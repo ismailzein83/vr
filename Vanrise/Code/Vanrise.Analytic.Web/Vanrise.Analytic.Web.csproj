@@ -198,6 +198,8 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\RangeConditionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-compare.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-range.js" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\CountAggregate\Templates\CountAggregateTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\CountAggregate\vr-analytic-countaggregate.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\Templates\HistoryAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\vr-analytic-analyticreport-history-runtime.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Chart\Templates\AnalyticRealTimeTimeVariationChart.html" />

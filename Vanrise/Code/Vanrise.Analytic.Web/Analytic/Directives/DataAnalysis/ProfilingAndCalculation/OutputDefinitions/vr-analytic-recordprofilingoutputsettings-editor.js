@@ -39,12 +39,10 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 recordFilterDirectiveAPI = api;
                 recordFilterDirectiveReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
                 dataRecordTypeFieldsSelectorAPI = api;
                 dataRecordTypeFieldsSelectorReadyDeferred.resolve();
             }
-
             $scope.scopeModel.onAggregationFieldsDirectiveReady = function (api) {
                 aggregationFieldsDirectiveAPI = api;
                 aggregationFieldsDirectiveReadyDeferred.resolve();
@@ -58,8 +56,6 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
             var api = {};
 
             api.load = function (payload) {
-
-                console.log(payload);
 
                 var promises = [];
 

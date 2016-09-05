@@ -14,6 +14,9 @@
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var recordAggregateSelectiveAPI;
+        var recordAggregateSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -36,6 +39,10 @@
             $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                 recordFilterDirectiveAPI = api;
                 recordFilterDirectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onRecordAggregateSelectiveReady = function (api) {
+                recordAggregateSelectiveAPI = api;
+                recordAggregateSelectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onValidateProperties = function () {
@@ -86,7 +93,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadRecordFilterDirective, loadRecordAggregateSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -113,12 +120,24 @@
                         recordFilterDirectivePayload.FilterGroup = aggregationFieldEntity.RecordFilter;
                     }
 
-                    console.log(recordFilterDirectivePayload);
-
                     VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
                 })
 
                 return recordFilterDirectiveLoadDeferred.promise;
+            }
+            function loadRecordAggregateSelective() {
+                var recordAggregateSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                recordAggregateSelectiveReadyDeferred.promise.then(function () {
+                    var recordAggregateSelectivePayload;
+                    if (aggregationFieldEntity != undefined && aggregationFieldEntity.RecordAggregate != undefined) {
+                        recordAggregateSelectivePayload.recordAggregate = aggregationFieldEntity.RecordAggregate;
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(recordAggregateSelectiveAPI, recordAggregateSelectivePayload, recordAggregateSelectiveLoadDeferred);
+                })
+
+                return recordAggregateSelectiveLoadDeferred.promise;
             }
         }
 

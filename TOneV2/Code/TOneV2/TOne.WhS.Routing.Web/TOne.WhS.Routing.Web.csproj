@@ -195,8 +195,8 @@
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-average.js" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-highest.js" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\vr-whs-routing-policy-rate-lowest.js" />
-    <Content Include="WhS_Routing\Directives\MainExtensions\RouteReader\Templates\RouteSyncReaderTemplate.html" />
-    <Content Include="WhS_Routing\Directives\MainExtensions\RouteReader\vr-whs-routing-routesyncreader.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteReader\Templates\RouteSyncReaderTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteReader\vr-whs-routing-routesyncreader.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\BuildRouteProcessTemplate.html" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\BuildRoutesByCodePrefixTemplate.html" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\RPBuildProductRoutesProcessTemplate.html" />
@@ -262,6 +262,7 @@
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="WhS_Routing\Directives\MainExtensions\" />
     <Folder Include="WhS_Routing\Directives\RouteConfiguration\" />
   </ItemGroup>
   <PropertyGroup>

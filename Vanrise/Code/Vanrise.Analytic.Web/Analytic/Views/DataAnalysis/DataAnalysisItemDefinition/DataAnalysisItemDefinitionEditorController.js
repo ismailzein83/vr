@@ -48,15 +48,11 @@
             }
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
-
-                console.log(selectedId);
-
                 if (selectedId != undefined) {
 
                     dataRecordTypeId = selectedId;
 
                     var settingsDirectivePayload = {};
-                    //settingsDirectivePayload.dataAnalysisItemDefinition = dataAnalysisItemDefinitionEntity;
                     settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
                     settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
                     settingsDirectivePayload.context = buildContext();
@@ -142,8 +138,7 @@
                 dataRecordTypeSelectorReadyDeferred.promise.then(function () {
                     var dataRecordTypeSelectorPayload = {};
                     if (dataAnalysisItemDefinitionEntity != undefined && dataAnalysisItemDefinitionEntity.Settings != undefined) {
-                        dataRecordTypeId = dataAnalysisItemDefinitionEntity.Settings.RecordTypeId
-                        dataRecordTypeSelectorPayload.selectedIds = dataRecordTypeId;
+                        dataRecordTypeSelectorPayload.selectedIds = dataAnalysisItemDefinitionEntity.Settings.RecordTypeId;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadDeferred);
@@ -152,12 +147,14 @@
                 return dataRecordTypeSelectorLoadDeferred.promise;
             }
             function loadSettingsDirective() {
+                if (!isEditMode) return;
+
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
 
+                    if (dataRecordTypeSelectionChangedDeferred == undefined)
                     dataRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-                    if (!isEditMode) dataRecordTypeSelectionChangedDeferred.resolve();
 
                     dataRecordTypeSelectionChangedDeferred.promise.then(function () {
                         dataRecordTypeSelectionChangedDeferred = undefined;
@@ -239,25 +236,22 @@
         function buildDataAnalysisItemDefinitionObjFromScope() {
 
             var dataAnalysisItemDefinitionSettings = settingsDirectiveAPI.getData();
-
-
             if (dataAnalysisItemDefinitionSettings != undefined) {
                 dataAnalysisItemDefinitionSettings.Title = $scope.scopeModel.title;
                 dataAnalysisItemDefinitionSettings.RecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds()
             }
 
-            console.log(dataAnalysisItemDefinitionSettings);
 
             return {
                 DataAnalysisItemDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisItemDefinitionId : undefined,
                 DataAnalysisDefinitionId: dataAnalysisItemDefinitionEntity != undefined ? dataAnalysisItemDefinitionEntity.DataAnalysisDefinitionId : dataAnalysisDefinitionId,
                 Name: $scope.scopeModel.name,
+                Settings: dataAnalysisItemDefinitionSettings
                 //Settings: {
                 //    $type: "Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings, Vanrise.Analytic.Entities",
                 //    Title: $scope.scopeModel.title,
                 //    RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
                 //}
-                Settings: dataAnalysisItemDefinitionSettings
             };
         }
     }

@@ -28,9 +28,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateDataAnalysisItemDefinition'), dataAnalysisItemDefinitionItem);
         }
 
-        //function GetDataAnalysisItemDefinitionSettingsExtensionConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisItemDefinitionSettingsExtensionConfigs"));
-        //}
+        function GetDARecordAggregateExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDARecordAggregateExtensionConfigs"));
+        }
 
         //function GetDataAnalysisItemDefinitionsInfo(filter) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisItemDefinitionsInfo"), {

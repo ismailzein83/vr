@@ -88,11 +88,11 @@ namespace Vanrise.Analytic.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<DataAnalysisItemDefinitionConfig> GetDataAnalysisItemDefinitionSettingsExtensionConfigs()
-        //{
-        //    var templateConfigManager = new ExtensionConfigurationManager();
-        //    return templateConfigManager.GetExtensionConfigurations<DataAnalysisItemDefinitionConfig>(DataAnalysisItemDefinitionConfig.EXTENSION_TYPE);
-        //}
+        public IEnumerable<DARecordAggregateConfigs> GetDARecordAggregateExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<DARecordAggregateConfigs>(DARecordAggregateConfigs.EXTENSION_TYPE);
+        }
 
         //public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter)
         //{
