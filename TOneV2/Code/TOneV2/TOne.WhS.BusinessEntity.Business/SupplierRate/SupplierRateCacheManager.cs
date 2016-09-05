@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
+using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -23,6 +25,17 @@ namespace TOne.WhS.BusinessEntity.Business
         protected override bool ShouldSetCacheExpired(object parameter)
         {
             return _dataManager.AreSupplierRatesUpdated(ref _updateHandle);
+        }
+        
+        public SupplierRate CacheAndGetRate(SupplierRate rate)
+        {
+            Dictionary<long, SupplierRate> cachedRatesById = this.GetOrCreateObject("cachedRatesById", () => new Dictionary<long, SupplierRate>());
+            SupplierRate matchRate;
+            lock (cachedRatesById)
+            {
+                matchRate = cachedRatesById.GetOrCreateItem(rate.SupplierRateId, () => rate);
+            }
+            return matchRate;
         }
     }
 }

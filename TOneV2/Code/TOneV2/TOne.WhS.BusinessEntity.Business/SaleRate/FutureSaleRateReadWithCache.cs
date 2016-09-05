@@ -17,7 +17,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SaleRatesByZone GetCachedFutureRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetFutureSaleRates_{0}_{1}", ownerType, ownerId), () =>
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>();
+            return cacheManager.GetOrCreateObject(String.Format("GetFutureSaleRates_{0}_{1}", ownerType, ownerId), () =>
             {
                 SaleRatesByZone futureRatesByZone = new SaleRatesByZone();
 
@@ -29,22 +30,23 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 foreach (SaleRate futureRate in futureRates.OrderBy(x => x.BED))
                 {
+                    var cachedRate = cacheManager.CacheAndGetRate(futureRate);
                     SaleRatePriceList saleRatePriceList;
 
-                    if (!futureRatesByZone.TryGetValue(futureRate.ZoneId, out saleRatePriceList))
+                    if (!futureRatesByZone.TryGetValue(cachedRate.ZoneId, out saleRatePriceList))
                     {
                         saleRatePriceList = new SaleRatePriceList();
                         saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
-                        futureRatesByZone.Add(futureRate.ZoneId, saleRatePriceList);
+                        futureRatesByZone.Add(cachedRate.ZoneId, saleRatePriceList);
                     }
 
-                    if (futureRate.RateTypeId.HasValue)
+                    if (cachedRate.RateTypeId.HasValue)
                     {
-                        if (!saleRatePriceList.RatesByRateType.ContainsKey(futureRate.RateTypeId.Value))
-                            saleRatePriceList.RatesByRateType.Add(futureRate.RateTypeId.Value, futureRate);
+                        if (!saleRatePriceList.RatesByRateType.ContainsKey(cachedRate.RateTypeId.Value))
+                            saleRatePriceList.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
                     }
                     else if (saleRatePriceList.Rate == null)
-                        saleRatePriceList.Rate = futureRate;
+                        saleRatePriceList.Rate = cachedRate;
                 }
 
                 return futureRatesByZone;

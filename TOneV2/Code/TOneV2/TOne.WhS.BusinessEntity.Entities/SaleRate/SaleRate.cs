@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Dictionary<int, SaleRate> RatesByRateType { get; set; }
 
         //TODO: Remove this property
-        public SalePriceList PriceList { get; set; }
+        //public SalePriceList PriceList { get; set; }
 
         public string SourceId { get; set; }
     }

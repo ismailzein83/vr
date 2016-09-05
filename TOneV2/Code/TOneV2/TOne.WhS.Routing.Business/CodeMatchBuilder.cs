@@ -195,15 +195,17 @@ namespace TOne.WhS.Routing.Business
         private SaleCodeIterator GetSellingNumberPlanSaleCodeIterator(int sellingNumberPlanId, DateTime effectiveOn)
         {
             string cacheName = String.Format("GetSellingNumberPlanSaleCodeIterator_{0}_{1}", sellingNumberPlanId, effectiveOn.Date);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>().GetOrCreateObject(cacheName,
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName,
                 () =>
                 {                    
                     SaleCodeManager saleCodeManager = new SaleCodeManager();
                     List<SaleCode> customerSaleCodes = saleCodeManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
+                    var cachedCodes = customerSaleCodes.Select(code => cacheManager.CacheAndGetCode(code));
                     if (customerSaleCodes != null)
                         return new SaleCodeIterator()
                         {
-                            CodeIterator = new CodeIterator<SaleCode>(customerSaleCodes),
+                            CodeIterator = new CodeIterator<SaleCode>(cachedCodes),
                             SellingNumberPlanId = sellingNumberPlanId
                         };
                     else
@@ -214,15 +216,17 @@ namespace TOne.WhS.Routing.Business
         private SupplierCodeIterator GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
         {
             string cacheName = String.Format("GetSupplierCodeIterator_{0}_{1}", supplierId, effectiveOn.Date);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>().GetOrCreateObject(cacheName,
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
                    SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
                    List<SupplierCode> supplierCodes = supplierCodeManager.GetSupplierCodes(supplierId, effectiveOn);
+                   var cachedCodes = supplierCodes.Select(code => cacheManager.CacheAndGetCode(code));
                    if (supplierCodes != null)
                        return new SupplierCodeIterator()
                        {
-                           CodeIterator = new CodeIterator<SupplierCode>(supplierCodes),
+                           CodeIterator = new CodeIterator<SupplierCode>(cachedCodes),
                            SupplierId = supplierId
                        };
                    else

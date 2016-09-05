@@ -21,7 +21,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(SalePriceListOwnerType ownerType, int ownerId)
         {
             string cacheName = String.Format("GetRoutingProductsOnZones_{0}_{1}_{2}", ownerType, ownerId, _effectiveOn.Date);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject(cacheName,
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName,
                 () =>
                 {
                     SaleZoneRoutingProductsByZone zoneRoutingProductsByZone = new SaleZoneRoutingProductsByZone();
@@ -30,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     IEnumerable<SaleZoneRoutingProduct> zoneRoutingProducts = dataManager.GetEffectiveZoneRoutingProducts(ownerType, ownerId, _effectiveOn);
 
                     foreach (SaleZoneRoutingProduct zoneRoutingProduct in zoneRoutingProducts)
-                        zoneRoutingProductsByZone.Add(zoneRoutingProduct.SaleZoneId, zoneRoutingProduct);
+                        zoneRoutingProductsByZone.Add(zoneRoutingProduct.SaleZoneId, cacheManager.CacheAndGetSaleZoneRP(zoneRoutingProduct));
 
                     return zoneRoutingProductsByZone;
                 });
@@ -52,9 +53,11 @@ namespace TOne.WhS.BusinessEntity.Business
         private DefaultRoutingProductsByOwner GetCachedDefaultRoutingProducts()
         {
             string cacheName = String.Format("GetCachedDefaultRoutingProducts_{0}", _effectiveOn);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject(cacheName,
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName,
                 () =>
                 {
+                    
                     DefaultRoutingProductsByOwner defaultRoutingProductsByOwner = new DefaultRoutingProductsByOwner();
                     defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
                     defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
@@ -66,10 +69,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
                         {
+                            var cachedDefaultRP = cacheManager.CacheAndGetDefaultRP(defaultRoutingProduct);
                             if (defaultRoutingProduct.OwnerType == SalePriceListOwnerType.SellingProduct)
-                                defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct.Add(defaultRoutingProduct.OwnerId, defaultRoutingProduct);
+                                defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct.Add(defaultRoutingProduct.OwnerId, cachedDefaultRP);
                             else
-                                defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer.Add(defaultRoutingProduct.OwnerId, defaultRoutingProduct);
+                                defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer.Add(defaultRoutingProduct.OwnerId, cachedDefaultRP);
                         }
                     }
 

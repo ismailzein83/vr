@@ -27,10 +27,15 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int ownerId)
         {
+            if (_allSaleRatesByOwner == null)
+                return null;
+
             var saleRateByOwnerType = ownerType == SalePriceListOwnerType.Customer ? _allSaleRatesByOwner.SaleRatesByCustomer : _allSaleRatesByOwner.SaleRatesByProduct;
-            SaleRatesByZone saleRatesByZone;
-            saleRateByOwnerType.TryGetValue(ownerId, out saleRatesByZone);
-            return saleRatesByZone;
+
+            if (saleRateByOwnerType == null)
+                return null;
+
+            return saleRateByOwnerType.GetRecord(ownerId);
         }
         #endregion
 
@@ -46,53 +51,34 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (SaleRate saleRate in saleRates)
             {
-                SaleRatePriceList saleRatePriceList = GetSaleRatePriceList(saleRate);
-                Dictionary<int, SaleRatesByZone> saleRatesByOwner = saleRatePriceList.PriceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleRatesByCustomer : result.SaleRatesByProduct;
+                SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
+                Dictionary<int, SaleRatesByZone> saleRatesByOwner = priceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleRatesByCustomer : result.SaleRatesByProduct;
 
-                if (!saleRatesByOwner.TryGetValue(saleRatePriceList.PriceList.OwnerId, out saleRateByZone))
+                if (!saleRatesByOwner.TryGetValue(priceList.OwnerId, out saleRateByZone))
                 {
                     saleRateByZone = new SaleRatesByZone();
-                    saleRatesByOwner.Add(saleRatePriceList.PriceList.OwnerId, saleRateByZone);
+                    saleRatesByOwner.Add(priceList.OwnerId, saleRateByZone);
                 }
 
-                SaleRatePriceList saleRatePriceListItem;
-                if (saleRateByZone.TryGetValue(saleRate.ZoneId, out saleRatePriceListItem))
+                SaleRatePriceList saleRatePriceList;
+
+                if (!saleRateByZone.TryGetValue(saleRate.ZoneId, out saleRatePriceList))
                 {
-                    if (saleRate.RateTypeId.HasValue)
-                    {
-                        if (saleRatePriceListItem.RatesByRateType == null)
-                            saleRatePriceListItem.RatesByRateType = new Dictionary<int, SaleRate>();
-                        saleRatePriceListItem.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
-                    }
-                    else
-                        saleRatePriceListItem.Rate = saleRate;
+                    saleRatePriceList = new SaleRatePriceList();
+                    saleRateByZone.Add(saleRate.ZoneId, saleRatePriceList);
+                }
+
+                if (saleRate.RateTypeId.HasValue)
+                {
+                    if (saleRatePriceList.RatesByRateType == null)
+                        saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
+                    saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
                 }
                 else
-                {
-                    saleRatePriceListItem = saleRatePriceList;
-                    if (saleRate.RateTypeId.HasValue)
-                    {
-                        saleRatePriceListItem.RatesByRateType = new Dictionary<int, SaleRate>();
-                        saleRatePriceListItem.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
-                    }
-                    else
-                        saleRatePriceListItem.Rate = saleRate;
-                    saleRateByZone.Add(saleRate.ZoneId, saleRatePriceListItem);
-                }
+                    saleRatePriceList.Rate = saleRate;
             }
             return result;
         }
-        private SaleRatePriceList GetSaleRatePriceList(SaleRate saleRate)
-        {
-            SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
-            SaleRatePriceList saleRatePriceList = new SaleRatePriceList()
-            {
-                PriceList = priceList
-            };
-            return saleRatePriceList;
-        }
         #endregion
-
-
     }
 }

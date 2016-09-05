@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -14,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Fields / Constructors
 
         private DateTime _effectiveOn;
+        private SaleRatesByOwner _allSaleRatesByOwner;
 
         public SaleRateReadWithCache(DateTime effectiveOn)
         {
@@ -35,34 +32,39 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, _effectiveOn.Date), () =>
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>();
+            return cacheManager.GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, _effectiveOn.Date), () =>
             {
+                SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
+
                 ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
                 List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(ownerType, ownerId, this._effectiveOn);
 
-                SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
-
                 foreach (SaleRate saleRate in saleRates)
                 {
+                    var cachedRate = cacheManager.CacheAndGetRate(saleRate);
+
                     SaleRatePriceList saleRatePriceList;
 
-                    if (!saleRatesByZone.TryGetValue(saleRate.ZoneId, out saleRatePriceList))
+                    if (!saleRatesByZone.TryGetValue(cachedRate.ZoneId, out saleRatePriceList))
                     {
                         saleRatePriceList = new SaleRatePriceList();
-                        saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
-                        saleRatesByZone.Add(saleRate.ZoneId, saleRatePriceList);
+                        saleRatesByZone.Add(cachedRate.ZoneId, saleRatePriceList);
                     }
 
-                    if (saleRate.RateTypeId.HasValue)
-                        saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+                    if (cachedRate.RateTypeId.HasValue)
+                    {
+                        if (saleRatePriceList.RatesByRateType == null)
+                            saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
+                        saleRatePriceList.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
+                    }
                     else
-                        saleRatePriceList.Rate = saleRate;
+                        saleRatePriceList.Rate = cachedRate;
                 }
 
                 return saleRatesByZone;
             });
         }
-
         #endregion
     }
 }

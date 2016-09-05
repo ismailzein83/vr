@@ -35,12 +35,13 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public Dictionary<long, SupplierRate> GetCachedSupplierRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject("GetSupplierRatesInBetweenPeriod",
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>();
+            return cacheManager.GetOrCreateObject("GetSupplierRatesInBetweenPeriod",
                () =>
                {
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
                    IEnumerable<SupplierRate> saleRates = dataManager.GetSupplierRatesInBetweenPeriod(fromTime, tillTime);
-                   return saleRates.ToDictionary(cn => cn.SupplierRateId, cn => cn);
+                   return saleRates.ToDictionary(cn => cn.SupplierRateId, cn => cacheManager.CacheAndGetRate(cn));
                });
         }
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)
@@ -105,6 +106,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException(String.Format("supplierPriceList (Id: {0}) does not exist for supplierRate (Id: {1})", supplierRate.SupplierRateId, supplierPriceList.PriceListId));
             return supplierPriceList.CurrencyId;
         }
+
 
         #endregion
 

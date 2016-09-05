@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
+using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -24,5 +26,17 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return _dataManager.AreSaleCodesUpdated(ref _updateHandle);
         }
+
+        public SaleCode CacheAndGetCode(SaleCode code)
+        {
+            Dictionary<long, SaleCode> cachedCodesById = this.GetOrCreateObject("cachedCodesById", () => new Dictionary<long, SaleCode>());
+            SaleCode matchCode;
+            lock (cachedCodesById)
+            {
+                matchCode = cachedCodesById.GetOrCreateItem(code.SaleCodeId, () => code);
+            }
+            return matchCode;
+        }
+
     }
 }

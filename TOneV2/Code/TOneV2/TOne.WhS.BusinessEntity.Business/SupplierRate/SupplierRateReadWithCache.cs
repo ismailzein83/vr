@@ -18,7 +18,6 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SupplierRatesByZone GetSupplierRates(int supplierId)
         {
-            SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
             return GetCachedSupplierRates(supplierId);
         }
         #endregion
@@ -26,44 +25,39 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Private Members
         SupplierRatesByZone GetCachedSupplierRates(int supplierId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().GetOrCreateObject(String.Format("GetSupplierRates_{0}_{1:MM/dd/yy}", supplierId, _effectiveOn.Date),
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>();
+            return cacheManager.GetOrCreateObject(String.Format("GetSupplierRates_{0}_{1:MM/dd/yy}", supplierId, _effectiveOn.Date),
                () =>
                {
+                   SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
                    List<SupplierRate> supplierRates = dataManager.GetEffectiveSupplierRates(supplierId, _effectiveOn);
-                   SupplierRatesByZone supplierRatesByZone = new SupplierRatesByZone();
+
                    SupplierZoneRate supplierZoneRate;
+                   
                    foreach (SupplierRate supplierRate in supplierRates)
                    {
-                       if (supplierRatesByZone.TryGetValue(supplierRate.ZoneId, out supplierZoneRate))
-                       {
-                           if (supplierRate.RateTypeId.HasValue)
-                           {
-                               if (supplierZoneRate.RatesByRateType == null)
-                                   supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
-                               supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
-                           }
-                           else
-                               supplierZoneRate.Rate = supplierRate;
-                       }
-                       else
+                       var cachedRate = cacheManager.CacheAndGetRate(supplierRate);
+
+                       if (!supplierRatesByZone.TryGetValue(cachedRate.ZoneId, out supplierZoneRate))
                        {
                            supplierZoneRate = new SupplierZoneRate();
-                           if (supplierRate.RateTypeId.HasValue)
-                           {
-                               supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
-                               supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
-                           }
-                           else
-                               supplierZoneRate.Rate = supplierRate;
-                           supplierRatesByZone.Add(supplierRate.ZoneId, supplierZoneRate);
+                           supplierRatesByZone.Add(cachedRate.ZoneId, supplierZoneRate);
                        }
+
+                       if (cachedRate.RateTypeId.HasValue)
+                       {
+                           if (supplierZoneRate.RatesByRateType == null)
+                               supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
+                           supplierZoneRate.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
+                       }
+                       else
+                           supplierZoneRate.Rate = cachedRate;
                    }
                    return supplierRatesByZone;
                });
         }
         #endregion
-
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -26,15 +27,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (_supplierRatesByZones == null)
                 return null;
-
-            SupplierRatesByZone supplierRatesByZone;
-            _supplierRatesByZones.TryGetValue(supplierId, out supplierRatesByZone);
-            return supplierRatesByZone;
+            return _supplierRatesByZones.GetRecord(supplierId);
         }
 
         private Dictionary<int, SupplierRatesByZone> GetRatesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
-            Dictionary<int, SupplierRatesByZone> supplierRatesByZones = new Dictionary<int, SupplierRatesByZone>();
+            Dictionary<int, SupplierRatesByZone> result = new Dictionary<int, SupplierRatesByZone>();
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
             List<SupplierRate> supplierRates = dataManager.GetEffectiveSupplierRatesBySuppliers(_effectiveOn, _isEffectiveInFuture, supplierInfos);
@@ -47,37 +45,28 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
 
-                if (!supplierRatesByZones.TryGetValue(supplierPriceList.SupplierId, out supplierRatesByZone))
+                if (!result.TryGetValue(supplierPriceList.SupplierId, out supplierRatesByZone))
                 {
                     supplierRatesByZone = new SupplierRatesByZone();
-                    supplierRatesByZones.Add(supplierPriceList.SupplierId, supplierRatesByZone);
+                    result.Add(supplierPriceList.SupplierId, supplierRatesByZone);
                 }
 
-                if (supplierRatesByZone.TryGetValue(supplierRate.ZoneId, out supplierZoneRate))
-                {
-                    if (supplierRate.RateTypeId.HasValue)
-                    {
-                        if (supplierZoneRate.RatesByRateType == null)
-                            supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
-                        supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
-                    }
-                    else
-                        supplierZoneRate.Rate = supplierRate;
-                }
-                else
+                if (!supplierRatesByZone.TryGetValue(supplierRate.ZoneId, out supplierZoneRate))
                 {
                     supplierZoneRate = new SupplierZoneRate();
-                    if (supplierRate.RateTypeId.HasValue)
-                    {
-                        supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
-                        supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
-                    }
-                    else
-                        supplierZoneRate.Rate = supplierRate;
                     supplierRatesByZone.Add(supplierRate.ZoneId, supplierZoneRate);
                 }
+
+                if (supplierRate.RateTypeId.HasValue)
+                {
+                    if (supplierZoneRate.RatesByRateType == null)
+                        supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
+                    supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
+                }
+                else
+                    supplierZoneRate.Rate = supplierRate;
             }
-            return supplierRatesByZones;
+            return result;
         }
     }
 }

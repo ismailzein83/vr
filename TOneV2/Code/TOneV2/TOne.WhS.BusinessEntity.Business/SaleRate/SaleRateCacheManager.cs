@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
+using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -24,5 +26,17 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return _dataManager.AreSaleRatesUpdated(ref _updateHandle);
         }
+
+        public SaleRate CacheAndGetRate(SaleRate rate)
+        {
+            Dictionary<long, SaleRate> cachedRatesById = this.GetOrCreateObject("cachedRatesById", () => new Dictionary<long, SaleRate>());
+            SaleRate matchRate;
+            lock (cachedRatesById)
+            {
+                matchRate = cachedRatesById.GetOrCreateItem(rate.SaleRateId, () => rate);
+            }
+            return matchRate;
+        }
+
     }
 }
