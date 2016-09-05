@@ -134,6 +134,10 @@
     <Compile Include="SaleZone\SaleZoneManager.cs" />
     <Compile Include="SellingNumberPlan\SellingNumberPlanManager.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRateLocator.cs" />
+    <Compile Include="Service\ISaleEntityServiceReader.cs" />
+    <Compile Include="Service\SaleEntityServiceCacheManager.cs" />
+    <Compile Include="Service\SaleEntityServiceLocator.cs" />
+    <Compile Include="Service\SaleEntityServiceReadWithCache.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierCode\SupplierCodeManager.cs" />

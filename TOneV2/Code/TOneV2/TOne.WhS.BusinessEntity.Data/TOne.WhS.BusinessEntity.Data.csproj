@@ -64,6 +64,7 @@
     <Compile Include="IDealProgressDataManager.cs" />
     <Compile Include="IDealDataManager.cs" />
     <Compile Include="ISaleEntityRoutingProductDataManager.cs" />
+    <Compile Include="ISaleEntityServiceDataManager.cs" />
     <Compile Include="ISalePriceListDataManager.cs" />
     <Compile Include="ISellingProductDataManager.cs" />
     <Compile Include="IRoutingProductDataManager.cs" />

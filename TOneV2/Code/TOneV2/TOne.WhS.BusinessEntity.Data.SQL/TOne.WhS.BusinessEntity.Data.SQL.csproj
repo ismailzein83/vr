@@ -68,6 +68,7 @@
     <Compile Include="DealProgressDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
+    <Compile Include="SaleEntityServiceDataManager.cs" />
     <Compile Include="SalePriceListDataManager.cs" />
     <Compile Include="SellingProductDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

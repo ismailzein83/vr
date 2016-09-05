@@ -8,9 +8,28 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SaleEntityService
     {
-        public int SaleEntityServiceId { get; set; }
+        public List<ZoneService> Services { get; set; }
+        public SaleEntityServiceSource Source { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+    }
+
+    public enum SaleEntityServiceSource : byte { CustomerZone, CustomerDefault, ProductZone, ProductDefault }
+
+    public class SaleEntityDefaultService
+    {
+        public long SaleEntityServiceId { get; set; }
         public int PriceListId { get; set; }
-        public long? ZoneId { get; set; }
+        public List<ZoneService> Services { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+    }
+
+    public class SaleEntityZoneService
+    {
+        public long SaleEntityServiceId { get; set; }
+        public int PriceListId { get; set; }
+        public long ZoneId { get; set; }
         public List<ZoneService> Services { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
