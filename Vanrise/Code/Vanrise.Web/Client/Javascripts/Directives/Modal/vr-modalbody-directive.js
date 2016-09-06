@@ -14,7 +14,7 @@ app.directive('vrModalbody', [function () {
             if (tAttrs.stopdrag != undefined)
                 draggablemodal = '';
 
-            var newElement = '<div class="modal-body"  ' + draggablemodal + ' ng-style="{ ' + maxHeightPart + ' }" >'
+            var newElement = '<div resizbalemodal class="modal-body"  ' + draggablemodal + ' ng-style="{ ' + maxHeightPart + ' }" >'
                                 +  tElement.context.innerHTML                             
                             + '</div>';
             tElement.html(newElement);

@@ -23,8 +23,11 @@ app.directive('vrModalcontent', [function () {
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
                                         + '    <h5 class="modal-title" ng-bind="title"></h5>'
                                         + '</div>'                                       
-                                +  tElement.context.innerHTML   
-                                    +'</div>'
+                                + tElement.context.innerHTML
+                         //                                            + '<div class="resize-modal" style="position:absolute;right:0px;bottom:0px">r</div>'
+
+                                    + '</div>'
+
                                 + '</div>';
             
             tElement.html(newElement);

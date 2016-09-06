@@ -65,6 +65,7 @@
     <Compile Include="AgentDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />
     <Compile Include="CreditClassDataManager.cs" />
+    <Compile Include="Pop\PopDataManager.cs" />
     <Compile Include="POSDataManager.cs" />
     <Compile Include="ServiceTypeDataManager.cs" />
     <Compile Include="StatusChargingSetDataManager.cs" />

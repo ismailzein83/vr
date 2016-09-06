@@ -160,6 +160,7 @@
     <Compile Include="Controllers\ActionDefinitionController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
     <Compile Include="Controllers\CreditClassController.cs" />
+    <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\RevenueComparisonController.cs" />
     <Compile Include="Controllers\StatusChargingSetController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
@@ -328,6 +329,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Pop\Templates\PopGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Pop\retail-be-pop-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\WeeklyPeriodTemplate .html" />
@@ -359,6 +362,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
@@ -378,6 +382,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\StatusChargingSetAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\StatusDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\CreditClassService.js" />
+    <Content Include="Retail_BusinessEntity\Services\PopService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusChargingSetService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
@@ -433,6 +438,10 @@
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\ServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Pop\PopEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Pop\PopEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Pop\PopManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Pop\PopManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\RevenueComparison\RevenueComparisonManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\RevenueComparison\RevenueComparisonManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ChargingPolicyPartEditor.html" />

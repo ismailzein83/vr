@@ -141,6 +141,8 @@
     <Compile Include="Package\PackageServiceDetail.cs" />
     <Compile Include="Package\PackageServiceQuery.cs" />
     <Compile Include="Package\ServicePackageItemConfig.cs" />
+    <Compile Include="Pop\Pop.cs" />
+    <Compile Include="Pop\PopQuery.cs" />
     <Compile Include="POS\POS.cs" />
     <Compile Include="POS\POSSetting.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />

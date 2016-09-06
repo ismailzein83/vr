@@ -114,6 +114,43 @@ appControllers.directive('draggablemodal', function ($document) {
         }
     };
 });
+
+
+appControllers.directive('resizbalemodal', function ($document) {
+    "use strict";
+    return function (scope, element) {
+        var startX = 0,
+          startY = 0,
+          x = 0,
+          y = 0;
+        element.parents().find('.resize-modal').last().css({
+            cursor: '-webkit-grab'
+        });
+        element.parents().find('.resize-modal').last().on('mousedown', function (event) {
+            // Prevent default dragging of selected content
+            event.preventDefault();
+            startX = event.screenX - x;
+            startY = event.screenY - y;
+            $document.on('mousemove', mousemove);
+            $document.on('mouseup', mouseup);
+           // scope.$broadcast("start-drag");
+        });
+
+        function mousemove(event) {
+            y = (event.screenY - startY > 0 && event.screenY - startY < innerHeight - element.innerHeight()) ? event.screenY - startY : y;
+            x = (event.screenX - startX < innerWidth) ? event.screenX - startX : x;
+            element.parents().find('.modal-content').last().css({
+                heigth: y + 'px',
+                width: x + 'px'
+            });
+        }
+
+        function mouseup() {
+            $document.unbind('mousemove', mousemove);
+            $document.unbind('mouseup', mouseup);
+        }
+    };
+});
 appControllers.directive('clickOutside', function ($document) {
     "use strict";
     return {
