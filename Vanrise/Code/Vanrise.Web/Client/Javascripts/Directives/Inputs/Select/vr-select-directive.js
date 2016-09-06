@@ -32,6 +32,7 @@
                 label: '@',
                 entityname: '@',
                 onReady: '=',
+                onblurdropdown: '=',
                 ismultipleselection: '@',
                 hideselectedvaluessection: '@',
                 datavaluefield: '@',
@@ -370,9 +371,12 @@
                     $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function () {
                         
                         $('#filterInput').blur();
-
+                        if (controller.onblurdropdown != null) {
+                            controller.onblurdropdown()
+                        }
                         vrSelectSharedObject.onCloseDropDown($attrs.id);
-                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();                        
+                        
                     });
                 }, 100);
                 setTimeout(function () {
