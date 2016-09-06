@@ -57,6 +57,8 @@
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
@@ -69,19 +71,24 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleCode)" Name="SaleCodes" />
-      <Variable x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)" Name="SupplierCodes" />
+      <Variable x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)" Name="SaleCodes" />
+      <Variable x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)" Name="SupplierCodes" />
       <Variable x:TypeArguments="twre:SupplierZoneDetailByZone" Name="SupplierZoneDetails" />
       <Variable x:TypeArguments="twre:CustomerZoneDetailByZone" Name="CustomerZoneDetails" />
     </Sequence.Variables>
     <Parallel DisplayName="Parallel_PrepareCodes" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Sequence DisplayName="Sequence_SaleCodes" sap2010:WorkflowViewState.IdRef="Sequence_2">
         <twrba1:GetSaleCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSaleCodes_1">
-          <twrba1:GetSaleCodes.CodePrefix>
-            <InArgument x:TypeArguments="twre:CodePrefix">
-              <mca:CSharpValue x:TypeArguments="twre:CodePrefix">Input.CodePrefix</mca:CSharpValue>
+          <twrba1:GetSaleCodes.CodePrefixGroup>
+            <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">Input.CodePrefixGroup</mca:CSharpValue>
             </InArgument>
-          </twrba1:GetSaleCodes.CodePrefix>
+          </twrba1:GetSaleCodes.CodePrefixGroup>
+          <twrba1:GetSaleCodes.CodePrefixSaleCodes>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">SaleCodes</mca:CSharpReference>
+            </OutArgument>
+          </twrba1:GetSaleCodes.CodePrefixSaleCodes>
           <twrba1:GetSaleCodes.EffectiveOn>
             <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
               <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
@@ -92,11 +99,6 @@
               <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSaleCodes.IsFuture>
-          <twrba1:GetSaleCodes.SaleCodes>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpReference>
-            </OutArgument>
-          </twrba1:GetSaleCodes.SaleCodes>
         </twrba1:GetSaleCodes>
         <twrba1:GetCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerZoneDetails_1">
           <twrba1:GetCustomerZoneDetails.CustomerZoneDetails>
@@ -110,8 +112,8 @@
             </InArgument>
           </twrba1:GetCustomerZoneDetails.RoutingDatabase>
           <twrba1:GetCustomerZoneDetails.SaleCodes>
-            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpValue>
+            <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">SaleCodes</mca:CSharpValue>
             </InArgument>
           </twrba1:GetCustomerZoneDetails.SaleCodes>
         </twrba1:GetCustomerZoneDetails>
@@ -128,11 +130,11 @@
           </twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
         </twrba1:GetActiveSupplierInfos>
         <twrba1:GetSupplierCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierCodes_1">
-          <twrba1:GetSupplierCodes.CodePrefix>
-            <InArgument x:TypeArguments="twre:CodePrefix">
-              <mca:CSharpValue x:TypeArguments="twre:CodePrefix">Input.CodePrefix</mca:CSharpValue>
+          <twrba1:GetSupplierCodes.CodePrefixGroup>
+            <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">Input.CodePrefixGroup</mca:CSharpValue>
             </InArgument>
-          </twrba1:GetSupplierCodes.CodePrefix>
+          </twrba1:GetSupplierCodes.CodePrefixGroup>
           <twrba1:GetSupplierCodes.EffectiveOn>
             <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
               <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
@@ -143,14 +145,14 @@
               <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSupplierCodes.IsFuture>
-          <twrba1:GetSupplierCodes.SupplierCodeServiceRuntimeProcessId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierCodeServiceRuntimeProcessId</mca:CSharpValue>
+          <twrba1:GetSupplierCodes.SupplierCodeServiceRuntimeProcessIds>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Int32)">
+              <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Int32)">Input.SupplierCodeServiceRuntimeProcessIds</mca:CSharpValue>
             </InArgument>
-          </twrba1:GetSupplierCodes.SupplierCodeServiceRuntimeProcessId>
+          </twrba1:GetSupplierCodes.SupplierCodeServiceRuntimeProcessIds>
           <twrba1:GetSupplierCodes.SupplierCodes>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpReference>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)">SupplierCodes</mca:CSharpReference>
             </OutArgument>
           </twrba1:GetSupplierCodes.SupplierCodes>
           <twrba1:GetSupplierCodes.SupplierInfo>
@@ -166,8 +168,8 @@
             </InArgument>
           </twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
           <twrba1:GetSupplierZoneDetails.SupplierCodes>
-            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpValue>
+            <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)">SupplierCodes</mca:CSharpValue>
             </InArgument>
           </twrba1:GetSupplierZoneDetails.SupplierCodes>
           <twrba1:GetSupplierZoneDetails.SupplierZoneDetails>
@@ -196,19 +198,19 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCodeSaleZoneStatus" />
       </Parallel.Variables>
       <twrba1:BuildCodeMatches OutputQueue_1="{x:Null}" OutputQueue_2="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatches_1" IsCustomerRoutesProcess="True">
-        <twrba1:BuildCodeMatches.CodePrefix>
-          <InArgument x:TypeArguments="x:String">
-            <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix.Code</mca:CSharpValue>
+        <twrba1:BuildCodeMatches.CodePrefixGroup>
+          <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">Input.CodePrefixGroup</mca:CSharpValue>
           </InArgument>
-        </twrba1:BuildCodeMatches.CodePrefix>
+        </twrba1:BuildCodeMatches.CodePrefixGroup>
         <twrba1:BuildCodeMatches.OutputQueueForCustomerRoutes>
           <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatches)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CodeMatches)">queueCodeMatchesBatch_ForCustomerRoutes</mca:CSharpReference>
           </InOutArgument>
         </twrba1:BuildCodeMatches.OutputQueueForCustomerRoutes>
         <twrba1:BuildCodeMatches.SaleCodes>
-          <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">SaleCodes</mca:CSharpValue>
+          <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">SaleCodes</mca:CSharpValue>
           </InArgument>
         </twrba1:BuildCodeMatches.SaleCodes>
         <twrba1:BuildCodeMatches.Status>
@@ -217,8 +219,8 @@
           </OutArgument>
         </twrba1:BuildCodeMatches.Status>
         <twrba1:BuildCodeMatches.SupplierCodes>
-          <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">SupplierCodes</mca:CSharpValue>
+          <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefixSupplierCodes)">SupplierCodes</mca:CSharpValue>
           </InArgument>
         </twrba1:BuildCodeMatches.SupplierCodes>
         <twrba1:BuildCodeMatches.SupplierZoneDetails>
@@ -304,7 +306,7 @@
         </twrba1:ApplyCustomerRoutesToDB.RoutingDatabaseId>
       </twrba1:ApplyCustomerRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbDVGA7QCDgIBAU0FtAEQAwHYArUBBbICEAIBAk4HdhIDAaMDdwezARIDAdkCvQENvQGFAQIBA8YBB+UBIQMB9gHmAQeKAiQDAYUBiwIHoAIuAgFEoQIHsQIoAgETTwlkHwMBtwNlCXUpAwGkA3sJgQEpAwGbA4IBCaEBIwMB8AKiAQmyASkDAdoC0wEN0wFqAwHIAskBDckBYAMBuALYAQ3YAXcDAagCzgENzgGQAQMBmALdAQ3dAXIDAYgCxgGfAcYBpQEDAYcC4gEN4gFzAwH3AekBDekBcwMB5gGCAg2CAm8DAdYB8wEN8wGIAQMBxgHuAQ3uAWoDAbYBhwINhwJ6AwGmAf0BDf0BiQEDAZYB+AEN+AFaAwGGAZgCDZgCcgIBdY4CDY4CgQECAWWdAg2dAnwCAVWTAg2TAnwCAUWpAg2pAnQCATSkAg2kAnQCASSuAg2uAmECARRXD1dsAwHKA2EPYXQDAcQDUg9SZAMBvgNcD1xcAwG4A2gPaH0DAbEDcg9ybAMBqwNtD21jAwGlA34PfogBAwGcA4oBD4oBbAMBlAOFAQ+FAWQDAY0DngEPngGAAQMBhgOZAQ+ZAXwDAf8ClAEPlAF1AwH4Ao8BD48BXAMB8QKlAQ+lAWMDAekCqgEPqgF0AwHiAq8BD68BfQMB2wI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbDVIA7YCDgIBAU8FtgEQAwHYArcBBbQCEAIBAlAHeBIDAaMDeQe1ARIDAdkCvwENvwGFAQIBA8gBB+cBIQMB9gHoAQeMAiQDAYUBjQIHogIuAgFEowIHswIoAgETUQlmHwMBtwNnCXcpAwGkA30JgwEpAwGbA4QBCaMBIwMB8AKkAQm0ASkDAdoC1QEN1QF1AwHIAssBDcsBeAMBuALaAQ3aAXcDAagC0AEN0AGQAQMBmALfAQ3fAX0DAYgCyAGfAcgBpQEDAYcC5AEN5AFzAwH3AesBDesBcwMB5gGEAg2EAm8DAdYB9QEN9QGIAQMBxgHwAQ3wAWoDAbYBiQINiQJ6AwGmAf8BDf8BiQEDAZYB+gEN+gFaAwGGAZoCDZoCcgIBdZACDZACgQECAWWfAg2fAnwCAVWVAg2VAnwCAUWrAg2rAnQCATSmAg2mAnQCASSwAg2wAmECARReD15sAwHKA1kPWX8DAcQDVA9UegMBvgNjD2NcAwG4A2oPan0DAbEDdA90dwMBqwNvD29jAwGlA4ABD4ABiAEDAZwDjAEPjAFsAwGUA4cBD4cBegMBjQOWAQ+WAZABAwGGA6ABD6ABgAEDAf8CmwEPmwGHAQMB+AKRAQ+RAVwDAfECpwEPpwFjAwHpAqwBD6wBfwMB4gKxAQ+xAX0DAdsC</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

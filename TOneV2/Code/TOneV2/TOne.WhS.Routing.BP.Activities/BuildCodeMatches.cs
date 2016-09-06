@@ -6,19 +6,20 @@ using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Business;
 using Vanrise.Queueing;
 using Vanrise.Entities;
+using System.Linq;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
 
     public class BuildCodeMatchesInput
     {
-        public string CodePrefix { get; set; }
+        public IEnumerable<CodePrefix> CodePrefixGroup { get; set; }
 
         public SupplierZoneDetailByZone SupplierZoneDetails { get; set; }
 
-        public IEnumerable<SaleCode> SaleCodes { get; set; }
+        public IEnumerable<CodePrefixSaleCodes> SaleCodes { get; set; }
 
-        public IEnumerable<SupplierCode> SupplierCodes { get; set; }
+        public IEnumerable<CodePrefixSupplierCodes> SupplierCodes { get; set; }
 
         public BaseQueue<CodeMatchesBatch> OutputQueue_1 { get; set; }
 
@@ -39,7 +40,7 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class BuildCodeMatches : BaseAsyncActivity<BuildCodeMatchesInput>
     {
         [RequiredArgument]
-        public InArgument<string> CodePrefix { get; set; }
+        public InArgument<IEnumerable<CodePrefix>> CodePrefixGroup { get; set; }
 
         [RequiredArgument]
         public InArgument<bool> IsCustomerRoutesProcess { get; set; }
@@ -48,10 +49,10 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<SupplierZoneDetailByZone> SupplierZoneDetails { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<SaleCode>> SaleCodes { get; set; }
+        public InArgument<IEnumerable<CodePrefixSaleCodes>> SaleCodes { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<SupplierCode>> SupplierCodes { get; set; }
+        public InArgument<IEnumerable<CodePrefixSupplierCodes>> SupplierCodes { get; set; }
 
         public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_1 { get; set; }
 
@@ -64,43 +65,51 @@ namespace TOne.WhS.Routing.BP.Activities
             CodeMatchesBatch codeMatchesBatch = null;
             if (inputArgument.OutputQueue_1 != null || inputArgument.OutputQueue_2 != null)
                 codeMatchesBatch = new CodeMatchesBatch();
+
             BuildCodeMatchesContext codeMatchContext = new BuildCodeMatchesContext();
             codeMatchContext.SupplierZoneDetails = inputArgument.SupplierZoneDetails;
-            codeMatchContext.CodePrefix = inputArgument.CodePrefix;
+            
 
             CodeMatchBuilder builder = new CodeMatchBuilder();
-            MemoryQueue<CodeMatches> outputQueueForCustomerRoutes = inputArgument.OutputQueueForCustomerRoutes as MemoryQueue<CodeMatches>;
-            builder.BuildCodeMatches(codeMatchContext, inputArgument.SaleCodes, inputArgument.SupplierCodes, codeMatch =>
+            //MemoryQueue<CodeMatches> outputQueueForCustomerRoutes = inputArgument.OutputQueueForCustomerRoutes as MemoryQueue<CodeMatches>;
+
+            foreach (CodePrefix code in inputArgument.CodePrefixGroup)
             {
-                codeMatch.CodePrefix = inputArgument.CodePrefix;
-                if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null)
+                IEnumerable<SaleCode> saleCodes = inputArgument.SaleCodes.FirstOrDefault(itm => itm.CodePrefix == code).SaleCodes;
+                IEnumerable<SupplierCode> supplierCodes = inputArgument.SupplierCodes.FirstOrDefault(itm => itm.CodePrefix == code).SupplierCodes;
+                codeMatchContext.CodePrefix = code.Code;
+                builder.BuildCodeMatches(codeMatchContext, saleCodes, supplierCodes, codeMatch =>
                 {
-                    inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
-                }
-
-                if (codeMatchesBatch != null)
-                {
-                    codeMatchesBatch.CodeMatches.Add(codeMatch);
-
-                    if (codeMatchesBatch.CodeMatches.Count >= 10)
+                    codeMatch.CodePrefix = code.Code;
+                    if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null)
                     {
-                        if (inputArgument.OutputQueue_1 != null)
-                            inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
-                        if (inputArgument.OutputQueue_2 != null)
-                            inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
-                        codeMatchesBatch = new CodeMatchesBatch();
+                        inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
                     }
+
+                    if (codeMatchesBatch != null)
+                    {
+                        codeMatchesBatch.CodeMatches.Add(codeMatch);
+
+                        if (codeMatchesBatch.CodeMatches.Count >= 10)
+                        {
+                            if (inputArgument.OutputQueue_1 != null)
+                                inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
+                            if (inputArgument.OutputQueue_2 != null)
+                                inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
+                            codeMatchesBatch = new CodeMatchesBatch();
+                        }
+                    }
+                });
+
+
+                if (codeMatchesBatch != null && codeMatchesBatch.CodeMatches.Count > 0)
+                {
+                    if (inputArgument.OutputQueue_1 != null)
+                        inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
+                    if (inputArgument.OutputQueue_2 != null)
+                        inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
                 }
-            });
-
-            if (codeMatchesBatch != null && codeMatchesBatch.CodeMatches.Count > 0)
-            {
-                if (inputArgument.OutputQueue_1 != null)
-                    inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
-                if (inputArgument.OutputQueue_2 != null)
-                    inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
             }
-
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Code Matches is done", null);
         }
 
@@ -108,7 +117,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new BuildCodeMatchesInput
             {
-                CodePrefix = this.CodePrefix.Get(context),
+                CodePrefixGroup = this.CodePrefixGroup.Get(context),
                 IsCustomerRoutesProcess = this.IsCustomerRoutesProcess.Get(context),
                 SaleCodes = this.SaleCodes.Get(context),
                 SupplierCodes = this.SupplierCodes.Get(context),

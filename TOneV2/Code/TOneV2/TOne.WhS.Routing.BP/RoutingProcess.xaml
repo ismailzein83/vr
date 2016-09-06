@@ -60,14 +60,14 @@
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
@@ -85,7 +85,7 @@
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">new List&lt;BusinessEntity.Entities.RoutingSupplierInfo&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="scg:IEnumerable(twre:CodePrefix)" Name="DistinctCodePrefixes" />
+      <Variable x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))" Name="DistinctCodePrefixes" />
       <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
       <Variable x:TypeArguments="x:Int32" Name="customerGroupSize" />
@@ -251,8 +251,8 @@
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
         <twrba1:PrepareCodePrefixes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareCodePrefixes_1">
           <twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">DistinctCodePrefixes</mca:CSharpReference>
+            <OutArgument x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))">DistinctCodePrefixes</mca:CSharpReference>
             </OutArgument>
           </twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
           <twrba1:PrepareCodePrefixes.EffectiveOn>
@@ -268,8 +268,8 @@
         </twrba1:PrepareCodePrefixes>
         <twrba1:MakeCodePrefixesAvailableForSubProcesses sap2010:WorkflowViewState.IdRef="MakeCodePrefixesAvailableForSubProcesses_1">
           <twrba1:MakeCodePrefixesAvailableForSubProcesses.CodePrefixes>
-            <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">DistinctCodePrefixes</mca:CSharpValue>
+            <InArgument x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))">DistinctCodePrefixes</mca:CSharpValue>
             </InArgument>
           </twrba1:MakeCodePrefixesAvailableForSubProcesses.CodePrefixes>
         </twrba1:MakeCodePrefixesAvailableForSubProcesses>
@@ -351,27 +351,49 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <ParallelForEach x:TypeArguments="twre:CodePrefix" DisplayName="ParallelForEach&lt;CodePrefix&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
+    <ParallelForEach x:TypeArguments="scg:IEnumerable(twre:CodePrefix)" DisplayName="ParallelForEach&lt;IEnumerable&lt;CodePrefix&gt;&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_7">
       <ParallelForEach.Values>
-        <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">DistinctCodePrefixes.Reverse()</mca:CSharpValue>
+        <InArgument x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(scg:IEnumerable(twre:CodePrefix))">DistinctCodePrefixes.Reverse()</mca:CSharpValue>
         </InArgument>
       </ParallelForEach.Values>
-      <ActivityAction x:TypeArguments="twre:CodePrefix">
+      <ActivityAction x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
         <ActivityAction.Argument>
-          <DelegateInArgument x:TypeArguments="twre:CodePrefix" Name="codePrefix" />
+          <DelegateInArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)" Name="codePrefixGroup" />
         </ActivityAction.Argument>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <Sequence DisplayName="CodePrefix_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Name="CodePrefixGroupDescription" />
+            <Variable x:TypeArguments="x:Int32" Name="CodePrefixGroupCount" />
+          </Sequence.Variables>
+          <twrba1:GetCodePrefixGroupDetails sap2010:WorkflowViewState.IdRef="GetCodePrefixGroupDetails_1">
+            <twrba1:GetCodePrefixGroupDetails.CodePrefixGroup>
+              <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">codePrefixGroup</mca:CSharpValue>
+              </InArgument>
+            </twrba1:GetCodePrefixGroupDetails.CodePrefixGroup>
+            <twrba1:GetCodePrefixGroupDetails.CodePrefixGroupCount>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">CodePrefixGroupCount</mca:CSharpReference>
+              </OutArgument>
+            </twrba1:GetCodePrefixGroupDetails.CodePrefixGroupCount>
+            <twrba1:GetCodePrefixGroupDetails.CodePrefixGroupDescription>
+              <OutArgument x:TypeArguments="x:String">
+                <mca:CSharpReference x:TypeArguments="x:String">CodePrefixGroupDescription</mca:CSharpReference>
+              </OutArgument>
+            </twrba1:GetCodePrefixGroupDetails.CodePrefixGroupDescription>
+          </twrba1:GetCodePrefixGroupDetails>
           <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                 <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput()
             {
                 RoutingDatabaseId = routingDatabaseId,
-                CodePrefix = codePrefix,
+                CodePrefixGroup = codePrefixGroup,
                 EffectiveOn = Input.EffectiveTime,
                 IsFuture = Input.IsFuture,
-                SupplierCodeServiceRuntimeProcessId = supplierCodePrefixesRuntimeProcessIds[codePrefix.Code.Substring(0, 1)]
+                SupplierCodeServiceRuntimeProcessIds = supplierCodePrefixesRuntimeProcessIds,
+                CodePrefixGroupDescription = CodePrefixGroupDescription
             }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
@@ -391,7 +413,7 @@
               <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
                 <TerminateWorkflow.Reason>
                   <InArgument x:TypeArguments="x:String">
-                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing code '{0}' failed due to error: {1}", codePrefix.Code, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing code(s) '{0}' failed due to error: {1}", CodePrefixGroupDescription, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
                   </InArgument>
                 </TerminateWorkflow.Reason>
               </TerminateWorkflow>
@@ -413,7 +435,7 @@
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code Prefix '{0}' group completed (Codes Count:{1}). {2} groups remaining", codePrefix.Code,codePrefix.CodeCount, (DistinctCodePrefixes.Count() - subProcessByPrefixCompleted))</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Code(s) Prefix '{0}' group completed (Codes Count:{1}). {2} groups remaining", CodePrefixGroupDescription,CodePrefixGroupCount, (DistinctCodePrefixes.Count() - subProcessByPrefixCompleted))</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
@@ -468,7 +490,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbFpLA9gDDgIBAVALUKcBAgEYVQtVpwECAQ1fC1/uAQIBAmMFZxEDAbkEaAWCASQDAYEEgwEFiQEgAwH0A4oBBZkBEAMB2wOaAQWlASIDAcQDpgEF2gIQAwHsAdsCBeECIAMB3wHiAgWuAxcCAWuvAwW1AyACAV62AwW8AzICAVK9AwXDAywCAUbEAwXKAyYCATrLAwXWAyYCASNlCWV7AwG6BHoLenADAa4EcAtwagMBowRrC2thAwGYBH8Lf3IDAY0EdQt1cAMBggSGAQuGAYUBAwH2A4MBYIMBdAMB9QOLAQeRAScDAegDkgEHmAEnAwHcA6IBC6IBYQMB0AOdAQudAWEDAcUDpwEH0AEnAwGiA9EBB/oBJwMBgAP7AQfZAhIDAe0B3gIL3gKFAQMB4QHbAmDbArgBAwHgAeUCC+UCfwMB1AHsAgmsAxQCAWyyAwuyA4UBAgFgrwNgrwOEAQIBX7kDC7kDhwECAVPAAwvAA1kCAUfHAwvHA1kCATvOAwvOA3ICAS/TAwvTA3ACASSOAQ2OAYgBAwHpA5UBDZUBhwEDAd0DrwENrwFbAwG5A6oBDaoBowEDAa4DtAENuQEgAwGjA9kBDdkBWwMBlwPUAQ3UAaIBAwGMA94BDeMBIAMBgQP8AQmMAiYDAd4CjQIJkwI7AwHSApQCCdYCGwMB8QHXAgnXAm8DAfAB2AIJ2AKbAQMB7gHtAgv/AhwDAboBgAMLqwMQAgFt/wEP/wGBAQMB9QKEAg+EAm4DAeoCiQIPiQJcAwHfApACD5ACeQMB0wKXAg+XAogBAwHHAp4CDdQCGAMB8gHYAnjYApgBAwHvAfACEfcCIAMByAH8AhH8AoQBAwG8Ae0CfO0CggEDAbsBgwMRgwOzAQIBbocDD40DIwMBrQGQAw+pAxoCAXqiAg+zAiADAasCtAIP0wIUAwHzAYoDFYoDzgEDAa4BkQMRnAMaAwGUAZ0DEagDLAIBe6UCFasCIAMBugKwAhWwApEBAwGtAqICgAGiAoYBAwGsArcCFbcCwAEDAfQBuwITwQInAwGdAsQCE9ECHgMBgQKZAxeZA3MDAaEBlAMXlAN3AwGVAaUDF6UDkQEDAYgBoAMXoAOeAgIBfL4CGb4C6AEDAZ4CxQIV0AIeAwGCAs0CG80CswEDAZACyAIbyAKRAQMBgwI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ1Byb2Nlc3MueGFtbF5LA+4DDgIBAVALUKcBAgEYVQtVpwECAQ1fC1/uAQIBAmMFZxEDAfQEaAWCASQDAbwEgwEFiQEgAwGvBIoBBZkBEAMBlgSaAQWlASIDAf8DpgEF2gIQAwGnAtsCBeECIAMBmgLiAgXEAxcCAWvFAwXLAyACAV7MAwXSAzICAVLTAwXZAywCAUbaAwXgAyYCATrhAwXsAyYCASNlCWV7AwH1BHoLenADAekEcAtwagMB3gRrC2thAwHTBH8Lf3IDAcgEdQt1cAMBvQSGAQuGAYUBAwGxBIMBYIMBdAMBsASLAQeRAScDAaMEkgEHmAEnAwGXBKIBC6IBYQMBiwSdAQudAWEDAYAEpwEH0AEnAwHdA9EBB/oBJwMBuwP7AQfZAhIDAagC3gIL3gKFAQMBnALbAmDbArgBAwGbAuUCC+UCkAEDAY8C7AIJwgMUAgFsyAMLyAOFAQIBYMUDYMUDhAECAV/PAwvPA4cBAgFT1gML1gNZAgFH3QML3QNZAgE75AML5ANyAgEv6QML6QNwAgEkjgENjgGIAQMBpASVAQ2VAYcBAwGYBK8BDa8BWwMB9AOqAQ2qAaMBAwHpA7QBDbkBIAMB3gPZAQ3ZAVsDAdID1AEN1AGiAQMBxwPeAQ3jASADAbwD/AEJjAImAwGZA40CCZMCOwMBjQOUAgnWAhsDAawC1wIJ1wJvAwGrAtgCCdgCmwEDAakC8QILgQMuAwHkAYIDC5UDHAMBxgGWAwvBAxACAW3/AQ//AZIBAwGwA4QCD4QCbgMBpQOJAg+JAlwDAZoDkAIPkAKKAQMBjgOXAg+XAogBAwGCA54CDdQCGAMBrQLYAnjYApgBAwGqAvQCEfQCdgMBgQL5AhH5AmoDAfMB/gIR/gJxAwHlAYUDEY0DIAMB1gGSAxGSA4QBAwHIAYIDfIIDggEDAccBmQMRmQOzAQIBbp0DD6MDIwMBtwGmAw+/AxoCAXyiAg+zAiADAeYCtAIP0wIUAwGuAqADFaAD3AEDAbgBpwMRsgMaAwGaAbMDEb4DLAIBfaUCFasCIAMB9QKwAhWwApEBAwHoAqICgAGiAoYBAwHnArcCFbcCwAEDAa8CuwITwQInAwHYAsQCE9ECHgMBvAKvAxevA3MDAakBqgMXqgN3AwGbAbsDF7sDkQEDAYwBtgMXtgOsAgIBfr4CGb4C6AEDAdkCxQIV0AIeAwG9As0CG80CswEDAcsCyAIbyAKRAQMBvgI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -580,6 +602,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1157,1090" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1157,22" />
+      <sap2010:ViewStateData Id="GetCodePrefixGroupDetails_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -592,27 +615,27 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,398" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,584">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,646">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="1157,734" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_7" sap:VirtualizedContainerService.HintSize="1157,796" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="UnLoadSupplierCodesFromSubProcesses_1" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_1" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1157,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1179,2774">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1179,2836">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1219,2854" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1219,2916" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

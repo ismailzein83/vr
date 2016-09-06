@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class GetCustomerZoneDetailsInput
     {
-        public IEnumerable<SaleCode> SaleCodes { get; set; }
+        public IEnumerable<CodePrefixSaleCodes> SaleCodes { get; set; }
 
         public int RoutingDatabase { get; set; }
     }
@@ -27,7 +27,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
 
         [RequiredArgument]
-        public InArgument<IEnumerable<SaleCode>> SaleCodes { get; set; }
+        public InArgument<IEnumerable<CodePrefixSaleCodes>> SaleCodes { get; set; }
 
         [RequiredArgument]
         public InArgument<int> RoutingDatabase { get; set; }
@@ -42,7 +42,7 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabase);
 
-            IEnumerable<CustomerZoneDetail> customerZoneDetails = dataManager.GetFilteredCustomerZoneDetailsByZone(inputArgument.SaleCodes.Select(s => s.ZoneId).Distinct());
+            IEnumerable<CustomerZoneDetail> customerZoneDetails = dataManager.GetFilteredCustomerZoneDetailsByZone(inputArgument.SaleCodes.SelectMany(itm => itm.SaleCodes).Select(itm => itm.ZoneId).Distinct());
             if (customerZoneDetails != null)
             {
                 customerZoneDetailsByZone = new CustomerZoneDetailByZone();

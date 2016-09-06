@@ -18,7 +18,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class PrepareCodePrefixesOutput
     {
-        public IEnumerable<CodePrefix> DistinctCodePrefixes { get; set; }
+        public IEnumerable<IEnumerable<CodePrefix>> DistinctCodePrefixes { get; set; }
     }
 
     public sealed class PrepareCodePrefixes : BaseAsyncActivity<PrepareCodePrefixesInput, PrepareCodePrefixesOutput>
@@ -30,15 +30,15 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<CodePrefix>> DistinctCodePrefixes { get; set; }
+        public OutArgument<IEnumerable<IEnumerable<CodePrefix>>> DistinctCodePrefixes { get; set; }
 
         protected override PrepareCodePrefixesOutput DoWorkWithResult(PrepareCodePrefixesInput inputArgument, AsyncActivityHandle handle)
         {
-            List<CodePrefix> distinctCodePrefixes = new List<CodePrefix>();
+            List<List<CodePrefix>> distinctCodePrefixes = new List<List<CodePrefix>>();
             HashSet<string> codesDivided = new HashSet<string>();
 
             //Dictionaries
-            Dictionary<string, CodePrefixInfo> codePrefixes = new Dictionary<string, CodePrefixInfo>();
+            Dictionary<CodePrefixKey, CodePrefixInfo> codePrefixes = new Dictionary<CodePrefixKey, CodePrefixInfo>();
             Dictionary<string, CodePrefixInfo> pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
 
             //Initializint Settings
@@ -59,50 +59,53 @@ namespace TOne.WhS.Routing.BP.Activities
             IEnumerable<CodePrefixInfo> saleCodePrefixes = saleCodeManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
             AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, handle);
 
-            if (maxPrefixLength == 1)
+            CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
+
+            while (pendingCodePrefixes.Count > 0 && prefixLength < maxPrefixLength)
             {
-                codePrefixes = pendingCodePrefixes;
-            }
-            else
-            {
+                prefixLength++;
+
+                IEnumerable<string> _pendingCodePrefixes = pendingCodePrefixes.Keys;
+                codesDivided.UnionWith(_pendingCodePrefixes);
+
+                pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
+
+                supplierCodePrefixes = supplierCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
+                AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes, handle);
+
+                saleCodePrefixes = saleCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
+                AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, handle);
+
                 CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
-
-                while (pendingCodePrefixes.Count > 0 && prefixLength < maxPrefixLength)
-                {
-                    prefixLength++;
-
-                    IEnumerable<string> _pendingCodePrefixes = pendingCodePrefixes.Keys;
-                    codesDivided.UnionWith(_pendingCodePrefixes);
-
-                    pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>();
-
-                    supplierCodePrefixes = supplierCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
-                    AddCodePrefixes(supplierCodePrefixes, pendingCodePrefixes, handle);
-
-                    saleCodePrefixes = saleCodeManager.GetSpecificCodeByPrefixes(prefixLength, _pendingCodePrefixes, effectiveOn, isFuture);
-                    AddCodePrefixes(saleCodePrefixes, pendingCodePrefixes, handle);
-
-                    CheckThreshold(pendingCodePrefixes, codePrefixes, threshold);
-                }
-
-                if (pendingCodePrefixes.Count > 0)
-                    foreach (KeyValuePair<string, CodePrefixInfo> item in pendingCodePrefixes)
-                        codePrefixes.Add(item.Key, item.Value);
             }
 
-            codePrefixes.Values.OrderByDescending(itm => itm.Count).ToList().ForEach(i =>
-                distinctCodePrefixes.Add(new CodePrefix()
+            if (pendingCodePrefixes.Count > 0)
+                foreach (KeyValuePair<string, CodePrefixInfo> item in pendingCodePrefixes)
+                    codePrefixes.Add(new CodePrefixKey() { Count = item.Value.Count }, item.Value);
+
+            Dictionary<CodePrefixKey, List<CodePrefixInfo>> groupCodePrefix = GroupCodePrefixes(codePrefixes, threshold);
+            groupCodePrefix.OrderByDescending(itm => itm.Key.Count).ToDictionary(itm => itm.Key, itm => itm.Value).Values.ToList().ForEach(i =>
+            {
+                List<CodePrefix> currentCodePrefixes = new List<CodePrefix>();
+                foreach (CodePrefixInfo codePrefixInfo in i)
                 {
-                    Code = i.CodePrefix,
-                    IsCodeDivided = codesDivided.Contains(i.CodePrefix),
-                    CodeCount = i.Count
-                }));
+                    CodePrefix codePrefix = new CodePrefix()
+                    {
+                        Code = codePrefixInfo.CodePrefix,
+                        IsCodeDivided = codesDivided.Contains(codePrefixInfo.CodePrefix),
+                        CodeCount = codePrefixInfo.Count
+                    };
+                    currentCodePrefixes.Add(codePrefix);
+                }
+                distinctCodePrefixes.Add(currentCodePrefixes);
+            });
 
             return new PrepareCodePrefixesOutput()
             {
                 DistinctCodePrefixes = distinctCodePrefixes
             };
         }
+
 
         protected override PrepareCodePrefixesInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -144,15 +147,49 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        void CheckThreshold(Dictionary<string, CodePrefixInfo> pendingCodePrefixes, Dictionary<string, CodePrefixInfo> codePrefixes, int threshold)
+        void CheckThreshold(Dictionary<string, CodePrefixInfo> pendingCodePrefixes, Dictionary<CodePrefixKey, CodePrefixInfo> codePrefixes, int threshold)
         {
-            Dictionary<string, CodePrefixInfo> _pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
+            Dictionary<string, CodePrefixInfo> _pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes).OrderByDescending(itm => itm.Value.Count).ToDictionary(itm => itm.Key, itm => itm.Value);
+
             foreach (KeyValuePair<string, CodePrefixInfo> item in _pendingCodePrefixes)
+            {
                 if (item.Value.Count <= threshold)
                 {
-                    codePrefixes.Add(item.Key, item.Value);
+                    codePrefixes.Add(new CodePrefixKey() { Count = item.Value.Count }, item.Value);
                     pendingCodePrefixes.Remove(item.Key);
                 }
+            }
+        }
+
+        private Dictionary<CodePrefixKey, List<CodePrefixInfo>> GroupCodePrefixes(Dictionary<CodePrefixKey, CodePrefixInfo> codePrefixes, int threshold)
+        {
+            Dictionary<CodePrefixKey, List<CodePrefixInfo>> result = new Dictionary<CodePrefixKey, List<CodePrefixInfo>>();
+            codePrefixes = codePrefixes.OrderByDescending(itm => itm.Key.Count).ToDictionary(itm => itm.Key, itm => itm.Value);
+
+            List<CodePrefixInfo> codePrefixInfoList = new List<CodePrefixInfo>();
+            int count = 0;
+
+            foreach (KeyValuePair<CodePrefixKey, CodePrefixInfo> item in codePrefixes)
+            {
+                if (item.Value.Count + count > threshold && count > 0)
+                {
+                    result.Add(new CodePrefixKey() { Count = count }, codePrefixInfoList);
+                    codePrefixInfoList = new List<CodePrefixInfo>();
+                    count = 0;
+                }
+
+                codePrefixInfoList.Add(item.Value);
+                count += item.Value.Count;
+
+
+            }
+            result.Add(new CodePrefixKey() { Count = count }, codePrefixInfoList);//to add last item
+            return result;
+        }
+
+        private class CodePrefixKey
+        {
+            public int Count { get; set; }
         }
         #endregion
     }

@@ -15,4 +15,18 @@ namespace TOne.WhS.Routing.Entities
 
         public int CodeCount { get; set; }
     }
+
+    public class CodePrefixSaleCodes
+    {
+        public CodePrefix CodePrefix { get; set; }
+
+        public IEnumerable<SaleCode> SaleCodes { get; set; }
+    }
+
+    public class CodePrefixSupplierCodes
+    {
+        public CodePrefix CodePrefix { get; set; }
+
+        public IEnumerable<SupplierCode> SupplierCodes { get; set; }
+    }
 }

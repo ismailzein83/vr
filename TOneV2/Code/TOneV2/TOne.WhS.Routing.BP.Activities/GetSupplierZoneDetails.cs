@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class GetSupplierZoneDetailsInput
     {
-        public IEnumerable<SupplierCode> SupplierCodes { get; set; }
+        public IEnumerable<CodePrefixSupplierCodes> SupplierCodes { get; set; }
 
         public int RoutingDatabaseId { get; set; }
     }
@@ -30,7 +30,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
 
         [RequiredArgument]
-        public InArgument<IEnumerable<SupplierCode>> SupplierCodes { get; set; }
+        public InArgument<IEnumerable<CodePrefixSupplierCodes>> SupplierCodes { get; set; }
 
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
@@ -46,7 +46,7 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             supplierZoneDetailsManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetFilteredSupplierZoneDetailsBySupplierZone(inputArgument.SupplierCodes.Select(c => c.ZoneId).Distinct());
+            IEnumerable<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsManager.GetFilteredSupplierZoneDetailsBySupplierZone(inputArgument.SupplierCodes.SelectMany(itm => itm.SupplierCodes).Select(itm => itm.ZoneId).Distinct());
 
             if (supplierZoneDetails != null)
             {

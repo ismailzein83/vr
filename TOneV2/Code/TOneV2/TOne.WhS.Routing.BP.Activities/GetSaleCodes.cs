@@ -12,23 +12,17 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class GetSaleCodesInput
     {
-        public CodePrefix CodePrefix { get; set; }
+        public IEnumerable<CodePrefix> CodePrefixGroup { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
 
         public bool IsFuture { get; set; }
     }
 
-    public class GetSaleCodesOutput
-    {
-        public IEnumerable<SaleCode> SaleCodes { get; set; }
-    }
-
-
-    public sealed class GetSaleCodes : BaseAsyncActivity<GetSaleCodesInput, GetSaleCodesOutput>
+    public sealed class GetSaleCodes : BaseAsyncActivity<GetSaleCodesInput, List<CodePrefixSaleCodes>>
     {
         [RequiredArgument]
-        public InArgument<CodePrefix> CodePrefix { get; set; }
+        public InArgument<IEnumerable<CodePrefix>> CodePrefixGroup { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveOn { get; set; }
@@ -37,35 +31,36 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<SaleCode>> SaleCodes { get; set; }
+        public OutArgument<IEnumerable<CodePrefixSaleCodes>> CodePrefixSaleCodes { get; set; }
 
 
-        protected override GetSaleCodesOutput DoWorkWithResult(GetSaleCodesInput inputArgument, AsyncActivityHandle handle)
+        protected override List<CodePrefixSaleCodes> DoWorkWithResult(GetSaleCodesInput inputArgument, AsyncActivityHandle handle)
         {
+            List<CodePrefixSaleCodes> output = new List<CodePrefixSaleCodes>();
             SaleCodeManager manager = new SaleCodeManager();
-
-            bool getChildCodes = !inputArgument.CodePrefix.IsCodeDivided;
-            IEnumerable<SaleCode> saleCodes = manager.GetSaleCodesByPrefix(inputArgument.CodePrefix.Code, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true);
-
-            return new GetSaleCodesOutput
+            foreach (CodePrefix codePrefix in inputArgument.CodePrefixGroup)
             {
-                SaleCodes = saleCodes
-            };
+                bool getChildCodes = !codePrefix.IsCodeDivided;
+                IEnumerable<SaleCode> saleCodes = manager.GetSaleCodesByPrefix(codePrefix.Code, inputArgument.EffectiveOn, inputArgument.IsFuture, getChildCodes, true);
+
+                output.Add(new CodePrefixSaleCodes() { CodePrefix = codePrefix, SaleCodes = saleCodes });
+            }
+            return output;
         }
 
         protected override GetSaleCodesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GetSaleCodesInput
             {
-                CodePrefix = this.CodePrefix.Get(context),
+                CodePrefixGroup = this.CodePrefixGroup.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsFuture = this.IsFuture.Get(context)
             };
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetSaleCodesOutput result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, List<CodePrefixSaleCodes> result)
         {
-            this.SaleCodes.Set(context, result.SaleCodes);
+            this.CodePrefixSaleCodes.Set(context, result);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Getting Sale Codes is done", null);
         }
     }

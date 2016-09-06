@@ -13,11 +13,11 @@ namespace TOne.WhS.Routing.BP.Activities
     public class MakeCodePrefixesAvailableForSubProcesses : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<IEnumerable<CodePrefix>> CodePrefixes { get; set; }
+        public InArgument<IEnumerable<IEnumerable<CodePrefix>>> CodePrefixes { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            CodePrefixRequest.LoadProcessCodePrefixes(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, this.CodePrefixes.Get(context).ToList());
+            CodePrefixRequest.LoadProcessCodePrefixes(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, this.CodePrefixes.Get(context));
         }
     }
 
@@ -35,14 +35,22 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public string Prefix { get; set; }
 
-        static Dictionary<long, List<CodePrefix>> s_codePrefixesByProcessInstanceId = new Dictionary<long, List<CodePrefix>>();
+        static Dictionary<long, IEnumerable<IEnumerable<CodePrefix>>> s_codePrefixesByProcessInstanceId = new Dictionary<long, IEnumerable<IEnumerable<CodePrefix>>>();
 
         public override List<CodePrefix> Execute()
         {
-            return s_codePrefixesByProcessInstanceId.GetRecord(this.ProcessInstanceId).Where(itm => itm.Code.StartsWith(this.Prefix)).ToList();
+            List<CodePrefix> result = new List<CodePrefix>();
+            IEnumerable<IEnumerable<CodePrefix>> codePrefixes = s_codePrefixesByProcessInstanceId.GetRecord(this.ProcessInstanceId);
+            foreach (IEnumerable<CodePrefix> codePrefixList in codePrefixes)
+            {
+                IEnumerable<CodePrefix> data = codePrefixList.Where(itm => itm.Code.StartsWith(this.Prefix));
+                if (data != null)
+                    result.AddRange(data.ToList());
+            }
+            return result;
         }
 
-        internal static void LoadProcessCodePrefixes(long processInstanceId, List<CodePrefix> codePrefixes)
+        internal static void LoadProcessCodePrefixes(long processInstanceId, IEnumerable<IEnumerable<CodePrefix>> codePrefixes)
         {
             s_codePrefixesByProcessInstanceId.Add(processInstanceId, codePrefixes);
         }
