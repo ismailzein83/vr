@@ -2,18 +2,24 @@
 <div vr-modalcontent ng-controller="VR_Analytic_DAProfCalcAggregationFieldController" width="'40%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formDAProfCalcAggregationFieldEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Field Name" value="scopeModel.fieldName"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
 
-            <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Field Name" value="scopeModel.fieldName"></vr-textbox>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-            </vr-row>
-            <vr-row>
-                <vr-analytic-darecordaggregate-selective on-ready="scopeModel.onRecordAggregateSelectiveReady"></vr-analytic-darecordaggregate-selective>
-            </vr-row>
+                    <vr-row>
+                        <vr-analytic-darecordaggregate-selective on-ready="scopeModel.onRecordAggregateSelectiveReady"></vr-analytic-darecordaggregate-selective>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Record Filter'">
+                    <vr-row>
+                        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
 
         </vr-form>
     </vr-modalbody>

@@ -94,6 +94,12 @@ namespace Vanrise.Analytic.Business
             return templateConfigManager.GetExtensionConfigurations<DARecordAggregateConfig>(DARecordAggregateConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<TimeRangeFilterConfig> GetTimeRangeFilterExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<TimeRangeFilterConfig>(TimeRangeFilterConfig.EXTENSION_TYPE);
+        }
+
         //public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter)
         //{
         //    Func<DataAnalysisItemDefinition, bool> filterExpression = null;

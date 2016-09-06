@@ -1,17 +1,34 @@
 ﻿
 
-<vr-tab header="'Record Filter'">
+<vr-tab header="'Record Type'">
     <vr-row>
-        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+        <vr-columns width="1/2row" vr-loader="scopeModel.isSelectorLoading">
+            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                    onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
+                                                    isrequired="true"
+                                                    label="Record Type"
+                                                    hideremoveicon>
+            </vr-genericdata-datarecordtype-selector>
+        </vr-columns>
     </vr-row>
+</vr-tab>
+<vr-tab header="'Filters'">
+    <vr-section title="Record Filter" collapsible>
+        <vr-row>
+            <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+        </vr-row>
+    </vr-section>
+    <vr-section title="Time Filter" collapsible>
+        <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady"></vr-analytic-timerangefilter-selective>
+    </vr-section>
 </vr-tab>
 <vr-tab header="'Grouping Fields'">
     <vr-row>
         <vr-columns width="1/2row">
             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
                                                           onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged"
-                                                          isrequired="false"
                                                           label="Fields"
+                                                          isrequired="false"
                                                           ismultipleselection="true"
                                                           hideremoveicon>
             </vr-genericdata-datarecordtypefields-selector>

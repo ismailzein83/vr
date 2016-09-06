@@ -20,7 +20,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/Templates/DARecordAggregateSelectiveTemplate.html'
+            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/Common/Templates/DARecordAggregateSelectiveTemplate.html'
         };
 
         function DARecordAggregateSelective($scope, ctrl, $attrs) {
@@ -46,7 +46,6 @@
                     directiveAPI = api;
 
                     var directivePayload = { context: context };
-
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };

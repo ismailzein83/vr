@@ -24,7 +24,7 @@
                     }
                 }
             },
-            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Templates/DAProfCalcCalculationFieldManagementTemplate.html'
+            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Common/Templates/DAProfCalcCalculationFieldManagementTemplate.html'
         };
 
         function DAProfCalcCalculationField($scope, ctrl) {

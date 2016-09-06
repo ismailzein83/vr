@@ -32,23 +32,9 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
+            $scope.scopeModel.onDataRecordFieldTypeSelectiveReady = function (api) {
                 dataRecordTypeFieldsSelectorAPI = api;
                 dataRecordTypeFieldsSelectorReadyDeferred.resolve();
-            }
-
-            $scope.scopeModel.onValidateProperties = function () {
-
-                if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
-                    return null;
-
-                for (var i = 0; i < properties.length; i++) {
-                    var property = properties[i];
-                    if ($scope.scopeModel.propertyName.toLowerCase() == property.Name.toLowerCase()) {
-                        return 'Same Property Name Exists';
-                    }
-                }
-                return null;
             }
 
             $scope.scopeModel.save = function () {
@@ -90,22 +76,13 @@
                 var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
-                    var dataRecordTypeFieldsSelectorPayload = {};
+                    var dataRecordTypeFieldsSelectorPayload;
 
                     if (calculationFieldEntity != undefined && calculationFieldEntity.FieldType) {
-                        dataRecordTypeFieldsSelectorPayload.selectedIds = calculationFieldEntity.FieldType;
+                        dataRecordTypeFieldsSelectorPayload = calculationFieldEntity.FieldType;
                     }
 
-                    //check if dataRecordType is selected
-                    var _dataRecordTypeId = context.getDataRecordTypeId();
-                    if (_dataRecordTypeId) {
-                        dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = _dataRecordTypeId;
-                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
-                    }
-                    else {
-                        dataRecordTypeFieldsSelectorLoadDeferred.resolve();
-                    }
-
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
                 });
 
                 return dataRecordTypeFieldsSelectorLoadDeferred.promise;
@@ -133,7 +110,7 @@
 
             return {
                 FieldName: $scope.scopeModel.fieldName,
-                FieldType: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                FieldType: dataRecordTypeFieldsSelectorAPI.getData(),
                 Expression: $scope.scopeModel.expression
             };
         }

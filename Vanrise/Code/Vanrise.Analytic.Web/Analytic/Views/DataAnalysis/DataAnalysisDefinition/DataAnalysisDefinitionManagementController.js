@@ -23,6 +23,7 @@
                 var onDataAnalysisDefinitionAdded = function (addedDataAnalysisDefinition) {
                     gridAPI.onDataAnalysisDefinitionAdded(addedDataAnalysisDefinition);
                 }
+
                 VR_Analytic_DataAnalysisDefinitionService.addDataAnalysisDefinition(onDataAnalysisDefinitionAdded);
             };
 

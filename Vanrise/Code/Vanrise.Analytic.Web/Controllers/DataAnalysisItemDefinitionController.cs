@@ -50,6 +50,13 @@ namespace Vanrise.Analytic.Web.Controllers
             return _manager.GetDARecordAggregateExtensionConfigs();
         }
 
+        [HttpGet]
+        [Route("GetTimeRangeFilterExtensionConfigs")]
+        public IEnumerable<TimeRangeFilterConfig> GetTimeRangeFilterExtensionConfigs()
+        {
+            return _manager.GetTimeRangeFilterExtensionConfigs();
+        }
+
         //[HttpGet]
         //[Route("GetDataAnalysisItemDefinitionsInfo")]
         //public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(string filter = null)

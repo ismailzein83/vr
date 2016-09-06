@@ -2,9 +2,9 @@
 
     'use strict';
 
-    StyleDefinitionSettingsDirective.$inject = ['VRCommon_StyleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    TimeRangeFilterSelectiveDirective.$inject = ['VR_Analytic_DataAnalysisItemDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function StyleDefinitionSettingsDirective(VRCommon_StyleDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function TimeRangeFilterSelectiveDirective(VR_Analytic_DataAnalysisItemDefinitionAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,17 +15,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var styleDefinitionSettings = new StyleDefinitionSettings($scope, ctrl, $attrs);
-                styleDefinitionSettings.initializeController();
+                var timeRangeFilterSelective = new TimeRangeFilterSelective($scope, ctrl, $attrs);
+                timeRangeFilterSelective.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            template: function (element, attrs) {
-                return getTamplate(attrs);
-            }
+            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/Common/Templates/TimeRangeFilterSelectiveTemplate.html'
         };
 
-        function StyleDefinitionSettings($scope, ctrl, $attrs) {
+        function TimeRangeFilterSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -51,7 +49,6 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -59,29 +56,31 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var styleDefinitionSettings;
+                    var timeRangeFilter;
 
                     if (payload != undefined) {
-                        styleDefinitionSettings = payload.styleDefinitionSettings;
-                    }
+                        timeRangeFilter = payload.timeRangeFilter;
+                     }
 
-                    if (styleDefinitionSettings != undefined) {
+                    var getTimeRangeFilterTemplateConfigsPromise = getTimeRangeFilterTemplateConfigs();
+                    promises.push(getTimeRangeFilterTemplateConfigsPromise);
+
+                    if (timeRangeFilter != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getStyleDefinitionSettingsTemplateConfigsPromise = getStyleDefinitionSettingsTemplateConfigs();
-                    promises.push(getStyleDefinitionSettingsTemplateConfigsPromise);
 
-                    function getStyleDefinitionSettingsTemplateConfigs() {
-                        return VRCommon_StyleDefinitionAPIService.GetStyleFormatingExtensionConfigs().then(function (response) {
+                    function getTimeRangeFilterTemplateConfigs() {
+                        return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetTimeRangeFilterExtensionConfigs().then(function (response) {
+
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (styleDefinitionSettings != undefined && styleDefinitionSettings.StyleFormatingSettings != null) {
+                                if (timeRangeFilter != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, styleDefinitionSettings.StyleFormatingSettings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, timeRangeFilter.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -93,7 +92,10 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { styleFormatingSettings: styleDefinitionSettings.StyleFormatingSettings };
+
+                            var directivePayload = {
+                                timeRangeFilter: timeRangeFilter,
+                            };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -108,13 +110,12 @@
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
 
                         data = directiveAPI.getData();
+
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
-                    return {
-                        StyleFormatingSettings: data
-                    };
+                    return data
                 };
 
                 if (ctrl.onReady != null) {
@@ -122,30 +123,8 @@
                 }
             }
         }
-
-        function getTamplate(attrs) {
-
-            var template =
-                  ' <vr-row>'
-                    + ' <vr-columns width="1/2row">'
-                        + ' <vr-select on-ready="scopeModel.onSelectorReady"'
-                            + ' datasource="scopeModel.templateConfigs"'
-                            + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                            + ' datavaluefield="ExtensionConfigurationId"'
-                            + ' datatextfield="Title"'
-                            + ' isrequired="true"'
-                            + ' label="Style Formating"'
-                            + ' hideremoveicon>'
-                        + '</vr-select>'
-                    + ' </vr-columns>'
-                + ' </vr-row>'
-                    + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
-                            + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                    + ' </vr-directivewrapper>'
-            return template;
-        }
     }
 
-    app.directive('vrCommonStyledefinitionSettings', StyleDefinitionSettingsDirective);
+    app.directive('vrAnalyticTimerangefilterSelective', TimeRangeFilterSelectiveDirective);
 
 })(app);

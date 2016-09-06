@@ -1,8 +1,8 @@
 ﻿
 'use strict';
 
-app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService', 'VR_Analytic_DataAnalysisDefinitionDrillDownService', 'VRNotificationService',
-    function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VR_Analytic_DataAnalysisDefinitionDrillDownService, VRNotificationService) {
+app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService','VRNotificationService',
+    function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -46,7 +46,7 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var dataAnalysisDefinition = response.Data[i];
-                                VR_Analytic_DataAnalysisDefinitionDrillDownService.defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI);
+                                VR_Analytic_DataAnalysisDefinitionService.defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI);
                             }
                         }
                         onResponseReady(response);
@@ -68,6 +68,7 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                 };
 
                 api.onDataAnalysisDefinitionAdded = function (addedDataAnalysisDefinition) {
+                    VR_Analytic_DataAnalysisDefinitionService.defineDataAnalysisItemDefinitionTabsAndMenuActions(addedDataAnalysisDefinition, gridAPI);
                     gridAPI.itemAdded(addedDataAnalysisDefinition);
                 }
 
@@ -83,6 +84,7 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
             }
             function editDataAnalysisDefinition(dataAnalysisDefinitionItem) {
                 var onDataAnalysisDefinitionUpdated = function (updatedDataAnalysisDefinition) {
+                    VR_Analytic_DataAnalysisDefinitionService.defineDataAnalysisItemDefinitionTabsAndMenuActions(updatedDataAnalysisDefinition, gridAPI);
                     gridAPI.itemUpdated(updatedDataAnalysisDefinition);
                 };
 

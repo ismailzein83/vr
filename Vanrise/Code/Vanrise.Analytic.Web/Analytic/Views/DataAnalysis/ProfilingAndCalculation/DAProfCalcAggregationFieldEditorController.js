@@ -44,20 +44,6 @@
                 recordAggregateSelectiveReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onValidateProperties = function () {
-
-                if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
-                    return null;
-
-                for (var i = 0; i < properties.length; i++) {
-                    var property = properties[i];
-                    if ($scope.scopeModel.propertyName.toLowerCase() == property.Name.toLowerCase()) {
-                        return 'Same Property Name Exists';
-                    }
-                }
-                return null;
-            }
-
             $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return update();

@@ -17,10 +17,6 @@
         var dataRecordTypeId;
         var dataRecordTypeEntity;
 
-        var dataRecordTypeSelectorAPI;
-        var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var dataRecordTypeSelectionChangedDeferred;
-
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -42,28 +38,6 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
-            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
-                dataRecordTypeSelectorAPI = api;
-                dataRecordTypeSelectorReadyDeferred.resolve();
-            }
-            $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
-                //var selectedId = dataRecordTypeSelectorAPI.getSelectedIds();
-                //if (selectedId != undefined) {
-
-                //    dataRecordTypeId = selectedId;
-
-                //    var settingsDirectivePayload = {};
-                //    settingsDirectivePayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
-                //    settingsDirectivePayload.itemDefinitionTypeId = itemDefinitionTypeId;
-                //    settingsDirectivePayload.context = buildContext();
-
-                //    var setLoader = function (value) {
-                //        $scope.scopeModel.isSelectorLoading = value;
-                //    };
-                //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, settingsDirectivePayload, setLoader, dataRecordTypeSelectionChangedDeferred);
-                //}
-            };
 
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
@@ -123,7 +97,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadSettingsDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
             }).finally(function () {
@@ -145,20 +119,6 @@
 
                 $scope.scopeModel.name = dataAnalysisItemDefinitionEntity.Name;
                 $scope.scopeModel.title = dataAnalysisItemDefinitionEntity.Settings.Title;
-            }
-            function loadDataRecordTypeSelector() {
-                var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                dataRecordTypeSelectorReadyDeferred.promise.then(function () {
-                    var dataRecordTypeSelectorPayload = {};
-                    if (dataAnalysisItemDefinitionEntity != undefined && dataAnalysisItemDefinitionEntity.Settings != undefined) {
-                        dataRecordTypeSelectorPayload.selectedIds = dataAnalysisItemDefinitionEntity.Settings.RecordTypeId;
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadDeferred);
-                });
-
-                return dataRecordTypeSelectorLoadDeferred.promise;
             }
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -241,7 +201,6 @@
             var dataAnalysisItemDefinitionSettings = settingsDirectiveAPI.getData();
             if (dataAnalysisItemDefinitionSettings != undefined) {
                 dataAnalysisItemDefinitionSettings.Title = $scope.scopeModel.title;
-                dataAnalysisItemDefinitionSettings.RecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds()
             }
 
             return {
