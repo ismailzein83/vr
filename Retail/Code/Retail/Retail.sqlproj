@@ -79,6 +79,7 @@
     <Folder Include="VR_AccountBalance\Functions\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail\Tables\Package.sql" />
@@ -213,5 +214,9 @@
     <Build Include="Retail\Stored Procedures\sp_OperatorDeclaredInfo_Update.sql" />
     <Build Include="Retail\Stored Procedures\sp_OperatorDeclaredInfo_Insert.sql" />
     <Build Include="Retail\Stored Procedures\sp_OperatorDeclaredInfo_GetAll.sql" />
+    <Build Include="dbo\Tables\Pop.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Pop_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Pop_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Pop_GetAll.sql" />
   </ItemGroup>
 </Project>
