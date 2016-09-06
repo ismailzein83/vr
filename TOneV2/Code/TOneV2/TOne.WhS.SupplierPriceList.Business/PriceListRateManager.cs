@@ -206,6 +206,9 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private void FillRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, ExistingRateGroupByZoneName existingRatesGroupsByZoneName)
         {
+            if (notImportedZones == null)
+                return;
+
             ExistingRateGroup existingRateGroup;
             foreach (NotImportedZone notImportedZone in notImportedZones)
             {

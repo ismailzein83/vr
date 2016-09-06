@@ -95,7 +95,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                 importedZone.ChangeType = GetZoneChangeType(importedZone, existingZones, importedZoneNamesHashSet);
                 importedZone.BED = GetZoneBED(importedZone);
-                importedZone.EED = (importedZone.ChangeType == ZoneChangeType.NotChanged) ? GetZoneEED(importedZone) : null;
+                importedZone.EED = GetZoneEED(importedZone);
             }
         }
 
@@ -136,6 +136,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private DateTime? GetZoneEED(ImportedZone importedZone)
         {
+            if (importedZone.ChangeType == ZoneChangeType.NotChanged)
+                return null;
+
             IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(importedZone.ExistingZones, importedZone.ZoneName);
             return connectedEntites.Last().EED;
         }
