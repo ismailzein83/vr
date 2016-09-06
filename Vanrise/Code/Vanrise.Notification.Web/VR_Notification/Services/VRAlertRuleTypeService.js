@@ -13,7 +13,7 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRAlertRuleTypeAdded = onVRAlertRuleTypeAdded
             };
-            VRModalService.showModal('/Client/Modules/Common/Views/VRAlertRuleType/VRAlertRuleTypeEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRuleType/VRAlertRuleTypeEditor.html', null, settings);
         };
 
         function editVRAlertRuleType(styleDefinitionId, onVRAlertRuleTypeUpdated) {
@@ -26,7 +26,7 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRAlertRuleTypeUpdated = onVRAlertRuleTypeUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Common/Views/VRAlertRuleType/VRAlertRuleTypeEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRuleType/VRAlertRuleTypeEditor.html', parameters, settings);
         }
 
 

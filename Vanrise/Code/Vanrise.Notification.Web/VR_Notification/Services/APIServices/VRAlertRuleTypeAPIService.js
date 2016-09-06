@@ -52,8 +52,8 @@
             GetVRAlertRuleType: GetVRAlertRuleType,
             AddVRAlertRuleType: AddVRAlertRuleType,
             HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission,
-            HasUpdateVRAlertRuleTypePermission: HasUpdateVRAlertRuleTypePermission,
-            UpdateVRAlertRuleType: UpdateVRAlertRuleType,
+            //HasUpdateVRAlertRuleTypePermission: HasUpdateVRAlertRuleTypePermission,
+            //UpdateVRAlertRuleType: UpdateVRAlertRuleType,
             //GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
             //GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo
         });

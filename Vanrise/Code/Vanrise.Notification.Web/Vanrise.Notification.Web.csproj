@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\VRActionController.cs" />
+    <Compile Include="Controllers\VRAlertRuleController.cs" />
     <Compile Include="Controllers\VRAlertRuleTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -146,6 +147,10 @@
     <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionsManagementTemplate.html" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeGridTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-grid.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleGridTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-alertrule-grid.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
@@ -154,6 +159,14 @@
     <Content Include="VR_Notification\Services\VRAlertRuleTypeService.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditorController.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditor.html" />
+    <Content Include="VR_Notification\Views\VRAlertRuleType\VRAlertRuleTypeEditor.html" />
+    <Content Include="VR_Notification\Views\VRAlertRuleType\VRAlertRuleTypeEditorController.js" />
+    <Content Include="VR_Notification\Views\VRAlertRuleType\VRAlertRuleTypeManagement.html" />
+    <Content Include="VR_Notification\Views\VRAlertRuleType\VRAlertRuleTypeManagementController.js" />
+    <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleEditor.html" />
+    <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleEditorController.js" />
+    <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleManagement.html" />
+    <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Notification\Directives\LiveBalance\" />

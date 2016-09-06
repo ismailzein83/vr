@@ -20,7 +20,7 @@ namespace Vanrise.Common.Business
 
         public IDataRetrievalResult<StyleDefinitionDetail> GetFilteredStyleDefinitions(DataRetrievalInput<StyleDefinitionQuery> input)
         {
-            var allStyleDefinitions = GetCachedStyleDefinitions();
+            var allStyleDefinitions = this.GetCachedStyleDefinitions();
             Func<StyleDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStyleDefinitions.ToBigResult(input, filterExpression, StyleDefinitionDetailMapper));
         }

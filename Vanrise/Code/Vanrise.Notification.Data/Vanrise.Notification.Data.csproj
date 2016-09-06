@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IVRAlertRuleDataManager.cs" />
     <Compile Include="IVRAlertRuleTypeDataManager.cs" />
     <Compile Include="NotificationDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

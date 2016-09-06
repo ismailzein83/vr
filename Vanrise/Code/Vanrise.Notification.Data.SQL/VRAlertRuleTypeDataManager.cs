@@ -65,7 +65,7 @@ namespace Vanrise.Notification.Data.SQL
             {
                 VRAlertRuleTypeId = (Guid) reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleTypeSettings>(reader["Settings"] as string) 
+                //Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleTypeSettings>(reader["Settings"] as string) 
             };
             return vrAlertRuleType;
         }

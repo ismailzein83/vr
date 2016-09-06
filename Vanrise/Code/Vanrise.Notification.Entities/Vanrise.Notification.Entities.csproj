@@ -58,9 +58,11 @@
     <Compile Include="VRAlertRule\VRAlertRuleCheckerInput.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleCheckerOutput.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleCriteria.cs" />
+    <Compile Include="VRAlertRule\VRAlertRuleDetail.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleEventPayload.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleExecution.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleMatchedEvent.cs" />
+    <Compile Include="VRAlertRule\VRAlertRuleQuery.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleSettings.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleType.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeDetail.cs" />

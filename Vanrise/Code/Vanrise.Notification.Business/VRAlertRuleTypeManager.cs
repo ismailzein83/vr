@@ -76,11 +76,11 @@ namespace Vanrise.Notification.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
-        {
-            var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
-        }
+        //public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
+        //{
+        //    var templateConfigManager = new ExtensionConfigurationManager();
+        //    return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
+        //}
 
         //public IEnumerable<VRAlertRuleTypeInfo> GetVRAlertRuleTypesInfo(VRAlertRuleTypeFilter filter)
         //{
