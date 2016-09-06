@@ -137,10 +137,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private DateTime? GetZoneEED(ImportedZone importedZone)
         {
             if (importedZone.ChangeType == ZoneChangeType.NotChanged)
-                return null;
+            {
+                IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(importedZone.ExistingZones, importedZone.ZoneName);
+                return connectedEntites.Last().EED;
+            }
 
-            IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(importedZone.ExistingZones, importedZone.ZoneName);
-            return connectedEntites.Last().EED;
+            return null;              
         }
 
         private IEnumerable<NotImportedZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)

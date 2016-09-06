@@ -17,12 +17,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
 
         [RequiredArgument]
+        public InArgument<IEnumerable<ImportedZoneService>> ImportedZonesServices { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<ImportedDataByZone>> ImportedDataByZone { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedCode> importedCodesList = this.ImportedCodes.Get(context);
             IEnumerable<ImportedRate> importedRatesList = this.ImportedRates.Get(context);
+            IEnumerable<ImportedZoneService> importedZonesServices = this.ImportedZonesServices.Get(context);
 
             Dictionary<string, ImportedDataByZone> importedDataByZoneName = new Dictionary<string, ImportedDataByZone>(StringComparer.InvariantCultureIgnoreCase);
             ImportedDataByZone importedDataByZone;
@@ -53,6 +57,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
 
                 importedDataByZone.ImportedRates.Add(rate);
+            }
+
+
+            foreach (ImportedZoneService service in importedZonesServices)
+            {
+                if (!importedDataByZoneName.TryGetValue(service.ZoneName, out importedDataByZone))
+                {
+                    importedDataByZone = new ImportedDataByZone();
+                    importedDataByZone.ZoneName = service.ZoneName;
+                    importedDataByZoneName.Add(service.ZoneName, importedDataByZone);
+                }
+
+                importedDataByZone.ImportedZonesServices.Add(service);
             }
 
             this.ImportedDataByZone.Set(context, importedDataByZoneName.Values);

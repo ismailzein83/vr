@@ -16,6 +16,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public IEnumerable<NewCode> NewCodes { get; set; }
 
         public IEnumerable<NewRate> NewRates { get; set; }
+
+        public IEnumerable<NewZoneService> NewZonesServices { get; set; }
     }
 
     public sealed class ReserveIdsForNewEntities : BaseAsyncActivity<ReserveIdsForNewEntitiesInput>
@@ -28,6 +30,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public InArgument<IEnumerable<NewRate>> NewRates { get; set; }
+
+        [RequiredArgument]
+
+        public InArgument<IEnumerable<NewZoneService>> NewZonesServices { get; set; }
 
         protected override void DoWork(ReserveIdsForNewEntitiesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -54,6 +60,18 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 rate.RateId = rateStartingId++;
             }
+
+            if (inputArgument.NewZonesServices != null)
+            {
+                SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
+                long zoneServicesStartingId = zoneServiceManager.ReserveIDRange(inputArgument.NewZonesServices.Count());
+
+                foreach (NewZoneService newZoneService in inputArgument.NewZonesServices)
+                {
+                    newZoneService.ZoneServiceId = zoneServicesStartingId++;
+                }
+            }
+
         }
 
         protected override ReserveIdsForNewEntitiesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -62,7 +80,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 NewCodes = this.NewCodes.Get(context),
                 NewRates = this.NewRates.Get(context),
-                NewZones = this.NewZones.Get(context)
+                NewZones = this.NewZones.Get(context),
+                NewZonesServices = this.NewZonesServices.Get(context)
             };
         }
     }

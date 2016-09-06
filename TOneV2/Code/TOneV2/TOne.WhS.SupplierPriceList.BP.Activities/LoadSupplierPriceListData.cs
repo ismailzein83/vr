@@ -31,8 +31,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public OutArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
 
         [RequiredArgument]
+        public OutArgument<IEnumerable<ImportedZoneService>> ImportedZonesServices { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<int>> ImportedRateTypeIds { get; set; }
-       
+
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
         protected override void Execute(CodeActivityContext context)
@@ -56,6 +59,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             List<ImportedCode> importedCodesList = new List<ImportedCode>();
             List<ImportedRate> importedRatesList = new List<ImportedRate>();
+            List<ImportedZoneService> importedZonesServicesList = new List<ImportedZoneService>();
 
             BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
 
@@ -73,9 +77,30 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     Code = codeValue,
                     CodeGroup = codeGroup,
                     ZoneName = zoneNameValue,
-                    BED = (priceListCode.EffectiveDate != null) ? priceListCode.EffectiveDate.Value : DateTime.MinValue,
+                    BED = (priceListCode.EffectiveDate.HasValue) ? priceListCode.EffectiveDate.Value : DateTime.MinValue,
                     EED = null
                 });
+            }
+
+            foreach (var priceListService in convertedPriceList.PriceListServices)
+            {
+                if (IsEffectiveDateLessThanMinDate(minimumDate, priceListService.EffectiveDate))
+                    minimumDate = priceListService.EffectiveDate.Value;
+
+                ImportedZoneService importedZoneService = importedZonesServicesList.FindRecord(item => item.ZoneName.Equals(priceListService.ZoneName, StringComparison.InvariantCultureIgnoreCase));
+                if (importedZoneService == null)
+                {
+                    List<int> serviceIds = new List<int>();
+                    serviceIds.Add(priceListService.FlaggedServiceId);
+                    importedZonesServicesList.Add(new ImportedZoneService()
+                    {
+                        ServiceIds = serviceIds,
+                        ZoneName = priceListService.ZoneName,
+                        BED = (priceListService.EffectiveDate.HasValue) ? priceListService.EffectiveDate.Value : DateTime.MinValue,
+                    });
+                }
+                else
+                    importedZoneService.ServiceIds.Add(priceListService.FlaggedServiceId);
             }
 
             foreach (var priceListRate in convertedPriceList.PriceListRates)
@@ -93,12 +118,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     ZoneName = zoneNameValue,
                     Rate = priceListRate.Rate.Value,
                     CurrencyId = currencyId,
-                    BED = (priceListRate.EffectiveDate != null) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
+                    BED = (priceListRate.EffectiveDate.HasValue) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
                     EED = null,
                 });
             }
 
-            foreach (KeyValuePair<int,List<PriceListRate>> item in convertedPriceList.PriceListOtherRates)
+            foreach (KeyValuePair<int, List<PriceListRate>> item in convertedPriceList.PriceListOtherRates)
             {
                 foreach (PriceListRate priceListRate in item.Value)
                 {
@@ -116,7 +141,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         Rate = priceListRate.Rate.Value,
                         CurrencyId = currencyId,
                         RateTypeId = item.Key,
-                        BED = (priceListRate.EffectiveDate != null) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
+                        BED = (priceListRate.EffectiveDate.HasValue) ? priceListRate.EffectiveDate.Value : DateTime.MinValue,
                         EED = null,
                     });
                 }
@@ -161,6 +186,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             #endregion
 
             ImportedCodes.Set(context, importedCodesList);
+            ImportedZonesServices.Set(context, importedZonesServicesList);
             ImportedRates.Set(context, validatedListofImportedRates);
             ImportedRateTypeIds.Set(context, convertedPriceList.PriceListOtherRates.Keys);
             MinimumDate.Set(context, minimumDate);

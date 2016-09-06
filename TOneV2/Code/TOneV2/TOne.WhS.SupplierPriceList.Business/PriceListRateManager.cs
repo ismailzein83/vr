@@ -14,14 +14,15 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public void ProcessCountryRates(IProcessCountryRatesContext context, IEnumerable<int> importedRateTypeIds)
         {
-            ProcessCountryRates(context.ImportedZones, context.ExistingRatesGroupsByZoneName, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, importedRateTypeIds, context.NotImportedZones);
+            ProcessCountryRates(context.ImportedZones, context.ExistingRates, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, importedRateTypeIds, context.NotImportedZones);
             context.NewRates = context.ImportedZones.SelectMany(item => item.ImportedNormalRate.NewRates).Union(context.ImportedZones.SelectMany(itm => itm.ImportedOtherRates.SelectMany(x => x.Value.NewRates)));
             context.ChangedRates = context.ExistingZones.SelectMany(item => item.ExistingRates.Where(itm => itm.ChangedRate != null).Select(x => x.ChangedRate));
         }
 
-        private void ProcessCountryRates(IEnumerable<ImportedZone> importedZones, ExistingRateGroupByZoneName existingRatesGroupsByZoneName, ZonesByName newAndExistingZones,
+        private void ProcessCountryRates(IEnumerable<ImportedZone> importedZones, IEnumerable<ExistingRate> existingRates, ZonesByName newAndExistingZones,
             IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<int> importedRateTypeIds, IEnumerable<NotImportedZone> notImportedZones)
         {
+            ExistingRateGroupByZoneName existingRatesGroupsByZoneName = StructureExistingRatesByRatesGroups(existingRates);
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ProcessImportedData(importedZones, newAndExistingZones, existingZonesByName, existingRatesGroupsByZoneName, importedRateTypeIds, pricelistDate);
             ProcessNotImportedData(existingZones, notImportedZones, existingRatesGroupsByZoneName);
@@ -233,6 +234,53 @@ namespace TOne.WhS.SupplierPriceList.Business
         #endregion
 
         #region Private Methods
+
+        private ExistingRateGroupByZoneName StructureExistingRatesByRatesGroups(IEnumerable<ExistingRate> existingRates)
+        {
+            ExistingRateGroupByZoneName existingRatesGroupsByZoneName = new ExistingRateGroupByZoneName();
+
+            List<ExistingRate> existingOtherRates;
+            ExistingRateGroup existingRateGroup;
+
+            foreach (ExistingRate existingRate in existingRates)
+            {
+                string zoneName = existingRate.ParentZone.ZoneEntity.Name;
+
+                if (!existingRatesGroupsByZoneName.TryGetValue(zoneName, out existingRateGroup))
+                {
+                    existingRateGroup = new ExistingRateGroup();
+                    existingRateGroup.ZoneName = zoneName;
+
+                    if (existingRate.RateEntity.RateTypeId.HasValue)
+                    {
+                        existingOtherRates = new List<ExistingRate>();
+                        existingOtherRates.Add(existingRate);
+                        existingRateGroup.OtherRates.Add(existingRate.RateEntity.RateTypeId.Value, existingOtherRates);
+                    }
+                    else
+                        existingRateGroup.NormalRates.Add(existingRate);
+
+                    existingRatesGroupsByZoneName.Add(zoneName, existingRateGroup);
+                }
+                else
+                {
+                    if (existingRate.RateEntity.RateTypeId.HasValue)
+                    {
+                        if (existingRateGroup.OtherRates.TryGetValue(existingRate.RateEntity.RateTypeId.Value, out existingOtherRates))
+                            existingOtherRates.Add(existingRate);
+                        else
+                        {
+                            existingOtherRates = new List<ExistingRate>();
+                            existingOtherRates.Add(existingRate);
+                            existingRateGroup.OtherRates.Add(existingRate.RateEntity.RateTypeId.Value, existingOtherRates);
+                        }
+                    }
+                    else
+                        existingRateGroup.NormalRates.Add(existingRate);
+                }
+            }
+            return existingRatesGroupsByZoneName;
+        }
 
         private ExistingRate GetSystemRate(ImportedRate importedRate, List<ExistingRate> existingRates)
         {

@@ -35,6 +35,15 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _newRates;
             }
         }
+
+        List<NewZoneService> _newZoneServices = new List<NewZoneService>();
+        public List<NewZoneService> NewZoneServices
+        {
+            get
+            {
+                return _newZoneServices;
+            }
+        }
     }
 
     public class NewZonesByName : Dictionary<string, List<NewZone>>

@@ -15,6 +15,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         List<NewRate> NewRates { get; }
 
+        List<NewZoneService> NewZoneServices { get; }
+
         int CountryId { get; }
     }
 

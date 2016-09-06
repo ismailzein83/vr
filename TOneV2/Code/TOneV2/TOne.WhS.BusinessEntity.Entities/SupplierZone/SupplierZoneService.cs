@@ -1,8 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
+    public enum ZoneServiceChangeType
+    {
+
+        [Description("Not Changed")]
+        NotChanged = 0,
+
+        [Description("New")]
+        New = 1,
+
+        [Description("Deleted")]
+        Deleted = 2,
+    }
     public class SupplierZoneService
     {
         public long SupplierZoneServiceId { get; set; }

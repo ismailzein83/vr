@@ -10,18 +10,38 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
     public class ImportedDataByZone : IRuleTarget
     {
-        public ImportedDataByZone()
-        {
-            this.ImportedCodes = new List<ImportedCode>();
-            this.ImportedRates = new List<ImportedRate>();
-        }
-
         public string ZoneName { get; set; }
 
-        public List<ImportedCode> ImportedCodes { get; set; }
+        private List<ImportedCode> _importedCodes = new List<ImportedCode>();
 
-        public List<ImportedRate> ImportedRates { get; set; }
+        public List<ImportedCode> ImportedCodes
+        {
+            get
+            {
+                return this._importedCodes;
+            }
+        }
 
+
+        private List<ImportedRate> _importedRates = new List<ImportedRate>();
+
+        public List<ImportedRate> ImportedRates
+        {
+            get
+            {
+                return this._importedRates;
+            }
+        }
+
+
+        private List<ImportedZoneService> _importedZonesServices = new List<ImportedZoneService>();
+        public List<ImportedZoneService> ImportedZonesServices
+        {
+            get
+            {
+                return this._importedZonesServices;
+            }
+        }
 
         #region IRuleTarget Implementation
 

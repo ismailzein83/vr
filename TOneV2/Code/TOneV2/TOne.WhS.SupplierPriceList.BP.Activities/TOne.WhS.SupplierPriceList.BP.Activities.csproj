@@ -88,6 +88,7 @@
     <Compile Include="ApplyChangedCodesToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />
     <Compile Include="ApplyChangedZonesToDB.cs" />
+    <Compile Include="ApplyNewZonesServicesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
     <Compile Include="ApplyPreviewOtherRatesToDB.cs" />
     <Compile Include="ApplyPreviewZonesRatesToDB.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GenerateOtherRatesPreview.cs" />
     <Compile Include="GenerateZonesRatesPreview.cs" />
+    <Compile Include="GetExistingZonesServices.cs" />
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
     <Compile Include="GetExistingZones.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="PrepareChangedCodesToDB.cs" />
     <Compile Include="PrepareChangedRatesToDB.cs" />
     <Compile Include="PrepareChangedZonesToDB.cs" />
+    <Compile Include="PrepareExistingZonesServices.cs" />
+    <Compile Include="PrepareNewZonesServicesForDBApply.cs" />
     <Compile Include="PreparePreviewOtherRatesForDBApply.cs" />
     <Compile Include="PrepareExistingCodes.cs" />
     <Compile Include="PrepareCodesForValidation.cs" />
@@ -115,6 +119,7 @@
     <Compile Include="PreparePreviewZonesRatesForDBApply.cs" />
     <Compile Include="PrepareNewZonesForDBApply.cs" />
     <Compile Include="ProcessCountryCodes.cs" />
+    <Compile Include="ProcessCountryZonesServices.cs" />
     <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ProcessCountryZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,7 +21,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<ExistingRateGroupByZoneName> ExistingRatesGroupsByZoneName { get; set; }
+        public OutArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -30,10 +30,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             IEnumerable<ExistingRate> existingRates = existingRateEntities.OrderBy(item => item.BED).Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords(
               (rateEntity) => ExistingRateMapper(rateEntity, existingZonesByZoneId));
-            ExistingRateGroupByZoneName existingRatesGroupsByZoneName = new ExistingRateGroupByZoneName();
-            StructureExistingRatesByRatesGroups( existingRatesGroupsByZoneName, existingRates);
-
-            ExistingRatesGroupsByZoneName.Set(context, existingRatesGroupsByZoneName);
+            
+            ExistingRates.Set(context, existingRates);
         }
 
         ExistingRate ExistingRateMapper(SupplierRate rateEntity, Dictionary<long, ExistingZone> existingZonesByZoneId)
@@ -52,52 +50,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             existingRate.ParentZone.ExistingRates.Add(existingRate);
             return existingRate;
         }
-        ExistingRateGroupByZoneName StructureExistingRatesByRatesGroups(ExistingRateGroupByZoneName existingRatesGroupsByZoneName, IEnumerable<ExistingRate> existingRates)
-        {
-            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
-
-            List<ExistingRate> existingOtherRates;
-            ExistingRateGroup existingRateGroup;
-
-            foreach (ExistingRate existingRate in existingRates)
-            {
-                string zoneName = supplierZoneManager.GetSupplierZoneName(existingRate.RateEntity.ZoneId);
-               
-                if (!existingRatesGroupsByZoneName.TryGetValue(zoneName, out existingRateGroup))
-                {
-                    existingRateGroup = new ExistingRateGroup();
-                    existingRateGroup.ZoneName = zoneName;
-
-                    if (existingRate.RateEntity.RateTypeId.HasValue)
-                    {
-                        existingOtherRates = new List<ExistingRate>();
-                        existingOtherRates.Add(existingRate);
-                        existingRateGroup.OtherRates.Add(existingRate.RateEntity.RateTypeId.Value, existingOtherRates);
-                    }
-                    else
-                        existingRateGroup.NormalRates.Add(existingRate);
-
-                    existingRatesGroupsByZoneName.Add(zoneName, existingRateGroup);
-                }
-                else
-                {
-                    if (existingRate.RateEntity.RateTypeId.HasValue)
-                    {
-                        if (existingRateGroup.OtherRates.TryGetValue(existingRate.RateEntity.RateTypeId.Value, out existingOtherRates))
-                            existingOtherRates.Add(existingRate);
-                        else
-                        {
-                            existingOtherRates = new List<ExistingRate>();
-                            existingOtherRates.Add(existingRate);
-                            existingRateGroup.OtherRates.Add(existingRate.RateEntity.RateTypeId.Value, existingOtherRates);
-                        }
-                    }
-                    else
-                        existingRateGroup.NormalRates.Add(existingRate);
-                }
-            }
-            return existingRatesGroupsByZoneName;
-        }
-       
+        
     }
 }

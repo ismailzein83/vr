@@ -26,6 +26,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetBySupplierId", SupplierZoneMapper, supplierId, effectiveDate);
         }
+
+        public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServices_GetByDate", SupplierZoneServiceMapper, supplierId, minimumDate);
+        }
         public List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetByDate", SupplierZoneMapper, supplierId, minimumDate);
@@ -57,6 +62,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SourceId = reader["SourceID"] as string
             };
             return supplierZone;
+        }
+
+
+        SupplierZoneService SupplierZoneServiceMapper(IDataReader reader)
+        {
+            return new SupplierZoneService()
+            {
+                SupplierZoneServiceId = (long)reader["ID"],
+                ZoneId = (long)reader["ZoneID"],
+                ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["ReceivedServiceFlag"] as string),
+                EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["EffectiveServiceFlag"] as string),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+            };
         }
         #endregion
 

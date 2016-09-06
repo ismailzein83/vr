@@ -35,12 +35,30 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
+        List<ExistingZoneService> _existinZonesServices = new List<ExistingZoneService>();
+        public List<ExistingZoneService> ExistingZonesServices
+        {
+            get
+            {
+                return _existinZonesServices;
+            }
+        }
+
         List<NewRate> _newRates = new List<NewRate>();
         public List<NewRate> NewRates
         {
             get
             {
                 return _newRates;
+            }
+        }
+
+        List<NewZoneService> _newZoneServices = new List<NewZoneService>();
+        public List<NewZoneService> NewZoneServices
+        {
+            get
+            {
+                return _newZoneServices;
             }
         }
 

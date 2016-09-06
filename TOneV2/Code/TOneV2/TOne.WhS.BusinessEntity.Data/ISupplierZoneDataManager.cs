@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data
         
         bool AreSupplierZonesUpdated(ref object updateHandle);
 
+        List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate);
         List<SupplierZone> GetSupplierZonesEffectiveAfter(int supplierId, DateTime minimumDate);
     }
 }

@@ -22,6 +22,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
+        public ImportedZoneService ImportedZoneService { get; set; }
+
         public ImportedRate ImportedNormalRate { get; set; }
 
         private Dictionary<int, ImportedRate> _importedOtherRates = new Dictionary<int, ImportedRate>();

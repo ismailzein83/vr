@@ -7,21 +7,20 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public interface IProcessCountryRatesContext
+    public interface IProcessCountryZonesServicesContext
     {
         IEnumerable<ImportedZone> ImportedZones { get; }
 
-        IEnumerable<ExistingRate> ExistingRates { get; }
-
         IEnumerable<ExistingZone> ExistingZones { get; }
 
+        IEnumerable<ExistingZoneService> ExistingZonesServices { get; }
         ZonesByName NewAndExistingZones { get; }
 
         DateTime PriceListDate { get; set; }
 
-        IEnumerable<NewRate> NewRates { set; }
+        IEnumerable<NewZoneService> NewZonesServices { get; set; }
 
-        IEnumerable<ChangedRate> ChangedRates { set; }
+        IEnumerable<ChangedZoneService> ChangedZonesServices { get; set; }
 
         IEnumerable<NotImportedZone> NotImportedZones { get; }
     }
