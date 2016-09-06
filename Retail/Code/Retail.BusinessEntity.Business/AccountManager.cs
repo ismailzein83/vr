@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<AccountDetail> GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
+        public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
 
@@ -31,7 +31,7 @@ namespace Retail.BusinessEntity.Business
                     (input.Query.ParentAccountId.HasValue && account.ParentAccountId.HasValue && account.ParentAccountId.Value == input.Query.ParentAccountId.Value)
                 );
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapper));
         }
 
         public Account GetAccount(long accountId)

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities
+namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
-    public class AgentSetting
+    class AccountPartAgentInfo
     {
-
     }
 }

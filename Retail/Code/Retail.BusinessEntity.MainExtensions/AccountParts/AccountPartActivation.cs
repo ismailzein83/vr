@@ -11,7 +11,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     {
         public const int ExtensionConfigId = 20;
         public AccountStatus Status { get; set; }
-
         public DateTime ActivationDate { get; set; }
     }
 }

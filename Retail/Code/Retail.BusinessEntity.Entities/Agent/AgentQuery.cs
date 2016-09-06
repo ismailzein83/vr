@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AgentSetting
+    public class AgentQuery
     {
-
+        public string Name { get; set; }
     }
 }

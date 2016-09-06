@@ -103,6 +103,9 @@
     <Compile Include="Action\ExecutedActionsData.cs" />
     <Compile Include="Action\ProvisionerDefinitionConfig.cs" />
     <Compile Include="Agent\Agent.cs" />
+    <Compile Include="Agent\AgentDetail.cs" />
+    <Compile Include="Agent\AgentInfo.cs" />
+    <Compile Include="Agent\AgentQuery.cs" />
     <Compile Include="Agent\AgentSetting.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IActionDefinitionManager.cs" />
@@ -144,6 +147,8 @@
     <Compile Include="Pop\Pop.cs" />
     <Compile Include="Pop\PopQuery.cs" />
     <Compile Include="POS\POS.cs" />
+    <Compile Include="POS\PosDetail.cs" />
+    <Compile Include="POS\POSInfo.cs" />
     <Compile Include="POS\POSSetting.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
     <Compile Include="RevenueComparison\RevenueComparison.cs" />

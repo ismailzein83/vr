@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return false;
         }
 
-        public bool Update(PointOfSale pos, long? parentId)
+        public bool Update(PointOfSale pos)
         {
             string serializedSettings = pos.Settings != null ? Serializer.Serialize(pos.Settings) : null;
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_POS_Update", pos.Id, pos.Name, pos.Type, serializedSettings, pos.SourceId);

@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return false;
         }
 
-        public bool Update(Agent agent, long? parentId)
+        public bool Update(Agent agent)
         {
             string serializedSettings = agent.Settings != null ? Serializer.Serialize(agent.Settings) : null;
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_Agent_Update", agent.Id, agent.Name, agent.Type, serializedSettings, agent.SourceId);

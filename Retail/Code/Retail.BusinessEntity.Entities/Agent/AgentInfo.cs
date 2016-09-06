@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AgentSetting
+    public class AgentInfo
     {
+        public long AgentId { get; set; }
+        public string Name { get; set; }
 
     }
 }

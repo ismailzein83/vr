@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities
+namespace Retail.BusinessEntity.Entities.POS
 {
-    public class AgentSetting
+    public class PosDetail
     {
-
+        public PointOfSale Entity { get; set; }
     }
 }

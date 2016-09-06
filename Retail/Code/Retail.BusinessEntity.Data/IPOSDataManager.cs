@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Data
 
         bool Insert(PointOfSale pos, out long insertedId);
 
-        bool Update(PointOfSale pos, long? parentId);
+        bool Update(PointOfSale pos);
 
         bool ArePOSsUpdated(ref object updateHandle);
     }

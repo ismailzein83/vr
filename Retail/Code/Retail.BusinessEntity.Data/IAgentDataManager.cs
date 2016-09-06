@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Data
 
         bool Insert(Agent agent, out long insertedId);
 
-        bool Update(Agent agent, long? parentId);
+        bool Update(Agent agent);
 
         bool AreAgentsUpdated(ref object updateHandle);
     }
