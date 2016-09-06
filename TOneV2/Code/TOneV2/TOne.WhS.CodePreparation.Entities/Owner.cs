@@ -10,6 +10,7 @@ namespace TOne.WhS.CodePreparation.Entities
     public class Owner
     {
         public SalePriceListOwnerType OwnerType { get; set; }
+        
         public int OwnerId { get; set; }
     }
 }

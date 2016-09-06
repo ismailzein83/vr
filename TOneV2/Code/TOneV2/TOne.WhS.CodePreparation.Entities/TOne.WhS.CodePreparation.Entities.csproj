@@ -58,6 +58,8 @@
     <Compile Include="AddedCode.cs" />
     <Compile Include="CPSettings\CPSettingsData.cs" />
     <Compile Include="ExistingRate.cs" />
+    <Compile Include="ExistingRateGroup.cs" />
+    <Compile Include="ExistingRateGroupByZoneName.cs" />
     <Compile Include="ExistingZoneInfo.cs" />
     <Compile Include="ExistingZone.cs" />
     <Compile Include="ICPParametersContext.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />
     <Compile Include="NewZoneRateEntity.cs" />
+    <Compile Include="NotImportedRate.cs" />
     <Compile Include="Owner.cs" />
     <Compile Include="PreviewData\NotImportedCode.cs" />
     <Compile Include="PreviewData\NotImportedZone.cs" />

@@ -74,7 +74,16 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             }
         }
 
-        public ExistingRate SystemRate { get; set; }
+        private List<NotImportedRate> _notImportedNormalRates = new List<NotImportedRate>();
+
+        public List<NotImportedRate> NotImportedNormalRates 
+        {
+            get
+            {
+                return this._notImportedNormalRates;
+            } 
+        }
+
         public string RecentZoneName { get; set; }
 
         public DateTime BED { get; set; }

@@ -27,78 +27,59 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
-
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
-
             BaseQueue<IEnumerable<RatePreview>> previewRatesQueue = this.PreviewRatesQueue.Get(context);
-
-            SalePriceListManager salePriceListManager = new SalePriceListManager();
 
             List<RatePreview> ratesPreview = new List<RatePreview>();
 
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
-                foreach (RateToAdd rateToAdd in zoneToProcess.RatesToAdd)
-                {
-                    ratesPreview.Add(new RatePreview()
-                    {
-                        ZoneName = rateToAdd.ZoneName,
-                        OnwerType = rateToAdd.PriceListToAdd.OwnerType,
-                        OwnerId = rateToAdd.PriceListToAdd.OwnerId,
-                        Rate = rateToAdd.Rate,
-                        BED = GetZoneBED(rateToAdd.AddedRates),
-                        EED = GetZoneEED(rateToAdd.AddedRates)
-                    });
-                }
-
-                ExistingRate systemRate = zoneToProcess.SystemRate;
-                if (systemRate != null)
-                {
-                    SalePriceList salePriceList = salePriceListManager.GetPriceList(systemRate.RateEntity.PriceListId);
-
-                    ratesPreview.Add(new RatePreview()
-                    {
-                        ZoneName = zoneToProcess.ZoneName,
-                        OnwerType = salePriceList.OwnerType,
-                        OwnerId = salePriceList.OwnerId,
-                        Rate = systemRate.RateEntity.NormalRate,
-                        BED = systemRate.BED,
-                        EED = systemRate.EED
-                    });
-                }
+                ratesPreview.AddRange(zoneToProcess.RatesToAdd.MapRecords(RateToAddPreviewMapper));
+                ratesPreview.AddRange(zoneToProcess.NotImportedNormalRates.MapRecords(NotImportedRatePreviewMapper));
             }
-
 
             foreach (NotImportedZone notImportedZone in notImportedZones)
             {
-                if (notImportedZone.ExistingRate != null)
-                {
-                    SalePriceList salePriceList = salePriceListManager.GetPriceList(notImportedZone.ExistingRate.RateEntity.PriceListId);
-                    ratesPreview.Add(new RatePreview()
-                    {
-                        ZoneName = notImportedZone.ZoneName,
-                        OnwerType = salePriceList.OwnerType,
-                        OwnerId = salePriceList.OwnerId,
-                        Rate = notImportedZone.ExistingRate.RateEntity.NormalRate,
-                        BED = notImportedZone.ExistingRate.RateEntity.BED,
-                        EED = notImportedZone.ExistingRate.RateEntity.EED
-                    });
-                }
-
+                ratesPreview.AddRange(notImportedZone.NotImportedNormalRates.MapRecords(NotImportedRatePreviewMapper));
             }
             
             previewRatesQueue.Enqueue(ratesPreview);
-
         }
 
-        private DateTime GetZoneBED(IEnumerable<AddedRate> addedRates)
+        private DateTime GetRateToAddBED(IEnumerable<AddedRate> addedRates)
         {
             return addedRates.Select(item => item.BED).Min();
         }
 
-        private DateTime? GetZoneEED(IEnumerable<AddedRate> addedRates)
+        private DateTime? GetRateToAddEED(IEnumerable<AddedRate> addedRates)
         {
             return addedRates.Select(item => item.EED).VRMaximumDate();
+        }
+
+        private RatePreview RateToAddPreviewMapper(RateToAdd rateToAdd)
+        {
+            return new RatePreview()
+            {
+                ZoneName = rateToAdd.ZoneName,
+                OnwerType = rateToAdd.PriceListToAdd.OwnerType,
+                OwnerId = rateToAdd.PriceListToAdd.OwnerId,
+                Rate = rateToAdd.Rate,
+                BED = GetRateToAddBED(rateToAdd.AddedRates),
+                EED = GetRateToAddEED(rateToAdd.AddedRates)
+            };
+        }
+
+        private RatePreview NotImportedRatePreviewMapper(NotImportedRate notImportedRate)
+        {
+            return new RatePreview()
+            {
+                ZoneName = notImportedRate.ZoneName,
+                OnwerType = notImportedRate.OwnerType,
+                OwnerId = notImportedRate.OwnerId,
+                Rate = notImportedRate.Rate,
+                BED = notImportedRate.BED,
+                EED = notImportedRate.EED
+            };
         }
 
     }

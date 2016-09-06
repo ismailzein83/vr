@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has been created with no rates", (target as ZoneToProcess).ZoneName);
+            return string.Format("Zone {0} has no rates", (target as ZoneToProcess).ZoneName);
         }
 
     }

@@ -53,11 +53,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override ProcessCountryZonesOutput DoWorkWithResult(ProcessCountryZonesInput inputArgument, AsyncActivityHandle handle)
         {
-            Dictionary<string, Dictionary<string, List<ExistingCode>>> existingCodeByZoneName = StructureExistingCodesByZonesNames(inputArgument.ExistingCodes);
-
             HashSet<string> zonesToProcessNamesHashSet = new HashSet<string>(inputArgument.ZonesToProcess.Select(item => item.ZoneName), StringComparer.InvariantCultureIgnoreCase);
 
-            UpdateImportedZonesInfo(inputArgument.ZonesToProcess, inputArgument.NewAndExistingZones, inputArgument.ExistingZones, zonesToProcessNamesHashSet, existingCodeByZoneName, inputArgument.ClosedExistingZones);
+            UpdateImportedZonesInfo(inputArgument.ZonesToProcess, inputArgument.NewAndExistingZones, inputArgument.ExistingZones, zonesToProcessNamesHashSet, inputArgument.ClosedExistingZones);
 
             IEnumerable<NotImportedZone> notImportedZones = PrepareNotImportedZones(inputArgument.ExistingZones, zonesToProcessNamesHashSet);
 
@@ -86,7 +84,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         #region Private Methods
 
-        private void UpdateImportedZonesInfo(IEnumerable<ZoneToProcess> zonesToProcess, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, HashSet<string> zonesToProcessNamesHashSet, Dictionary<string, Dictionary<string, List<ExistingCode>>> existingCodesByZoneNames, Dictionary<string, List<ExistingZone>> closedExistingZones)
+        private void UpdateImportedZonesInfo(IEnumerable<ZoneToProcess> zonesToProcess, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones,
+            HashSet<string> zonesToProcessNamesHashSet, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
@@ -99,13 +98,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 if (existingZones != null)
                     zoneToProcess.ExistingZones.AddRange(existingZones.FindAllRecords(item => item.Name.Equals(zoneToProcess.ZoneName, StringComparison.InvariantCultureIgnoreCase)));
 
+                zoneToProcess.ChangeType = GetZoneChangeType(zoneToProcess, closedExistingZones);
 
                 zoneToProcess.BED = GetZoneBED(zoneToProcess);
                 zoneToProcess.EED = GetZoneEED(zoneToProcess);
-
-                zoneToProcess.ChangeType = GetZoneChangeType(zoneToProcess, closedExistingZones);
-
-
             }
         }
 
@@ -131,7 +127,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return notImportedZonesByZoneName.MapRecords(NotImportedZoneInfoMapper);
         }
 
-
         private NotImportedZone NotImportedZoneInfoMapper(List<ExistingZone> existingZones)
         {
             IEnumerable<ExistingZone> connectedEntities = this.GetConnectedExistingZones(existingZones);
@@ -150,26 +145,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return notImportedZone;
         }
 
-        private IEnumerable<ExistingZone> GetConnectedExistingZones(List<ExistingZone> existingZones)
-        {
-            return this.GetConnectedExistingZones(existingZones, null);
-        }
-        private IEnumerable<ExistingZone> GetConnectedExistingZones(List<ExistingZone> existingZones, string zoneName)
-        {
-            IEnumerable<ExistingZone> connectedEntites = existingZones.GetConnectedEntities(DateTime.Now);
-            if (connectedEntites == null)
-            {
-                string message = "Not Imported Zone has missing existing zones";
-                if (zoneName != null)
-                    message = string.Format("Zone {0} is missing existing zones", zoneName);
-
-                throw new DataIntegrityValidationException(message);
-            }
-
-            return connectedEntites;
-        }
-    
-
         private DateTime GetZoneBED(ZoneToProcess zoneToProcess)
         {
             if (zoneToProcess.AddedZones.Count() > 0)
@@ -181,8 +156,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private DateTime? GetZoneEED(ZoneToProcess zoneToProcess)
         {
-            IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(zoneToProcess.ExistingZones, zoneToProcess.ZoneName);
-            return connectedEntites.Last().EED;
+            if (zoneToProcess.ChangeType == ZoneChangeType.NotChanged || zoneToProcess.ChangeType == ZoneChangeType.PendingClosed || zoneToProcess.ChangeType == ZoneChangeType.Deleted)
+            {
+                IEnumerable<ExistingZone> connectedEntites = this.GetConnectedExistingZones(zoneToProcess.ExistingZones, zoneToProcess.ZoneName);
+                return connectedEntites.Last().EED;
+            }
+
+            return null;
         }
 
         private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
@@ -211,38 +191,25 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return ZoneChangeType.NotChanged;
         }
 
-        private Dictionary<string, Dictionary<string, List<ExistingCode>>> StructureExistingCodesByZonesNames(IEnumerable<ExistingCode> existingCodes)
+        private IEnumerable<ExistingZone> GetConnectedExistingZones(List<ExistingZone> existingZones)
         {
-            Dictionary<string, Dictionary<string, List<ExistingCode>>> existingCodeByZoneName = new Dictionary<string, Dictionary<string, List<ExistingCode>>>();
-            Dictionary<string, List<ExistingCode>> existingCodesByCode;
-
-            foreach (ExistingCode existingCode in existingCodes)
-            {
-                if (!existingCodeByZoneName.TryGetValue(existingCode.ParentZone.Name, out existingCodesByCode))
-                {
-                    List<ExistingCode> existingCodesList = new List<ExistingCode>();
-                    existingCodesList.Add(existingCode);
-                    existingCodesByCode = new Dictionary<string, List<ExistingCode>>();
-                    existingCodesByCode.Add(existingCode.CodeEntity.Code, existingCodesList);
-                    existingCodeByZoneName.Add(existingCode.ParentZone.Name, existingCodesByCode);
-                }
-                else
-                {
-                    List<ExistingCode> matchedCodes;
-                    if (!existingCodesByCode.TryGetValue(existingCode.CodeEntity.Code, out matchedCodes))
-                    {
-                        matchedCodes = new List<ExistingCode>();
-                        matchedCodes.Add(existingCode);
-                        existingCodesByCode.Add(existingCode.CodeEntity.Code, matchedCodes);
-                    }
-                    else
-                        matchedCodes.Add(existingCode);
-                }
-            }
-
-            return existingCodeByZoneName;
+            return this.GetConnectedExistingZones(existingZones, null);
         }
 
+        private IEnumerable<ExistingZone> GetConnectedExistingZones(List<ExistingZone> existingZones, string zoneName)
+        {
+            IEnumerable<ExistingZone> connectedEntites = existingZones.GetConnectedEntities(DateTime.Now);
+            if (connectedEntites == null)
+            {
+                string message = "Not Imported Zone has missing existing zones";
+                if (zoneName != null)
+                    message = string.Format("Zone {0} is missing existing zones", zoneName);
+
+                throw new DataIntegrityValidationException(message);
+            }
+
+            return connectedEntites;
+        }
 
         #endregion
     }

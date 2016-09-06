@@ -18,7 +18,15 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public DateTime? EED { get; set; }
 
-        public ExistingRate ExistingRate { get; set; }
+        private List<NotImportedRate> _notImportedNormalRates = new List<NotImportedRate>();
+
+        public List<NotImportedRate> NotImportedNormalRates
+        {
+            get
+            {
+                return this._notImportedNormalRates;
+            }
+        }
 
         public bool HasChanged { get; set; }
 

@@ -86,6 +86,10 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (ExistingRate existingRate in existingZone.ExistingRates)
                 {
+                    //Comparison will only occur with normal rates
+                    if (existingRate.RateEntity.RateTypeId != null)
+                        continue;
+
                     SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
                     existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
                 }
