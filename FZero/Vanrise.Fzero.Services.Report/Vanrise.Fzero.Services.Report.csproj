@@ -132,6 +132,7 @@
     <EmbeddedResource Include="Reports\rptToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToSyrianOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToZainOperator.rdlc" />
+    <EmbeddedResource Include="Reports\rptToZainOperatorExcel.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

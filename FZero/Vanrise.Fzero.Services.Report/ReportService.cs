@@ -38,6 +38,7 @@ namespace Vanrise.Fzero.Services.Report
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
+            //Debugger.Launch(); // launch and attach debugger
             aTimer = new System.Timers.Timer(7200000);// 2 hours
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 7200000;// 2 hours
@@ -108,6 +109,7 @@ namespace Vanrise.Fzero.Services.Report
         private void SendReport(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT)
         {
             ReportViewer rvToOperator = new ReportViewer();
+            ReportViewer rvToOperator2 = new ReportViewer();
             Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
 
 
@@ -174,7 +176,7 @@ namespace Vanrise.Fzero.Services.Report
 
             string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.Report\");
             string reportPath =string.Empty;
-
+            string reportPath2 = string.Empty;
 
 
             if (ClientID == (int)Enums.Clients.ST)//-- Syrian Telecom
@@ -184,6 +186,7 @@ namespace Vanrise.Fzero.Services.Report
             else if (ClientID == (int)Enums.Clients.Zain)//-- Zain
             {
                 reportPath = Path.Combine(exeFolder, @"Reports\rptToZainOperator.rdlc");
+                reportPath2 = Path.Combine(exeFolder, @"Reports\rptToZainOperatorExcel.rdlc");
             }
             else if (ClientID == (int)Enums.Clients.ITPC)//-- ITPC
             {
@@ -199,7 +202,7 @@ namespace Vanrise.Fzero.Services.Report
 
 
             rvToOperator.LocalReport.ReportPath = reportPath;
-            
+            rvToOperator2.LocalReport.ReportPath = reportPath2;
 
 
             ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(1)).User.Signature);
@@ -211,7 +214,7 @@ namespace Vanrise.Fzero.Services.Report
 
             ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
             rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
-
+            rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
 
 
@@ -219,8 +222,10 @@ namespace Vanrise.Fzero.Services.Report
             parameters[2] = new ReportParameter("HideSignature", "true");
             rvToOperator.LocalReport.SetParameters(parameters);
             rvToOperator.LocalReport.Refresh();
+            rvToOperator2.LocalReport.SetParameters(parameters);
+            rvToOperator2.LocalReport.Refresh();
             string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
-
+            string filenameExcel2 = ExportReportToExcel(report.ReportID + ".xls", rvToOperator2);
 
 
 
@@ -247,10 +252,33 @@ namespace Vanrise.Fzero.Services.Report
 
 
             if (ClientID == 3)
-                EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF,
+                    EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
+                    report.ReportID, profile_name);
 
             else
-                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+            {
+                string zainExcel = ConfigurationManager.AppSettings["ZainExcel"];
+
+                if (string.IsNullOrEmpty(zainExcel))
+                    EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
+                else
+                {
+                    if (ClientID == (int)Enums.Clients.Zain)
+                    {
+                        if (zainExcel == "true")
+                        {
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel2 + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        }
+                        else
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                    }
+                    else
+                        EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                }
+
+            }
+                
 
             MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
 
