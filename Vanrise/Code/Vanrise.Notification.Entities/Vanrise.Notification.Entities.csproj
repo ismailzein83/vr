@@ -62,8 +62,10 @@
     <Compile Include="VRAlertRule\VRAlertRuleExecution.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleMatchedEvent.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleSettings.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleType.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleTypeSettings.cs" />
+    <Compile Include="VRAlertRuleType\VRAlertRuleType.cs" />
+    <Compile Include="VRAlertRuleType\VRAlertRuleTypeDetail.cs" />
+    <Compile Include="VRAlertRuleType\VRAlertRuleTypeQuery.cs" />
+    <Compile Include="VRAlertRuleType\VRAlertRuleTypeSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
