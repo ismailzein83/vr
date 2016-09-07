@@ -135,6 +135,7 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\TextManipulationController.cs" />
+    <Compile Include="Controllers\VRConcatenatedPartController.cs" />
     <Compile Include="Controllers\VRMailMessageTemplateController.cs" />
     <Compile Include="Controllers\VRMailMessageTypeController.cs" />
     <Compile Include="Controllers\VRObjectPropertyController.cs" />
@@ -256,6 +257,9 @@
     <Content Include="Common\Directives\StyleDefinition\vr-common-styledefinition-settings.js" />
     <Content Include="Common\Directives\TextManipulation\Templates\TextManiplutaionSettingsDirectiveTemplate.html" />
     <Content Include="Common\Directives\TextManipulation\vr-common-textmanipulationsettings.js" />
+    <Content Include="Common\Directives\VRConcatenatedPart\vr-common-concatenatedpartsettings.js" />
+    <Content Include="Common\Directives\VRConcatenatedPart\vr-common-vrconcatenatedparts.js" />
+    <Content Include="Common\Directives\VRConcatenatedPart\Templates\VRConcatenatedPartsTemplate.html" />
     <Content Include="Common\Directives\VRMail\vr-common-mailmessagetemplate-selector.js" />
     <Content Include="Common\Directives\VRMail\Templates\VRMailMessageTemplateGridTemplate.html" />
     <Content Include="Common\Directives\VRMail\Templates\VRObjectTypePropertyGridTemplate.html" />
@@ -292,11 +296,13 @@
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\TextManipulationAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRConcatenatedPartAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
+    <Content Include="Common\Services\VRConcatenatedPartService.js" />
     <Content Include="Common\Services\VRMailMessageTemplateService.js" />
     <Content Include="Common\Services\VRMailMessageTypeService.js" />
     <Content Include="Common\Services\APIServices\VRObjectPropertyAPIService.js" />
@@ -383,6 +389,8 @@
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditor.html" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditorController.js" />
+    <Content Include="Common\Views\VRConcatenatedPart\VRConcatenatedPartEditor.html" />
+    <Content Include="Common\Views\VRConcatenatedPart\VRConcatenatedPartEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditor.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateManagement.html" />

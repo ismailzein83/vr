@@ -68,6 +68,9 @@
     <Compile Include="TextManipulation\TextManipulationActionSettingsConfig.cs" />
     <Compile Include="TextManipulation\TextManipulationSettings.cs" />
     <Compile Include="TextManipulation\TextManipulationTarget.cs" />
+    <Compile Include="VRConcatenatedPart\ConcatenatedPartSettingsConfig.cs" />
+    <Compile Include="VRConcatenatedPart\VRConcatenatedPart.cs" />
+    <Compile Include="VRConcatenatedPart\VRConcatenatedPartSettings.cs" />
     <Compile Include="VRMail\VRMailMessage.cs" />
     <Compile Include="VRMail\VRMailMessageTemplate.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateDetail.cs" />

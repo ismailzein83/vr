@@ -1,0 +1,8 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addConcatenatedPart" standalone></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeConcatenatedPart" hidegridmenu>
+        <vr-datagridcolumn headertext="'Part Title'" field="'Entity.PartTitle'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>
