@@ -52,8 +52,8 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
                 label = "Business Rule Sets";
                 multipleselection = "ismultipleselection";
             }
-
-
+            if (attrs.label != undefined)
+                label = attrs.label;
             var addCliked = '';
 
             //vr-disabled="ctrl.isdisabled" is removed temporary

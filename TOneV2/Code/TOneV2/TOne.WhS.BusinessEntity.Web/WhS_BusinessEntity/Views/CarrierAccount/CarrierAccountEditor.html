@@ -36,6 +36,30 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Pricelist Settings'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <businessprocess-bp-business-rule-set-selector on-ready="scopeModal.onBPBusinessRuleSetSelectorReady" label="Rule Set" ismultipleselection></businessprocess-bp-business-rule-set-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+
+                            <vr-section title="Automatic Import">
+                                <vr-row>
+                                    <vr-columns width="1/2row">
+                                        <vr-textbox type="email" value="scopeModal.automaticPriceListEmail" label="Email"></vr-textbox>
+                                    </vr-columns>
+                                    <vr-columns width="1/2row">
+                                        <vr-textbox value="scopeModal.automaticPriceListSubjectCode" label="Subject Code"></vr-textbox>
+                                    </vr-columns>
+                                    <vr-columns width="1/2row">
+                                        <vr-textbox value="scopeModal.fileMask" label="File Mask"></vr-textbox>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                      </vr-columns>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

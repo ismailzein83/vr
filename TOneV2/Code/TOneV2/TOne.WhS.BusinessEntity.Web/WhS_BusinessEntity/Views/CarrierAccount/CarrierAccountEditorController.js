@@ -11,6 +11,10 @@
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var activationStatusSelectorAPI;
         var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var bpBusinessRuleSetDirectiveAPI;
+        var bpBusinessRuleSetReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var sellingNumberPlanDirectiveAPI;
         var isEditMode;
         var carrierAccountId;
@@ -35,7 +39,12 @@
             $scope.scopeModal.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode
             $scope.scopeModal.disableCarrierAccountType = isEditMode
             $scope.scopeModal.disableSellingNumberPlan = isEditMode
-
+            $scope.scopeModal.onBPBusinessRuleSetSelectorReady = function(api)
+            {
+                console.log(api);
+                bpBusinessRuleSetDirectiveAPI = api;
+                bpBusinessRuleSetReadyPromiseDeferred.resolve();
+            }
             $scope.hasSaveCarrierAccountPermission = function () {
                 if (isEditMode)
                     return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
@@ -116,7 +125,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -178,6 +187,12 @@
                 if (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined) {
                     $scope.scopeModal.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
                     $scope.scopeModal.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
+                    if(carrierAccountEntity.CarrierAccountSettings.PriceListSettings)
+                    {
+                        $scope.scopeModal.fileMask = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.FileMask;
+                        $scope.scopeModal.automaticPriceListEmail = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.Email;
+                        $scope.scopeModal.automaticPriceListSubjectCode = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.SubjectCode;
+                    }
                 }
             }
         }
@@ -197,7 +212,18 @@
             })
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
+        function loadBPBusinessRuleSetSelector() {
+            var loadBPBusinessRuleSetSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            bpBusinessRuleSetReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    filter: { BPDefinitionId: 3 },
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined && carrierAccountEntity.CarrierAccountSettings.PriceListSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.PriceListSettings.BPBusinessRuleSetIds : undefined)
+                };
 
+                VRUIUtilsService.callDirectiveLoad(bpBusinessRuleSetDirectiveAPI, payload, loadBPBusinessRuleSetSelectorPromiseDeferred);
+            })
+            return loadBPBusinessRuleSetSelectorPromiseDeferred.promise;
+        }
         function insertCarrierAccount() {
             $scope.scopeModal.isLoading = true;
             return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(buildCarrierAccountObjFromScope())
@@ -238,7 +264,13 @@
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     Mask: $scope.scopeModal.mask,
-                    NominalCapacity: $scope.scopeModal.nominalCapacity
+                    NominalCapacity: $scope.scopeModal.nominalCapacity,
+                    PriceListSettings: {
+                        Email:$scope.scopeModal.automaticPriceListEmail,
+                        FileMask:$scope.scopeModal.fileMask,
+                        SubjectCode: $scope.scopeModal.automaticPriceListSubjectCode,
+                        BPBusinessRuleSetIds: bpBusinessRuleSetDirectiveAPI.getSelectedIds()
+                    }
                 },
                 SupplierSettings: {},
                 CustomerSettings: {}

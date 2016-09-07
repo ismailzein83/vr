@@ -27,6 +27,13 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Mask { get; set; }
 
         public int NominalCapacity { get; set; }
-
+        public CarrierAccountPriceListSettings PriceListSettings { get; set; }
+    }
+    public class CarrierAccountPriceListSettings
+    {
+        public string Email { get; set; }
+        public string FileMask { get; set; }
+        public string SubjectCode { get; set; }
+        public List<int> BPBusinessRuleSetIds { get; set; }
     }
 }
