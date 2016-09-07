@@ -37,8 +37,8 @@ namespace Vanrise.Fzero.Services.Report
 
         protected override void OnStart(string[] args)
         {
-            base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
-            //Debugger.Launch(); // launch and attach debugger
+            //base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
+            Debugger.Launch(); // launch and attach debugger
             aTimer = new System.Timers.Timer(7200000);// 2 hours
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 7200000;// 2 hours
@@ -207,7 +207,8 @@ namespace Vanrise.Fzero.Services.Report
 
 
                 rvToOperator.LocalReport.ReportPath = reportPath;
-                rvToOperator2.LocalReport.ReportPath = reportPath2;
+                if (ClientID == (int)Enums.Clients.Zain)
+                    rvToOperator2.LocalReport.ReportPath = reportPath2;
 
 
                 ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(1)).User.Signature);
@@ -219,7 +220,8 @@ namespace Vanrise.Fzero.Services.Report
 
                 ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
-                rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+                if (ClientID == (int)Enums.Clients.Zain)
+                    rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
 
 
@@ -227,13 +229,20 @@ namespace Vanrise.Fzero.Services.Report
                 parameters[2] = new ReportParameter("HideSignature", "true");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
-                rvToOperator2.LocalReport.SetParameters(parameters);
-                rvToOperator2.LocalReport.Refresh();
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
-                string filenameExcel2 = ExportReportToExcel(report.ReportID + ".xls", rvToOperator2);
+                string filenameExcel2 = "";
+                if (ClientID == (int) Enums.Clients.Zain)
+                {
+                    rvToOperator2.LocalReport.SetParameters(parameters);
+                    rvToOperator2.LocalReport.Refresh();
+                    filenameExcel2 = ExportReportToExcel(report.ReportID + ".xls", rvToOperator2);
+                    ErrorLog("filenameExcel: " + filenameExcel);
+                    ErrorLog("filenameExcel2: " + filenameExcel2);
+                }
+                
+                
 
-                ErrorLog("filenameExcel: " + filenameExcel);
-                ErrorLog("filenameExcel2: " + filenameExcel2);
+
 
 
                 parameters[2] = new ReportParameter("HideSignature", "false");
