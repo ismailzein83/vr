@@ -15,11 +15,16 @@
             var backdrop = "static";
             var modalInstance;
             modalScope.modalContext = {};
+
+            var onhideModal = function () {
+              
+            }
             modalScope.modalContext.closeModal = function () {
                 if (modalInstance) modalInstance.hide();
                 deferred.resolve();
             };
 
+           
             VRNavigationService.setParameters(modalScope, parameters);
             if (settings != undefined && settings != null) {
                 if (settings.useModalTemplate === true) {
@@ -43,10 +48,13 @@
             }
 
             modalScope.$on('modal.hide.before', function () {
+               $('.modal-header').eq($('.modal-dialog').length - 2).css({
+                        backgroundColor: "#20407D"
+               })
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
 
-            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: "am-fade-and-scale" });
+            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: "am-fade-and-scale" ,onHide:onhideModal });
             return deferred.promise;
         }
     }

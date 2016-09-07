@@ -15,8 +15,12 @@ app.directive('vrModalcontent', [function () {
                 widthPart = '\'width\': ' + tAttrs.width;
             //'<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">'
             var style = "";
-            if ($('.modal-dialog').length > 0)
+            if ($('.modal-dialog').length > 0) {
                 style = "top:" + ($('.modal-dialog').length) * 10 + "px; left:" + ($('.modal-dialog').length) * 10 + "px;";
+                $('.modal-header').eq($('.modal-dialog').length-1).css({
+                    backgroundColor: "#6b7892"
+                })
+            }
             var newElement = '<div class="modal-dialog" ng-style="{ ' + widthPart + ' }" style="' + style + '" >'
                                   + '  <div class="modal-content">'
                                     + '    <div class="modal-header" ng-show="title">'
