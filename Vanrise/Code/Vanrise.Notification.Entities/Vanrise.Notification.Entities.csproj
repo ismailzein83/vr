@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRAction\VRAction.cs" />
     <Compile Include="VRAction\VRActionConfig.cs" />
+    <Compile Include="VRAlertRuleType\VRAlertRuleTypeConfig.cs" />
     <Compile Include="VRAlertRule\VRAlertRule.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleCheckerInput.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleCheckerOutput.cs" />
