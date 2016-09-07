@@ -166,7 +166,7 @@ namespace TOne.WhS.CodePreparation.Business
                             BED = addedZone.BED,
                             EED = addedZone.EED,
                             PriceListToAdd = rateToAdd.PriceListToAdd,
-                            NoramlRate = rateToAdd.Rate,
+                            NormalRate = rateToAdd.Rate,
                             AddedZone = addedZone
                         });
                     }

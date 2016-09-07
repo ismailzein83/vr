@@ -51,11 +51,13 @@ namespace TOne.WhS.CodePreparation.Business
                 ratesEntities = new List<NewZoneRateEntity>();
                 foreach (SellingProduct sellingProduct in allSellingProducts)
                 {
+                    int sellingProductCurrencyId = base.GetCurrencyForNewRate(sellingProduct.SellingProductId, SalePriceListOwnerType.SellingProduct);
                     NewZoneRateEntity rate = new NewZoneRateEntity()
                     {
                         OwnerId = sellingProduct.SellingProductId,
                         OwnerType = SalePriceListOwnerType.SellingProduct,
-                        CurrencyId = base.GetCurrencyForNewRate(sellingProduct.SellingProductId, SalePriceListOwnerType.SellingProduct),
+                        CurrencyId = sellingProductCurrencyId,
+                        //TODO: make sure to convert from default rate currency to selling product currency later
                         Rate = base.SaleAreaSettings.DefaultRate
                     };
 

@@ -60,7 +60,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                        _processInstanceID,
                        record.AddedZone.ZoneId,
                        record.PriceListToAdd.PriceListId,
-                       record.NoramlRate,
+                       decimal.Round(record.NormalRate, 8),
                        record.BED,
                        record.EED);
         }

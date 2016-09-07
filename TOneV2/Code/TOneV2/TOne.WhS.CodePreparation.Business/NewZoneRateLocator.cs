@@ -101,13 +101,14 @@ namespace TOne.WhS.CodePreparation.Business
             while (e.MoveNext())
             {
                 Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
+                int ownerCurrencyId = GetCurrencyForNewRate(owner.OwnerId, owner.OwnerType);
 
                 NewZoneRateEntity zoneRate = new NewZoneRateEntity()
                 {
                     OwnerId = owner.OwnerId,
                     OwnerType = owner.OwnerType,
-                    CurrencyId = GetCurrencyForNewRate(owner.OwnerId, owner.OwnerType),
-                    Rate = this.GetHighestRate(e.Current.Value)
+                    CurrencyId = ownerCurrencyId,
+                    Rate = this.GetHighestRate(e.Current.Value, ownerCurrencyId)
                 };
 
                 ratesEntities.Add(zoneRate);
@@ -116,11 +117,22 @@ namespace TOne.WhS.CodePreparation.Business
             return ratesEntities;
         }
 
-        private Decimal GetHighestRate(IEnumerable<ExistingRate> existingRates)
+        private Decimal GetHighestRate(IEnumerable<ExistingRate> existingRates, int targetCurrencyId)
         {
             if(existingRates != null && existingRates.Count() > 0)
             {
-                return existingRates.Select(item => item.RateEntity.NormalRate).Max();
+                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                SaleRateManager saleRateManager = new SaleRateManager();
+                List<decimal> convertedRates = new List<decimal>();
+                
+                foreach (ExistingRate item in existingRates)
+                {
+                    int rateCurrencyId = saleRateManager.GetCurrencyId(item.RateEntity);
+                    decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(item.RateEntity.NormalRate, rateCurrencyId, targetCurrencyId, DateTime.Now);
+                    convertedRates.Add(convertedRate);
+                }
+
+                return convertedRates.Max();
             }
 
             return 0;

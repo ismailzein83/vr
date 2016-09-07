@@ -55,7 +55,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 record.ZoneName,
                 (int)record.OnwerType,
                 record.OwnerId,
-                record.Rate,
+                decimal.Round(record.Rate, 8),
                 record.BED,
                 record.EED);
         }
