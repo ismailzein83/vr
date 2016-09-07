@@ -987,24 +987,6 @@
                 <TablixCell>
                   <CellContents>
                     <Rectangle Name="Rectangle1">
-                      <ReportItems>
-                        <Subreport Name="Subreport11">
-                          <ReportName>ProfileInvoice</ReportName>
-                          <Parameters>
-                            <Parameter Name="SaleCurrency">
-                              <Value>=Fields!SaleCurrency.Value</Value>
-                            </Parameter>
-                          </Parameters>
-                          <Top>0.00139in</Top>
-                          <Height>1.04305in</Height>
-                          <Width>3.78125in</Width>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                          </Style>
-                        </Subreport>
-                      </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
                         <Border>
@@ -1042,6 +1024,22 @@
           </Border>
         </Style>
       </Tablix>
+      <Subreport Name="Subreport11">
+        <ReportName>ProfileInvoice</ReportName>
+        <Top>2.89458in</Top>
+        <Left>0.47415in</Left>
+        <Height>0.95833in</Height>
+        <Width>8.78125in</Width>
+        <ZIndex>17</ZIndex>
+        <Visibility>
+          <Hidden>= iif(Convert.ToString(Parameters!Partner.Value).Split("_").GetValue(0).Equals("Profile"),false,true)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Subreport>
     </ReportItems>
     <Height>13.33554in</Height>
     <Style />

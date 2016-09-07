@@ -45,7 +45,7 @@ namespace TOne.WhS.Invoice.Business
             var carrierProfiles = carrierProfileManager.GetCarrierProfiles();
             foreach (var carrierProfile in carrierProfiles)
             {
-                if (carrierProfile.Settings.CustomerByProfile)
+                if (carrierProfile.Settings.CustomerInvoiceByProfile)
                 {
                     if(getProfiles)
                     {
