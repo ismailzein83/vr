@@ -32,11 +32,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisDefinitionSettingsExtensionConfigs"));
         }
 
-        //function GetDataAnalysisDefinitionsInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisDefinitionsInfo"), {
-        //        filter: filter
-        //    });
-        //}
+        function GetDataAnalysisDefinitionsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisDefinitionsInfo"), {
+                filter: filter
+            });
+        }
 
 
         return ({
@@ -45,7 +45,7 @@
             AddDataAnalysisDefinition: AddDataAnalysisDefinition,
             UpdateDataAnalysisDefinition: UpdateDataAnalysisDefinition,
             GetDataAnalysisDefinitionSettingsExtensionConfigs: GetDataAnalysisDefinitionSettingsExtensionConfigs,
-            //GetDataAnalysisDefinitionsInfo: GetDataAnalysisDefinitionsInfo
+            GetDataAnalysisDefinitionsInfo: GetDataAnalysisDefinitionsInfo
         });
     }
 

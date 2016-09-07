@@ -50,12 +50,12 @@ namespace Vanrise.Analytic.Web.Controllers
             return _manager.GetDataAnalysisDefinitionSettingsExtensionConfigs();
         }
 
-        //[HttpGet]
-        //[Route("GetDataAnalysisDefinitionsInfo")]
-        //public IEnumerable<DataAnalysisDefinitionInfo> GetDataAnalysisDefinitionsInfo(string filter = null)
-        //{
-        //    DataAnalysisDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<DataAnalysisDefinitionFilter>(filter) : null;
-        //    return _manager.GetDataAnalysisDefinitionsInfo(deserializedFilter);
-        //}
+        [HttpGet]
+        [Route("GetDataAnalysisDefinitionsInfo")]
+        public IEnumerable<DataAnalysisDefinitionInfo> GetDataAnalysisDefinitionsInfo(string filter = null)
+        {
+            DataAnalysisDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<DataAnalysisDefinitionFilter>(filter) : null;
+            return _manager.GetDataAnalysisDefinitionsInfo(deserializedFilter);
+        }
     }
 }

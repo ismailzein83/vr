@@ -31,6 +31,7 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
             fields.AddRange(this.GroupingFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.FieldType }));
             fields.AddRange(this.AggregationFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.RecordAggregate.FieldType }));
             fields.AddRange(this.CalculationFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.FieldType }));
+
             return fields;
         }
     }

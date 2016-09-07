@@ -107,8 +107,12 @@
     <Compile Include="DataAnalysis\Common\TimeRangeFilterConfig.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinition.cs" />
     <Compile Include="DataAnalysis\Common\DARecordAggregateConfig.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionFilter.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionInfo.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinition.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionDetail.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionFilter.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionInfo.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionQuery.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\DataAnalysisItemDefinitionSettings.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionConfig.cs" />

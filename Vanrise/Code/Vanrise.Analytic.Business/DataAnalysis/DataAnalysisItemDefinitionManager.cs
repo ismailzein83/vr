@@ -100,12 +100,12 @@ namespace Vanrise.Analytic.Business
             return templateConfigManager.GetExtensionConfigurations<TimeRangeFilterConfig>(TimeRangeFilterConfig.EXTENSION_TYPE);
         }
 
-        //public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter)
-        //{
-        //    Func<DataAnalysisItemDefinition, bool> filterExpression = null;
+        public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter, Guid dataAnalysisDefinisitonId)
+        {
+            Func<DataAnalysisItemDefinition, bool> filterExpression = null;
 
-        //    return this.GetCachedDataAnalysisItemDefinitions().MapRecords(DataAnalysisItemDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
+            return this.GetCachedDataAnalysisItemDefinitions().MapRecords(DataAnalysisItemDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
 
         #endregion
 
@@ -152,15 +152,15 @@ namespace Vanrise.Analytic.Business
             return dataAnalysisItemDefinitionDetail;
         }
 
-        //public DataAnalysisItemDefinitionInfo DataAnalysisItemDefinitionInfoMapper(DataAnalysisItemDefinition dataAnalysisItemDefinition)
-        //{
-        //    DataAnalysisItemDefinitionInfo dataAnalysisItemDefinitionInfo = new DataAnalysisItemDefinitionInfo()
-        //    {
-        //        DataAnalysisItemDefinitionId = dataAnalysisItemDefinition.DataAnalysisItemDefinitionId,
-        //        Name = dataAnalysisItemDefinition.Name
-        //    };
-        //    return dataAnalysisItemDefinitionInfo;
-        //}
+        public DataAnalysisItemDefinitionInfo DataAnalysisItemDefinitionInfoMapper(DataAnalysisItemDefinition dataAnalysisItemDefinition)
+        {
+            DataAnalysisItemDefinitionInfo dataAnalysisItemDefinitionInfo = new DataAnalysisItemDefinitionInfo()
+            {
+                DataAnalysisItemDefinitionId = dataAnalysisItemDefinition.DataAnalysisItemDefinitionId,
+                Name = dataAnalysisItemDefinition.Name
+            };
+            return dataAnalysisItemDefinitionInfo;
+        }
 
         #endregion   
     }

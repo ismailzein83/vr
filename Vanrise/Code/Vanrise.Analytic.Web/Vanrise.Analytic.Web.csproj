@@ -77,9 +77,7 @@
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\MainExtensions\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
@@ -137,6 +135,12 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\Templates\TimeRangeFilterSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\vr-analytic-timerangefilter-selective.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-selector.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-selector.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleCriteriaTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleTypeSettingsTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertrulecriteria.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertruletypesettings.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcCalculationFieldManagementTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\vr-analytic-daprofcalccalculationfield-management.js" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\Templates\DARecordAggregateSelectiveTemplate.html" />

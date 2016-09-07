@@ -82,12 +82,12 @@ namespace Vanrise.Analytic.Business
             return templateConfigManager.GetExtensionConfigurations<DataAnalysisDefinitionConfig>(DataAnalysisDefinitionConfig.EXTENSION_TYPE);
         }
 
-        //public IEnumerable<DataAnalysisDefinitionInfo> GetDataAnalysisDefinitionsInfo(DataAnalysisDefinitionFilter filter)
-        //{
-        //    Func<DataAnalysisDefinition, bool> filterExpression = null;
+        public IEnumerable<DataAnalysisDefinitionInfo> GetDataAnalysisDefinitionsInfo(DataAnalysisDefinitionFilter filter)
+        {
+            Func<DataAnalysisDefinition, bool> filterExpression = null;
 
-        //    return this.GetCachedDataAnalysisDefinitions().MapRecords(DataAnalysisDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
+            return this.GetCachedDataAnalysisDefinitions().MapRecords(DataAnalysisDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
 
         #endregion
 
@@ -134,15 +134,15 @@ namespace Vanrise.Analytic.Business
             return dataAnalysisDefinitionDetail;
         }
 
-        //public DataAnalysisDefinitionInfo DataAnalysisDefinitionInfoMapper(DataAnalysisDefinition dataAnalysisDefinition)
-        //{
-        //    DataAnalysisDefinitionInfo dataAnalysisDefinitionInfo = new DataAnalysisDefinitionInfo()
-        //    {
-        //        DataAnalysisDefinitionId = dataAnalysisDefinition.DataAnalysisDefinitionId,
-        //        Name = dataAnalysisDefinition.Name
-        //    };
-        //    return dataAnalysisDefinitionInfo;
-        //}
+        public DataAnalysisDefinitionInfo DataAnalysisDefinitionInfoMapper(DataAnalysisDefinition dataAnalysisDefinition)
+        {
+            DataAnalysisDefinitionInfo dataAnalysisDefinitionInfo = new DataAnalysisDefinitionInfo()
+            {
+                DataAnalysisDefinitionId = dataAnalysisDefinition.DataAnalysisDefinitionId,
+                Name = dataAnalysisDefinition.Name
+            };
+            return dataAnalysisDefinitionInfo;
+        }
 
         #endregion   
     }

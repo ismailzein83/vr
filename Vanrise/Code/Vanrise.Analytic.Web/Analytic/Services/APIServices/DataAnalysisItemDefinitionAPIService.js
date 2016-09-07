@@ -36,11 +36,12 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetTimeRangeFilterExtensionConfigs"));
         }
 
-        //function GetDataAnalysisItemDefinitionsInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisItemDefinitionsInfo"), {
-        //        filter: filter
-        //    });
-        //}
+        function GetDataAnalysisItemDefinitionsInfo(filter, dataAnalysisDefinisitonId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDataAnalysisItemDefinitionsInfo"), {
+                filter: filter,
+                dataAnalysisDefinisitonId: dataAnalysisDefinisitonId
+            });
+        }
 
 
         return ({
@@ -50,7 +51,7 @@
             UpdateDataAnalysisItemDefinition: UpdateDataAnalysisItemDefinition,
             GetDARecordAggregateExtensionConfigs: GetDARecordAggregateExtensionConfigs,
             GetTimeRangeFilterExtensionConfigs: GetTimeRangeFilterExtensionConfigs,
-            //GetDataAnalysisItemDefinitionsInfo: GetDataAnalysisItemDefinitionsInfo
+            GetDataAnalysisItemDefinitionsInfo: GetDataAnalysisItemDefinitionsInfo
         });
     }
 

@@ -57,12 +57,12 @@ namespace Vanrise.Analytic.Web.Controllers
             return _manager.GetTimeRangeFilterExtensionConfigs();
         }
 
-        //[HttpGet]
-        //[Route("GetDataAnalysisItemDefinitionsInfo")]
-        //public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(string filter = null)
-        //{
-        //    DataAnalysisItemDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<DataAnalysisItemDefinitionFilter>(filter) : null;
-        //    return _manager.GetDataAnalysisItemDefinitionsInfo(deserializedFilter);
-        //}
+        [HttpGet]
+        [Route("GetDataAnalysisItemDefinitionsInfo")]
+        public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(string filter, Guid dataAnalysisDefinisitonId)
+        {
+            DataAnalysisItemDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<DataAnalysisItemDefinitionFilter>(filter) : null;
+            return _manager.GetDataAnalysisItemDefinitionsInfo(deserializedFilter, dataAnalysisDefinisitonId);
+        }
     }
 }
