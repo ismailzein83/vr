@@ -295,9 +295,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Security.MainExtens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Analytic.BP.Arguments", "Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj", "{74BCFDD5-6F60-4976-A31C-712BECCC2787}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Caching.Runtime", "Vanrise.Caching.Runtime\Vanrise.Caching.Runtime.csproj", "{C6B2D722-14CE-4ED4-8B2B-52588494E449}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 127
+		SccNumberOfProjects = 128
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -805,6 +807,10 @@ Global
 		SccProjectTopLevelParentUniqueName126 = Vanrise.sln
 		SccProjectName126 = Vanrise.Analytic.BP.Arguments
 		SccLocalPath126 = Vanrise.Analytic.BP.Arguments
+		SccProjectUniqueName127 = Vanrise.Caching.Runtime\\Vanrise.Caching.Runtime.csproj
+		SccProjectTopLevelParentUniqueName127 = Vanrise.sln
+		SccProjectName127 = Vanrise.Caching.Runtime
+		SccLocalPath127 = Vanrise.Caching.Runtime
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1843,6 +1849,14 @@ Global
 		{74BCFDD5-6F60-4976-A31C-712BECCC2787}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74BCFDD5-6F60-4976-A31C-712BECCC2787}.Release|x64.ActiveCfg = Release|Any CPU
 		{74BCFDD5-6F60-4976-A31C-712BECCC2787}.Release|x86.ActiveCfg = Release|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Release|x64.ActiveCfg = Release|Any CPU
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1978,5 +1992,6 @@ Global
 		{193E0684-1E10-48ED-B615-6EAE5C9E41B7} = {B8BB40CA-D3A7-4DF5-A763-4F9FE944B360}
 		{1C62D57F-BA03-42F7-9362-CB097E1145AC} = {375D020B-2FA0-4D68-B841-E74E1FD15B16}
 		{74BCFDD5-6F60-4976-A31C-712BECCC2787} = {8DFB44A5-B08F-439A-856A-174E03432484}
+		{C6B2D722-14CE-4ED4-8B2B-52588494E449} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 	EndGlobalSection
 EndGlobal

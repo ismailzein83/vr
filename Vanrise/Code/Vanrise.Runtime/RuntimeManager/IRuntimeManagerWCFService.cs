@@ -12,6 +12,12 @@ namespace Vanrise.Runtime
     {
         [OperationContract]
         HeartBeatResponse UpdateHeartBeat(HeartBeatRequest request);
+
+        [OperationContract]
+        bool TryLockRuntimeService(string serviceTypeUniqueName, int runtimeProcessId);
+
+        [OperationContract]
+        GetServiceProcessIdResponse TryGetServiceProcessId(GetServiceProcessIdRequest request);
     }
 
     public class HeartBeatRequest
@@ -24,5 +30,29 @@ namespace Vanrise.Runtime
     public class HeartBeatResponse
     {
         public HeartBeatResult Result { get; set; }
+    }
+
+    public class LockRuntimeServiceRequest
+    {
+        public string ServiceTypeUniqueName { get; set; }
+
+        public int RuntimeProcessId { get; set; }
+    }
+
+    public enum LockRuntimeServiceResult { Succeeded, Failed }
+
+    public class LockRuntimeServiceResponse
+    {
+        public LockRuntimeServiceResult Result { get; set; }
+    }
+
+    public class GetServiceProcessIdRequest
+    {
+        public string ServiceTypeUniqueName { get; set; }
+    }
+
+    public class GetServiceProcessIdResponse
+    {
+        public int? RuntimeProcessId { get; set; }
     }
 }

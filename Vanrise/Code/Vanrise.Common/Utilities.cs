@@ -217,15 +217,14 @@ namespace Vanrise.Common
             return dict.Keys.ToList();
         }
         
-        public static T DeserializeAndValidate<T>(string serialized) where T : class
+        public static T DeserializeAndValidate<T>(string serialized)
         {
             if (serialized == null)
-                throw new ArgumentNullException("serializedItems");
+                throw new ArgumentNullException("serialized");
             Object deserializedAsObject = Serializer.Deserialize(serialized);
-            T deserialized = deserializedAsObject as T;
-            if (deserialized == null)
+            if (!(deserializedAsObject is T))
                 throw new Exception(String.Format("handler is not of type {0}. it is of type '{1}'", typeof(T).FullName, deserializedAsObject.ToString()));
-            return deserialized;
+            return (T)deserializedAsObject;
         }
 
     }

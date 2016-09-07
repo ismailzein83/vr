@@ -39,13 +39,8 @@ namespace Vanrise.Runtime
                 {
                     try
                     {
-                        if (_runtimeManagerServiceURL == null)
-                            _runtimeManagerServiceURL = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>().GetRuntimeManagerServiceURL();
-                        if (_runtimeManagerServiceURL == null)
-                            throw new NullReferenceException("_runtimeManagerServiceURL");
-
                         HeartBeatResponse hpResponse = null;
-                        Common.ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(_runtimeManagerServiceURL, (client) =>
+                        Common.ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(GetRuntimeManagerServiceURL(), (client) =>
                             {
                                 hpResponse = client.UpdateHeartBeat(new HeartBeatRequest
                                     {
@@ -73,6 +68,15 @@ namespace Vanrise.Runtime
             }
             lock (s_lockObj)
                 s_isRunning = false;
+        }
+
+        private static string GetRuntimeManagerServiceURL()
+        {
+            if (_runtimeManagerServiceURL == null)
+                _runtimeManagerServiceURL = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>().GetRuntimeManagerServiceURL();
+            if (_runtimeManagerServiceURL == null)
+                throw new NullReferenceException("_runtimeManagerServiceURL");
+            return _runtimeManagerServiceURL;
         }
 
         static List<Guid> s_FreezedTransactionLocks = new List<Guid>();
@@ -219,6 +223,56 @@ namespace Vanrise.Runtime
         internal void SetTransactionLockFreezed(TransactionLockItem transactionLockItem)
         {
             s_queueFreezedTransactionLocks.Enqueue(transactionLockItem.LockItemUniqueId);
+        }
+
+        public bool TryLockRuntimeService(string serviceTypeUniqueName)
+        {
+            bool isLocked = false;
+            try
+            {
+                ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(GetRuntimeManagerServiceURL(), (client) =>
+                    {
+                        isLocked = client.TryLockRuntimeService(serviceTypeUniqueName, CurrentProcess.ProcessId);
+                    });
+            }
+            catch
+            {
+                _runtimeManagerServiceURL = null;
+                throw;
+            }
+            return isLocked;
+        }
+
+        public bool TryGetRuntimeServiceProcessId(string serviceTypeUniqueName, out int runtimeProcessId)
+        {
+            int? runtimeProcessId_Internal = null;
+            try
+            {
+                ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(GetRuntimeManagerServiceURL(), (client) =>
+                {
+                    var response = client.TryGetServiceProcessId(new GetServiceProcessIdRequest
+                        {
+                            ServiceTypeUniqueName = serviceTypeUniqueName
+                        });
+                    if (response != null && response.RuntimeProcessId.HasValue)
+                        runtimeProcessId_Internal = response.RuntimeProcessId.Value;
+                });
+            }
+            catch
+            {
+                _runtimeManagerServiceURL = null;
+                throw;
+            }
+            if(runtimeProcessId_Internal.HasValue)
+            {
+                runtimeProcessId = runtimeProcessId_Internal.Value;
+                return true;
+            }
+            else
+            {
+                runtimeProcessId = 0;
+                return false;
+            }
         }
 
         #region Private Classes
