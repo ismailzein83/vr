@@ -15,12 +15,12 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var vrAlertRuleTypeSettings = new VRAlertRuleTypeSettings($scope, ctrl, $attrs);
-                vrAlertRuleTypeSettings.initializeController();
+                var criteria = new VRAlertRuleTypeSettings($scope, ctrl, $attrs);
+                criteria.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_Notification/Directives/VRAlertRuleType/Templates/VRAlertRuleTypeSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_Notification/Directives/VRAlertRule/Templates/VRAlertRuleCriteriaTemplate.html'
         };
 
         function VRAlertRuleTypeSettings($scope, ctrl, $attrs) {
@@ -56,31 +56,33 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var vrAlertRuleTypeSettings;
+                    var context;
+                    var criteria;
 
                     if (payload != undefined) {
-                        vrAlertRuleTypeSettings = payload.vrAlertRuleTypeSettings;
+                        context = payload.context;
+                        criteria = payload.criteria;
                     }
 
-                    var getVRAlertRuleTypeSettingsTemplateConfigsPromise = getVRAlertRuleTypeSettingsTemplateConfigs();
-                    promises.push(getVRAlertRuleTypeSettingsTemplateConfigsPromise);
+                    var getVRAlertRuleCriteriaTemplateConfigsPromise = getVRAlertRuleCriteriaTemplateConfigs();
+                    promises.push(getVRAlertRuleCriteriaTemplateConfigsPromise);
 
-                    if (vrAlertRuleTypeSettings != undefined) {
+                    if (criteria != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
 
-                    function getVRAlertRuleTypeSettingsTemplateConfigs() {
-                        return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleTypeSettingsExtensionConfigs().then(function (response) {
+                    function getVRAlertRuleCriteriaTemplateConfigs() {
+                        return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleCriteriaExtensionConfigs().then(function (response) {
 
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (vrAlertRuleTypeSettings != undefined) {
+                                if (criteria != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrAlertRuleTypeSettings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, criteria.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -92,12 +94,18 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { vrAlertRuleTypeSettings: vrAlertRuleTypeSettings };
+                            var directivePayload = {
+                                context: builContext(),
+                                criteria: criteria
+                            };
 
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
                         return directiveLoadDeferred.promise;
+                    }
+                    function builContext() {
+                        return context;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -122,6 +130,6 @@
         }
     }
 
-    app.directive('vrNotificationAlertruletypeSettings', VRAlertRuleTypeSettingsDirective);
+    app.directive('vrNotificationVralertrulecriteria', VRAlertRuleTypeSettingsDirective);
 
 })(app);

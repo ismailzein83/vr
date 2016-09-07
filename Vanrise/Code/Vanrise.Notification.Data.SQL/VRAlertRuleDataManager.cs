@@ -41,14 +41,14 @@ namespace Vanrise.Notification.Data.SQL
 
             int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Insert", out vrAlertRuleID, vrAlertRuleItem.Name, vrAlertRuleItem.RuleTypeId, serializedSettings);
 
-            insertedId = (affectedRecords > 0) ? (long)vrAlertRuleID : -1;
+            insertedId = (affectedRecords > 0) ? Convert.ToInt64(vrAlertRuleID) : -1;
             return (affectedRecords > 0);
         }
 
         public bool Update(VRAlertRule vrAlertRuleItem)
         {
             string serializedSettings = vrAlertRuleItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrAlertRuleItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Update", vrAlertRuleItem.VRAlertRuleId, vrAlertRuleItem.Name, vrAlertRuleItem.Settings, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Update", vrAlertRuleItem.VRAlertRuleId, vrAlertRuleItem.Name, vrAlertRuleItem.RuleTypeId, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -63,7 +63,8 @@ namespace Vanrise.Notification.Data.SQL
             {
                 VRAlertRuleId = (long) reader["ID"],
                 Name = reader["Name"] as string,
-                //Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleSettings>(reader["Settings"] as string) 
+                RuleTypeId = (Guid) reader["RuleTypeId"],
+                Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleSettings>(reader["Settings"] as string) 
             };
             return vrAlertRule;
         }

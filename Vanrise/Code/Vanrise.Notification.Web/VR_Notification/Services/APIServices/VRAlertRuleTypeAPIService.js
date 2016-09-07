@@ -32,11 +32,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypeSettingsExtensionConfigs"));
         }
 
-        //function GetVRAlertRuleTypesInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypesInfo"), {
-        //        filter: filter
-        //    });
-        //}
+        function GetVRAlertRuleTypesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypesInfo"), {
+                filter: filter
+            });
+        }
 
         //function HasAddVRAlertRuleTypePermission() {
         //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRuleType']));
@@ -53,7 +53,7 @@
             AddVRAlertRuleType: AddVRAlertRuleType,
             UpdateVRAlertRuleType: UpdateVRAlertRuleType,
             GetVRAlertRuleTypeSettingsExtensionConfigs: GetVRAlertRuleTypeSettingsExtensionConfigs,
-            //GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo,
+            GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo,
             //HasUpdateVRAlertRuleTypePermission: HasUpdateVRAlertRuleTypePermission,
             //HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission
         });

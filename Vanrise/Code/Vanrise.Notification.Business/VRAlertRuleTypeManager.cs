@@ -82,12 +82,12 @@ namespace Vanrise.Notification.Business
             return templateConfigManager.GetExtensionConfigurations<VRAlertRuleTypeConfig>(VRAlertRuleTypeConfig.EXTENSION_TYPE);
         }
 
-        //public IEnumerable<VRAlertRuleTypeInfo> GetVRAlertRuleTypesInfo(VRAlertRuleTypeFilter filter)
-        //{
-        //    Func<VRAlertRuleType, bool> filterExpression = null;
+        public IEnumerable<VRAlertRuleTypeInfo> GetVRAlertRuleTypesInfo(VRAlertRuleTypeFilter filter)
+        {
+            Func<VRAlertRuleType, bool> filterExpression = null;
 
-        //    return this.GetCachedVRAlertRuleTypes().MapRecords(VRAlertRuleTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
+            return this.GetCachedVRAlertRuleTypes().MapRecords(VRAlertRuleTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
 
         #endregion
 
@@ -134,15 +134,15 @@ namespace Vanrise.Notification.Business
             return vrAlertRuleTypeDetail;
         }
 
-        //public VRAlertRuleTypeInfo VRAlertRuleTypeInfoMapper(VRAlertRuleType vrAlertRuleType)
-        //{
-        //    VRAlertRuleTypeInfo vrAlertRuleTypeInfo = new VRAlertRuleTypeInfo()
-        //    {
-        //        VRAlertRuleTypeId = vrAlertRuleType.VRAlertRuleTypeId,
-        //        Name = vrAlertRuleType.Name
-        //    };
-        //    return vrAlertRuleTypeInfo;
-        //}
+        public VRAlertRuleTypeInfo VRAlertRuleTypeInfoMapper(VRAlertRuleType vrAlertRuleType)
+        {
+            VRAlertRuleTypeInfo vrAlertRuleTypeInfo = new VRAlertRuleTypeInfo()
+            {
+                VRAlertRuleTypeId = vrAlertRuleType.VRAlertRuleTypeId,
+                Name = vrAlertRuleType.Name
+            };
+            return vrAlertRuleTypeInfo;
+        }
 
         #endregion
     }

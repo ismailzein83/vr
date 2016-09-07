@@ -50,12 +50,12 @@ namespace Vanrise.Notification.Web.Controllers
             return _manager.GetVRAlertRuleTypeSettingsExtensionConfigs();
         }
 
-        //[HttpGet]
-        //[Route("GetVRAlertRuleTypesInfo")]
-        //public IEnumerable<VRAlertRuleTypeInfo> GetVRAlertRuleTypesInfo(string filter = null)
-        //{
-        //    VRAlertRuleTypeFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRAlertRuleTypeFilter>(filter) : null;
-        //    return _manager.GetVRAlertRuleTypesInfo(deserializedFilter);
-        //}
+        [HttpGet]
+        [Route("GetVRAlertRuleTypesInfo")]
+        public IEnumerable<VRAlertRuleTypeInfo> GetVRAlertRuleTypesInfo(string filter = null)
+        {
+            VRAlertRuleTypeFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRAlertRuleTypeFilter>(filter) : null;
+            return _manager.GetVRAlertRuleTypesInfo(deserializedFilter);
+        }
     }
 }

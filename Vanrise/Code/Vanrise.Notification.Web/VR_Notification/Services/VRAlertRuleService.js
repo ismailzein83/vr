@@ -3,39 +3,39 @@
 
     "use strict";
 
-    VRAlertRuleTypeService.$inject = ['VRModalService'];
+    VRAlertRuleService.$inject = ['VRModalService'];
 
-    function VRAlertRuleTypeService(VRModalService) {
+    function VRAlertRuleService(VRModalService) {
 
-        function addVRAlertRuleType(onVRAlertRuleTypeAdded) {
+        function addVRAlertRule(onVRAlertRuleAdded) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRAlertRuleTypeAdded = onVRAlertRuleTypeAdded
+                modalScope.onVRAlertRuleAdded = onVRAlertRuleAdded
             };
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', null, settings);
         };
 
-        function editVRAlertRuleType(styleDefinitionId, onVRAlertRuleTypeUpdated) {
+        function editVRAlertRule(vrAlertRuleId, onVRAlertRuleUpdated) {
             var settings = {};
 
             var parameters = {
-                styleDefinitionId: styleDefinitionId,
+                vrAlertRuleId: vrAlertRuleId,
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRAlertRuleTypeUpdated = onVRAlertRuleTypeUpdated;
+                modalScope.onVRAlertRuleUpdated = onVRAlertRuleUpdated;
             };
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', parameters, settings);
         }
 
 
         return {
-            addVRAlertRuleType: addVRAlertRuleType,
-            editVRAlertRuleType: editVRAlertRuleType
+            addVRAlertRule: addVRAlertRule,
+            editVRAlertRule: editVRAlertRule
         };
     }
 
-    appControllers.service('VR_Notification_VRAlertRuleService', VRAlertRuleTypeService);
+    appControllers.service('VR_Notification_VRAlertRuleService', VRAlertRuleService);
 
 })(appControllers);

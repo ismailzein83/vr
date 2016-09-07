@@ -28,10 +28,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'UpdateVRAlertRule'), vrAlertRuleItem);
         }
 
+        function GetVRAlertRuleCriteriaExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleCriteriaExtensionConfigs"));
+        }
 
-        //function GetStyleFormatingExtensionConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
-        //}
 
         //function GetVRAlertRulesInfo(filter) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRulesInfo"), {
@@ -53,7 +53,7 @@
             GetVRAlertRule: GetVRAlertRule,
             AddVRAlertRule: AddVRAlertRule,
             UpdateVRAlertRule: UpdateVRAlertRule,
-            //GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
+            GetVRAlertRuleCriteriaExtensionConfigs: GetVRAlertRuleCriteriaExtensionConfigs,
             //GetVRAlertRulesInfo: GetVRAlertRulesInfo,
             //HasAddVRAlertRulePermission: HasAddVRAlertRulePermission,
             //HasUpdateVRAlertRulePermission: HasUpdateVRAlertRulePermission,

@@ -7,6 +7,7 @@ using Vanrise.Notification.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Notification.Data;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Notification.Business
 {
@@ -79,11 +80,11 @@ namespace Vanrise.Notification.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
-        //{
-        //    var templateConfigManager = new ExtensionConfigurationManager();
-        //    return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
-        //}
+        public IEnumerable<VRAlertRuleCriteriaConfig> GetVRAlertRuleCriteriaExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<VRAlertRuleCriteriaConfig>(VRAlertRuleCriteriaConfig.EXTENSION_TYPE);
+        }
 
         //public IEnumerable<VRAlertRuleInfo> GetVRAlertRulesInfo(VRAlertRuleFilter filter)
         //{
@@ -158,11 +159,5 @@ namespace Vanrise.Notification.Business
         //}
 
         #endregion
-
-
-
-
-
-
     }
 }
