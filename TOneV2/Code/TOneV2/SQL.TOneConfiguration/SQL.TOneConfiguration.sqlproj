@@ -106,6 +106,7 @@
     <Folder Include="VR_BEBridge\" />
     <Folder Include="VR_BEBridge\Tables\" />
     <Folder Include="VR_BEBridge\Stored Procedures\" />
+    <Folder Include="VRNotification\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -397,6 +398,13 @@
     <Build Include="Analytic\Stored Procedures\sp_DataAnalysisItemDefinition_Update.sql" />
     <Build Include="Analytic\Stored Procedures\sp_DataAnalysisItemDefinition_Insert.sql" />
     <Build Include="Analytic\Stored Procedures\sp_DataAnalysisItemDefinition_GetAll.sql" />
+    <Build Include="VRNotification\Tables\VRAlertRuleType.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRuleType_Update.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRuleType_Insert.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRuleType_GetAll.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_Update.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_Insert.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
