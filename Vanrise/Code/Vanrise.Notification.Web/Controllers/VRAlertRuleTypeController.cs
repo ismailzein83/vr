@@ -43,12 +43,12 @@ namespace Vanrise.Notification.Web.Controllers
             return _manager.UpdateVRAlertRuleType(vrAlertRuleTypeItem);
         }
 
-        //[HttpGet]
-        //[Route("GetStyleFormatingExtensionConfigs")]
-        //public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
-        //{
-        //    return _manager.GetStyleFormatingExtensionConfigs();
-        //}
+        [HttpGet]
+        [Route("GetVRAlertRuleTypeSettingsExtensionConfigs")]
+        public IEnumerable<VRAlertRuleTypeConfig> GetVRAlertRuleTypeSettingsExtensionConfigs()
+        {
+            return _manager.GetVRAlertRuleTypeSettingsExtensionConfigs();
+        }
 
         //[HttpGet]
         //[Route("GetVRAlertRuleTypesInfo")]

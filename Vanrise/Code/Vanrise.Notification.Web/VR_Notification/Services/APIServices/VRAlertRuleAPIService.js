@@ -2,63 +2,64 @@
 (function (appControllers) {
 
     "use strict";
-    VRAlertRuleTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Notification_ModuleConfig', 'SecurityService'];
 
-    function VRAlertRuleTypeAPIService(BaseAPIService, UtilsService, VR_Notification_ModuleConfig, SecurityService) {
+    VRAlertRuleAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Notification_ModuleConfig', 'SecurityService'];
 
-        var controllerName = "VRAlertRuleType";
+    function VRAlertRuleAPIService(BaseAPIService, UtilsService, VR_Notification_ModuleConfig, SecurityService) {
+
+        var controllerName = "VRAlertRule";
 
 
-        function GetFilteredVRAlertRuleTypes(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetFilteredVRAlertRuleTypes'), input);
+        function GetFilteredVRAlertRules(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetFilteredVRAlertRules'), input);
         }
 
-        function GetVRAlertRuleType(vrAlertRuleTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetVRAlertRuleType'), {
-                VRAlertRuleTypeId: vrAlertRuleTypeId
+        function GetVRAlertRule(vrAlertRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetVRAlertRule'), {
+                VRAlertRuleId: vrAlertRuleId
             });
         }
 
-        function AddVRAlertRuleType(vrAlertRuleTypeItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'AddVRAlertRuleType'), vrAlertRuleTypeItem);
+        function AddVRAlertRule(vrAlertRuleItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'AddVRAlertRule'), vrAlertRuleItem);
         }
 
-        function UpdateVRAlertRuleType(vrAlertRuleTypeItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'UpdateVRAlertRuleType'), vrAlertRuleTypeItem);
+        function UpdateVRAlertRule(vrAlertRuleItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'UpdateVRAlertRule'), vrAlertRuleItem);
         }
 
-
-        //function HasAddVRAlertRuleTypePermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRuleType']));
-        //}
-
-        //function HasUpdateVRAlertRuleTypePermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRuleType']));
-        //}
 
         //function GetStyleFormatingExtensionConfigs() {
         //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
         //}
 
-        //function GetVRAlertRuleTypesInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypesInfo"), {
+        //function GetVRAlertRulesInfo(filter) {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRulesInfo"), {
         //        filter: filter
         //    });
         //}
 
+        //function HasAddVRAlertRulePermission() {
+        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRule']));
+        //}
+
+        //function HasUpdateVRAlertRulePermission() {
+        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRule']));
+        //}
+
 
         return ({
-            GetFilteredVRAlertRuleTypes: GetFilteredVRAlertRuleTypes,
-            GetVRAlertRuleType: GetVRAlertRuleType,
-            AddVRAlertRuleType: AddVRAlertRuleType,
-            HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission,
-            //HasUpdateVRAlertRuleTypePermission: HasUpdateVRAlertRuleTypePermission,
-            //UpdateVRAlertRuleType: UpdateVRAlertRuleType,
+            GetFilteredVRAlertRules: GetFilteredVRAlertRules,
+            GetVRAlertRule: GetVRAlertRule,
+            AddVRAlertRule: AddVRAlertRule,
+            UpdateVRAlertRule: UpdateVRAlertRule,
             //GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
-            //GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo
+            //GetVRAlertRulesInfo: GetVRAlertRulesInfo,
+            //HasAddVRAlertRulePermission: HasAddVRAlertRulePermission,
+            //HasUpdateVRAlertRulePermission: HasUpdateVRAlertRulePermission,
         });
     }
 
-    appControllers.service('VR_Notification_VRAlertRuleAPIService', VRAlertRuleTypeAPIService);
+    appControllers.service('VR_Notification_VRAlertRuleAPIService', VRAlertRuleAPIService);
 
 })(appControllers);

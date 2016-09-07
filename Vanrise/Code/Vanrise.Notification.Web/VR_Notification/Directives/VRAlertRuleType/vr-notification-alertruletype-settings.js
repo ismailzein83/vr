@@ -55,6 +55,8 @@
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
+                    console.log(payload);
+
                     var promises = [];
                     var vrAlertRuleTypeSettings;
 
@@ -73,6 +75,7 @@
 
                     function getVRAlertRuleTypeSettingsTemplateConfigs() {
                         return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleTypeSettingsExtensionConfigs().then(function (response) {
+
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

@@ -76,7 +76,7 @@ namespace Vanrise.Notification.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<VRAlertRuleTypeConfig> GetStyleFormatingExtensionConfigs()
+        public IEnumerable<VRAlertRuleTypeConfig> GetVRAlertRuleTypeSettingsExtensionConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<VRAlertRuleTypeConfig>(VRAlertRuleTypeConfig.EXTENSION_TYPE);

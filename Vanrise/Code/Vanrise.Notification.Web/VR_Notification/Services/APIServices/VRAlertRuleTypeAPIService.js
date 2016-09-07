@@ -2,6 +2,7 @@
 (function (appControllers) {
 
     "use strict";
+
     VRAlertRuleTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Notification_ModuleConfig', 'SecurityService'];
 
     function VRAlertRuleTypeAPIService(BaseAPIService, UtilsService, VR_Notification_ModuleConfig, SecurityService) {
@@ -27,6 +28,15 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'UpdateVRAlertRuleType'), vrAlertRuleTypeItem);
         }
 
+        function GetVRAlertRuleTypeSettingsExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypeSettingsExtensionConfigs"));
+        }
+
+        //function GetVRAlertRuleTypesInfo(filter) {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypesInfo"), {
+        //        filter: filter
+        //    });
+        //}
 
         //function HasAddVRAlertRuleTypePermission() {
         //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRuleType']));
@@ -36,26 +46,16 @@
         //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRuleType']));
         //}
 
-        //function GetStyleFormatingExtensionConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
-        //}
-
-        //function GetVRAlertRuleTypesInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRuleTypesInfo"), {
-        //        filter: filter
-        //    });
-        //}
-
 
         return ({
             GetFilteredVRAlertRuleTypes: GetFilteredVRAlertRuleTypes,
             GetVRAlertRuleType: GetVRAlertRuleType,
             AddVRAlertRuleType: AddVRAlertRuleType,
-            HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission,
+            UpdateVRAlertRuleType: UpdateVRAlertRuleType,
+            GetVRAlertRuleTypeSettingsExtensionConfigs: GetVRAlertRuleTypeSettingsExtensionConfigs,
+            //GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo,
             //HasUpdateVRAlertRuleTypePermission: HasUpdateVRAlertRuleTypePermission,
-            //UpdateVRAlertRuleType: UpdateVRAlertRuleType,
-            //GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
-            //GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo
+            //HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission
         });
     }
 

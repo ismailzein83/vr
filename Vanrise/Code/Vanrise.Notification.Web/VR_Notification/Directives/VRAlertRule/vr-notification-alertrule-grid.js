@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleAPIService', 'VR_Notification_VRAlertRuleService', 'VRNotificationService',
+app.directive('vrNotificationAlertruleGrid', ['VR_Notification_VRAlertRuleAPIService', 'VR_Notification_VRAlertRuleService', 'VRNotificationService',
     function (VR_Notification_VRAlertRuleAPIService, VR_Notification_VRAlertRuleService, VRNotificationService) {
         return {
             restrict: 'E',
@@ -62,7 +62,7 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleAP
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editVRAlertRule,
-                    haspermission: hasEditVRAlertRulePermission
+                    //haspermission: hasEditVRAlertRulePermission
                 });
             }
             function editVRAlertRule(vrAlertRuleItem) {
@@ -72,8 +72,8 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleAP
 
                 VR_Notification_VRAlertRuleService.editVRAlertRule(vrAlertRuleItem.Entity.VRAlertRuleId, onVRAlertRuleUpdated);
             }
-            function hasEditVRAlertRulePermission() {
-                return VR_Notification_VRAlertRuleAPIService.HasUpdateVRAlertRulePermission();
-            }
+            //function hasEditVRAlertRulePermission() {
+            //    return VR_Notification_VRAlertRuleAPIService.HasUpdateVRAlertRulePermission();
+            //}
         }
     }]);

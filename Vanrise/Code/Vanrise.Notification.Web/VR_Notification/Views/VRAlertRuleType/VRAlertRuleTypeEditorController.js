@@ -71,7 +71,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -80,10 +80,10 @@
             function setTitle() {
                 if (isEditMode) {
                     var vrAlertRuleTypeName = (vrAlertRuleTypeEntity != undefined) ? vrAlertRuleTypeEntity.Name : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrAlertRuleTypeName, 'VRAlertRuleType');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrAlertRuleTypeName, 'Alert Rule Type');
                 }
                 else {
-                    $scope.title = UtilsService.buildTitleForAddEditor('VRAlertRuleType');
+                    $scope.title = UtilsService.buildTitleForAddEditor('Alert Rule Type');
                 }
             }
             function loadStaticData() {
@@ -97,7 +97,7 @@
                 settingsDirectiveReadyDeferred.promise.then(function () {
                     var settingsDirectivePayload;
                     if (vrAlertRuleTypeEntity != undefined) {
-                        settingsDirectivePayload = { vrAlertRuleTypeSettings: vrAlertRuleTypeEntity.VRAlertRuleTypeSettings };
+                        settingsDirectivePayload = { vrAlertRuleTypeSettings: vrAlertRuleTypeEntity.Settings };
                     }
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });
@@ -142,7 +142,7 @@
             return {
                 VRAlertRuleTypeId: vrAlertRuleTypeEntity != undefined ? vrAlertRuleTypeEntity.VRAlertRuleTypeId : undefined,
                 Name: $scope.scopeModel.name,
-                VRAlertRuleTypeSettings: vrAlertRuleTypeSettings
+                Settings: vrAlertRuleTypeSettings
             };
         }
     }

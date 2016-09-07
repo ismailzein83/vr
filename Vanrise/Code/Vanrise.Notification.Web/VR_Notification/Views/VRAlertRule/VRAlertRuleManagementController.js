@@ -25,9 +25,9 @@
 
                 VR_Notification_VRAlertRuleService.addVRAlertRule(onVRAlertRuleAdded);
             };
-            $scope.hasAddVRAlertRulePermission = function () {
-                return VR_Notification_VRAlertRuleAPIService.HasAddVRAlertRulePermission()
-            }
+            //$scope.hasAddVRAlertRulePermission = function () {
+            //    return VR_Notification_VRAlertRuleAPIService.HasAddVRAlertRulePermission()
+            //}
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
