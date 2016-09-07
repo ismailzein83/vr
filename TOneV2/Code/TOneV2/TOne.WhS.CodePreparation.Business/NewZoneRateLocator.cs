@@ -74,7 +74,11 @@ namespace TOne.WhS.CodePreparation.Business
             if (customer.CarrierAccountSettings == null)
                 throw new DataIntegrityValidationException(String.Format("Carrier Account Settings for customer with id {0} does not exist", ownerId));
 
-            return customer.CarrierAccountSettings.CurrencyId;
+            int currencyId = customer.CarrierAccountSettings.CurrencyId;
+            if (currencyId == 0)
+                throw new DataIntegrityValidationException(String.Format("No currency set for customer with id {0}", ownerId));
+
+            return currencyId;
         }
 
         protected List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<ExistingZone> matchedZones)
