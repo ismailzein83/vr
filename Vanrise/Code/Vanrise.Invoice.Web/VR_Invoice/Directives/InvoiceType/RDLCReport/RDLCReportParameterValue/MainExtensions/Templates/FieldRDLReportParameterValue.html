@@ -8,7 +8,14 @@
                        label="Field">
             </vr-select>
     </vr-columns>
-    <vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.fieldName" label="Field Name" isrequired="scopeModel.isCustomFieldRequired()" ng-show="scopeModel.isCustomFieldRequired()"></vr-textbox>
+    <vr-columns width="1/2row" ng-if="scopeModel.isCustomFieldRequired()">
+        <vr-select label="Field Name"
+                   datasource="scopeModel.recordFields"
+                   datatextfield="FieldTitle"
+                   datavaluefield="FieldName"
+                   selectedvalues="scopeModel.selectedRecordField"
+                   entityname="Field Name"
+                   isrequired="scopeModel.isCustomFieldRequired()">
+        </vr-select>
     </vr-columns>
 </vr-row>

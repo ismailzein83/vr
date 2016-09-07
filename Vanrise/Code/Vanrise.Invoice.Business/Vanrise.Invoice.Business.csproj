@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\InvoiceGenerationContext.cs" />
+    <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
     <Compile Include="Context\ItemsFilterContext.cs" />
     <Compile Include="Context\PartnerManagerContext.cs" />
     <Compile Include="Context\PhysicalInvoiceActionContext.cs" />

@@ -47,7 +47,7 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
                         ctrl.datasource.push(addNeededFields({ Entity: gridColumn }));
                     }
 
-                    VR_Invoice_InvoiceTypeService.addGridColumn(onGridColumnAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addGridColumn(onGridColumnAdded, getContext());
                 };
 
                 ctrl.removeColumn = function(dataItem)
@@ -120,7 +120,11 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
                     ctrl.datasource[index] = addNeededFields({ Entity: column });
                 }
 
-                VR_Invoice_InvoiceTypeService.editGridColumn(columnObj.Entity, onGridColumnUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editGridColumn(columnObj.Entity, onGridColumnUpdated, getContext());
+            }
+            function getContext()
+            {
+                return context;
             }
         }
 

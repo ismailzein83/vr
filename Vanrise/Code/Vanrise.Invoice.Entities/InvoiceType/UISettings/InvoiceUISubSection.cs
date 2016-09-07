@@ -9,6 +9,7 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceUISubSection
     {
         public string SectionTitle { get; set; }
+        public Vanrise.GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
         public InvoiceUISubSectionSettings Settings { get; set; }
     }
     public abstract class InvoiceUISubSectionSettings

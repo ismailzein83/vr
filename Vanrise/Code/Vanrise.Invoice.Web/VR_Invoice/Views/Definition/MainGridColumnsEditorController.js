@@ -6,7 +6,7 @@
 
     function mainGridColumnsEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VR_Invoice_InvoiceFieldEnum) {
 
-        var gridColumns = [];
+        var context;
         var columnEntity;
 
         var isEditMode;
@@ -18,44 +18,45 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                gridColumns = parameters.gridColumns;
+                context = parameters.context;
                 columnEntity = parameters.columnEntity;
             }
             isEditMode = (columnEntity != undefined);
         }
 
         function defineScope() {
-            $scope.invoiceFields = UtilsService.getArrayEnum(VR_Invoice_InvoiceFieldEnum);
-
-            $scope.isCustomFieldRequired = function()
+            $scope.scopeModel = {};
+            $scope.scopeModel.invoiceFields = UtilsService.getArrayEnum(VR_Invoice_InvoiceFieldEnum);
+            $scope.scopeModel.recordFields = context != undefined ? context.getFields() : [];
+            $scope.scopeModel.isCustomFieldRequired = function ()
             {
-                if ($scope.selectedInvoiceField != undefined)
+                if ($scope.scopeModel.selectedInvoiceField != undefined)
                 {
-                    if ($scope.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.CustomField.value)
+                    if ($scope.scopeModel.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.CustomField.value)
                         return true;
                 }
                 
                 return false;
             }
 
-            $scope.save = function () {
+            $scope.scopeModel.save = function () {
                 return (isEditMode)?  updateGridColumn() : addGridColumn();
             };
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
 
         function load() {
 
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle,loadStaticData]).then(function () {
 
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -71,18 +72,18 @@
         {
             if(columnEntity != undefined)
             {
-                $scope.header = columnEntity.Header;
-                $scope.customFieldName = columnEntity.CustomFieldName;
-                $scope.selectedInvoiceField = UtilsService.getItemByVal($scope.invoiceFields, columnEntity.Field,"value");
+                $scope.scopeModel.header = columnEntity.Header;
+                $scope.scopeModel.selectedRecordField = UtilsService.getItemByVal($scope.scopeModel.recordFields, columnEntity.CustomFieldName, "FieldName");
+                $scope.scopeModel.selectedInvoiceField = UtilsService.getItemByVal($scope.scopeModel.invoiceFields, columnEntity.Field, "value");
             }
         }
 
         function builGridColumnObjFromScope()
         {
             return {
-                Header: $scope.header,
-                Field:$scope.selectedInvoiceField.value,
-                CustomFieldName:$scope.customFieldName
+                Header: $scope.scopeModel.header,
+                Field: $scope.scopeModel.selectedInvoiceField.value,
+                CustomFieldName: $scope.scopeModel.isCustomFieldRequired()? $scope.scopeModel.selectedRecordField.FieldName : undefined
             };
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
@@ -19,7 +20,25 @@ namespace Vanrise.Invoice.Business
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler(dataManager));
+            var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler(dataManager)) as Vanrise.Entities.BigResult<InvoiceDetail>;
+            if(result != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            {
+                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+                RecordFilterManager recordFilterManager = new RecordFilterManager();
+                var invoiceType = invoiceTypeManager.GetInvoiceType(input.Query.InvoiceTypeId);
+                foreach(var data in result.Data)
+                { 
+                    DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(data.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
+                    foreach(var section in invoiceType.Settings.UISettings.SubSections)
+                    {
+                        if(recordFilterManager.IsFilterGroupMatch(section.FilterGroup, context))
+                        {
+                            data.SectionTitle = section.SectionTitle;
+                        }
+                    }
+                }
+            }
+            return result;
         }
         public Entities.Invoice GetInvoice(long invoiceId)
         {

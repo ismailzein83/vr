@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
+app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
     function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
 
         var directiveDefinitionObject = {
@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/Templates/SubSectionsManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/Templates/InvoiceItemSubSectionsManagement.html"
 
         };
 
@@ -44,7 +44,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                         ctrl.datasource.push({ Entity: subSection });
                     }
 
-                    VR_Invoice_InvoiceTypeService.addSubSection(onSubSectionAdded, getContext());
+                    VR_Invoice_InvoiceTypeService.addInvoiceItemSubSection(onSubSectionAdded, getContext());
                 };
 
                 ctrl.removeSubSection = function (dataItem) {
@@ -104,7 +104,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                     ctrl.datasource[index] = { Entity: subSection };
                 }
 
-                VR_Invoice_InvoiceTypeService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
+                VR_Invoice_InvoiceTypeService.editInvoiceItemSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
             }
             function getContext()
             {

@@ -58,7 +58,8 @@
                 query: {
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
-                    PartnerId: partnerSelectorAPI.getSelectedIds()
+                    PartnerId: partnerSelectorAPI.getSelectedIds(),
+                    InvoiceTypeId: invoiceTypeId
                 }
             };
             return filter;

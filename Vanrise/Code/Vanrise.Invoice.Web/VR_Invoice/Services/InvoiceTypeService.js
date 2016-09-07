@@ -26,7 +26,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceTypeEditor.html', parameters, settings);
         }
 
-        function addGridColumn(onGridColumnAdded, gridColumns) {
+        function addGridColumn(onGridColumnAdded, context) {
             var settings = {
 
             };
@@ -34,12 +34,12 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 modalScope.onGridColumnAdded = onGridColumnAdded;
             };
             var parameters = {
-                gridColumns: gridColumns
+                context: context
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/MainGridColumnsEditor.html', parameters, settings);
         }
 
-        function editGridColumn(columnEntity, onGridColumnUpdated, gridColumns) {
+        function editGridColumn(columnEntity, onGridColumnUpdated, context) {
             var settings = {
 
             };
@@ -48,13 +48,13 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             };
             var parameters = {
                 columnEntity: columnEntity,
-                gridColumns: gridColumns
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/MainGridColumnsEditor.html', parameters, settings);
         }
 
-        function addSubSection(onSubSectionAdded, subSections) {
+        function addSubSection(onSubSectionAdded, context) {
             var settings = {
 
             };
@@ -62,12 +62,12 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 modalScope.onSubSectionAdded = onSubSectionAdded;
             };
             var parameters = {
-                subSections: subSections
+                context: context
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionEditor.html', parameters, settings);
         }
 
-        function editSubSection(subSectionEntity, onSubSectionUpdated, subSections) {
+        function editSubSection(subSectionEntity, onSubSectionUpdated, context) {
             var settings = {
 
             };
@@ -76,11 +76,41 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             };
             var parameters = {
                 subSectionEntity: subSectionEntity,
-                subSections: subSections
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionEditor.html', parameters, settings);
         }
+
+
+        function addInvoiceItemSubSection(onInvoiceItemSubSectionAdded, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceItemSubSectionAdded = onInvoiceItemSubSectionAdded;
+            };
+            var parameters = {
+                context: context
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemSubSectionEditor.html', parameters, settings);
+        }
+
+        function editInvoiceItemSubSection(subSectionEntity, onInvoiceItemSubSectionUpdated, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceItemSubSectionUpdated = onInvoiceItemSubSectionUpdated;
+            };
+            var parameters = {
+                subSectionEntity: subSectionEntity,
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemSubSectionEditor.html', parameters, settings);
+        }
+
 
         function addGridAction(onGridActionAdded, context) {
             var settings = {
@@ -138,7 +168,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceDataSourceEditor.html', parameters, settings);
         }
 
-        function addParameter(onParameterAdded, parametersObj) {
+        function addParameter(onParameterAdded, context) {
             var settings = {
 
             };
@@ -146,12 +176,12 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 modalScope.onParameterAdded = onParameterAdded;
             };
             var parameters = {
-                parametersObj: parametersObj
+                context: context
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCParameterEditor.html', parameters, settings);
         }
 
-        function editParameter(parameterEntity, onParameterUpdated, parametersObj) {
+        function editParameter(parameterEntity, onParameterUpdated, context) {
             var settings = {
 
             };
@@ -160,7 +190,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             };
             var parameters = {
                 parameterEntity: parameterEntity,
-                parameters: parametersObj
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCParameterEditor.html', parameters, settings);
@@ -238,7 +268,9 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             addSubSectionGridColumn: addSubSectionGridColumn,
             editSubSectionGridColumn: editSubSectionGridColumn,
             addSubReport: addSubReport,
-            editSubReport: editSubReport
+            editSubReport: editSubReport,
+            addInvoiceItemSubSection: addInvoiceItemSubSection,
+            editInvoiceItemSubSection: editInvoiceItemSubSection
 
         });
     }]);

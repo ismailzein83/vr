@@ -18,6 +18,25 @@ namespace Vanrise.Invoice.Business
             IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
             return BigDataManager.Instance.RetrieveData(input, new InvoiceItemRequestHandler(dataManager));
         }
+
+        public static string ExecuteItemSetNameParts(List<InvoiceItemConcatenatedPart> itemSetNameParts, dynamic invoiceItemDetails,string currentItemSetName)
+        {
+            if(itemSetNameParts !=null && itemSetNameParts.Count>0)
+            {
+                StringBuilder itemSetName = new StringBuilder();
+                InvoiceItemConcatenatedPartContext context = new InvoiceItemConcatenatedPartContext
+                    {
+                        InvoiceItemDetails = invoiceItemDetails,
+                        CurrentItemSetName = currentItemSetName
+                    };
+                foreach(var part in itemSetNameParts)
+                {
+                   itemSetName.Append(part.Settings.GetPartText(context));
+                }
+                return itemSetName.ToString();
+            }
+            return null;
+        }
         public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, List<string> itemSetNames)
         {
             IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
@@ -56,6 +75,11 @@ namespace Vanrise.Invoice.Business
 
             public override IEnumerable<Entities.InvoiceItem> RetrieveAllData(DataRetrievalInput<InvoiceItemQuery> input)
             {
+                if (input.Query.ItemSetNameParts != null && input.Query.ItemSetNameParts.Count>0)
+                {
+                    input.Query.ItemSetName = InvoiceItemManager.ExecuteItemSetNameParts(input.Query.ItemSetNameParts, input.Query.InvoiceItemDetails,input.Query.ItemSetName);
+                }
+
                 return _dataManager.GetFilteredInvoiceItems(input);
             }
         }

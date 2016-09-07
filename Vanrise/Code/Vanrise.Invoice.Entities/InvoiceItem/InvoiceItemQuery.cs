@@ -9,6 +9,8 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceItemQuery
     {
         public long InvoiceId { get; set; }
+        public dynamic InvoiceItemDetails { get; set; }
         public string ItemSetName { get; set; }
+        public List<InvoiceItemConcatenatedPart> ItemSetNameParts { get; set; }
     }
 }

@@ -3,10 +3,14 @@
         <vr-textbox value="scopeModel.itemSetName" label="Itemset Name" isrequired="true"></vr-textbox>
     </vr-columns>
 </vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-section title="Grid Columns">
-            <vr-invoicetype-invoicesubsectiongridcolumns on-ready="scopeModel.onSubSectionGridColumnsReady"></vr-invoicetype-invoicesubsectiongridcolumns>
-            </vr-section>
-</vr-columns>
-</vr-row>
+
+<vr-tabs>
+    <vr-tab header="'Grid Columns'">
+        <vr-invoicetype-invoicesubsectiongridcolumns on-ready="scopeModel.onSubSectionGridColumnsReady"></vr-invoicetype-invoicesubsectiongridcolumns>
+
+    </vr-tab>
+    <vr-tab header="'Sub Sections'">
+        <vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsections on-ready="scopeModel.onInvoiceItemSubSectionGridColumnsReady"></vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsections>
+    </vr-tab>
+</vr-tabs>
+

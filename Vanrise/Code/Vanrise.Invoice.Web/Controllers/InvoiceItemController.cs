@@ -10,6 +10,8 @@ using Vanrise.Web.Base;
 namespace Vanrise.Invoice.Web.Controllers
 {
      [RoutePrefix(Constants.ROUTE_PREFIX + "InvoiceItem")]
+     [JSONWithTypeAttribute]
+
     public class InvoiceItemController : BaseAPIController
     {
          [HttpPost]

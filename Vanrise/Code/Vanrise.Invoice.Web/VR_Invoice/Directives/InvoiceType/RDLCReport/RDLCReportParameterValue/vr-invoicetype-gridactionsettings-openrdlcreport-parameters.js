@@ -29,7 +29,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
 
             var gridAPI;
             this.initializeController = initializeController;
-
+            var context;
             function initializeController() {
                 ctrl.datasource = [];
 
@@ -43,7 +43,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
                     var onParameterAdded = function (parameter) {
                         ctrl.datasource.push({ Entity: parameter });
                     }
-                    VR_Invoice_InvoiceTypeService.addParameter(onParameterAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceTypeService.addParameter(onParameterAdded, getContext());
                 };
 
                 ctrl.removeParameter = function (dataItem) {
@@ -75,6 +75,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.parameters != undefined) {
                             for (var i = 0; i < payload.parameters.length; i++) {
                                 var parameter = payload.parameters[i];
@@ -105,7 +106,11 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
                     var index = ctrl.datasource.indexOf(parameterObj);
                     ctrl.datasource[index] = { Entity: parameter };
                 }
-                VR_Invoice_InvoiceTypeService.editParameter(parameterObj.Entity, onParameterUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceTypeService.editParameter(parameterObj.Entity, onParameterUpdated, getContext());
+            }
+            function getContext()
+            {
+                return context;
             }
         }
 

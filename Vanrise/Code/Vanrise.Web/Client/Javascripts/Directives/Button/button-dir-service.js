@@ -296,6 +296,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Analyse',
                     class: "glyphicon glyphicon-retweet"
                 }
+            case 'Preview':
+                return {
+                    text: 'Preview',
+                    class: "glyphicon glyphicon-eye-open"
+                }
         } 
     }
 }]);

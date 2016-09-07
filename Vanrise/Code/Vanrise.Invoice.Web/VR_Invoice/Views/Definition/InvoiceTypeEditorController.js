@@ -146,12 +146,12 @@
                 InvoiceTypeId: invoiceTypeId,
                 Name: $scope.scopeModel.name,
                 Settings: {
-                    InvoiceDetailsRecordTypeId:dataRecordTypeSelectorAPI.getSelectedIds(),
+                    InvoiceDetailsRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                     UISettings: {
                         MainGridColumns: mainGridColumnsAPI.getData(),
                         SubSections: subSectionsAPI.getData(),
                         InvoiceGridActions: invoiceGridActionsAPI.getData(),
-                        PartnerSettings:invoicePartnerSettingsAPI.getData()
+                        PartnerSettings: invoicePartnerSettingsAPI.getData()
                     },
                     InvoiceGenerator: invoiceGeneratorAPI.getData()
                 }
@@ -221,7 +221,10 @@
             var subSectionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             subSectionsSectionReadyPromiseDeferred.promise.then(function () {
-                var mainGridColumnsPayload = invoiceTypeEntity != undefined ? { subSections: invoiceTypeEntity.Settings.UISettings.SubSections } : undefined;
+                var mainGridColumnsPayload = {context:getContext() };
+
+                if(invoiceTypeEntity != undefined)
+                    mainGridColumnsPayload.subSections = invoiceTypeEntity.Settings.UISettings.SubSections;
                 VRUIUtilsService.callDirectiveLoad(subSectionsAPI, mainGridColumnsPayload, subSectionsSectionLoadPromiseDeferred);
             });
             return subSectionsSectionLoadPromiseDeferred.promise;

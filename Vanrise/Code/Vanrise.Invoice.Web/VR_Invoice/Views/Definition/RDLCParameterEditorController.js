@@ -6,7 +6,7 @@
 
     function RDLCParameterEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var parameters = [];
+        var context = [];
         var parameterEntity;
 
         var isEditMode;
@@ -22,7 +22,7 @@
         function loadParameters() {
             var parametersObj = VRNavigationService.getParameters($scope);
             if (parametersObj != undefined) {
-                parameters = parametersObj.parameters;
+                context = parametersObj.context;
                 parameterEntity = parametersObj.parameterEntity;
             }
             isEditMode = (parameterEntity != undefined);
@@ -79,12 +79,17 @@
         function loadParameterSettingsDirective() {
             var parameterSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             parameterSettingsReadyPromiseDeferred.promise.then(function () {
-                var parameterPayload = parameterEntity != undefined ? { parameterEntity: parameterEntity.Value } : undefined;
+                var parameterPayload = { context: getContext() }
+                if(parameterEntity != undefined)
+                    parameterPayload.parameterEntity = parameterEntity.Value;
                 VRUIUtilsService.callDirectiveLoad(parameterSettingsAPI, parameterPayload, parameterSettingsLoadPromiseDeferred);
             });
             return parameterSettingsLoadPromiseDeferred.promise;
         }
-
+        function getContext()
+        {
+            return context;
+        }
         function builParameterObjFromScope() {
             return {
                 ParameterName: $scope.scopeModel.parameterName,

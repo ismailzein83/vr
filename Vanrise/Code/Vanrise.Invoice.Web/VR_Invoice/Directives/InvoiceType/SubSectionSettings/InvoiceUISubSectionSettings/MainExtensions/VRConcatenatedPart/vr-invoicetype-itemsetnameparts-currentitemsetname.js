@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeItemsetnamepartsCurrentitemsetname", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["Utils
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new CustomFieldRDLReportParameterValue($scope, ctrl, $attrs);
+                var ctor = new CurrentItemSetNameConcatenatedPart($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,12 +21,13 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["Utils
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/RDLCReportParameterValue/MainExtensions/Templates/CustomFieldRDLReportParameterValue.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/MainExtensions/VRConcatenatedPart/Templates/CurrentItemSetNameConcatenatedPartTemplate.html"
 
         };
 
-        function CustomFieldRDLReportParameterValue($scope, ctrl, $attrs) {
+        function CurrentItemSetNameConcatenatedPart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 defineAPI();
@@ -36,8 +37,7 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["Utils
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.parameterEntity != undefined) {
-                        $scope.scopeModel.fieldValue = payload.parameterEntity.FieldValue;
+                    if (payload != undefined && payload.concatenatedPartSettings) {
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
@@ -45,8 +45,7 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["Utils
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.CustomFieldRDLReportParameterValue ,Vanrise.Invoice.MainExtensions",
-                        FieldValue: $scope.scopeModel.fieldValue
+                        $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.CurrentItemSetNameConcatenatedPart ,Vanrise.Invoice.MainExtensions",
                     };
                 }
 

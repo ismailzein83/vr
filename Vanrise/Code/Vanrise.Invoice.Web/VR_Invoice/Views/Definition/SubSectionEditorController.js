@@ -6,12 +6,15 @@
 
     function subSectionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var subSections = [];
+        var context;
         var subSectionEntity;
 
         var isEditMode;
         var invoiceUISubsectionSettingsAPI;
         var invoiceUISubsectionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var recordFilterAPI;
+        var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -21,7 +24,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                subSections = parameters.subSections;
+                context = parameters.context;
                 subSectionEntity = parameters.subSectionEntity;
             }
             isEditMode = (subSectionEntity != undefined);
@@ -33,6 +36,10 @@
             {
                 invoiceUISubsectionSettingsAPI = api;
                 invoiceUISubsectionSettingsReadyDeferred.resolve();
+            }
+            $scope.scopeModel.onRecordFilterReady = function (api) {
+                recordFilterAPI = api;
+                recordFilterReadyPromiseDeferred.resolve();
             }
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSubSection() : addeSubSection();
@@ -48,7 +55,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective, loadRecordFilterDirective]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -66,7 +73,17 @@
             });
             return invoiceUISubsectionSettingsLoadDeferred.promise;
         }
-
+        function loadRecordFilterDirective() {
+            var recordFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            recordFilterReadyPromiseDeferred.promise.then(function () {
+                var recordFilterPayload = { context: getContext() }
+                if (subSectionEntity != undefined) {
+                    recordFilterPayload.FilterGroup = subSectionEntity.FilterGroup;
+                }
+                VRUIUtilsService.callDirectiveLoad(recordFilterAPI, recordFilterPayload, recordFilterLoadPromiseDeferred);
+            });
+            return recordFilterLoadPromiseDeferred.promise;
+        }
         function setTitle() {
             if (isEditMode && subSectionEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(subSectionEntity.SectionTitle, 'Sub Section');
@@ -81,12 +98,18 @@
         }
 
         function builSubSectionObjFromScope() {
+            var filterGroup = recordFilterAPI.getData();
+
             return {
                 SectionTitle: $scope.scopeModel.sectionTitle,
+                FilterGroup: filterGroup != undefined ? filterGroup.filterObj : undefined,
                 Settings: invoiceUISubsectionSettingsAPI.getData()
             };
         }
-
+        function getContext() 
+        {
+            return context;
+        }
         function addeSubSection() {
             var subSectionObj = builSubSectionObjFromScope();
             if ($scope.onSubSectionAdded != undefined) {

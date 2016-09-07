@@ -30,7 +30,7 @@ namespace Vanrise.Invoice.Data.SQL
         }
         public IEnumerable<Entities.Invoice> GetGetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.PartnerId, input.Query.FromTime, input.Query.ToTime);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper,input.Query.InvoiceTypeId, input.Query.PartnerId, input.Query.FromTime, input.Query.ToTime);
         }
         public bool SaveInvoices(Entities.GenerateInvoiceInput createInvoiceInput, Entities.GeneratedInvoice invoice, out long insertedInvoiceId)
         {

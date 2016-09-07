@@ -190,6 +190,16 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\vr-invoicetype-datasourcesettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\vr-invoicetype-openrdlcreport-parametersettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\Templates\InvoiceGridActionsManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\ConstantConatenatedPartSettingsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\CurrentItemSetNameConcatenatedPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\InvoiceItemFieldValueConcatenatedPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\vr-invoicetype-itemsetnameparts-constant.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\vr-invoicetype-itemsetnameparts-currentitemsetname.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\vr-invoicetype-itemsetnameparts-invoiceitemfield.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\Templates\InvoiceItemSubSectionsManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\Templates\InvoiceItemSubSectionSettingsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsections.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\Templates\InvoiceSubSectionGridColumnsManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\Templates\InvoiceTypeGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\Templates\MainGridColumnsManagement.html" />
@@ -225,6 +235,8 @@
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\InvoiceService.js" />
     <Content Include="VR_Invoice\Services\InvoiceTypeService.js" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceItemSubSectionEditor.html" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceItemSubSectionEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditorController.js" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditor.html" />

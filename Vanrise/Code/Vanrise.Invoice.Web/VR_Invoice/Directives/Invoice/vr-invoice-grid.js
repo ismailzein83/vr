@@ -27,10 +27,9 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
 
         function InvoiceGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var drillDownManager;
-            var drillDownTabs = [];
             var gridAPI;
             var subSectionConfigs = [];
+            var subSections = [];
             function initializeController() {
 
                 $scope.datastore = [];
@@ -45,7 +44,6 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (payload) {
                             var query;
-                            drillDownTabs.length = 0;
                             var promiseDeferred = UtilsService.createPromiseDeferred();
                             VR_Invoice_InvoiceTypeAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
                                 if (response != undefined)
@@ -54,11 +52,10 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 }
                                 if (payload != undefined) {
                                     buildGridFields(payload.mainGridColumns);
-                                    buildGridSubSections(payload.subSections);
+                                    subSections = payload.subSections;
                                     query = payload.query;
                                     defineMenuActions(payload.invoiceGridActions);
                                 }
-                                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, []);
                                 gridAPI.retrieveData(query).then(function()
                                 {
                                     promiseDeferred.resolve();
@@ -84,7 +81,9 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                         .then(function (response) {
                             if (response.Data != undefined) {
                                 for (var i = 0; i < response.Data.length; i++) {
-                                    drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                                    var dataItem = response.Data[i];
+                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs);
+
                                 }
                             }
                             onResponseReady(response);
@@ -150,37 +149,38 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                 }
             }
 
-            function buildGridSubSections(subSections) {
-                if (subSections != undefined) {
-                    for (var i = 0; i < subSections.length ; i++) {
-                        var subSection = subSections[i];
-                        var tab = buildInvoiceItemsTab(subSection);
-                        if (tab != undefined)
-                            drillDownTabs.push(tab);
-                    }
-                    function buildInvoiceItemsTab(subSection) {
-                        var invoiceItemsTab = {};
-                        var cofigItem = UtilsService.getItemByVal(subSectionConfigs, subSection.Settings.ConfigId, "ExtensionConfigurationId");
-                        if(cofigItem != undefined)
-                        {
-                            invoiceItemsTab.title = subSection.SectionTitle;
-                            invoiceItemsTab.directive = cofigItem.RuntimeEditor;
-                            invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoice) {
-                                invoice.invoiceItemGridAPI = invoiceItemGridAPI;
-                                var invoiceItemGridPayload = {
-                                    query: {
-                                        InvoiceId: invoice.Entity.InvoiceId,
-                                    },
-                                    settings: subSection.Settings
-                                };
-                                return invoice.invoiceItemGridAPI.load(invoiceItemGridPayload);
-                            };
-                            invoiceItemsTab.parentMenuActions = [];
-                            return invoiceItemsTab;
-                        }
-                    }
-                }
-            }
+            //function buildGridSubSections(subSections) {
+            //    if (subSections != undefined) {
+            //        for (var i = 0; i < subSections.length ; i++) {
+            //            var subSection = subSections[i];
+            //            var tab = buildInvoiceItemsTab(subSection);
+            //            if (tab != undefined)
+            //                drillDownTabs.push(tab);
+            //        }
+            //        function buildInvoiceItemsTab(subSection) {
+            //            var invoiceItemsTab = {};
+            //            var cofigItem = UtilsService.getItemByVal(subSectionConfigs, subSection.Settings.ConfigId, "ExtensionConfigurationId");
+            //            if(cofigItem != undefined)
+            //            {
+            //                invoiceItemsTab.title = subSection.SectionTitle;
+            //                invoiceItemsTab.directive = cofigItem.RuntimeEditor;
+            //                invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoice) {
+            //                    invoice.invoiceItemGridAPI = invoiceItemGridAPI;
+            //                    var invoiceItemGridPayload = {
+            //                        query: {
+            //                            InvoiceId: invoice.Entity.InvoiceId,
+            //                        },
+            //                        settings: subSection.Settings,
+            //                        invoiceId: invoice.Entity.InvoiceId,
+            //                    };
+            //                    return invoice.invoiceItemGridAPI.load(invoiceItemGridPayload);
+            //                };
+            //                invoiceItemsTab.parentMenuActions = [];
+            //                return invoiceItemsTab;
+            //            }
+            //        }
+            //    }
+            //}
 
             function defineMenuActions(invoiceGridActions) {
                 $scope.gridMenuActions.length = 0;

@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_Invoice_SubSectionEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceItemSubSectionEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formSubSectionEditor">
             <vr-tabs>
@@ -9,12 +9,7 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'">
-                        <vr-invoicetype-invoiceuisubsectionsettings on-ready="scopeModel.onInvoiceUISubsectionSettingsReady" normal-col-num="6"></vr-invoicetype-invoiceuisubsectionsettings>
-                </vr-tab>
-                <vr-tab header="'Condition'">
-                    <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterReady"></vr-genericdata-recordfilter>
-                </vr-tab>
+                    <vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings on-ready="scopeModel.onInvoiceItemSubSectionReady"></vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings>
             </vr-tabs>
 
         </vr-form>

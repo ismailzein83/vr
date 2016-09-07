@@ -1,6 +1,6 @@
 ﻿
-app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService',
-    function (VRModalService, SecurityService, UtilsService) {
+app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService','VRUIUtilsService',
+    function (VRModalService, SecurityService, UtilsService, VRUIUtilsService) {
 
         var actionTypes = [];
         function registerActionType(actionType) {
@@ -53,10 +53,52 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
             registerActionType(actionType);
         }
 
+        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs) {
+            if (subSections == null)
+                return;
+            
+            var drillDownTabs = [];
+            var menuActions = [];
+
+            for (var i = 0; i < subSections.length; i++) {
+                var subSection = subSections[i];
+                if (dataItem.SectionTitle == subSection.SectionTitle)
+                    addDrillDownTab(subSection);
+            }
+
+            setDrillDownTabs();
+
+            function addDrillDownTab(subSection) {
+                var drillDownTab = {};
+                var cofigItem = UtilsService.getItemByVal(subSectionConfigs, subSection.Settings.ConfigId, "ExtensionConfigurationId");
+                if (cofigItem != undefined) {
+                    drillDownTab.title = subSection.SectionTitle;
+                    drillDownTab.directive = cofigItem.RuntimeEditor;
+                    drillDownTab.loadDirective = function (invoiceItemGridAPI, invoice) {
+                        invoice.invoiceItemGridAPI = invoiceItemGridAPI;
+                        var invoiceItemGridPayload = {
+                            query: {
+                                InvoiceId: invoice.Entity.InvoiceId,
+                            },
+                            settings: subSection.Settings,
+                            invoiceId: invoice.Entity.InvoiceId,
+                        };
+                        return invoice.invoiceItemGridAPI.load(invoiceItemGridPayload);
+                    };
+                    drillDownTabs.push(drillDownTab);
+                }
+            }
+            function setDrillDownTabs() {
+                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, undefined);
+                drillDownManager.setDrillDownExtensionObject(dataItem);
+            }
+        }
+        
         return ({
             generateInvoice: generateInvoice,
             registerActionType: registerActionType,
             getActionTypeIfExist: getActionTypeIfExist,
-            registerInvoiceRDLCReport: registerInvoiceRDLCReport
+            registerInvoiceRDLCReport: registerInvoiceRDLCReport,
+            defineInvoiceTabsAndMenuActions: defineInvoiceTabsAndMenuActions
         });
     }]);

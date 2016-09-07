@@ -29,10 +29,17 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
             this.initializeController = initializeController;
             var gridAPI;
             var gridWidthFactors = [];
+            var drillDownManager;
+            var drillDownTabs = [];
+            var subSectionConfigs = [];
+            var invoiceId;
             function initializeController() {
                 gridWidthFactors = UtilsService.getArrayEnum(VRCommon_GridWidthFactorEnum);
                 $scope.datastore = [];
                 $scope.gridFields = [];
+                $scope.showExpandIcon = function (dataItem) {
+                    return (dataItem.drillDownExtensionObject != null && dataItem.drillDownExtensionObject.drillDownDirectiveTabs.length > 0);
+                };
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -44,29 +51,37 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                         directiveAPI.load = function (payload) {
                             var query = {};
                             if (payload != undefined) {
+                                invoiceId = payload.invoiceId;
                                 var promiseDeferred = UtilsService.createPromiseDeferred();
                                 if (payload.query != undefined)
                                     query = payload.query;
                                 if (payload.settings != undefined) {
-                                    query.ItemSetName = payload.settings.ItemSetName;
+                                    if (query.ItemSetName == undefined)
+                                        query.ItemSetName = payload.settings.ItemSetName;
+                                    query.ItemSetNameParts = payload.settings.ItemSetNameParts;
                                     var input = {
                                         GridColumns: payload.settings.GridColumns
                                     };
                                     VR_Invoice_InvoiceTypeAPIService.CovertToGridColumnAttribute(input).then(function (response) {
                                         buildGridFields(response, payload.settings.GridColumns);
-                                        gridAPI.retrieveData(query).then(function () {
-                                            promiseDeferred.resolve();
+
+                                        drillDownTabs.length = 0;
+                                            if (payload != undefined) {
+                                                buildGridSubSections(payload.settings.SubSections);
+                                            }
+                                            drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, []);
+                                            gridAPI.retrieveData(query).then(function () {
+                                                promiseDeferred.resolve();
+                                            }).catch(function (error) {
+                                                promiseDeferred.reject(error);
+                                            });
                                         }).catch(function (error) {
                                             promiseDeferred.reject(error);
-                                        });;
-                                    }).catch(function (error) {
-                                        promiseDeferred.reject(error);
-                                    });;
-
+                                        });
                                 }
                                 return promiseDeferred.promise;
+
                             }
-                            
                         }
                         return directiveAPI;
                     }
@@ -76,6 +91,9 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                     return VR_Invoice_InvoiceItemAPIService.GetFilteredInvoiceItems(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                                }
                             }
                             onResponseReady(response);
                         })
@@ -111,6 +129,37 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
+                }
+            }
+
+            function buildGridSubSections(subSections) {
+                if (subSections != undefined) {
+                    for (var i = 0; i < subSections.length ; i++) {
+                        var subSection = subSections[i];
+                        var tab = buildInvoiceItemsTab(subSection);
+                        if (tab != undefined)
+                            drillDownTabs.push(tab);
+                    }
+                    function buildInvoiceItemsTab(subSection) {
+                        var invoiceItemsTab = {};
+                        invoiceItemsTab.title = subSection.SectionTitle;
+                        invoiceItemsTab.directive = "vr-invoice-subsection-grid";
+                        invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoiceItem) {
+                            invoiceItem.invoiceItemGridAPI = invoiceItemGridAPI;
+                            var invoiceItemGridPayload = {
+                                query: {
+                                    InvoiceId: invoiceId,
+                                    ItemSetName: invoiceItem.Entity.ItemSetName,
+                                    InvoiceItemDetails: invoiceItem.Entity.Details
+                                },
+                                settings: subSection.Settings,
+                                invoiceId: invoiceId,
+                            };
+                            return invoiceItem.invoiceItemGridAPI.load(invoiceItemGridPayload);
+                        };
+                        invoiceItemsTab.parentMenuActions = [];
+                        return invoiceItemsTab;
+                    }
                 }
             }
         }

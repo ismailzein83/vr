@@ -33,7 +33,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -65,6 +65,7 @@
 
                     if (payload != undefined) {
                         parameterEntity = payload.parameterEntity;
+                        context = payload.context;
                     }
 
                     if (parameterEntity != undefined) {
@@ -95,7 +96,10 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = parameterEntity;
+                            var directivePayload = { context: getContext() };
+                            if (parameterEntity != undefined) {
+                                directivePayload.parameterEntity = parameterEntity;
+                            };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -120,6 +124,10 @@
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
+            }
+            function getContext()
+            {
+                return context;
             }
         }
 
