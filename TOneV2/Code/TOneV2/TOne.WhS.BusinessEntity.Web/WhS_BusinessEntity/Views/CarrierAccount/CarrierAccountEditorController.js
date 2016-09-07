@@ -41,7 +41,6 @@
             $scope.scopeModal.disableSellingNumberPlan = isEditMode
             $scope.scopeModal.onBPBusinessRuleSetSelectorReady = function(api)
             {
-                console.log(api);
                 bpBusinessRuleSetDirectiveAPI = api;
                 bpBusinessRuleSetReadyPromiseDeferred.resolve();
             }
