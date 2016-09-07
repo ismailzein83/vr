@@ -15,7 +15,7 @@ BEGIN
 	
 	IF (@TimestampAfter IS NULL)--If First Time Query And No Pending, get the Last Test Calls
 		SELECT @TimestampAfter = MIN([timestamp])
-		FROM (SELECT TOP 30 [timestamp] FROM [QM_CLITester].[TestCall] ORDER BY ID DESC) LastTestCalls
+		FROM (SELECT TOP 30 [timestamp] FROM [QM_CLITester].[TestCall] WITH(NOLOCK)  ORDER BY ID DESC) LastTestCalls
 	
 	SELECT  [ID]
 		  ,[UserID]
@@ -34,7 +34,7 @@ BEGIN
 		  ,[timestamp]
       ,[BatchNumber]
 	INTO #Result
-	FROM [QM_CLITester].[TestCall] 
+	FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE 
 	(@TimestampAfter IS NOT NULL AND [timestamp] > @TimestampAfter) --ONLY Updated records
 	

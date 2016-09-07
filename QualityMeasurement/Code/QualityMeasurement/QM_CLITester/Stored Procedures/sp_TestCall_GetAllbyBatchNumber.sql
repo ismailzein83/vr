@@ -30,7 +30,7 @@ BEGIN
       ,[MOS]
       ,[Duration]
       ,[RingDuration]
-	FROM	[QM_CLITester].[TestCall] 
+	FROM	[QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE 
 	BatchNumber = @BatchNumber
 END

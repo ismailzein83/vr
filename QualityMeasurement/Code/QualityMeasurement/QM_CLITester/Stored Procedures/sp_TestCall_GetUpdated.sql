@@ -8,7 +8,7 @@ BEGIN
 	
 	IF (@TimestampAfter IS NULL)--If First Time Query, get the Last Test Calls
 		SELECT @TimestampAfter = MIN([timestamp])
-		FROM (SELECT TOP (@NbOfRows) [timestamp] FROM [QM_CLITester].[TestCall] WHERE UserID = @UserId ORDER BY ID DESC) LastTestCalls
+		FROM (SELECT TOP (@NbOfRows) [timestamp] FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) WHERE UserID = @UserId ORDER BY ID DESC) LastTestCalls
 	
 	SELECT   [ID]
 		  ,[UserID]
@@ -33,7 +33,7 @@ BEGIN
 		  ,[RingDuration]
 		  
 	INTO #Result
-	FROM [QM_CLITester].[TestCall] 
+	FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE 
 	 UserID = @UserId AND
 	([timestamp] > @TimestampAfter) --ONLY Updated records

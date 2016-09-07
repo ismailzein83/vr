@@ -12,7 +12,7 @@ BEGIN
 
 	convert(varchar, [CreationDate], 101) AS CreationDate,
 	COUNT(*) AS TotalCalls
-	FROM	[QM_CLITester].[TestCall] 
+	FROM	[QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE 
 	UserID = @UserId  
 	

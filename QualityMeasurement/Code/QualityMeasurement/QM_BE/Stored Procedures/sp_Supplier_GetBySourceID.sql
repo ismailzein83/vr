@@ -18,6 +18,6 @@ BEGIN
       ,[Name]
       ,[Settings]
       ,[SourceSupplierID]
-      from QM_BE.Supplier
+      from QM_BE.Supplier WITH(NOLOCK) 
 	  Where SourceSupplierID=@SourceSupplierID
 END

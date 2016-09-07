@@ -9,5 +9,5 @@ BEGIN
 	Insert into QM_BE.ConnectorZoneInfo([ConnectorType],[ConnectorZoneID],[Codes],[CreatedTime])
 	Values(@ConnectorType,@ConnectorZoneID,@Codes,GETDATE())
 	
-	Set @ID = @@IDENTITY
+	Set @ID = SCOPE_IDENTITY()
 END

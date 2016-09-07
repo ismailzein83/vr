@@ -20,6 +20,6 @@ BEGIN
       ,[CountryID]
 	  ,[BED]
 	  ,[EED]
-      from QM_BE.Zone
+      from QM_BE.Zone WITH(NOLOCK) 
 	  Where CountryID=@CountryID
 END

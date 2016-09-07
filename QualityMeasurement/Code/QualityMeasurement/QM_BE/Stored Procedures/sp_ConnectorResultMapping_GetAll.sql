@@ -4,7 +4,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [QM_BE].[sp_ConnectorResultMapping_GetAll]
+CREATE PROCEDURE [QM_BE].[sp_ConnectorResultMapping_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -16,5 +16,5 @@ BEGIN
       ,[ResultID]
       ,[ResultName]
       ,[ConnectorResults]
-      from QM_BE.ConnectorResultMapping
+      from QM_BE.ConnectorResultMapping WITH(NOLOCK) 
 END

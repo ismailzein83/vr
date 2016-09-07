@@ -21,5 +21,5 @@ BEGIN
 	  ,[EED]
 	  ,[Settings]
 	  ,[IsFromTestingConnectorZone]
-      from QM_BE.Zone
+      from QM_BE.Zone WITH(NOLOCK) 
 END

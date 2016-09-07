@@ -16,5 +16,5 @@ BEGIN
       ,[Name]
       ,[SourceProfileID]
       ,[Settings]
-      from QM_CLITester.Profile
+      from QM_CLITester.[Profile] WITH(NOLOCK) 
 END

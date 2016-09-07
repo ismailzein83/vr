@@ -23,5 +23,5 @@ BEGIN
 	[CallTestStatus],[CallTestResult],[UserID], [ProfileID], [InitiationRetryCount], [GetProgressRetryCount], [BatchNumber], [scheduleID], [UpdateStatusTime])
 	Values(@SupplierID, @CountryID, @ZoneID, GETDATE(),@CallTestStatus, @CallTestResult, @UserID, @ProfileID, @InitiationRetryCount, @GetProgressRetryCount, @BatchNumber, @scheduleID, GETDATE())
 	
-	Set @ID = @@IDENTITY
+	Set @ID = SCOPE_IDENTITY()
 END

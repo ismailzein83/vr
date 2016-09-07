@@ -15,5 +15,5 @@ BEGIN
       ,[Name]
       ,[SourceSupplierID]
       ,[Settings]
-      from QM_BE.Supplier
+      from QM_BE.Supplier WITH(NOLOCK) 
 END

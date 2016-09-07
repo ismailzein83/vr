@@ -79,7 +79,7 @@ BEGIN
 			  
 			INTO #RESULT
 			FROM 
-			[QM_CLITester].[TestCall]  tc  
+			[QM_CLITester].[TestCall]  tc   WITH(NOLOCK) 
             WHERE 
             (@UserIDs  IS NULL OR tc.UserID IN (select UserID from @UserIDsTable))
             AND (CreationDate BETWEEN @FromDate AND @ToDate)

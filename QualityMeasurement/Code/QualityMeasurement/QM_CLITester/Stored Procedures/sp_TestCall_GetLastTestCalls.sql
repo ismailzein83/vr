@@ -1,12 +1,12 @@
 ﻿
-CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetBeforeID]
-	@LessThanID BIGINT,
+CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetLastTestCalls]
+	@TimestampAfter timestamp,
+	@NumberOfMinutes INT,
 	@NbOfRows INT,
 	@UserId INT
 AS
-BEGIN	
-	
-	SELECT TOP(@NbOfRows) [ID]
+BEGIN
+	SELECT   [ID]
 		  ,[UserID]
 		  ,[SupplierID]
 		  ,[CountryID]
@@ -21,13 +21,18 @@ BEGIN
 		  ,[GetProgressRetryCount]
 		  ,[FailureMessage]
 		  ,[timestamp]
-          ,[BatchNumber]
-          ,[ScheduleID]
+		  ,[BatchNumber]
+		  ,[ScheduleID]
           ,[PDD]
 		  ,[MOS]
 		  ,[Duration]
 		  ,[RingDuration]
+		  ,DATEDIFF(MONTH,CreationDate,GETDATE())
 	FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
-	WHERE ID < @LessThanID AND  UserID = @UserId
+	WHERE 
+		UserID = @UserId 
+	 AND DATEDIFF(MONTH,CreationDate,GETDATE()) < @NumberOfMinutes
 	ORDER BY ID DESC
+
+	SELECT MAX([timestamp]) MaxTimestamp FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
 END

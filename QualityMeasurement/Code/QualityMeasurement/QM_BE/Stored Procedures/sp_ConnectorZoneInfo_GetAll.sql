@@ -15,5 +15,5 @@ BEGIN
 	  ,[ConnectorType]
       ,[ConnectorZoneID]
       ,[Codes]
-      from QM_BE.ConnectorZoneInfo
+      from QM_BE.ConnectorZoneInfo WITH(NOLOCK) 
 END
