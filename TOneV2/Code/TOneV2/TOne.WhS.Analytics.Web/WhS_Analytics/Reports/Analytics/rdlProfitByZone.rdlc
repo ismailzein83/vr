@@ -9,16 +9,16 @@
               <Width>0.03547in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.92605in</Width>
+              <Width>2.45126in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.92605in</Width>
+              <Width>2.45126in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.75in</Width>
+              <Width>2.45126in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.44454in</Width>
+              <Width>2.45126in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.80114in</Width>
@@ -1013,7 +1013,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Sale Duration</Value>
+                              <Value>Minutes</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -1590,14 +1590,14 @@
         </TablixRowHierarchy>
         <DataSetName>ZoneProfit</DataSetName>
         <Height>1in</Height>
-        <Width>13.12492in</Width>
+        <Width>15.88332in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1in</Height>
     <Style />
   </Body>
-  <Width>14.12492in</Width>
+  <Width>15.88332in</Width>
   <Page>
     <PageHeader>
       <Height>2in</Height>
@@ -1777,8 +1777,8 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>0.75in</Top>
-          <Left>8.875in</Left>
+          <Top>0.92361in</Top>
+          <Left>8.95999in</Left>
           <Height>0.25in</Height>
           <Width>0.74999in</Width>
           <ZIndex>6</ZIndex>
@@ -1808,8 +1808,8 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>1in</Top>
-          <Left>8.875in</Left>
+          <Top>1.17361in</Top>
+          <Left>8.95999in</Left>
           <Height>0.25in</Height>
           <Width>0.74999in</Width>
           <ZIndex>7</ZIndex>
@@ -1838,8 +1838,8 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>0.75in</Top>
-          <Left>9.625in</Left>
+          <Top>0.92361in</Top>
+          <Left>9.70999in</Left>
           <Height>0.25in</Height>
           <Width>1.50001in</Width>
           <ZIndex>8</ZIndex>
@@ -1869,8 +1869,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox2</rd:DefaultName>
-          <Top>1in</Top>
-          <Left>9.625in</Left>
+          <Top>1.17361in</Top>
+          <Left>9.70999in</Left>
           <Height>0.25in</Height>
           <Width>1.50001in</Width>
           <ZIndex>9</ZIndex>

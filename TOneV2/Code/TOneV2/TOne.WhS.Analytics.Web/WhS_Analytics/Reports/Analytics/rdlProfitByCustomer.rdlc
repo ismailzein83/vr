@@ -1163,7 +1163,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1303,7 +1302,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatPercent(Sum(Fields!PercentageProfit.Value), Parameters!Digit.Value)</Value>
+                                  <Value>=FormatPercent( (Sum(Fields!SaleNet.Value) - Sum(Fields!CostNet.Value )) / Sum(Fields!SaleNet.Value), Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2321,7 +2320,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatPercent(Sum(Fields!PercentageProfit.Value),Parameters!Digit.Value)</Value>
+                                  <Value>=FormatPercent( (Sum(Fields!SaleNet.Value) - Sum(Fields!CostNet.Value )) / Sum(Fields!SaleNet.Value), Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2341,6 +2340,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

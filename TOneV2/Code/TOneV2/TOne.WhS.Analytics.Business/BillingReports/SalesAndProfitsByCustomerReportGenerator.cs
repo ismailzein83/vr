@@ -77,7 +77,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue costDuration;
                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                     salesAndProfitsByCustomer.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    salesAndProfitsByCustomer.CostDurationFormatted = ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.CostDuration);
+                    salesAndProfitsByCustomer.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.CostDuration);
 
                     salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0;
                     salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
@@ -113,13 +113,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             return list;
         }
-
         private List<ProfitSummary> GetCustomerProfitSummary(List<SalesAndProfitsByCustomer> summarieslist)
         {
             List<ProfitSummary> lstProfitSummary = new List<ProfitSummary>();
             lstProfitSummary = summarieslist.Select(r => new ProfitSummary
             {
-                Profit = (r.SaleNet > 0) ? (double)((r.SaleNet - r.CostNet)) : 0,
+                Profit = (r.SaleNet > 0) ? Math.Truncate((double)((r.SaleNet - r.CostNet) * 100)) / 100 : 0,
                 FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet > 0) ? ((r.SaleNet - r.CostNet)) : 0),
                 Customer = r.Customer.ToString()
             }).OrderByDescending(r => r.Profit).Take(10).ToList();
@@ -133,7 +132,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 SaleAmountSummary s = new SaleAmountSummary()
                 {
-                    SaleAmount = cs.SaleNet != null ? (double)cs.SaleNet : 0,
+                    SaleAmount = cs.SaleNet != null ? Math.Truncate(((double)cs.SaleNet * 100)) / 100 : 0,
                     FormattedSaleAmount = ReportHelpers.FormatNormalNumberDigit(cs.SaleNet != null ? (double)cs.SaleNet : 0),
                     Customer = cs.Customer
                 };

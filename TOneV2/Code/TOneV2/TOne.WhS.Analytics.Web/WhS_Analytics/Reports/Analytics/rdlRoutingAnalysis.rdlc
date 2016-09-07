@@ -188,7 +188,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -335,7 +334,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -657,7 +655,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -979,7 +976,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1892,7 +1888,7 @@
                       <GroupExpression>=Fields!SaleZone.Value</GroupExpression>
                     </GroupExpressions>
                     <PageBreak>
-                      <BreakLocation>StartAndEnd</BreakLocation>
+                      <BreakLocation>Between</BreakLocation>
                       <Disabled>=IIf(Parameters!PageBreak.Value="true", false, true)</Disabled>
                     </PageBreak>
                   </Group>
@@ -1912,6 +1908,9 @@
                         <GroupExpressions>
                           <GroupExpression>=Fields!SaleZone.Value</GroupExpression>
                         </GroupExpressions>
+                        <PageBreak>
+                          <BreakLocation>Between</BreakLocation>
+                        </PageBreak>
                       </Group>
                       <SortExpressions>
                         <SortExpression>
@@ -1922,6 +1921,9 @@
                       <TablixMembers>
                         <TablixMember>
                           <Group Name="table1_Details_Group">
+                            <PageBreak>
+                              <BreakLocation>Between</BreakLocation>
+                            </PageBreak>
                             <DataElementName>Detail</DataElementName>
                           </Group>
                           <TablixMembers>

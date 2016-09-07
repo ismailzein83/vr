@@ -1282,7 +1282,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value),Parameters!Digit.Value)</Value>
+                              <Value>=FormatNumber(Sum(Fields!SaleNet.Value),Parameters!DigitRate.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2299,9 +2299,10 @@
                   <ChartDataLabel>
                     <Style>
                       <FontWeight>Heavy</FontWeight>
+                      <Format>#,0.00</Format>
                       <Color>DarkRed</Color>
                     </Style>
-                    <Label>=FormatNumber(Fields!SaleAmount.Value,2)</Label>
+                    <Label>=Fields!FormattedSaleAmount.Value</Label>
                     <Visible>true</Visible>
                     <Position>Right</Position>
                   </ChartDataLabel>
@@ -2430,6 +2431,7 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <Format>#,0,.00</Format>
                 </Style>
                 <ChartAxisTitle>
                   <Caption />
@@ -2437,7 +2439,6 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
-                <Margin>True</Margin>
                 <ChartMajorGridLines>
                   <Enabled>True</Enabled>
                   <Style>
@@ -2471,11 +2472,12 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <CrossAt>0</CrossAt>
                 <Scalar>true</Scalar>
-                <Minimum>0</Minimum>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
-                <IncludeZero>false</IncludeZero>
                 <ChartAxisScaleBreak>
                   <Style />
                 </ChartAxisScaleBreak>
@@ -2615,9 +2617,10 @@
                   <ChartDataLabel>
                     <Style>
                       <FontWeight>ExtraBold</FontWeight>
+                      <Format>#,0,.00</Format>
                       <Color>DarkRed</Color>
                     </Style>
-                    <Label>=FormatNumber(Fields!Profit.Value,2)</Label>
+                    <Label>=Fields!FormattedProfit.Value</Label>
                     <Visible>true</Visible>
                     <Position>Right</Position>
                   </ChartDataLabel>
@@ -2646,12 +2649,6 @@
                   <Style />
                 </ChartDataLabel>
               </ChartEmptyPoints>
-              <CustomProperties>
-                <CustomProperty>
-                  <Name>PointWidth</Name>
-                  <Value>0.6</Value>
-                </CustomProperty>
-              </CustomProperties>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -2676,7 +2673,6 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
-                <Margin>False</Margin>
                 <ChartMajorGridLines>
                   <Enabled>False</Enabled>
                   <Style>
@@ -2715,7 +2711,6 @@
                 <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
-                <IncludeZero>false</IncludeZero>
                 <ChartAxisScaleBreak>
                   <Style />
                 </ChartAxisScaleBreak>
@@ -2746,6 +2741,7 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <Format>#,0,.00</Format>
                 </Style>
                 <ChartAxisTitle>
                   <Caption />
@@ -2753,7 +2749,9 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
-                <Margin>True</Margin>
+                <IntervalType>Number</IntervalType>
+                <IntervalOffset>-1000000</IntervalOffset>
+                <IntervalOffsetType>Number</IntervalOffsetType>
                 <ChartMajorGridLines>
                   <Enabled>True</Enabled>
                   <Style>
@@ -2787,8 +2785,10 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <CrossAt>0</CrossAt>
                 <Scalar>true</Scalar>
-                <Minimum>0</Minimum>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>
@@ -2819,7 +2819,6 @@
               <ProjectionMode>Perspective</ProjectionMode>
               <Shading>Simple</Shading>
               <WallThickness>15</WallThickness>
-              <Clustered>true</Clustered>
             </ChartThreeDProperties>
             <Style>
               <Border>

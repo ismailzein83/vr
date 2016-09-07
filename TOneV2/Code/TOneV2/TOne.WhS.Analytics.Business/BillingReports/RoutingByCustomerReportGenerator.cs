@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery()
                 {
-                    DimensionFields = new List<string> { "Day", "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRate", "SaleRate" },
+                    DimensionFields = new List<string> { "Day", "Customer", "Supplier", "SaleZone", "CostRate", "SaleRate" },
                     MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNet", "CostNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,

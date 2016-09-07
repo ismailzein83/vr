@@ -90,7 +90,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
         public static string FormatNumberPercentage(Double? number)
         {
-            return String.Format("{0:#,##0.00%}", number);
+            return String.Format("{0:#,##0.00%}", (number.HasValue) ? Math.Truncate(number.Value *10000)/10000 : number);
+        }
+        public static string FormatNumberUnsignedPercentage(Double? number)
+        {
+            return String.Format("{0:#,##0.00}", number);
         }
         public static string FormatNumber(Double? number)
         {

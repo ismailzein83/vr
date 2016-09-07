@@ -147,7 +147,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     MeasureValue percentageLoss;
                     analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
 
-                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(Convert.ToDouble(percentageLoss.Value ?? 0.0));
+                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet);
 
                     listRateLossFromatted.Add(rateLossFromatted);
                 }

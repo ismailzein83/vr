@@ -213,7 +213,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -791,7 +790,8 @@
                   <Type>None</Type>
                 </ChartMinorTickMarks>
                 <Scalar>true</Scalar>
-                <Minimum>0</Minimum>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
                 <IncludeZero>false</IncludeZero>

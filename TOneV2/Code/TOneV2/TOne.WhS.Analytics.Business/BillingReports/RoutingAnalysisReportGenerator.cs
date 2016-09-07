@@ -152,7 +152,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             parameters.TotalDuration = TotalDuration;
             parameters.TotalSale = TotalSale;
-            parameters.TotalCost = TotalSale;
+            parameters.TotalCost = TotalCost;
             parameters.TotalProfit = TotalProfit;
 
             result = analyticManager.GetFilteredRecords(trafficDataRetrievalInput) as AnalyticSummaryBigResult<AnalyticRecord>;
