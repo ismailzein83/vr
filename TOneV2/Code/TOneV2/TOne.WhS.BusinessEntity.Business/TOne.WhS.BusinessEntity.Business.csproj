@@ -137,6 +137,7 @@
     <Compile Include="Service\ISaleEntityServiceReader.cs" />
     <Compile Include="Service\SaleEntityServiceCacheManager.cs" />
     <Compile Include="Service\SaleEntityServiceLocator.cs" />
+    <Compile Include="Service\SaleEntityServiceManager.cs" />
     <Compile Include="Service\SaleEntityServiceReadWithCache.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
