@@ -75,18 +75,15 @@ namespace TOne.WhS.Sales.Data.SQL
             if (record.IsCurrentRateInherited.HasValue)
                 isCurrentRateInherited = (record.IsCurrentRateInherited.Value) ? "1" : "0";
 
-            decimal? currentRate = GetRoundedRate(record.CurrentRate);
-            decimal? newRate = GetRoundedRate(record.NewRate);
-
             streamForBulkInsert.WriteRecord
             (
                 "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                 record.ZoneName,
                 _processInstanceId,
                 record.RateTypeId,
-                currentRate,
+                GetRoundedRate(record.CurrentRate),
                 isCurrentRateInherited,
-                newRate,
+                GetRoundedRate(record.NewRate),
                 Convert.ToInt32(record.ChangeType),
                 record.EffectiveOn,
                 record.EffectiveUntil

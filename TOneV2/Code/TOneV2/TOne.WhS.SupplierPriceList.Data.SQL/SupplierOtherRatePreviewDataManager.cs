@@ -57,10 +57,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                 _processInstanceID,
                 record.ZoneName,
-                record.SystemRate,
+                GetRoundedRate(record.SystemRate),
                 record.SystemRateBED,
                 record.SystemRateEED,
-                record.ImportedRate,
+                GetRoundedRate(record.ImportedRate),
                 record.ImportedRateBED,
                 record.RateTypeId,
                 (int)record.ChangeTypeRate);
@@ -97,8 +97,12 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             return otherRatePreview;
         }
 
-
-
+        private decimal? GetRoundedRate(decimal? rate)
+        {
+            if (rate.HasValue)
+                return decimal.Round(rate.Value, 8);
+            return null;
+        }
         
     }
 }
