@@ -45,27 +45,29 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private void ProcessData(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName, DateTime pricelistDate)
         {
-
-            ProcessCountryZoneServices(importedZone.ImportedZoneService, existingZoneServices, newAndExistingZones, existingZonesByName);
-
-            if (importedZone.ImportedZoneService != null && importedZone.ImportedZoneService.ServiceIds.Count == 0)
+            if (importedZone.ImportedZoneService != null)
+                ProcessCountryZoneServices(importedZone.ImportedZoneService, existingZoneServices, newAndExistingZones, existingZonesByName);
+            else
                 CloseNotImportedZoneServices(existingZoneServices, pricelistDate);
         }
 
         private void CloseNotImportedZoneServices(List<ExistingZoneService> existingZoneServices, DateTime zoneServiceCloseDate)
         {
-            foreach (var existingZoneService in existingZoneServices)
+            if (existingZoneServices != null)
             {
-                //Get max between BED and Close Date to avoid closing a zone service with EED before BED
-                DateTime? closureDate = Utilities.Max(zoneServiceCloseDate, existingZoneService.BED);
-                if (!existingZoneService.ZoneServiceEntity.EED.HasValue && closureDate.VRLessThan(existingZoneService.EED))
+                foreach (var existingZoneService in existingZoneServices)
                 {
-                    //Only in this case closing has a meaning, otherwise no need to close the zone service
-                    existingZoneService.ChangedZoneService = new ChangedZoneService
+                    //Get max between BED and Close Date to avoid closing a zone service with EED before BED
+                    DateTime? closureDate = Utilities.Max(zoneServiceCloseDate, existingZoneService.BED);
+                    if (!existingZoneService.ZoneServiceEntity.EED.HasValue && closureDate.VRLessThan(existingZoneService.EED))
                     {
-                        EntityId = existingZoneService.ZoneServiceEntity.SupplierZoneServiceId,
-                        EED = closureDate.Value
-                    };
+                        //Only in this case closing has a meaning, otherwise no need to close the zone service
+                        existingZoneService.ChangedZoneService = new ChangedZoneService
+                        {
+                            EntityId = existingZoneService.ZoneServiceEntity.SupplierZoneServiceId,
+                            EED = closureDate.Value
+                        };
+                    }
                 }
             }
         }
@@ -78,8 +80,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private void ProcessCountryZoneServices(ImportedZoneService importedZoneService, List<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
         {
-            if (importedZoneService != null)
-                ProcessImportedZoneService(importedZoneService, existingZonesServices, newAndExistingZones, existingZonesByName);
+            ProcessImportedZoneService(importedZoneService, existingZonesServices, newAndExistingZones, existingZonesByName);
         }
 
         #endregion

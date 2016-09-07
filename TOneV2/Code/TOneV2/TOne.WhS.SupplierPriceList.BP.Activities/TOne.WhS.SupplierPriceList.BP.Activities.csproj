@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyChangedCodesToDB.cs" />
+    <Compile Include="ApplyChangedZonesServicesToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />
     <Compile Include="ApplyChangedZonesToDB.cs" />
     <Compile Include="ApplyNewZonesServicesToDB.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="GetExistingZones.cs" />
     <Compile Include="LoadSupplierPriceListData.cs" />
     <Compile Include="PrepareChangedCodesToDB.cs" />
+    <Compile Include="PrepareChangedZonesServicesToDB.cs" />
     <Compile Include="PrepareChangedRatesToDB.cs" />
     <Compile Include="PrepareChangedZonesToDB.cs" />
     <Compile Include="PrepareExistingZonesServices.cs" />

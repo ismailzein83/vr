@@ -80,6 +80,7 @@
     <Compile Include="SupplierCodeDataManager.cs" />
     <Compile Include="SupplierPriceListDataManager.cs" />
     <Compile Include="SupplierRateDataManager.cs" />
+    <Compile Include="SupplierZoneServiceDataManager.cs" />
     <Compile Include="SupplierZoneDataManager.cs" />
     <Compile Include="SwitchConnectivityDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />

@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
-            ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
             return dataManager.GetSupplierZonesServicesEffectiveAfter(supplierId, minimumDate);
         }
 

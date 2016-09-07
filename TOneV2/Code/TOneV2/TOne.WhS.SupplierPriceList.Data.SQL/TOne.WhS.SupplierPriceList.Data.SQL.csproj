@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangedSupplierCodeDataManager.cs" />
+    <Compile Include="ChangedSupplierZonesServicesDataManager.cs" />
     <Compile Include="ChangedSupplierRateDataManager.cs" />
     <Compile Include="ChangedSupplierZoneDataManager.cs" />
     <Compile Include="ImportPriceListDataManager.cs" />

@@ -74,7 +74,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ExistingZones = existingZones,
                 NewAndExistingZones = inputArgument.NewAndExistingZones,
                 PriceListDate = inputArgument.PriceListDate,
-                NotImportedZones = inputArgument.NotImportedZones
+                NotImportedZones = inputArgument.NotImportedZones,
+                ExistingZonesServices = inputArgument.ExistingZonesServices
             };
 
             PriceListZoneServiceManager manager = new PriceListZoneServiceManager();

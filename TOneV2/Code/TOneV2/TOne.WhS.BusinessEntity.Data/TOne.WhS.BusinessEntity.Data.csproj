@@ -75,6 +75,7 @@
     <Compile Include="ISupplierCodeDataManager.cs" />
     <Compile Include="ISupplierPriceListDataManager.cs" />
     <Compile Include="ISupplierRateDataManager.cs" />
+    <Compile Include="ISupplierZoneServiceDataManager.cs" />
     <Compile Include="ISupplierZoneDataManager.cs" />
     <Compile Include="ISwitchConnectivityDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
