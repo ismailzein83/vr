@@ -27,7 +27,11 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 
         public override List<DataRecordField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
         {
-            throw new NotImplementedException();
+            List<DataRecordField> fields = new List<DataRecordField>();
+            fields.AddRange(this.GroupingFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.FieldType }));
+            fields.AddRange(this.AggregationFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.RecordAggregate.FieldType }));
+            fields.AddRange(this.CalculationFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.FieldType }));
+            return fields;
         }
     }
 }
