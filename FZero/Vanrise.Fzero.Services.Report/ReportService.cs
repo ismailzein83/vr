@@ -282,7 +282,9 @@ namespace Vanrise.Fzero.Services.Report
                         EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
                     else
                     {
-                        if (ClientID == (int)Enums.Clients.Zain)
+                        string reportCode = ReportID.Substring(0, 3);
+
+                        if (reportCode == "FZZ")
                         {
                             ErrorLog("Zain Client");
 
