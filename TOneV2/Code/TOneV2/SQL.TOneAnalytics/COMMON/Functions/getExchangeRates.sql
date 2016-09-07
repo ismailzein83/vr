@@ -2,7 +2,7 @@
 RETURNS @ExchangeRates Table  
 					(
 						CurrencyID int NOT NULL,
-						Rate Decimal(18,6) NOT NULL,
+						Rate Decimal(20,10) NOT NULL,
 						BED DATETIME NOT NULL,
 						EED DATETIME
 					) 
