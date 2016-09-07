@@ -148,7 +148,9 @@
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeGridTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-grid.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-settings.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleGridTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-alertrule-grid.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
