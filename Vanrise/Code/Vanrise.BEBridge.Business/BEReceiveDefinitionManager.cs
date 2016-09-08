@@ -80,10 +80,10 @@ namespace Vanrise.BEBridge.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<SourceBeReadersConfig>(SourceBeReadersConfig.EXTENSION_TYPE);
         }
-        public IEnumerable<RingoAccountConvertorConfig> GetTargetConvertorExtensionConfigs()
+        public IEnumerable<AccountConvertorConfig> GetTargetConvertorExtensionConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurations<RingoAccountConvertorConfig>(RingoAccountConvertorConfig.EXTENSION_TYPE);
+            return manager.GetExtensionConfigurations<AccountConvertorConfig>(AccountConvertorConfig.EXTENSION_TYPE);
         }
         public IEnumerable<TargetBESynchronizerConfig> GetTargetSynchronizerExtensionConfigs()
         {

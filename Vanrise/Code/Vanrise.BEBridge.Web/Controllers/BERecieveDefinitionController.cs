@@ -60,7 +60,7 @@ namespace Vanrise.BEBridge.Web.Controllers
         }
         [HttpGet]
         [Route("GetTargetConvertorExtensionConfigs")]
-        public IEnumerable<TargetBEConvertorConfig> GetTargetConvertorExtensionConfigs()
+        public IEnumerable<AccountConvertorConfig> GetTargetConvertorExtensionConfigs()
         {
             return _manager.GetTargetConvertorExtensionConfigs();
         }
