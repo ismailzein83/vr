@@ -52,7 +52,7 @@
     <Compile Include="FileSourceBatch.cs" />
     <Compile Include="BEReceiveDefinition\SourceBEs\SourceBeReadersConfig.cs" />
     <Compile Include="TargetBEConvertor.cs" />
-    <Compile Include="TargetBEConvertor\TargetBEConvertorConfig.cs" />
+    <Compile Include="TargetBEConvertor\RingoAccountConvertorConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceBEBatch.cs" />
     <Compile Include="SourceBEReader.cs" />

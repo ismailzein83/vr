@@ -9,7 +9,7 @@ namespace Vanrise.BEBridge.Entities
 {
     public class SourceBeReadersConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_BEBridge_SourceBeReadersDefinition";
+        public const string EXTENSION_TYPE = "VR_BEBridge_SourceBeReaders";
         public string Editor { get; set; }
     }
 }

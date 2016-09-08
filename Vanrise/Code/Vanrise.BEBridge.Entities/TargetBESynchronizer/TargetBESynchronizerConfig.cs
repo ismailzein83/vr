@@ -9,7 +9,7 @@ namespace Vanrise.BEBridge.Entities
 {
     public class TargetBESynchronizerConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_BEBridge_TargetBESynchronizerDefinition";
+        public const string EXTENSION_TYPE = "VR_BEBridge_BEAccountSynchronizer";
         public string Editor { get; set; }
     }
 }
