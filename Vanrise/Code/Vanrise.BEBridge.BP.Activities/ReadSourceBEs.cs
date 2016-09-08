@@ -15,6 +15,8 @@ namespace Vanrise.BEBridge.BP.Activities
         public SourceBEReader SourceReader { get; set; }
 
         public BaseQueue<SourceBatches> SourceBatches { get; set; }
+
+        public List<BaseQueue<BatchProcessingContext>> OutputQueues { get; set; }
     }
 
     public sealed class ReadSourceBEs : DependentAsyncActivity<ReadSourceBEsInput>
@@ -24,15 +26,53 @@ namespace Vanrise.BEBridge.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<SourceBatches>> SourceBatches { get; set; }
 
+        public InArgument<List<BaseQueue<BatchProcessingContext>>> OutputQueues { get; set; }
+
         protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            //Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
+            //{
+            //    handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
+            //    inputArgument.SourceBatches.Enqueue(new SourceBatches() { SorceBEBatches = new List<SourceBEBatch> { sourceBEBatch } });
+            //};
+            //SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
+            //inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
+
+            List<BatchProcessingContext> pendingBatchProcessings = new List<BatchProcessingContext>();
+            System.Threading.Tasks.Task taskCheckPendingBatches = new System.Threading.Tasks.Task(() =>
+            {
+                while (pendingBatchProcessings.Count > 0)
+                {
+                    HashSet<BatchProcessingContext> completedBatches = new HashSet<BatchProcessingContext>(pendingBatchProcessings.Where(batchProcessing => batchProcessing.IsComplete));
+                    if (completedBatches.Count > 0)
+                    {
+                        lock (pendingBatchProcessings)
+                        {
+                            pendingBatchProcessings.RemoveAll(batchProcessing => completedBatches.Contains(batchProcessing));
+                        }
+                    }
+                    if (pendingBatchProcessings.Count > 0)
+                        System.Threading.Thread.Sleep(250);
+                }
+                taskCheckPendingBatches = null;
+            });
+            taskCheckPendingBatches.Start();
+
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
             {
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
-                inputArgument.SourceBatches.Enqueue(new SourceBatches() { SorceBEBatches = new List<SourceBEBatch> { sourceBEBatch } });
+                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues);
+                lock(pendingBatchProcessings)
+                {
+                    pendingBatchProcessings.Add(batchProcessContext);
+                }
             };
             SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
             inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
+            while(taskCheckPendingBatches != null)//wait all pending batches
+            {
+                System.Threading.Thread.Sleep(250);
+            }
         }
 
         protected override ReadSourceBEsInput GetInputArgument2(AsyncCodeActivityContext context)

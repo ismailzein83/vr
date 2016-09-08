@@ -44,12 +44,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BEBridge.BP.Arguments">
-      <HintPath>..\Output\Vanrise.BEBridge.BP.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BEBridge.Entities">
-      <HintPath>..\Output\Vanrise.BEBridge.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
@@ -78,6 +72,7 @@
   <ItemGroup>
     <Compile Include="ConvertSourceToTargetBEs.cs" />
     <Compile Include="GetBEReceiveDefinition.cs" />
+    <Compile Include="BatchProcessingContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSourceBEs.cs" />
     <Compile Include="UpdateTargetBEs.cs" />
@@ -86,6 +81,10 @@
     <ProjectReference Include="..\Vanrise.BEBridge.Business\Vanrise.BEBridge.Business.csproj">
       <Project>{3bb5b698-9767-49c7-b9cc-5b1418870a8a}</Project>
       <Name>Vanrise.BEBridge.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
+      <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
+      <Name>Vanrise.BEBridge.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

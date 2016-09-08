@@ -11,11 +11,21 @@ namespace Vanrise.BEBridge.Entities
         public int ConfigId { get; set; }
 
         public abstract void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context);
+
+        public virtual void SetBatchImported(ISourceBEReaderSetBatchImportedContext context)
+        {
+
+        }
     }
 
     public interface ISourceBEReaderRetrieveUpdatedBEsContext
     {
         void OnSourceBEBatchRetrieved(SourceBEBatch sourceBEs, SourceBEBatchRetrievedContext context);
+    }
+
+    public interface ISourceBEReaderSetBatchImportedContext
+    {
+        SourceBEBatch Batch { get; }
     }
 
     public class SourceBEBatchRetrievedContext
