@@ -22,7 +22,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
 
-            if (zoneTopProcess.ChangeType == ZoneChangeType.New)
+            if (zoneTopProcess.ChangeType == ZoneChangeType.New || zoneTopProcess.ChangeType == ZoneChangeType.Renamed)
                 return true;
 
             if (zoneTopProcess.CodesToAdd != null && zoneTopProcess.CodesToAdd.Count()>0)
