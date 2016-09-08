@@ -60,7 +60,7 @@ namespace QM.BusinessEntity.Business
 
                 Func<Zone, bool> filterExpression = (prod) =>
                     ((prod.BeginEffectiveDate <= DateTime.Now)
-                    && (!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now)) && (!prod.Settings.IsOffline)
+                    && (!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now))
                     && (filter.CountryId.Count == 0 || filter.CountryId.Contains(prod.CountryId)));
 
                 return zones.MapRecords(ZoneInfoMapper, filterExpression);
@@ -192,7 +192,7 @@ namespace QM.BusinessEntity.Business
             CountryManager manager = new CountryManager();
             var country = manager.GetCountry(zone.CountryId);
             zoneInfo.LongName = (country != null) ? country.Name + " - " + zone.Name : "";
-
+            zoneInfo.IsDisabled = zone.Settings.IsOffline;
             return zoneInfo;
        }
 

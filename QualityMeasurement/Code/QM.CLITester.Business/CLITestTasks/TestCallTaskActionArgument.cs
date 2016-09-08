@@ -16,5 +16,6 @@ namespace QM.CLITester.Business
         public string ZoneSourceId { get; set; }
         public int ProfileID { get; set; }
         public string ListEmails { get; set; }
+        public int Quantity { get; set; }
     }
 }

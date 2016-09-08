@@ -22,7 +22,6 @@
         var releaseCode;
         var ringDuration;
         var duration;
-        var callResults;
 
         loadParameters();
         defineScope();

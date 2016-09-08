@@ -12,11 +12,11 @@ namespace QM.CLITester.iTestIntegration
 {
     internal class CallTestManager
     {
-        internal bool TryInitiateTest(string profileId, string supplierId, string countryId, string zoneId, 
+        internal bool TryInitiateTest(string profileId, string supplierId, string countryId, string zoneId, int quantity,
             out  InitiateTestInformation initiateTestInformation, out string failureMessage)
         {
             ServiceActions serviceActions = new ServiceActions();
-            var responseString = serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", profileId, supplierId, countryId, zoneId));
+            var responseString = serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}&ndbqty={4}", profileId, supplierId, countryId, zoneId, quantity));
             
 
             XmlDocument xml = new XmlDocument();

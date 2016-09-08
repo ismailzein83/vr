@@ -43,7 +43,8 @@ namespace QM.CLITester.Business
                     Supplier = supplierManager.GetSupplier(testCall.SupplierID),
                     Profile = profileManager.GetProfile(testCall.ProfileID),
                     Country = countryManager.GetCountry(testCall.CountryID),
-                    Zone = zoneManager.GetZone(testCall.ZoneID)
+                    Zone = zoneManager.GetZone(testCall.ZoneID),
+                    Quantity = testCall.Quantity
                 };
 
                 InitiateTestOutput initiateTestOutput = new InitiateTestOutput();

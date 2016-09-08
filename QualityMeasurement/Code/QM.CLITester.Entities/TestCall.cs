@@ -26,6 +26,7 @@ namespace QM.CLITester.Entities
         public string FailureMessage { get; set; }
         public long BatchNumber { get; set; }
         public int ScheduleId { get; set; }
+        public int Quantity { get; set; }
 
         long IItem.ItemId
         {

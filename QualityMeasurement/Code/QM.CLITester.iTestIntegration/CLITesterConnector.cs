@@ -46,6 +46,7 @@ namespace QM.CLITester.iTestIntegration
                 };
 
             string itestProfileId = context.Profile.SourceId;
+            int itestQuantity = context.Quantity;
             //if (context.Profile.Settings != null && context.Profile.Settings.ExtendedSettings != null)
             //{
             //    ProfileExtensionSettings profileITestSettings = context.Profile.Settings.ExtendedSettings.Where(itm => itm is ProfileExtensionSettings).FirstOrDefault() as ProfileExtensionSettings;
@@ -71,7 +72,7 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Breakout Configuration!"
                 };
 
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", itestProfileId,itestSupplierSettings.ITestSupplierId, itestZoneSettings.ITestCountryId, itestZoneSettings.ITestZoneId)));
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}&ndbqty={4}", itestProfileId, itestSupplierSettings.ITestSupplierId, itestZoneSettings.ITestCountryId, itestZoneSettings.ITestZoneId, itestQuantity)));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)

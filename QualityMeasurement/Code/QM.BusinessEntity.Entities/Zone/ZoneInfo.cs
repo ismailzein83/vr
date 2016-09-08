@@ -8,5 +8,6 @@ namespace QM.BusinessEntity.Entities
         public string Name { get; set; }
 
         public string LongName { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }

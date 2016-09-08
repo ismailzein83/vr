@@ -23,6 +23,7 @@
         load();
 
         function defineScope() {
+            $scope.quantity = 1;
             $scope.addNewTestCall = addNewTestCall;
             $scope.hasAddTestCallPermission = function () {
                 return Qm_CliTester_TestCallAPIService.HasAddTestCallPermission();
@@ -135,7 +136,8 @@
                 ZoneSourceId:"",
                 ProfileID: $scope.selectedProfile.ProfileId,
                 UserId: 0,
-                ScheduleId:0
+                ScheduleId: 0,
+                Quantity: $scope.quantity
             };
             return obj;
         }

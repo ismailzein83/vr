@@ -26,6 +26,8 @@ namespace QM.CLITester.Entities
         BusinessEntity.Entities.Zone Zone { get; }
 
         Vanrise.Entities.Country Country { get; }
+
+        int Quantity { get; }
     }
 
     public class InitiateTestOutput

@@ -19,5 +19,6 @@ namespace QM.CLITester.Entities
         public int ProfileID { get; set; }
         public int UserId { get; set; }
         public int? ScheduleId { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace QM.CLITester.iTestIntegration
                             Measure measure = new Measure();
                             TestProgress testProgress = new TestProgress();
 
-                            if(callTestManager.TryInitiateTest(profileITestId, supplierITestId, itestZone.CountryId, itestZone.ZoneId, 
+                            if(callTestManager.TryInitiateTest(profileITestId, supplierITestId, itestZone.CountryId, itestZone.ZoneId,  vIConnectorSyncTaskActionArgument.Quantity,
                                 out initiateTestInformation, out failureMessage))
                             {
                                 int retryCount = 0;

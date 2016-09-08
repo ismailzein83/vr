@@ -34,12 +34,12 @@ namespace QM.CLITester.Data.SQL
         }
 
         public bool Insert(int supplierId, int countryId, long zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount,
-            int userId, int profileId, long? batchNumber, int? scheduleId)
+            int userId, int profileId, long? batchNumber, int? scheduleId, int quantity)
         {
             object testCallId;
 
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_Insert", out testCallId, supplierId, countryId, zoneId,
-                    callTestStatus, callTestResult, initiationRetryCount, getProgressRetryCount, userId, profileId, batchNumber, scheduleId);
+                    callTestStatus, callTestResult, initiationRetryCount, getProgressRetryCount, userId, profileId, batchNumber, scheduleId, quantity);
             return (recordsEffected > 0);
         }
 
@@ -61,19 +61,17 @@ namespace QM.CLITester.Data.SQL
             List<TestCall> listTestCalls = new List<TestCall>();
             byte[] timestamp = null;
 
-            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetLastTestCalls", (reader) =>
+            ExecuteReaderSP("QM_CLITester.sp_TestCall_GetUpdated", (reader) =>
             {
-                if (reader.Read())
-                {
+                while (reader.Read())
+                    listTestCalls.Add(TestCallMapper(reader));
+                if (reader.NextResult())
                     while (reader.Read())
-                        listTestCalls.Add(TestCallMapper(reader));
-                    if (reader.NextResult())
-                        while (reader.Read())
-                            timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
-                }
+                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
             },
-               maxTimeStamp, numberOfMinutes, nbOfRows, userId);
-            maxTimeStamp = timestamp;
+               maxTimeStamp, nbOfRows, userId, numberOfMinutes);
+            if (timestamp != null)
+                maxTimeStamp = timestamp;
             return listTestCalls;
         }
         public List<TestCall> GetBeforeId(GetBeforeIdInput input)
@@ -172,7 +170,8 @@ namespace QM.CLITester.Data.SQL
                 Measure = measure,
                 FailureMessage = reader["FailureMessage"] as string,
                 BatchNumber = GetReaderValue<long>(reader, "BatchNumber"),
-                ScheduleId = GetReaderValue<int>(reader, "ScheduleID")
+                ScheduleId = GetReaderValue<int>(reader, "ScheduleID"),
+                Quantity = GetReaderValue<int>(reader, "Quantity")
             };
 
             string initiateTestInformationSerialized = reader["InitiateTestInformation"] as string;

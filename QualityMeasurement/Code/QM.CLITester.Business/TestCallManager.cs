@@ -80,7 +80,7 @@ namespace QM.CLITester.Business
             foreach (int supplierId in listSuppliersIds)
                 foreach (Zone z in zones)
                     dataManager.Insert(supplierId, z.CountryId, z.ZoneId, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0, 0,
-                            testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId);
+                            testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId, testCallInput.Quantity);
 
             testCallOutput.BatchNumber = batchNumber;
             return testCallOutput;

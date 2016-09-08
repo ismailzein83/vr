@@ -32,5 +32,7 @@ namespace QM.CLITester.Business
             get;
             set;
         }
+
+        public int Quantity { get; set; }
     }
 }

@@ -51,7 +51,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
             required = "isrequired";
 
         return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select ' + multipleselection + '  datatextfield="LongName" datavaluefield="ZoneId" '
+            + '<vr-select ' + multipleselection + '  datatextfield="LongName" datadisabledfield="IsDisabled" datavaluefield="ZoneId" '
         + required + ' label="Zones" datasource="ctrl.datasource" on-ready="ctrl.onBaseSelectorReady" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }

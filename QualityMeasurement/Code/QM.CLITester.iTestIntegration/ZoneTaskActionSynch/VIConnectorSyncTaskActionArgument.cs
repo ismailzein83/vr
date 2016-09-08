@@ -21,6 +21,6 @@ namespace QM.CLITester.iTestIntegration
         public int TimeOut { get; set; }
         public int ProfileId { get; set; }
         public int SupplierId { get; set; }
-
+        public int Quantity { get; set; }
     }
 }

@@ -63,7 +63,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                name: "Send mail",
+                name: "Share result",
                 clicked: sendTestCall
             }];
         }

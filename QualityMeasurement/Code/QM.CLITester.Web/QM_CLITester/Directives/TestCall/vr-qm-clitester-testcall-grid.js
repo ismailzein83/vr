@@ -25,8 +25,8 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
     };
 
     function TestCallGrid($scope, ctrl) {
-
-        var lastUpdateHandle, lessThanID, nbOfRows;
+        var lastUpdateHandle = null;
+        var lessThanID, nbOfRows;
         var input = {
             LastUpdateHandle: lastUpdateHandle,
             LessThanID: lessThanID,
@@ -78,12 +78,11 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             var isGettingData = false;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+                input.LastUpdateHandle = null;
                 var timer = setInterval(function () {
                     if (!isGettingData) {
                         var pageInfo = gridAPI.getPageInfo();
                         input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
-                        
                         Qm_CliTester_TestCallAPIService.GetUpdated(input).then(function (response) {
                             isGettingData = true;
                             if (response != undefined) {
@@ -93,7 +92,6 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                                     
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(testCall);
                                     var findTestCall = false;
-                                    
                                     for (var j = 0; j < $scope.testcalls.length; j++) {
                                         //Get the minimun ID Test Call to send as parameter to getData();
                                         if (i === 1) {//just in the first check all test calls list
@@ -107,7 +105,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                                             }
                                         }
                                         ///////////////////////////////////////////////////////////////////
-
+                                        
 
                                         //Check if this test call exist in test call Details, if a new call
                                         // then unshift in the list(put the item in the top of the list)
