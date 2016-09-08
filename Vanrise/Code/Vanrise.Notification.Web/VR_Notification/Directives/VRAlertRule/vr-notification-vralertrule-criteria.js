@@ -58,8 +58,6 @@
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
-                    console.log(payload);
-
                     var promises = [];
                     var criteria;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    public abstract class VRAlertRuleSettings
+    public class VRAlertRuleSettings
     {
         public Guid RuleTypeId { get; set; }
 
