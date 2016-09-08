@@ -155,3 +155,24 @@ when not matched by target then
 	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
 set identity_insert [common].[TemplateConfig] off;
+
+--[common].[Setting]---------------------------801 to 900-------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[Setting] on;
+;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(801,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Carrier Portal","VersionNumber":"version 0.9"}}',0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+set identity_insert [common].[Setting] off;
