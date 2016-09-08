@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Entities
 
         public IEnumerable<ZoneService> NewDefaultServices { get; set; }
 
-        public DateTime ClosedDefaultServiceEffectiveOn { get; set; }
+        public DateTime? ClosedDefaultServiceEffectiveOn { get; set; }
 
         public int NumberOfNewSaleZoneServices { get; set; }
 

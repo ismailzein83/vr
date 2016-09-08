@@ -225,7 +225,7 @@ namespace TOne.WhS.Sales.BP.Activities
             if (defaultServiceToAdd != null)
                 summary.NewDefaultServices = defaultServiceToAdd.NewDefaultService.Services;
 
-            if (defaultServiceToClose != null)
+            else if (defaultServiceToClose != null)
                 summary.ClosedDefaultServiceEffectiveOn = defaultServiceToClose.CloseEffectiveDate;
         }
 

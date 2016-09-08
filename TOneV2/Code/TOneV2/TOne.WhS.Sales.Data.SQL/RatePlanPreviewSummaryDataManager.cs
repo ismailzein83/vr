@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Data.SQL;
 
@@ -41,6 +42,8 @@ namespace TOne.WhS.Sales.Data.SQL
 
         public void ApplyRatePlanPreviewSummaryToDB(RatePlanPreviewSummary summary)
         {
+            string newDefaultServices = summary.NewDefaultServices != null ? Vanrise.Common.Serializer.Serialize(summary.NewDefaultServices) : null;
+
             ExecuteNonQuerySP
             (
                 "TOneWhS_Sales.sp_RatePlanPreviewSummary_Insert",
@@ -52,7 +55,11 @@ namespace TOne.WhS.Sales.Data.SQL
                 summary.NameOfNewDefaultRoutingProduct,
                 summary.NameOfClosedDefaultRoutingProduct,
                 summary.NumberOfNewSaleZoneRoutingProducts,
-                summary.NumberOfClosedSaleZoneRoutingProducts
+                summary.NumberOfClosedSaleZoneRoutingProducts,
+                newDefaultServices,
+                summary.ClosedDefaultServiceEffectiveOn,
+                summary.NumberOfNewSaleZoneServices,
+                summary.NumberOfClosedSaleZoneServices
             );
         }
         
@@ -62,6 +69,8 @@ namespace TOne.WhS.Sales.Data.SQL
 
         private RatePlanPreviewSummary RatePlanPreviewSummaryMapper(IDataReader reader)
         {
+            string newDefaultServices = reader["NewDefaultServices"] as string;
+
             return new RatePlanPreviewSummary()
             {
                 NumberOfNewRates = (int)reader["NumberOfNewRates"],
@@ -71,7 +80,11 @@ namespace TOne.WhS.Sales.Data.SQL
                 NameOfNewDefaultRoutingProduct = reader["NameOfNewDefaultRoutingProduct"] as string,
                 NameOfClosedDefaultRoutingProduct = reader["NameOfClosedDefaultRoutingProduct"] as string,
                 NumberOfNewSaleZoneRoutingProducts = (int)reader["NumberOfNewSaleZoneRoutingProducts"],
-                NumberOfClosedSaleZoneRoutingProducts = (int)reader["NumberOfClosedSaleZoneRoutingProducts"]
+                NumberOfClosedSaleZoneRoutingProducts = (int)reader["NumberOfClosedSaleZoneRoutingProducts"],
+                NewDefaultServices = newDefaultServices != null ? Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(newDefaultServices) : null,
+                ClosedDefaultServiceEffectiveOn = GetReaderValue<DateTime?>(reader, "ClosedDefaultServiceEffectiveOn"),
+                NumberOfNewSaleZoneServices = (int)reader["NumberOfNewSaleZoneServices"],
+                NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"]
             };
         }
         
