@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Business;
 using Vanrise.Entities;
+using TOne.WhS.RouteSync.BP.Activities;
+using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -23,6 +23,8 @@ namespace TOne.WhS.Routing.BP.Activities
         public DateTime? EffectiveDate { get; set; }
 
         public bool IsFuture { get; set; }
+
+        public List<SwitchInProcess> SwitchesInProcess { get; set; }
     }
 
     public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
@@ -65,13 +67,19 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
 
+        public InArgument<List<SwitchInProcess>> SwitchesInProcess { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<CustomerRoutesBatch>> OutputQueue { get; set; }
 
         protected override void DoWork(BuildCustomerRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
+            {
+                InitialiseSwitchesInProcessQueues(inputArgument.SwitchesInProcess);
+            }
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
-
+            List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -85,6 +93,16 @@ namespace TOne.WhS.Routing.BP.Activities
                         RouteBuilder builder = new RouteBuilder();
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code, out sellingProductRoute);
 
+                        if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
+                        {
+                            switchesInProcessRoutes.AddRange(customerRoutes);
+                            if (switchesInProcessRoutes.Count > 100000)
+                            {
+                                FillSwitchInProcessQueues(inputArgument.SwitchesInProcess, switchesInProcessRoutes);
+                                switchesInProcessRoutes = new List<CustomerRoute>();
+                            }
+                        }
+
                         customerRoutesBatch.CustomerRoutes.AddRange(customerRoutes);
                         inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
                         customerRoutesBatch = new CustomerRoutesBatch();
@@ -93,10 +111,20 @@ namespace TOne.WhS.Routing.BP.Activities
                 } while (!ShouldStop(handle) && hasItem);
             });
 
+
+
             if (customerRoutesBatch.CustomerRoutes.Count > 0)
             {
+                if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
+                {
+                    switchesInProcessRoutes.AddRange(customerRoutesBatch.CustomerRoutes);
+                }
                 inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
             }
+
+            if (switchesInProcessRoutes.Count > 0)
+                FillSwitchInProcessQueues(inputArgument.SwitchesInProcess, switchesInProcessRoutes);
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Customer Routes is done", null);
         }
 
@@ -108,7 +136,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
-                IsFuture = this.IsFuture.Get(context)
+                IsFuture = this.IsFuture.Get(context),
+                SwitchesInProcess = this.SwitchesInProcess.Get(context)
             };
         }
 
@@ -118,6 +147,46 @@ namespace TOne.WhS.Routing.BP.Activities
                 this.OutputQueue.Set(context, new MemoryQueue<CustomerRoutesBatch>());
 
             base.OnBeforeExecute(context, handle);
+        }
+
+        private void InitialiseSwitchesInProcessQueues(List<SwitchInProcess> switchesInProcess)
+        {
+            foreach (SwitchInProcess switchInProcess in switchesInProcess)
+            {
+                if (switchInProcess.RouteQueue == null)
+                    switchInProcess.RouteQueue = new MemoryQueue<RouteBatch>();
+            }
+        }
+
+        private void FillSwitchInProcessQueues(List<SwitchInProcess> switchesInProcess, IEnumerable<CustomerRoute> customerRoutes)
+        {
+            RouteBatch routeBatch = new RouteBatch() { Routes = new List<Route>() };
+            foreach (CustomerRoute customerRoute in customerRoutes)
+            {
+                Route route = new Route()
+                {
+                    Code = customerRoute.Code,
+                    CustomerId = customerRoute.CustomerId.ToString(),
+                };
+                if (customerRoute.Options != null && customerRoute.Options.Count > 0)
+                {
+                    route.Options = new List<RouteSync.Entities.RouteOption>();
+                    foreach (Routing.Entities.RouteOption option in customerRoute.Options)
+                    {
+                        route.Options.Add(new RouteSync.Entities.RouteOption()
+                        {
+                            Percentage = option.Percentage,
+                            SupplierId = option.SupplierId.ToString()
+                        });
+                    }
+                }
+                routeBatch.Routes.Add(route);
+            }
+
+            foreach (SwitchInProcess switchInProcess in switchesInProcess)
+            {
+                switchInProcess.RouteQueue.Enqueue(routeBatch);
+            }
         }
     }
 }

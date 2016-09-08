@@ -1,9 +1,19 @@
 ﻿<vr-row removeline>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
         <vr-select datatextfield="description" datavaluefield="value" label="Routing Database Type" datasource="routingDatabaseTypes"
-                   selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingProductDatabaseTypeSelectionChanged" hideremoveicon />
+                   selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingDatabaseTypeSelectionChanged" hideremoveicon />
     </vr-columns>
-    <vr-columns width="1/2row" ng-show="!isFuture">
+
+    <vr-columns width="1/3row" ng-show="!isFuture">
         <vr-datetimepicker type="datetime" value="effectiveOn" label="Effective On" isrequired="!isFuture"></vr-datetimepicker>
+    </vr-columns>
+
+
+</vr-row>
+<vr-row ng-show="!isFuture">
+    <vr-columns width="fullrow">
+        <vr-section title="Route Sync">
+            <vr-whs-be-switch-selector on-ready="onSwitchSelectorReady" normal-col-num="4" ismultipleselection="true"></vr-whs-be-switch-selector>
+        </vr-section>
     </vr-columns>
 </vr-row>

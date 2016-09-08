@@ -1,0 +1,146 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.RouteSync.BP.SubProcess.InitializeRouteSyncSwitches"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twrba="clr-namespace:TOne.WhS.RouteSync.BP.Activities;assembly=TOne.WhS.RouteSync.BP.Activities"
+ xmlns:twre="clr-namespace:TOne.WhS.RouteSync.Entities;assembly=TOne.WhS.RouteSync.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Switches" Type="InArgument(scg:List(twre:SwitchInfo))" />
+    <x:Property Name="RouteRangeType" Type="InArgument(s:Nullable(twre:RouteRangeType))" />
+    <x:Property Name="SwitchesInProcess" Type="InOutArgument(scg:List(twrba:SwitchInProcess))" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.RouteSync.BP.SubProcess.InitializeRouteSyncSwitches_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.RouteSync.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <ParallelForEach x:TypeArguments="twre:SwitchInfo" DisplayName="ParallelForEach&lt;SwitchInfo&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+      <ParallelForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(twre:SwitchInfo)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:SwitchInfo)">Switches</mca:CSharpValue>
+        </InArgument>
+      </ParallelForEach.Values>
+      <ActivityAction x:TypeArguments="twre:SwitchInfo">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="twre:SwitchInfo" Name="switchInfo" />
+        </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="twrba:SwitchInProcess" Name="switchInProcess" />
+            <Variable x:TypeArguments="x:String" Name="variable1" />
+          </Sequence.Variables>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="twrba:SwitchInProcess">
+                <mca:CSharpReference x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="twrba:SwitchInProcess">
+                <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess" xml:space="preserve">new RouteSync.BP.Activities.SwitchInProcess {  Switch = switchInfo}</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <twrba:InitializeSwitchRouteSync sap2010:WorkflowViewState.IdRef="InitializeSwitchRouteSync_1">
+            <twrba:InitializeSwitchRouteSync.InitializationData>
+              <OutArgument x:TypeArguments="twre:SwitchRouteSyncInitializationData">
+                <mca:CSharpReference x:TypeArguments="twre:SwitchRouteSyncInitializationData">switchInProcess.InitializationData</mca:CSharpReference>
+              </OutArgument>
+            </twrba:InitializeSwitchRouteSync.InitializationData>
+            <twrba:InitializeSwitchRouteSync.RouteRangeType>
+              <InArgument x:TypeArguments="s:Nullable(twre:RouteRangeType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(twre:RouteRangeType)">RouteRangeType</mca:CSharpValue>
+              </InArgument>
+            </twrba:InitializeSwitchRouteSync.RouteRangeType>
+            <twrba:InitializeSwitchRouteSync.Switch>
+              <InArgument x:TypeArguments="twre:SwitchInfo">
+                <mca:CSharpValue x:TypeArguments="twre:SwitchInfo">switchInfo</mca:CSharpValue>
+              </InArgument>
+            </twrba:InitializeSwitchRouteSync.Switch>
+          </twrba:InitializeSwitchRouteSync>
+          <AddToCollection x:TypeArguments="twrba:SwitchInProcess" DisplayName="AddToCollection&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
+            <AddToCollection.Item>
+              <InArgument x:TypeArguments="twrba:SwitchInProcess">
+                <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpValue>
+              </InArgument>
+            </AddToCollection.Item>
+            <InArgument x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">
+              <mca:CSharpValue x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
+            </InArgument>
+          </AddToCollection>
+        </Sequence>
+      </ActivityAction>
+    </ParallelForEach>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxTdWJQcm9jZXNzXEluaXRpYWxpemVSb3V0ZVN5bmNTd2l0Y2hlcy54YW1sDjcDcg4CAQE4BXAXAgECOws7aQIBOEIJbhQCAQNHC1IUAgEpUwtjLQIBE2QLbR0CAQRPEU+0AQIBMUoRSnMCASpWEVaXAQIBImARYGACARtbEVt0AgEUaw9rfAIBDGcRZ2sCAQU=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="InitializeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,310">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="294,460">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="316,584">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.SubProcess.InitializeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="356,664" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

@@ -5,6 +5,8 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Business;
+using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.BP.Activities
 {
@@ -19,8 +21,14 @@ namespace TOne.WhS.RouteSync.BP.Activities
         
         protected override void Execute(CodeActivityContext context)
         {
-            List<SwitchInfo> switches = new SwitchManager().GetSwitches(this.SwitchIds.Get(context));
-            this.Switches.Set(context, switches);
+            List<string> switchIds = this.SwitchIds.Get(context);
+
+            if (switchIds != null)
+            {
+                List<SwitchInfo> switches = new SwitchManager().GetSwitches(switchIds);
+                this.Switches.Set(context, switches);
+                context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Getting Switches is done", null);
+            }
         }
     }
 }

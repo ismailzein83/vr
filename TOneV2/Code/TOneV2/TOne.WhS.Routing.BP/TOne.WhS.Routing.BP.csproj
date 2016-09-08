@@ -123,6 +123,18 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Activities\TOne.WhS.RouteSync.BP.Activities.csproj">
+      <Project>{6AF7A0AD-F82D-4B4C-9085-0FE891B78863}</Project>
+      <Name>TOne.WhS.RouteSync.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.BP\TOne.WhS.RouteSync.BP.csproj">
+      <Project>{BA6F56B5-C93E-4903-8AC2-BE2B41603755}</Project>
+      <Name>TOne.WhS.RouteSync.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.BP.Activities\TOne.WhS.Routing.BP.Activities.csproj">
       <Project>{a28f67c0-6326-4830-8a1e-021f91a4236d}</Project>
       <Name>TOne.WhS.Routing.BP.Activities</Name>

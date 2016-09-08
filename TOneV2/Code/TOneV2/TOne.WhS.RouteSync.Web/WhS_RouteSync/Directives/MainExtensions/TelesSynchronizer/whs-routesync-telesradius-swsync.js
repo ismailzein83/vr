@@ -100,11 +100,13 @@
                      if (response) {
                          if (payload && payload.switchSynchronizerSettings && payload.switchSynchronizerSettings.CarrierMappings) {
                              for (var i = 0; i < response.length; i++) {
+
+                                 var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId];
                                  var carrierMapping = {
                                      CarrierAccountId: response[i].CarrierAccountId,
                                      CarrierAccountName: response[i].Name,
-                                     CustomerMapping: payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId].CustomerMapping.join($scope.scopeModel.separator),
-                                     SupplierMapping: payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId].SupplierMapping.join($scope.scopeModel.separator)
+                                     CustomerMapping: accountCarrierMappings != undefined ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
+                                     SupplierMapping: accountCarrierMappings != undefined ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
                                  };
 
                                  $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
@@ -155,8 +157,7 @@
 
                 radiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
                     var settingsDirectivePayload;
-                    if (radiusDataManager != undefined)
-                    {
+                    if (radiusDataManager != undefined) {
                         settingsDirectivePayload = { radiusDataManagersSettings: radiusDataManager }
                     }
                     VRUIUtilsService.callDirectiveLoad(radiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, radiusDataManagerSettingsDirectiveReadyDeferred);

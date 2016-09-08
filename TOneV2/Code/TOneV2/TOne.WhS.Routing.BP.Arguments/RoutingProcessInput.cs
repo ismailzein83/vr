@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Arguments
@@ -11,6 +12,8 @@ namespace TOne.WhS.Routing.BP.Arguments
         public RoutingDatabaseType RoutingDatabaseType { get; set; }
         public RoutingProcessType RoutingProcessType { get; set; }
         public bool DivideProcessIntoSubProcesses { get; set; }
+        public List<string> Switches { get; set; }
+
         public override string GetTitle()
         {
             return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveTime);
