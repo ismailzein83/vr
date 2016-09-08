@@ -78,6 +78,10 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 InitialiseSwitchesInProcessQueues(inputArgument.SwitchesInProcess);
             }
+
+            RouteSync.Business.ConfigManager routeSyncConfigManager = new RouteSync.Business.ConfigManager();
+            int routeBatchSize = routeSyncConfigManager.GetRouteSyncProcessSettings().RouteBatchSize;
+
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
             List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -96,7 +100,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
                         {
                             switchesInProcessRoutes.AddRange(customerRoutes);
-                            if (switchesInProcessRoutes.Count > 100000)
+                            if (switchesInProcessRoutes.Count > routeBatchSize)
                             {
                                 FillSwitchInProcessQueues(inputArgument.SwitchesInProcess, switchesInProcessRoutes);
                                 switchesInProcessRoutes = new List<CustomerRoute>();
