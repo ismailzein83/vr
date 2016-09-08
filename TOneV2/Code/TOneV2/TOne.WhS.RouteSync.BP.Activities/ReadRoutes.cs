@@ -55,7 +55,9 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override ReadRoutesOutput DoWorkWithResult(ReadRoutesInput inputArgument, AsyncActivityHandle handle)
         {
-            int deliverRoutesBatchSize = 200000;
+            RouteSync.Business.ConfigManager routeSyncConfigManager = new RouteSync.Business.ConfigManager();
+            int deliverRoutesBatchSize = routeSyncConfigManager.GetRouteSyncProcessSettings().RouteBatchSize;
+
             int totalBatchesRead = 0;
             long totalRoutesRead = 0;
             List<SwitchRouteDelivery> switchesRouteDelivery = BuildSwitchesRouteDelivery(inputArgument.SwitchesInProcess);
