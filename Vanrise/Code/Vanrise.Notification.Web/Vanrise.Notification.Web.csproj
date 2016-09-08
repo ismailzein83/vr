@@ -158,8 +158,8 @@
     <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-settings.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleCriteriaTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleGridTemplate.html" />
-    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-alertrule-grid.js" />
-    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrulecriteria.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-grid.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-criteria.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />

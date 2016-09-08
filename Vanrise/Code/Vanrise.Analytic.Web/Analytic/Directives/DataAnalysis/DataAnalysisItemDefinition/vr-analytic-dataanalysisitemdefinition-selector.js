@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrAnalyticDataanalysisdefinitionSelector', ['VR_Analytic_DataAnalysisItemDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrAnalyticDataanalysisitemdefinitionSelector', ['VR_Analytic_DataAnalysisItemDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
 
     function (VR_Analytic_DataAnalysisItemDefinitionAPIService, UtilsService, VRUIUtilsService) {
         return {
@@ -56,6 +56,8 @@ app.directive('vrAnalyticDataanalysisdefinitionSelector', ['VR_Analytic_DataAnal
 
                     var selectedIds;
                     var filter;
+                    var dataAnalysisDefinitionId;
+
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
@@ -63,7 +65,10 @@ app.directive('vrAnalyticDataanalysisdefinitionSelector', ['VR_Analytic_DataAnal
                         dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
                     }
 
-                    return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinitionsInfo(UtilsService.serializetoJson(filter), dataAnalysisDefinitionId).then(function (response) {
+                    var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
+                    console.log(serializedFilter);
+
+                    return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinitionsInfo(serializedFilter, dataAnalysisDefinitionId).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {

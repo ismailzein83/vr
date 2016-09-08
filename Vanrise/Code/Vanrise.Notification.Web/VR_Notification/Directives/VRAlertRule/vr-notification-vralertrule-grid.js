@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrNotificationAlertruleGrid', ['VR_Notification_VRAlertRuleAPIService', 'VR_Notification_VRAlertRuleService', 'VRNotificationService',
+app.directive('vrNotificationVralertruleGrid', ['VR_Notification_VRAlertRuleAPIService', 'VR_Notification_VRAlertRuleService', 'VRNotificationService',
     function (VR_Notification_VRAlertRuleAPIService, VR_Notification_VRAlertRuleService, VRNotificationService) {
         return {
             restrict: 'E',

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRAlertRuleTypeSettingsDirective.$inject = ['VR_Notification_VRAlertRuleTypeAPIService', 'UtilsService', 'VRUIUtilsService'];
+    VRAlertRuleTypeSettingsDirective.$inject = ['VR_Notification_VRAlertRuleAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function VRAlertRuleTypeSettingsDirective(VR_Notification_VRAlertRuleTypeAPIService, UtilsService, VRUIUtilsService) {
+    function VRAlertRuleTypeSettingsDirective(VR_Notification_VRAlertRuleAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -27,6 +27,7 @@
             this.initializeController = initializeController;
 
             var selectorAPI;
+            var context;
 
             var directiveAPI;
             var directiveReadyDeferred;
@@ -43,10 +44,12 @@
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
+
+                    var directivePayload = { context: builContext() };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
             function defineAPI() {
@@ -55,8 +58,9 @@
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
+                    console.log(payload);
+
                     var promises = [];
-                    var context;
                     var criteria;
 
                     if (payload != undefined) {
@@ -74,7 +78,7 @@
 
 
                     function getVRAlertRuleCriteriaTemplateConfigs() {
-                        return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleCriteriaExtensionConfigs().then(function (response) {
+                        return VR_Notification_VRAlertRuleAPIService.GetVRAlertRuleCriteriaExtensionConfigs().then(function (response) {
 
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
@@ -94,18 +98,15 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
+
                             var directivePayload = {
                                 context: builContext(),
                                 criteria: criteria
                             };
-
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
                         return directiveLoadDeferred.promise;
-                    }
-                    function builContext() {
-                        return context;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -127,9 +128,13 @@
                     ctrl.onReady(api);
                 }
             }
+
+            function builContext() {
+                return context;
+            }
         }
     }
 
-    app.directive('vrNotificationVralertrulecriteria', VRAlertRuleTypeSettingsDirective);
+    app.directive('vrNotificationVralertruleCriteria', VRAlertRuleTypeSettingsDirective);
 
 })(app);

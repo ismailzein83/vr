@@ -100,9 +100,15 @@ namespace Vanrise.Analytic.Business
             return templateConfigManager.GetExtensionConfigurations<TimeRangeFilterConfig>(TimeRangeFilterConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter, Guid dataAnalysisDefinisitonId)
+        public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter, Guid dataAnalysisDefinitonId)
         {
-            Func<DataAnalysisItemDefinition, bool> filterExpression = null;
+            Func<DataAnalysisItemDefinition, bool> filterExpression = (item) =>
+            {
+                if (item.DataAnalysisDefinitionId != dataAnalysisDefinitonId)
+                    return false;
+
+                return true;
+            };
 
             return this.GetCachedDataAnalysisItemDefinitions().MapRecords(DataAnalysisItemDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }

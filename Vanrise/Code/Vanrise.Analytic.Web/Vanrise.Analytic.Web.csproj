@@ -139,8 +139,8 @@
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleCriteriaTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleTypeSettingsTemplate.html" />
-    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertrulecriteria.js" />
-    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertruletypesettings.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertrule-criteria.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertruletype-settings.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcCalculationFieldManagementTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\vr-analytic-daprofcalccalculationfield-management.js" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\Templates\DARecordAggregateSelectiveTemplate.html" />

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DAProfCalcAlertRuleCriteria.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    DAProfCalcAlertRuleTypeSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function DAProfCalcAlertRuleCriteria(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function DAProfCalcAlertRuleTypeSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var vrDAProfCalcAlertRuleCriteria = new VRDAProfCalcAlertRuleCriteria($scope, ctrl, $attrs);
-                vrDAProfCalcAlertRuleCriteria.initializeController();
+                var vrDAProfCalcAlertRuleTypeSettings = new VRDAProfCalcAlertRuleTypeSettings($scope, ctrl, $attrs);
+                vrDAProfCalcAlertRuleTypeSettings.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/AlertRuleExtensions/Templates/DAProfCalcAlertRuleCriteriaTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/AlertRuleExtensions/Templates/DAProfCalcAlertRuleTypeSettingsTemplate.html"
 
         };
-        function VRDAProfCalcAlertRuleCriteria($scope, ctrl, $attrs) {
+        function VRDAProfCalcAlertRuleTypeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var dataAnalysisDefinitionSelectorAPI;
@@ -60,12 +60,12 @@
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, dataAnalysisDefinitionSelectorPayload, dataAnalysisDefinitionSelectorLoadDeferred);
                     });
 
-                    return dataAnalysisDefinitionSelectorLoadDeferred.promise;
+                    return dataAnalysisDefinitionSelectorLoadDeferred.promise;       
                 };
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleCriteria, Vanrise.Analytic.Entities",
+                        $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
                         DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds()
                     }
                     return data;
@@ -78,6 +78,6 @@
         }
     }
 
-    app.directive('vrAnalyticDaprofcalcalertruletypesettings', DAProfCalcAlertRuleCriteria);
+    app.directive('vrAnalyticDaprofcalcalertruletypeSettings', DAProfCalcAlertRuleTypeSettings);
 
 })(app);
