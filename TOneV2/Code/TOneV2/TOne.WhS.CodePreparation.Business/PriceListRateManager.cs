@@ -119,11 +119,6 @@ namespace TOne.WhS.CodePreparation.Business
             return existingRateGroupByZoneName;
         }
 
-        private void ProcessData(ZoneToProcess zoneToProcess, SaleAreaSettingsData saleAreaSettingsData, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
-        {
-            
-        }
-
         private void CreateRatesForNewZones(ZoneToProcess zoneToProcess, int sellingNumberPlanId, SaleAreaSettingsData saleAreaSettingsData,
             Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
         {
