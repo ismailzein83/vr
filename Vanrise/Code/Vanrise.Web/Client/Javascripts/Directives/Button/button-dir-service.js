@@ -301,6 +301,13 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Preview',
                     class: "glyphicon glyphicon-eye-open"
                 }
+            case 'SendEmail':
+                return {
+                    text: 'Send Email',
+                    class: "glyphicon glyphicon-envelope"
+                }
+
+                
         } 
     }
 }]);
