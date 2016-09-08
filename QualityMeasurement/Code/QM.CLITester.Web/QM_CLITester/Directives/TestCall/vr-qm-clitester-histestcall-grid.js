@@ -78,12 +78,13 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             var destination = "";
             var receivedCli = "";
             var releaseCode = "";
-            for (var i = 0; i < testCallObj.Entity.TestProgress.CallResults.length; i++) {
-                source = source + ";" + testCallObj.Entity.TestProgress.CallResults[i].Source;
-                destination = destination + ";" + testCallObj.Entity.TestProgress.CallResults[i].Destination;
-                receivedCli = receivedCli + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReceivedCli;
-                releaseCode = releaseCode + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReleaseCode;
-            }
+            if (testCallObj.Entity.TestProgress != null && testCallObj.Entity.TestProgress.CallResults != null)
+                for (var i = 0; i < testCallObj.Entity.TestProgress.CallResults.length; i++) {
+                    source = source + ";" + testCallObj.Entity.TestProgress.CallResults[i].Source;
+                    destination = destination + ";" + testCallObj.Entity.TestProgress.CallResults[i].Destination;
+                    receivedCli = receivedCli + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReceivedCli;
+                    releaseCode = releaseCode + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReleaseCode;
+                }
 
             Qm_CliTester_TestCallService.sendTestCall(testCallObj.SupplierName, testCallObj.UserName, testCallObj.CountryName, testCallObj.ZoneName,
                 testCallObj.CallTestStatusDescription, testCallObj.CallTestResultDescription, testCallObj.ScheduleName, testCallObj.Entity.Measure.Pdd,
