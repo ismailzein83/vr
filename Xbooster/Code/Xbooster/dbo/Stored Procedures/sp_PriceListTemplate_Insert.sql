@@ -15,6 +15,6 @@ BEGIN
 	BEGIN
 		INSERT INTO dbo.PriceListTemplate (Name, UserID, [Type], ConfigDetails)
 		VALUES (@Name, @UserId, @Type, @ConfigDetails)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

@@ -12,5 +12,5 @@ BEGIN
 		SettingsTaskExecutionInfo,
 		IsPartnerCDRSource,
 		UserID
-	FROM dbo.CDRSourceConfig
+	FROM dbo.CDRSourceConfig WITH(NOLOCK) 
 END

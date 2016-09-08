@@ -16,6 +16,6 @@ BEGIN
 	BEGIN
 		INSERT INTO dbo.CDRSourceConfig (Name, CDRSource, SettingsTaskExecutionInfo, IsPartnerCDRSource, UserID)
 		VALUES (@Name, @CDRSource, @SettingsTaskExecutionInfo, @IsPartnerCDRSource, @UserID)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

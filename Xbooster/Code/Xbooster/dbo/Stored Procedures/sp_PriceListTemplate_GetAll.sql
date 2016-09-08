@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [dbo].[sp_PriceListTemplate_GetAll]
+CREATE PROCEDURE [dbo].[sp_PriceListTemplate_GetAll]
 AS
 BEGIN
 	SELECT ID,
@@ -11,5 +11,5 @@ BEGIN
 		UserId,
 		[Type],
 		ConfigDetails
-	FROM dbo.PriceListTemplate
+	FROM dbo.PriceListTemplate WITH(NOLOCK) 
 END
