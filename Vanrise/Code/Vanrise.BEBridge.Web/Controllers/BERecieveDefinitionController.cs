@@ -25,7 +25,7 @@ namespace Vanrise.BEBridge.Web.Controllers
         [Route("GetFilteredBeReceiveDefinitions")]
         public object GetFilteredBeReceiveDefinitions(DataRetrievalInput<BEReceiveDefinitionQuery> input)
         {
-            input.SortByColumnName = "Entity.BEReceiveDefinitionId";
+            //  input.SortByColumnName = "Entity.BEReceiveDefinitionId";
             return GetWebResponse(input, _manager.GetFilteredBeReceiveDefinitions(input));
         }
         [HttpGet]

@@ -156,13 +156,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_BEBridge\Constants\ModuleConfig.js" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\Templates\BEReceiveDefinitionFileSourceReadersTemplate.html" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\Templates\BEReceiveDefinitionFTPSourceReadersTemplate.html" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\vr-bebridge-sourcebereaders-file-directive.js" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\vr-bebridge-sourcebereaders-ftp-directive.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\Templates\BEReceiveDefinitionGridTemplate.html" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-bereceivedefinition-grid.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-berecievedefinition-selector.js" />
-    <Content Include="VR_BEBridge\Directives\MainExtensions\SourceBEReaders\Templates\BEReceiveDefinitionFTPSourceReaderTemplate.html" />
-    <Content Include="VR_BEBridge\Directives\MainExtensions\SourceBEReaders\Templates\BEReceiveDefinitionFileSourceReaderTemplate.html" />
-    <Content Include="VR_BEBridge\Directives\MainExtensions\SourceBEReaders\vr-bebridge-sourcebereaders-ftpsourcereader-directive.js" />
-    <Content Include="VR_BEBridge\Directives\MainExtensions\SourceBEReaders\vr-bebridge-sourcebereaders-filesourcereader-directive.js" />
     <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBEConvertor\vr-bebridge-targetbeconvertor-definition.js" />
     <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBESynchronizer\vr-bebridge-targetbesynchronizer-definition.js" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\Templates\BEBridgeProcessManualTemplate.html" />
