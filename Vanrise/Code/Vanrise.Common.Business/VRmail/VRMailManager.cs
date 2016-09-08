@@ -45,7 +45,7 @@ namespace Vanrise.Common.Business
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subject;
             mailMessage.Body = body;
-            mailMessage.IsBodyHtml = false;
+            mailMessage.IsBodyHtml = true;
 
             SmtpClient client = new SmtpClient();
             client.Port = emailSettingData.Port;
