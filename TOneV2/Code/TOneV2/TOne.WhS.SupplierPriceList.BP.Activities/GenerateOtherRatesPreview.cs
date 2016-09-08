@@ -46,9 +46,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             ZoneName = importedZone.ZoneName,
                             ImportedRate = decimal.Round(importedOtherRate.Rate, 8),
                             ImportedRateBED = importedOtherRate.BED,
-                            SystemRate = importedOtherRate.SystemRate != null ? importedOtherRate.SystemRate.RateEntity.NormalRate : (decimal?)null,
-                            SystemRateBED = importedOtherRate.SystemRate != null ? importedOtherRate.SystemRate.BED : (DateTime?)null,
-                            SystemRateEED = importedOtherRate.SystemRate != null ? importedOtherRate.SystemRate.EED : (DateTime?)null,
                             RateTypeId = importedOtherRate.RateTypeId.Value,
                             ChangeTypeRate = importedOtherRate.ChangeType
                         };

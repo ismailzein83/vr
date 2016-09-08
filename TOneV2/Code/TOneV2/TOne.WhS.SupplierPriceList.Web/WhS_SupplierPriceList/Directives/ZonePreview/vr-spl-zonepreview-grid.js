@@ -108,8 +108,25 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 }
             };
 
+            var zoneServicesTab = {
+                title: "Zone Services",
+                directive: "vr-spl-zoneservicespreview-grid",
+                loadDirective: function (directiveAPI, zoneDataItem) {
+                    zoneDataItem.zoneServicesGridAPI = directiveAPI;
+
+                    var zoneServicesGridPayload = {
+                        ProcessInstanceId: processInstanceId,
+                        ZoneName: zoneDataItem.ZoneName,
+                        OnlyModified: onlyModified
+                    };
+
+                    return zoneDataItem.zoneServicesGridAPI.load(zoneServicesGridPayload);
+                }
+            };
+
             directiveTabs.push(codeTab);
             directiveTabs.push(otherRatesTab);
+            directiveTabs.push(zoneServicesTab);
 
             return directiveTabs;
         }

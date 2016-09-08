@@ -52,7 +52,13 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
            return GetWebResponse(input, manager.GetFilteredOtherRatesPreview(input));
        }
 
-       
+       [HttpPost]
+       [Route("GetFilteredZoneServicesPreview")]
+       public object GetFilteredZoneServicesPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+       {
+           SupplierZonesServicesPreviewManager manager = new SupplierZonesServicesPreviewManager();
+          return GetWebResponse(input, manager.GetFilteredZoneServicesPreview(input));
+       }
 
     }
 }

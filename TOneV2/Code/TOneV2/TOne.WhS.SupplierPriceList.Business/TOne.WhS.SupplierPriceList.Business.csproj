@@ -95,6 +95,7 @@
     <Compile Include="PriceListZoneServiceManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
     <Compile Include="ProcessCountryZonesServicesContext.cs" />
+    <Compile Include="SupplierZonesServicesPreviewManager.cs" />
     <Compile Include="SupplierOtherRatesPreviewManager.cs" />
     <Compile Include="SupplierPriceListTemplateManager.cs" />
     <Compile Include="ProcessCountryCodesContext.cs" />

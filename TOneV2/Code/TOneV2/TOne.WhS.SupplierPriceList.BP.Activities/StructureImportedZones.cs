@@ -40,7 +40,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         importedZone.ImportedOtherRates.Add(importedRate.RateTypeId.Value, importedRate);
                 }
 
-                importedZone.ImportedZoneService = item.ImportedZonesServices.FirstOrDefault();
+               
+                ImportedZoneService importedZoneService = item.ImportedZonesServices.FirstOrDefault(itm => itm.BED != DateTime.MinValue);
+                if (importedZoneService != null)
+                {
+                    importedZoneService.ServiceIds = item.ImportedZonesServices.SelectMany(itm => itm.ServiceIds).ToList();
+                    importedZone.ImportedZoneService = importedZoneService;
+                }
 
                 importedZones.Add(importedZone);
             }

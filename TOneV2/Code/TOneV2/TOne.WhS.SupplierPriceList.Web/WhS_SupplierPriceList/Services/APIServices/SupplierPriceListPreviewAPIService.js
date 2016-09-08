@@ -24,13 +24,19 @@
         function GetFilteredOtherRatePreview(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredOtherRatePreview"), input);
         }
+
+        function GetFilteredZoneServicesPreview(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredZoneServicesPreview"), input);
+        }
         
         return ({
             GetFilteredZonePreview: GetFilteredZonePreview,
             GetFilteredCodePreview: GetFilteredCodePreview,
             GetFilteredRatePreview: GetFilteredRatePreview,
             GetFilteredCountryPreview: GetFilteredCountryPreview,
-            GetFilteredOtherRatePreview: GetFilteredOtherRatePreview
+            GetFilteredOtherRatePreview: GetFilteredOtherRatePreview,
+            GetFilteredZoneServicesPreview: GetFilteredZoneServicesPreview
+
         });
     }
 

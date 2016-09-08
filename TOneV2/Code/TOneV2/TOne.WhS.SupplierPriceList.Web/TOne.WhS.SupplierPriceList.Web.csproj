@@ -161,6 +161,7 @@
     <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SupplierPriceListType.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\ZoneServiceChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\ZoneChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ChangesPreview\vr-spl-groupedby-selector.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ChangesPreview\vr-spl-viewchangetype-selector.js" />
@@ -168,6 +169,8 @@
     <Content Include="WhS_SupplierPriceList\Directives\CountryPreview\vr-spl-countrypreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\Templates\BasicSupplierPriceListConfiguration.html" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-suppl-supplierpricelistconfiguration-basic.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\ZoneServicesPreview\Templates\SupplierPriceListZoneServicesPreviewGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\ZoneServicesPreview\vr-spl-zoneservicespreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\OtherRatesPreview\Templates\SupplierPriceListOtherRatesPreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\OtherRatesPreview\vr-spl-otherratespreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-suppl-supplierpricelistconfiguration-selective.js" />

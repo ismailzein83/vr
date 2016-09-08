@@ -59,6 +59,7 @@
     <Compile Include="PreviewData\CodePreview.cs" />
     <Compile Include="CodesByCode.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="PreviewData\ZoneServicePreview.cs" />
     <Compile Include="PreviewData\SPLPreviewQuery.cs" />
     <Compile Include="PreviewData\CountryPreview.cs" />
     <Compile Include="PreviewData\OtherRatePreview.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="SPL\NewData\NewZoneService.cs" />
     <Compile Include="SPL\NotImportedRate.cs" />
     <Compile Include="SPL\NotImportedCode.cs" />
+    <Compile Include="SPL\NotImportedZoneService.cs" />
     <Compile Include="SPL\NotImportedZone.cs" />
     <Compile Include="SPL\ImportedData\ImportedCode.cs" />
     <Compile Include="SPL\ImportedData\ImportedCountry.cs" />

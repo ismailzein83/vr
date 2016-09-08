@@ -1,0 +1,19 @@
+﻿<vr-datagrid datasource="zoneServicesPreview"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="[]">
+
+    <vr-datagridcolumn headertext="'Current Services'" field="'SystemServiceIds'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onSystemServicseReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'SystemServicesBED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'SystemServicesEED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Service Change Type'">
+        <vr-icon iconurl="dataItem.ZoneServicesStatusIconUrl" tooltip="dataItem.ZoneServicesStatusIconTooltip" inline></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Imported Services'" field="'ImportedServiceIds'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onImportedServicesReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Imported BED'" field="'ImportedServicesBED'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>

@@ -9,11 +9,12 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ImportedZoneService : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
+    public class ImportedZoneService : Vanrise.Entities.IDateEffectiveSettings
     {
         public List<int> ServiceIds { get; set; }
         public string ZoneName { get; set; }
 
+        public ExistingZoneService SystemZoneService { get; set; }
         public ZoneServiceChangeType ChangeType { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
@@ -35,24 +36,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _changedExistingZoneServices;
             }
         }
-
-        #region IRuleTarget Implementation
-
-        public object Key
-        {
-            get { return this.ZoneName; }
-        }
-
-
-        #endregion
-
-
-        public string TargetType
-        {
-            get { return "ZoneService"; }
-        }
-
-
 
     }
 }

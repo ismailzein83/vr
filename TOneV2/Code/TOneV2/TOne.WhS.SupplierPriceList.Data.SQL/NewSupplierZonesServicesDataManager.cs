@@ -60,7 +60,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.ZoneServiceId,
                        _processInstanceID,
                        record.Zone.ZoneId,
-                       record.ZoneServices != null ? Vanrise.Common.Serializer.Serialize(record.ZoneServices) : null,
+                       Vanrise.Common.Serializer.Serialize(record.ZoneServices),
                        record.BED,
                        record.EED);
         }

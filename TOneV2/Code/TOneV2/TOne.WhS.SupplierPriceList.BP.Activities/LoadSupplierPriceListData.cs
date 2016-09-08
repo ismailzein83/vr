@@ -87,20 +87,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (IsEffectiveDateLessThanMinDate(minimumDate, priceListService.EffectiveDate))
                     minimumDate = priceListService.EffectiveDate.Value;
 
-                ImportedZoneService importedZoneService = importedZonesServicesList.FindRecord(item => item.ZoneName.Equals(priceListService.ZoneName, StringComparison.InvariantCultureIgnoreCase));
-                if (importedZoneService == null)
+                List<int> serviceIds = new List<int>();
+                serviceIds.Add(priceListService.FlaggedServiceId);
+
+                importedZonesServicesList.Add(new ImportedZoneService()
                 {
-                    List<int> serviceIds = new List<int>();
-                    serviceIds.Add(priceListService.FlaggedServiceId);
-                    importedZonesServicesList.Add(new ImportedZoneService()
-                    {
-                        ServiceIds = serviceIds,
-                        ZoneName = priceListService.ZoneName,
-                        BED = (priceListService.EffectiveDate.HasValue) ? priceListService.EffectiveDate.Value : DateTime.MinValue,
-                    });
-                }
-                else
-                    importedZoneService.ServiceIds.Add(priceListService.FlaggedServiceId);
+                    ServiceIds = serviceIds,
+                    ZoneName = priceListService.ZoneName,
+                    BED = priceListService.EffectiveDate.HasValue ? priceListService.EffectiveDate.Value : DateTime.MinValue,
+                });
             }
 
             foreach (var priceListRate in convertedPriceList.PriceListRates)
