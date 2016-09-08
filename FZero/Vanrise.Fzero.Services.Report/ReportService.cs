@@ -188,26 +188,25 @@ namespace Vanrise.Fzero.Services.Report
                 else if (ClientID == (int)Enums.Clients.Zain)//-- Zain
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToZainOperator.rdlc");
-                    reportPath2 = Path.Combine(exeFolder, @"Reports\rptToZainOperatorExcel.rdlc");
-
-                    ErrorLog("reportPath: " + reportPath);
-                    ErrorLog("reportPath2: " + reportPath2);
                 }
                 else if (ClientID == (int)Enums.Clients.ITPC)//-- ITPC
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+                    reportPath2 = Path.Combine(exeFolder, @"Reports\rptToZainOperatorExcel.rdlc");
+                    ErrorLog("reportPath: " + reportPath);
+                    ErrorLog("reportPath2: " + reportPath2);
                 }
                 else
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptDefaultToOperator.rdlc");
                 }
-
+                
 
 
 
 
                 rvToOperator.LocalReport.ReportPath = reportPath;
-                if (ClientID == (int)Enums.Clients.Zain)
+                if (ClientID == (int)Enums.Clients.ITPC)
                     rvToOperator2.LocalReport.ReportPath = reportPath2;
 
 
@@ -220,7 +219,7 @@ namespace Vanrise.Fzero.Services.Report
 
                 ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
-                if (ClientID == (int)Enums.Clients.Zain)
+                if (ClientID == (int)Enums.Clients.ITPC)
                     rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
 
@@ -231,7 +230,7 @@ namespace Vanrise.Fzero.Services.Report
                 rvToOperator.LocalReport.Refresh();
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
                 string filenameExcel2 = "";
-                if (ClientID == (int) Enums.Clients.Zain)
+                if (ClientID == (int)Enums.Clients.ITPC)
                 {
                     rvToOperator2.LocalReport.SetParameters(parameters);
                     rvToOperator2.LocalReport.Refresh();
