@@ -14,5 +14,5 @@ AS
 BEGIN
 	INSERT INTO Retail.AccountService(AccountId, ServiceTypeID, ServiceChargingPolicyID, Settings,StatusID)
 	VALUES (@AccountId, @ServiceTypeID, @ServiceChargingPolicyID, @Settings,@StatusID)
-	SET @ID = @@IDENTITY
+	SET @ID = SCOPE_IDENTITY()
 END

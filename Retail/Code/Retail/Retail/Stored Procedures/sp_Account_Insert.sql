@@ -21,6 +21,6 @@ BEGIN
 	BEGIN
 		INSERT INTO Retail.Account (Name, [TypeID], Settings, ParentID,StatusID, SourceID)
 		VALUES (@Name, @TypeID, @Settings, @ParentID,@StatusID,@SourceID)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

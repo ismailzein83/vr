@@ -11,5 +11,5 @@ AS
 BEGIN
 	INSERT INTO dbo.OperatorDeclaredInfo ( Settings, CreatedTime)
 	VALUES (@Settings, GETDATE())
-	SET @ID = @@IDENTITY
+	SET @ID = SCOPE_IDENTITY()
 END

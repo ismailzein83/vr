@@ -13,5 +13,5 @@ AS
 BEGIN
 	INSERT INTO [VR_AccountBalance].AlertRuleActionExecution (AccountID, Threshold, ActionExecutionInfo, ExecutionTime)
 	VALUES (@AccountID, @Threshold, @ActionExecutionInfo, @ExecutionTime)
-	SET @ID = @@IDENTITY
+	SET @ID = SCOPE_IDENTITY()
 END

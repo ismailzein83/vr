@@ -18,8 +18,8 @@ BEGIN
 			sc.[ZoneID],
 			sc.[BED],
 			sc.[EED]
-	FROM	[TOneWhS_BE].[SaleCode] sc
-	join [TOneWhS_BE].[SaleZone] sz on sz.Id = sc.[ZoneID]
+	FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 
+	join [TOneWhS_BE].[SaleZone] sz WITH(NOLOCK)  on sz.Id = sc.[ZoneID]
 	WHERE sz.CountryID = @CountryId 
 	   and ((sc.BED <= @when ) and (sc.EED is null or sc.EED > @when))
         

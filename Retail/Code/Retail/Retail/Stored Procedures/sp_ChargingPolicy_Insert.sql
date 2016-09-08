@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE Retail.sp_ChargingPolicy_Insert
+CREATE PROCEDURE [Retail].[sp_ChargingPolicy_Insert]
 	@Name NVARCHAR(255),
 	@ServiceTypeId INT,
 	@Settings NVARCHAR(MAX),
@@ -14,6 +14,6 @@ BEGIN
 	BEGIN
 		INSERT INTO Retail.ChargingPolicy (Name, ServiceTypeId, Settings)
 		VALUES (@Name, @ServiceTypeId, @Settings)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

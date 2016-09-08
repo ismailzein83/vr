@@ -16,5 +16,5 @@ AS
 BEGIN
 	INSERT INTO VR_AccountBalance.BillingTransaction (AccountID, Amount, CurrencyId, TransactionTypeId,TransactionTime,Notes,Reference)
 	VALUES (@AccountID, @Amount, @CurrencyId, @TransactionTypeId,@TransactionTime,@Notes,@Reference)
-	SET @ID = @@IDENTITY
+	SET @ID = SCOPE_IDENTITY()
 END

@@ -3,21 +3,22 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail_BE].[sp_AccountPartDefinition_Insert]
+CREATE PROCEDURE [Retail].[sp_POS_Insert]
 	@Name NVARCHAR(255),
-	@Title NVARCHAR(255),
-	@Details NVARCHAR(MAX),
+	@Type INT,
+	@Settings NVARCHAR(MAX),
+	@SourceID nvarchar(255),
 	@ID INT OUT
 AS
 BEGIN
 	IF NOT EXISTS
 	(
-		SELECT 1 FROM Retail_BE.AccountPartDefinition
-		WHERE Name = @Name
+		SELECT 1 FROM Retail.POS
+		WHERE Name = @Name 
 	)
 	BEGIN
-		INSERT INTO Retail_BE.AccountPartDefinition (Name, Title, Details)
-		VALUES (@Name, @Title, @Details)
+		INSERT INTO Retail.POS (Name, Type, Settings,  SourceID)
+		VALUES (@Name, @Type, @Settings,@SourceID)
 		SET @ID = SCOPE_IDENTITY()
 	END
 END

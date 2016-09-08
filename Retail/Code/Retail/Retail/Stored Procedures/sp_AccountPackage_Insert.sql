@@ -15,6 +15,6 @@ BEGIN
 	BEGIN
 		INSERT INTO Retail.AccountPackage (AccountID, PackageID, BED, EED)
 		VALUES (@AccountID, @PackageID, @BED, @EED)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

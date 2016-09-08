@@ -16,5 +16,5 @@ BEGIN
 	   [Description],
 	   [Quantity],
 	   [Location]
-      from dbo.Pop 
+      from dbo.Pop  WITH(NOLOCK) 
 END

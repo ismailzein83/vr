@@ -17,6 +17,6 @@ IF NOT EXISTS(SELECT 1 FROM dbo.Pop WHERE [Name] = @Name )
 		Insert into dbo.Pop([Name],[Description],[Quantity],[Location])
 		Values(@Name,@Description,@Quantity , @Location)
 	
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

@@ -218,5 +218,13 @@
     <Build Include="dbo\Stored Procedures\sp_Pop_Update.sql" />
     <Build Include="dbo\Stored Procedures\sp_Pop_Insert.sql" />
     <Build Include="dbo\Stored Procedures\sp_Pop_GetAll.sql" />
+    <Build Include="Retail\Tables\POS.sql" />
+    <Build Include="Retail\Tables\Agent.sql" />
+    <Build Include="Retail\Stored Procedures\sp_POS_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_POS_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_POS_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Agent_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Agent_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Agent_GetAll.sql" />
   </ItemGroup>
 </Project>

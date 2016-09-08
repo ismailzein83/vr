@@ -15,6 +15,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[CodeGroup] WHERE Code = @Code)
 		INSERT INTO TOneWhS_BE.CodeGroup(Code,CountryID)
 		VALUES (@Code,@CountryID)
 		
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END
