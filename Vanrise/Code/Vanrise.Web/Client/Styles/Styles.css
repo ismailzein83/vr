@@ -456,7 +456,11 @@ a.mark-select:hover, a.mark-select:active, a.mark-select:focus {
     cursor: pointer !important;
     text-decoration:none;
 }
-
+a.vr-select-disabled-item:hover, a.vr-select-disabled-item:active, a.vr-select-disabled-item:focus {
+    color: #c1c1c1 !important ;
+    background-color: transparent !important;
+   
+}
 
 .single-col-checklist {
     width: 226px;
@@ -589,6 +593,10 @@ add padding .left-addon input {
     font-size: 12px;
     right: -2px;
     top: 25px;
+}
+.vr-select-disabled-item{
+    color: #c1c1c1 !important;
+    pointer-events: none;
 }
 /*.modal-body  .vr-select-add{
     right : -15px ;
@@ -2508,3 +2516,4 @@ div[validationcontainer]{
     height: 100%;
     margin: 0px 3px;
 }
+

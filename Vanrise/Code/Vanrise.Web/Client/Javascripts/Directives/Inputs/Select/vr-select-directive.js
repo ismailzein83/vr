@@ -37,6 +37,7 @@
                 hideselectedvaluessection: '@',
                 datavaluefield: '@',
                 datatextfield: '@',
+                datadisabledfield: '@',
                 hidefilterbox: '@',
                 datasource: '=',
                 selectedvalues: '=',
@@ -219,6 +220,10 @@
                     if (controller.datavaluefield) return getObjectProperty(item, controller.datavaluefield);
                     return item;
                 };
+                function getObjectDisabled(item) {
+                    if (controller.datadisabledfield) return getObjectProperty(item, controller.datadisabledfield);
+                    return false;
+                };
 
                 function findExsite(item) {
                     return utilsService.getItemIndexByVal(controller.selectedvalues, getObjectValue(item), controller.datavaluefield);
@@ -300,6 +305,7 @@
                     selectedSectionVisible: selectedSectionVisible,
                     getObjectText: getObjectText,
                     getObjectValue: getObjectValue,
+                    getObjectDisabled:getObjectDisabled,
                     findExsite: findExsite,
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
@@ -579,7 +585,9 @@
                         }
 
                         ctrl.selectValue = function (e, item) {
-                            selectItem(e, item);
+                            if (ctrl.getObjectDisabled(item) == true)
+                                return;
+                              selectItem(e, item);
                         };
 
 
