@@ -9,6 +9,7 @@ using TOne.WhS.CodePreparation.Entities;
 using Vanrise.BusinessProcess;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Entities;
+using TOne.WhS.CodePreparation.Business;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -169,14 +170,21 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
             {
+                //Check if all codes are coming from the same original zone; otherwise we cannot consider it as renamed
                 string originalZoneName = zoneToProcess.CodesToMove.First().OldZoneName;
                 if (zoneToProcess.CodesToMove.All(itm => itm.OldZoneName == originalZoneName))
                 {
+                    //Check if the original zone has been close, otherwise the original still exists change type of this zone cannot be considered as renamed
                     List<ExistingZone> matchedRenamedExistingZones;
                     if (closedExistingZones != null && closedExistingZones.TryGetValue(originalZoneName, out matchedRenamedExistingZones))
                     {
-                        zoneToProcess.RecentZoneName = originalZoneName;
-                        return ZoneChangeType.Renamed;
+                        //The last check is on the count of zones between original and new zone, in case they are not equal we cannot consider this zone as renamed
+                        HashSet<string> codesFromOriginalZone = NumberingPlanHelper.GetExistingCodes(matchedRenamedExistingZones);
+                        if(zoneToProcess.CodesToMove.Count == codesFromOriginalZone.Count)
+                        {
+                            zoneToProcess.RecentZoneName = originalZoneName;
+                            return ZoneChangeType.Renamed;
+                        }
                     }
                 }
             }

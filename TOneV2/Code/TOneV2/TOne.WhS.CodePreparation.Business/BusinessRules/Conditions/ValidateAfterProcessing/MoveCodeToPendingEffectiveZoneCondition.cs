@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
             if (zoneTopProcess.ChangeType == ZoneChangeType.New || zoneTopProcess.ChangeType == ZoneChangeType.Renamed)
                 return true;
 
-            if (zoneTopProcess.CodesToAdd != null && zoneTopProcess.CodesToAdd.Count()>0)
+            if (zoneTopProcess.CodesToAdd != null && zoneTopProcess.CodesToAdd.Count() > 0)
             {
                 if (zoneTopProcess.BED > DateTime.Today.Date)
                     return false;

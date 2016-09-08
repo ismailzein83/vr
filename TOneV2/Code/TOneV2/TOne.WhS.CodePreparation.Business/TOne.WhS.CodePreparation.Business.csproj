@@ -106,6 +106,7 @@
     <Compile Include="CountryPreviewManager.cs" />
     <Compile Include="CodePreviewManager.cs" />
     <Compile Include="SalePriceListsByOwner.cs" />
+    <Compile Include="NumberingPlanHelper.cs" />
     <Compile Include="ZonePreviewManager.cs" />
   </ItemGroup>
   <ItemGroup>
