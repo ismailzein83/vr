@@ -14,7 +14,7 @@ app.directive('retailBeTargetconvertorDirective', ['VRNotificationService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/RingoExtensions/TargetConvertor/Templates/TargetConvertorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/RingoExtensions/TargetConvertor/Templates/RingoAccountConvertorTemplate.html'
         };
 
         function targetConvertorDirective($scope, ctrl, $attrs) {
@@ -31,7 +31,7 @@ app.directive('retailBeTargetconvertorDirective', ['VRNotificationService',
                 };
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BEBridge.Entities.TargetBEConvertor, Vanrise.BEBridge.Entities"
+                        $type: "Retail.BusinessEntity.RingoExtensions.RingoFileAccountConvertor, Retail.BusinessEntity.RingoExtensions"
 
                     };
                 };

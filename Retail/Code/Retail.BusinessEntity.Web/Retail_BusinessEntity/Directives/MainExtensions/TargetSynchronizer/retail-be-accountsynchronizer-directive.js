@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeTargetsynchronizerDirective', ['VRNotificationService',
+app.directive('retailBeAccountsynchronizerDirective', ['VRNotificationService',
     function (vrNotificationService) {
         return {
             restrict: 'E',
@@ -14,7 +14,7 @@ app.directive('retailBeTargetsynchronizerDirective', ['VRNotificationService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/TargetSynchronizer/Templates/TargetSynchronizerTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/TargetSynchronizer/Templates/AccountSynchronizerTemplate.html'
         };
 
         function targetAnalysisDirective($scope, ctrl, $attrs) {
@@ -31,7 +31,7 @@ app.directive('retailBeTargetsynchronizerDirective', ['VRNotificationService',
                 };
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BEBridge.Entities.TargetBESynchronizer, Vanrise.BEBridge.Entities"
+                        $type: " Retail.BusinessEntity.Business.AccountSynchronizer,  Retail.BusinessEntity.Business"
 
                     };
                 };

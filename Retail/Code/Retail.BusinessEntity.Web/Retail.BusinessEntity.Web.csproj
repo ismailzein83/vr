@@ -289,8 +289,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\retail-be-switchintegrations-radius.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\Templates\RetailBESwitchIntegrationWebServiceTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\Templates\RetailBESwitchIntegrationRadiusTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\retail-be-targetsynchronizer-directive.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\Templates\TargetSynchronizerTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\retail-be-accountsynchronizer-directive.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\Templates\AccountSynchronizerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\PropertyEvaluator\retail_be_retailaccountobjecttype_financial.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\PropertyEvaluator\Templates\FinancialRetailAccountEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail_be_retailaccountobjecttype.js" />
@@ -343,7 +343,7 @@
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
-    <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\Templates\TargetConvertorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\Templates\RingoAccountConvertorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
