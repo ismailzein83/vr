@@ -46,8 +46,6 @@
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
                     var promises = [];
                     var context;
                     var criteria;
@@ -86,9 +84,6 @@
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleCriteria, Vanrise.Analytic.Entities",
                         DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds()
                     }
-
-                    console.log(data);
-
                     return data;
                 }
 

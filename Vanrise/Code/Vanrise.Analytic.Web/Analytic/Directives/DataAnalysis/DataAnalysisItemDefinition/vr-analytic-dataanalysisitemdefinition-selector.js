@@ -66,7 +66,6 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSelector', ['VR_Analytic_Data
                     }
 
                     var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
-                    console.log(serializedFilter);
 
                     return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinitionsInfo(serializedFilter, dataAnalysisDefinitionId).then(function (response) {
                         selectorAPI.clearDataSource();

@@ -24,15 +24,7 @@
 </vr-tab>
 <vr-tab header="'Grouping Fields'">
     <vr-row>
-        <vr-columns width="1/2row">
-            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
-                                                          onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged"
-                                                          label="Fields"
-                                                          isrequired="false"
-                                                          ismultipleselection="true"
-                                                          hideremoveicon>
-            </vr-genericdata-datarecordtypefields-selector>
-        </vr-columns>
+        <vr-analytic-daprofcalcgroupingfield-management on-ready="scopeModel.onGroupingFieldsDirectiveReady"></vr-analytic-daprofcalcgroupingfield-management>
     </vr-row>
 </vr-tab>
 <vr-tab header="'Aggregation Fields'">

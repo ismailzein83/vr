@@ -2,13 +2,13 @@
 
     'use strict';
 
-    DAProfCalcCalculationFieldController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    DAProfCalcGroupingFieldController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function DAProfCalcCalculationFieldController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function DAProfCalcGroupingFieldController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
 
-        var calculationFieldEntity;
+        var groupingFieldEntity;
         var context;
 
         var dataRecordTypeFieldsSelectorAPI;
@@ -26,11 +26,11 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                calculationFieldEntity = parameters.daProfCalcCalculationField;
+                groupingFieldEntity = parameters.daProfCalcGroupingField;
                 context = parameters.context;
             }
 
-            isEditMode = (calculationFieldEntity != undefined);
+            isEditMode = (groupingFieldEntity != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -70,15 +70,14 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((calculationFieldEntity != undefined) ? calculationFieldEntity.FieldName : null, 'Profiling and Calculation Calculation Field') :
-                    UtilsService.buildTitleForAddEditor('Profiling and Calculation Calculation Field');
+                    UtilsService.buildTitleForUpdateEditor((groupingFieldEntity != undefined) ? groupingFieldEntity.FieldName : null, 'Grouping Field') :
+                    UtilsService.buildTitleForAddEditor('Grouping Fields');
             }
             function loadStaticData() {
-                if (calculationFieldEntity == undefined)
+                if (groupingFieldEntity == undefined)
                     return;
 
-                $scope.scopeModel.fieldName = calculationFieldEntity.FieldName;
-                $scope.scopeModel.expression = calculationFieldEntity.Expression;
+                $scope.scopeModel.fieldName = groupingFieldEntity.FieldName;
             }
             function loadDataRecordTypeFieldsSelector() {
 
@@ -89,8 +88,8 @@
                     if (context != undefined) {
                         dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = context.getDataRecordTypeId();
                     }
-                    if (calculationFieldEntity != undefined) {
-                        dataRecordTypeFieldsSelectorPayload.selectedIds = calculationFieldEntity.FieldName;
+                    if (groupingFieldEntity != undefined) {
+                        dataRecordTypeFieldsSelectorPayload.selectedIds = groupingFieldEntity.FieldName;
                     }
                     VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
                 });
@@ -103,8 +102,8 @@
                 fieldTypeSelectiveReadyDeferred.promise.then(function () {
                     var fieldTypeSelectivePayload;
 
-                    if (calculationFieldEntity != undefined && calculationFieldEntity.FieldType) {
-                        fieldTypeSelectivePayload = calculationFieldEntity.FieldType;
+                    if (groupingFieldEntity != undefined && groupingFieldEntity.FieldType) {
+                        fieldTypeSelectivePayload = groupingFieldEntity.FieldType;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(fieldTypeSelectiveAPI, fieldTypeSelectivePayload, fieldTypeSelectiveLoadDeferred);
@@ -117,16 +116,16 @@
         function insert() {
             var calculationFieldObject = buildCalculationFieldObjectFromScope();
 
-            if ($scope.onDAProfCalcCalculationFieldAdded != undefined && typeof ($scope.onDAProfCalcCalculationFieldAdded) == 'function') {
-                $scope.onDAProfCalcCalculationFieldAdded(calculationFieldObject);
+            if ($scope.onDAProfCalcGroupingFieldAdded != undefined && typeof ($scope.onDAProfCalcGroupingFieldAdded) == 'function') {
+                $scope.onDAProfCalcGroupingFieldAdded(calculationFieldObject);
             }
             $scope.modalContext.closeModal();
         }
         function update() {
             var calculationFieldObject = buildCalculationFieldObjectFromScope();
 
-            if ($scope.onDAProfCalcCalculationFieldUpdated != undefined && typeof ($scope.onDAProfCalcCalculationFieldUpdated) == 'function') {
-                $scope.onDAProfCalcCalculationFieldUpdated(calculationFieldObject);
+            if ($scope.onDAProfCalcGroupingFieldUpdated != undefined && typeof ($scope.onDAProfCalcGroupingFieldUpdated) == 'function') {
+                $scope.onDAProfCalcGroupingFieldUpdated(calculationFieldObject);
             }
             $scope.modalContext.closeModal();
         }
@@ -136,11 +135,10 @@
             return {
                 FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
                 FieldType: fieldTypeSelectiveAPI.getData(),
-                Expression: $scope.scopeModel.expression
             };
         }
     }
 
-    appControllers.controller('VR_Analytic_DAProfCalcCalculationFieldController', DAProfCalcCalculationFieldController);
+    appControllers.controller('VR_Analytic_DAProfCalcGroupingFieldController', DAProfCalcGroupingFieldController);
 
 })(appControllers);

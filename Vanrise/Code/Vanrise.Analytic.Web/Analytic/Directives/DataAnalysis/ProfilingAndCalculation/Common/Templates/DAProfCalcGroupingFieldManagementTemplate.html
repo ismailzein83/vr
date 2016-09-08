@@ -1,16 +1,18 @@
 ﻿
+
+
 <div>
     <vr-row removeline>
         <vr-columns width="fullrow" simplecol>
-            <vr-button type="Add" data-onclick="ctrl.onAddDAProfCalcCalculationField" standalone></vr-button>
+            <vr-button type="Add" data-onclick="ctrl.onAddDAProfCalcGroupingField" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow">
             <vr-datagrid on-ready="ctrl.onGridReady"
-                         datasource="ctrl.daProfCalcCalculationFields"
+                         datasource="ctrl.daProfCalcGroupingFields"
                          menuactions="ctrl.menuActions"
-                         ondeleterow="ctrl.onDeleteDAProfCalcCalculationField"
+                         ondeleterow="ctrl.onDeleteDAProfCalcGroupingField"
                          enabledraggablerow="true"
                          hidegridmenu>
                 <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'FieldName'" widthfactor="1" disablesorting></vr-datagridcolumn>

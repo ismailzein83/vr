@@ -29,8 +29,8 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
         var timeRangeFilterSelectiveAPI;
         var timeRangeFilterSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var dataRecordTypeFieldsSelectorAPI;
-        var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var groupingFieldsDirectiveAPI;
+        var groupingFieldsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var aggregationFieldsDirectiveAPI;
         var aggregationFieldsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -40,7 +40,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
 
         function initializeController() {
-            var promises = [recordFilterDirectiveReadyDeferred.promise, dataRecordTypeFieldsSelectorReadyDeferred.promise,
+            var promises = [recordFilterDirectiveReadyDeferred.promise, groupingFieldsDirectiveReadyDeferred.promise,
                             aggregationFieldsDirectiveReadyDeferred.promise, calculationFieldsDirectiveReadyDeferred.promise];
 
             $scope.scopeModel = {};
@@ -57,10 +57,10 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 timeRangeFilterSelectiveAPI = api;
                 timeRangeFilterSelectiveReadyDeferred.resolve();
             };
-            $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
-                dataRecordTypeFieldsSelectorAPI = api;
-                dataRecordTypeFieldsSelectorReadyDeferred.resolve();
-            }
+            $scope.scopeModel.onGroupingFieldsDirectiveReady = function (api) {
+                groupingFieldsDirectiveAPI = api;
+                groupingFieldsDirectiveReadyDeferred.resolve();
+            };
             $scope.scopeModel.onAggregationFieldsDirectiveReady = function (api) {
                 aggregationFieldsDirectiveAPI = api;
                 aggregationFieldsDirectiveReadyDeferred.resolve();
@@ -114,9 +114,9 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 var timeRangeFilterSelectiveLoadPromise = getTimeRangeFilterSelectiveLoadPromise();
                 promises.push(timeRangeFilterSelectiveLoadPromise);
 
-                //Loading Data Record Type Fields Selector (Grouping Directive)
-                var dataRecordTypeFieldsSelectorLoadPromise = getDataRecordTypeFieldsSelectorLoadPromise();
-                promises.push(dataRecordTypeFieldsSelectorLoadPromise);
+                //Loading Grouping Fields Directive
+                var groupingFieldsDirectiveLoadPromise = getGroupingFieldsDirectiveLoadPromise();
+                promises.push(groupingFieldsDirectiveLoadPromise);
 
                 //Loading Aggregation Fields Directive
                 var aggregationFieldsDirectiveLoadPromise = getAggregationFieldsDirectiveLoadPromise();
@@ -168,29 +168,18 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
                     return timeRangeFilterSelectiveLoadDeferred.promise;
                 }
-                function getDataRecordTypeFieldsSelectorLoadPromise() {
-                    var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                function getGroupingFieldsDirectiveLoadPromise() {
+                    var groupingFieldsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
-                        var dataRecordTypeFieldsSelectorPayload = {};
+                    groupingFieldsDirectiveReadyDeferred.promise.then(function () {
+                        var groupingFieldsDirectivePayload = {}
+                        groupingFieldsDirectivePayload.context = buildContext();
+                        groupingFieldsDirectivePayload.groupingFields = groupingFields;
 
-                        if (groupingFields != undefined) {
-                            dataRecordTypeFieldsSelectorPayload.selectedIds = buildDataRecordTypeFieldsSelectorPayload();
-                        }
+                        VRUIUtilsService.callDirectiveLoad(groupingFieldsDirectiveAPI, groupingFieldsDirectivePayload, groupingFieldsDirectiveLoadDeferred);
+                    })
 
-                        //check if dataRecordType is selected
-                        var _dataRecordTypeId = context.getDataRecordTypeId();
-                        if (_dataRecordTypeId) {
-                            dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = _dataRecordTypeId;
-                            VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
-                        }
-                        else {
-                            dataRecordTypeFieldsSelectorLoadDeferred.resolve();
-                        }
-
-                    });
-                    
-                    return dataRecordTypeFieldsSelectorLoadDeferred.promise;
+                    return groupingFieldsDirectiveLoadDeferred.promise;
                 }
                 function getAggregationFieldsDirectiveLoadPromise() {
                     var aggregationFieldsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -222,53 +211,6 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 function buildContext() {
                     return context;
                 }
-                function buildDataRecordTypeFieldsSelectorPayload() {
-                    var array = [];
-
-                    if (groupingFields != undefined) {
-                        for (var i = 0; i < groupingFields.length; i++)
-                            array.push(groupingFields[i].FieldName);
-                    }
-                    return array;
-                }
-                function virtual() {
-
-                    //var promises = [];
-
-                    //var serviceTypeId;
-                    //var chargingPolicy;
-                    //var chargingPolicyDefinitionSettings;
-                    //if (payload != undefined) {
-
-                    //    serviceTypeId = payload.serviceTypeId;
-                    //    chargingPolicy = payload.chargingPolicy;
-                    //}
-
-                    //var getChargingPolicyDefinitionSettingsPromise = getChargingPolicyDefinitionSettings();
-                    //promises.push(getChargingPolicyDefinitionSettingsPromise);
-
-                    //var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    //promises.push(directiveLoadDeferred.promise);
-
-                    //UtilsService.waitMultiplePromises([getChargingPolicyDefinitionSettingsPromise, directiveReadyDeferred.promise]).then(function () {
-                    //    var directivePayload = {
-                    //        definitionSettings: chargingPolicyDefinitionSettings,
-                    //        settings: (chargingPolicy != undefined) ? chargingPolicy.Settings : undefined
-                    //    };
-                    //    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                    //});
-
-                    //function getChargingPolicyDefinitionSettings() {
-                    //    return Retail_BE_ServiceTypeAPIService.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId).then(function (response) {
-                    //        chargingPolicyDefinitionSettings = response;
-                    //        if (response != null) {
-                    //            $scope.scopeModel.directiveEditor = chargingPolicyDefinitionSettings.ChargingPolicyEditor;
-                    //        }
-                    //    });
-                    //}
-
-                    //return UtilsService.waitMultiplePromises(promises);
-                }
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -280,22 +222,9 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                     RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                     TimeRangeFilter: timeRangeFilterSelectiveAPI.getData(),
-                    GroupingFields: buildListOfDAProfCalcGroupingField(),
+                    GroupingFields: groupingFieldsDirectiveAPI.getData(),
                     AggregationFields: aggregationFieldsDirectiveAPI.getData(),
                     CalculationFields: calculationFieldsDirectiveAPI.getData()
-                }
-
-                function buildListOfDAProfCalcGroupingField() {
-                    var array = [];
-
-                    var dataRecordTypeFieldsArray = dataRecordTypeFieldsSelectorAPI.getSelectedIds();
-                    for (var i = 0 ; i < dataRecordTypeFieldsArray.length; i++) {
-                        var daProfCalcGroupingField = {
-                            FieldName: dataRecordTypeFieldsArray[i]
-                        }
-                        array.push(daProfCalcGroupingField);
-                    }
-                    return array;
                 }
 
                 return data;

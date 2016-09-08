@@ -142,6 +142,7 @@
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertrule-criteria.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalcalertruletype-settings.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcCalculationFieldManagementTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcGroupingFieldManagementTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\vr-analytic-daprofcalccalculationfield-management.js" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\Templates\DARecordAggregateSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\Templates\DataAnalysisDefinitionGridTemplate.html" />
@@ -150,6 +151,7 @@
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-settings.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\Templates\DataAnalysisItemDefinitionSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-settings.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\vr-analytic-daprofcalcgroupingfield-management.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\Templates\RecordProfilingOutputSettingsEditorTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\Templates\RecordProfilingOutputSettingsGridTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-recordprofilingoutputsettings-editor.js" />
@@ -248,6 +250,7 @@
     <Content Include="Analytic\Services\APIServices\DataAnalysisItemDefinitionAPIService.js" />
     <Content Include="Analytic\Services\DAProfCalcAggregationFieldService.js" />
     <Content Include="Analytic\Services\DAProfCalcCalculationFieldService.js" />
+    <Content Include="Analytic\Services\DAProfCalcGroupingFieldService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
     <Content Include="Analytic\Services\DataAnalysisItemDefinitionService.js" />
     <Content Include="Analytic\Services\RecordSearchService.js" />
@@ -268,6 +271,8 @@
     <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcAggregationFieldEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcCalculationFieldEditor.html" />
     <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcCalculationFieldEditorController.js" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcGroupingFieldEditor.html" />
+    <Content Include="Analytic\Views\DataAnalysis\ProfilingAndCalculation\DAProfCalcGroupingFieldEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettings.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticGridWidgetSettingsController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditor.html" />
