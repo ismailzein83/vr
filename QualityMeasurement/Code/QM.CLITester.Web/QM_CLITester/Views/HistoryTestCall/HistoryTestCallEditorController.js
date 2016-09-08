@@ -60,7 +60,7 @@
 
         function load() {
             $scope.isLoading = true;
-            $scope.title = UtilsService.buildTitleForAddEditor("send mail");
+            $scope.title = "Send Test Call Result";
             $scope.isLoading = false;
         }
 
@@ -83,7 +83,7 @@
                 RingDuration: (ringDuration != null) ? ringDuration : "",
                 CallDuration: (duration != null) ? duration : "",
                 ReleaseCode: (releaseCode != null) ? releaseCode : "",
-                ToMail: $scope.toMail
+                ToMail: $scope.toMail.join(";")
             };
             return obj;
         }
