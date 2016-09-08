@@ -9,6 +9,6 @@ SELECT [EventId]
       ,[EventStatus]
 	  ,MediationDefinitionId
       ,[EventDetails]
-  FROM [Mediation_Generic].[MediationRecord]
+  FROM [Mediation_Generic].[MediationRecord] WITH(NOLOCK) 
   where MediationDefinitionId = @MediationDefinitionId and EventStatus = @Status
 end

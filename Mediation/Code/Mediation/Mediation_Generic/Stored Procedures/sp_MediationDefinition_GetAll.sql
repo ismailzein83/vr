@@ -1,4 +1,4 @@
-﻿create PROCEDURE [Mediation_Generic].[sp_MediationDefinition_GetAll]
+﻿CREATE PROCEDURE [Mediation_Generic].[sp_MediationDefinition_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -10,5 +10,5 @@ BEGIN
       ,def.[Name]
       ,def.Details
       ,def.CreatedTime
-      FROM [Mediation_Generic].MediationDefinition def
+      FROM [Mediation_Generic].MediationDefinition def WITH(NOLOCK) 
 END

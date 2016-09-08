@@ -1,4 +1,4 @@
-﻿create PROCEDURE [Mediation_Generic].[sp_MediationDefinition_Insert] 
+﻿CREATE PROCEDURE [Mediation_Generic].[sp_MediationDefinition_Insert] 
 	@Name nvarchar(255),
 	@Details VARCHAR(MAX),
 	@ID INT OUT
@@ -8,6 +8,6 @@ IF NOT EXISTS(SELECT 1 FROM [Mediation_Generic].[MediationDefinition] WHERE Name
 	BEGIN
 		INSERT INTO [Mediation_Generic].[MediationDefinition](Name,Details,CreatedTime)
 		VALUES (@Name,@Details,GETDATE())
-		SET @ID = @@IDENTITY 
+		SET @ID = SCOPE_IDENTITY() 
 	END
 END

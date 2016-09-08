@@ -7,5 +7,5 @@ SELECT [EventId]
       ,[EventStatus]
 	  ,MediationDefinitionId
       ,[EventDetails]
-  FROM Mediation_Generic.[MediationRecord]
+  FROM Mediation_Generic.[MediationRecord] WITH(NOLOCK) 
 end
