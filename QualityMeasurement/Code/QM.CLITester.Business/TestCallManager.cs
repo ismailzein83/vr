@@ -119,6 +119,17 @@ namespace QM.CLITester.Business
             return lastCallUpdateOutputs;
         }
 
+
+        public void SendMail(TestCallInfo testCallInfo)
+        {
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            objects.Add("SendTestCallResultObjList", testCallInfo);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(new Guid("019A4F17-CDDC-47FC-B0E0-4F65473E173D"), objects);
+        }
+
+
         public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
         {
             input.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();

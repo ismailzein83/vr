@@ -2,15 +2,16 @@
 
     'use strict';
 
-    TestCallService.$inject = ['LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum'];
+    TestCallService.$inject = ['LabelColorsEnum', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum', 'VRModalService'];
 
-    function TestCallService(LabelColorsEnum, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum) {
+    function TestCallService(LabelColorsEnum, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum, VRModalService) {
         var drillDownDefinitions = [];
         return {
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
             getCallTestStatusColor: getCallTestStatusColor,
-            getCallTestResultColor: getCallTestResultColor
+            getCallTestResultColor: getCallTestResultColor,
+            sendTestCall: sendTestCall
         };
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
@@ -18,6 +19,36 @@
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
+        }
+
+        function sendTestCall(supplierName,userName, countryName, zoneName,callTestStatusDescription, callTestResultDescription, scheduleName, 
+            pdd, mos, creationDate, source, destination, receivedCli, releaseCode, ringDuration, duration, onSendTestCall) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCountryUpdated = onSendTestCall;
+            };
+            var parameters = {
+                SupplierName: supplierName,
+                UserName: userName,
+                CountryName: countryName,
+                ZoneName: zoneName,
+                CallTestStatusDescription: callTestStatusDescription,
+                CallTestResultDescription: callTestResultDescription,
+                ScheduleName: scheduleName,
+                Pdd: pdd,
+                Mos: mos,
+                CreationDate: creationDate,
+                Source: source,
+                Destination: destination,
+                ReceivedCli: receivedCli,
+                ReleaseCode: releaseCode,
+                RingDuration: ringDuration,
+                Duration: duration
+            };
+
+            VRModalService.showModal('/Client/Modules/QM_CLITester/Views/HistoryTestCall/HistoryTestCallEditor.html', parameters, settings);
         }
 
         function getCallTestStatusColor(value) {

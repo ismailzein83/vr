@@ -75,5 +75,14 @@ namespace QM.CLITester.Web.Controllers
             TestCallManager manager = new TestCallManager();
             return manager.GetTestProgressTemplates();
         }
+
+        [HttpPost]
+        [Route("SendMail")]
+        public void SendMail(TestCallInfo input)
+        {
+            TestCallManager manager = new TestCallManager();
+            manager.SendMail(input);
+        }
+
     }
 }

@@ -192,6 +192,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="QM_CLITester\Constant\CallTestDetailPropertyEnum.js" />
     <Content Include="QM_CLITester\Constant\CallTestResultEnum.js" />
     <Content Include="QM_CLITester\Constant\CallTestStatusEnum.js" />
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
@@ -227,6 +228,10 @@
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-histestcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcalldetails.js" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\Templates\TestCallDetailObjectTypeTemplate.html" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\Templates\TestCallDetailPropertyEvaluatorTemplate.html" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\vr-qm-clitester-testcalldetailobjecttype.js" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\vr-qm-clitester-testcalldetailpropertyevaluator.js" />
     <Content Include="QM_CLITester\ModuleInitialization.js" />
     <Content Include="QM_CLITester\Services\APIServices\ProfileAPIService.js" />
     <Content Include="QM_CLITester\Services\APIServices\TestCallAPIService.js" />
@@ -235,6 +240,8 @@
     <Content Include="QM_CLITester\Services\TestCallService.js" />
     <Content Include="QM_CLITester\Views\Dashboard\DashboardManagement.html" />
     <Content Include="QM_CLITester\Views\Dashboard\DashboardManagementController.js" />
+    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallEditor.html" />
+    <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallEditorController.js" />
     <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagement.html" />
     <Content Include="QM_CLITester\Views\HistoryTestCall\HistoryTestCallManagementController.js" />
     <Content Include="QM_CLITester\Views\Profile\ProfileEditor.html" />

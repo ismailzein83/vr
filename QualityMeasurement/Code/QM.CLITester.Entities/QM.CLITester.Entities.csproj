@@ -67,9 +67,12 @@
     <Compile Include="TaskCheckProgressContext.cs" />
     <Compile Include="TestCall.cs" />
     <Compile Include="TestCallDetail.cs" />
+    <Compile Include="TestCallInfo.cs" />
     <Compile Include="TestCallQuery.cs" />
     <Compile Include="AddTestCallInput.cs" />
     <Compile Include="TotalCallsChart.cs" />
+    <Compile Include="VRObjectTypes\TestResultObjectType.cs" />
+    <Compile Include="VRObjectTypes\TestResultPropertyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QM.BusinessEntity.Entities\QM.BusinessEntity.Entities.csproj">

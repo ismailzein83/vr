@@ -39,6 +39,11 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_CLITester_ModuleConfig.moduleName, controllerName, ['AddNewTestCall']));
 
         }
+
+        function SendMail(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "SendMail"), input);
+        }
+
         return ({
             AddNewTestCall: AddNewTestCall,
             HasAddTestCallPermission: HasAddTestCallPermission,
@@ -47,7 +52,8 @@
             GetInitiateTestTemplates: GetInitiateTestTemplates,
             GetTestProgressTemplates: GetTestProgressTemplates,
             GetUpdated: GetUpdated,
-            GetBeforeId: GetBeforeId
+            GetBeforeId: GetBeforeId,
+            SendMail: SendMail
         });
     }
 

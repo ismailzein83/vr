@@ -58,6 +58,37 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 }
 
             };
+            defineMenuActions();
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Send mail",
+                clicked: sendTestCall
+            }];
+        }
+
+        function sendTestCall(testCallObj) {
+            var onSendTestCall = function (testCallObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(testCallObj);
+                gridAPI.itemUpdated(testCallObj);
+            }
+
+            var source = "";
+            var destination = "";
+            var receivedCli = "";
+            var releaseCode = "";
+            for (var i = 0; i < testCallObj.Entity.TestProgress.CallResults.length; i++) {
+                source = source + ";" + testCallObj.Entity.TestProgress.CallResults[i].Source;
+                destination = destination + ";" + testCallObj.Entity.TestProgress.CallResults[i].Destination;
+                receivedCli = receivedCli + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReceivedCli;
+                releaseCode = releaseCode + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReleaseCode;
+            }
+
+            Qm_CliTester_TestCallService.sendTestCall(testCallObj.SupplierName, testCallObj.UserName, testCallObj.CountryName, testCallObj.ZoneName,
+                testCallObj.CallTestStatusDescription, testCallObj.CallTestResultDescription, testCallObj.ScheduleName, testCallObj.Entity.Measure.Pdd,
+                testCallObj.Entity.Measure.Mos, testCallObj.Entity.CreationDate, source, destination, receivedCli, releaseCode,
+                testCallObj.Entity.Measure.RingDuration, testCallObj.Entity.Measure.Duration, onSendTestCall);
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
