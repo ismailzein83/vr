@@ -3,6 +3,6 @@
 AS
 BEGIN
 	SELECT [Id], [Name], [Extension], [Content], [IsUsed], [ModuleName], [UserID], [CreatedTime]
-	FROM [common].[File]
+	FROM [common].[File] WITH(NOLOCK) 
 	WHERE Id = @Id
 END
