@@ -78,6 +78,6 @@
         }
     }
 
-    app.directive('vrAnalyticDaprofcalcalertruletypeSettings', DAProfCalcAlertRuleTypeSettings);
+    app.directive('vrAnalyticDaprofcalcAlertruletypesettings', DAProfCalcAlertRuleTypeSettings);
 
 })(app);

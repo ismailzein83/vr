@@ -66,6 +66,6 @@
         }
     }
 
-    app.directive('vrAnalyticDaprofcalcsettingsSelector', DAProfCalcSettingsSelector);
+    app.directive('vrAnalyticDaprofcalcSettings', DAProfCalcSettingsSelector);
 
 })(app);

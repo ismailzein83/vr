@@ -106,6 +106,6 @@
         }
     }
 
-    app.directive('vrAnalyticDaprofcalcgroupingfieldManagement', DAProfCalcGroupingFieldManagementDirective);
+    app.directive('vrAnalyticDaprofcalcGroupingfieldManagement', DAProfCalcGroupingFieldManagementDirective);
 
 })(app);

@@ -21,16 +21,8 @@ namespace Vanrise.Analytic.Entities
                          TypeId = Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings.S_ItemDefinitionTypeId,
                          Title = "Record Profiling",
                          Editor= "vr-analytic-recordprofilingoutputsettings-editor",
-                         GridDirective = "vr-analytic-recordprofilingoutputsettings-grid"
-                             
-                    },
-                    //new DataAnalysisItemDefinitionConfig
-                    //{
-                    //     TypeId = Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.MergingProfiledOutputSettings.S_ItemDefinitionTypeId,
-                    //     Title = "Profiled Merging",
-                    //     Editor="",
-                    //     GridDirective = "vr-analytic-recordprofilingoutputsettings-grid"
-                    //},
+                         GridDirective = "vr-analytic-dataanalysisitemdefinition-grid"
+                    }
                 };
             }
             set

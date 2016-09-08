@@ -22,6 +22,11 @@ namespace Vanrise.Analytic.Entities
 
         public string Editor { get; set; }
 
-        public string GridDirective { get; set; }
+        public virtual string GridDirective
+        {
+            get { return "vr-analytic-recordprofilingoutputsettings-grid"; }
+
+            set { this.GridDirective = value; }
+        }
     }
 }

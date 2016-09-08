@@ -94,6 +94,6 @@
         }
     }
 
-    app.directive('vrAnalyticDaprofcalcalertruleCriteria', DAProfCalcAlertRuleCriteriaDirective);
+    app.directive('vrAnalyticDaprofcalcAlertrulecriteria', DAProfCalcAlertRuleCriteriaDirective);
 
 })(app);

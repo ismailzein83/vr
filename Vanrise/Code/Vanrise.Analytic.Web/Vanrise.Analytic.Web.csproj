@@ -136,6 +136,8 @@
     <Content Include="Analytic\Directives\DataAnalysis\Common\Templates\TimeRangeFilterSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\vr-analytic-timerangefilter-selective.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-selector.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\Templates\DataAnalysisItemDefinitionGridTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-grid.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleCriteriaTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleTypeSettingsTemplate.html" />

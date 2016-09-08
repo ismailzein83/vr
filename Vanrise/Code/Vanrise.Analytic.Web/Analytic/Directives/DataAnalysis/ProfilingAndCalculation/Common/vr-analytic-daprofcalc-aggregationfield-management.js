@@ -104,6 +104,6 @@
         }
     }
 
-    app.directive('vrAnalyticDaprofcalcaggregationfieldManagement', DAProfCalcAggregationFieldManagementDirective);
+    app.directive('vrAnalyticDaprofcalcAggregationfieldManagement', DAProfCalcAggregationFieldManagementDirective);
 
 })(app);
