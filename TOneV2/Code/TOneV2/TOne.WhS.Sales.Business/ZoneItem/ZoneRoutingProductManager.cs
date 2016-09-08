@@ -10,7 +10,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ZoneRoutingProductSetter
+    public class ZoneRoutingProductManager
     {
         int _sellingProductId;
         int? _customerId;
@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Business
         DraftNewDefaultRoutingProduct _newDefaultRoutingProduct;
         DraftChangedDefaultRoutingProduct _defaultRoutingProductChange;
 
-        public ZoneRoutingProductSetter(int sellingProductId, int? customerId, DateTime effectiveOn, Changes changes)
+        public ZoneRoutingProductManager(int sellingProductId, int? customerId, DateTime effectiveOn, Changes changes)
         {
             ValidateOwner(sellingProductId, customerId);
 

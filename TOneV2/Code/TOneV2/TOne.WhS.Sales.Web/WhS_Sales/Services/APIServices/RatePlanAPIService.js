@@ -30,10 +30,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneItem"), input);
         }
 
-        function GetDefaultItem(ownerType, ownerId) {
+        function GetDefaultItem(ownerType, ownerId, effectiveOn) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDefaultItem"), {
                 ownerType: ownerType,
-                ownerId: ownerId
+                ownerId: ownerId,
+                effectiveOn: effectiveOn
             });
         }
 
@@ -86,7 +87,16 @@
             });
         }
 
-        return ({
+        function GetInheritedService(ownerType, ownerId, effectiveOn, zoneId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetInheritedService"), {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                effectiveOn: effectiveOn,
+                zoneId: zoneId
+            });
+        }
+
+        return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
             GetDefaultItem: GetDefaultItem,
@@ -100,8 +110,9 @@
             DeleteDraft: DeleteDraft,
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
-            DeleteChangedRates: DeleteChangedRates
-        });
+            DeleteChangedRates: DeleteChangedRates,
+            GetInheritedService: GetInheritedService
+        };
 
     }
 

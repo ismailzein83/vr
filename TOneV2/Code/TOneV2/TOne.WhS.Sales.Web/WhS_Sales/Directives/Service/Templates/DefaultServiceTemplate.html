@@ -1,0 +1,45 @@
+﻿<div vr-loader="scopeModel.isLoading">
+    <vr-row>
+        <vr-columns colnum="1" ng-show="scopeModel.showCurrentServiceViewer">
+            <vr-label><span>Current Services<span ng-if="scopeModel.isCurrentServiceInherited"> (*)</span></vr-label>
+            <vr-whs-be-services-viewer on-ready="scopeModel.onCurrentServiceViewerReady"></vr-whs-be-services-viewer>
+        </vr-columns>
+
+        <vr-columns colnum="1" ng-show="scopeModel.showInheritedServiceViewer">
+            <vr-label>Inherited Services</vr-label>
+            <vr-whs-be-services-viewer on-ready="scopeModel.onInheritedServiceViewerReady"></vr-whs-be-services-viewer>
+        </vr-columns>
+
+        <span vr-disabled="scopeModel.isSelectorDisabled">
+            <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onSelectorReady"
+                                                    selectedvalues="scopeModel.selectedValues"
+                                                    normal-col-num="2"
+                                                    ismultipleselection="true"
+                                                    onblurdropdown="scopeModel.onSelectorBlurred">
+            </vr-whs-be-zone-service-config-selector>
+        </span>
+        <vr-columns colnum="1">
+            <span vr-disabled="scopeModel.areDatesDisabled">
+                <vr-datetimepicker type="date" label="BED" value="scopeModel.serviceBED"></vr-datetimepicker>
+            </span>
+        </vr-columns>
+
+        <vr-columns colnum="1">
+            <span vr-disabled="scopeModel.areDatesDisabled || scopeModel.isCurrentServiceInherited">
+                <vr-datetimepicker type="date" label="EED" value="scopeModel.serviceEED" onvaluechanged="scopeModel.onServiceEEDChanged"></vr-datetimepicker>
+            </span>
+        </vr-columns>
+    </vr-row>
+    <vr-row removeline="true">
+        <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showResetLink" ng-if="!scopeModel.isCurrentServiceInherited || !scopeModel.renderResetLink">
+            <vr-label isvalue="true">
+                <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.reset()">Reset to inherited</span>
+            </vr-label>
+        </vr-columns>
+        <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showUndoLink">
+            <vr-label isvalue="true">
+                <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.undo()">Undo</span>
+            </vr-label>
+        </vr-columns>
+    </vr-row>
+</div>

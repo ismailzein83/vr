@@ -76,95 +76,11 @@ namespace TOne.WhS.Sales.Business
             });
         }
 
-        private IEnumerable<DraftRateToChange> MergeNewRates(IEnumerable<DraftRateToChange> existingNewRates, IEnumerable<DraftRateToChange> importedNewRates)
-        {
-            return Merge<IEnumerable<DraftRateToChange>>(existingNewRates, importedNewRates, () =>
-            {
-                var mergedNewRates = new List<DraftRateToChange>();
-
-                DraftRateToChange existingNewNormalRate;
-                List<DraftRateToChange> existingNewOtherRates;
-                SetNormalAndOtherNewRates(existingNewRates, out existingNewNormalRate, out existingNewOtherRates);
-
-                DraftRateToChange importedNewNormalRate;
-                List<DraftRateToChange> importedNewOtherRates;
-                SetNormalAndOtherNewRates(importedNewRates, out importedNewNormalRate, out importedNewOtherRates);
-
-                if (importedNewNormalRate != null)
-                    mergedNewRates.Add(importedNewNormalRate);
-                else if (existingNewNormalRate != null)
-                    mergedNewRates.Add(existingNewNormalRate);
-
-                if (importedNewOtherRates.Count > 0)
-                    mergedNewRates.AddRange(importedNewOtherRates);
-                else if (existingNewOtherRates.Count > 0)
-                    mergedNewRates.AddRange(existingNewOtherRates);
-
-                return mergedNewRates;
-            });
-        }
-
-        private IEnumerable<DraftRateToClose> MergeClosedRates(IEnumerable<DraftRateToClose> existingClosedRates, IEnumerable<DraftRateToClose> newClosedRates)
-        {
-            return Merge<IEnumerable<DraftRateToClose>>(existingClosedRates, newClosedRates, () =>
-            {
-                var mergedClosedRates = new List<DraftRateToClose>();
-
-                DraftRateToClose existingClosedNormalRate;
-                List<DraftRateToClose> existingClosedOtherRates;
-                SetNormalAndOtherClosedRates(existingClosedRates, out existingClosedNormalRate, out existingClosedOtherRates);
-
-                DraftRateToClose newClosedNormalRate;
-                List<DraftRateToClose> newClosedOtherRates;
-                SetNormalAndOtherClosedRates(newClosedRates, out newClosedNormalRate, out newClosedOtherRates);
-
-                if (newClosedNormalRate != null)
-                    mergedClosedRates.Add(newClosedNormalRate);
-                else if (existingClosedNormalRate != null)
-                    mergedClosedRates.Add(existingClosedNormalRate);
-
-                if (newClosedOtherRates.Count > 0)
-                    mergedClosedRates.AddRange(newClosedOtherRates);
-                else if (existingClosedOtherRates.Count > 0)
-                    mergedClosedRates.AddRange(existingClosedOtherRates);
-
-                return mergedClosedRates;
-            });
-        }
-
         private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
         {
             if (existingChanges != null && newChanges != null)
                 return mergeLogic();
             return existingChanges != null ? existingChanges : newChanges;
-        }
-
-        private void SetNormalAndOtherNewRates(IEnumerable<DraftRateToChange> newRates, out DraftRateToChange newNormalRate, out List<DraftRateToChange> newOtherRates)
-        {
-            newNormalRate = null;
-            newOtherRates = new List<DraftRateToChange>();
-
-            foreach (DraftRateToChange newRate in newRates)
-            {
-                if (newRate.RateTypeId.HasValue)
-                    newOtherRates.Add(newRate);
-                else
-                    newNormalRate = newRate;
-            }
-        }
-
-        private void SetNormalAndOtherClosedRates(IEnumerable<DraftRateToClose> closedRates, out DraftRateToClose closedNormalRate, out List<DraftRateToClose> closedOtherRates)
-        {
-            closedNormalRate = new DraftRateToClose();
-            closedOtherRates = new List<DraftRateToClose>();
-
-            foreach (DraftRateToClose closedRate in closedRates)
-            {
-                if (closedRate.RateTypeId.HasValue)
-                    closedOtherRates.Add(closedRate);
-                else
-                    closedNormalRate = closedRate;
-            }
         }
 
         #endregion

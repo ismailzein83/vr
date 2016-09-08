@@ -11,7 +11,7 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ZoneRateSetter
+    public class ZoneRateManager
     {
         #region Fields
 
@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Business
 
         #region Public Methods
 
-        public ZoneRateSetter(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId)
+        public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
@@ -72,7 +72,7 @@ namespace TOne.WhS.Sales.Business
                     zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
                 }
 
-                if (rate.RatesByRateType.Count > 0)
+                if (rate.RatesByRateType != null)
                 {
                     zoneItem.CurrentOtherRates = new Dictionary<int, OtherRate>();
                     foreach (KeyValuePair<int, SaleRate> kvp in rate.RatesByRateType)

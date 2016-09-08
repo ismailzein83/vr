@@ -15,6 +15,15 @@
         var saleZoneRoutingProductPreviewGridAPI;
         var saleZoneRoutingProductGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var saleZoneServicePreviewGridAPI;
+        var saleZoneServicePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var currentDefaultServiceViewerAPI;
+        var currentDefaultServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var newDefaultServiceViewerAPI;
+        var newDefaultServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -26,8 +35,10 @@
                 taskId = parameters.TaskId;
             }
         }
-        function defineScope() {
+        function defineScope()
+        {
             $scope.scopeModel = {};
+            $scope.scopeModel.defaultServicePreview = {};
 
             $scope.scopeModel.onRatePreviewGridReady = function (api) {
                 ratePreviewGridAPI = api;
@@ -37,6 +48,21 @@
             $scope.scopeModel.onSaleZoneRoutingProductPreviewGridReady = function (api) {
                 saleZoneRoutingProductPreviewGridAPI = api;
                 saleZoneRoutingProductGridReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onSaleZoneServicePreviewGridReady = function (api) {
+                saleZoneServicePreviewGridAPI = api;
+                saleZoneServicePreviewGridReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onCurrentDefaultServiceViewerReady = function (api) {
+                currentDefaultServiceViewerAPI = api;
+                currentDefaultServiceViewerReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onNewDefaultServiceViewerReady = function (api) {
+                newDefaultServiceViewerAPI = api;
+                newDefaultServiceViewerReadyDeferred.resolve();
             };
 
             //$scope.scopeModel.validateDefaultRoutingProduct = function () {
@@ -71,7 +97,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadSaleZoneServicePreivewGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -104,9 +130,70 @@
                     if (response.IsCurrentDefaultRoutingProductInherited === true)
                         $scope.scopeModel.currentDefaultRoutingProductName += ' (Inherited)';
                     $scope.scopeModel.newDefaultRoutingProductName = response.NewDefaultRoutingProductName;
-                    $scope.scopeModel.effectiveOn = new Date(response.EffectiveOn).toDateString();
+                    $scope.scopeModel.effectiveOn = UtilsService.getShortDate(new Date(response.EffectiveOn));
                 }
             });
+        }
+        function loadDefaultServicePreview()
+        {
+            var promises = [];
+
+            var input = { ProcessInstanceId: processInstanceId };
+            var getDefaultServicePreviewPromise = WhS_Sales_RatePlanPreviewAPIService.GetDefaultServicePreview(input);
+            promises.push(getDefaultServicePreviewPromise);
+
+            var loadDefaultServiceViewersDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadDefaultServiceViewersDeferred.promise);
+
+            getDefaultServicePreviewPromise.then(function (response)
+            {
+                var serviceViewerPromises = [];
+
+                if (response != null)
+                {
+                    $scope.scopeModel.defaultServicePreview.effectiveOn = UtilsService.getShortDate(new Date(response.EffectiveOn));
+                    if (response.EffectiveUntil != null)
+                        $scope.scopeModel.defaultServicePreview.EffectiveUntil = UtilsService.getShortDate(new Date(response.EffectiveUntil));
+
+                    if (response.CurrentServices != null)
+                    {
+                        $scope.scopeModel.showCurrentDefaultServiceViewer = true;
+
+                        var currentDefaultServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                        serviceViewerPromises.push(currentDefaultServiceViewerLoadDeferred.promise);
+
+                        currentDefaultServiceViewerReadyDeferred.promise.then(function () {
+                            var currentDefaultServiceViewerPayload = {
+                                selectedIds: UtilsService.getPropValuesFromArray(response.CurrentServices, 'ServiceId')
+                            };
+                            VRUIUtilsService.callDirectiveLoad(currentDefaultServiceViewerAPI, currentDefaultServiceViewerPayload, currentDefaultServiceViewerLoadDeferred);
+                        });
+                    }
+
+                    if (response.NewServices != null)
+                    {
+                        $scope.scopeModel.showNewDefaultServiceViewer = true;
+
+                        var newDefaultServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                        serviceViewerPromises.push(newDefaultServiceViewerLoadDeferred.promise);
+
+                        newDefaultServiceViewerReadyDeferred.promise.then(function () {
+                            var newDefaultServiceViewerPayload = {
+                                selectedIds: UtilsService.getPropValuesFromArray(response.NewServices, 'ServiceId')
+                            };
+                            VRUIUtilsService.callDirectiveLoad(newDefaultServiceViewerAPI, newDefaultServiceViewerPayload, newDefaultServiceViewerLoadDeferred);
+                        });
+                    }
+                }
+
+                UtilsService.waitMultiplePromises(serviceViewerPromises).then(function () {
+                    loadDefaultServiceViewersDeferred.resolve();
+                }).catch(function (error) {
+                    loadDefaultServiceViewersDeferred.reject(error);
+                });
+            });
+
+            return UtilsService.waitMultiplePromises(promises);
         }
         function loadRatePreviewGrid() {
             var ratePreviewGridLoadDeferred = UtilsService.createPromiseDeferred();
@@ -132,6 +219,18 @@
             });
 
             return saleZoneRoutingProductGridLoadDeferred.promise;
+        }
+        function loadSaleZoneServicePreivewGrid() {
+            var saleZoneServiceLoadDeferred = UtilsService.createPromiseDeferred();
+
+            saleZoneServicePreviewGridReadyDeferred.promise.then(function () {
+                var saleZoneServicePreivewGridPayload = {
+                    ProcessInstanceId: processInstanceId
+                };
+                VRUIUtilsService.callDirectiveLoad(saleZoneServicePreviewGridAPI, saleZoneServicePreivewGridPayload, saleZoneServiceLoadDeferred);
+            });
+
+            return saleZoneServiceLoadDeferred.promise;
         }
 
         function executeTask(decision) {

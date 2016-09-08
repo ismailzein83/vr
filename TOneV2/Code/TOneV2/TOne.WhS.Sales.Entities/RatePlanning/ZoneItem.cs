@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
@@ -15,7 +16,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
 
-        #region Rate Properties
+        #region Rate
         public long? CurrentRateId { get; set; }
         public Decimal? CurrentRate { get; set; }
         public DateTime? CurrentRateBED { get; set; }
@@ -60,7 +61,7 @@ namespace TOne.WhS.Sales.Entities
         public Dictionary<int, FutureRate> FutureOtherRates { get; set; }
         #endregion
 
-        #region Routing Product Properties
+        #region Routing Product
         public int? CurrentRoutingProductId { get; set; }
         public string CurrentRoutingProductName { get; set; }
         public DateTime? CurrentRoutingProductBED { get; set; }
@@ -74,9 +75,21 @@ namespace TOne.WhS.Sales.Entities
         public string EffectiveRoutingProductName { get; set; }
         #endregion
 
-        #region Route Option Properties
+        #region Route Options
         public IEnumerable<RPRouteOptionDetail> RouteOptions { get; set; }
         public List<decimal?> Costs { get; set; }
+        #endregion
+
+        #region Service
+        public int? CurrentServiceId { get; set; }
+        public List<ZoneService> CurrentServices { get; set; }
+        public DateTime? CurrentServiceBED { get; set; }
+        public DateTime? CurrentServiceEED { get; set; }
+        public bool? IsCurrentServiceEditable { get; set; }
+        public DraftNewZoneService NewService { get; set; }
+        public DraftClosedZoneService ClosedService { get; set; }
+        public DraftResetZoneService ResetService { get; set; }
+        public IEnumerable<ZoneService> EffectiveServices { get; set; }
         #endregion
     }
 

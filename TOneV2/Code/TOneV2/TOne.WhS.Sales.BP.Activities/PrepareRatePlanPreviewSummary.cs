@@ -10,6 +10,8 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
+    #region Classes
+
     public class PrepareRatePlanPreviewSummaryInput
     {
         public IEnumerable<RateToChange> RatesToChange { get; set; }
@@ -23,12 +25,22 @@ namespace TOne.WhS.Sales.BP.Activities
         public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }
 
         public IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; set; }
+
+        public DefaultServiceToAdd DefaultServiceToAdd { get; set; }
+
+        public DefaultServiceToClose DefaultServiceToClose { get; set; }
+
+        public IEnumerable<SaleZoneServiceToAdd> SaleZoneServicesToAdd { get; set; }
+
+        public IEnumerable<SaleZoneServiceToClose> SaleZoneServicesToClose { get; set; }
     }
 
     public class PrepareRatePlanPreviewSummaryOutput
     {
         public RatePlanPreviewSummary RatePlanPreviewSummary { get; set; }
     }
+    
+    #endregion
 
     public class PrepareRatePlanPreviewSummary : BaseAsyncActivity<PrepareRatePlanPreviewSummaryInput, PrepareRatePlanPreviewSummaryOutput>
     {
@@ -52,6 +64,18 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<SaleZoneRoutingProductToClose>> SaleZoneRoutingProductsToClose { get; set; }
 
+        [RequiredArgument]
+        public InArgument<DefaultServiceToAdd> DefaultServiceToAdd { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DefaultServiceToClose> DefaultServiceToClose { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneServiceToAdd>> SaleZoneServicesToAdd { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
+
         #endregion
 
         #region Output Arguments
@@ -70,7 +94,11 @@ namespace TOne.WhS.Sales.BP.Activities
                 DefaultRoutingProductToAdd = this.DefaultRoutingProductToAdd.Get(context),
                 DefaultRoutingProductToClose = this.DefaultRoutingProductToClose.Get(context),
                 SaleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context),
-                SaleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context)
+                SaleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context),
+                DefaultServiceToAdd = this.DefaultServiceToAdd.Get(context),
+                DefaultServiceToClose = this.DefaultServiceToClose.Get(context),
+                SaleZoneServicesToAdd = this.SaleZoneServicesToAdd.Get(context),
+                SaleZoneServicesToClose = this.SaleZoneServicesToClose.Get(context)
             };
         }
 
@@ -92,11 +120,19 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = inputArgument.SaleZoneRoutingProductsToAdd;
             IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = inputArgument.SaleZoneRoutingProductsToClose;
 
+            DefaultServiceToAdd defaultServiceToAdd = inputArgument.DefaultServiceToAdd;
+            DefaultServiceToClose defaultServiceToClose = inputArgument.DefaultServiceToClose;
+
+            IEnumerable<SaleZoneServiceToAdd> saleZoneServicesToAdd = inputArgument.SaleZoneServicesToAdd;
+            IEnumerable<SaleZoneServiceToClose> saleZoneServicesToClose = inputArgument.SaleZoneServicesToClose;
+
             var summary = new RatePlanPreviewSummary();
 
             SetRateProperties(summary, ratesToChange, ratesToClose);
             SetDefaultRoutingProductProperties(summary, defaultRoutingProductToAdd, defaultRoutingProductToClose);
             SetZoneRoutingProductProperties(summary, saleZoneRoutingProductsToAdd, saleZoneRoutingProductsToClose);
+            SetDefaultServiceProperties(summary, defaultServiceToAdd, defaultServiceToClose);
+            SetSaleZoneServiceProperties(summary, saleZoneServicesToAdd, saleZoneServicesToClose);
 
             return new PrepareRatePlanPreviewSummaryOutput()
             {
@@ -182,6 +218,21 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 summary.NumberOfClosedSaleZoneRoutingProducts = saleZoneRoutingProductsToClose.Count();
             }
+        }
+
+        private void SetDefaultServiceProperties(RatePlanPreviewSummary summary, DefaultServiceToAdd defaultServiceToAdd, DefaultServiceToClose defaultServiceToClose)
+        {
+            if (defaultServiceToAdd != null)
+                summary.NewDefaultServices = defaultServiceToAdd.NewDefaultService.Services;
+
+            if (defaultServiceToClose != null)
+                summary.ClosedDefaultServiceEffectiveOn = defaultServiceToClose.CloseEffectiveDate;
+        }
+
+        private void SetSaleZoneServiceProperties(RatePlanPreviewSummary summary, IEnumerable<SaleZoneServiceToAdd> saleZoneServiceToAdd, IEnumerable<SaleZoneServiceToClose> closedSaleZoneServices)
+        {
+            summary.NumberOfNewSaleZoneServices = saleZoneServiceToAdd.Count();
+            summary.NumberOfClosedSaleZoneServices = closedSaleZoneServices.Count();
         }
 
         #endregion

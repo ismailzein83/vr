@@ -18,6 +18,18 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<int> ChangedRatesCount { get; set; }
 
+        [RequiredArgument]
+        public InArgument<bool> DoesNewDefaultServiceExist { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> ChangedDefaultServicesCount { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> NewSaleZoneServicesCount { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> ChangedSaleZoneServicesCount { get; set; }
+
         #endregion
 
         #region Output Arguments
@@ -31,10 +43,15 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             int newRatesCount = NewRatesCount.Get(context);
             int changedRatesCount = ChangedRatesCount.Get(context);
-            
+
+            bool doesNewDefaultServiceExist = DoesNewDefaultServiceExist.Get(context);
+            int changedDefaultServicesCount = ChangedDefaultServicesCount.Get(context);
+            int newSaleZoneServicesCount = NewSaleZoneServicesCount.Get(context);
+            int changedSaleZoneServicesCount = ChangedSaleZoneServicesCount.Get(context);
+
             int? salePriceListId = null;
 
-            if (newRatesCount > 0 || changedRatesCount > 0)
+            if (newRatesCount > 0 || changedRatesCount > 0 || doesNewDefaultServiceExist || changedDefaultServicesCount > 0 || newSaleZoneServicesCount > 0 || changedSaleZoneServicesCount > 0)
             {
                 var salePriceListManager = new SalePriceListManager();
                 long startingId = salePriceListManager.ReserveIdRange(1);

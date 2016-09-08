@@ -28,7 +28,7 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new RatePreviewManager();
             return GetWebResponse(input, manager.GetFilteredRatePreviews(input));
         }
-        
+
         [HttpPost]
         [Route("GetFilteredSaleZoneRoutingProductPreviews")]
         public object GetFilteredSaleZoneRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
@@ -43,6 +43,22 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             var manager = new DefaultRoutingProductPreviewManager();
             return manager.GetDefaultRoutingProductPreview(query);
+        }
+
+        [HttpPost]
+        [Route("GetFilteredSaleZoneServicePreviews")]
+        public object GetFilteredSaleZoneServicePreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
+        {
+            var manager = new SaleZoneServicePreviewManager();
+            return GetWebResponse(input, manager.GetFilteredSaleZoneServicePreviews(input));
+        }
+
+        [HttpPost]
+        [Route("GetDefaultServicePreview")]
+        public DefaultServicePreview GetDefaultServicePreview(RatePlanPreviewQuery query)
+        {
+            var manager = new DefaultServicePreviewManager();
+            return manager.GetDefaultServicePreview(query);
         }
     }
 }

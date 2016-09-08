@@ -144,6 +144,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                     return rateTypeGridAPI.loadGrid(query);
                 }
+            }, {
+                title: "Services",
+                directive: "vr-whs-sales-zone-service",
+                loadDirective: function (zoneServiceAPI, zoneItem) {
+                    zoneItem.OwnerId = gridQuery.OwnerId;
+                    var zoneServicePayload = {
+                        zoneItem: zoneItem
+                    };
+                    return zoneServiceAPI.load(zoneServicePayload);
+                }
             }];
         }
 
@@ -203,7 +213,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var zoneItemsGetPromise = WhS_Sales_RatePlanAPIService.GetZoneItems(getZoneItemsInput());
             promises.push(zoneItemsGetPromise);
 
-            zoneItemsGetPromise.then(function (response) {
+            var loadDirectivesDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadDirectivesDeferred.promise);
+
+            zoneItemsGetPromise.then(function (response)
+            {
+                var directivePromises = [];
+
                 if (response != null) {
                     var zoneItems = [];
 
@@ -211,7 +227,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         var zoneItem = response[i];
                         extendZoneItem(zoneItem);
                         gridDrillDownTabs.setDrillDownExtensionObject(zoneItem);
-                        promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
+                        directivePromises.push(zoneItem.RouteOptionsLoadDeferred.promise);
+                        directivePromises.push(zoneItem.serviceViewerLoadDeferred.promise);
 
                         WhS_Sales_RatePlanUtilsService.onNewRateChanged(zoneItem);
 
@@ -220,6 +237,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                     gridAPI.addItemsToSource(zoneItems);
                 }
+
+                UtilsService.waitMultiplePromises(directivePromises).then(function () {
+                    loadDirectivesDeferred.resolve();
+                }).catch(function (error) {
+                    loadDirectivesDeferred.reject(error);
+                });
             });
 
             return UtilsService.waitMultiplePromises(promises).catch(function (error) {
@@ -241,10 +264,26 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function extendZoneItem(zoneItem) {
                 zoneItem.IsDirty = false;
+                zoneItem.OwnerType = gridQuery.OwnerType;
                 zoneItem.showRateChangeType = true;
 
                 zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                 setRouteOptionProperties(zoneItem);
+
+                zoneItem.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                zoneItem.onServiceViewerReady = function (api)
+                {
+                    zoneItem.serviceViewerAPI = api;
+                    
+                    var serviceViewerPayload;
+                    if (zoneItem.EffectiveServices != null) {
+                        serviceViewerPayload = {
+                            selectedIds: UtilsService.getPropValuesFromArray(zoneItem.EffectiveServices, 'ServiceId')
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
+                };
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
@@ -439,6 +478,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 applyRoutingProductChanges();
                 applyOtherRateChanges();
+                applyServiceChanges();
 
                 zoneChanges.push(zoneItemChanges);
             }
@@ -520,6 +560,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItemChanges.ClosedRates.push(zoneItem.ClosedRates[i]);
                     }
                 }
+            }
+            function applyServiceChanges() {
+                zoneItemChanges.NewService = zoneItem.NewService;
+                zoneItemChanges.ClosedService = zoneItem.ClosedService;
+                zoneItemChanges.ResetService = zoneItem.ResetService;
             }
         }
     }

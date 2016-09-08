@@ -16,46 +16,44 @@ namespace TOne.WhS.Sales.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "RatePlan")]
     public class RatePlanController : BaseAPIController
     {
-        private RatePlanManager _manager;
-
-        public RatePlanController()
-        {
-            _manager = new RatePlanManager();
-        }
-
         [HttpGet]
         [Route("ValidateCustomer")]
         public bool ValidateCustomer(int customerId, DateTime effectiveOn)
         {
-            return _manager.ValidateCustomer(customerId, effectiveOn);
+            var manager = new RatePlanManager();
+            return manager.ValidateCustomer(customerId, effectiveOn);
         }
 
         [HttpGet]
         [Route("GetZoneLetters")]
         public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
         {
-            return _manager.GetZoneLetters(ownerType, ownerId);
+            var manager = new RatePlanManager();
+            return manager.GetZoneLetters(ownerType, ownerId);
         }
 
         [HttpPost]
         [Route("GetZoneItems")]
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemsInput input)
         {
-            return _manager.GetZoneItems(input);
+            var manager = new RatePlanManager();
+            return manager.GetZoneItems(input);
         }
 
         [HttpPost]
         [Route("GetZoneItem")]
         public ZoneItem GetZoneItem(ZoneItemInput input)
         {
-            return _manager.GetZoneItem(input);
+            var manager = new RatePlanManager();
+            return manager.GetZoneItem(input);
         }
 
         [HttpGet]
         [Route("GetDefaultItem")]
-        public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId)
+        public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
-            return _manager.GetDefaultItem(ownerType, ownerId);
+            var manager = new DefaultItemManager();
+            return manager.GetDefaultItem(ownerType, ownerId, effectiveOn);
         }
 
         [HttpGet]
@@ -110,7 +108,8 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("GetRatePlanSettingsData")]
         public RatePlanSettingsData GetRatePlanSettingsData()
         {
-            return _manager.GetRatePlanSettingsData();
+            var manager = new RatePlanManager();
+            return manager.GetRatePlanSettingsData();
         }
 
         [HttpGet]
@@ -127,6 +126,14 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             var manager = new RatePlanDraftManager();
             manager.DeleteChangedRates(ownerType, ownerId, newCurrencyId);
+        }
+
+        [HttpGet]
+        [Route("GetInheritedService")]
+        public SaleEntityService GetInheritedService(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, long? zoneId = null)
+        {
+            var manager = new DefaultItemManager();
+            return manager.GetInheritedService(ownerType, ownerId, effectiveOn, zoneId);
         }
     }
 }

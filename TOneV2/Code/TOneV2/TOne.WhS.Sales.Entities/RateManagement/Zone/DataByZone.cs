@@ -21,6 +21,8 @@ namespace TOne.WhS.Sales.Entities
         public List<RateToClose> OtherRatesToClose { get; set; }
         public SaleZoneRoutingProductToAdd SaleZoneRoutingProductToAdd { get; set; }
         public SaleZoneRoutingProductToClose SaleZoneRoutingProductToClose { get; set; }
+        public SaleZoneServiceToAdd SaleZoneServiceToAdd { get; set; }
+        public SaleZoneServiceToClose SaleZoneServiceToClose { get; set; }
 
         #region IRuleTarget Implementation
 

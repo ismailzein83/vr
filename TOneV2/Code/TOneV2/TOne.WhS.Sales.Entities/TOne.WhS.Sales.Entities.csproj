@@ -74,11 +74,17 @@
     <Compile Include="RateManagement\Actions\RoutingProduct\DefaultRoutingProductToClose.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToAdd.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\SaleZoneRoutingProductToClose.cs" />
+    <Compile Include="RateManagement\Actions\Service\DefaultServiceToAdd.cs" />
+    <Compile Include="RateManagement\Actions\Service\DefaultServiceToClose.cs" />
+    <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToAdd.cs" />
+    <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToClose.cs" />
     <Compile Include="RateManagement\Preview\DefaultRoutingProductPreview.cs" />
+    <Compile Include="RateManagement\Preview\DefaultServicePreview.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewQuery.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewSummary.cs" />
     <Compile Include="RateManagement\Preview\RatePreview.cs" />
     <Compile Include="RateManagement\Preview\SaleZoneRoutingProductPreview.cs" />
+    <Compile Include="RateManagement\Preview\SaleZoneServicePreview.cs" />
     <Compile Include="RateManagement\Rate\ChangedRate.cs" />
     <Compile Include="RateManagement\Rate\ExistingRate.cs" />
     <Compile Include="RateManagement\Rate\IProcessRatesContext.cs" />
@@ -88,6 +94,14 @@
     <Compile Include="RateManagement\RoutingProduct\Zone\ChangedSaleZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Zone\ExistingSaleZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Zone\IProcessZoneRoutingProductsContext.cs" />
+    <Compile Include="RateManagement\Service\Default\ExistingDefaultService.cs" />
+    <Compile Include="RateManagement\Service\Default\IProcessDefaultServiceContext.cs" />
+    <Compile Include="RateManagement\Service\Default\NewDefaultService.cs" />
+    <Compile Include="RateManagement\Service\Default\ChangedDefaultService.cs" />
+    <Compile Include="RateManagement\Service\Zone\ChangedSaleZoneService.cs" />
+    <Compile Include="RateManagement\Service\Zone\ExistingSaleZoneService.cs" />
+    <Compile Include="RateManagement\Service\Zone\IProcessSaleZoneServicesContext.cs" />
+    <Compile Include="RateManagement\Service\Zone\NewSaleZoneService.cs" />
     <Compile Include="RateManagement\Zone\DataByZone.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs" />
@@ -101,6 +115,12 @@
     <Compile Include="RatePlanning\BaseChanges.cs" />
     <Compile Include="RatePlanning\Changes.cs" />
     <Compile Include="RatePlanning\Draft\Rate\DraftRateToChange.cs" />
+    <Compile Include="RatePlanning\Draft\Service\Default\DraftClosedDefaultService.cs" />
+    <Compile Include="RatePlanning\Draft\Service\Default\DraftNewDefaultService.cs" />
+    <Compile Include="RatePlanning\Draft\Service\Default\DraftResetDefaultService.cs" />
+    <Compile Include="RatePlanning\Draft\Service\Zone\DraftClosedZoneService.cs" />
+    <Compile Include="RatePlanning\Draft\Service\Zone\DraftNewZoneService.cs" />
+    <Compile Include="RatePlanning\Draft\Service\Zone\DraftResetZoneService.cs" />
     <Compile Include="RatePlanning\Enums.cs" />
     <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
@@ -111,7 +131,6 @@
     <Compile Include="RatePlanning\Draft\Rate\DraftRateToClose.cs" />
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
-    <Compile Include="RatePlanning\ServiceChanges.cs" />
     <Compile Include="RatePlanning\ZoneChanges.cs" />
     <Compile Include="RatePlanning\ZoneItem.cs" />
     <Compile Include="RatePlanning\ZoneRateChangesDetail.cs" />
@@ -134,6 +153,7 @@
       <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

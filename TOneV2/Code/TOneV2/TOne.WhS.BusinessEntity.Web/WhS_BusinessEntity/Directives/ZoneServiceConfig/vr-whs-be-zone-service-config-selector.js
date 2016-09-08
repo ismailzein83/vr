@@ -13,6 +13,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
             isrequired: "=",
             onselectitem: "=",
             ondeselectitem: "=",
+            onblurdropdown:"=",
             hideremoveicon: '@',
             normalColNum: '@'
         },
@@ -70,20 +71,28 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Zone Service" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="onSelectorReady" ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" isrequired="ctrl.isrequired"'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Zone Service" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" onblurdropdown="ctrl.onblurdropdown" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
     }
 
     function zoneServiceConfigCtor(ctrl, $scope, attrs) {
 
-        function initializeController() {
-            defineAPI();
+        var selectorAPI;
+
+        function initializeController()
+        {
+            $scope.onSelectorReady = function (api) {
+                selectorAPI = api;
+                defineAPI();
+            };
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+
+                selectorAPI.clearDataSource();
 
                 var selectedIds;
                 var filter;
@@ -100,6 +109,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('ZoneServiceConfigId', attrs, ctrl);
             }
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

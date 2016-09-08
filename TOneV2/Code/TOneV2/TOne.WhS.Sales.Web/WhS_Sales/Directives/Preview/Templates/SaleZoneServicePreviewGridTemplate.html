@@ -1,0 +1,18 @@
+﻿<vr-datagrid datasource="scopeModel.saleZoneServicePreviews"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions">
+    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Services'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onCurrentServiceViewerReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Inherited'" widthfactor="3">
+        <vr-icon ng-if="dataItem.isCurrentServiceInherited" icontype="dataItem.isCurrentServiceInherited"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Services'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onNewServiceViewerReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective On'" field="'Entity.EffectiveOn'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective Until'" field="'Entity.EffectiveUntil'" type="'Date'"></vr-datagridcolumn>
+</vr-datagrid>

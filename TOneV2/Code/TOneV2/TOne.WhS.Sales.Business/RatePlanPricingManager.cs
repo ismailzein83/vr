@@ -58,7 +58,7 @@ namespace TOne.WhS.Sales.Business
 
             var draftManager = new RatePlanDraftManager();
             Changes changes = draftManager.GetDraft(ownerType, ownerId);
-            ZoneRoutingProductSetter routingProductSetter = new ZoneRoutingProductSetter(sellingProductId, customerId, effectiveOn, changes);
+            ZoneRoutingProductManager routingProductSetter = new ZoneRoutingProductManager(sellingProductId, customerId, effectiveOn, changes);
 
             foreach (SaleZone zone in zones)
             {
@@ -74,7 +74,7 @@ namespace TOne.WhS.Sales.Business
 
             // Set the route options, calculate the costs, and calculate the rate for all zone items
             IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-            ZoneRouteOptionSetter routeOptionSetter = new ZoneRouteOptionSetter(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
+            ZoneRouteOptionManager routeOptionSetter = new ZoneRouteOptionManager(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
 
             routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
             return zoneItems.FindAllRecords(itm => itm.CalculatedRate != null);

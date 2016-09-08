@@ -23,12 +23,22 @@
         function GetDefaultRoutingProductPreview(query) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDefaultRoutingProductPreview"), query);
         }
+        
+        function GetFilteredSaleZoneServicePreviews(query) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSaleZoneServicePreviews"), query);
+        }
+        
+        function GetDefaultServicePreview(query) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDefaultServicePreview"), query);
+        }
 
         return {
             GetRatePlanPreviewSummary: GetRatePlanPreviewSummary,
             GetFilteredRatePreviews: GetFilteredRatePreviews,
             GetFilteredSaleZoneRoutingProductPreviews: GetFilteredSaleZoneRoutingProductPreviews,
-            GetDefaultRoutingProductPreview: GetDefaultRoutingProductPreview
+            GetDefaultRoutingProductPreview: GetDefaultRoutingProductPreview,
+            GetFilteredSaleZoneServicePreviews: GetFilteredSaleZoneServicePreviews,
+            GetDefaultServicePreview: GetDefaultServicePreview
         };
     }
 

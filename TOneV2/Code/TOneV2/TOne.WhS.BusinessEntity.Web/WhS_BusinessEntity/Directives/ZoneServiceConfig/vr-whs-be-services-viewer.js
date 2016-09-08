@@ -43,6 +43,9 @@ app.directive('vrWhsBeServicesViewer', [
                 var api = {};
 
                 api.load = function (payload) {
+
+                    ctrl.selectedItems.length = 0;
+
                     var selectedIds;
                     var service;
                     if (payload != undefined) {
@@ -65,6 +68,9 @@ app.directive('vrWhsBeServicesViewer', [
 
         function getAllZoneServiceConfigs(ctrl, selectedIds) {
             return WhS_BE_ZoneServiceConfigAPIService.GetAllZoneServices().then(function (response) {
+
+                ctrl.items.length = 0;
+
                 angular.forEach(response, function (itm) {
                     ctrl.items.push(itm);
                 });

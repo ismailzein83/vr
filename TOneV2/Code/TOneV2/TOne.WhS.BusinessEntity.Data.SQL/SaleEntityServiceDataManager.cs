@@ -27,6 +27,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetEffectiveZoneServices", SaleEntityZoneServiceMapper, ownerType, ownerId, effectiveOn);
         }
 
+        public IEnumerable<SaleEntityDefaultService> GetDefaultServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetDefaultServicesEffectiveAfter", SaleEntityDefaultServiceMapper, ownerType, ownerId, minimumDate);
+        }
+
+        public IEnumerable<SaleEntityZoneService> GetZoneServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetZoneServicesEffectiveAfter", SaleEntityZoneServiceMapper, ownerType, ownerId, minimumDate);
+        }
         public bool AreSaleEntityServicesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleEntityService", ref updateHandle);

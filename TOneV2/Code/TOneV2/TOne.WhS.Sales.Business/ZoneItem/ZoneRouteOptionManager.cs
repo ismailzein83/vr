@@ -11,14 +11,14 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ZoneRouteOptionSetter
+    public class ZoneRouteOptionManager
     {
         private IEnumerable<RPRouteDetail> _routes;
         private List<CostCalculationMethod> _costCalculationMethods;
         private int? _rateCalculationCostColumnConfigId;
         private RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionSetter(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        public ZoneRouteOptionManager(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
             _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId);

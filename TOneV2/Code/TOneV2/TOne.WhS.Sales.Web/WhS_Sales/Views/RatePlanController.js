@@ -2,38 +2,9 @@
 
     "use strict";
 
-    RatePlanController.$inject = [
-        "$scope",
-        "WhS_Sales_RatePlanService",
-        "WhS_Sales_RatePlanAPIService",
-        "WhS_BE_SalePriceListOwnerTypeEnum",
-        "WhS_Sales_RatePlanStatusEnum",
-        'BusinessProcess_BPInstanceAPIService',
-        'BusinessProcess_BPInstanceService',
-        'WhS_BP_CreateProcessResultEnum',
-        'VRCommon_CurrencyAPIService',
-        'WhS_BE_CarrierAccountAPIService',
-        "UtilsService",
-        "VRUIUtilsService",
-        "VRNotificationService"
-    ];
+    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', "UtilsService", "VRUIUtilsService", "VRNotificationService"];
 
-    function RatePlanController
-    (
-        $scope,
-        WhS_Sales_RatePlanService,
-        WhS_Sales_RatePlanAPIService,
-        WhS_BE_SalePriceListOwnerTypeEnum,
-        WhS_Sales_RatePlanStatusEnum,
-        BusinessProcess_BPInstanceAPIService,
-        BusinessProcess_BPInstanceService,
-        WhS_BP_CreateProcessResultEnum,
-        VRCommon_CurrencyAPIService,
-        WhS_BE_CarrierAccountAPIService,
-        UtilsService,
-        VRUIUtilsService,
-        VRNotificationService
-    )
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, VRNotificationService)
     {
         var ownerTypeSelectorAPI;
         var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -194,6 +165,13 @@
             $scope.defaultItemTabs = [{
                 title: "Default Routing Product",
                 directive: "vr-whs-sales-defaultroutingproduct",
+                loadDirective: function (api) {
+                    defaultItem.onChange = onDefaultItemChange;
+                    return api.load(defaultItem);
+                }
+            }, {
+                title: "Default Services",
+                directive: "vr-whs-sales-default-service",
                 loadDirective: function (api) {
                     defaultItem.onChange = onDefaultItemChange;
                     return api.load(defaultItem);
@@ -519,7 +497,8 @@
             }
 
             function getDefaultItem() {
-                return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerTypeValue, getOwnerId());
+                var effectiveOn = UtilsService.getDateFromDateTime(new Date());
+                return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerTypeValue, getOwnerId(), effectiveOn);
             }
         }
         function loadGrid()
@@ -600,7 +579,7 @@
                         ZoneChanges: zoneChanges
                     };
                 }
-
+                
                 return {
                     OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
@@ -619,6 +598,10 @@
                             if (item.directiveAPI)
                                 item.directiveAPI.applyChanges(defaultChanges);
                         }
+
+                        defaultChanges.NewService = defaultItem.NewService;
+                        defaultChanges.ClosedService = defaultItem.ClosedService;
+                        defaultChanges.ResetService = defaultItem.ResetService;
                     }
 
                     return defaultChanges;

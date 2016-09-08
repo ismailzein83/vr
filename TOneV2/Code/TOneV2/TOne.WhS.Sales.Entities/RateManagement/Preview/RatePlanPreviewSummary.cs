@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -23,5 +24,13 @@ namespace TOne.WhS.Sales.Entities
         public string NameOfNewDefaultRoutingProduct { get; set; }
 
         public string NameOfClosedDefaultRoutingProduct { get; set; }
+
+        public IEnumerable<ZoneService> NewDefaultServices { get; set; }
+
+        public DateTime ClosedDefaultServiceEffectiveOn { get; set; }
+
+        public int NumberOfNewSaleZoneServices { get; set; }
+
+        public int NumberOfClosedSaleZoneServices { get; set; }
     }
 }

@@ -72,14 +72,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyChangedDefaultServicesToDB.cs" />
+    <Compile Include="ApplyChangedSaleZoneServicesToDB.cs" />
     <Compile Include="ApplyDefaultRoutingProductPreviewToDB.cs" />
+    <Compile Include="ApplyDefaultServicePreviewToDB.cs" />
+    <Compile Include="ApplyNewDefaultServiceToDB.cs" />
+    <Compile Include="ApplyNewSaleZoneServicesToDB.cs" />
     <Compile Include="ApplyRatePlanPreviewSummaryToDB.cs" />
     <Compile Include="ApplyRatePreviewsToDB.cs" />
     <Compile Include="ApplySaleZoneRoutingProductPreviewsToDB.cs" />
+    <Compile Include="ApplySaleZoneServicePreviewsToDB.cs" />
+    <Compile Include="GetExistingSaleEntityDefaultServices.cs" />
+    <Compile Include="GetExistingSaleEntityZoneServices.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />
+    <Compile Include="PrepareDefaultServicePreview.cs" />
+    <Compile Include="PrepareExistingDefaultServices.cs" />
+    <Compile Include="PrepareExistingSaleZoneServices.cs" />
     <Compile Include="PrepareRatePlanPreviewSummary.cs" />
     <Compile Include="PrepareRatePreviews.cs" />
     <Compile Include="PrepareSaleZoneRoutingProductPreviews.cs" />
+    <Compile Include="PrepareSaleZoneServicePreviews.cs" />
+    <Compile Include="ProcessDefaultService.cs" />
+    <Compile Include="ProcessSaleZoneServices.cs" />
     <Compile Include="ReserveSalePriceListId.cs" />
     <Compile Include="ApplyChangedDefaultRoutingProductsToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />

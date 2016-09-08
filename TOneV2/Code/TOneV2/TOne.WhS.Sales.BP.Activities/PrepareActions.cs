@@ -39,10 +39,22 @@ namespace TOne.WhS.Sales.BP.Activities
         public OutArgument<DefaultRoutingProductToClose> DefaultRoutingProductToClose { get; set; }
 
         [RequiredArgument]
+        public OutArgument<DefaultServiceToAdd> DefaultServiceToAdd { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<DefaultServiceToClose> DefaultServiceToClose { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<SaleZoneRoutingProductToAdd>> SaleZoneRoutingProductsToAdd { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<SaleZoneRoutingProductToClose>> SaleZoneRoutingProductsToClose { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<SaleZoneServiceToAdd>> SaleZoneServicesToAdd { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
 
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
@@ -60,16 +72,20 @@ namespace TOne.WhS.Sales.BP.Activities
 
             DefaultRoutingProductToAdd defaultRoutingProductToAdd = null;
             DefaultRoutingProductToClose defaultRoutingProductToClose = null;
+            DefaultServiceToAdd defaultServiceToAdd = null;
+            DefaultServiceToClose defaultServiceToClose = null;
 
             var saleZoneRoutingProductsToAdd = new List<SaleZoneRoutingProductToAdd>();
             var saleZoneRoutingProductsToClose = new List<SaleZoneRoutingProductToClose>();
+            var saleZoneServicesToAdd = new List<SaleZoneServiceToAdd>();
+            var saleZoneServicesToClose = new List<SaleZoneServiceToClose>();
 
             var minDate = effectiveDate;
 
             if (changes != null)
             {
-                SetDefaultRoutingProductActions(ref defaultRoutingProductToAdd, ref defaultRoutingProductToClose, changes.DefaultChanges, ref minDate);
-                SetZoneActions(ref ratesToChange, ref ratesToClose, ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, changes.ZoneChanges, currencyId, ref minDate);
+                SetDefaultActions(out defaultRoutingProductToAdd, out defaultRoutingProductToClose, out defaultServiceToAdd, out defaultServiceToClose, changes.DefaultChanges, ref minDate);
+                SetZoneActions(ref ratesToChange, ref ratesToClose, ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, ref saleZoneServicesToAdd, ref saleZoneServicesToClose, changes.ZoneChanges, currencyId, ref minDate);
             }
 
             RatesToChange.Set(context, ratesToChange);
@@ -78,78 +94,126 @@ namespace TOne.WhS.Sales.BP.Activities
             DefaultRoutingProductToAdd.Set(context, defaultRoutingProductToAdd);
             DefaultRoutingProductToClose.Set(context, defaultRoutingProductToClose);
 
+            DefaultServiceToAdd.Set(context, defaultServiceToAdd);
+            DefaultServiceToClose.Set(context, defaultServiceToClose);
+
             SaleZoneRoutingProductsToAdd.Set(context, saleZoneRoutingProductsToAdd);
             SaleZoneRoutingProductsToClose.Set(context, saleZoneRoutingProductsToClose);
+
+            SaleZoneServicesToAdd.Set(context, saleZoneServicesToAdd);
+            SaleZoneServicesToClose.Set(context, saleZoneServicesToClose);
 
             MinimumDate.Set(context, minDate);
         }
 
         #region Private Methods
 
-        private void SetDefaultRoutingProductActions(ref DefaultRoutingProductToAdd defaultRoutingProductToAdd, ref DefaultRoutingProductToClose defaultRoutingProductToClose, DefaultChanges defaultChanges, ref DateTime minDate)
+        #region Set Default Actions
+
+        private void SetDefaultActions(out DefaultRoutingProductToAdd defaultRoutingProductToAdd, out DefaultRoutingProductToClose defaultRoutingProductToClose, out DefaultServiceToAdd defaultServiceToAdd, out DefaultServiceToClose defaultServiceToClose, DefaultChanges defaultDraft, ref DateTime minDate)
         {
-            if (defaultChanges == null)
-                return;
-
-            var routingProductManager = new RoutingProductManager();
-
-            if (defaultChanges.NewDefaultRoutingProduct != null)
+            if (defaultDraft != null)
             {
-                var newDefaultRoutingProduct = new NewDefaultRoutingProduct()
+                SetDefaultRoutingProductActions(defaultDraft.NewDefaultRoutingProduct, defaultDraft.DefaultRoutingProductChange, out defaultRoutingProductToAdd, out defaultRoutingProductToClose, ref minDate);
+
+                SetDefaultServiceActions(defaultDraft.NewService, defaultDraft.ClosedService, defaultDraft.ResetService, out defaultServiceToAdd, out defaultServiceToClose, ref minDate);
+            }
+            else
+            {
+                defaultRoutingProductToAdd = null;
+                defaultRoutingProductToClose = null;
+                defaultServiceToAdd = null;
+                defaultServiceToClose = null;
+            }
+        }
+
+        private void SetDefaultRoutingProductActions(DraftNewDefaultRoutingProduct newDefaultRoutingProduct, DraftChangedDefaultRoutingProduct changedDefaultRoutingProduct, out DefaultRoutingProductToAdd defaultRoutingProductToAdd, out DefaultRoutingProductToClose defaultRoutingProductToClose, ref DateTime minDate)
+        {
+            defaultRoutingProductToAdd = null;
+            defaultRoutingProductToClose = null;
+
+            if (newDefaultRoutingProduct != null)
+            {
+                var newRoutingProduct = new NewDefaultRoutingProduct()
                 {
-                    RoutingProductId = defaultChanges.NewDefaultRoutingProduct.DefaultRoutingProductId,
-                    BED = defaultChanges.NewDefaultRoutingProduct.BED,
-                    EED = defaultChanges.NewDefaultRoutingProduct.EED
+                    RoutingProductId = newDefaultRoutingProduct.DefaultRoutingProductId,
+                    BED = newDefaultRoutingProduct.BED,
+                    EED = newDefaultRoutingProduct.EED
                 };
                 defaultRoutingProductToAdd = new DefaultRoutingProductToAdd()
                 {
-                    NewDefaultRoutingProduct = newDefaultRoutingProduct,
-                    BED = defaultChanges.NewDefaultRoutingProduct.BED,
-                    EED = defaultChanges.NewDefaultRoutingProduct.EED
+                    NewDefaultRoutingProduct = newRoutingProduct,
+                    BED = newDefaultRoutingProduct.BED,
+                    EED = newDefaultRoutingProduct.EED
                 };
-                minDate = Vanrise.Common.Utilities.Min(minDate, defaultChanges.NewDefaultRoutingProduct.BED);
+                minDate = Vanrise.Common.Utilities.Min(minDate, newDefaultRoutingProduct.BED);
             }
-            else if (defaultChanges.DefaultRoutingProductChange != null)
+            else if (changedDefaultRoutingProduct != null)
             {
                 defaultRoutingProductToClose = new DefaultRoutingProductToClose()
                 {
-                    CloseEffectiveDate = defaultChanges.DefaultRoutingProductChange.EED
+                    CloseEffectiveDate = changedDefaultRoutingProduct.EED
                 };
-                minDate = Vanrise.Common.Utilities.Min(minDate, defaultChanges.DefaultRoutingProductChange.EED);
+                minDate = Vanrise.Common.Utilities.Min(minDate, changedDefaultRoutingProduct.EED);
             }
         }
+
+        private void SetDefaultServiceActions(DraftNewDefaultService newDefaultService, DraftClosedDefaultService closedDefaultService, DraftResetDefaultService resetDefaultService, out DefaultServiceToAdd defaultServiceToAdd, out DefaultServiceToClose defaultServiceToClose, ref DateTime minDate)
+        {
+            defaultServiceToAdd = null;
+            defaultServiceToClose = null;
+
+            if (newDefaultService != null)
+            {
+                defaultServiceToAdd = new DefaultServiceToAdd()
+                {
+                    NewDefaultService = new NewDefaultService()
+                    {
+                        Services = newDefaultService.Services,
+                        BED = newDefaultService.BED,
+                        EED = newDefaultService.EED
+                    },
+                    BED = newDefaultService.BED,
+                    EED = newDefaultService.EED
+                };
+                minDate = Vanrise.Common.Utilities.Min(minDate, newDefaultService.BED);
+            }
+            else if (closedDefaultService != null)
+            {
+                defaultServiceToClose = new DefaultServiceToClose()
+                {
+                    CloseEffectiveDate = closedDefaultService.EED
+                };
+                minDate = Vanrise.Common.Utilities.Min(minDate, closedDefaultService.EED);
+            }
+            else if (resetDefaultService != null)
+            {
+                defaultServiceToClose = new DefaultServiceToClose()
+                {
+                    CloseEffectiveDate = resetDefaultService.EED
+                };
+                minDate = Vanrise.Common.Utilities.Min(minDate, resetDefaultService.EED);
+            }
+        }
+
+        #endregion
 
         #region Set Zone Actions
 
-        private void SetZoneActions
-        (
-            ref List<RateToChange> ratesToChange,
-            ref List<RateToClose> ratesToClose,
-            ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd,
-            ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose,
-            IEnumerable<ZoneChanges> zoneChangesList,
-            int currencyId,
-            ref DateTime minDate
-        )
+        private void SetZoneActions(ref List<RateToChange> ratesToChange, ref List<RateToClose> ratesToClose, ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ref List<SaleZoneServiceToAdd> saleZoneServicesToAdd, ref List<SaleZoneServiceToClose> saleZoneServicesToClose, IEnumerable<ZoneChanges> zoneDrafts, int currencyId, ref DateTime minDate)
         {
-            if (zoneChangesList == null)
+            if (zoneDrafts == null)
                 return;
 
-            foreach (ZoneChanges zoneChanges in zoneChangesList)
+            foreach (ZoneChanges zoneDraft in zoneDrafts)
             {
-                SetZoneRateActions(ref ratesToChange, ref ratesToClose, zoneChanges, currencyId, ref minDate);
-                SetZoneRoutingProductActions(ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, zoneChanges, ref minDate);
+                SetZoneRateActions(ref ratesToChange, ref ratesToClose, zoneDraft, currencyId, ref minDate);
+                SetZoneRoutingProductActions(ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, zoneDraft, ref minDate);
+                SetZoneServiceActions(ref saleZoneServicesToAdd, ref saleZoneServicesToClose, zoneDraft, ref minDate);
             }
         }
 
-        private void SetZoneRateActions
-        (
-            ref List<RateToChange> ratesToChange,
-            ref List<RateToClose> ratesToClose,
-            ZoneChanges zoneChanges,
-            int currencyId,
-            ref DateTime minDate
-        )
+        private void SetZoneRateActions(ref List<RateToChange> ratesToChange, ref List<RateToClose> ratesToClose, ZoneChanges zoneChanges, int currencyId, ref DateTime minDate)
         {
             if (zoneChanges.NewRates != null)
             {
@@ -168,7 +232,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
                 }
             }
-            
+
             if (zoneChanges.ClosedRates != null)
             {
                 foreach (DraftRateToClose closedRate in zoneChanges.ClosedRates)
@@ -185,13 +249,7 @@ namespace TOne.WhS.Sales.BP.Activities
             }
         }
 
-        private void SetZoneRoutingProductActions
-        (
-            ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd,
-            ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose,
-            ZoneChanges zoneChanges,
-            ref DateTime minDate
-        )
+        private void SetZoneRoutingProductActions(ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ZoneChanges zoneChanges, ref DateTime minDate)
         {
             if (zoneChanges.NewRoutingProduct != null)
             {
@@ -214,6 +272,42 @@ namespace TOne.WhS.Sales.BP.Activities
                     CloseEffectiveDate = zoneChanges.RoutingProductChange.EED
                 });
                 minDate = Vanrise.Common.Utilities.Min(minDate, zoneChanges.RoutingProductChange.EED);
+            }
+        }
+
+        private void SetZoneServiceActions(ref List<SaleZoneServiceToAdd> saleZoneServicesToAdd, ref List<SaleZoneServiceToClose> saleZoneServicesToClose, ZoneChanges zoneDraft, ref DateTime minDate)
+        {
+            if (zoneDraft.NewService != null)
+            {
+                saleZoneServicesToAdd.Add(new SaleZoneServiceToAdd()
+                {
+                    ZoneId = zoneDraft.ZoneId,
+                    ZoneName = zoneDraft.ZoneName,
+                    Services = zoneDraft.NewService.Services,
+                    BED = zoneDraft.NewService.BED,
+                    EED = zoneDraft.NewService.EED
+                });
+                minDate = Vanrise.Common.Utilities.Min(minDate, zoneDraft.NewService.BED);
+            }
+            else if (zoneDraft.ClosedService != null)
+            {
+                saleZoneServicesToClose.Add(new SaleZoneServiceToClose()
+                {
+                    ZoneId = zoneDraft.ZoneId,
+                    ZoneName = zoneDraft.ZoneName,
+                    CloseEffectiveDate = zoneDraft.ClosedService.EED
+                });
+                minDate = Vanrise.Common.Utilities.Min(minDate, zoneDraft.ClosedService.EED);
+            }
+            else if (zoneDraft.ResetService != null)
+            {
+                saleZoneServicesToClose.Add(new SaleZoneServiceToClose()
+                {
+                    ZoneId = zoneDraft.ZoneId,
+                    ZoneName = zoneDraft.ZoneName,
+                    CloseEffectiveDate = zoneDraft.ResetService.EED
+                });
+                minDate = Vanrise.Common.Utilities.Min(minDate, zoneDraft.ResetService.EED);
             }
         }
 

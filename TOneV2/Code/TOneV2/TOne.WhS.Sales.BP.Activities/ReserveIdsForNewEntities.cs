@@ -14,10 +14,10 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ReserveIdsForNewEntitiesInput
     {
         public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
-
         public IEnumerable<NewRate> NewRates { get; set; }
-
         public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
+        public NewDefaultService NewDefaultService { get; set; }
+        public IEnumerable<NewSaleZoneService> NewSaleZoneServices { get; set; }
     }
 
     public class ReserveIdsForNewEntitiesOutput
@@ -38,6 +38,12 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<NewSaleZoneRoutingProduct>> NewSaleZoneRoutingProducts { get; set; }
 
+        [RequiredArgument]
+        public InArgument<NewDefaultService> NewDefaultService { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<NewSaleZoneService>> NewSaleZoneServices { get; set; }
+
         #endregion
         
         protected override ReserveIdsForNewEntitiesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -46,7 +52,9 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 NewDefaultRoutingProduct = this.NewDefaultRoutingProduct.Get(context),
                 NewRates = this.NewRates.Get(context),
-                NewSaleZoneRoutingProducts = this.NewSaleZoneRoutingProducts.Get(context)
+                NewSaleZoneRoutingProducts = this.NewSaleZoneRoutingProducts.Get(context),
+                NewDefaultService = this.NewDefaultService.Get(context),
+                NewSaleZoneServices = this.NewSaleZoneServices.Get(context)
             };
         }
 
@@ -60,10 +68,14 @@ namespace TOne.WhS.Sales.BP.Activities
             NewDefaultRoutingProduct newDefaultRoutingProduct = inputArgument.NewDefaultRoutingProduct;
             IEnumerable<NewRate> newRates = inputArgument.NewRates;
             IEnumerable<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts = inputArgument.NewSaleZoneRoutingProducts;
+            NewDefaultService newDefaultService = inputArgument.NewDefaultService;
+            IEnumerable<NewSaleZoneService> newSaleZoneServices = inputArgument.NewSaleZoneServices;
 
             ReserveNewDefaultRoutingProductId(newDefaultRoutingProduct);
             ReserveNewRateIds(newRates);
             ReserveNewSaleZoneRoutingProductIds(newSaleZoneRoutingProducts);
+            ReserveNewDefaultServiceId(newDefaultService);
+            ReserveNewSaleZoneServiceIds(newSaleZoneServices);
 
             return new ReserveIdsForNewEntitiesOutput() { };
         }
@@ -102,6 +114,29 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (NewSaleZoneRoutingProduct newSaleZoneRoutingProduct in newSaleZoneRoutingProducts)
                 newSaleZoneRoutingProduct.SaleEntityRoutingProductId = startingId++;
+        }
+
+        private void ReserveNewDefaultServiceId(NewDefaultService newDefaultService)
+        {
+            if (newDefaultService == null)
+                return;
+
+            var saleEntityServiceManager = new TOne.WhS.Sales.Business.SaleEntityServiceManager();
+            long startingId = saleEntityServiceManager.ReserveIdRange(1);
+
+            newDefaultService.SaleEntityServiceId = startingId;
+        }
+
+        private void ReserveNewSaleZoneServiceIds(IEnumerable<NewSaleZoneService> newSaleZoneServices)
+        {
+            if (newSaleZoneServices == null)
+                return;
+
+            var saleEntityServiceManager = new TOne.WhS.Sales.Business.SaleEntityServiceManager();
+            long startingId = saleEntityServiceManager.ReserveIdRange(newSaleZoneServices.Count());
+
+            foreach (NewSaleZoneService newSaleZoneService in newSaleZoneServices)
+                newSaleZoneService.SaleEntityServiceId = startingId++;
         }
 
         #endregion

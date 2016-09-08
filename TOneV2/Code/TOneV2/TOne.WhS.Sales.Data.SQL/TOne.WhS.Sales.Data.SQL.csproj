@@ -58,12 +58,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangedDefaultRoutingProductDataManager.cs" />
+    <Compile Include="ChangedDefaultServiceDataManager.cs" />
     <Compile Include="ChangedSaleRateDataManager.cs" />
     <Compile Include="ChangedSaleZoneRoutingProductDataManager.cs" />
+    <Compile Include="ChangedSaleZoneServiceDataManager.cs" />
     <Compile Include="DefaultRoutingProductPreviewDataManager.cs" />
+    <Compile Include="DefaultServicePreviewDataManager.cs" />
     <Compile Include="NewDefaultRoutingProductDataManager.cs" />
+    <Compile Include="NewDefaultServiceDataManager.cs" />
     <Compile Include="NewSaleRateDataManager.cs" />
     <Compile Include="NewSaleZoneRoutingProductDataManager.cs" />
+    <Compile Include="NewSaleZoneServiceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateDataManager.cs" />
     <Compile Include="RatePlanDataManager.cs" />
@@ -71,6 +76,7 @@
     <Compile Include="RatePreviewDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleZoneRoutingProductPreviewDataManager.cs" />
+    <Compile Include="SaleZoneServicePreviewDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">

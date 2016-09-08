@@ -38,6 +38,12 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<SaleZoneRoutingProductToClose>> SaleZoneRoutingProductsToClose { get; set; }
 
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneServiceToAdd>> SaleZoneServicesToAdd { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
+
         #endregion
 
         #region Output Arguments
@@ -58,6 +64,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
             IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context);
             IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context);
+
+            IEnumerable<SaleZoneServiceToAdd> saleZoneServicesToAdd = this.SaleZoneServicesToAdd.Get(context);
+            IEnumerable<SaleZoneServiceToClose> saleZoneServicesToClose = this.SaleZoneServicesToClose.Get(context);
 
             IEnumerable<CustomerCountry> soldCountries = null;
             if (ownerType == SalePriceListOwnerType.Customer)
@@ -118,6 +127,20 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (!dataByZoneName.TryGetValue(routingProductToClose.ZoneName, out dataByZone))
                     AddEmptyDataByZone(dataByZoneName, routingProductToClose.ZoneName, out dataByZone);
                 dataByZone.SaleZoneRoutingProductToClose = routingProductToClose;
+            }
+
+            foreach (SaleZoneServiceToAdd saleZoneServiceToAdd in saleZoneServicesToAdd)
+            {
+                if (!dataByZoneName.TryGetValue(saleZoneServiceToAdd.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, saleZoneServiceToAdd.ZoneName, out dataByZone);
+                dataByZone.SaleZoneServiceToAdd = saleZoneServiceToAdd;
+            }
+
+            foreach (SaleZoneServiceToClose saleZoneServiceToClose in saleZoneServicesToClose)
+            {
+                if (!dataByZoneName.TryGetValue(saleZoneServiceToClose.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, saleZoneServiceToClose.ZoneName, out dataByZone);
+                dataByZone.SaleZoneServiceToClose = saleZoneServiceToClose;
             }
 
             this.DataByZone.Set(context, dataByZoneName.Values);
