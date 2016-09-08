@@ -2517,3 +2517,6 @@ div[validationcontainer]{
     margin: 0px 3px;
 }
 
+.vr-multiple  .glyphicon-plus-sign{
+    top:7px
+}

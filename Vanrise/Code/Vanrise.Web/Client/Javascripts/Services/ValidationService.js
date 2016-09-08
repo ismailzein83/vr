@@ -108,6 +108,7 @@
 
         return ({
             validate: validate,
+            validateEmail:validateEmail,
             validateTimeRange: validateTimeRange,
             validateTimeEqualorGreaterthanToday: validateTimeEqualorGreaterthanToday
         });
