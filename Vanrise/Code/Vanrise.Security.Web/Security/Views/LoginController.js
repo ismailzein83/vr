@@ -37,7 +37,7 @@
 
                 authenticate(credentialsObject);
             }
-            VR_Sec_UserService.activatePassword($scope.email, userObj, onPasswordActivated);
+            VR_Sec_UserService.activatePassword($scope.email, userObj, $scope.password, onPasswordActivated);
         }
 
         function authenticate(credentialsObject) {

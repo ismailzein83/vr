@@ -404,9 +404,18 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public UpdateOperationOutput<object> ActivatePassword(string email, string password, string name)
+        public UpdateOperationOutput<object> ActivatePassword(string email, string password, string name, string tempPassword)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUserbyEmail(email);
+            if (user == null)
+                return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+
+            string loggedInUserTempPassword = GetUserTempPassword(user.UserId);
+            if (!HashingUtility.VerifyHash(tempPassword, "", loggedInUserTempPassword))
+                return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
             bool updateActionSucc = dataManager.ActivatePassword(email, HashingUtility.ComputeHash(password, "", null), name);
 

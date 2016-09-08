@@ -6,7 +6,7 @@
     function ActivatePasswordEditorController($scope, VR_Sec_UserAPIService, VRNavigationService, VRNotificationService) {
         var email;
         var userObj;
-
+        var tempPassword;
         loadParameters();
         defineScope();
         load();
@@ -17,6 +17,7 @@
             if (parameters) {
                 email = parameters.email;
                 userObj = parameters.userObj;
+                tempPassword = parameters.tempPassword;
             }
         }
 
@@ -25,7 +26,8 @@
                 var activatePasswordInput = {
                     Email: email,
                     Password: $scope.password,
-                    Name: $scope.name
+                    Name: $scope.name,
+                    TempPassword : tempPassword
                 };
 
                 return VR_Sec_UserAPIService.ActivatePassword(activatePasswordInput).then(function (response) {

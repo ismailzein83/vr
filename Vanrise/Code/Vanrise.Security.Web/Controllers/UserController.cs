@@ -84,7 +84,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("ActivatePassword")]
         public Vanrise.Entities.UpdateOperationOutput<object> ActivatePassword(ActivatePasswordInput user)
         {
-            return _manager.ActivatePassword(user.Email, user.Password, user.Name);
+            return _manager.ActivatePassword(user.Email, user.Password, user.Name, user.TempPassword);
         }
 
 
@@ -128,5 +128,6 @@ namespace Vanrise.Security.Web.Controllers
         public string Email { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
+        public string TempPassword { get; set; }
     }
 }

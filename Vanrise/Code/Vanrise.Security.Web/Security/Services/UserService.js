@@ -67,10 +67,11 @@
 
 
 
-        function activatePassword(email, userObj, onPasswordActivated) {
+        function activatePassword(email, userObj, tempPassword, onPasswordActivated) {
             var modalParameters = {
                 email: email,
-                userObj: userObj
+                userObj: userObj,
+                tempPassword: tempPassword
             };
 
             var modalSettings = {};
