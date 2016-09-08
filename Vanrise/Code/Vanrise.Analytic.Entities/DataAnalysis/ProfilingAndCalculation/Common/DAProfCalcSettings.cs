@@ -20,8 +20,8 @@ namespace Vanrise.Analytic.Entities
                     {
                          TypeId = Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions.RecordProfilingOutputSettings.S_ItemDefinitionTypeId,
                          Title = "Record Profiling",
-                         Editor= "vr-analytic-recordprofilingoutputsettings-editor",
-                         GridDirective = "vr-analytic-dataanalysisitemdefinition-grid"
+                         Editor= "vr-analytic-recordprofilingoutputsettings-editor"
+                         //GridDirective = "vr-analytic-recordprofilingoutputsettings-grid"
                     }
                 };
             }

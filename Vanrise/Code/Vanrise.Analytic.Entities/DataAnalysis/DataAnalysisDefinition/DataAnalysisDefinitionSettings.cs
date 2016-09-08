@@ -24,9 +24,9 @@ namespace Vanrise.Analytic.Entities
 
         public virtual string GridDirective
         {
-            get { return "vr-analytic-recordprofilingoutputsettings-grid"; }
-
-            set { this.GridDirective = value; }
+            get { return "vr-analytic-dataanalysisitemdefinition-grid"; }
+            
+            //set { this.GridDirective = value; }
         }
     }
 }
