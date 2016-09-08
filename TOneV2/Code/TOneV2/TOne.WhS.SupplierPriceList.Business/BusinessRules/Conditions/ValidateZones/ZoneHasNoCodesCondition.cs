@@ -27,7 +27,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override string GetMessage(IRuleTarget target)
         {
             ImportedDataByZone importedDateByZone = target as ImportedDataByZone;
-            string zoneName = importedDateByZone.ImportedRates.First().ZoneName;
+            string zoneName = importedDateByZone.ZoneName;
             return string.Format("Zone {0} has no codes", zoneName);
         }
 

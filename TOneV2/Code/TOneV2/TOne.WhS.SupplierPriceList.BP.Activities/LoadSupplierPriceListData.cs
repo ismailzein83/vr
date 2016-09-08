@@ -146,43 +146,43 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             //TODO: this logic needs to be removed when handling rates validation is done in business rules. 
             //For example when a rule has an action that takes the rate with min date or the rate with min value. At this case, the below logic is not needed.
-            var importedRatesByZoneName = new Dictionary<string, List<ImportedRate>>();
+            //var importedRatesByZoneName = new Dictionary<string, List<ImportedRate>>();
 
-            foreach (var importedRate in importedRatesList.OrderBy(x => x.BED))
-            {
-                if (importedRate.ZoneName == null)
-                    continue;
+            //foreach (var importedRate in importedRatesList.OrderBy(x => x.BED))
+            //{
+            //    if (importedRate.ZoneName == null)
+            //        continue;
 
-                List<ImportedRate> zoneRates;
-                if (!importedRatesByZoneName.TryGetValue(importedRate.ZoneName, out zoneRates))
-                {
-                    zoneRates = new List<ImportedRate>();
-                    importedRatesByZoneName.Add(importedRate.ZoneName, zoneRates);
-                }
+            //    List<ImportedRate> zoneRates;
+            //    if (!importedRatesByZoneName.TryGetValue(importedRate.ZoneName, out zoneRates))
+            //    {
+            //        zoneRates = new List<ImportedRate>();
+            //        importedRatesByZoneName.Add(importedRate.ZoneName, zoneRates);
+            //    }
 
-                zoneRates.Add(importedRate);
-            }
+            //    zoneRates.Add(importedRate);
+            //}
 
-            var validatedListofImportedRates = new List<ImportedRate>();
+            //var validatedListofImportedRates = new List<ImportedRate>();
 
-            foreach (var zoneImportedRates in importedRatesByZoneName.Values)
-            {
-                bool allRatesWithSameValue = !zoneImportedRates.Select(item => item.Rate)
-                      .Distinct()
-                      .Skip(1)
-                      .Any();
+            //foreach (var zoneImportedRates in importedRatesByZoneName.Values)
+            //{
+            //    bool allRatesWithSameValue = !zoneImportedRates.Select(item => item.Rate)
+            //          .Distinct()
+            //          .Skip(1)
+            //          .Any();
 
-                if (allRatesWithSameValue)
-                    validatedListofImportedRates.Add(zoneImportedRates.First()); //The rate with min date
-                else
-                    validatedListofImportedRates.AddRange(zoneImportedRates); //Add them all to catch them in business rules
-            }
+            //    if (allRatesWithSameValue)
+            //        validatedListofImportedRates.Add(zoneImportedRates.First()); //The rate with min date
+            //    else
+            //        validatedListofImportedRates.AddRange(zoneImportedRates); //Add them all to catch them in business rules
+            //}
 
             #endregion
 
             ImportedCodes.Set(context, importedCodesList);
             ImportedZonesServices.Set(context, importedZonesServicesList);
-            ImportedRates.Set(context, validatedListofImportedRates);
+            ImportedRates.Set(context, importedRatesList);
             ImportedRateTypeIds.Set(context, convertedPriceList.PriceListOtherRates.Keys);
             MinimumDate.Set(context, minimumDate);
 

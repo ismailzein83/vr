@@ -21,7 +21,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedDataByZone zone = context.Target as ImportedDataByZone;
-            return !(zone.ImportedRates.Count == 0);
+            return !(zone.ImportedNormalRates.Count == 0);
         }
 
         public override string GetMessage(IRuleTarget target)

@@ -11,9 +11,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SupplierZoneServiceDataManager : BaseSQLDataManager, ISupplierZoneServiceDataManager
     {
+        #region ctor/Local Variables
+        
+        public SupplierZoneServiceDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
 
+        }
+
+        #endregion
        
-
         #region Public Methods
        
         public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -22,7 +29,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
        
         #endregion
-
        
 
         #region Mappers

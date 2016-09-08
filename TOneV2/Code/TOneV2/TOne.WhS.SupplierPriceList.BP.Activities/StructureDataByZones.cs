@@ -55,10 +55,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     importedDataByZoneName.Add(rate.ZoneName, importedDataByZone);
                 }
-
-                importedDataByZone.ImportedRates.Add(rate);
+                if (rate.RateTypeId == null)
+                    importedDataByZone.ImportedNormalRates.Add(rate);
+                else
+                    importedDataByZone.ImportedOtherRates.Add(rate);
             }
-
 
             foreach (ImportedZoneService service in importedZonesServices)
             {

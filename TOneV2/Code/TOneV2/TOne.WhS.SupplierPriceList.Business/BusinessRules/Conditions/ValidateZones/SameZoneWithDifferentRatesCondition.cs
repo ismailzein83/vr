@@ -22,12 +22,18 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
-            var distinctImportedRates = from importedRate in zone.ImportedRates
+            var distinctImportedNormalRates = from importedRate in zone.ImportedNormalRates
                                         where !importedRate.RateTypeId.HasValue
                                         group importedRate by importedRate.Rate into newRates
                                         select newRates;
 
-            return !(distinctImportedRates.Count() > 1);
+
+            var distinctImportedOtherRates = from importedRate in zone.ImportedOtherRates
+                                        where importedRate.RateTypeId.HasValue
+                                        group importedRate by new {importedRate.Rate, importedRate.RateTypeId} into newRates
+                                        select newRates;
+
+            return !(distinctImportedNormalRates.Count() > 1 || distinctImportedOtherRates.Count() > 1);
         }
 
         public override string GetMessage(IRuleTarget target)

@@ -23,13 +23,23 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
 
-        private List<ImportedRate> _importedRates = new List<ImportedRate>();
+        private List<ImportedRate> _importedNormalRates = new List<ImportedRate>();
 
-        public List<ImportedRate> ImportedRates
+        public List<ImportedRate> ImportedNormalRates
         {
             get
             {
-                return this._importedRates;
+                return this._importedNormalRates;
+            }
+        }
+
+        private List<ImportedRate> _importedOtherRates = new List<ImportedRate>();
+
+        public List<ImportedRate> ImportedOtherRates
+        {
+            get
+            {
+                return this._importedOtherRates;
             }
         }
 
