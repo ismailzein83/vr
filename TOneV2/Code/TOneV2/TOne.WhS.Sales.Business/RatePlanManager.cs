@@ -114,7 +114,7 @@ namespace TOne.WhS.Sales.Business
                 if (changes != null && changes.DefaultChanges != null)
                     newDefaultService = changes.DefaultChanges.NewService;
 
-                foreach (SaleZone zone in zones)
+                foreach (SaleZone zone in zones.OrderBy(x => x.Name))
                 {
                     ZoneItem zoneItem = new ZoneItem()
                     {

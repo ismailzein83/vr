@@ -5,8 +5,8 @@
              menuactions="scopeModel.menuActions">
     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" ng-show="ctrl.isNormalRateGrid"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rate Type'" field="'RateTypeName'" type="'Text'" ng-show="!ctrl.isNormalRateGrid"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Change Type'">
         <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
     </vr-datagridcolumn>

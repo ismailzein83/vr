@@ -24,7 +24,7 @@ namespace TOne.WhS.Sales.Business
             ApplyCalculatedRates(input.OwnerType, input.OwnerId, (int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
         }
 
-        public void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        private void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(ownerType, ownerId, sellingNumberPlanId, sellingProductId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
 
@@ -58,7 +58,9 @@ namespace TOne.WhS.Sales.Business
 
             var draftManager = new RatePlanDraftManager();
             Changes changes = draftManager.GetDraft(ownerType, ownerId);
-            ZoneRoutingProductManager routingProductSetter = new ZoneRoutingProductManager(sellingProductId, customerId, effectiveOn, changes);
+            
+            var zoneRateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, changes, currencyId);
+            var routingProductSetter = new ZoneRoutingProductManager(sellingProductId, customerId, effectiveOn, changes);
 
             foreach (SaleZone zone in zones)
             {
@@ -68,7 +70,9 @@ namespace TOne.WhS.Sales.Business
                     ZoneName = zone.Name
                 };
 
+                zoneRateManager.SetZoneRate(zoneItem);
                 routingProductSetter.SetZoneRoutingProduct(zoneItem);
+                
                 zoneItems.Add(zoneItem);
             }
 
@@ -85,13 +89,25 @@ namespace TOne.WhS.Sales.Business
             // Create a list of zone changes, each having a new rate, from the calculated rates
             List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
 
+            var ratePlanManager = new RatePlanManager();
+            RatePlanSettingsData ratePlanSettings = ratePlanManager.GetRatePlanSettingsData();
+
+            DateTime newRateBED;
+
             foreach (ZoneItem zoneItem in zoneItems)
             {
+                if (!zoneItem.CalculatedRate.HasValue)
+                    continue;
+
+                newRateBED = (!zoneItem.CurrentRate.HasValue || zoneItem.CalculatedRate.Value > zoneItem.CurrentRate.Value) ?
+                    effectiveOn.AddDays(ratePlanSettings.IncreasedRateDayOffset) :
+                    effectiveOn.AddDays(ratePlanSettings.DecreasedRateDayOffset);
+                
                 DraftRateToChange newRate = new DraftRateToChange()
                 {
                     ZoneId = zoneItem.ZoneId,
                     NormalRate = (decimal)zoneItem.CalculatedRate,
-                    BED = effectiveOn
+                    BED = newRateBED
                 };
 
                 ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, ZoneName = zoneItem.ZoneName, NewRates = new List<DraftRateToChange>() { newRate } };

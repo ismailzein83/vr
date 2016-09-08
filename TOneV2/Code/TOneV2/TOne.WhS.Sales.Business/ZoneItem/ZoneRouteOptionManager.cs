@@ -87,7 +87,10 @@ namespace TOne.WhS.Sales.Business
 
                     _rateCalculationMethod.CalculateRate(context);
                     if (context.Rate.HasValue)
-                        zoneItem.CalculatedRate = Decimal.Round(context.Rate.Value, GenericParameterManager.Current.GetLongPrecision());
+                    {
+                        if (!zoneItem.CurrentRate.HasValue || zoneItem.CurrentRate.Value != context.Rate.Value)
+                            zoneItem.CalculatedRate = Decimal.Round(context.Rate.Value, GenericParameterManager.Current.GetLongPrecision());
+                    }
                 }
             }
         }
