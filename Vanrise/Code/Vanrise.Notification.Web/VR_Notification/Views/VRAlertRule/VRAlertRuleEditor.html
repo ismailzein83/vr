@@ -11,12 +11,18 @@
                     <vr-row>
                         <vr-columns width="1/2row" vr-loader="scopeModel.isAlertRuleTypeSelectorLoading">
                             <vr-notification-alertruletype-selector on-ready="scopeModel.onAlertRuleTypeSelectorReady"
-                                                                    onselectionchanged="scopeModel.onAlertRuleTypeSelectionChanged" isrequired="true"></vr-notification-alertruletype-selector>
+                                                                    onselectionchanged="scopeModel.onAlertRuleTypeSelectionChanged" 
+                                                                    isrequired="true">
+
+                            </vr-notification-alertruletype-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Criteria'">
                     <vr-notification-vralertrule-criteria on-ready="scopeModel.onVRAlertRuleCriteriaDirectiveReady" ng-show="scopeModel.canDefineCriteria"></vr-notification-vralertrule-criteria>
+                </vr-tab>
+                <vr-tab header="'Actions'" vr-loader="scopeModel.isVRActionLoading">
+                    <vr-notification-vraction-management on-ready="scopeModel.onVRActionDirectiveReady" ng-show="scopeModel.canDefineCriteria"></vr-notification-vraction-management>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

@@ -19,11 +19,11 @@ function (UtilsService, VR_Notification_VRActionService) {
 
         },
         templateUrl: "/Client/Modules/VR_Notification/Directives/VRActions/Templates/VRActionsManagementTemplate.html"
-
     };
 
-
     function VRActionsManagement(ctrl, $scope, $attrs) {
+        this.initializeController = initializeController;
+
         var extensionType;
         var isRequired;
 
@@ -56,7 +56,6 @@ function (UtilsService, VR_Notification_VRActionService) {
             defineAPI();
             defineMenuActions();
         }
-
         function defineAPI() {
             var api = {};
 
@@ -107,8 +106,7 @@ function (UtilsService, VR_Notification_VRActionService) {
             }
             VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType);
         }
-
-        this.initializeController = initializeController;
     }
+
     return directiveDefinitionObject;
 }]);

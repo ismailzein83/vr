@@ -25,7 +25,7 @@ namespace Vanrise.Analytic.Entities
         {
             get
             {
-                return "VR_Analytic_DAProfCalcAlertRule_VRAction";
+                return "vr-analytic-daprofcalc-alertruleaction";
             }
             set
             {
