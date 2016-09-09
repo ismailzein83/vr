@@ -2,13 +2,14 @@
 CREATE PROCEDURE [QM_CLITester].[sp_TestCall_GetUpdated]
 	@TimestampAfter timestamp,
 	@NbOfRows INT,
-	@UserId INT
+	@UserId INT,
+	@NumberOfMinutes INT
 AS
 BEGIN
 	
 	IF (@TimestampAfter IS NULL)--If First Time Query, get the Last Test Calls
 		SELECT @TimestampAfter = MIN([timestamp])
-		FROM (SELECT TOP (@NbOfRows) [timestamp] FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) WHERE UserID = @UserId ORDER BY ID DESC) LastTestCalls
+		FROM (SELECT TOP (@NbOfRows) [timestamp] FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) WHERE UserID = @UserId AND (DATEDIFF(MINUTE,CreationDate,GETDATE()) < @NumberOfMinutes) ORDER BY ID DESC) LastTestCalls
 	
 	SELECT   [ID]
 		  ,[UserID]
@@ -31,13 +32,13 @@ BEGIN
 		  ,[MOS]
 		  ,[Duration]
 		  ,[RingDuration]
-		  
+		  ,[Quantity]
 	INTO #Result
 	FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE 
 	 UserID = @UserId AND
-	([timestamp] > @TimestampAfter) --ONLY Updated records
-	
+	([timestamp] > @TimestampAfter) --ONLY Updated records 
+	AND DATEDIFF(MINUTE,CreationDate,GETDATE()) < @NumberOfMinutes
 	
 	SELECT * FROM #Result
 	ORDER BY ID DESC

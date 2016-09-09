@@ -21,8 +21,11 @@
     [Duration]                DATETIME        NULL,
     [RingDuration]            VARCHAR (20)    NULL,
     [UpdateStatusTime]        DATETIME        NULL,
+    [Quantity]                INT             NULL,
     CONSTRAINT [PK_TestCall] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

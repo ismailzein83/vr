@@ -15,13 +15,14 @@ CREATE PROCEDURE [QM_CLITester].[sp_TestCall_Insert]
 	@ProfileID int,
 	@BatchNumber bigint,
 	@scheduleID int,
+	@Quantity int,
 	@ID int out
 AS
 BEGIN
 
 	Insert into QM_CLITester.TestCall([SupplierID], [CountryID], [ZoneID], [CreationDate],
-	[CallTestStatus],[CallTestResult],[UserID], [ProfileID], [InitiationRetryCount], [GetProgressRetryCount], [BatchNumber], [scheduleID], [UpdateStatusTime])
-	Values(@SupplierID, @CountryID, @ZoneID, GETDATE(),@CallTestStatus, @CallTestResult, @UserID, @ProfileID, @InitiationRetryCount, @GetProgressRetryCount, @BatchNumber, @scheduleID, GETDATE())
+	[CallTestStatus],[CallTestResult],[UserID], [ProfileID], [InitiationRetryCount], [GetProgressRetryCount], [BatchNumber], [scheduleID], [Quantity], [UpdateStatusTime])
+	Values(@SupplierID, @CountryID, @ZoneID, GETDATE(),@CallTestStatus, @CallTestResult, @UserID, @ProfileID, @InitiationRetryCount, @GetProgressRetryCount, @BatchNumber, @scheduleID, @Quantity, GETDATE())
 	
 	Set @ID = SCOPE_IDENTITY()
 END

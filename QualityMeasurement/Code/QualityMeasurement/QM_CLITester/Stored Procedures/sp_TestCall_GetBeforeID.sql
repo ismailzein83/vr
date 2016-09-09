@@ -27,6 +27,7 @@ BEGIN
 		  ,[MOS]
 		  ,[Duration]
 		  ,[RingDuration]
+		  ,[Quantity]
 	FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE ID < @LessThanID AND  UserID = @UserId
 	ORDER BY ID DESC

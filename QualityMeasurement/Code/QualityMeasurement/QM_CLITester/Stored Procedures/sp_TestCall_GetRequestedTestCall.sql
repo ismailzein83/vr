@@ -35,7 +35,7 @@ select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CallTes
       ,[MOS]
       ,[Duration]
       ,[RingDuration]
-      
+      ,[Quantity]
 	FROM	[QM_CLITester].[TestCall] WITH(NOLOCK)  where
 	
 	(@CallTestStatusIDs  is null or [QM_CLITester].[TestCall].CallTestStatus in (select CallTestStatusID from @CallTestStatusIDsTable))

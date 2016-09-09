@@ -76,7 +76,8 @@ BEGIN
 			  ,tc.[MOS]
 			  ,tc.[Duration]
 			  ,tc.[RingDuration]
-			  
+			  ,tc.[Quantity]
+
 			INTO #RESULT
 			FROM 
 			[QM_CLITester].[TestCall]  tc   WITH(NOLOCK) 
