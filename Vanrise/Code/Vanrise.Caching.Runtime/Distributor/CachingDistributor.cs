@@ -21,54 +21,60 @@ namespace Vanrise.Caching.Runtime
         internal void Initialize()
         {
             var runtimeServiceInstances = _runtimeServiceInstanceManager.GetServices(CachingRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
-            var interRuntimeServiceManager = new InterRuntimeServiceManager();
-            Parallel.ForEach(runtimeServiceInstances, (serviceInstance) =>
+            if (runtimeServiceInstances != null)
             {
-                var processId = serviceInstance.ProcessId;
-                List<string> runtimeFullCacheNames = interRuntimeServiceManager.SendRequest(processId, new GetRuntimeAllCacheNamesRequest
+                var interRuntimeServiceManager = new InterRuntimeServiceManager();
+                Parallel.ForEach(runtimeServiceInstances, (serviceInstance) =>
                 {
-                });
-                lock (this)
-                {
-                    foreach (var fullCacheName in runtimeFullCacheNames)
+                    var processId = serviceInstance.ProcessId;
+                    List<string> runtimeFullCacheNames = interRuntimeServiceManager.SendRequest(processId, new GetRuntimeAllCacheNamesRequest
                     {
-                        _runtimeProcessIdByCacheNames.Add(fullCacheName, processId);
+                    });
+                    lock (this)
+                    {
+                        foreach (var fullCacheName in runtimeFullCacheNames)
+                        {
+                            _runtimeProcessIdByCacheNames.Add(fullCacheName, processId);
+                        }
+                        _cacheCountByRuntimeProcessIds.Add(processId, runtimeFullCacheNames.Count);
                     }
-                    _cacheCountByRuntimeProcessIds.Add(processId, runtimeFullCacheNames.Count);
-                }
-            });
+                });
+            }
         }
 
         internal void SyncServiceRuntimeProcesses()
         {
             var runtimeServiceInstances = _runtimeServiceInstanceManager.GetServices(CachingRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
-            HashSet<int> runningProcessIds = new HashSet<int>(runtimeServiceInstances.Select(itm => itm.ProcessId));
-            foreach (var processId in runningProcessIds)
+            if (runtimeServiceInstances != null)
             {
-                if (!_cacheCountByRuntimeProcessIds.ContainsKey(processId))
+                HashSet<int> runningProcessIds = new HashSet<int>(runtimeServiceInstances.Select(itm => itm.ProcessId));
+                foreach (var processId in runningProcessIds)
                 {
-                    lock (this)
+                    if (!_cacheCountByRuntimeProcessIds.ContainsKey(processId))
                     {
-                        _cacheCountByRuntimeProcessIds.Add(processId, 0);
+                        lock (this)
+                        {
+                            _cacheCountByRuntimeProcessIds.Add(processId, 0);
+                        }
                     }
                 }
-            }
-            if (runningProcessIds.Count != _cacheCountByRuntimeProcessIds.Count)
-            {
-                HashSet<int> nonRunningProcessIds = new HashSet<int>(_cacheCountByRuntimeProcessIds.Keys.Where(processId => !runningProcessIds.Contains(processId)));
-                var cacheNamesWithNonRunningProcesses = _runtimeProcessIdByCacheNames.Where(itm => nonRunningProcessIds.Contains(itm.Value));
-                foreach (var cacheNameEntry in cacheNamesWithNonRunningProcesses)
+                if (runningProcessIds.Count != _cacheCountByRuntimeProcessIds.Count)
                 {
-                    lock (this)
+                    HashSet<int> nonRunningProcessIds = new HashSet<int>(_cacheCountByRuntimeProcessIds.Keys.Where(processId => !runningProcessIds.Contains(processId)));
+                    var cacheNamesWithNonRunningProcesses = _runtimeProcessIdByCacheNames.Where(itm => nonRunningProcessIds.Contains(itm.Value));
+                    foreach (var cacheNameEntry in cacheNamesWithNonRunningProcesses)
                     {
-                        _runtimeProcessIdByCacheNames.Remove(cacheNameEntry.Key);
+                        lock (this)
+                        {
+                            _runtimeProcessIdByCacheNames.Remove(cacheNameEntry.Key);
+                        }
                     }
-                }
-                foreach (var processId in nonRunningProcessIds)
-                {
-                    lock (this)
+                    foreach (var processId in nonRunningProcessIds)
                     {
-                        _cacheCountByRuntimeProcessIds.Remove(processId);
+                        lock (this)
+                        {
+                            _cacheCountByRuntimeProcessIds.Remove(processId);
+                        }
                     }
                 }
             }

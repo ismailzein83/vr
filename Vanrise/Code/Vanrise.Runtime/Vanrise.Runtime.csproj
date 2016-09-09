@@ -64,6 +64,7 @@
     <Compile Include="SchedulerService.cs" />
     <Compile Include="SchedulerTaskCheckProgressContext.cs" />
     <Compile Include="RuntimeServiceInstanceManager.cs" />
+    <Compile Include="SingletonServiceProcessIdGetter.cs" />
     <Compile Include="TransactionLock\ITransactionLockHandler.cs" />
     <Compile Include="TransactionLock\ITransactionLockWCFService.cs" />
     <Compile Include="TransactionLock\LocalTransactionLockHandler.cs" />

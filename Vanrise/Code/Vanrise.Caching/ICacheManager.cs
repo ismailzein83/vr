@@ -14,4 +14,9 @@ namespace Vanrise.Caching
 
         CacheObjectSize ApproximateObjectSize { get; }
     }
+
+    public interface ICacheManager<ParamType> : ICacheManager
+    {
+        bool IsCacheExpired(ParamType parameter, ref DateTime? lastCheckTime);
+    }
 }

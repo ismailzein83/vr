@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
 using System.Configuration;
+using System.Reflection;
 
 namespace Vanrise.Caching
 {
-    public abstract class BaseCacheManager<ParamType> : ICacheManager
+    public abstract class BaseCacheManager<ParamType> : ICacheManager<ParamType>
     {
         ConcurrentDictionary<ParamType, DateTime> _cacheExpirationTimes = new ConcurrentDictionary<ParamType, DateTime>();
 
         TimeSpan _timeExpirationInterval;
+
         protected virtual bool IsTimeExpirable
         {
             get
@@ -199,7 +201,10 @@ namespace Vanrise.Caching
             {
                 if ((DateTime.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 2)//dont check expiration if it is checked recently
                     return;
-                if (ShouldSetCacheExpired(parameter))
+                bool isExpired;
+                if (!RuntimeCacheFactory.GetCacheExpirationChecker().TryCheckExpirationFromRuntimeService(this.GetType(), parameter, out isExpired))
+                    isExpired = ShouldSetCacheExpired(parameter);
+                if (isExpired)
                 {
                     SetCacheExpired(parameter);
                 }

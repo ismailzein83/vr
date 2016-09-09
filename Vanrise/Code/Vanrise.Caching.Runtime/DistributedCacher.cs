@@ -44,50 +44,21 @@ namespace Vanrise.Caching.Runtime
                 });
         }
 
-        static Object s_lockObj = new object();
-        static int? s_distributorRuntimeProcessId;
-        static DateTime s_lastTimeDistributorProcessRetrieved;
-
         private int? GetCachingRuntimeProcessId(string cacheFullName)
         {
-            if(!s_distributorRuntimeProcessId.HasValue && (DateTime.Now - s_lastTimeDistributorProcessRetrieved).TotalSeconds > 10)
-            {
-                lock (s_lockObj)
-                {
-                    if (!s_distributorRuntimeProcessId.HasValue && (DateTime.Now - s_lastTimeDistributorProcessRetrieved).TotalSeconds > 10)
-                    {
-                        try
-                        {
-                            int distributorRuntimeProcessId_local;
-                            if (new Vanrise.Runtime.RunningProcessManager().TryGetRuntimeServiceProcessId(CachingDistributorRuntimeService.SERVICE_TYPE_UNIQUE_NAME, out distributorRuntimeProcessId_local))
-                                s_distributorRuntimeProcessId = distributorRuntimeProcessId_local;
-                        }
-                        catch(Exception ex)
-                        {
-                            Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
-                        }
-                        finally
-                        {
-                            s_lastTimeDistributorProcessRetrieved = DateTime.Now;
-                        }
-                    }
-                }
-            }
-            if(s_distributorRuntimeProcessId.HasValue)
+            var distributorRuntimeProcessId = Vanrise.Runtime.SingletonServiceProcessIdGetter.GetRuntimeProcessId(CachingDistributorRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
+            if (distributorRuntimeProcessId.HasValue)
             {
                 try
                 {
-                    return new Vanrise.Runtime.InterRuntimeServiceManager().SendRequest(s_distributorRuntimeProcessId.Value, new GetCachingRuntimeProcessIdRequest
+                    return new Vanrise.Runtime.InterRuntimeServiceManager().SendRequest(distributorRuntimeProcessId.Value, new GetCachingRuntimeProcessIdRequest
                         {
                             CacheFullName = cacheFullName
                         });
                 }
                 catch
                 {
-                    lock (s_lockObj)
-                    {
-                        s_distributorRuntimeProcessId = null;
-                    }
+                    Vanrise.Runtime.SingletonServiceProcessIdGetter.ResetRuntimeProcessId(CachingDistributorRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
                 }
             }
             return null;

@@ -110,6 +110,14 @@ namespace Vanrise.Runtime
             }
         }
 
+        public static bool IsCurrentProcessARuntime
+        {
+            get
+            {
+                return _currentProcess != null;
+            }
+        }
+
         private static void InitializeCurrentProcessIfNotInitialized()
         {
             lock(s_lockObj)
@@ -176,9 +184,14 @@ namespace Vanrise.Runtime
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllRunningProcesses",
                () =>
                {
-                   IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
-                   return dataManager.GetRunningProcesses().ToDictionary(itm => itm.ProcessId, itm => itm);
+                   return GetRunningProcessesFromDB().ToDictionary(itm => itm.ProcessId, itm => itm);
                });
+        }
+
+        private static List<RunningProcessInfo> GetRunningProcessesFromDB()
+        {
+            IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
+            return dataManager.GetRunningProcesses();
         }
 
         public List<RunningProcessInfo> GetRunningProcesses()
@@ -196,22 +209,32 @@ namespace Vanrise.Runtime
             return GetRunningProcesses();
         }
 
+        static Dictionary<int, string> s_processIdServiceUrls = new Dictionary<int, string>();
+        
         internal string GetProcessTCPServiceURL(int processId)
         {
-            var allProcesses = GetAllRunningProcesses();
-            RunningProcessInfo runningProcessInfo = allProcesses.GetRecord(processId);
-            if(runningProcessInfo == null && processId > allProcesses.Keys.Max())//the processId might be a new process
+            string serviceURL;
+            if(!s_processIdServiceUrls.TryGetValue(processId, out serviceURL))
             {
-                Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                runningProcessInfo = GetAllRunningProcesses().GetRecord(processId);
+                lock(s_processIdServiceUrls)
+                {
+                    if (!s_processIdServiceUrls.TryGetValue(processId, out serviceURL))
+                    {
+                        //ATTENTION: allRunningProcess should not be retrieved from cache because the CacheExpirationChecker relies on it which would cause infinite loop
+                        var allRunningProcess = GetRunningProcessesFromDB();
+                        RunningProcessInfo runningProcessInfo = allRunningProcess.FirstOrDefault(itm => itm.ProcessId == processId);
+                        if (runningProcessInfo == null)
+                            throw new NullReferenceException(String.Format("runningProcessInfo '{0}'", processId));
+                        if (runningProcessInfo.AdditionalInfo == null)
+                            throw new NullReferenceException(String.Format("runningProcessInfo.AdditionalInfo '{0}'", processId));
+                        if (runningProcessInfo.AdditionalInfo.TCPServiceURL == null)
+                            throw new NullReferenceException(String.Format("runningProcessInfo.AdditionalInfo.TCPServiceURL '{0}'", processId));
+                        serviceURL = runningProcessInfo.AdditionalInfo.TCPServiceURL;
+                        s_processIdServiceUrls.Add(processId, serviceURL);
+                    }
+                }
             }
-            if (runningProcessInfo == null)
-                throw new NullReferenceException(String.Format("runningProcessInfo '{0}'", processId));
-            if (runningProcessInfo.AdditionalInfo == null)
-                throw new NullReferenceException(String.Format("runningProcessInfo.AdditionalInfo '{0}'", processId));
-            if (runningProcessInfo.AdditionalInfo.TCPServiceURL == null)
-                throw new NullReferenceException(String.Format("runningProcessInfo.AdditionalInfo.TCPServiceURL '{0}'", processId));
-            return runningProcessInfo.AdditionalInfo.TCPServiceURL;
+            return serviceURL;
         }
 
         RunningProcessInfo IRunningProcessManager.CurrentProcess

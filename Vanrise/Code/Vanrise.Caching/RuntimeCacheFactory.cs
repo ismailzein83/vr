@@ -15,5 +15,10 @@ namespace Vanrise.Caching
         {
             return s_runtimeObjectFactory.CreateObjectFromType<IDistributedCacher>();
         }
+
+        internal static ICacheExpirationChecker GetCacheExpirationChecker()
+        {
+            return s_runtimeObjectFactory.CreateObjectFromType<ICacheExpirationChecker>();
+        }
     }
 }
