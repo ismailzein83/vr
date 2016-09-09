@@ -22,26 +22,46 @@ namespace Retail.Runtime.Tasks
     {
         public void Execute()
         {
+            
+            BEReceiveDefinitionSettings setting = new BEReceiveDefinitionSettings
+            {
+                SourceBEReader = new FileSourceReader
+                {
+                    Setting = new FileSourceReaderSetting
+                    {
+                        Directory = @"c:\RingoSubscriberFiles",
+                        Mask = "",
+                        Extension = ".csv"
+                    }
+                },
+                EntitySyncDefinitions = new List<EntitySyncDefinition>
+                {
+                    new EntitySyncDefinition
+                    {
+                      TargetBEConvertor = new RingoFileAccountConvertor
+                      {
+                         
+                      },
+                       TargetBESynchronizer = new AccountSynchronizer
+                       {
+                           
+                       }
+                    },
+                    new EntitySyncDefinition
+                    {
+                         TargetBESynchronizer =  new AgentSynchronizer
+                         {
+                             
+                         },
+                         TargetBEConvertor = new AgentConvertor
+                         {
+                             
+                         }
+                    }
+                }
+            };
 
-            //BEReceiveDefinitionSettings setting = new BEReceiveDefinitionSettings
-            //{
-            //    SourceBEReader = new FileSourceReader
-            //    {
-            //        Setting = new FileSourceReaderSetting
-            //        {
-            //            Directory = @"c:\RingoSubscriberFiles",
-            //            Mask = "",
-            //            Extension = ".csv"
-            //        }
-            //    },
-            //    TargetBEConvertor = new RingoFileAccountConvertor
-            //    {
-
-            //    },
-            //    TargetBESynchronizer = new AccountSynchronizer { }
-            //};
-
-            //var str = Serializer.Serialize(setting);
+            var str = Serializer.Serialize(setting);
 
             var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
@@ -65,7 +85,7 @@ namespace Retail.Runtime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            //RunBESyncProcess();
+            RunBESyncProcess();
             Console.ReadKey();
 
         }
@@ -78,10 +98,17 @@ namespace Retail.Runtime.Tasks
             {
                 InputArguments = new SourceBESyncProcessInput()
                 {
-                    BEReceiveDefinitionIds = new List<Guid>() { Guid.Parse("01BAC79F-F20D-4D8C-8C39-EFE51908C35C") },
+                    BEReceiveDefinitionIds = new List<Guid>() { Guid.Parse("79348eb0-82fd-481e-9c72-d935065dd1cc") },
                     UserId = 1
                 }
             });
         }
+
+        const string query = @"
+DELETE FROM [runtime].[LockService]
+DELETE FROM [runtime].[RunningProcess]
+DELETE FROM [runtime].[RuntimeManager]
+DELETE FROM [runtime].[RuntimeServiceInstance]
+";
     }
 }
