@@ -6,7 +6,7 @@
     <vr-datagrid datasource="ctrl.dataSource" norowhighlightonclick="true" maxheight="300px"
                  on-ready="onGridReady" hidegridmenu ondeleterow="ctrl.removeRoutingOptimizer">
         <vr-datagridcolumn headertext="'Analysis Type'" field="'Title'" widthfactor="10" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Percentage Factor'" field="" widthfactor="10" disablesorting>
+        <vr-datagridcolumn headertext="'Weight'" field="" widthfactor="10" disablesorting>
             <vr-textbox value="dataItem.PercentageFactor" type="number" isrequired="true"></vr-textbox>
         </vr-datagridcolumn>
     </vr-datagrid>
