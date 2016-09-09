@@ -180,6 +180,9 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching.Runtime">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Caching.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
