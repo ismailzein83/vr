@@ -50,7 +50,8 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 SuppliersIds: [dataItem.Entity.SupplierID],
                 CountryIds: [dataItem.Entity.CountryID],
                 ZoneIds: [dataItem.Entity.ZoneID],
-                ProfileID: dataItem.Entity.ProfileID
+                ProfileID: dataItem.Entity.ProfileID,
+                Quantity: dataItem.Entity.Quantity
             };
             return obj;
         }
