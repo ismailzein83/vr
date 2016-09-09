@@ -23,7 +23,6 @@
   </vanriseLogging>
   <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=ClearVoice_Configuration;User ID=sa;Password= "/>
-    <add name="QMConnString" connectionString="Server=localhost;Database=ClearVoice_Configuration;User ID=sa;Password= "/>
 
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=ClearVoice_Transaction;User ID=sa;Password= "/>
     <add name="LogDBConnString" connectionString="Server=localhost;Database=ClearVoice_Logging;User ID=sa;Password= "/>
@@ -42,8 +41,8 @@
     <add key="RuntimeConnStringKey" value="TransactionDBConnString" />
     <add key="IntegrationConnStringKey" value="TransactionDBConnString" />
     <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString" />
-    <add key="QM_BE_DBConnStringKey" value="QMConnString" />
-    <add key="QM_CLITester_DBConnStringKey" value="QMConnString" />
+    <add key="QM_BE_DBConnStringKey" value="ConfigurationDBConnString" />
+    <add key="QM_CLITester_DBConnStringKey" value="ConfigurationDBConnString" />
     <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="ConnectorEmail" value="WYtp0l4OqaBUNquwGoGhztgUI8jFe5CRaNrzLrr3ESU=" />
