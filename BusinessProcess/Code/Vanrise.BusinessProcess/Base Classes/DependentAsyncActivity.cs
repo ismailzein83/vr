@@ -50,8 +50,8 @@ namespace Vanrise.BusinessProcess
 
         protected void PrepareDataForDBApply<R, S>(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<Object> outputQueue, Func<S, IEnumerable<R>> GetItems)
         {
-           System.Threading.Tasks.Parallel.For(0, 3, (i) =>
-           {
+           //System.Threading.Tasks.Parallel.For(0, 3, (i) =>
+           //{
                object dbApplyStream = null;
                int addedItemsToStream = 0;
                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -84,7 +84,7 @@ namespace Vanrise.BusinessProcess
                    Object preparedItemsForDBApply = dataManager.FinishDBApplyStream(dbApplyStream);
                    outputQueue.Enqueue(preparedItemsForDBApply);
                }
-           });
+           //});
         }
     }
 

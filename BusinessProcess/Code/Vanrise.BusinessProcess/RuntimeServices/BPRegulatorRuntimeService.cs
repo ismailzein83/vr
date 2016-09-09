@@ -16,7 +16,7 @@ namespace Vanrise.BusinessProcess
     {
         static int s_maxWorkflowsPerServiceInstance = 5;
         static int s_maxConcurrentWorkflowsPerDefinition = 5;
-        static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 3;
+        static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 1;
 
         BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
         IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
@@ -68,7 +68,13 @@ namespace Vanrise.BusinessProcess
                         if (serviceInstancesInfo.TryGetValue(pendingInstanceInfo.ServiceInstanceId.Value, out serviceInstanceInfo))
                         {
                             serviceInstanceInfo.TotalItemsCount++;
-                            serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.BPDefinitionId).ItemsCount++;
+                            var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.BPDefinitionId);
+                            bpDefinitionInfo.ItemsCount++;
+                            if (pendingInstanceInfo.Status == BPInstanceStatus.New)
+                            {
+                                bpDefinitionInfo.HasAnyNewInstance = true;
+                                serviceInstanceInfo.HasAnyNewInstance = true;
+                            }
                         }
                         else
                         {
@@ -108,6 +114,11 @@ namespace Vanrise.BusinessProcess
                             pendingInstancesToUpdate.Add(pendingInstanceInfo);
                             bpDefinitionInfo.ItemsCount++;
                             serviceInstanceInfo.TotalItemsCount++;
+                            if (pendingInstanceInfo.Status == BPInstanceStatus.New)
+                            {
+                                bpDefinitionInfo.HasAnyNewInstance = true;
+                                serviceInstanceInfo.HasAnyNewInstance = true;
+                            }
                             if (serviceInstanceInfo.TotalItemsCount >= s_maxWorkflowsPerServiceInstance)
                                 servicesToAssign.Remove(serviceInstanceInfo);
                             break;
@@ -117,7 +128,6 @@ namespace Vanrise.BusinessProcess
 
                 if (pendingInstancesToUpdate.Count > 0)
                     _bpInstanceDataManager.SetServiceInstancesOfBPInstances(pendingInstancesToUpdate);
-
                 NotifyServiceInstances(serviceInstancesInfo);
                 runningInstances = pendingInstancesInfo.Where(itm => !terminatedPendingInstances.Contains(itm) && itm.Status == BPInstanceStatus.Running).ToList();
             }
@@ -129,12 +139,12 @@ namespace Vanrise.BusinessProcess
         {
             var interRuntimeServiceManager = new InterRuntimeServiceManager();
 
-            Parallel.ForEach(serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount > 0), (serviceInstanceInfo) =>
+            Parallel.ForEach(serviceInstancesInfo.Values.Where(itm => itm.HasAnyNewInstance), (serviceInstanceInfo) =>
             {
                 InterBPServicePendingInstancesRequest request = new InterBPServicePendingInstancesRequest
                 {
                     ServiceInstanceId = serviceInstanceInfo.ServiceInstance.ServiceInstanceId,
-                    PendingBPDefinitionIds = serviceInstanceInfo.ItemsCountByBPDefinition.Values.Where(bpDefinitionInfo => bpDefinitionInfo.ItemsCount > 0).Select(bpDefinitionInfo => bpDefinitionInfo.BPDefinition.BPDefinitionID).ToList()
+                    PendingBPDefinitionIds = serviceInstanceInfo.ItemsCountByBPDefinition.Values.Where(bpDefinitionInfo => bpDefinitionInfo.HasAnyNewInstance).Select(bpDefinitionInfo => bpDefinitionInfo.BPDefinition.BPDefinitionID).ToList()
                 };
                 try
                 {
@@ -236,6 +246,8 @@ namespace Vanrise.BusinessProcess
 
             public int TotalItemsCount { get; set; }
 
+            public bool HasAnyNewInstance { get; set; }
+
             public Dictionary<int, BPDefinitionInfo> ItemsCountByBPDefinition { get; set; }
 
             internal BPDefinitionInfo GetBPDefinitionInfo(int bpDefinitionId)
@@ -250,6 +262,8 @@ namespace Vanrise.BusinessProcess
         private class BPDefinitionInfo
         {
             public BPDefinition BPDefinition { get; set; }
+
+            public bool HasAnyNewInstance { get; set; }
 
             public int ItemsCount { get; set; }
         }
