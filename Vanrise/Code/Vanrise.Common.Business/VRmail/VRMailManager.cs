@@ -49,11 +49,16 @@ namespace Vanrise.Common.Business
             {
                 mailMessage.To.Add(new MailAddress(toAddress));
             }
-            string[] ccAddresses = cc.Split(';', ',', ':');
-            foreach (var ccAddress in ccAddresses)
+
+            if (!String.IsNullOrWhiteSpace(cc))
             {
-                mailMessage.CC.Add(new MailAddress(ccAddress));
+                string[] ccAddresses = cc.Split(';', ',', ':');
+                foreach (var ccAddress in ccAddresses)
+                {
+                    mailMessage.CC.Add(new MailAddress(ccAddress));
+                }
             }
+
             mailMessage.Subject = subject;
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
@@ -103,7 +108,7 @@ namespace Vanrise.Common.Business
     {
         VRObjectEvaluator vrObjectEvaluator;
 
-        public VRMailContext(VRMailMessageType mailMessageType, Dictionary<string, dynamic> objects) 
+        public VRMailContext(VRMailMessageType mailMessageType, Dictionary<string, dynamic> objects)
         {
             vrObjectEvaluator = new VRObjectEvaluator(mailMessageType.Settings.Objects, objects);
         }
