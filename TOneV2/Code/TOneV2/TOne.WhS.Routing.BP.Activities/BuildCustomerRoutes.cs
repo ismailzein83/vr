@@ -74,13 +74,13 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(BuildCustomerRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            int routeBatchSize = 0;
             if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
             {
                 InitialiseSwitchesInProcessQueues(inputArgument.SwitchesInProcess);
+                RouteSync.Business.ConfigManager routeSyncConfigManager = new RouteSync.Business.ConfigManager();
+                routeBatchSize = routeSyncConfigManager.GetRouteSyncProcessSettings().RouteBatchSize;
             }
-
-            RouteSync.Business.ConfigManager routeSyncConfigManager = new RouteSync.Business.ConfigManager();
-            int routeBatchSize = routeSyncConfigManager.GetRouteSyncProcessSettings().RouteBatchSize;
 
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
             List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
