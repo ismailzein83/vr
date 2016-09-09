@@ -181,6 +181,8 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\Templates\OptionPercentageOptimizationDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-optimization.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\RouteRuleRegularDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-block.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-regular.js" />
@@ -189,6 +191,16 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byrate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealCompletionProgressRoutingOptimizerItemSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealProfitRoutingOptimizerItemSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\MarginRoutingOptimizerItemSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\QualityRoutingOptimizerItemSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\vr-whs-routing-routingoptimizersettings-dealcompletionprogress.js" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\vr-whs-routing-routingoptimizersettings-dealprofit.js" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\vr-whs-routing-routingoptimizersettings-margin.js" />
+    <Content Include="WhS_Routing\Directives\Settings\Extensions\vr-whs-routing-routingoptimizersettings-quality.js" />
+    <Content Include="WhS_Routing\Directives\Settings\Templates\RoutingOptimizerSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Settings\vr-whs-routing-routingoptimizersettings.js" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\Templates\SupplierZoneToRPOptionAverageRatePolicy.html" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\Templates\SupplierZoneToRPOptionHighestRatePolicy.html" />
     <Content Include="WhS_Routing\Directives\Extensions\SupplierZoneToRPOptionPolicies\Templates\SupplierZoneToRPOptionLowestRatePolicy.html" />

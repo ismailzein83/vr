@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
@@ -32,6 +33,12 @@ namespace TOne.WhS.Routing.Business
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.RouteRuleOptionPercentageSettings);
+        }
+
+        public IEnumerable<RoutingOptimizerSettingsConfig> GetRoutingOptimizerSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<RoutingOptimizerSettingsConfig>(RoutingOptimizerSettingsConfig.EXTENSION_TYPE);
         }
     }
 }
