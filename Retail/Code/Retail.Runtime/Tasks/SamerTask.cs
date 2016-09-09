@@ -16,9 +16,13 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
-
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorService);
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            
             runtimeServices.Add(bpService);
 
 
@@ -42,44 +46,44 @@ namespace Retail.Runtime.Tasks
 
 
 
-            UsageBalanceManager manager = new UsageBalanceManager();
+            //UsageBalanceManager manager = new UsageBalanceManager();
 
 
-            UsageBalanceUpdate usageBalanceUpdate1 = new UsageBalanceUpdate
-            {
-                AccountId = 171,
-                CurrencyId = 1,
-                Value = 1000,
-                EffectiveOn = DateTime.MinValue
-            };
-            UsageBalanceUpdate usageBalanceUpdate2 = new UsageBalanceUpdate
-            {
-                AccountId = 171,
-                CurrencyId = 1,
-                Value = 20,
-                EffectiveOn = DateTime.MinValue
-            };
-            UsageBalanceUpdate usageBalanceUpdate3 = new UsageBalanceUpdate
-            {
-                AccountId = 171,
-                CurrencyId = 1,
-                Value = 1000,
-                EffectiveOn = DateTime.MinValue
+            //UsageBalanceUpdate usageBalanceUpdate1 = new UsageBalanceUpdate
+            //{
+            //    AccountId = 171,
+            //    CurrencyId = 1,
+            //    Value = 1000,
+            //    EffectiveOn = DateTime.MinValue
+            //};
+            //UsageBalanceUpdate usageBalanceUpdate2 = new UsageBalanceUpdate
+            //{
+            //    AccountId = 171,
+            //    CurrencyId = 1,
+            //    Value = 20,
+            //    EffectiveOn = DateTime.MinValue
+            //};
+            //UsageBalanceUpdate usageBalanceUpdate3 = new UsageBalanceUpdate
+            //{
+            //    AccountId = 171,
+            //    CurrencyId = 1,
+            //    Value = 1000,
+            //    EffectiveOn = DateTime.MinValue
 
-            };
-            UsageBalanceUpdate usageBalanceUpdate4 = new UsageBalanceUpdate
-            {
-                AccountId = 171,
-                CurrencyId = 1,
-                Value = 1000,
-                EffectiveOn = DateTime.MinValue
-            };
+            //};
+            //UsageBalanceUpdate usageBalanceUpdate4 = new UsageBalanceUpdate
+            //{
+            //    AccountId = 171,
+            //    CurrencyId = 1,
+            //    Value = 1000,
+            //    EffectiveOn = DateTime.MinValue
+            //};
 
-            BalanceUsageDetail BalanceUsageDetail = new BalanceUsageDetail
-            {
-                UsageBalanceUpdates = new List<UsageBalanceUpdate>() { usageBalanceUpdate1, usageBalanceUpdate2, usageBalanceUpdate3, usageBalanceUpdate4 }
-            };
-            manager.UpdateUsageBalance(BalanceUsageDetail);
+            //BalanceUsageDetail BalanceUsageDetail = new BalanceUsageDetail
+            //{
+            //    UsageBalanceUpdates = new List<UsageBalanceUpdate>() { usageBalanceUpdate1, usageBalanceUpdate2, usageBalanceUpdate3, usageBalanceUpdate4 }
+            //};
+            //manager.UpdateUsageBalance(BalanceUsageDetail);
         }
     }
 }
