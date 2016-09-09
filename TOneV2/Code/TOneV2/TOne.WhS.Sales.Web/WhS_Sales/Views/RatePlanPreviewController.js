@@ -133,6 +133,9 @@
                     $scope.scopeModel.numberOfNewSaleZoneRoutingProducts = response.NumberOfNewSaleZoneRoutingProducts;
                     $scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = response.NumberOfClosedSaleZoneRoutingProducts;
 
+                    $scope.scopeModel.numberOfNewSaleZoneServices = response.NumberOfNewSaleZoneServices;
+                    $scope.scopeModel.numberOfClosedSaleZoneServices = response.NumberOfClosedSaleZoneServices;
+
                     if (response.NewDefaultServices == null)
                         summaryServiceViewerLoadDeferred.resolve();
                     else

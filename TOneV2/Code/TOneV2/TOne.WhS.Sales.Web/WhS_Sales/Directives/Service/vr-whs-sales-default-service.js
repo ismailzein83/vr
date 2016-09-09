@@ -57,8 +57,6 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                 defaultItem.IsDirty = true;
                 var selectedIds = selectorAPI.getSelectedIds();
 
-                console.log(selectedIds);
-                console.log(oldIds);
                 if (WhS_Sales_RatePlanUtilsService.isSameNewService(selectedIds, oldIds))
                     return;
 

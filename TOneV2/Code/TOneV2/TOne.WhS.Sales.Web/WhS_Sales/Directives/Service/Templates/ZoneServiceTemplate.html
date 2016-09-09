@@ -1,8 +1,13 @@
 ﻿<div vr-loader="scopeModel.isLoading">
     <vr-row>
         <vr-columns colnum="1" ng-show="scopeModel.showCurrentServiceViewer">
-            <vr-label><span>Current Services<span ng-if="scopeModel.isCurrentServiceInherited"> (*)</span></vr-label>
-            <vr-whs-be-services-viewer on-ready="scopeModel.onCurrentServiceViewerReady"></vr-whs-be-services-viewer>
+            <vr-label isvalue="true"><span>Current Services</vr-label>
+            <div style="display: table-cell">
+                <vr-whs-be-services-viewer on-ready="scopeModel.onCurrentServiceViewerReady"></vr-whs-be-services-viewer>
+            </div>
+            <div style="display: table-cell; padding-left: 3px;" ng-if="scopeModel.isCurrentServiceInherited">
+                <vr-label isvalue="true">(Inherited)</vr-label>
+            </div>
         </vr-columns>
 
         <vr-columns colnum="1" ng-show="scopeModel.showInheritedServiceViewer">
@@ -20,13 +25,13 @@
             </vr-whs-be-zone-service-config-selector>
         </span>
         <vr-columns colnum="1">
-            <span vr-disabled="scopeModel.areDatesDisabled">
+            <span vr-disabled="scopeModel.areDatesDisabled || (scopeModel.isCurrentServiceInherited && scopeModel.selectedValues.length == 0)">
                 <vr-datetimepicker type="date" label="BED" value="scopeModel.serviceBED"></vr-datetimepicker>
             </span>
         </vr-columns>
 
         <vr-columns colnum="1">
-            <span vr-disabled="scopeModel.areDatesDisabled || scopeModel.isCurrentServiceInherited">
+            <span vr-disabled="scopeModel.isCurrentServiceInherited || scopeModel.areDatesDisabled">
                 <vr-datetimepicker type="date" label="EED" value="scopeModel.serviceEED" onvaluechanged="scopeModel.onServiceEEDChanged"></vr-datetimepicker>
             </span>
         </vr-columns>
