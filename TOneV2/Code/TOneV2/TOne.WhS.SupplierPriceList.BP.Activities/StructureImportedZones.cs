@@ -31,11 +31,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                
                 importedZone.ImportedNormalRate = item.ImportedNormalRates.First();
                 
-                foreach (ImportedRate importedRate in item.ImportedOtherRates)
+                foreach (KeyValuePair<int, List<ImportedRate>> kvp in item.ImportedOtherRates)
                 {
-                    ImportedRate matchImportedRate;
-                    if (!importedZone.ImportedOtherRates.TryGetValue(importedRate.RateTypeId.Value, out matchImportedRate))
-                        importedZone.ImportedOtherRates.Add(importedRate.RateTypeId.Value, importedRate);
+                    importedZone.ImportedOtherRates.Add(kvp.Key, kvp.Value.First());
                 }
                
                 ImportedZoneService importedZoneService = item.ImportedZonesServices.FirstOrDefault(itm => itm.BED != DateTime.MinValue);

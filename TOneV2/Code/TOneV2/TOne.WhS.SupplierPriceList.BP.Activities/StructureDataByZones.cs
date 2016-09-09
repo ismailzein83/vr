@@ -56,9 +56,20 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedDataByZoneName.Add(rate.ZoneName, importedDataByZone);
                 }
                 if (rate.RateTypeId == null)
+                {
                     importedDataByZone.ImportedNormalRates.Add(rate);
+                }
                 else
-                    importedDataByZone.ImportedOtherRates.Add(rate);
+                {
+                    List<ImportedRate> otherRates = null;
+                    if (!importedDataByZone.ImportedOtherRates.TryGetValue(rate.RateTypeId.Value, out otherRates))
+                    {
+                        otherRates = new List<ImportedRate>();
+                        importedDataByZone.ImportedOtherRates.Add(rate.RateTypeId.Value, otherRates);
+                    }
+
+                    otherRates.Add(rate);
+                }
             }
 
             foreach (ImportedZoneService service in importedZonesServices)

@@ -33,9 +33,9 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
-        private List<ImportedRate> _importedOtherRates = new List<ImportedRate>();
+        private Dictionary<int, List<ImportedRate>> _importedOtherRates = new Dictionary<int, List<ImportedRate>>();
 
-        public List<ImportedRate> ImportedOtherRates
+        public Dictionary<int, List<ImportedRate>> ImportedOtherRates
         {
             get
             {

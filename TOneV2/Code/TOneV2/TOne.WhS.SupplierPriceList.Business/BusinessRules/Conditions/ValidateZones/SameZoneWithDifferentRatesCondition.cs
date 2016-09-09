@@ -27,13 +27,20 @@ namespace TOne.WhS.SupplierPriceList.Business
                                         group importedRate by importedRate.Rate into newRates
                                         select newRates;
 
+            if (distinctImportedNormalRates.Count() > 1)
+                return false;
 
-            var distinctImportedOtherRates = from importedRate in zone.ImportedOtherRates
-                                        where importedRate.RateTypeId.HasValue
-                                        group importedRate by importedRate.RateTypeId into newRates
-                                        select newRates;
+            foreach (KeyValuePair<int, List<ImportedRate>> kvp in zone.ImportedOtherRates)
+            {
+                var distinctImportedOtherRates = from importedRate in kvp.Value
+                                             group importedRate by importedRate.Rate into newRates
+                                             select newRates;
 
-            return !(distinctImportedNormalRates.Count() > 1 || distinctImportedOtherRates.Any(item => item.Count() > 1));
+                if (distinctImportedOtherRates.Count() > 1)
+                    return false;
+            }
+
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
