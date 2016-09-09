@@ -107,6 +107,7 @@
     <Compile Include="Agent\AgentInfo.cs" />
     <Compile Include="Agent\AgentQuery.cs" />
     <Compile Include="Agent\AgentSetting.cs" />
+    <Compile Include="Agent\SourceAgent.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IActionDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />

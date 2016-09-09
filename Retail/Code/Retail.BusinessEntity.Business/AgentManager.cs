@@ -140,5 +140,22 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
+
+        internal void TryAddAgent(Agent agent, out long agentId)
+        {
+            agentId = 0;
+            if (agent == null)
+                throw new ArgumentNullException("agent");
+        }
+
+        internal Agent GetAgentBySourceId(string p)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void TryUpdateAgent(Agent agent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

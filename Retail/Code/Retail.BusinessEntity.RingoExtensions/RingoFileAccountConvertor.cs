@@ -19,16 +19,13 @@ namespace Retail.BusinessEntity.RingoExtensions
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
-            AccountManager accountManager = new AccountManager();
 
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
 
             List<ITargetBE> lstTargets = new List<ITargetBE>();
-            string fileContent = System.Text.Encoding.UTF8.GetString(fileBatch.Content, 0, fileBatch.Content.Length);
             using (Stream stream = new MemoryStream(fileBatch.Content))
             {
-                TextFieldParser parser = new TextFieldParser(stream);
-                parser.Delimiters = new string[] { "," };
+                TextFieldParser parser = new TextFieldParser(stream) { Delimiters = new string[] { "," } };
                 while (true)
                 {
                     string[] accountRecords = parser.ReadFields();
@@ -55,19 +52,19 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            SourceAccountData existingBE = context.ExistingBE as SourceAccountData;
-            SourceAccountData newBE = context.NewBE as SourceAccountData;
+            SourceAccountData existingBe = context.ExistingBE as SourceAccountData;
+            SourceAccountData newBe = context.NewBE as SourceAccountData;
 
-            SourceAccountData finalBE = new SourceAccountData
+            SourceAccountData finalBe = new SourceAccountData
             {
-                Account = Serializer.Deserialize<Account>(Serializer.Serialize(existingBE.Account))
+                Account = Serializer.Deserialize<Account>(Serializer.Serialize(existingBe.Account))
             };
 
-            UpdatePersonalInfoPart(finalBE, newBE);
-            UpdateResidentialInfoPart(finalBE, newBE);
-            UpdateActivationInfoPart(finalBE, newBE);
+            UpdatePersonalInfoPart(finalBe, newBe);
+            UpdateResidentialInfoPart(finalBe, newBe);
+            UpdateActivationInfoPart(finalBe, newBe);
 
-            context.FinalBE = finalBE;
+            context.FinalBE = finalBe;
         }
 
         public override bool CompareBeforeUpdate
@@ -154,10 +151,10 @@ namespace Retail.BusinessEntity.RingoExtensions
             });
         }
 
-        void UpdatePersonalInfoPart(SourceAccountData finalBE, SourceAccountData newBE)
+        void UpdatePersonalInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartPersonalInfo personalInfo = newBE.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
-            AccountPartPersonalInfo newPersonalInfo = finalBE.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
+            AccountPartPersonalInfo personalInfo = newBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
+            AccountPartPersonalInfo newPersonalInfo = finalBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
 
             newPersonalInfo.BirthCityId = personalInfo.BirthCityId;
             newPersonalInfo.BirthCountryId = personalInfo.BirthCountryId;
@@ -165,14 +162,14 @@ namespace Retail.BusinessEntity.RingoExtensions
             newPersonalInfo.FirstName = personalInfo.FirstName;
             newPersonalInfo.Gender = personalInfo.Gender;
             newPersonalInfo.LastName = personalInfo.LastName;
-            finalBE.Account.Name = string.Format("{0} {1}", newPersonalInfo.FirstName, newPersonalInfo.LastName);
-            finalBE.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings = newPersonalInfo;
+            finalBe.Account.Name = string.Format("{0} {1}", newPersonalInfo.FirstName, newPersonalInfo.LastName);
+            finalBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings = newPersonalInfo;
         }
 
-        void UpdateResidentialInfoPart(SourceAccountData finalBE, SourceAccountData newBE)
+        void UpdateResidentialInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartResidentialProfile residentialProfile = newBE.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings as AccountPartResidentialProfile;
-            AccountPartResidentialProfile newResidentialProfile = finalBE.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings as AccountPartResidentialProfile;
+            AccountPartResidentialProfile residentialProfile = newBe.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings as AccountPartResidentialProfile;
+            AccountPartResidentialProfile newResidentialProfile = finalBe.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings as AccountPartResidentialProfile;
 
             newResidentialProfile.CityId = residentialProfile.CityId;
             newResidentialProfile.CountryId = residentialProfile.CountryId;
@@ -184,17 +181,17 @@ namespace Retail.BusinessEntity.RingoExtensions
             newResidentialProfile.Town = residentialProfile.Town;
             newResidentialProfile.ZipCode = residentialProfile.ZipCode;
 
-            finalBE.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings = newResidentialProfile;
+            finalBe.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings = newResidentialProfile;
         }
 
-        private void UpdateActivationInfoPart(SourceAccountData finalBE, SourceAccountData newBE)
+        private void UpdateActivationInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartActivation activationPart = newBE.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings as AccountPartActivation;
-            AccountPartActivation newActivationPart = finalBE.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings as AccountPartActivation;
+            AccountPartActivation activationPart = newBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings as AccountPartActivation;
+            AccountPartActivation newActivationPart = finalBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings as AccountPartActivation;
 
             newActivationPart.ActivationDate = activationPart.ActivationDate;
             newActivationPart.Status = activationPart.Status;
-            finalBE.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings = newActivationPart;
+            finalBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings = newActivationPart;
         }
 
         #endregion
