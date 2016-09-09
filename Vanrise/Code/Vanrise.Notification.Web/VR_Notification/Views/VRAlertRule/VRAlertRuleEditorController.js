@@ -51,7 +51,10 @@
                         $scope.scopeModel.canDefineCriteria = true;
 
                         var vrAlertRuleCriteriaDirectivePayload = {};
-                        vrAlertRuleCriteriaDirectivePayload.context = buildCriteriaContext();
+                        if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
+                            vrAlertRuleCriteriaDirectivePayload.dataAnalysisDefinitionId = vrAlertRuleTypeEntity.Settings.DataAnalysisDefinitionId;
+                            vrAlertRuleCriteriaDirectivePayload.criteriaEditor = vrAlertRuleTypeEntity.Settings.CriteriaEditor
+                        }
                         var setLoader = function (value) {
                             $scope.scopeModel.isLoadingAlertRuleTypeSelector = value;
                         };
@@ -82,6 +85,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
+
                 getVRAlertRule().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
@@ -145,7 +149,6 @@
             function loadVRAlertRuleCriteriaDirective() {
                 if (!isEditMode) return;
 
-
                 var vrAlertRuleCriteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 if (vrAlertRuleTypeSelectoSelectionChangedDeferred == undefined)
@@ -157,10 +160,14 @@
                         vrAlertRuleTypeSelectoSelectionChangedDeferred = undefined;
 
                         var vrAlertRuleCriteriaDirectivePayload = {};
-                        vrAlertRuleCriteriaDirectivePayload.context = buildCriteriaContext();
                         if (vrAlertRuleEntity != undefined) {
                             vrAlertRuleCriteriaDirectivePayload.criteria = vrAlertRuleEntity.Settings.Criteria;
                         }
+                        if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
+                            vrAlertRuleCriteriaDirectivePayload.dataAnalysisDefinitionId = vrAlertRuleTypeEntity.Settings.DataAnalysisDefinitionId;
+                            vrAlertRuleCriteriaDirectivePayload.criteriaEditor = vrAlertRuleTypeEntity.Settings.CriteriaEditor
+                        }
+
                         VRUIUtilsService.callDirectiveLoad(vrAlertRuleCriteriaDirectiveAPI, vrAlertRuleCriteriaDirectivePayload, vrAlertRuleCriteriaDirectiveLoadDeferred);
                     })
                 });

@@ -16,7 +16,7 @@
 
         function GetDataAnalysisDefinition(dataAnalysisDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetDataAnalysisDefinition'), {
-                DataAnalysisDefinitionId: dataAnalysisDefinitionId
+                dataAnalysisDefinitionId: dataAnalysisDefinitionId
             });
         }
 

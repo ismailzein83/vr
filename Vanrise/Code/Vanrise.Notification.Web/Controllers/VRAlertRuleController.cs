@@ -43,13 +43,6 @@ namespace Vanrise.Notification.Web.Controllers
             return _manager.UpdateVRAlertRule(vrAlertRuleItem);
         }
 
-        [HttpGet]
-        [Route("GetVRAlertRuleCriteriaExtensionConfigs")]
-        public IEnumerable<VRAlertRuleCriteriaConfig> GetVRAlertRuleCriteriaExtensionConfigs()
-        {
-            return _manager.GetVRAlertRuleCriteriaExtensionConfigs();
-        }
-
         //[HttpGet]
         //[Route("GetVRAlertRulesInfo")]
         //public IEnumerable<VRAlertRuleInfo> GetVRAlertRulesInfo(string filter = null)

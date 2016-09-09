@@ -26,8 +26,12 @@
             var dataAnalysisItemDefinitionSelectorAPI;
             var dataAnalysisItemDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var recordFilterDirectiveAPI;
+            var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
-                var promises = [dataAnalysisItemDefinitionSelectoReadyDeferred.promise];
+                var promises = [dataAnalysisItemDefinitionSelectoReadyDeferred.promise, recordFilterDirectiveReadyDeferred.promise];
 
                 $scope.scopeModel = {};
 
@@ -36,6 +40,10 @@
                     dataAnalysisItemDefinitionSelectoReadyDeferred.resolve();
                 }
 
+                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
+                    recordFilterDirectiveAPI = api;
+                    recordFilterDirectiveReadyDeferred.resolve();
+                };
 
                 UtilsService.waitMultiplePromises(promises).then(function () {
                     defineAPI();
@@ -47,11 +55,11 @@
                 api.load = function (payload) {
 
                     var promises = [];
-                    var context;
+                    var dataAnalysisDefinitionId;
                     var criteria;
 
                     if (payload != undefined) {
-                        context = payload.context;
+                        dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
                         criteria = payload.criteria;
                     }
                         
@@ -60,20 +68,37 @@
                     var dataAnalysisItemDefinitionSelectorLoadPromise = getDataAnalysisItemDefinitionSelectorLoadPromise();
                     promises.push(dataAnalysisItemDefinitionSelectorLoadPromise);
 
+                    //Loading Record Filter Directive
+                    var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
+                    promises.push(recordFilterDirectiveLoadPromise);
+
 
                     function getDataAnalysisItemDefinitionSelectorLoadPromise() {
                         var dataAnalysisItemDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         var dataAnalysisItemDefinitionSelectorPayload = {};
-                        if(context != undefined){
-                            dataAnalysisItemDefinitionSelectorPayload.dataAnalysisDefinitionId = context.getDataAnalysisDefinitionId();
-                        }
-                        if (criteria != undefined && criteria.DAProfCalcOutputItemDefinitionId != undefined) {
+                        dataAnalysisItemDefinitionSelectorPayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
+                        if (criteria != undefined) {
                             dataAnalysisItemDefinitionSelectorPayload.selectedIds = criteria.DAProfCalcOutputItemDefinitionId
                         }
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisItemDefinitionSelectorAPI, dataAnalysisItemDefinitionSelectorPayload, dataAnalysisItemDefinitionSelectorLoadDeferred);
 
                         return dataAnalysisItemDefinitionSelectorLoadDeferred.promise;
+                    }
+                    function getRecordFilterDirectiveLoadPromise() {
+                        var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        recordFilterDirectiveReadyDeferred.promise.then(function () {
+                            var recordFilterDirectivePayload = {};
+                            recordFilterDirectivePayload.context = buildContext();
+                            if (criteria != undefined) {
+                                recordFilterDirectivePayload.FilterGroup = criteria.FilterGroup;
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                        })
+
+                        return recordFilterDirectiveLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -82,7 +107,8 @@
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleCriteria, Vanrise.Analytic.Entities",
-                        DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds()
+                        DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds(),
+                        FilterGroup: recordFilterDirectiveAPI.getData().filterObj
                     }
                     return data;
                 }
@@ -90,6 +116,30 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+
+            function buildContext() {
+                var context = {
+                    getFields: function () {
+                        var fields = []
+
+                        if (dataRecordTypeId) {
+                            getDataRecordType().then(function () {
+                                for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
+                                    var field = dataRecordTypeEntity.Fields[i];
+                                    fields.push({
+                                        FieldName: field.Name,
+                                        FieldTitle: field.Title,
+                                        Type: field.Type
+                                    })
+                                }
+                            });
+                        }
+
+                        return fields;
+                    }
+                }
+                return context;
             }
         }
     }

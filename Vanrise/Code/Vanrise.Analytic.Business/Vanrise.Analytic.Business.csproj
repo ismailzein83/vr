@@ -59,6 +59,7 @@
     <Compile Include="AnalyticTableQueryContext.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataAnalysis\DAProfCalcGenerateVRAlertEventsOutputProcessor.cs" />
+    <Compile Include="DataAnalysis\DAProfCalcOutputSettingsManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinitionManager.cs" />
     <Compile Include="DynamicTypeGenerator.cs" />

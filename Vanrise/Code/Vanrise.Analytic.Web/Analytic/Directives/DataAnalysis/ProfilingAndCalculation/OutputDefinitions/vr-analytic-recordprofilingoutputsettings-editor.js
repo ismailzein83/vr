@@ -1,21 +1,23 @@
 ﻿
 'use strict';
                 
-app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) { 
-    return {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var recordProfilingOutputSettingsEditor = new RecordProfilingOutputSettingsEditor($scope, ctrl, $attrs);
-            recordProfilingOutputSettingsEditor.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/OutputDefinitions/Templates/RecordProfilingOutputSettingsEditorTemplate.html'
-    };
+app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
+
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var recordProfilingOutputSettingsEditor = new RecordProfilingOutputSettingsEditor($scope, ctrl, $attrs);
+                recordProfilingOutputSettingsEditor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/OutputDefinitions/Templates/RecordProfilingOutputSettingsEditorTemplate.html'
+        };
 
     function RecordProfilingOutputSettingsEditor($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
@@ -234,4 +236,5 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 ctrl.onReady(api);
         }
     }
+
 }]);

@@ -80,12 +80,6 @@ namespace Vanrise.Notification.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<VRAlertRuleCriteriaConfig> GetVRAlertRuleCriteriaExtensionConfigs()
-        {
-            var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<VRAlertRuleCriteriaConfig>(VRAlertRuleCriteriaConfig.EXTENSION_TYPE);
-        }
-
         //public IEnumerable<VRAlertRuleInfo> GetVRAlertRulesInfo(VRAlertRuleFilter filter)
         //{
         //    Func<VRAlertRule, bool> filterExpression = null;
