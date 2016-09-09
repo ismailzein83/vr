@@ -24,6 +24,9 @@
         var newDefaultServiceViewerAPI;
         var newDefaultServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var summaryServiceViewerAPI;
+        var summaryServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -65,11 +68,10 @@
                 newDefaultServiceViewerReadyDeferred.resolve();
             };
 
-            //$scope.scopeModel.validateDefaultRoutingProduct = function () {
-            //    if ($scope.scopeModel.currentDefaultRoutingProductName == null && $scope.scopeModel.newDefaultRoutingProductName == null)
-            //        return 'Rate plan does not have a default routing product';
-            //    return null;
-            //};
+            $scope.scopeModel.onSummaryServiceViewerReady = function (api) {
+                summaryServiceViewerAPI = api;
+                summaryServiceViewerReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 return executeTask(true);
@@ -104,11 +106,22 @@
             });
         }
         function loadSummary() {
-            var query = {
-                ProcessInstanceId: processInstanceId
-            };
-            return WhS_Sales_RatePlanPreviewAPIService.GetRatePlanPreviewSummary(query).then(function (response) {
-                if (response != null) {
+
+            var promises = [];
+
+            var query = { ProcessInstanceId: processInstanceId };
+            var getRatePlanPreviewSummaryPromise = WhS_Sales_RatePlanPreviewAPIService.GetRatePlanPreviewSummary(query);
+            promises.push(getRatePlanPreviewSummaryPromise);
+
+            var summaryServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(summaryServiceViewerLoadDeferred.promise);
+
+            getRatePlanPreviewSummaryPromise.then(function (response)
+            {
+                if (response == undefined || response == null)
+                    summaryServiceViewerLoadDeferred.resolve();
+                else
+                {
                     $scope.scopeModel.numberOfNewRates = response.NumberOfNewRates;
                     $scope.scopeModel.numberOfIncreasedRates = response.NumberOfIncreasedRates;
                     $scope.scopeModel.numberOfDecreasedRates = response.NumberOfDecreasedRates;
@@ -119,8 +132,26 @@
 
                     $scope.scopeModel.numberOfNewSaleZoneRoutingProducts = response.NumberOfNewSaleZoneRoutingProducts;
                     $scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = response.NumberOfClosedSaleZoneRoutingProducts;
+
+                    if (response.NewDefaultServices == null)
+                        summaryServiceViewerLoadDeferred.resolve();
+                    else
+                    {
+                        $scope.scopeModel.showSummaryServiceViewer = true;
+                        summaryServiceViewerReadyDeferred.promise.then(function () {
+                            var summaryServiceViewerPayload = {
+                                selectedIds: UtilsService.getPropValuesFromArray(response.NewDefaultServices, 'ServiceId')
+                            };
+                            VRUIUtilsService.callDirectiveLoad(summaryServiceViewerAPI, summaryServiceViewerPayload, summaryServiceViewerLoadDeferred);
+                        });
+                    }
+
+                    if (response.ClosedDefaultServiceEffectiveOn != null)
+                        $scope.scopeModel.closedDefaultServiceEffectiveOn = UtilsService.getShortDate(new Date(response.ClosedDefaultServiceEffectiveOn));
                 }
             });
+
+            return UtilsService.waitMultiplePromises(promises);
         }
         function loadDefaultRoutingProductPreview() {
             var input = { ProcessInstanceId: processInstanceId };
@@ -153,7 +184,7 @@
                 {
                     $scope.scopeModel.defaultServicePreview.effectiveOn = UtilsService.getShortDate(new Date(response.EffectiveOn));
                     if (response.EffectiveUntil != null)
-                        $scope.scopeModel.defaultServicePreview.EffectiveUntil = UtilsService.getShortDate(new Date(response.EffectiveUntil));
+                        $scope.scopeModel.defaultServicePreview.effectiveUntil = UtilsService.getShortDate(new Date(response.EffectiveUntil));
 
                     if (response.CurrentServices != null)
                     {

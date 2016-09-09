@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_Sales_RatePlanAPIService, WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -21,6 +21,11 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'UtilsSe
         this.initializeController = initializeController;
 
         var zoneItem;
+        var settings;
+        var oldIds;
+
+        var isFirstSelection = true;
+        var areNewServicesSet;
 
         var currentServiceViewerAPI;
         var currentServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
@@ -50,19 +55,43 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'UtilsSe
                 selectorReadyDeferred.resolve();
             };
 
-            // Note that the onBlurred event doesn't happen when the selector is ready AND when it's programmatically loaded
-            $scope.scopeModel.onSelectorBlurred = function ()
+            $scope.scopeModel.onSelectionChanged = function ()
             {
+                if (isFirstSelection) {
+                    isFirstSelection = false;
+                    return;
+                }
+
+                if (areNewServicesSet === false) {
+                    areNewServicesSet = true;
+                    return;
+                }
+
                 zoneItem.IsDirty = true;
                 var selectedIds = selectorAPI.getSelectedIds();
+
                 if (selectedIds != undefined) {
-                    setServiceDates(new Date().toString(), undefined); // null and undefined don't work!
+                    var newServiceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
+                    setServiceDates(newServiceBED, undefined); // null and undefined don't work!
                 }
                 else {
                     setServiceDates(zoneItem.CurrentServiceBED, zoneItem.CurrentServiceEED);
-                    selectedIds = UtilsService.getPropValuesFromArray(zoneItem.CurrentServices, 'ServiceId');
+                    if (zoneItem.CurrentServices != null)
+                        selectedIds = UtilsService.getPropValuesFromArray(zoneItem.CurrentServices, 'ServiceId');
                 }
+
                 loadZoneServiceViewer(selectedIds);
+            };
+
+            $scope.scopeModel.onSelectorBlurred = function ()
+            {
+                var selectedIds = selectorAPI.getSelectedIds();
+
+                if (WhS_Sales_RatePlanUtilsService.isSameNewService(selectedIds, oldIds))
+                    return;
+                
+                oldIds = selectedIds;
+                zoneItem.onNewZoneServiceChanged();
             };
 
             $scope.scopeModel.reset = function () {
@@ -102,6 +131,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'UtilsSe
 
                 if (payload != undefined) {
                     zoneItem = payload.zoneItem;
+                    settings = payload.settings;
                 }
                 
                 if (zoneItem != undefined) {
@@ -118,7 +148,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'UtilsSe
                         showLinks(true, false);
                     }
                     else {
-                        $scope.scopeModel.serviceBED = new Date();
+                        $scope.scopeModel.serviceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
                     }
 
                     if (zoneItem.ResetService != null) {
@@ -133,8 +163,11 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'UtilsSe
                     }
                     else if (zoneItem.NewService != null) {
                         zoneItem.IsDirty = true;
+                        areNewServicesSet = false;
+                        var newServiceIds = UtilsService.getPropValuesFromArray(zoneItem.NewService.Services, 'ServiceId');
+                        oldIds = newServiceIds;
                         selectorPayload = {
-                            selectedIds: UtilsService.getPropValuesFromArray(zoneItem.NewService.Services, 'ServiceId')
+                            selectedIds: newServiceIds
                         };
                         setServiceDates(zoneItem.NewService.BED, zoneItem.NewService.EED);
                     }

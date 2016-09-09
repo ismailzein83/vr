@@ -163,15 +163,23 @@
             };
 
             $scope.defaultItemTabs = [{
-                title: "Default Routing Product",
-                directive: "vr-whs-sales-defaultroutingproduct",
-                loadDirective: function (api) {
-                    defaultItem.onChange = onDefaultItemChange;
-                    return api.load(defaultItem);
-                }
-            }, {
                 title: "Default Services",
                 directive: "vr-whs-sales-default-service",
+                loadDirective: function (api) {
+                    defaultItem.onChange = onDefaultItemChange;
+
+                    var defaultServicePayload = {
+                        defaultItem: defaultItem,
+                        settings: {
+                            newServiceDayOffset: ratePlanSettingsData.NewServiceDayOffset
+                        }
+                    };
+
+                    return api.load(defaultServicePayload);
+                }
+            }, {
+                title: "Default Routing Product",
+                directive: "vr-whs-sales-defaultroutingproduct",
                 loadDirective: function (api) {
                     defaultItem.onChange = onDefaultItemChange;
                     return api.load(defaultItem);
@@ -520,7 +528,8 @@
                     CostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
                     RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
                     Settings: ratePlanSettingsData,
-                    CurrencyId: getCurrencyId()
+                    CurrencyId: getCurrencyId(),
+                    onNewZoneServiceChanged: onNewZoneServiceChanged
                 };
             }
 
@@ -619,6 +628,9 @@
         }
         function onDefaultItemChange() {
             saveChanges(true);
+        }
+        function onNewZoneServiceChanged() {
+            saveChanges(false);
         }
         function onCustomerChanged(selectedCarrierAccountId) {
             var promises = [];

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_RatePlanUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_Sales_RatePlanAPIService, WhS_Sales_RatePlanUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -21,6 +21,8 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
         this.initializeController = initializeController;
 
         var defaultItem;
+        var settings;
+        var oldIds;
 
         var currentServiceViewerAPI;
         var currentServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
@@ -54,8 +56,17 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
             $scope.scopeModel.onSelectorBlurred = function () {
                 defaultItem.IsDirty = true;
                 var selectedIds = selectorAPI.getSelectedIds();
+
+                console.log(selectedIds);
+                console.log(oldIds);
+                if (WhS_Sales_RatePlanUtilsService.isSameNewService(selectedIds, oldIds))
+                    return;
+
+                oldIds = selectedIds;
+
                 if (selectedIds != undefined) {
-                    setServiceDates(new Date().toString(), undefined); // null and undefined don't work!
+                    var newServiceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
+                    setServiceDates(newServiceBED, undefined); // null and undefined don't work!
                 }
                 else {
                     setServiceDates(defaultItem.CurrentServiceBED, defaultItem.CurrentServiceEED);
@@ -98,8 +109,11 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                 var promises = [];
                 var selectorPayload;
 
-                defaultItem = payload;
-
+                if (payload != undefined) {
+                    defaultItem = payload.defaultItem;
+                    settings = payload.settings;
+                }
+                
                 if (defaultItem != undefined)
                 {
                     $scope.scopeModel.renderResetLink = defaultItem.OwnerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value;
@@ -117,7 +131,7 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                         showLinks(true, false);
                     }
                     else {
-                        $scope.scopeModel.serviceBED = new Date();
+                        $scope.scopeModel.serviceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
                     }
 
                     if (defaultItem.ResetService != null) {
@@ -132,8 +146,10 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                     }
                     else if (defaultItem.NewService != null) {
                         defaultItem.IsDirty = true;
+                        var newServiceIds = UtilsService.getPropValuesFromArray(defaultItem.NewService.Services, 'ServiceId');
+                        oldIds = newServiceIds;
                         selectorPayload = {
-                            selectedIds: UtilsService.getPropValuesFromArray(defaultItem.NewService.Services, 'ServiceId')
+                            selectedIds: newServiceIds
                         };
                         setServiceDates(defaultItem.NewService.BED, defaultItem.NewService.EED);
                     }

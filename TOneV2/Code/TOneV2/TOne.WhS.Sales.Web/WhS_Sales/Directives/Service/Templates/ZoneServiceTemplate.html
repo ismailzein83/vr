@@ -12,10 +12,11 @@
 
         <span vr-disabled="scopeModel.isSelectorDisabled">
             <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onSelectorReady"
+                                                    onselectionchanged="scopeModel.onSelectionChanged"
+                                                    onblurdropdown="scopeModel.onSelectorBlurred"
                                                     selectedvalues="scopeModel.selectedValues"
                                                     normal-col-num="2"
-                                                    ismultipleselection="true"
-                                                    onblurdropdown="scopeModel.onSelectorBlurred">
+                                                    ismultipleselection="true">
             </vr-whs-be-zone-service-config-selector>
         </span>
         <vr-columns colnum="1">
@@ -33,7 +34,7 @@
     <vr-row removeline="true">
         <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showResetLink" ng-if="!scopeModel.isCurrentServiceInherited">
             <vr-label isvalue="true">
-                <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.reset()">Reset to inherited</span>
+                <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.reset()">Reset to default</span>
             </vr-label>
         </vr-columns>
         <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showUndoLink">

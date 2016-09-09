@@ -97,6 +97,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public int RateTypeId { get; set; }
         public decimal Rate { get; set; }
+        public bool IsRateEditable { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
     }
@@ -105,6 +106,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public int? RateTypeId { get; set; }
         public decimal Rate { get; set; }
+        public bool IsRateEditable { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
     }

@@ -45,7 +45,6 @@
                                 <vr-validator validate="scopeModel.validateDefaultRoutingProduct()">
                                     <vr-section title="Default Changes">
                                         <vr-section title="Routing Product Changes" level="2">
-
                                             <vr-row>
                                                 <vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName">
                                                     <vr-label>New: </vr-label>
@@ -59,9 +58,22 @@
                                                     <vr-label isvalue>No changes</vr-label>
                                                 </vr-columns>
                                             </vr-row>
-
                                         </vr-section>
-                                        
+                                        <vr-section title="Service Changes" level="2">
+                                            <vr-row>
+                                                <vr-columns width="fullrow" ng-show="scopeModel.showSummaryServiceViewer">
+                                                    <vr-label>New</vr-label>
+                                                    <vr-whs-be-services-viewer on-ready="scopeModel.onSummaryServiceViewerReady"></vr-whs-be-services-viewer>
+                                                </vr-columns>
+                                                <vr-columns width="fullrow" ng-show="scopeModel.closedDefaultServiceEffectiveOn">
+                                                    <vr-label>Closed On: </vr-label>
+                                                    <vr-label isvalue>{{scopeModel.closedDefaultServiceEffectiveOn}}</vr-label>
+                                                </vr-columns>
+                                                <vr-columns width="fullrow" ng-show="scopeModel.showSummaryServiceViewer == null &&  scopeModel.closedDefaultServiceEffectiveOn == null">
+                                                    <vr-label isvalue>No changes</vr-label>
+                                                </vr-columns>
+                                            </vr-row>
+                                        </vr-section>
                                     </vr-section>
                                 </vr-validator>
                             </vr-validation-group>
@@ -81,8 +93,6 @@
                                         <vr-label>New:</vr-label>
                                         <vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
                                     </vr-columns>
-                                </vr-row>
-                                <vr-row>
                                     <vr-columns width="1/2row" ng-show="scopeModel.effectiveOn != null">
                                         <vr-label>Effective On:</vr-label>
                                         <vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
@@ -101,8 +111,6 @@
                                         <vr-label>New:</vr-label>
                                         <vr-whs-be-services-viewer on-ready="scopeModel.onNewDefaultServiceViewerReady"></vr-whs-be-services-viewer>
                                     </vr-columns>
-                                </vr-row>
-                                <vr-row>
                                     <vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveOn != undefined">
                                         <vr-label>Effective On:</vr-label>
                                         <vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveOn}}</vr-label>

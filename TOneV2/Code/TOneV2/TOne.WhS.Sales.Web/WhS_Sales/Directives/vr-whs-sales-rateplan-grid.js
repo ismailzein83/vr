@@ -25,6 +25,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         var increasedRateDayOffset = 0;
         var decreasedRateDayOffset = 0;
+        var newServiceDayOffset = 0;
 
         function initializeController() {
             $scope.zoneItems = [];
@@ -104,6 +105,20 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         function getGridDrillDownDefinitions() {
             return [{
+                title: "Services",
+                directive: "vr-whs-sales-zone-service",
+                loadDirective: function (zoneServiceAPI, zoneItem) {
+                    zoneItem.OwnerId = gridQuery.OwnerId;
+                    zoneItem.onNewZoneServiceChanged = gridQuery.onNewZoneServiceChanged;
+                    var zoneServicePayload = {
+                        zoneItem: zoneItem,
+                        settings: {
+                            newServiceDayOffset: newServiceDayOffset
+                        }
+                    };
+                    return zoneServiceAPI.load(zoneServicePayload);
+                }
+            }, {
                 title: "Routing Product",
                 directive: "vr-whs-sales-zoneroutingproduct",
                 loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
@@ -122,16 +137,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return saleRateGridAPI.loadGrid(query);
                 }
             }, {
-                title: "Codes",
-                directive: "vr-whs-be-salecode-grid",
-                loadDirective: function (saleCodeGridAPI, zoneItem) {
-                    var query = {
-                        SellingNumberPlanId: null,
-                        ZonesIds: [zoneItem.ZoneId]
-                    };
-                    return saleCodeGridAPI.loadGrid(query);
-                }
-            }, {
                 title: "Other Rates",
                 directive: "vr-whs-sales-otherrate-grid",
                 loadDirective: function (rateTypeGridAPI, zoneItem) {
@@ -145,14 +150,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return rateTypeGridAPI.loadGrid(query);
                 }
             }, {
-                title: "Services",
-                directive: "vr-whs-sales-zone-service",
-                loadDirective: function (zoneServiceAPI, zoneItem) {
-                    zoneItem.OwnerId = gridQuery.OwnerId;
-                    var zoneServicePayload = {
-                        zoneItem: zoneItem
+                title: "Codes",
+                directive: "vr-whs-be-salecode-grid",
+                loadDirective: function (saleCodeGridAPI, zoneItem) {
+                    var query = {
+                        SellingNumberPlanId: null,
+                        ZonesIds: [zoneItem.ZoneId]
                     };
-                    return zoneServiceAPI.load(zoneServicePayload);
+                    return saleCodeGridAPI.loadGrid(query);
                 }
             }];
         }
@@ -187,6 +192,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     increasedRateDayOffset = Number(settings.IncreasedRateDayOffset);
                 if (settings.DecreasedRateDayOffset != undefined)
                     decreasedRateDayOffset = Number(settings.DecreasedRateDayOffset);
+                if (settings.NewServiceDayOffset != undefined)
+                    newServiceDayOffset = Number(settings.NewServiceDayOffset);
             }
 
             api.getZoneChanges = function () {

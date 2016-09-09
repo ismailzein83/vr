@@ -77,9 +77,13 @@ namespace TOne.WhS.Sales.Business
                     zoneItem.CurrentOtherRates = new Dictionary<int, OtherRate>();
                     foreach (KeyValuePair<int, SaleRate> kvp in rate.RatesByRateType)
                     {
+                        SalePriceListOwnerType otherRateSource;
+                        rate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
+
                         zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
                         {
                             Rate = GetConvertedRate(kvp.Value),
+                            IsRateEditable = otherRateSource == _ownerType,
                             BED = kvp.Value.BED,
                             EED = kvp.Value.EED
                         });
@@ -109,6 +113,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         RateTypeId = futureRate.Rate.RateTypeId,
                         Rate = GetConvertedRate(futureRate.Rate),
+                        IsRateEditable = futureRate.Source == _ownerType,
                         BED = futureRate.Rate.BED,
                         EED = futureRate.Rate.EED
                     };
@@ -119,12 +124,16 @@ namespace TOne.WhS.Sales.Business
                     zoneItem.FutureOtherRates = new Dictionary<int, FutureRate>();
                     foreach (KeyValuePair<int, SaleRate> kvp in futureRate.RatesByRateType)
                     {
+                        SalePriceListOwnerType fututreOtherRateSource;
+                        futureRate.SourcesByRateType.TryGetValue(kvp.Key, out fututreOtherRateSource);
+
                         if (kvp.Value.BED.Date > _effectiveOn.Date)
                         {
                             zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
                             {
                                 RateTypeId = kvp.Value.RateTypeId,
                                 Rate = GetConvertedRate(kvp.Value),
+                                IsRateEditable = fututreOtherRateSource == _ownerType,
                                 BED = kvp.Value.BED,
                                 EED = kvp.Value.EED
                             });

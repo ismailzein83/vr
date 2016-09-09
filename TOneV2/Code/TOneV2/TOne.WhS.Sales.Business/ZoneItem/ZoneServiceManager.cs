@@ -44,7 +44,7 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.CurrentServices = currentService.Services;
                 zoneItem.CurrentServiceBED = currentService.BED;
                 zoneItem.CurrentServiceEED = currentService.EED;
-                zoneItem.IsCurrentServiceEditable = true;
+                zoneItem.IsCurrentServiceEditable = currentService.Source == SaleEntityServiceSource.CustomerZone;
             }
 
             SetDraftZoneService(zoneItem, zoneDraft);

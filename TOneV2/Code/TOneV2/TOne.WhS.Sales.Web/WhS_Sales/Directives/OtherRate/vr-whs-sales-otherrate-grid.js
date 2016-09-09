@@ -93,6 +93,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                                 if (currentOtherRate != undefined)
                                 {
                                     otherRate.CurrentRate = currentOtherRate.Rate;
+                                    otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
                                     otherRate.CurrentRateBED = currentOtherRate.BED;
                                     otherRate.CurrentRateEED = currentOtherRate.EED;
                                     otherRate.CurrentRateNewEED = currentOtherRate.EED;

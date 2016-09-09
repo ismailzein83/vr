@@ -9,7 +9,9 @@
             onNewRateBlurred: onNewRateBlurred,
             onNewRateChanged: onNewRateChanged,
             validateNewRate: validateNewRate,
-            validateNewRateDates: validateNewRateDates
+            validateNewRateDates: validateNewRateDates,
+            getNowPlusDays: getNowPlusDays,
+            isSameNewService: isSameNewService
         };
 
         function onNewRateChanged(dataItem) {
@@ -92,6 +94,21 @@
                 return 'Max EED: ' + UtilsService.getShortDate(zoneEED);
 
             return UtilsService.validateDates(newRateBED, newRateEED);
+        }
+
+        function isSameNewService(newIds, oldIds) {
+            if (newIds == undefined && oldIds == undefined)
+                return true;
+            if (newIds != undefined && oldIds != undefined) {
+                if (newIds.length != oldIds.length)
+                    return false;
+                for (var i = 0; i < newIds.length; i++) {
+                    if (!UtilsService.contains(oldIds, newIds[i]))
+                        return false;
+                }
+                return true;
+            }
+            return false;
         }
     }
 

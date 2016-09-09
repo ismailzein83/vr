@@ -32,6 +32,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', [function () {
                 if (payload != undefined && payload.data != null) {
                     $scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
                     $scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
+                    $scope.scopeModel.newServiceDayOffset = payload.data.NewServiceDayOffset;
                 }
             };
 
@@ -39,7 +40,8 @@ app.directive('vrWhsSalesRateplanSettingsEditor', [function () {
                 return {
                     $type: "TOne.WhS.Sales.Entities.RatePlanSettingsData, TOne.WhS.Sales.Entities",
                     IncreasedRateDayOffset: $scope.scopeModel.increasedRateDayOffset,
-                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset
+                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset,
+                    NewServiceDayOffset: $scope.scopeModel.newServiceDayOffset
                 };
             };
 

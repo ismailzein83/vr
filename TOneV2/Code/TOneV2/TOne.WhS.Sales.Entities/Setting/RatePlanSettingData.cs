@@ -11,5 +11,6 @@ namespace TOne.WhS.Sales.Entities
     {
         public int IncreasedRateDayOffset { get; set; }
         public int DecreasedRateDayOffset { get; set; }
+        public int NewServiceDayOffset { get; set; }
     }
 }

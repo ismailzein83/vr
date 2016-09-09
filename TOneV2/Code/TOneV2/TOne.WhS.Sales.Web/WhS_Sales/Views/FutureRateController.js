@@ -35,6 +35,8 @@
                 var rateType = (futureRate.RateTypeId != null) ? 'Other' : 'Normal';
                 $scope.title = 'Future ' + rateType + ' Rate of Zone ' + zoneName;
                 $scope.scopeModel.rate = futureRate.Rate;
+                if (!futureRate.IsRateEditable)
+                    $scope.scopeModel.isInheritedMessage = ' (Inherited)';
                 $scope.scopeModel.rateBED = UtilsService.getShortDate(new Date(futureRate.BED));
             }
 
