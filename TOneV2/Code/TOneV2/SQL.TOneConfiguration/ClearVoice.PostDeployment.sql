@@ -60,8 +60,9 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
-GO--delete 'My Scheduler Service' since it is replace with 'Schedule Test Calls'
-delete from [sec].[View] where [Id]=5002
+GO--delete useless views from ClearVoice product such 'My Scheduler Service' since it is replace with 'Schedule Test Calls', 'Organizational Charts', etc...
+delete from [sec].[View] where [Id] in (7,1002,1003,1004,1005,5002)
+
 GO
 --[sec].[View]-----------------------------10001 to 11000------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------
