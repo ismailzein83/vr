@@ -17,6 +17,8 @@ namespace TOne.WhS.DBSync.Entities
 
         public string ExcludedCodes { get; set; }
 
+        public HashSet<string> ExcludedCodesList { get; set; }
+
         public bool IncludeSubCode { get; set; }
 
         public string Reason { get; set; }

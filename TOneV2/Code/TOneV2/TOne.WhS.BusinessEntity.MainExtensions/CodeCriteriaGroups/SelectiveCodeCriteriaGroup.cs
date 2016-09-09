@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
 {
     public class SelectiveCodeCriteriaGroup : CodeCriteriaGroupSettings
     {
+        public const int ExtensionConfigId = 5;
         public List<CodeCriteria> Codes { get; set; }
 
         public override IEnumerable<CodeCriteria> GetCodeCriterias(ICodeCriteriaGroupContext context)
@@ -19,8 +20,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
         public override string GetDescription(ICodeCriteriaGroupContext context)
         {
             var validCodes = context != null ? context.GetGroupCodeCriterias(this) : this.Codes;
-            if (validCodes != null)            
-                return string.Join(", ", validCodes.Select(item => item.Code));            
+            if (validCodes != null)
+                return string.Join(", ", validCodes.Select(item => item.Code));
             else
                 return null;
         }

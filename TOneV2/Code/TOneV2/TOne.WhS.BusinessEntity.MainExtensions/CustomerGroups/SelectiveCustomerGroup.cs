@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
 {
     public class SelectiveCustomerGroup : CustomerGroupSettings
     {
+        public const int ExtensionConfigId = 4;
         public List<int> CustomerIds { get; set; } 
 
         public override IEnumerable<int> GetCustomerIds(ICustomerGroupContext context)

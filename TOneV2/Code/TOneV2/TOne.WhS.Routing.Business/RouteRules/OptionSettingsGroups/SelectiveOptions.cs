@@ -9,6 +9,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups
 {
     public class SelectiveOptions : RouteOptionSettingsGroup
     {
+        public const int ExtensionConfigId = 13;
         public List<RouteOptionSettings> Options { get; set; }
         
         public override IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context)

@@ -2,30 +2,30 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Entities;
+using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.Rules;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
     public class RulesDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Rule);
-        string _Schema = "rules";
-        bool _UseTempTables;
+        readonly string _tableName = Utilities.GetEnumDescription(DBTableName.Rule);
+        readonly string _schema = "rules";
+        readonly bool _useTempTables;
         public RulesDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
-            _UseTempTables = useTempTables;
+            _useTempTables = useTempTables;
         }
 
-
-        public void ApplyRouteRulesToTemp(List<RouteRule> routeRules)
+        public void ApplyRouteRulesToTemp(List<BaseRule> routeRules)
         {
-            DataTable dt = new DataTable();
-            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            RouteRuleManager routeRuleManager = new RouteRuleManager();
+            DataTable dt = new DataTable { TableName = MigrationUtils.GetTableName(_schema, _tableName, _useTempTables) };
             dt.Columns.Add("RuleDetails", typeof(string));
             dt.Columns.Add("TypeID", typeof(int));
             dt.Columns.Add("BED", typeof(DateTime));
@@ -36,43 +36,38 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 DataRow row = dt.NewRow();
                 row["RuleDetails"] = Serializer.Serialize(routeRule);
-                row["TypeID"] = 10;
+                row["TypeID"] = routeRuleManager.GetRuleTypeId();
                 row["BED"] = routeRule.BeginEffectiveTime;
-                row["EED"] = routeRule.EndEffectiveTime;
-
+                row["EED"] = routeRule.EndEffectiveTime ?? (object)DBNull.Value;
+                dt.Rows.Add(row);
             }
             dt.EndLoadData();
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
-
         public Dictionary<string, RouteRule> GetRouteRules(bool useTempTables)
         {
             return GetItemsText("SELECT [ID] ,[RuleDetails]  ,[BED] ,EED, SourceID FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), RouteRuleMapper, null).ToDictionary(k => k.SourceId, v => v);
+                + MigrationUtils.GetTableName(_schema, _tableName, useTempTables), RouteRuleMapper, null).ToDictionary(k => k.SourceId, v => v);
         }
-
         private RouteRule RouteRuleMapper(IDataReader reader)
         {
-            RouteRule rule = Vanrise.Common.Serializer.Deserialize<RouteRule>(reader["RuleDetails"] as string);
+            RouteRule rule = Serializer.Deserialize<RouteRule>(reader["RuleDetails"] as string);
             if (rule != null)
                 rule.SourceId = reader["SourceID"] as string;
             return rule;
 
         }
-
         public string GetConnection()
         {
             return base.GetConnectionString();
         }
-
         public string GetTableName()
         {
-            return _TableName;
+            return _tableName;
         }
-
         public string GetSchema()
         {
-            return _Schema;
+            return _schema;
         }
     }
 }

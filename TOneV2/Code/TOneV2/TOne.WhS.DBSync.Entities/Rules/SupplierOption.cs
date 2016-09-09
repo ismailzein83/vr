@@ -9,7 +9,7 @@ namespace TOne.WhS.DBSync.Entities
     {
         public string SupplierId { get; set; }
         public short Priority { get; set; }
-        public short Percentage { get; set; }
+        public decimal Percentage { get; set; }
         public bool IsLoss { get; set; }
 
         public override string ToString()

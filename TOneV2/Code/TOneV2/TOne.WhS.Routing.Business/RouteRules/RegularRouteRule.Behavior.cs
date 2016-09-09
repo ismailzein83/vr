@@ -14,6 +14,8 @@ namespace TOne.WhS.Routing.Business
     {
         #region SaleEntity Execution
 
+        public const int ExtensionConfigId = 11;
+
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             var options = CreateOptions(context, target);

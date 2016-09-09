@@ -7,6 +7,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
 {
     public class FixedOptionPercentage : RouteOptionPercentageSettings
     {
+        public const int ExtensionConfigId = 16;
         public List<Decimal> Percentages { get; set; }
 
         public override void Execute(IRouteOptionPercentageExecutionContext context)

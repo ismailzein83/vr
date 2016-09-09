@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TOne.BusinessEntity.Data;
 using TOne.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.DBSync.Business;
+using TOne.WhS.DBSync.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.TelesRadius;
 using TOne.WhS.RouteSync.TelesRadius.SQL;
@@ -20,6 +22,7 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TestRuntime
 {
@@ -27,6 +30,9 @@ namespace TestRuntime
     {
         public void Execute()
         {
+
+            RunMigration();
+            return;
 
             //RadiusDataManagerConfig settings = new RadiusDataManagerConfig
             //{
@@ -38,29 +44,41 @@ namespace TestRuntime
             //RouteSyncTechnicalSettings sett = new RouteSyncTechnicalSettings() { SwitchInfoGetter = new RouteSyncSwitchGetter() };
             //var ser = Serializer.Serialize(settings);
 
-            System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-            Console.WriteLine("Hello from Rabih!");
+            //System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+            //Console.WriteLine("Hello from Rabih!");
 
-            var runtimeServices = new List<RuntimeService>();
-            BusinessProcessService bpservice = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bpservice);
+            //var runtimeServices = new List<RuntimeService>();
+            //BusinessProcessService bpservice = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(bpservice);
 
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(transactionLockRuntimeService);
-            runtimeServices.Add(queueActivationService);
-            runtimeServices.Add(schedulerService);
-            runtimeServices.Add(dsRuntimeService);
+            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(transactionLockRuntimeService);
+            //runtimeServices.Add(queueActivationService);
+            //runtimeServices.Add(schedulerService);
+            //runtimeServices.Add(dsRuntimeService);
 
-            RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
+            //RuntimeHost host = new RuntimeHost(runtimeServices);
+            //host.Start();
 
-            RunRouteSync();
+            //RunRouteSync();
             //RunCompleteRouteBuild();
             //RunCompleteProductRouteBuild();
             //RunPartialRouteBuild();
+
+
+            RuntimeHost _host;
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            var runtimeServices = new List<RuntimeService> { queueActivationService, bpService, bpRegulatorService, transactionLockRuntimeService };
+
+            _host = new RuntimeHost(runtimeServices);
+            _host.Start();
         }
 
         private static void RunCompleteProductRouteBuild()
@@ -119,6 +137,108 @@ namespace TestRuntime
                     UserId = 1
                 }
             });
+        }
+
+        private static void RunMigration()
+        {
+            List<DBTableName> migrationTables = new List<DBTableName>();
+            string tableName;
+
+            foreach (DBTableName table in Enum.GetValues(typeof(DBTableName)))
+            {
+                tableName = Vanrise.Common.Utilities.GetEnumDescription(table);
+
+                switch (table)
+                {
+                    //case DBTableName.CarrierAccount:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+
+                    //case DBTableName.CarrierProfile:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+
+                    //case DBTableName.Currency:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.CurrencyExchangeRate:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.Switch:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    //case DBTableName.Country:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.CodeGroup:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SupplierCode:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SupplierPriceList:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    //case DBTableName.SupplierRate:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SupplierZone:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SaleCode:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SalePriceList:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SaleRate:
+                    //    migrationTables.Add(table);
+                    //    break;
+
+                    //case DBTableName.SaleZone:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    //case DBTableName.File:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    //case DBTableName.CustomerZone:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    //case DBTableName.SwitchConnectivity:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    case DBTableName.Rule:
+                        migrationTables.Add(table);
+                        break;
+                }
+            }
+
+
+
+            DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
+            {
+                ConnectionString =
+                    "Server=192.168.110.185;Database=TOneV2_Dev_RoutingDB;User ID=development;Password=dev!123;",
+                DefaultSellingNumberPlanId = 1,
+                SellingProductId = 1,
+                OffPeakRateTypeId = -2,
+                WeekendRateTypeId = -3,
+                UseTempTables = true,
+                MigrationRequestedTables = migrationTables
+            };
+            DBSyncTaskAction dbSyncTaskAction = new DBSyncTaskAction();
+            dbSyncTaskAction.Execute(new SchedulerTask(), taskActionArgument, null);
         }
     }
 }

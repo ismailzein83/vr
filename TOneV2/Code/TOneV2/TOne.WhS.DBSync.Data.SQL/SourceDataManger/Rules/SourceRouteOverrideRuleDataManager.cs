@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
@@ -12,7 +10,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 {
     public class SourceRouteOverrideRuleDataManager : BaseSQLDataManager
     {
-        bool _getEffectiveOnly;
+        readonly bool _getEffectiveOnly;
         public SourceRouteOverrideRuleDataManager(string connectionString, bool getEffectiveOnly)
             : base(connectionString, false)
         {
@@ -33,16 +31,24 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
             {
                 SourceId = reader["RouteOverrideID"].ToString(),
                 CustomerId = reader["CustomerID"] as string,
-                SupplierOptions = GetSupplierOptions(reader["SupplierID"] as string),
-                SupplierOptionsString = reader["SupplierID"] as string,
+                SupplierOptions = GetSupplierOptions(reader["RouteOptions"] as string),
+                SupplierOptionsString = reader["RouteOptions"] as string,
                 Code = reader["Code"] as string,
-                SaleZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                SaleZoneId = GetReaderValue<int?>(reader, "ZoneID"),
                 BED = (DateTime)reader["BeginEffectiveDate"],
                 EED = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 ExcludedCodes = reader["ExcludedCodes"] as string,
-                IncludeSubCode = (reader["IncludeSubCodes"] as string).Equals("Y"),
-                Reason = reader["Reason"] as string
+                IncludeSubCode = ((string)reader["IncludeSubCodes"]).Equals("Y"),
+                Reason = reader["Reason"] as string,
+                ExcludedCodesList = GetExcludedCodes(reader["ExcludedCodes"] as string)
             };
+        }
+        private HashSet<string> GetExcludedCodes(string codes)
+        {
+            if (string.IsNullOrEmpty(codes))
+                return null;
+            return new HashSet<string>(codes.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).OrderBy(s => s));
+
         }
 
         private IEnumerable<SupplierOption> GetSupplierOptions(string option)
@@ -50,7 +56,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
             if (string.IsNullOrEmpty(option))
                 return null;
             List<SupplierOption> supplierOptions = new List<SupplierOption>();
-            string[] options = option.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] options = option.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             short index = 0;
             foreach (var optionString in options)
             {
@@ -58,8 +64,8 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 SupplierOption supplierOption = new SupplierOption
                 {
                     SupplierId = supplierOptionEntries[0],
-                    IsLoss = bool.Parse(supplierOptionEntries[1]),
-                    Percentage = short.Parse(supplierOptionEntries[2]),
+                    IsLoss = supplierOptionEntries.Length > 1 && supplierOptionEntries[1].Equals("1"),
+                    Percentage = supplierOptionEntries.Length < 3 || string.IsNullOrEmpty(supplierOptionEntries[2]) ? 0 : Convert.ToDecimal(supplierOptionEntries[2]),
                     Priority = index++
                 };
 

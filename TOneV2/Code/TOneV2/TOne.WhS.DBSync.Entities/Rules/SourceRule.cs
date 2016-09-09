@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.Routing.Entities;
 using Vanrise.Entities.EntitySynchronization;
+using Vanrise.Rules;
 
 namespace TOne.WhS.DBSync.Entities
 {
@@ -15,6 +15,6 @@ namespace TOne.WhS.DBSync.Entities
             get;
             set;
         }
-        public RouteRule RouteRule { get; set; }
+        public BaseRule RouteRule { get; set; }
     }
 }

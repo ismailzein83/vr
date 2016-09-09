@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
-using TOne.WhS.Routing.Entities;
+using Vanrise.Rules;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class RuleMigrator : Migrator<SourceRule, RouteRule>
+    public class RuleMigrator : Migrator<SourceRule, BaseRule>
     {
         MigrationContext _migrationContext;
-        RulesDBSyncDataManager dbSyncDataManager;
+        readonly RulesDBSyncDataManager _dbSyncDataManager;
         RouteRuleBaseMigrator _routeRuleBaseMigrator;
+
+
         public RuleMigrator(MigrationContext context)
             : base(context)
         {
             _migrationContext = context;
-            dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
-            // dataManager = new SourceRouteOverrideRuleDataManager(context.ConnectionString, true);
-
+            _dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
         }
         public override void FillTableInfo(bool useTempTables)
         {
 
         }
 
-        public override void AddItems(List<RouteRule> itemsToAdd)
+        public override void AddItems(List<BaseRule> itemsToAdd)
         {
-            dbSyncDataManager.ApplyRouteRulesToTemp(itemsToAdd);
+            _dbSyncDataManager.ApplyRouteRulesToTemp(itemsToAdd);
             TotalRowsSuccess = itemsToAdd.Count;
         }
 
@@ -37,13 +33,24 @@ namespace TOne.WhS.DBSync.Business
         {
             List<SourceRule> routeRules = new List<SourceRule>();
 
-            _routeRuleBaseMigrator = new RouteOverrideRuleMigrator();
-            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules(_migrationContext));
+            RuleMigrationContext ruleContext = new RuleMigrationContext
+            {
+                MigrationContext = new MigrationContext
+                {
+                    ConnectionString = Context.ConnectionString,
+                    DBTables = Context.DBTables,
+                    UseTempTables = Context.UseTempTables,
+                    DefaultSellingNumberPlanId = Context.DefaultSellingNumberPlanId
+                }
+            };
+            //_routeRuleBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
+            _routeRuleBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
+            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
 
             return routeRules;
         }
 
-        public override RouteRule BuildItemFromSource(SourceRule sourceItem)
+        public override BaseRule BuildItemFromSource(SourceRule sourceItem)
         {
             return sourceItem.RouteRule;
         }

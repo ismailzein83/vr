@@ -93,6 +93,7 @@
     <Compile Include="Common\Migrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
+    <Compile Include="Migrators\Rules\RouteOptionBlockRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOverrideRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteRuleBaseMigrator.cs" />
     <Compile Include="Migrators\Rules\RuleMigrator.cs" />
@@ -132,6 +133,10 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.MainExtensions\TOne.WhS.BusinessEntity.MainExtensions.csproj">
+      <Project>{31d4e637-c2d3-49b2-ae0a-0658aeddd9dd}</Project>
+      <Name>TOne.WhS.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.DBSync.Data.SQL\TOne.WhS.DBSync.Data.SQL.csproj">
       <Project>{ddabf1cd-636e-47c1-a713-0ec00ab5f581}</Project>
       <Name>TOne.WhS.DBSync.Data.SQL</Name>
@@ -139,6 +144,10 @@
     <ProjectReference Include="..\TOne.WhS.DBSync.Entities\TOne.WhS.DBSync.Entities.csproj">
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
+      <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>
+      <Name>TOne.WhS.Routing.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
       <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>

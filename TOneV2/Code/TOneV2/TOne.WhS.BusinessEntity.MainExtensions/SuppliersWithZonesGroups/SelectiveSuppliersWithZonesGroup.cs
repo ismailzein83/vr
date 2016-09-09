@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups
 {
     public class SelectiveSuppliersWithZonesGroup : SuppliersWithZonesGroupSettings
     {
+        public const int ExtensionConfigId = 12;
         public List<SupplierWithZones> SuppliersWithZones { get; set; }
 
         public override IEnumerable<SupplierWithZones> GetSuppliersWithZones(ISuppliersWithZonesGroupContext context)

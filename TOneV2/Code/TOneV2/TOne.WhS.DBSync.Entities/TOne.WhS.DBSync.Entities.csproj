@@ -81,6 +81,7 @@
     <Compile Include="Common\MigrationContext.cs" />
     <Compile Include="Common\MigrationCredentials.cs" />
     <Compile Include="IDManagerEntity.cs" />
+    <Compile Include="Rules\RuleMigratorContext.cs" />
     <Compile Include="Rules\SourceBaseRule.cs" />
     <Compile Include="Rules\SourceRule.cs" />
     <Compile Include="Rules\SourceRouteOverrideRule.cs" />

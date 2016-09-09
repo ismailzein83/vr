@@ -12,17 +12,18 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 {
     public class SourceRouteOptionBlockRuleDataManager : BaseSQLDataManager
     {
-        public SourceRouteOptionBlockRuleDataManager(string connectionString)
+        readonly bool _getEffectiveOnly;
+        public SourceRouteOptionBlockRuleDataManager(string connectionString, bool getEffectiveOnly)
             : base(connectionString, false)
         {
-
+            _getEffectiveOnly = getEffectiveOnly;
         }
 
-        IEnumerable<SourceRouteOptionBlockRule> GetRouteOptionBlockRules(bool getEffectiveOnly)
+        public IEnumerable<SourceRouteOptionBlockRule> GetRouteOptionBlockRules()
         {
             return GetItemsText(query_getRouteOptionBlockRules, SourceRouteOptionBlockRuleMapper, (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", getEffectiveOnly));
+                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
             });
         }
 
@@ -38,7 +39,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 BED = (DateTime)reader["BeginEffectiveDate"],
                 EED = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 ExcludedCodes = reader["ExcludedCodes"] as string,
-                IncludeSubCode = (reader["IncludeSubCode"] as string).Equals("Y"),
+                IncludeSubCode = (reader["IncludeSubCodes"] as string).Equals("Y"),
                 Reason = reader["Reason"] as string
             };
         }
