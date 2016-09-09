@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DAProfCalcAlertRuleCriteriaDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function DAProfCalcAlertRuleCriteriaDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -23,6 +23,8 @@
         function DAProfCalcAlertRuleCriteria($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var daProfCalcOutputItemDefinitionId;
+
             var dataAnalysisItemDefinitionSelectorAPI;
             var dataAnalysisItemDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -38,6 +40,19 @@
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectorReady = function (api) {
                     dataAnalysisItemDefinitionSelectorAPI = api;
                     dataAnalysisItemDefinitionSelectoReadyDeferred.resolve();
+                }
+                $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (api) {
+                    daProfCalcOutputItemDefinitionId = dataAnalysisItemDefinitionSelectorAPI.getSelectedIds();
+                    if (daProfCalcOutputItemDefinitionId != undefined) {
+
+                        var recordFilterDirectivePayload = {};
+                        recordFilterDirectivePayload.context = buildContext();
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isRecordFilterDirectiveLoading = value;
+                        };
+
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader);
+                    }
                 }
 
                 $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
@@ -61,6 +76,10 @@
                     if (payload != undefined) {
                         dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
                         criteria = payload.criteria;
+
+                        if (criteria) {
+                            daProfCalcOutputItemDefinitionId = criteria.DAProfCalcOutputItemDefinitionId;
+                        }
                     }
                         
 
@@ -69,8 +88,10 @@
                     promises.push(dataAnalysisItemDefinitionSelectorLoadPromise);
 
                     //Loading Record Filter Directive
-                    var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
-                    promises.push(recordFilterDirectiveLoadPromise);
+                    if (daProfCalcOutputItemDefinitionId) {
+                        var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
+                        promises.push(recordFilterDirectiveLoadPromise);
+                    }
 
 
                     function getDataAnalysisItemDefinitionSelectorLoadPromise() {
@@ -123,10 +144,12 @@
                     getFields: function () {
                         var fields = []
 
-                        if (dataRecordTypeId) {
-                            getDataRecordType().then(function () {
-                                for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
-                                    var field = dataRecordTypeEntity.Fields[i];
+                        if (daProfCalcOutputItemDefinitionId) {
+                            VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(daProfCalcOutputItemDefinitionId).then(function (response) {
+
+                                var outputFields = response;
+                                for (var i = 0 ; i < outputFields.length; i++) {
+                                    var field = outputFields[i];
                                     fields.push({
                                         FieldName: field.Name,
                                         FieldTitle: field.Title,
@@ -135,7 +158,6 @@
                                 }
                             });
                         }
-
                         return fields;
                     }
                 }

@@ -1,11 +1,14 @@
 ﻿
 
 <vr-row>
-    <vr-columns width="1/2row">
-        <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"></vr-analytic-dataanalysisitemdefinition-selector>
-    </vr-columns>
+    <vr-section title="Data Analysis Item Definition" collapsible>
+        <vr-columns width="1/2row">
+            <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"
+                                                             onselectionchanged="scopeModel.onDataAnalysisItemDefinitionSelectionChanged"></vr-analytic-dataanalysisitemdefinition-selector>
+        </vr-columns>
+    </vr-section>
 </vr-row>
-<vr-row>
+<vr-row vr-loader="scopeModel.isRecordFilterDirectiveLoading">
     <vr-section title="Record Filter" collapsible>
         <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
     </vr-section>

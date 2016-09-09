@@ -41,8 +41,6 @@ app.directive('vrNotificationVralertruleCriteria', ['UtilsService', 'VRUIUtilsSe
 
             api.load = function (payload) {
 
-                console.log(payload);
-
                 var promises = [];
                 var dataAnalysisDefinitionId;
                 var criteriaEditor;
