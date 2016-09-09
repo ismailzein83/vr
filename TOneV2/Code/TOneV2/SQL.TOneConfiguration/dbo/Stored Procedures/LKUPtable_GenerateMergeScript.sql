@@ -48,8 +48,11 @@ select  @exec = isnull(@exec + '+' + @b,'') + ''','' +' +
         @Cols = @Cols + ','+quotename(c.column_name, '['),
         @sCols = @sCols + ',s.'+quotename(c.column_name, '[')
 from    information_schema.columns c
-where   c.table_name = parsename(@TableName, 1) and
-        c.table_schema = parsename(@TableName, 2)
+where   c.table_name = parsename(@TableName, 1) 
+		and c.table_schema = parsename(@TableName, 2)
+		and c.DATA_TYPE !='timestamp'
+		and (c.DATA_TYPE !='datetime' or c.COLUMN_DEFAULT is null)
+		
 order 
 by      c.ordinal_position
 
@@ -75,9 +78,11 @@ by      o;
 -- build update columns, do not update identities or pks
 select  @aCols = @aCols + ','+quotename(c.[name], '[') + ' = s.' + quotename(c.[name], '[')
 from    sys.columns c
-where   object_id = object_id(@TableName) and
-        [name] not in (select c from @pks) and
-        columnproperty(object_id(@TableName), c.[name], 'IsIdentity ') = 0;
+where   object_id = object_id(@TableName) 
+		and (system_type_id !=61 or default_object_id=0)
+		and system_type_id !=189 -- remove timestamp field
+		and [name] not in (select c from @pks)
+		and	columnproperty(object_id(@TableName), c.[name], 'IsIdentity ') = 0;
 
 -- script the data out as table value constructors
 select  @exec = 'set nocount on; Select ' + @b + '''(' + ''' + ' + @b + stuff(@exec,1, 3, '') + '+'')''' + @b + 'from ' + @TableName,
@@ -96,6 +101,8 @@ begin
     return
 end
 
+--select @Values = stuff(cast((select ','+ @b + val from @tab for xml path('')) as xml).value('.', 'varchar(max)'),1,2,'');
+
 select @Values = stuff(cast((select ','+ @b + val from @tab for xml path('')) as xml).value('.', 'varchar(max)'),1,2,'');
 
 -- build the merge statement
@@ -103,17 +110,19 @@ set @output +=  @b+'--'+@TableName+replicate('-', 98-len(@TableName))+@b+replica
 set @output +=  'set nocount on;'+@b
 if objectproperty(object_id(@TableName), 'TableHasIdentity') = 1 
     set @output += 'set identity_insert ' + @TableName + ' on;'+@b;
+
 set @output +=  ';with cte_data('+@Cols+')'+@b+'as (select * from (values'+@b+'--'+replicate('/', 98) + @b +@Values+ @b +'--'+replicate('\', 98)+ @b +')c('+@Cols+'))'+@b;
 set @output +=  'merge' + @t + '['+parsename(@TableName, 2)+'].[' + parsename(@TableName, 1) + '] as t' + @b + 'using' + @t + 'cte_data as s'+@b;
 set @output +=  'on' + replicate(@t, 2) + @pCols+@b;
 set @output +=  'when matched then' + @b+@t + 'update set'+ @b+@t + @aCols+@b;
 set @output +=  'when not matched by target then'+@b;
 set @output +=  @t+'insert(' + @Cols + ')'+@b;
-set @output +=  @t+'values(' + @sCols + ')'+@b;
-set @output +=  'when not matched by source then' + @b+@t+ 'delete;'+@b;
+set @output +=  @t+'values(' + @sCols + ');'+@b;
+--set @output +=  'when not matched by source then' + @b+@t+ 'delete;'+@b;
+
 if objectproperty(object_id(@TableName), 'TableHasIdentity') = 1 
     set @output += 'set identity_insert ' + @TableName + ' off;'
 
 --output the statement as xml (to overcome mgmt studio limitations)
-select s as [output] from (select @output)d(s) for xml path('');
+select s as [output] from (select @output)d(s) --for xml path('');
 return;

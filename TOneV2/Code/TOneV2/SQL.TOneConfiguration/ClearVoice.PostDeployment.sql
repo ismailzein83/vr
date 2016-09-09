@@ -194,7 +194,7 @@ set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'Keep history in Test Calls Page','QM_CLITester_LastTestCall_Settings','General','{"Editor":"vr-qm-clitester-lasttestcall-settings-editor"}','{"$type":"QM.CLITester.Entities.LastTestCallsSettingsData, QM.CLITester.Entities","LastTestCall":60}',0),
+(301,'Keep history in Test Call Page','QM_CLITester_LastTestCall_Settings','General','{"Editor":"vr-qm-clitester-lasttestcall-settings-editor"}','{"$type":"QM.CLITester.Entities.LastTestCallsSettingsData, QM.CLITester.Entities","LastTestCall":60}',0),
 (302,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Clear Voice","VersionNumber":"version 0.9"}}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
@@ -208,3 +208,60 @@ when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[Setting] off;
+
+--[common].[VRObjectTypeDefinition]-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings],[CreatedTime])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('7B6B09AF-D2F8-47E0-B4FD-187A8075D4BB','TestCall','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultObjectType, QM.CLITester.Entities","ConfigId":3004},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Supplier Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Supplier Name","Description":"Supplier Name","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":0,"ConfigId":3005}},"User Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"User Name","Description":"User Name","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":1,"ConfigId":3005}},"Country Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Country Name","Description":"Country Name","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":2,"ConfigId":3005}},"Zone Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Zone Name","Description":"Zone Name","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":3,"ConfigId":3005}},"Call Test Status Description":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Call Test Status Description","Description":"Call Test Status Description","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":4,"ConfigId":3005}},"Call Test Result Description":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Call Test Result Description","Description":"Call Test Result Description","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":5,"ConfigId":3005}},"Schedule Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Schedule Name","Description":"Schedule Name","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":6,"ConfigId":3005}},"Pdd":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Pdd","Description":"Pdd","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":7,"ConfigId":3005}},"Mos":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Mos","Description":"Mos","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":8,"ConfigId":3005}},"Creation Date":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Creation Date","Description":"Creation Date","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":9,"ConfigId":3005}},"Source":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Source","Description":"Source","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":10,"ConfigId":3005}},"Destination":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Destination","Description":"Destination","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":11,"ConfigId":3005}},"Received Cli":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Received Cli","Description":"Received Cli","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":12,"ConfigId":3005}},"Ring Duration":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Ring Duration","Description":"Ring Duration","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":13,"ConfigId":3005}},"Release Code":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Release Code","Description":"Release Code","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":15,"ConfigId":3005}},"To Mail":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"To Mail","Description":"To Mail","PropertyEvaluator":{"$type":"QM.CLITester.Entities.VRObjectTypes.TestResultPropertyEvaluator, QM.CLITester.Entities","TestCallDetailField":16,"ConfigId":3005}}}}','2016-09-05 17:11:16.873')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings],[CreatedTime]))
+merge	[common].[VRObjectTypeDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+--[common].[MailMessageType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings],[CreatedTime])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('D87DD73B-B143-486B-AFE9-303F8D4C90AC','Test Call','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","SendTestCallResultObjList":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"SendTestCallResultObjList","VRObjectTypeDefinitionId":"7b6b09af-d2f8-47e0-b4fd-187a8075d4bb"},"Product":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Product","VRObjectTypeDefinitionId":"62b9a4da-0018-4514-bcfd-8268a58f53a2"}}}','2016-09-05 17:13:29.663')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings],[CreatedTime]))
+merge	[common].[MailMessageType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+--[common].[MailMessageTemplate]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[MessageTypeID],[Settings],[CreatedTime])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('019A4F17-CDDC-47FC-B0E0-4F65473E173D','Test Call','D87DD73B-B143-486B-AFE9-303F8D4C90AC','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"SendTestCallResultObjList\",\"To Mail\")"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"Product\",\"Product Name\"): Test call summary for supplier: @Model.GetVal(\"SendTestCallResultObjList\",\"Supplier Name\") on Country: @Model.GetVal(\"SendTestCallResultObjList\",\"Country Name\")"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"Dears,\n&lt;div&gt;Kindly find below Test call summary&lt;/div&gt;\n&lt;br/&gt;Supplier Name: @Model.GetVal(\"SendTestCallResultObjList\",\"Supplier Name\")\n&lt;br/&gt;Country Name: @Model.GetVal(\"SendTestCallResultObjList\",\"Country Name\")\n&lt;br/&gt;Zone Name: @Model.GetVal(\"SendTestCallResultObjList\",\"Zone Name\")\n&lt;br/&gt;Call Date: @Model.GetVal(\"SendTestCallResultObjList\",\"Creation Date\")\n\n&lt;!--repeated section--&gt;\nSource: @Model.GetVal(\"SendTestCallResultObjList\",\"Source\")\nDestination: @Model.GetVal(\"SendTestCallResultObjList\",\"Destination\")\nReceived Cli: @Model.GetVal(\"SendTestCallResultObjList\",\"Received Cli\")\nRing Duration: @Model.GetVal(\"SendTestCallResultObjList\",\"Ring Duration\")\nRelease Code: @Model.GetVal(\"SendTestCallResultObjList\",\"Release Code\")\nPdd: @Model.GetVal(\"SendTestCallResultObjList\",\"Pdd\")\nMos: @Model.GetVal(\"SendTestCallResultObjList\",\"Mos\")\nCall Result: @Model.GetVal(\"SendTestCallResultObjList\",\"Call Test Result Description\")\n\nDestinations:\n@if (Model.GetVal(\"SendTestCallResultObjList\",\"Destination\") != null)\n{\n  var  source= Model.GetVal(\"SendTestCallResultObjList\",\"Destination\").ToString();\n  var sourceSplit= source.Split('';'');\nforeach (var s in sourceSplit) \n{\n\tif (s != \"\"){\n       @s\n}}}\n&lt;br/&gt;&lt;br/&gt;\n&lt;div&gt;Regards;&lt;/div&gt;\n&lt;div&gt;@Model.GetVal(\"SendTestCallResultObjList\",\"User Name\")&lt;/div&gt;"}}','2016-09-05 17:15:54.417')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[MessageTypeID],[Settings],[CreatedTime]))
+merge	[common].[MailMessageTemplate] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[MessageTypeID],[Settings])
+	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);

@@ -405,6 +405,7 @@
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_Update.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_Insert.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_GetAll.sql" />
+    <Build Include="common\Tables\TimeZone.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
