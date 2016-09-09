@@ -409,6 +409,7 @@
     <Build Include="common\Stored Procedures\sp_VRTimeZone_Update.sql" />
     <Build Include="common\Stored Procedures\sp_VRTimeZone_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_VRTimeZone_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScriptXML.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
