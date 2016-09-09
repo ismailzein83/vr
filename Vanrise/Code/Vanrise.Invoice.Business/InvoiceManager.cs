@@ -66,8 +66,31 @@ namespace Vanrise.Invoice.Business
                 ToDate = createInvoiceInput.ToDate
             };
             invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
+
+            Entities.Invoice invoice = new Entities.Invoice
+            {
+                Details = context.Invoice.InvoiceDetails,
+                InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
+                FromDate = createInvoiceInput.FromDate,
+                PartnerId = createInvoiceInput.PartnerId,
+                ToDate = createInvoiceInput.ToDate
+            };
+
+            var serialNumber = invoiceType.Settings.SerialNumberPattern;
+            InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext{
+                Invoice = invoice,
+                InvoiceTypeId = createInvoiceInput.InvoiceTypeId
+            };
+            foreach(var part in invoiceType.Settings.SerialNumberParts)
+            {
+                if(invoiceType.Settings.SerialNumberPattern != null && invoiceType.Settings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                {
+                    serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
+                }
+            }
+            invoice.SerialNumber = serialNumber;
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            if (dataManager.SaveInvoices(createInvoiceInput, context.Invoice,out insertedInvoiceId))
+            if (dataManager.SaveInvoices(createInvoiceInput, context.Invoice,invoice,out insertedInvoiceId))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
@@ -81,6 +104,13 @@ namespace Vanrise.Invoice.Business
 
             return insertOperationOutput;
         }
+
+        public int GetOverAllInvoiceCount(Guid InvoiceTypeId, string partnerId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetOverAllInvoiceCount( InvoiceTypeId,  partnerId);
+        }
+
         #endregion
 
 

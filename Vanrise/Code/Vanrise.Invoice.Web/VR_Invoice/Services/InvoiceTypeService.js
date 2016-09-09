@@ -82,7 +82,6 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SubSectionEditor.html', parameters, settings);
         }
 
-
         function addInvoiceItemSubSection(onInvoiceItemSubSectionAdded, context) {
             var settings = {
 
@@ -110,7 +109,6 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemSubSectionEditor.html', parameters, settings);
         }
-
 
         function addGridAction(onGridActionAdded, context) {
             var settings = {
@@ -252,6 +250,34 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCSubReportEditor.html', parameters, settings);
         }
 
+        function addSerialNumberPart(onSerialNumberPartAdded, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSerialNumberPartAdded = onSerialNumberPartAdded;
+            };
+            var parameters = {
+                context: context
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SerialNumberPartEditor.html', parameters, settings);
+        }
+
+        function editSerialNumberPart(serialNumberPartEntity, onSerialNumberPartUpdated, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSerialNumberPartUpdated = onSerialNumberPartUpdated;
+            };
+            var parameters = {
+                serialNumberPartEntity: serialNumberPartEntity,
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SerialNumberPartEditor.html', parameters, settings);
+        }
+
         return ({
             addInvoiceType: addInvoiceType,
             editInvoiceType: editInvoiceType,
@@ -270,7 +296,9 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             addSubReport: addSubReport,
             editSubReport: editSubReport,
             addInvoiceItemSubSection: addInvoiceItemSubSection,
-            editInvoiceItemSubSection: editInvoiceItemSubSection
+            editInvoiceItemSubSection: editInvoiceItemSubSection,
+            addSerialNumberPart: addSerialNumberPart,
+            editSerialNumberPart: editSerialNumberPart
 
         });
     }]);

@@ -32,7 +32,15 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper,input.Query.InvoiceTypeId, input.Query.PartnerId, input.Query.FromTime, input.Query.ToTime);
         }
-        public bool SaveInvoices(Entities.GenerateInvoiceInput createInvoiceInput, Entities.GeneratedInvoice invoice, out long insertedInvoiceId)
+
+        public int GetOverAllInvoiceCount(Guid InvoiceTypeId, string partnerId)
+        {
+            return GetItemSP("VR_Invoice.sp_Invoice_GetOverAllInvoiceCount", (reader) =>
+            {
+                return GetReaderValue<int>(reader, "Counter");
+            }, InvoiceTypeId, partnerId);
+        }
+        public bool SaveInvoices(Entities.GenerateInvoiceInput createInvoiceInput, Entities.GeneratedInvoice invoice,Entities.Invoice invoiceEntity, out long insertedInvoiceId)
         {
             var options = new TransactionOptions
             {
@@ -43,7 +51,7 @@ namespace Vanrise.Invoice.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object invoiceId;
-               int affectedRows =  ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, "", createInvoiceInput.FromDate, createInvoiceInput.ToDate, DateTime.Now, DateTime.Now, Vanrise.Common.Serializer.Serialize(invoice.InvoiceDetails));
+                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, invoiceEntity.SerialNumber, createInvoiceInput.FromDate, createInvoiceInput.ToDate, DateTime.Now, DateTime.Now, Vanrise.Common.Serializer.Serialize(invoice.InvoiceDetails));
                 insertedInvoiceId = Convert.ToInt64(invoiceId);
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems((long)invoiceId,invoice.InvoiceItemSets);

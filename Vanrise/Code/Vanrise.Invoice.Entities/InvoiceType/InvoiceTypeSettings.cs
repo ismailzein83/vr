@@ -13,6 +13,14 @@ namespace Vanrise.Invoice.Entities
 
         public int InvoiceDetailsRecordTypeId { get; set; }
 
-        public InvoiceGenerator InvoiceGenerator { get; set; } 
-    }   
+        public InvoiceGenerator InvoiceGenerator { get; set; }
+        public List<SerialNumberPart> SerialNumberParts { get; set; }
+        public string SerialNumberPattern { get; set; }
+    }
+    public class SerialNumberPart
+    {
+        public string VariableName { get; set; }
+        public string Description { get; set; }
+        public Vanrise.Entities.VRConcatenatedPartSettings<IInvoiceSerialNumberConcatenatedPartContext> Settings { get; set; }
+    }
 }

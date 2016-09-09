@@ -174,6 +174,13 @@
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\MainExtensions\Templates\InvoiceFieldSerialNumberPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\MainExtensions\Templates\OverallInvoiceCounterSerialNumberPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\MainExtensions\vr-invoicetype-serialnumber-invoicefield.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\MainExtensions\vr-invoicetype-serialnumber-overallcounter.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\Templates\SerialNumberPartsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\vr-invoicetype-serialnumber-pattern.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\vr-invoicetype-serialnumberparts.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\BankDetailsDataSourceSettings.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\InvoiceDataSourceItems.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\vr-invoicetype-datasourcesettings-bankdetails.js" />
@@ -239,6 +246,10 @@
     <Content Include="VR_Invoice\Views\Definition\InvoiceItemSubSectionEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditorController.js" />
+    <Content Include="VR_Invoice\Views\Definition\SerialNumberPartEditor.html" />
+    <Content Include="VR_Invoice\Views\Definition\SerialNumberPartEditorController.js" />
+    <Content Include="VR_Invoice\Views\Definition\SerialNumberPatternHelper.html" />
+    <Content Include="VR_Invoice\Views\Definition\SerialNumberPatternHelperController.js" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditor.html" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceDataSourceEditor.html" />

@@ -99,6 +99,6 @@
         }
 
     }
-    appControllers.controller('VR_Invoice_ConcatenatedPartEditorController', concatenatedPartEditorController);
+    appControllers.controller('VRCommon_ConcatenatedPartEditorController', concatenatedPartEditorController);
 
 })(appControllers);

@@ -14,4 +14,5 @@ namespace Vanrise.Invoice.Entities
 
         public InvoiceTypeSettings Settings { get; set; }
     }
+
 }

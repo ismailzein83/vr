@@ -26,6 +26,13 @@
 
         var invoicePartnerSettingsAPI;
         var invoicePartnerSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var concatenatedPartsAPI;
+        var concatenatedPartsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var serialNumberPatternAPI;
+        var serialNumberPatternReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeEntity;
         defineScope();
         loadParameters();
@@ -87,6 +94,14 @@
                     return insertInvoiceType();
                 }
             };
+            $scope.scopeModel.onConcatenatedPartsReady = function (api) {
+                concatenatedPartsAPI = api;
+                concatenatedPartsReadyPromiseDeferred.resolve();
+            }
+            $scope.scopeModel.onSerialNumberPatternReady = function (api) {
+                serialNumberPatternAPI = api;
+                serialNumberPatternReadyPromiseDeferred.resolve();
+            }
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -112,7 +127,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGeneratorDirective, loadInvoiceGridActionsSection, loadInvoicePartnerSettingsSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGeneratorDirective, loadInvoiceGridActionsSection, loadInvoicePartnerSettingsSection, loadConcatenatedParts, loadSerialNumberPattern])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -153,7 +168,9 @@
                         InvoiceGridActions: invoiceGridActionsAPI.getData(),
                         PartnerSettings: invoicePartnerSettingsAPI.getData()
                     },
-                    InvoiceGenerator: invoiceGeneratorAPI.getData()
+                    InvoiceGenerator: invoiceGeneratorAPI.getData(),
+                    SerialNumberParts: concatenatedPartsAPI.getData(),
+                    SerialNumberPattern: serialNumberPatternAPI.getData()
                 }
             };
             return obj;
@@ -167,6 +184,32 @@
                 VRUIUtilsService.callDirectiveLoad(invoicePartnerSettingsAPI, partnerSettingsPayload, invoicePartnerSettingsLoadPromiseDeferred);
             });
             return invoicePartnerSettingsLoadPromiseDeferred.promise;
+        }
+
+        function loadConcatenatedParts()
+        {
+            var concatenatedPartsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            concatenatedPartsReadyPromiseDeferred.promise.then(function () {
+                var concatenatedPartsDirectivePayload = { context: getContext() }
+                if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings) {
+                    concatenatedPartsDirectivePayload.serialNumberParts = invoiceTypeEntity.Settings.SerialNumberParts;
+                }
+
+
+                VRUIUtilsService.callDirectiveLoad(concatenatedPartsAPI, concatenatedPartsDirectivePayload, concatenatedPartsDeferredLoadPromiseDeferred);
+            });
+            return concatenatedPartsDeferredLoadPromiseDeferred.promise;
+        }
+
+        function loadSerialNumberPattern() {
+            var serialNumberPatternDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            serialNumberPatternReadyPromiseDeferred.promise.then(function () {
+                var serialNumberPatternDirectivePayload = { context: getContext() }
+                if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
+                    serialNumberPatternDirectivePayload.serialNumberPattern = invoiceTypeEntity.Settings.SerialNumberPattern;
+                VRUIUtilsService.callDirectiveLoad(serialNumberPatternAPI, serialNumberPatternDirectivePayload, serialNumberPatternDeferredLoadPromiseDeferred);
+            });
+            return serialNumberPatternDeferredLoadPromiseDeferred.promise;
         }
 
         function loadInvoiceGridActionsSection() {
@@ -235,15 +278,20 @@
             var context = {
                 getFields: function () {
                     var fields = [];
-                    if (dataRecordTypeEntity != undefined && dataRecordTypeEntity.Fields !=undefined)
-                    {
-                        for (var i = 0; i < dataRecordTypeEntity.Fields.length; i++)
-                        {
+                    if (dataRecordTypeEntity != undefined && dataRecordTypeEntity.Fields != undefined) {
+                        for (var i = 0; i < dataRecordTypeEntity.Fields.length; i++) {
                             var field = dataRecordTypeEntity.Fields[i];
                             fields.push({ FieldName: field.Name, FieldTitle: field.Title, Type: field.Type });
                         }
                     }
                     return fields;
+                },
+                getParts:function()
+                {
+                    return concatenatedPartsAPI.getData();
+                },
+                getExtensionType: function () {
+                    return "VR_InvoiceType_SerialNumberParts";
                 }
             }
             return context;
