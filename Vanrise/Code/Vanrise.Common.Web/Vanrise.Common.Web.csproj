@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRTimeZoneController.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\EmailTemplateController.cs" />
@@ -180,6 +181,9 @@
     <Content Include="Common\Directives\City\Templates\citySelectorTemplate.html" />
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
     <Content Include="Common\Directives\City\vr-common-city-selector.js" />
+    <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
+    <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
+    <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-selector.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\CountrySourceReaderSelector.html" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SourceCountryReaderTOneV1.html" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-country-sourcereader-selector.js" />
@@ -283,6 +287,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRTimeZoneAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\EmailTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\FileAPIService.js" />
@@ -301,6 +306,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
+    <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRConcatenatedPartService.js" />
     <Content Include="Common\Services\VRMailMessageTemplateService.js" />
@@ -389,6 +395,10 @@
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditor.html" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditorController.js" />
+    <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditor.html" />
+    <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditorController.js" />
+    <Content Include="Common\Views\VRTimeZone\VRTimeZoneManagement.html" />
+    <Content Include="Common\Views\VRTimeZone\VRTimeZoneManagementController.js" />
     <Content Include="Common\Views\VRConcatenatedPart\VRConcatenatedPartEditor.html" />
     <Content Include="Common\Views\VRConcatenatedPart\VRConcatenatedPartEditorController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageTemplateEditor.html" />

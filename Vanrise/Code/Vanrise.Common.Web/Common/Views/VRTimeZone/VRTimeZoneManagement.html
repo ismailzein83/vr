@@ -1,0 +1,25 @@
+﻿<vr-panel ng-controller="VRCommon_VRTimeZoneManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" haspermission="hasAddVRTimeZonePermission" data-onclick="addNewVRTimeZone"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-common-timezone-grid on-ready="onGridReady"></vr-common-timezone-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+
+</vr-panel>

@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_VRTimeZoneEditorController" vr-loader="isLoading" width="'30%'">
+    <vr-modalbody>
+        <vr-form name="formVRTimeZoneEditor">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-select hidefilterbox="true" label="Sign" datatextfield="text" datavaluefield="value"
+                               ng-init="signs=[{text:'&plus;',value:''},{text:'&minus;',value:'-'}]" datasource="signs" selectedvalues="sign" isrequired="true"></vr-select>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-datetimepicker type="time" label="Time Shift" value="time" isrequired></vr-datetimepicker>
+                </vr-columns>
+               
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" haspermission="hasSaveVRTimeZonePermission" formname="formVRTimeZoneEditor" data-onclick="saveVRTimeZone"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

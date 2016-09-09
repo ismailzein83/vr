@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="timeZones"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.TimeZoneId">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.TimeZoneId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>   
+    <vr-datagridcolumn headertext="'Time Shift'" field="'Entity.Settings.Offset'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

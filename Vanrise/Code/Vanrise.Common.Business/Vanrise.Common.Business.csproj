@@ -115,6 +115,7 @@
     <Compile Include="VRObject\VRObjectManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />
     <Compile Include="VRFileManager.cs" />
+    <Compile Include="VRTimeZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">

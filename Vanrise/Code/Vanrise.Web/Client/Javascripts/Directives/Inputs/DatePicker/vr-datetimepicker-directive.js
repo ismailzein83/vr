@@ -240,6 +240,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     return;
                 var date;
                 if ($attrs.type == "time") {
+                    console.log("her")
                     var initialDate = new Date();
                     if (ctrl.value.Hour == undefined)
                         ctrl.value.Hour = 0;
@@ -249,7 +250,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                         ctrl.value.Second = 0;
                     if (ctrl.value.Millisecond == undefined)
                         ctrl.value.Millisecond = 0;
+                   
                     initialDate.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
+                    date = initialDate;
                     //var convertedDate = convertUTCDateToLocalDate(initialDate);
                     //date = convertedDate;
                 }
