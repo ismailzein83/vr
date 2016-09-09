@@ -16,7 +16,7 @@ namespace QM.Runtime
             if (ConfigurationManager.AppSettings["IsRuntimeService"] == "true")
             {
                 
-                SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
+                SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
                 Vanrise.Caching.Runtime.CachingDistributorRuntimeService cachingDistributorRuntimeService = new Vanrise.Caching.Runtime.CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
                 
                 var runtimeServices = new List<RuntimeService>();
