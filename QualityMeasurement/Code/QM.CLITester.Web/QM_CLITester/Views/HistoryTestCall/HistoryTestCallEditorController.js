@@ -37,8 +37,8 @@
                 callTestStatusDescription = parameters.CallTestStatusDescription;
                 callTestResultDescription = parameters.CallTestResultDescription;
                 scheduleName = parameters.ScheduleName;
-                pdd = parameters.Pdd;
-                mos = parameters.Mos;
+                pdd = parameters.PDD;
+                mos = parameters.MOS;
                 creationDate = parameters.CreationDate;
                 source = parameters.Source;
                 destination = parameters.Destination;

@@ -15,8 +15,8 @@ namespace QM.CLITester.Entities
         public string CallTestStatusDescription { get; set; }
         public string CallTestResultDescription { get; set; }
         public string ScheduleName { get; set; }
-        public decimal Pdd { get; set; }
-        public decimal Mos { get; set; }
+        public string Pdd { get; set; }
+        public string Mos { get; set; }
         public DateTime CreationDate { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }

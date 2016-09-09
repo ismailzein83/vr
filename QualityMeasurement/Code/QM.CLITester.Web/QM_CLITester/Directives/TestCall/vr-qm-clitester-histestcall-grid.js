@@ -78,18 +78,26 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             var destination = "";
             var receivedCli = "";
             var releaseCode = "";
+            var pdd = "";
+            var mos = "";
+            var ringDuration = "";
+            var duration = "";
+            var callTestResultDescription = "";
             if (testCallObj.Entity.TestProgress != null && testCallObj.Entity.TestProgress.CallResults != null)
                 for (var i = 0; i < testCallObj.Entity.TestProgress.CallResults.length; i++) {
                     source = source + ";" + testCallObj.Entity.TestProgress.CallResults[i].Source;
                     destination = destination + ";" + testCallObj.Entity.TestProgress.CallResults[i].Destination;
                     receivedCli = receivedCli + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReceivedCli;
                     releaseCode = releaseCode + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReleaseCode;
+                    pdd = pdd + ";" + testCallObj.Entity.TestProgress.CallResults[i].Pdd;
+                    mos = mos + ";" + testCallObj.Entity.TestProgress.CallResults[i].Mos;
+                    ringDuration = ringDuration + ";" + testCallObj.Entity.TestProgress.CallResults[i].Ring;
+                    duration = duration + ";" + testCallObj.Entity.TestProgress.CallResults[i].Call;
+                    callTestResultDescription = callTestResultDescription + ";" + testCallObj.Entity.TestProgress.CallResults[i].CallTestResultDescription;
                 }
-
             Qm_CliTester_TestCallService.sendTestCall(testCallObj.SupplierName, testCallObj.UserName, testCallObj.CountryName, testCallObj.ZoneName,
-                testCallObj.CallTestStatusDescription, testCallObj.CallTestResultDescription, testCallObj.ScheduleName, testCallObj.Entity.Measure.Pdd,
-                testCallObj.Entity.Measure.Mos, testCallObj.Entity.CreationDate, source, destination, receivedCli, releaseCode,
-                testCallObj.Entity.Measure.RingDuration, testCallObj.Entity.Measure.Duration, onSendTestCall);
+                testCallObj.CallTestStatusDescription, callTestResultDescription, testCallObj.ScheduleName, pdd, mos, testCallObj.Entity.CreationDate, source, destination, receivedCli, releaseCode,
+                ringDuration, duration, onSendTestCall);
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
