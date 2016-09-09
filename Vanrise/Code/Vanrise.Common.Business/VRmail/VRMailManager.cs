@@ -37,12 +37,23 @@ namespace Vanrise.Common.Business
 
         public void SendMail(string to, string cc, string subject, string body)
         {
+            if (String.IsNullOrWhiteSpace(to))
+                throw new NullReferenceException("to");
             ConfigManager configManager = new ConfigManager();
             EmailSettingData emailSettingData = configManager.GetSystemEmail();
 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
-            mailMessage.To.Add(new MailAddress(to));
+            string[] toAddresses = to.Split(';', ',', ':');
+            foreach (var toAddress in toAddresses)
+            {
+                mailMessage.To.Add(new MailAddress(toAddress));
+            }
+            string[] ccAddresses = cc.Split(';', ',', ':');
+            foreach (var ccAddress in ccAddresses)
+            {
+                mailMessage.CC.Add(new MailAddress(ccAddress));
+            }
             mailMessage.Subject = subject;
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
