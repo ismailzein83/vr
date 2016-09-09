@@ -87,7 +87,6 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="TOneV2DBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
     <add name="TOneCDRDBConnString" connectionString="Server=localhost;Database=TOneV2_CDR;User ID=sa;Password= "/>
     <add name="TOneAnalyticsDBConnString" connectionString="Server=localhost;Database=TOneV2_Analytics;User ID=sa;Password= "/>
     
@@ -111,7 +110,7 @@
     <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="BigDataServiceDBConnStringKey" value="TransactionDBConnString"/>
     <add key="StatisticManagementDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="TOneWhS_BE_DBConnStringKey" value="TOneV2DBConnString"/>
+    <add key="TOneWhS_BE_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="AddBusinessProcessConsoleTracking" value="true"/>
     <add key="DropOldRoutingDatabasesInterval" value="00:01:00"/>
     <add key="BusinessProcessServiceHost" value="localhost:1849"/>
@@ -121,16 +120,16 @@
     <add key="BCPDonotDeleteFiles" value="false"/><!--BCPDonotDeleteFiles should be always false at production. could be only set to true for troubleshooting-->
     <add key="RebuildZoneRates" value="true"/>
     <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
-    <add key="TOneWhS_BE_DBConnStringKey" value="TOneV2DBConnString"/>
+    <add key="TOneWhS_BE_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TOneWhS_CDR_DBConnStringKey" value="TOneCDRDBConnString"/>
     <add key="TOneWhS_Routing_DBConnStringKey" value="RoutingDBConnStringTemplateKey"/>
     <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="StatisticManagement_LockRetryInterval" value="00:00:05"/>
-    <add key="TOneWhS_SPL_DBConnStringKey" value="TOneV2DBConnString"/>
+    <add key="TOneWhS_SPL_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="TOneWhS_TS_DBConnStringKey" value="TOneV2DBConnString"/>
+    <add key="TOneWhS_TS_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TrafficStatsQualityMeasurementInterval" value="5000:00:00"/>
     <add key="IsRuntimeService" value="true"/>
     <add key="Currency" value="USD"/>
