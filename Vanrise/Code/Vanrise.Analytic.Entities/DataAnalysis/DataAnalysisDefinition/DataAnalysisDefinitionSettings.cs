@@ -22,6 +22,9 @@ namespace Vanrise.Analytic.Entities
 
         public string Editor { get; set; }
 
-        public string GridDirective = "vr-analytic-dataanalysisitemdefinition-grid";
+        public virtual string GridDirective
+        {
+            get { return "vr-analytic-dataanalysisitemdefinition-grid"; }
+        } 
     }
 }

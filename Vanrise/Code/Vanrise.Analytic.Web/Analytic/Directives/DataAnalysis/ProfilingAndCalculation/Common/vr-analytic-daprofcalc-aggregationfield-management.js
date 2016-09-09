@@ -95,7 +95,7 @@
             }
             function editDAProfCalcAggregationField(daProfCalcAggregationField) {
                 var onDAProfCalcAggregationFieldUpdated = function (updatedDAProfCalcAggregationField) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcAggregationFields, daProfCalcAggregationField.RecordFilter, 'RecordFilter');
+                    var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcAggregationFields, daProfCalcAggregationField.FieldName, 'FieldName');
                     ctrl.daProfCalcAggregationFields[index] = updatedDAProfCalcAggregationField;
                 };
 

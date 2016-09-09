@@ -64,6 +64,8 @@
 
                 api.load = function (payload) {
 
+                    console.log(payload);
+
                     ctrl.daProfCalcGroupingFields = [];
 
                     if (payload != undefined) {
@@ -97,7 +99,7 @@
             }
             function editDAProfCalcGroupingField(daProfCalcGroupingField) {
                 var onDAProfCalcGroupingFieldUpdated = function (updatedDAProfCalcGroupingField) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcGroupingFields, daProfCalcGroupingField.RecordFilter, 'RecordFilter');
+                    var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcGroupingFields, daProfCalcGroupingField.FieldName, 'FieldName');
                     ctrl.daProfCalcGroupingFields[index] = updatedDAProfCalcGroupingField;
                 };
 

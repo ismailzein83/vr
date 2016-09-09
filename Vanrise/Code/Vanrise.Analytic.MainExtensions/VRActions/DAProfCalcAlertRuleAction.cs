@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.MainExtensions.VRActions
 {
@@ -14,7 +15,7 @@ namespace Vanrise.Analytic.MainExtensions.VRActions
 
         public override void Execute(IVRActionExecutionContext context)
         {
-
+            new VRMailManager().SendMail(this.MailMessageTemplateId, null);
         }
     }
 }

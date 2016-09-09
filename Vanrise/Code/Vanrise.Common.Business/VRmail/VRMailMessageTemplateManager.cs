@@ -76,11 +76,16 @@ namespace Vanrise.Common.Business
         {
             Func<VRMailMessageTemplate, bool> filterExpression = (item) =>
             {
+                if (filter == null)
+                    return true;
+
                 if (filter.VRMailMessageTypeId != item.VRMailMessageTypeId)
                     return false;
 
                 return true;
             };
+
+
 
             return this.GetCachedVRMailMessageTemplates().MapRecords(VRMailMessageTemplateInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
