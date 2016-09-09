@@ -244,48 +244,9 @@ namespace QM.CLITester.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<TestCallDetail> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "User Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Creation Date" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "PDD" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "MOS" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Batch Number" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Schedule Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Call Test Status" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Call Test Result" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
-                {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    if (record.Entity != null)
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.ID });
-                    row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
-                    row.Cells.Add(new ExportExcelCell { Value = record.UserName });
-                    row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
-                    row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
-                    if (record.Entity != null)
-                    {
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreationDate });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Measure.Pdd });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Measure.Mos });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.BatchNumber });    
-                    }
-                    row.Cells.Add(new ExportExcelCell { Value = record.ScheduleName });
-                    row.Cells.Add(new ExportExcelCell { Value = record.CallTestStatusDescription });
-                    row.Cells.Add(new ExportExcelCell { Value = record.CallTestResultDescription });
-                }
-                context.MainSheet = sheet;
+                ConfigManager configManager = new ConfigManager();
+                CLITesterConnectorBase cliTestConnector = configManager.GetCLITesterConnector();
+                cliTestConnector.ConvertResultToExcelData(context);
             }
         }
 

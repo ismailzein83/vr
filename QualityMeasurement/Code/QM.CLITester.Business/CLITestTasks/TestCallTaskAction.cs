@@ -46,7 +46,7 @@ namespace QM.CLITester.Business
                 ZoneSourceId = testCallTaskActionArgument.ZoneSourceId,
                 UserId = task.OwnerId,
                 ScheduleId = task.TaskId,
-                Quantity = testCallTaskActionArgument.Quantity
+                Quantity = 1
             };
 
             AddTestCallOutput testCallOutput = manager.AddNewTestCall(testCallInput);

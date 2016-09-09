@@ -85,6 +85,7 @@
     <Compile Include="CLITestTasks\TestCallTaskActionExecutionInfo.cs" />
     <Compile Include="CLITestTasks\TestProgressTaskAction.cs" />
     <Compile Include="CLITestTasks\TestProgressTaskActionArgument.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GetTestProgressContext.cs" />
     <Compile Include="InitiateTestContext.cs" />

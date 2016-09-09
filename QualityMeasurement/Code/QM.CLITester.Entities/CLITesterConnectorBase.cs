@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace QM.CLITester.Entities
 {    
@@ -14,6 +15,8 @@ namespace QM.CLITester.Entities
         public abstract InitiateTestOutput InitiateTest(IInitiateTestContext context);
 
         public abstract GetTestProgressOutput GetTestProgress(IGetTestProgressContext context);
+
+        public abstract void ConvertResultToExcelData(IConvertResultToExcelDataContext<TestCallDetail> context);
     }
 
     public enum InitiateTestResult { Created, FailedWithRetry, FailedWithNoRetry }

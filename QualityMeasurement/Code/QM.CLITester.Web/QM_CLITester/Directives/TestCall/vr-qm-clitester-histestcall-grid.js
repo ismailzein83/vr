@@ -97,6 +97,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 .then(function (response) {
                     if (response.Data != undefined) {
                         for (var i = 0; i < response.Data.length; i++) {
+                            if (response.Data[i] != null && response.Data[i].Entity != null)
                             if (response.Data[i].Entity.BatchNumber === 0)
                                 response.Data[i].Entity.BatchNumber = "";
                             gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
