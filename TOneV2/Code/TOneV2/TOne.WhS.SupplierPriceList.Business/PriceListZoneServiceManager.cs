@@ -47,7 +47,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             if (importedZone.ImportedZoneService != null)
                 FillSystemZoneServicesForImportedZone(importedZone, existingZoneServices);
-            if (importedZone.ImportedZoneService == null)
+            if (importedZone.ImportedZoneService == null && existingZoneServices != null)
                 FillNotImportedZoneServicesWithClosedZoneServices(importedZone, existingZoneServices);
         }
 
@@ -256,12 +256,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingZoneServicesByZoneName;
         }
 
-        private void CloseExistingOverlapedZoneServices(ImportedZoneService importedZoneService, List<ExistingZoneService> matchExistingZoneServices, out bool shouldNotAddZoneService)
+
+        private void CloseExistingOverlapedZoneServices(ImportedZoneService importedZoneService, List<ExistingZoneService> matchExistingServices, out bool shouldNotAddZoneService)
         {
             shouldNotAddZoneService = false;
-            foreach (var existingZoneService in matchExistingZoneServices)
+            foreach (var existingZoneService in matchExistingServices.OrderBy(itm => itm.ZoneServiceEntity.BED))
             {
-
                 if (existingZoneService.IsOverlappedWith(importedZoneService))
                 {
                     if (SameZoneServices(importedZoneService, existingZoneService))
@@ -271,7 +271,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                             shouldNotAddZoneService = true;
                             break;
                         }
-                        else if (importedZoneService.EED.HasValue && importedZoneService.EED.VRLessThan(existingZoneService.EED))
+                        if (importedZoneService.EED.HasValue && importedZoneService.EED.VRLessThan(existingZoneService.EED))
                         {
                             existingZoneService.ChangedZoneService = new ChangedZoneService
                             {
@@ -279,23 +279,21 @@ namespace TOne.WhS.SupplierPriceList.Business
                                 EED = importedZoneService.EED.Value
                             };
                             importedZoneService.ChangedExistingZoneServices.Add(existingZoneService);
+                            shouldNotAddZoneService = true;
+                            break;
                         }
-
                     }
-                    else
+                    DateTime existingZoneServiceEed = Utilities.Max(importedZoneService.BED, existingZoneService.BED);
+                    existingZoneService.ChangedZoneService = new ChangedZoneService
                     {
-                        DateTime existingZoneServiceEED = Utilities.Max(importedZoneService.BED, existingZoneService.BED);
-                        existingZoneService.ChangedZoneService = new ChangedZoneService
-                        {
-                            EntityId = existingZoneService.ZoneServiceEntity.SupplierZoneServiceId,
-                            EED = existingZoneServiceEED
-                        };
-                        importedZoneService.ChangedExistingZoneServices.Add(existingZoneService);
-                    }
+                        EntityId = existingZoneService.ZoneServiceEntity.SupplierZoneServiceId,
+                        EED = existingZoneServiceEed
+                    };
+                    importedZoneService.ChangedExistingZoneServices.Add(existingZoneService);
                 }
             }
-
         }
+
 
         private void AddImportedZoneService(ImportedZoneService importedZoneService, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
         {
@@ -351,8 +349,6 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             return importedZoneService.BED == existingZoneService.BED
                && sameServiceIds(existingZoneService.ZoneServiceEntity.ReceivedServices, importedZoneService.ServiceIds);
-            //TODO: compare CurrencyId of the Pricelists
-
         }
 
 

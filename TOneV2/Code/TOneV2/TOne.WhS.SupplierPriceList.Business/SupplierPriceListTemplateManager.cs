@@ -247,7 +247,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     {
                         Cells = new List<ExportExcelCell>(){
                             new ExportExcelCell{ Value = priceListZoneService.ZoneName},
-                            new ExportExcelCell{ Value = priceListZoneService.FlaggedServiceId },
+                            new ExportExcelCell{ Value = priceListZoneService.ZoneServiceConfigId },
                             new ExportExcelCell{ Value = priceListZoneService.EffectiveDate}
                         }
                     });

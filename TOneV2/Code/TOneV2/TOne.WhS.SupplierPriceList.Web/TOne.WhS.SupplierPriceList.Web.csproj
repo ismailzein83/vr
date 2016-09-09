@@ -161,7 +161,7 @@
     <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SupplierPriceListType.js" />
-    <Content Include="WhS_SupplierPriceList\Constant\ZoneServiceChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\ZoneServicesChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\ZoneChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ChangesPreview\vr-spl-groupedby-selector.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ChangesPreview\vr-spl-viewchangetype-selector.js" />

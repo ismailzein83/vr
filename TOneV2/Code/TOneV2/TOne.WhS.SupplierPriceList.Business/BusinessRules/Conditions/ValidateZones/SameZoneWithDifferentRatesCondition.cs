@@ -30,10 +30,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             var distinctImportedOtherRates = from importedRate in zone.ImportedOtherRates
                                         where importedRate.RateTypeId.HasValue
-                                        group importedRate by new {importedRate.Rate, importedRate.RateTypeId} into newRates
+                                        group importedRate by importedRate.RateTypeId into newRates
                                         select newRates;
 
-            return !(distinctImportedNormalRates.Count() > 1 || distinctImportedOtherRates.Count() > 1);
+            return !(distinctImportedNormalRates.Count() > 1 || distinctImportedOtherRates.Any(item => item.Count() > 1));
         }
 
         public override string GetMessage(IRuleTarget target)

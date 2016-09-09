@@ -42,6 +42,12 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public decimal? ImportedRate { get; set; }
         public DateTime? ImportedRateBED { get; set; }
         public RateChangeType ChangeTypeRate { get; set; }
+        public List<int> SystemServiceIds { get; set; }
+        public DateTime? SystemServicesBED { get; set; }
+        public DateTime? SystemServicesEED { get; set; }
+        public List<int> ImportedServiceIds { get; set; }
+        public DateTime? ImportedServicesBED { get; set; }
+        public ZoneServiceChangeType ZoneServicesChangeType { get; set; }
 
     }
 
@@ -59,6 +65,12 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public decimal? ImportedRate { get; set; }
         public DateTime? ImportedRateBED { get; set; }
         public RateChangeType ChangeTypeRate { get; set; }
+        public List<int> SystemServiceIds { get; set; }
+        public DateTime? SystemServicesBED { get; set; }
+        public DateTime? SystemServicesEED { get; set; }
+        public List<int> ImportedServiceIds { get; set; }
+        public DateTime? ImportedServicesBED { get; set; }
+        public ZoneServiceChangeType ZoneServicesChangeType { get; set; }
 
         public int NewCodes { get; set; }
 

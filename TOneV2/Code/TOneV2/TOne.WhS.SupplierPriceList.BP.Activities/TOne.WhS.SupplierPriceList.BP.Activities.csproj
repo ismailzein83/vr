@@ -91,14 +91,12 @@
     <Compile Include="ApplyChangedZonesToDB.cs" />
     <Compile Include="ApplyNewZonesServicesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
-    <Compile Include="ApplyPreviewZonesServicesToDB.cs" />
     <Compile Include="ApplyPreviewOtherRatesToDB.cs" />
     <Compile Include="ApplyPreviewZonesRatesToDB.cs" />
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewRatesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
-    <Compile Include="GenerateZonesServicesPreview.cs" />
     <Compile Include="GenerateOtherRatesPreview.cs" />
     <Compile Include="GenerateZonesRatesPreview.cs" />
     <Compile Include="GetExistingZonesServices.cs" />
@@ -112,7 +110,6 @@
     <Compile Include="PrepareChangedZonesToDB.cs" />
     <Compile Include="PrepareExistingZonesServices.cs" />
     <Compile Include="PrepareNewZonesServicesForDBApply.cs" />
-    <Compile Include="PreparePreviewZonesServicesForDBApply.cs" />
     <Compile Include="PreparePreviewOtherRatesForDBApply.cs" />
     <Compile Include="PrepareExistingCodes.cs" />
     <Compile Include="PrepareCodesForValidation.cs" />

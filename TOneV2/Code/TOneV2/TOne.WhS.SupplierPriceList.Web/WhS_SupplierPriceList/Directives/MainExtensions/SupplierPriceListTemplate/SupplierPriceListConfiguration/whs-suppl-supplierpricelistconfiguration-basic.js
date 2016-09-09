@@ -104,14 +104,14 @@
 
                 $scope.scopeModel.onSelectFlaggedService = function (item) {
                     var serviceTabe = {
-                        Name: item.Name,
-                        FlaggedServiceId: item.FlaggedServiceId,
+                        Symbol: item.Symbol,
+                        ZoneServiceConfigId: item.ZoneServiceConfigId,
                         onServiceListMappingReady: function (api) {
                             serviceTabe.flaggedServiceAPI = api;
                             var payload = {
                                 context: getContext(),
                                 fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
-                                listName: item.Name,
+                                listName: item.Symbol,
                             };
                             var setLoader = function (value) {
                                 $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
@@ -125,7 +125,7 @@
                 }
                 $scope.scopeModel.onDeselectFlaggedService = function (item) {
                   //  $scope.scopeModel.codeTabObject.isSelected = true;
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.servicesSelected, item.FlaggedServiceId, "FlaggedServiceId");
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.servicesSelected, item.ZoneServiceConfigId, "ZoneServiceConfigId");
                     $scope.scopeModel.servicesSelected.splice(index, 1);
                     serviceTabsAPI.setTabSelected($scope.scopeModel.servicesSelected.length-1);
 
@@ -256,7 +256,7 @@
                                 var flaggedServicesIds = [];
                                 for (var i = 0; i < configDetails.FlaggedServiceListMapping.length; i++) {
                                     var flaggedService = configDetails.FlaggedServiceListMapping[i];
-                                    flaggedServicesIds.push(flaggedService.FlaggedServiceId);
+                                    flaggedServicesIds.push(flaggedService.ZoneServiceConfigId);
                                 }
                                 payload = {
                                     selectedIds: flaggedServicesIds
@@ -361,7 +361,7 @@
                             var flaggedServiceSelected = $scope.scopeModel.servicesSelected[i];
                             flaggedServiceListMapping.push(
                                 {
-                                    FlaggedServiceId: flaggedServiceSelected.FlaggedServiceId,
+                                    ZoneServiceConfigId: flaggedServiceSelected.ZoneServiceConfigId,
                                     ServiceListMapping: flaggedServiceSelected.flaggedServiceAPI.getData()
                                 });
                         }
@@ -412,8 +412,8 @@
             }
 
             function addFlaggedServiceAPIExtension(flaggedService, payloadFlaggedService) {
-                flaggedService.Name = payloadFlaggedService.ServiceListMapping.ListName;
-                flaggedService.FlaggedServiceId = payloadFlaggedService.FlaggedServiceId;
+                flaggedService.Symbol = payloadFlaggedService.ServiceListMapping.ListName;
+                flaggedService.ZoneServiceConfigId = payloadFlaggedService.ZoneServiceConfigId;
                 flaggedService.onServiceListMappingReady = function (api) {
                     flaggedService.flaggedServiceAPI = api;
                     flaggedService.readyPromiseDeferred.resolve();
@@ -422,7 +422,7 @@
                     var payload = {
                         context: getContext(),
                         fieldMappings: [{ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
-                        listName: flaggedService.Name,
+                        listName: flaggedService.Symbol,
                     };
                     if (payloadFlaggedService != undefined && payloadFlaggedService.ServiceListMapping) {
                         payload.listMappingData = payloadFlaggedService.ServiceListMapping;

@@ -9,7 +9,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 {
     public class FlaggedServiceListMapping
     {
-        public int FlaggedServiceId { get; set; }
+        public int ZoneServiceConfigId { get; set; }
         public ListMapping ServiceListMapping { get; set; }
     }
 }

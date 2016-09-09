@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeFlaggedserviceSelector', ['UtilsService', 'VRUIUtilsService',
-function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeFlaggedserviceSelector', ['UtilsService', 'VRUIUtilsService','WhS_BE_ZoneServiceConfigAPIService',
+function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -46,14 +46,14 @@ function (UtilsService, VRUIUtilsService) {
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Flagged Service";
+        var label = "Zone Service";
         if (attrs.ismultipleselection != undefined) {
-            label = "Flagged Services";
+            label = "Zone Services";
             multipleselection = "ismultipleselection";
         }
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="FlaggedServiceId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</vr-columns>';
     }
 
@@ -69,31 +69,31 @@ function (UtilsService, VRUIUtilsService) {
         function defineAPI() {
             var api = {};
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('FlaggedServiceId', $attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('ZoneServiceConfigId', $attrs, ctrl);
             }
             api.load = function (payload) {
                 selectorApi.clearDataSource();
                 ctrl.datasource.length = 0;
                 var selectedIds;
+                var filter;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    filter = payload.filter;
                 }
 
-                ctrl.datasource.push({
-                    FlaggedServiceId: 0,
-                    Name: "Wholesale"
-                }, {
-                    FlaggedServiceId: 1,
-                    Name: "Retail"
-                }, {
-                    FlaggedServiceId: 2,
-                    Name: "Premium"
-                }, {
-                    FlaggedServiceId: 3,
-                    Name: "CLI"
+                var serializedFilter = {};
+                if (filter != undefined)
+                    serializedFilter = UtilsService.serializetoJson(filter);
+
+                return WhS_BE_ZoneServiceConfigAPIService.GetAllZoneServiceConfigs(serializedFilter).then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        ctrl.datasource.push(itm);
+                    });
+
+                    if (selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneServiceConfigId', $attrs, ctrl);
+                    }
                 });
-                if (selectedIds != undefined)
-                    VRUIUtilsService.setSelectedValues(selectedIds, 'FlaggedServiceId', $attrs, ctrl);
             }
 
             if (ctrl.onReady != null)

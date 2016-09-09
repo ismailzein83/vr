@@ -88,7 +88,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     minimumDate = priceListService.EffectiveDate.Value;
 
                 List<int> serviceIds = new List<int>();
-                serviceIds.Add(priceListService.FlaggedServiceId);
+                serviceIds.Add(priceListService.ZoneServiceConfigId);
 
                 importedZonesServicesList.Add(new ImportedZoneService()
                 {
@@ -132,7 +132,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     importedRatesList.Add(new ImportedRate()
                     {
-                        ZoneName = zoneNameValue,
+                        ZoneName = zoneNameValue, 
                         Rate = priceListRate.Rate.Value,
                         CurrencyId = currencyId,
                         RateTypeId = item.Key,

@@ -24,7 +24,7 @@
         </vr-row>
 
         <vr-tabs on-ready="scopeModel.onServiceTabsReady">
-            <vr-tab ng-repeat="service in scopeModel.servicesSelected" header="'{{service.Name}}'">
+            <vr-tab ng-repeat="service in scopeModel.servicesSelected" header="'{{service.Symbol}}'">
                 <vr-excelconversion-listmapping on-ready="service.onServiceListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
             </vr-tab>
         </vr-tabs>

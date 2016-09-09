@@ -9,7 +9,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
     public class PriceListZoneService
     {
         public string ZoneName { get; set; }
-        public int FlaggedServiceId { get; set; }
+        public int ZoneServiceConfigId { get; set; }
         public DateTime? EffectiveDate { get; set; }
     }
 }
