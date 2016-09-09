@@ -164,7 +164,7 @@ namespace Vanrise.Rules
 
         static ConcurrentDictionary<string, int> s_ruleTypesIds = new ConcurrentDictionary<string, int>();
 
-        private int GetRuleTypeId()
+        public int GetRuleTypeId()
         {
             string ruleType = typeof(T).FullName;
             int ruleTypeId;
