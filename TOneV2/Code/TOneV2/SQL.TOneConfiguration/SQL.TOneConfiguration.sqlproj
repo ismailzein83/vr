@@ -405,7 +405,10 @@
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_Update.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_Insert.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_GetAll.sql" />
-    <Build Include="common\Tables\TimeZone.sql" />
+    <Build Include="common\Tables\VRTimeZone.sql" />
+    <Build Include="common\Stored Procedures\sp_VRTimeZone_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRTimeZone_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRTimeZone_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
