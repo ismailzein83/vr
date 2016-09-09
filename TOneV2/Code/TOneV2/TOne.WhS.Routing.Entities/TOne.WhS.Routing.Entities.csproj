@@ -67,6 +67,7 @@
     <Compile Include="CodeSaleZone.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="RoutingOptimizerSettings.cs" />
     <Compile Include="Settings\RouteBuildConfiguration.cs" />
     <Compile Include="Settings\RouteDatabaseConfiguration.cs" />
     <Compile Include="Settings\RouteDatabasesToKeep.cs" />

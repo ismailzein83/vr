@@ -24,4 +24,23 @@ namespace TOne.WhS.Routing.Business
         {
         }
     }
+
+
+
+    public class RoutingOptimizationOptionPercentage : RouteOptionPercentageSettings
+    {
+        public List<RoutingOptimizationOptionPercentageItem> Items { get; set; }
+        public override void Execute(IRouteOptionPercentageExecutionContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class RoutingOptimizationOptionPercentageItem
+    {
+        public int RoutingOptimizerItemConfigId { get; set; }
+
+        public int PercentageFactor { get; set; }
+    }
 }
