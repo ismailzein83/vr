@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Vanrise.BEBridge.Entities;
 
 namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
@@ -12,14 +8,13 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
     public class FileSourceReader : SourceBEReader
     {
         public FileSourceReaderSetting Setting { get; set; }
-
         public override void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context)
         {
             FileSourceBatch fileBatch = new FileSourceBatch();
             string mask = string.IsNullOrEmpty(Setting.Mask) ? "" : Setting.Mask;
             Regex regEx = new Regex(mask);
 
-            if (System.IO.Directory.Exists(Setting.Directory))
+            if (Directory.Exists(Setting.Directory))
             {
                 DirectoryInfo d = new DirectoryInfo(Setting.Directory);
                 FileInfo[] Files = d.GetFiles("*" + Setting.Extension);
@@ -36,7 +31,6 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                 throw new DirectoryNotFoundException(string.Format("directory {0}", Setting.Directory));
             }
         }
-
         FileSourceBatch GetFileSourceBatch(FileInfo fileInfo)
         {
             string fileName = string.Format("{0}/{1}", Setting.Directory, fileInfo.Name);

@@ -12,21 +12,22 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 {
     public class FTPSourceReader : SourceBEReader
     {
+        Ftp _ftp;
         public FTPSourceReaderSetting Setting { get; set; }
         public override void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context)
         {
-            var ftp = new Rebex.Net.Ftp();
+            _ftp = new Ftp();
             string mask = string.IsNullOrEmpty(Setting.Mask) ? "" : Setting.Mask;
             Regex regEx = new Regex(mask);
 
-            EstablishConnection(ftp);
-            if (ftp.GetConnectionState().Connected)
+            EstablishConnection();
+            if (_ftp.GetConnectionState().Connected)
             {
-                if (!ftp.DirectoryExists(Setting.Directory))
+                if (!_ftp.DirectoryExists(Setting.Directory))
                     throw new DirectoryNotFoundException();
 
-                ftp.ChangeDirectory(Setting.Directory);
-                FtpList currentItems = ftp.GetList(string.Format("*{0}", Setting.Extension));
+                _ftp.ChangeDirectory(Setting.Directory);
+                FtpList currentItems = _ftp.GetList(string.Format("*{0}", Setting.Extension));
 
                 if (currentItems.Count > 0)
                 {
@@ -35,11 +36,10 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
                             String filePath = Setting.Directory + "/" + fileObj.Name;
-                            context.OnSourceBEBatchRetrieved(GetFileSourceBatch(ftp, fileObj, filePath), null);
+                            context.OnSourceBEBatchRetrieved(GetFileSourceBatch(_ftp, fileObj, filePath), null);
                         }
                     }
                 }
-                CloseConnection(ftp);
             }
             else
             {
@@ -47,14 +47,14 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
             }
         }
 
-        void EstablishConnection(Ftp ftp)
+        void EstablishConnection()
         {
-            ftp.Connect(Setting.ServerIP);
-            ftp.Login(Setting.UserName, Setting.Password);
+            _ftp.Connect(Setting.ServerIp);
+            _ftp.Login(Setting.UserName, Setting.Password);
         }
-        static void CloseConnection(Ftp ftp)
+        void CloseConnection()
         {
-            ftp.Dispose();
+            _ftp.Dispose();
         }
 
         FileSourceBatch GetFileSourceBatch(Ftp ftp, FtpItem fileObj, String filePath)
@@ -68,6 +68,12 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                   Content = content
               };
         }
+
+        public override void SetBatchCompleted(ISourceBEReaderSetBatchImportedContext context)
+        {
+            CloseConnection();
+            base.SetBatchCompleted(context);
+        }
     }
 
     public class FTPSourceReaderSetting
@@ -75,7 +81,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
         public string Extension { get; set; }
         public string Mask { get; set; }
         public string Directory { get; set; }
-        public string ServerIP { get; set; }
+        public string ServerIp { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
     }

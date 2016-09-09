@@ -30,14 +30,6 @@ namespace Vanrise.BEBridge.BP.Activities
 
         protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            //Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
-            //{
-            //    handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
-            //    inputArgument.SourceBatches.Enqueue(new SourceBatches() { SorceBEBatches = new List<SourceBEBatch> { sourceBEBatch } });
-            //};
-            //SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
-            //inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
-
             List<BatchProcessingContext> pendingBatchProcessings = new List<BatchProcessingContext>();
             System.Threading.Tasks.Task taskCheckPendingBatches = new System.Threading.Tasks.Task(() =>
             {
@@ -62,14 +54,14 @@ namespace Vanrise.BEBridge.BP.Activities
             {
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
                 var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues);
-                lock(pendingBatchProcessings)
+                lock (pendingBatchProcessings)
                 {
                     pendingBatchProcessings.Add(batchProcessContext);
                 }
             };
             SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
             inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
-            while(taskCheckPendingBatches != null)//wait all pending batches
+            while (taskCheckPendingBatches != null)//wait all pending batches
             {
                 System.Threading.Thread.Sleep(250);
             }
@@ -80,7 +72,8 @@ namespace Vanrise.BEBridge.BP.Activities
             return new ReadSourceBEsInput
             {
                 SourceBatches = this.SourceBatches.Get(context),
-                SourceReader = this.SourceReader.Get(context)
+                SourceReader = this.SourceReader.Get(context),
+                OutputQueues = this.OutputQueues.Get(context)
             };
         }
 

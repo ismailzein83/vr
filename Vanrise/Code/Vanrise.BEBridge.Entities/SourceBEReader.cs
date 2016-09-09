@@ -12,7 +12,7 @@ namespace Vanrise.BEBridge.Entities
 
         public abstract void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context);
 
-        public virtual void SetBatchImported(ISourceBEReaderSetBatchImportedContext context)
+        public virtual void SetBatchCompleted(ISourceBEReaderSetBatchImportedContext context)
         {
 
         }

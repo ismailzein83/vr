@@ -24,10 +24,8 @@ namespace Vanrise.BEBridge.BP.Activities
                 throw new NullReferenceException("beRecieveDefinition.Settings");
             if (beRecieveDefinition.Settings.SourceBEReader == null)
                 throw new NullReferenceException("beRecieveDefinition.Settings.SourceBEReader");
-            if (beRecieveDefinition.Settings.TargetBEConvertor == null)
-                throw new NullReferenceException("beRecieveDefinition.Settings.TargetBEConvertor");
-            if (beRecieveDefinition.Settings.TargetBESynchronizer == null)
-                throw new NullReferenceException("beRecieveDefinition.Settings.TargetBESynchronizer");
+            if (beRecieveDefinition.Settings.EntitySyncDefinitions == null)
+                throw new NullReferenceException("beRecieveDefinition.Settings.EntitySyncDefinitions");
             BEReceiveDefinition.Set(context, beRecieveDefinition);
         }
     }

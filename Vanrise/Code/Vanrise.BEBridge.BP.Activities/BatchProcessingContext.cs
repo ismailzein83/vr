@@ -65,7 +65,7 @@ namespace Vanrise.BEBridge.BP.Activities
         {
             if (_targetBEsToInsert != null)
                 insertTargetBEs(_targetBEsToInsert);
-            if (_targetBEsToInsert != null)
+            if (_targetBEsToUpdate != null)
                 updateTargetBEs(_targetBEsToUpdate);
             _targetBEsToInsert = null;
             _targetBEsToUpdate = null;
@@ -81,7 +81,7 @@ namespace Vanrise.BEBridge.BP.Activities
             }
             else
             {
-                _sourceBEReader.SetBatchImported(new SourceBEReaderSetBatchImportedContext { Batch = _sourceBEBatch });
+                _sourceBEReader.SetBatchCompleted(new SourceBEReaderSetBatchImportedContext { Batch = _sourceBEBatch });
                 _isComplete = true;
             }
         }
