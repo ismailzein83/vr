@@ -161,8 +161,9 @@
 
                         setTimeout(function () {
                             $('#' + ctrl.id).on('show.bs.dropdown', function () {
-
-                                $('#' + ctrl.id).find('input').first().focus();
+                                setTimeout(function() {
+                                    $('#' + ctrl.id).find('input').first().focus();
+                                },1)
 
                                 var selfHeight = $(this).height();
                                 var selfOffset = $(this).offset();
