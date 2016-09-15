@@ -21,6 +21,7 @@ namespace TOne.WhS.DBSync.Entities
         public DateTime? BeginEffectiveDate { get; set; }
         public DateTime? EndEffectiveDate { get; set; }
         public Int16? Change { get; set; }
+        public Int16? ServicesFlag { get; set; }
         public string CurrencyId { get; set; }
         public RateTypeEnum? RateType { get; set; }
     }

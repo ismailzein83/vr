@@ -39,26 +39,21 @@ namespace TOne.WhS.DBSync.Data.SQL
             foreach (var item in supplierRates)
             {
                 DataRow row = dt.NewRow();
-                int index = 0;
-                row[index++] = item.PriceListId;
-                row[index++] = item.ZoneId;
-                if (item.CurrencyId == null)
-                    row[index++] = DBNull.Value;
-                else
-                    row[index++] = item.CurrencyId;
-                row[index++] = item.NormalRate;
-                row[index++] = Vanrise.Common.Serializer.Serialize(item.OtherRates);
-                row[index++] = item.BED;
-                if (item.EED == null)
-                    row[index++] = DBNull.Value;
-                else
-                    row[index++] = item.EED;
-                 row[index++] = item.RateChange;
-                row[index++] = item.SourceId;
-                row[index++] = item.RateTypeId.HasValue ? item.RateTypeId : (object)DBNull.Value;
-                row[index++] = startingId++;
-
+                row["PriceListID"] = item.PriceListId;
+                row["ZoneID"] = item.ZoneId;
+                row["CurrencyID"] = item.CurrencyId.HasValue ? item.CurrencyId : (object)DBNull.Value;
+                row["NormalRate"] = item.NormalRate;
+                row["OtherRates"] = Vanrise.Common.Serializer.Serialize(item.OtherRates);
+                row["BED"] = item.BED;
+                row["EED"] = item.EED.HasValue ? item.EED : (object)DBNull.Value;
+                row["Change"] = item.RateChange;
+                row["SourceID"] = item.SourceId;
+                row["RateTypeID"] = item.RateTypeId.HasValue ? item.RateTypeId : (object)DBNull.Value;
+                row["ID"] = startingId++;
                 dt.Rows.Add(row);
+
+
+
             }
             dt.EndLoadData();
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);

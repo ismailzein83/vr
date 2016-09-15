@@ -93,11 +93,13 @@
     <Compile Include="Common\Migrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
+    <Compile Include="Migrators\FlaggedServiceMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOptionBlockRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOverrideRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteRuleBaseMigrator.cs" />
     <Compile Include="Migrators\Rules\RuleMigrator.cs" />
     <Compile Include="Migrators\SupplierPriceListMigrator.cs" />
+    <Compile Include="Migrators\SupplierZoneServicesMigrator.cs" />
     <Compile Include="Migrators\SupplierRateMigrator.cs" />
     <Compile Include="Migrators\SupplierZoneMigrator.cs" />
     <Compile Include="Migrators\SaleCodeMigrator.cs" />

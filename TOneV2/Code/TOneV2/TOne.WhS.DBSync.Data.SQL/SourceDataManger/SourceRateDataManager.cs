@@ -41,33 +41,35 @@ namespace TOne.WhS.DBSync.Data.SQL
             }, null);
         }
 
-        private SourceRate SourceRateMapper(IDataReader arg)
+        private SourceRate SourceRateMapper(IDataReader reader)
         {
             return new SourceRate()
             {
-                SourceId = arg["RateID"].ToString(),
-                PriceListId = GetReaderValue<int?>(arg, "PriceListID"),
-                ZoneId = GetReaderValue<int?>(arg, "ZoneID"),
-                Rate = GetReaderValue<decimal?>(arg, "Rate"),
-                BeginEffectiveDate = GetReaderValue<DateTime?>(arg, "BeginEffectiveDate"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(arg, "EndEffectiveDate"),
-                Change = GetReaderValue<Int16>(arg, "Change"),
-                CurrencyId = arg["CurrencyID"] as string,
+                SourceId = reader["RateID"].ToString(),
+                PriceListId = GetReaderValue<int?>(reader, "PriceListID"),
+                ZoneId = GetReaderValue<int?>(reader, "ZoneID"),
+                Rate = GetReaderValue<decimal?>(reader, "Rate"),
+                BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "BeginEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
+                Change = GetReaderValue<Int16>(reader, "Change"),
+                ServicesFlag = GetReaderValue<Int16>(reader, "ServicesFlag"),
+                CurrencyId = reader["CurrencyID"] as string,
             };
         }
 
-        private SourceRate SourceOtherRateMapper(IDataReader arg, decimal? rate, RateTypeEnum rateType)
+        private SourceRate SourceOtherRateMapper(IDataReader reader, decimal? rate, RateTypeEnum rateType)
         {
             return new SourceRate()
             {
-                SourceId = arg["RateID"].ToString(),
-                PriceListId = GetReaderValue<int?>(arg, "PriceListID"),
-                ZoneId = GetReaderValue<int?>(arg, "ZoneID"),
+                SourceId = reader["RateID"].ToString(),
+                PriceListId = GetReaderValue<int?>(reader, "PriceListID"),
+                ZoneId = GetReaderValue<int?>(reader, "ZoneID"),
                 Rate = rate.Value,
-                BeginEffectiveDate = GetReaderValue<DateTime?>(arg, "BeginEffectiveDate"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(arg, "EndEffectiveDate"),
-                Change = GetReaderValue<Int16>(arg, "Change"),
-                CurrencyId = arg["CurrencyID"] as string,
+                BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "BeginEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
+                Change = GetReaderValue<Int16>(reader, "Change"),
+                ServicesFlag = GetReaderValue<Int16>(reader, "ServicesFlag"),
+                CurrencyId = reader["CurrencyID"] as string,
                 RateType = rateType
             };
         }
@@ -76,7 +78,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         const string query_getSourceRates = @"SELECT    Rate.RateID RateID, Rate.PriceListID PriceListID, Rate.ZoneID ZoneID,
                                                         Rate.Rate Rate, Rate.OffPeakRate OffPeakRate, Rate.WeekendRate WeekendRate,
                                                         Rate.BeginEffectiveDate BeginEffectiveDate, Rate.EndEffectiveDate EndEffectiveDate,
-                                                        Rate.Change, PriceList.CurrencyID CurrencyID
+                                                        Rate.Change, Rate.ServicesFlag, PriceList.CurrencyID CurrencyID
                                                         FROM Rate WITH (NOLOCK) INNER JOIN
                                                         Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID INNER JOIN
                                                         PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID ";

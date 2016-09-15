@@ -83,6 +83,8 @@
     <Compile Include="Common\IDBSyncDataManager.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\MigrationUtils.cs" />
+    <Compile Include="DBSyncDataManager\SupplierZoneServicesDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\ZoneServiceConfigDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CustomerZoneDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />
@@ -108,6 +110,8 @@
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCodeDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceSupplierZoneServiceDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceFlaggedServiceDataManager.cs" />
     <Compile Include="SourceDataManger\SourcePriceListDataManager.cs" />
     <Compile Include="SourceDataManger\SourceRateDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierSwitchConnectivityDataManager.cs" />

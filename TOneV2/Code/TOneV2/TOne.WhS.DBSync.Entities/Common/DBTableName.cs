@@ -39,9 +39,7 @@ namespace TOne.WhS.DBSync.Entities
 
         [Description("SupplierCode")]
         SupplierCode,
-
-        [Description("SupplierZoneService")]
-        SupplierZoneService,
+       
 
         [Description("SalePriceList")]
         SalePriceList,
@@ -68,6 +66,12 @@ namespace TOne.WhS.DBSync.Entities
         SwitchConnectivity,
 
         [Description("Rule")]
-        Rule
+        Rule,
+
+        [Description("ZoneServiceConfig")]
+        ZoneServiceConfig,
+
+         [Description("SupplierZoneService")]
+        SupplierZoneService,
     }
 }

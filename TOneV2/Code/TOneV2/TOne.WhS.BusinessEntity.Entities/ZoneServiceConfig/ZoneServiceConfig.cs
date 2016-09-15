@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Symbol { get; set; }
 
         public ServiceConfigSetting Settings { get; set; }
+
+        public string SourceId { get; set; }
     }
 
     public class ServiceConfigSetting

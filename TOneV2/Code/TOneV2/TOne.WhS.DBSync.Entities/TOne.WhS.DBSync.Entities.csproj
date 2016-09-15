@@ -91,6 +91,7 @@
     <Compile Include="SourceCarrierAccount.cs" />
     <Compile Include="SourceCode.cs" />
     <Compile Include="SourceCustomerZone.cs" />
+    <Compile Include="SourceFlaggedService.cs" />
     <Compile Include="SourcePriceList.cs" />
     <Compile Include="SourceRate.cs" />
     <Compile Include="Rules\SourceRouteOptionBlockRule.cs" />

@@ -1,14 +1,15 @@
 ﻿
 <vr-datagrid datasource="customerSellingProducts"
-            on-ready="onGridReady"
-            dataretrievalfunction="dataRetrievalFunction"
-            pagingtype="'PagingOnScroll'"
-            menuactions="gridMenuActions"
-            idfield="Entity.CustomerSellingProductId">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.CustomerSellingProductId"
+             defaultsortbyfieldname="'CustomerName'">
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CustomerSellingProductId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
-<vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'" ng-show="!hideCustomerColumn"></vr-datagridcolumn>
-<vr-datagridcolumn headertext="'Selling Product Name'" field="'SellingProductName'" type="'Text'" ng-show="!hideSellingProductColumn"></vr-datagridcolumn>
-<vr-datagridcolumn headertext="'Effective On'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'" ng-show="!hideCustomerColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Selling Product Name'" field="'SellingProductName'" type="'Text'" ng-show="!hideSellingProductColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective On'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
 
 </vr-datagrid>

@@ -148,6 +148,12 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.Rule:
                         iDBSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
                         break;
+                    case DBTableName.ZoneServiceConfig:
+                        iDBSyncDataManager = new ZoneServiceConfigDBSyncDataManager(context.UseTempTables);
+                        break;
+                    case DBTableName.SupplierZoneService:
+                        iDBSyncDataManager = new SupplierZoneServicesDBSyncDataManager(context.UseTempTables);
+                        break;
 
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
@@ -290,6 +296,12 @@ namespace TOne.WhS.DBSync.Business
                     break;
                 case DBTableName.Rule:
                     imgrator = new RuleMigrator(context);
+                    break;
+                case DBTableName.ZoneServiceConfig:
+                    imgrator = new FlaggedServiceMigrator(context);
+                    break;
+                case DBTableName.SupplierZoneService:
+                    imgrator = new  SupplierZoneServicesMigrator(context);
                     break;
             }
 
