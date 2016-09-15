@@ -108,17 +108,15 @@
             $scope.name = vrTimeZoneEntity.Name;
             $scope.sign = vrTimeZoneEntity.Settings.Offset[0] == '-' ? $scope.signs[1] : $scope.signs[0];
             var timetab = vrTimeZoneEntity.Settings.Offset.split(":");
+            var hours = timetab[0];
+            var minutes = timetab[1];
+            if (timetab[0][0] == '-')
+                hours = timetab[0].substring(1);
             $scope.time = {
-                Hour: timetab[0],
-                Minute: timetab[1]
+                Hour: hours,
+                Minute: minutes
             };
-            //d.setHours(timetab[0]);
-            //d.setMinutes(timetab[1]);
-            //$scope.time = {
-            //    Hour:"00"
-
-            //};
-
+           
         }
         function insertVRTimeZone() {
             $scope.isLoading = true;
