@@ -52,6 +52,9 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    ctrl.expression = undefined;
+                    filterObj = undefined;
+
                     var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
