@@ -103,8 +103,14 @@
 
         function loadStaticData() {
 
-            if (vrTimeZoneEntity == undefined)
+            if (vrTimeZoneEntity == undefined) {
+                $scope.time = {
+                    Hour: 0,
+                    Minute: 0
+                };
                 return;
+            }
+               
             $scope.name = vrTimeZoneEntity.Name;
             $scope.sign = vrTimeZoneEntity.Settings.Offset[0] == '-' ? $scope.signs[1] : $scope.signs[0];
             var timetab = vrTimeZoneEntity.Settings.Offset.split(":");
