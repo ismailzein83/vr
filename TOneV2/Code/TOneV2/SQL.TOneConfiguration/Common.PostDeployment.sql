@@ -58,7 +58,9 @@ as (select * from (values
 ('VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates','VRCommon_VRMailMessageTemplate: View'),
 ('VRCommon/VRMailMessageTemplate/GetMailMessageTemplate',null),
 ('VRCommon/VRMailMessageTemplate/AddMailMessageTemplate','VRCommon_VRMailMessageTemplate: Add'),
-('VRCommon/VRMailMessageTemplate/UpdateMailMessageTemplate','VRCommon_VRMailMessageTemplate: Edit')
+('VRCommon/VRMailMessageTemplate/UpdateMailMessageTemplate','VRCommon_VRMailMessageTemplate: Edit'),
+
+('VRCommon/TimeZone/GetFilteredVRTimeZones','VRCommon_TimeZone: View'),('VRCommon/TimeZone/GetVRTimeZonesInfo',null),('VRCommon/TimeZone/GetVRTimeZone',null),('VRCommon/TimeZone/AddVRTimeZone','VRCommon_TimeZone: Add'),('VRCommon/TimeZone/UpdateVRTimeZone','VRCommon_TimeZone: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -112,7 +114,8 @@ as (select * from (values
 (304,'VRCommon_Settings','Settings',203,0,'["View", "Edit"]'),
 (330,'VRCommon_VRObjectTypeDefinition','Object Type Definition',203,0,'["View","Add","Edit"]'),
 (331,'VRCommon_VRMailMessageType','Mail Message Type',203,0,'["View","Add","Edit"]'),
-(332,'VRCommon_VRMailMessageTemplate','Mail Message Template',203,0,'["View","Add","Edit"]')
+(332,'VRCommon_VRMailMessageTemplate','Mail Message Template',203,0,'["View","Add","Edit"]'),
+(350,'VRCommon_TimeZone','Time Zone',202,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -168,7 +171,8 @@ as (select * from (values
 (1020,'Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement',-100,'VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,0,55),
 (1021,'Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement',-100,'VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,0,60),
 
-(1022,'Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement',3,'VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9)
+(1022,'Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement',3,'VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9),
+(1030,'Time Zone','Time Zone Management','#/view/Common/Views/VRTimeZone/VRTimeZoneManagement',102,'VRCommon/TimeZone/GetFilteredVRTimeZones',null,null,null,0,30)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
