@@ -11,9 +11,6 @@
         var aggregationFieldEntity;
         var context;
 
-        var dataRecordTypeFieldsSelectorAPI;
-        var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         var recordAggregateSelectiveAPI;
         var recordAggregateSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -42,10 +39,6 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
-                dataRecordTypeFieldsSelectorAPI = api;
-                dataRecordTypeFieldsSelectorReadyDeferred.resolve();
-            }
             $scope.scopeModel.onRecordAggregateSelectiveReady = function (api) {
                 recordAggregateSelectiveAPI = api;
                 recordAggregateSelectiveReadyDeferred.resolve();
@@ -77,7 +70,7 @@
 
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDataRecordTypeFieldsSelector, loadRecordAggregateSelective, loadTimeRangeFilterSelective, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRecordAggregateSelective, loadTimeRangeFilterSelective, loadRecordFilterDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -88,22 +81,10 @@
                     UtilsService.buildTitleForUpdateEditor((aggregationFieldEntity != undefined) ? aggregationFieldEntity.FieldName : null, 'Profiling and Calculation Aggregation Field') :
                     UtilsService.buildTitleForAddEditor('Profiling and Calculation Aggregation Field');
             }
-            function loadDataRecordTypeFieldsSelector() {
+            function loadStaticData(){
+                if(aggregationFieldEntity == undefined) return;
 
-                var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
-                    var dataRecordTypeFieldsSelectorPayload = {};
-                    if (context != undefined) {
-                        dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = context.getDataRecordTypeId();
-                    }
-                    if (aggregationFieldEntity != undefined) {
-                        dataRecordTypeFieldsSelectorPayload.selectedIds = aggregationFieldEntity.FieldName;
-                    }
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
-                });
-
-                return dataRecordTypeFieldsSelectorLoadDeferred.promise;
+                $scope.scopeModel.fieldName = aggregationFieldEntity.FieldName;
             }
             function loadRecordAggregateSelective() {
                 var recordAggregateSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -175,7 +156,7 @@
         function buildAggregationFieldObjectFromScope() {
 
             return {
-                FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                FieldName: $scope.scopeModel.fieldName,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                 TimeRangeFilter: timeRangeFilterSelectiveAPI.getData(),
                 RecordAggregate: recordAggregateSelectiveAPI.getData()

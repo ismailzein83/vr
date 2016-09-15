@@ -3,31 +3,29 @@
     <vr-modalbody>
         <vr-form name="formDAProfCalcAggregationFieldEditor">
             <vr-tabs>
-                <vr-tab header="'Definition'">
 
+                <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
-                                                                          onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged"
-                                                                          label="Field"
-                                                                          isrequired="false"
-                                                                          hideremoveicon>
-                            </vr-genericdata-datarecordtypefields-selector>
+                            <vr-textbox label="Field Name" value="scopeModel.fieldName" isrequired="true"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-analytic-darecordaggregate-selective on-ready="scopeModel.onRecordAggregateSelectiveReady"></vr-analytic-darecordaggregate-selective>
                     </vr-row>
-                    <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady"></vr-analytic-timerangefilter-selective>
+                </vr-tab>
+                <vr-tab header="'Filters'">
+                    <vr-section title="Record Filter" collapsible>
+                        <vr-row>
+                            <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                        </vr-row>
+                    </vr-section>
+                    <vr-section title="Time Filter" collapsible>
+                        <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady" isrequired="false"></vr-analytic-timerangefilter-selective>
+                    </vr-section>
+                </vr-tab>
 
-                </vr-tab>
-                <vr-tab header="'Record Filter'">
-                    <vr-row>
-                        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-                    </vr-row>
-                </vr-tab>
             </vr-tabs>
-
         </vr-form>
     </vr-modalbody>
     <div>

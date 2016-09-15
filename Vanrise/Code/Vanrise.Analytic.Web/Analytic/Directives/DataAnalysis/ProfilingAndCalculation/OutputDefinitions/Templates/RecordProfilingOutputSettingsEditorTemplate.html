@@ -5,7 +5,6 @@
         <vr-columns width="1/2row" vr-loader="scopeModel.isSelectorLoading">
             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
                                                     onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
-                                                    isrequired="true"
                                                     label="Record Type"
                                                     hideremoveicon>
             </vr-genericdata-datarecordtype-selector>
@@ -19,7 +18,7 @@
         </vr-row>
     </vr-section>
     <vr-section title="Time Filter" collapsible>
-        <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady"></vr-analytic-timerangefilter-selective>
+        <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady" isrequired="false"></vr-analytic-timerangefilter-selective>
     </vr-section>
 </vr-tab>
 <vr-tab header="'Grouping Fields'">

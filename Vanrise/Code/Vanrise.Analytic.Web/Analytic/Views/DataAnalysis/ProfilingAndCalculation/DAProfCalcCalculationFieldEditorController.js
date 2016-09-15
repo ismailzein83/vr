@@ -11,9 +11,6 @@
         var calculationFieldEntity;
         var context;
 
-        var dataRecordTypeFieldsSelectorAPI;
-        var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         var fieldTypeSelectiveAPI;
         var fieldTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -34,11 +31,6 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
-            $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
-                dataRecordTypeFieldsSelectorAPI = api;
-                dataRecordTypeFieldsSelectorReadyDeferred.resolve();
-            }
 
             $scope.scopeModel.onFieldTypeSelectiveReady = function (api) {
                 fieldTypeSelectiveAPI = api;
@@ -62,7 +54,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeFieldsSelector, loadFieldTypeSelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldTypeSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -79,23 +71,6 @@
 
                 $scope.scopeModel.fieldName = calculationFieldEntity.FieldName;
                 $scope.scopeModel.expression = calculationFieldEntity.Expression;
-            }
-            function loadDataRecordTypeFieldsSelector() {
-
-                var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
-                    var dataRecordTypeFieldsSelectorPayload = {};
-                    if (context != undefined) {
-                        dataRecordTypeFieldsSelectorPayload.dataRecordTypeId = context.getDataRecordTypeId();
-                    }
-                    if (calculationFieldEntity != undefined) {
-                        dataRecordTypeFieldsSelectorPayload.selectedIds = calculationFieldEntity.FieldName;
-                    }
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, dataRecordTypeFieldsSelectorLoadDeferred);
-                });
-
-                return dataRecordTypeFieldsSelectorLoadDeferred.promise;
             }
             function loadFieldTypeSelective() {
                 var fieldTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -134,7 +109,7 @@
         function buildCalculationFieldObjectFromScope() {
 
             return {
-                FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                FieldName: $scope.scopeModel.fieldName,
                 FieldType: fieldTypeSelectiveAPI.getData(),
                 Expression: $scope.scopeModel.expression
             };

@@ -4,13 +4,8 @@
         <vr-form name="formDAProfCalcCalculationFieldEditor">
 
             <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
-                                                                  onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged"
-                                                                  label="Fields"
-                                                                  isrequired="false"
-                                                                  hideremoveicon>
-                    </vr-genericdata-datarecordtypefields-selector>
+                <vr-columns width="1/2row">
+                    <vr-textbox label="Field Name" value="scopeModel.fieldName" isrequired="true"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <vr-row>

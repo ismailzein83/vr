@@ -52,7 +52,6 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                     var mailMessageTemplate;
 
                     if (payload != undefined && payload.vrActionEntity != undefined) {
-                        $scope.scopeModel.actionName = payload.vrActionEntity.ActionName;
                         mailMessageTemplate = payload.vrActionEntity.MailMessageTemplateId;
                     }
 
@@ -69,7 +68,7 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Analytic.MainExtensions.VRActions.DAProfCalcAlertRuleAction, Vanrise.Analytic.MainExtensions",
-                        ActionName: $scope.scopeModel.actionName,
+                        ActionName: "Send Email",
                         MailMessageTemplateId: mailMessageTemplateSelectorReadyAPI.getSelectedIds()
                     };
                 }

@@ -40,7 +40,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.canDefineCriteria = false;
+            $scope.scopeModel.isAlertRuleTypeSelected = false;
 
             $scope.scopeModel.onAlertRuleTypeSelectorReady = function (api) {
                 vrAlertRuleTypeSelectorAPI = api;
@@ -52,7 +52,7 @@
 
                     getVRAlertRuleType().then(function () {
 
-                        $scope.scopeModel.canDefineCriteria = true;
+                        $scope.scopeModel.isAlertRuleTypeSelected = true;
 
                         if (vrAlertRuleTypeSelectionChangedDeferred != undefined) {
                             vrAlertRuleTypeSelectionChangedDeferred.resolve();
