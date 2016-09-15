@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommon_CountryService', 'UtilsService', 'VRUIUtilsService', function (VRCommon_CountryAPIService, VRCommon_CountryService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonTimezoneSelector', ['VRCommon_CountryAPIService', 'VRCommon_CountryService', 'UtilsService', 'VRUIUtilsService', function (VRCommon_CountryAPIService, VRCommon_CountryService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
