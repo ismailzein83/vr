@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecordfilterDirective.$inject = ['VR_GenericData_DataRecordTypeService', 'UtilsService', 'VRUIUtilsService'];
+    RecordfilterDirective.$inject = ['VR_GenericData_DataRecordTypeService', 'UtilsService', 'VRUIUtilsService','VR_GenericData_RecordFilterAPIService'];
 
-    function RecordfilterDirective(VR_GenericData_DataRecordTypeService, UtilsService, VRUIUtilsService) {
+    function RecordfilterDirective(VR_GenericData_DataRecordTypeService, UtilsService, VRUIUtilsService, VR_GenericData_RecordFilterAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -55,11 +55,21 @@
                     var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
-                        if(payload != undefined )
+                        filterObj = payload.FilterGroup;
+                        var fieldsObj = [];
+                        if(context != undefined)
                         {
-                            filterObj = payload.FilterGroup;
-                            ctrl.expression = payload.ConditionExpression;
+                            var fields = context.getFields();
+                            for (var i = 0; i < fields.length; i++) {
+                                var field = fields[i];
+                                fieldsObj.push({ Name: field.FieldName, Type: field.Type })
+                            }
                         }
+                        if (filterObj != undefined)
+                        {
+                            promises.push(buildRecordFilterGroupExpression(fieldsObj, filterObj));
+                        }
+
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -75,6 +85,13 @@
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function buildRecordFilterGroupExpression(fieldsObj, filterObj)
+            {
+               return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: fieldsObj, FilterGroup: filterObj }).then(function (response) {
+                    ctrl.expression = response
+                });
             }
         }
     }

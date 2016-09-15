@@ -42,7 +42,7 @@ namespace Vanrise.GenericData.Business
                 expression.Append(" ) ");
             }
 
-            if (expression.Length != 0 && !isFirstFilter)
+            if (expression.Length != 0 && !isFirstFilter && childFilterGroup == null)
                 expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
 
             if (recordFilter is EmptyRecordFilter)
