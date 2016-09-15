@@ -81,10 +81,10 @@
 <div>
     <vr-row>
         <vr-columns ng-repeat="widget in scopeModel.widgets" colnum="{{widget.columnWidth.numberOfColumns}}">
-            <vr-section title="{{widget.settings.WidgetTitle}}" ng-if="widget.settings.ShowTitle">
+            <vr-section title="{{widget.settings.WidgetTitle}}" ng-if="widget.settings.ShowTitle" vr-loader="scopeModel.isLoadingDimensionDirective">
                 <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
             </vr-section>
-            <span style="padding-right: 3px;" ng-if="!widget.settings.ShowTitle">
+            <span style="padding-right: 3px;" ng-if="!widget.settings.ShowTitle" vr-loader="scopeModel.isLoadingDimensionDirective">
                 <vr-directivewrapper directive="widget.runtimeEditor" on-ready="widget.onDirectiveReady"></vr-directivewrapper>
             </span>
         </vr-columns>

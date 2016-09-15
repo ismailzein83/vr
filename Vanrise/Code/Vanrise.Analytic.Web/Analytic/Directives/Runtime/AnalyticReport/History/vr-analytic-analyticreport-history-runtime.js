@@ -90,7 +90,7 @@
                             var promiseDeffer = UtilsService.createPromiseDeferred();
                             for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
                                 var widget = $scope.scopeModel.widgets[i];
-                                var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
+                                var setLoader = function (value) { $scope.scopeModel.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
                                 var payload = getQuery(widget.settings);
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
                             }

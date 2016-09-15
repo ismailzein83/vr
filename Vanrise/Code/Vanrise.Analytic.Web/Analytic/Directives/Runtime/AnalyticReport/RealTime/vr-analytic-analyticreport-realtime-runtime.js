@@ -136,7 +136,7 @@
             }
             function loadWidgetDirective(widget)
             {
-                var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? widget.promiseDeffer.resolve() : undefined; };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingDimensionDirective = value, !value ? widget.promiseDeffer.resolve() : undefined; };
                 var payload = getQuery(widget.settings);
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
             }
