@@ -35,6 +35,7 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                     if(ctrl.itemsetName != undefined)
                     {
                         ctrl.listItems.push(ctrl.itemsetName);
+                        ctrl.itemsetName = undefined;
                     }
                 }
                 ctrl.disableAddButton = true;

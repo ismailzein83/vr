@@ -11,7 +11,7 @@ namespace Vanrise.Invoice.Data
     public interface IInvoiceDataManager:IDataManager
     {
         IEnumerable<Entities.Invoice> GetGetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
-        int GetOverAllInvoiceCount(Guid InvoiceTypeId, string partnerId);
+        int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
         bool SaveInvoices(GenerateInvoiceInput createInvoiceInput, GeneratedInvoice invoice,Entities.Invoice invoiceEntity, out long insertedInvoiceId);
         Entities.Invoice GetInvoice(long invoiceId);
     }

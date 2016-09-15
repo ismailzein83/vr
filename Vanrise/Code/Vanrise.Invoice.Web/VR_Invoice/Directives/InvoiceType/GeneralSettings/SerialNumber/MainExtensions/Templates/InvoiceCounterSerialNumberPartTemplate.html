@@ -5,4 +5,12 @@
     <vr-columns width="1/2row">
         <vr-textbox value="scopeModel.overAllStartUpCounter" type="number" label="Over All StartUp Counter"></vr-textbox>
     </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.counterTypes"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedCounterType"
+                   label="Type">
+        </vr-select>
+    </vr-columns>
 </vr-row>

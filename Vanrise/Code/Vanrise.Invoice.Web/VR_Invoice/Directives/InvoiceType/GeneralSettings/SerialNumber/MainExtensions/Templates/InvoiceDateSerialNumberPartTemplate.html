@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.invoiceDates"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedInvoiceDate"
+                   label="Invoice Date"
+                   isrequired="true">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.dateFormat" label="Date Format" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>

@@ -34,11 +34,11 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
             function initializeController() {
                 ctrl.datasource = [];
 
-                ctrl.isValid = function () {
-                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
-                        return null;
-                    return "You Should add at least one action.";
-                }
+                //ctrl.isValid = function () {
+                //    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
+                //        return null;
+                //    return "You Should add at least one action.";
+                //}
 
                 ctrl.addGridAction = function () {
                     var onGridActionAdded = function (gridAction) {

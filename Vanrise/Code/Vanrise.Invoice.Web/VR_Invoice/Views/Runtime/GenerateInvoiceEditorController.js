@@ -20,7 +20,7 @@
             }
         }
         function defineScope() {
-
+            $scope.issueDate = new Date();
             $scope.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
@@ -33,7 +33,8 @@
                     InvoiceTypeId: invoiceTypeId,
                     PartnerId: partnerSelectorAPI.getSelectedIds(),
                     FromDate:$scope.fromDate,
-                    ToDate:$scope.toDate
+                    ToDate: $scope.toDate,
+                    IssueDate: $scope.issueDate
                 };
 
                 var paramsurl = "";
@@ -92,7 +93,8 @@
                 InvoiceTypeId: invoiceTypeId,
                 PartnerId:partnerSelectorAPI.getSelectedIds(),
                 FromDate: $scope.fromDate,
-                ToDate: $scope.toDate
+                ToDate: $scope.toDate,
+                IssueDate: $scope.issueDate
             };
             return obj;
         }

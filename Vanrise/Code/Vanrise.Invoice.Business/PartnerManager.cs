@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business
@@ -22,6 +23,18 @@ namespace Vanrise.Invoice.Business
             if (invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN == null)
                 throw new NullReferenceException("PartnerManagerFQTN");
             return invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetPartnerInfo(context);
+        }
+        public dynamic GetActualPartnerId(Guid invoiceTypeId, string partnerId)
+        {
+            InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            PartnerManagerContext context = new PartnerManagerContext
+            {
+                PartnerId = partnerId,
+            };
+            if (invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN == null)
+                throw new NullReferenceException("PartnerManagerFQTN");
+            return invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetActualPartnerId(context);
         }
     }
 }

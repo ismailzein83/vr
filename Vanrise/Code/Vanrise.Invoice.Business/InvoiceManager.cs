@@ -73,7 +73,8 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
                 FromDate = createInvoiceInput.FromDate,
                 PartnerId = createInvoiceInput.PartnerId,
-                ToDate = createInvoiceInput.ToDate
+                ToDate = createInvoiceInput.ToDate,
+                IssueDate = createInvoiceInput.IssueDate,
             };
 
             var serialNumber = invoiceType.Settings.SerialNumberPattern;
@@ -105,10 +106,10 @@ namespace Vanrise.Invoice.Business
             return insertOperationOutput;
         }
 
-        public int GetOverAllInvoiceCount(Guid InvoiceTypeId, string partnerId)
+        public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetOverAllInvoiceCount( InvoiceTypeId,  partnerId);
+            return dataManager.GetInvoiceCount(InvoiceTypeId, partnerId, fromDate, toDate);
         }
 
         #endregion

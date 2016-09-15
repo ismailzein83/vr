@@ -33,12 +33,12 @@ namespace Vanrise.Invoice.Data.SQL
             return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper,input.Query.InvoiceTypeId, input.Query.PartnerId, input.Query.FromTime, input.Query.ToTime);
         }
 
-        public int GetOverAllInvoiceCount(Guid InvoiceTypeId, string partnerId)
+        public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId,DateTime? fromDate,DateTime? toDate)
         {
-            return GetItemSP("VR_Invoice.sp_Invoice_GetOverAllInvoiceCount", (reader) =>
+            return GetItemSP("VR_Invoice.sp_Invoice_GetInvoiceCount", (reader) =>
             {
                 return GetReaderValue<int>(reader, "Counter");
-            }, InvoiceTypeId, partnerId);
+            }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
         public bool SaveInvoices(Entities.GenerateInvoiceInput createInvoiceInput, Entities.GeneratedInvoice invoice,Entities.Invoice invoiceEntity, out long insertedInvoiceId)
         {
@@ -51,7 +51,7 @@ namespace Vanrise.Invoice.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object invoiceId;
-                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, invoiceEntity.SerialNumber, createInvoiceInput.FromDate, createInvoiceInput.ToDate, DateTime.Now, DateTime.Now, Vanrise.Common.Serializer.Serialize(invoice.InvoiceDetails));
+                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, invoiceEntity.SerialNumber, createInvoiceInput.FromDate, createInvoiceInput.ToDate, invoiceEntity.IssueDate, DateTime.Now, Vanrise.Common.Serializer.Serialize(invoice.InvoiceDetails));
                 insertedInvoiceId = Convert.ToInt64(invoiceId);
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems((long)invoiceId,invoice.InvoiceItemSets);

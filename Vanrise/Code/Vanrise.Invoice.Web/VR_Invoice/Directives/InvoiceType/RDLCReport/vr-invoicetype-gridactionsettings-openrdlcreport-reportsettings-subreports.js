@@ -34,11 +34,11 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
             function initializeController() {
                 ctrl.datasource = [];
 
-                ctrl.isValid = function () {
-                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
-                        return null;
-                    return "You Should add at least one dataSource.";
-                }
+                //ctrl.isValid = function () {
+                //    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
+                //        return null;
+                //    return "You Should add at least one dataSource.";
+                //}
 
                 ctrl.addSubReport = function () {
                     var onSubReportAdded = function (subReport) {
