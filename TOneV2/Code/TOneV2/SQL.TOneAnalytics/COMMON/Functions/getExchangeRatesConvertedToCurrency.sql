@@ -1,8 +1,8 @@
-﻿CREATE FUNCTION [common].[getExchangeRatesConvertedToCurrency](@CurrencyIDToConvertTo int, @From DateTime, @To Datetime) 
+﻿CREATE FUNCTION [COMMON].[getExchangeRatesConvertedToCurrency](@CurrencyIDToConvertTo int, @From DateTime, @To Datetime) 
 RETURNS @ConvertedExchangeRates Table  
 					(
 						CurrencyID int NOT NULL,
-						Rate Decimal(20,16) NOT NULL,
+						Rate Decimal(20,10) NOT NULL,
 						BED DATETIME NOT NULL,
 						EED DATETIME
 					) 
