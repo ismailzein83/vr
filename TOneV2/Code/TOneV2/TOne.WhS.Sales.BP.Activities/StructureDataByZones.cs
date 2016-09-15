@@ -133,14 +133,22 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 if (!dataByZoneName.TryGetValue(saleZoneServiceToAdd.ZoneName, out dataByZone))
                     AddEmptyDataByZone(dataByZoneName, saleZoneServiceToAdd.ZoneName, out dataByZone);
+                
                 dataByZone.SaleZoneServiceToAdd = saleZoneServiceToAdd;
+
+                if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
+                    dataByZone.SoldOn = GetStartEffectiveTime(soldCountries, saleZoneManager, saleZoneServiceToAdd.ZoneId);
             }
 
             foreach (SaleZoneServiceToClose saleZoneServiceToClose in saleZoneServicesToClose)
             {
                 if (!dataByZoneName.TryGetValue(saleZoneServiceToClose.ZoneName, out dataByZone))
                     AddEmptyDataByZone(dataByZoneName, saleZoneServiceToClose.ZoneName, out dataByZone);
+                
                 dataByZone.SaleZoneServiceToClose = saleZoneServiceToClose;
+
+                if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
+                    dataByZone.SoldOn = GetStartEffectiveTime(soldCountries, saleZoneManager, saleZoneServiceToClose.ZoneId);
             }
 
             this.DataByZone.Set(context, dataByZoneName.Values);
