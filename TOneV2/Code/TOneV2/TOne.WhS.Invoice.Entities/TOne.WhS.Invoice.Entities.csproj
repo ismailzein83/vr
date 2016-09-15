@@ -48,6 +48,8 @@
     <Compile Include="InvoiceCarrier.cs" />
     <Compile Include="InvoiceCarrierFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupplierInvoiceDetails.cs" />
+    <Compile Include="SupplierInvoiceItemDetails.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

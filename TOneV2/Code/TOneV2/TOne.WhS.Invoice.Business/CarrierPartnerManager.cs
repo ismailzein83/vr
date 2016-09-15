@@ -12,7 +12,6 @@ namespace TOne.WhS.Invoice.Business
 {
     public class CarrierPartnerManager : IPartnerManager
     {
-
         public dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
             switch(context.InfoType)
@@ -81,6 +80,19 @@ namespace TOne.WhS.Invoice.Business
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                 return carrierAccountManager.GetCarrierAccountName(Convert.ToInt32(partnerId[1]));
+            }
+            return null;
+        }
+        public dynamic GetActualPartnerId(IPartnerManagerContext context)
+        {
+            string[] partnerId = context.PartnerId.Split('_');
+            if (partnerId[0].Equals("Profile"))
+            {
+                return Convert.ToInt32(partnerId[1]);
+            }
+            else if (partnerId[0].Equals("Account"))
+            {
+                return Convert.ToInt32(partnerId[1]);
             }
             return null;
         }
