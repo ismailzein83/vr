@@ -401,5 +401,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetZoneServicesEffectiveAfter.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetDefaultServicesEffectiveAfter.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetFiltered.sql" />
   </ItemGroup>
 </Project>
