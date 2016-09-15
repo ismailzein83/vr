@@ -2,9 +2,12 @@
     [ID]        INT            IDENTITY (1, 1) NOT NULL,
     [Symbol]    NVARCHAR (50)  NOT NULL,
     [Settings]  NVARCHAR (MAX) NOT NULL,
+    [SourceID]  VARCHAR (50)   NULL,
     [timestamp] ROWVERSION     NULL,
     CONSTRAINT [PK_ZoneServiceConfig] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

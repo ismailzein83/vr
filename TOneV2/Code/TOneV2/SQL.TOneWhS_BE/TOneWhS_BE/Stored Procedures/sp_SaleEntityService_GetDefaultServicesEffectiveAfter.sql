@@ -3,16 +3,16 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityService_GetEffectiveZoneServices]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityService_GetDefaultServicesEffectiveAfter]
 	@OwnerType int,
 	@OwnerId int,
-	@EffectiveOn datetime
+	@MinimumDate datetime
 AS
 BEGIN
-	select ses.[ID], ses.[PriceListID], ses.[ZoneID], ses.[Services], ses.[BED], ses.[EED]
+	select ses.ID, ses.[PriceListID], ses.[Services], ses.BED, ses.EED
 	from TOneWhS_BE.SaleEntityService ses inner join TOneWhS_BE.SalePriceList spl on ses.PriceListID = spl.ID
-	where [ZoneID] is not null
-		and spl.OwnerType = @OwnerType
+	where spl.OwnerType = @OwnerType
 		and spl.OwnerID = @OwnerId
-		and (BED <= @EffectiveOn and (EED is null or EED > @EffectiveOn))
+		and ses.ZoneID is null
+		and (ses.EED is null or ses.EED > @MinimumDate)
 END

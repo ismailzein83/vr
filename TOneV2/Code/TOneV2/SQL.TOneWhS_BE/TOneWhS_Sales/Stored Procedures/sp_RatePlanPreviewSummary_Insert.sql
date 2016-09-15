@@ -12,7 +12,11 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_RatePlanPreviewSummary_Insert]
 	@NameOfNewDefaultRoutingProduct nvarchar(255),
 	@NameOfClosedDefaultRoutingProduct nvarchar(255),
 	@NumberOfNewSaleZoneRoutingProducts int,
-	@NumberOfClosedSaleZoneRoutingProducts int
+	@NumberOfClosedSaleZoneRoutingProducts int,
+	@NewDefaultServices nvarchar(max),
+	@ClosedDefaultServiceEffectiveOn datetime = null,
+	@NumberOfNewSaleZoneServices int,
+	@NumberOfClosedSaleZoneServices int
 AS
 BEGIN
 	insert into TOneWhS_Sales.RP_RatePlanPreview_Summary
@@ -25,7 +29,11 @@ BEGIN
 		NameOfNewDefaultRoutingProduct,
 		NameOfClosedDefaultRoutingProduct,
 		NumberOfNewSaleZoneRoutingProducts,
-		NumberOfClosedSaleZoneRoutingProducts
+		NumberOfClosedSaleZoneRoutingProducts,
+		NewDefaultServices,
+		ClosedDefaultServiceEffectiveOn,
+		NumberOfNewSaleZoneServices,
+		NumberOfClosedSaleZoneServices
 	)
 	
 	values
@@ -38,6 +46,10 @@ BEGIN
 		@NameOfNewDefaultRoutingProduct,
 		@NameOfClosedDefaultRoutingProduct,
 		@NumberOfNewSaleZoneRoutingProducts,
-		@NumberOfClosedSaleZoneRoutingProducts
+		@NumberOfClosedSaleZoneRoutingProducts,
+		@NewDefaultServices,
+		@ClosedDefaultServiceEffectiveOn,
+		@NumberOfNewSaleZoneServices,
+		@NumberOfClosedSaleZoneServices
 	)
 END

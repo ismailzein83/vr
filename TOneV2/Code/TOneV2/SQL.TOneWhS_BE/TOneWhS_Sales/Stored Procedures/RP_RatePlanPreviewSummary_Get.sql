@@ -14,7 +14,11 @@ BEGIN
 		NameOfNewDefaultRoutingProduct,
 		NameOfClosedDefaultRoutingProduct,
 		NumberOfNewSaleZoneRoutingProducts,
-		NumberOfClosedSaleZoneRoutingProducts
+		NumberOfClosedSaleZoneRoutingProducts,
+		NewDefaultServices,
+		ClosedDefaultServiceEffectiveOn,
+		NumberOfNewSaleZoneServices,
+		NumberOfClosedSaleZoneServices
 	
 	from [TOneWhS_Sales].RP_RatePlanPreview_Summary WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID

@@ -384,5 +384,22 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZonesServices_GetByDate.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetEffectiveZoneServices.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetEffectiveDefaultServices.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneService_Preview.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneService_New.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_SaleZoneService_Changed.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_DefaultService_Preview.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_DefaultService_New.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_DefaultService_Changed.sql" />
+    <Build Include="TOneWhS_BE\Tables\SPL_SupplierZoneService_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\SPL_SupplierZoneService_Changed.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetInvoiceCount.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZonesServices_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SaleZoneService_GetPreviews.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_NewDefaultService_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_DefaultServicePreview_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_DefaultServicePreview_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetZoneServicesEffectiveAfter.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetDefaultServicesEffectiveAfter.sql" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,6 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-	
 
 With cteZoneCode AS 
 ( 
@@ -24,9 +23,18 @@ With cteZoneCode AS
 	 from TOneWhS_SPL.SupplierZoneRate_Preview as Z WITH(NOLOCK) 
 	join TOneWhS_SPL.SupplierCode_Preview as C WITH(NOLOCK)  on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
 
-	where (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or  Exists (Select 1 from TOneWhS_SPL.SupplierOtherRate_Preview as Orp with(nolock) Where Orp.ProcessInstanceID =@ProcessInstanceId  and Orp.ZoneName=z.ZoneName and Orp.RateChangeType != 0))  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId
+	where (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or z.ZoneServiceChangeType != 0)  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId
 	group by Z.ZoneName
+),
+
+
+cteZoneOtherRate AS 
+( 
+SELECT sor.ZoneName from TOneWhS_SPL.SupplierOtherRate_Preview sor
+Where sor.ProcessInstanceID =@ProcessInstanceId  and (@OnlyModified = 0 or sor.RateChangeType != 0)
+group by sor.ZoneName
 )
+
 
  Select
 	Res.CountryId
@@ -37,8 +45,9 @@ With cteZoneCode AS
 	 ,SUM(cteZoneCode.MovedCodes) as MovedCodes
 	 ,SUM(cteZoneCode.DeleteCodes) as DeletedCodes
  from TOneWhS_SPL.SupplierZoneRate_Preview as Res WITH(NOLOCK) 
- Join cteZoneCode  WITH(NOLOCK) on Res.ZoneName = cteZoneCode.ZoneWithCodeChanges
- where res.ProcessInstanceID=@ProcessInstanceId
+ left Join cteZoneCode  WITH(NOLOCK) on Res.ZoneName = cteZoneCode.ZoneWithCodeChanges
+ left Join cteZoneOtherRate  WITH(NOLOCK) on Res.ZoneName = cteZoneOtherRate.ZoneName
+ where res.ProcessInstanceID=@ProcessInstanceId and (cteZoneOtherRate.ZoneName IS NOT NULL or cteZoneCode.ZoneWithCodeChanges IS NOT NULL)
  
  group by Res.CountryId	
  

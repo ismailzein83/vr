@@ -14,11 +14,11 @@ AS
 BEGIN
 	begin try
 		begin tran
-			
-			-- Sync rates
-			
+
 			if @ReservedSalePriceListId is not null
 			begin
+				-- Sync rates
+
 				insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn)
 				values (@ReservedSalePriceListId, @OwnerType, @OwnerID, @CurrencyID, @EffectiveOn)
 				
@@ -31,6 +31,30 @@ BEGIN
 				set EED = changedRate.EED
 				from TOneWhS_BE.SaleRate rate  WITH(NOLOCK) inner join TOneWhS_Sales.RP_SaleRate_Changed changedRate  WITH(NOLOCK) on rate.ID = changedRate.ID
 				where changedRate.ProcessInstanceID = @ProcessInstanceId
+
+				-- Sync default services
+
+				insert into TOneWhS_BE.SaleEntityService (ID, PriceListID, ZoneID, [Services], BED, EED)
+				select ID, @ReservedSalePriceListId, null, [Services], BED, EED
+				from TOneWhS_Sales.RP_DefaultService_New newService WITH(NOLOCK) 
+				where newService.ProcessInstanceID = @ProcessInstanceID
+			
+				update TOneWhS_BE.SaleEntityService
+				set EED = changedService.EED
+				from TOneWhS_BE.SaleEntityService ses WITH(NOLOCK) inner join TOneWhS_Sales.RP_DefaultService_Changed changedService on ses.ID = changedService.ID
+				where changedService.ProcessInstanceID = @ProcessInstanceID
+
+				-- Sync zone services
+
+				insert into TOneWhS_BE.SaleEntityService (ID, PriceListID, ZoneID, [Services], BED, EED)
+				select ID, @ReservedSalePriceListId, ZoneID, [Services], BED, EED
+				from TOneWhS_Sales.RP_SaleZoneService_New newService
+				where newService.ProcessInstanceID = @ProcessInstanceID
+			
+				update TOneWhS_BE.SaleEntityService
+				set EED = changedService.EED
+				from TOneWhS_BE.SaleEntityService ses inner join TOneWhS_Sales.RP_SaleZoneService_Changed changedService on ses.ID = changedService.ID
+				where changedService.ProcessInstanceID = @ProcessInstanceID
 			end
 			
 			-- Sync default routing product

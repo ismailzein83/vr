@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SaleEntityService] (
-    [ID]          BIGINT         IDENTITY (1, 1) NOT NULL,
+    [ID]          BIGINT         NOT NULL,
     [PriceListID] INT            NOT NULL,
     [ZoneID]      BIGINT         NULL,
     [Services]    NVARCHAR (MAX) NOT NULL,
@@ -9,6 +9,8 @@
     CONSTRAINT [PK_SaleZoneService] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleZoneService_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 GO

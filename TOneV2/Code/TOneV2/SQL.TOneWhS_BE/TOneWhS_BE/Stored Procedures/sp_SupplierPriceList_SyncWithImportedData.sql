@@ -20,6 +20,8 @@ AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierCode_New Where ProcessInsta
 AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierCode_Changed Where ProcessInstanceID = @ProcessInstanceId)
 AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierRate_New Where ProcessInstanceID = @ProcessInstanceId)
 AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierRate_Changed Where ProcessInstanceID = @ProcessInstanceId)
+AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierZoneService_New Where ProcessInstanceID = @ProcessInstanceId)
+AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierZoneService_Changed Where ProcessInstanceID = @ProcessInstanceId)
 	RAISERROR ('Price list has no changes', 12, 1);
 ELSE
 	Begin 
@@ -40,6 +42,10 @@ ELSE
 	Insert into TOnewhs_BE.SupplierRate (ID, PriceListID, ZoneID, CurrencyID, NormalRate, OtherRates, RateTypeID,BED, EED)
 	Select srnew.ID, @PriceListId, srnew.ZoneID, srnew.CurrencyID, srnew.NormalRate, srnew.OtherRates, srnew.RateTypeID, srnew.BED, srnew.EED
 	from TOneWhS_BE.SPL_SupplierRate_New srnew WITH(NOLOCK) Where srnew.ProcessInstanceID = @ProcessInstanceId
+
+	Insert into TOnewhs_BE.SupplierZoneService(ID,ZoneID,ReceivedServicesFlag,EffectiveServiceFlag,BED,EED)
+	Select srnew.ID,srnew.ZoneID, srnew.ZoneServices, srnew.ZoneServices, srnew.BED, srnew.EED
+	from TOnewhs_BE.SPL_SupplierZoneService_New srnew WITH(NOLOCK) Where srnew.ProcessInstanceID = @ProcessInstanceId
 	
 	Update ToneWhs_be.SupplierZone
 	Set EED = szchanged.EED
@@ -55,6 +61,11 @@ ELSE
 	Set EED = srchanged.EED
 	from TOneWhs_BE.SupplierRate sr join TOneWhS_BE.SPL_SupplierRate_Changed srchanged
 	on sr.ID = srchanged.ID Where srchanged.ProcessInstanceID = @ProcessInstanceId
+
+	Update TOneWhs_BE.SupplierZoneService
+	Set EED = szschanged.EED
+	from TOneWhs_BE.SupplierZoneService szs join TOneWhS_BE.SPL_SupplierZoneService_Changed szschanged
+	on szs.ID = szschanged.ID Where szschanged.ProcessInstanceID = @ProcessInstanceId
 	
 	COMMIT TRAN
 	End Try
