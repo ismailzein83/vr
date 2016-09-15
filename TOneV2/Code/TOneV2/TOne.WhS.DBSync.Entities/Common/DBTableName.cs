@@ -65,13 +65,15 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SwitchConnectivity")]
         SwitchConnectivity,
 
-        [Description("Rule")]
-        Rule,
-
         [Description("ZoneServiceConfig")]
         ZoneServiceConfig,
 
-         [Description("SupplierZoneService")]
+        [Description("SupplierZoneService")]
         SupplierZoneService,
+
+        [Description("Rule")]
+        Rule,
+
+       
     }
 }

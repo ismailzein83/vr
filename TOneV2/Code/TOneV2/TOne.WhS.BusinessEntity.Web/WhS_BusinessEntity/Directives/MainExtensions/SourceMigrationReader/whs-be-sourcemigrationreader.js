@@ -124,6 +124,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         selectedTables.push(x.value);
                     });
                     selectedTables.push(WhS_BE_DBTableNameEnum.CustomerZone.value);
+                    selectedTables.push(WhS_BE_DBTableNameEnum.File.value);
                     schedulerTaskAction.MigrationRequestedTables = selectedTables;
 
                     return schedulerTaskAction;
@@ -142,7 +143,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
 
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
-                            if (x != WhS_BE_DBTableNameEnum.CustomerZone.value)
+                            if (x != WhS_BE_DBTableNameEnum.CustomerZone.value && x != WhS_BE_DBTableNameEnum.File.value)
                                 $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
                         })
 
