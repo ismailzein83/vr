@@ -1,99 +1,96 @@
 ﻿
 'use strict';
 
-app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', function (VR_Analytic_DataAnalysisDefinitionAPIService, UtilsService, VRUIUtilsService) {
-    return {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var dataAnalysisItemDefinitionSettings = new DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs);
-            dataAnalysisItemDefinitionSettings.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/DataAnalysisItemDefinition/Templates/DataAnalysisItemDefinitionSettingsTemplate.html'
-    };
+app.directive('vrAnalyticDataanalysisitemdefinitionSettings', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Analytic_DataAnalysisDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
-    function DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs) {
-        this.initializeController = initializeController;
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var dataAnalysisItemDefinitionSettings = new DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs);
+                dataAnalysisItemDefinitionSettings.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/DataAnalysisItemDefinition/Templates/DataAnalysisItemDefinitionSettingsTemplate.html'
+        };
 
-        var directiveAPI;
-        var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+        function DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-        function initializeController() {
+            var directiveAPI;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.scopeModel = {};
+            function initializeController() {
 
-            $scope.scopeModel.onDirectiveReady = function (api) {
-                directiveAPI = api;
-                directiveReadyDeferred.resolve();
-            };
+                $scope.scopeModel = {};
 
-            defineAPI();
-        }
-        function defineAPI() {
-            var api = {};
+                $scope.scopeModel.onDirectiveReady = function (api) {
+                    directiveAPI = api;
+                    directiveReadyDeferred.resolve();
+                };
 
-            api.load = function (payload) {
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
 
-                var promises = [];
-                var dataAnalysisItemDefinition;
-                var dataAnalysisDefinitionId;
-                var itemDefinitionTypeId;
-                var context;
+                api.load = function (payload) {
 
-                if (payload != undefined) {
-                    dataAnalysisItemDefinition = payload.dataAnalysisItemDefinition;
-                    dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
-                    itemDefinitionTypeId = payload.itemDefinitionTypeId;
-                    context = payload.context;
-                }
+                    var dataAnalysisItemDefinition;
+                    var dataAnalysisDefinitionId;
+                    var itemDefinitionTypeId;
+                    var context;
 
-                var getDataAnalysisDefinitionSettingsPromise = getDataAnalysisDefinitionSettings();
-                promises.push(getDataAnalysisDefinitionSettingsPromise);
+                    if (payload != undefined) {
+                        dataAnalysisItemDefinition = payload.dataAnalysisItemDefinition;
+                        dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
+                        itemDefinitionTypeId = payload.itemDefinitionTypeId;
+                        context = payload.context;
+                    }
 
-                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                promises.push(directiveLoadDeferred.promise);
+                    var dataAnalysisDefinitionSettingsLoadPromise = getDataAnalysisDefinitionSettingsLoadPromise();
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                UtilsService.waitMultiplePromises([getDataAnalysisDefinitionSettingsPromise, directiveReadyDeferred.promise]).then(function () {
+                    UtilsService.waitMultiplePromises([directiveReadyDeferred.promise, dataAnalysisDefinitionSettingsLoadPromise]).then(function () {
 
-                    var directivePayload = {};
-                    directivePayload.context = buildContext();
-                    if (dataAnalysisItemDefinition != undefined)
-                        directivePayload.dataAnalysisItemDefinitionSettings = dataAnalysisItemDefinition.Settings;
+                        var directivePayload = {};
+                        directivePayload.context = buildContext();
+                        if (dataAnalysisItemDefinition != undefined)
+                            directivePayload.dataAnalysisItemDefinitionSettings = dataAnalysisItemDefinition.Settings;
 
-                    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                });
-
-                function getDataAnalysisDefinitionSettings() {
-
-                    return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
- 
-                        var dataAnalysisDefinitionEntity = response;
-                        var itemsConfig = dataAnalysisDefinitionEntity.Settings.ItemsConfig;
-
-                        for (var i = 0; i < itemsConfig.length; i++) 
-                            if (itemsConfig[i].TypeId == itemDefinitionTypeId) {
-                                $scope.scopeModel.directiveEditor = itemsConfig[i].Editor;
-                            }
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
-                }
-                function buildContext() {
-                    return context;
-                }
 
-                return UtilsService.waitMultiplePromises(promises);
-            };
+                    function getDataAnalysisDefinitionSettingsLoadPromise() {
+                        return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
+ 
+                            var dataAnalysisDefinitionEntity = response;
+                            var itemsConfig = dataAnalysisDefinitionEntity.Settings.ItemsConfig;
 
-            api.getData = function () {
-                return directiveAPI.getData();
-            };
+                            for (var i = 0; i < itemsConfig.length; i++) 
+                                if (itemsConfig[i].TypeId == itemDefinitionTypeId) {
+                                    $scope.scopeModel.directiveEditor = itemsConfig[i].Editor;
+                                }
+                        });
+                    }
+                    function buildContext() {
+                        return context;
+                    }
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+                    return directiveLoadDeferred.resolve();
+                };
+
+                api.getData = function () {
+                    return directiveAPI.getData();
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
         }
-    }
 }]);

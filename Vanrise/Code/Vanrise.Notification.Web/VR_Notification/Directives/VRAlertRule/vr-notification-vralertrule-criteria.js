@@ -5,19 +5,19 @@ app.directive('vrNotificationVralertruleCriteria', ['UtilsService', 'VRUIUtilsSe
     function (UtilsService, VRUIUtilsService) {
 
         return {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var dataAnalysisItemDefinitionSettings = new DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs);
-            dataAnalysisItemDefinitionSettings.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        templateUrl: '/Client/Modules/VR_Notification/Directives/VRAlertRule/Templates/VRAlertRuleCriteriaTemplate.html'
-    };
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var dataAnalysisItemDefinitionSettings = new DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs);
+                dataAnalysisItemDefinitionSettings.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/VR_Notification/Directives/VRAlertRule/Templates/VRAlertRuleCriteriaTemplate.html'
+        };
 
     function DataAnalysisItemDefinitionSettings($scope, ctrl, $attrs) {
         this.initializeController = initializeController;

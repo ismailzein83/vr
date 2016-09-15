@@ -64,8 +64,6 @@
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
                     ctrl.daProfCalcGroupingFields = [];
 
                     if (payload != undefined) {

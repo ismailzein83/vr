@@ -72,7 +72,7 @@
                         vrAlertRuleCriteriaDirectivePayload.criteriaEditor = vrAlertRuleTypeEntity.Settings.CriteriaEditor
                     }
                     var setLoader = function (value) {
-                        $scope.scopeModel.isAlertRuleTypeSelectorLoading = value;
+                        $scope.scopeModel.VRAlertRuleCriteriaLoading = value;
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, vrAlertRuleCriteriaDirectiveAPI, vrAlertRuleCriteriaDirectivePayload, setLoader);
