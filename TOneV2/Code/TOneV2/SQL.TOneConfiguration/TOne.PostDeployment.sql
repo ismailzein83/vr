@@ -99,6 +99,8 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
+GO--delete useless views from TOne product such 'My Scheduler Service'
+delete from [sec].[View] where [Id] in (5002)
 --[sec].[View]-----------------------------12001 to 13000-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
