@@ -39,7 +39,7 @@ namespace Vanrise.Common.Data.SQL
             var extensionConfigurationObj = Vanrise.Common.Serializer.Deserialize<T>(reader["Settings"] as string);
             if (extensionConfigurationObj != null)
             {
-                extensionConfigurationObj.ExtensionConfigurationId = (int)reader["ID"];
+                extensionConfigurationObj.ExtensionConfigurationId = (int)reader["OldID"];
                 extensionConfigurationObj.Title = reader["Title"] as string;
                 extensionConfigurationObj.Name = reader["Name"] as string;
             }
