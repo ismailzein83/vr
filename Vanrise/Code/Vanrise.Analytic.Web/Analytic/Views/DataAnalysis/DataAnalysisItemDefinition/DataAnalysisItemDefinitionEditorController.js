@@ -63,7 +63,12 @@
                 var promises = [getDataAnalysisItemDefinition(), getDataAnalysisDefinition()];
 
                 UtilsService.waitMultiplePromises(promises).then(function () {
-                    loadAllControls();
+                    getDataRecordType().then(function () {
+                        loadAllControls();
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.scopeModel.isLoading = false;
+                    });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
@@ -71,7 +76,12 @@
             }
             else {
                 getDataAnalysisDefinition().then(function () {
-                    loadAllControls();
+                    getDataRecordType().then(function () {
+                        loadAllControls();
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.scopeModel.isLoading = false;
+                    });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
@@ -174,19 +184,14 @@
                 getFields: function () {
                     var fields = []
 
-                    if (dataRecordTypeId) {
-                        getDataRecordType().then(function () {
-                            for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
-                                var field = dataRecordTypeEntity.Fields[i];
-                                fields.push({
-                                    FieldName: field.Name,
-                                    FieldTitle: field.Title,
-                                    Type: field.Type
-                                })
-                            }
-                        });
+                    for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
+                        var field = dataRecordTypeEntity.Fields[i];
+                        fields.push({
+                            FieldName: field.Name,
+                            FieldTitle: field.Title,
+                            Type: field.Type
+                        })
                     }
-
                     return fields;
                 },
                 getDataRecordTypeId: function () {
@@ -195,7 +200,6 @@
             }
             return context;
         }
-
         function buildDataAnalysisItemDefinitionObjFromScope() {
 
             var dataAnalysisItemDefinitionSettings = settingsDirectiveAPI.getData();
