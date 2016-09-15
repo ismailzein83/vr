@@ -18,7 +18,7 @@ namespace Vanrise.Common.Business
 
             Func<VRTimeZone, bool> filterExpression = (prod) =>
             {
-                if (input.Query.Name != null && prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 return true;
             };

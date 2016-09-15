@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrCommonTimezoneSelector', ['VRCommon_CountryAPIService', 'VRCommon_CountryService', 'UtilsService', 'VRUIUtilsService', function (VRCommon_CountryAPIService, VRCommon_CountryService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRCommon_VRTimeZoneService', 'UtilsService', 'VRUIUtilsService', function (VRCommon_VRTimeZoneAPIService, VRCommon_VRTimeZoneService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -22,22 +22,22 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_CountryAPIService', 'VRComm
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            $scope.addNewCountry = function () {
-                var onCountryAdded = function (countryObj) {
-                    ctrl.datasource.push(countryObj.Entity);
+            $scope.addNewTimeZone = function () {
+                var onTimeZoneAdded = function (timeZoneObj) {
+                    ctrl.datasource.push(timeZoneObj.Entity);
                     if ($attrs.ismultipleselection != undefined)
-                        ctrl.selectedvalues.push(countryObj.Entity);
+                        ctrl.selectedvalues.push(timeZoneObj.Entity);
                     else
-                        ctrl.selectedvalues = countryObj.Entity ;
+                        ctrl.selectedvalues = timeZoneObj.Entity ;
                 };
-                VRCommon_CountryService.addCountry(onCountryAdded);
+                VRCommon_VRTimeZoneService.addTimeZone(onTimeZoneAdded);
             }
 
             ctrl.haspermission = function () {
-                return VRCommon_CountryAPIService.HasAddCountryPermission();
+                return VRCommon_VRTimeZoneAPIService.HasAddVRTimeZonePermission();
             };
 
-            var ctor = new countryCtor(ctrl, $scope, $attrs);
+            var ctor = new timeZoneCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -50,31 +50,31 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_CountryAPIService', 'VRComm
             }
         },
         template: function (element, attrs) {
-            return getCountryTemplate(attrs);
+            return getTimeZoneTemplate(attrs);
         }
 
     };
 
-    function getCountryTemplate(attrs) {
+    function getTimeZoneTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Country";
+        var label = "TimeZone";
         if (attrs.ismultipleselection != undefined) {
-            label = "Countries";
+            label = "TimeZones";
             multipleselection = "ismultipleselection";
         }
 
         var addCliked = '';
         if (attrs.showaddbutton != undefined)
-            addCliked = 'onaddclicked="addNewCountry"';
+            addCliked = 'onaddclicked="addNewTimeZone"';
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TimeZoneId" isrequired="ctrl.isrequired"'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="TimeZone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
     }
 
-    function countryCtor(ctrl, $scope, attrs) {
+    function timeZoneCtor(ctrl, $scope, attrs) {
 
         function initializeController() {
             defineAPI();
@@ -90,11 +90,10 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_CountryAPIService', 'VRComm
                     selectedIds = payload.selectedIds;
                 }
 
-                return getCountriesInfo(attrs, ctrl, selectedIds);
+                return getTimeZonesInfo(attrs, ctrl, selectedIds);
             }
-
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('CountryId', attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('TimeZoneId', attrs, ctrl);
             }             
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -103,15 +102,15 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_CountryAPIService', 'VRComm
         this.initializeController = initializeController;
     }
 
-    function getCountriesInfo(attrs, ctrl, selectedIds) {
-        return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
+    function getTimeZonesInfo(attrs, ctrl, selectedIds) {
+        return VRCommon_VRTimeZoneAPIService.GetVRTimeZonesInfo().then(function (response) {
             ctrl.datasource.length = 0;
             angular.forEach(response, function (itm) {
                 ctrl.datasource.push(itm);
             });
 
             if (selectedIds != undefined) {
-                VRUIUtilsService.setSelectedValues(selectedIds, 'CountryId', attrs, ctrl);
+                VRUIUtilsService.setSelectedValues(selectedIds, 'TimeZoneId', attrs, ctrl);
             }
         });
     }
