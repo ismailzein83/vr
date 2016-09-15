@@ -226,6 +226,8 @@
     <Compile Include="SupplierPriceList\SupplierPriceListDetail.cs" />
     <Compile Include="SupplierPriceList\SupplierPricelistQuery.cs" />
     <Compile Include="SupplierZone\ISupplierZoneGroupContext.cs" />
+    <Compile Include="SupplierZone\SupplierZoneServiceDetail.cs" />
+    <Compile Include="SupplierZone\SupplierZoneServiceQuery.cs" />
     <Compile Include="SupplierZone\SupplierZoneService.cs" />
     <Compile Include="SupplierZone\SupplierZoneDetails.cs" />
     <Compile Include="SupplierZone\SupplierZoneFilterSettings.cs" />

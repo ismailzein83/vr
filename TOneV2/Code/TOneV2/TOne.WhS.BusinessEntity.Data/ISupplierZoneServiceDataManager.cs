@@ -10,5 +10,8 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISupplierZoneServiceDataManager : IDataManager
     {
         List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate);
+
+        IEnumerable<SupplierZoneService> GetFilteredSupplierZoneServices(SupplierZoneServiceQuery query);
+
     }
 }

@@ -163,6 +163,7 @@
     <Compile Include="Controllers\SellingNumberPlanController.cs" />
     <Compile Include="Controllers\SupplierCodeController.cs" />
     <Compile Include="Controllers\SupplierPricelistController.cs" />
+    <Compile Include="Controllers\SupplierZoneServiceController.cs" />
     <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
     <Compile Include="Controllers\SwitchConnectivityController.cs" />
@@ -319,6 +320,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SellingProduct\vr-whs-be-sellingproduct-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\Templates\SupplierZoneServiceGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\vr-whs-be-supplierzoneservice-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\TechnicalSetting\Templates\BETechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\TechnicalSetting\vr-whs-be-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierCode\Templates\SupplierCodeGridTemplate.html" />
@@ -356,6 +359,7 @@
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealProgressAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneServiceAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\VolumeCommitmentAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealAnalysisService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierPriceListAPIService.js" />
@@ -369,6 +373,7 @@
     <Content Include="WhS_BusinessEntity\Services\DealBuyingService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealSellingService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierCodeService.js" />
@@ -461,6 +466,8 @@
     <Content Include="WhS_BusinessEntity\Views\SupplierCode\SupplierCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierPricelist\SupplierPricelist.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierPricelist\SupplierPricelistController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierService\SupplierServiceManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierService\SupplierServiceManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierZone\SupplierZoneManagement.html" />

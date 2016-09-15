@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="supplierZoneServices"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.SupplierZoneServiceId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.SupplierZoneServiceId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Services'" field="'Services'"  disablesorting>
+        <vr-whs-be-services-viewer on-ready="dataItem.onServiceReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
+</vr-datagrid>

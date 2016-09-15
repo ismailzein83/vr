@@ -27,6 +27,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServices_GetByDate", SupplierZoneServiceMapper, supplierId, minimumDate);
         }
+
+        public IEnumerable<SupplierZoneService> GetFilteredSupplierZoneServices(SupplierZoneServiceQuery query)
+        {
+            string zonesids = null;
+            if (query.ZoneIds != null && query.ZoneIds.Count() > 0)
+                zonesids = string.Join<int>(",", query.ZoneIds);
+
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierZoneService_GetFiltered]", SupplierZoneServiceMapper, query.SupplierId, zonesids, query.EffectiveOn);
+        }
        
         #endregion
        

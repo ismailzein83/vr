@@ -22,6 +22,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierZonesServicesEffectiveAfter(supplierId, minimumDate);
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<SupplierZoneServiceDetail> GetFilteredSupplierZoneServices(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new SupplierZoneServiceRequestHandler());
+        }
 
         public long ReserveIDRange(int numberOfIDs)
         {
@@ -40,7 +44,43 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
+
         #endregion
 
+
+        private SupplierZoneServiceDetail SupplierZoneServiceDetailMapper(SupplierZoneService supplierZoneService)
+        {
+            SupplierZoneServiceDetail detail = new SupplierZoneServiceDetail()
+            {
+                Entity = supplierZoneService
+            };
+
+            SupplierZone supplierZone = new SupplierZoneManager().GetSupplierZone(supplierZoneService.ZoneId);
+            if (supplierZone == null)
+                throw new NullReferenceException();
+
+            detail.SupplierZoneName = supplierZone.Name;
+            detail.Services = supplierZoneService.EffectiveServices.Select(x => x.ServiceId).ToList();         
+
+            return detail;
+        }
+        private class SupplierZoneServiceRequestHandler : BigDataRequestHandler<SupplierZoneServiceQuery, SupplierZoneService, SupplierZoneServiceDetail>
+        {
+            public override SupplierZoneServiceDetail EntityDetailMapper(SupplierZoneService entity)
+            {
+                SupplierZoneServiceManager manager = new SupplierZoneServiceManager();
+                return manager.SupplierZoneServiceDetailMapper(entity);
+            }
+
+            public override IEnumerable<SupplierZoneService> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
+            {
+                ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+                return dataManager.GetFilteredSupplierZoneServices(input.Query);
+            }
+        }
+
     }
+
+   
+
 }
