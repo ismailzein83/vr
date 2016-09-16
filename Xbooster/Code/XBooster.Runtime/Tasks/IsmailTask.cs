@@ -12,10 +12,15 @@ namespace XBooster.Runtime.Tasks
     {
         public void Execute()
         {
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
 
-            runtimeServices.Add(bpService);
+            BusinessProcessService businessProcessService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+
+            runtimeServices.Add(businessProcessService);
+            runtimeServices.Add(bpRegulatorRuntimeService);
+            runtimeServices.Add(transactionLockRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
