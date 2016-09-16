@@ -144,6 +144,7 @@
     <add key="TOneWhS_TS_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TrafficStatsQualityMeasurementInterval" value="5000:00:00"/>
     <add key="IsRuntimeService" value="true"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="Currency" value="USD"/>
     <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
     <add key="VanriseCache_CleanMemoryThreshold" value="999999999999999"/>
