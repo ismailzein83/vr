@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestRuntime.ExecutionFlows;
-using TOne.WhS.CDRProcessing.Entities;
-using TOne.WhS.CDRProcessing.QueueActivators;
 using TOne.WhS.CodePreparation.BP.Arguments;
 using TOne.WhS.Invoice.Business;
 using TOne.WhS.Invoice.Business.Extensions;

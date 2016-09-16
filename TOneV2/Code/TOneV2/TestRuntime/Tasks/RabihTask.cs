@@ -81,23 +81,23 @@ namespace TestRuntime
             _host.Start();
         }
 
-        private static void RunCompleteProductRouteBuild()
-        {
-            BPInstanceManager bpClient = new BPInstanceManager();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
-                {
-                    EffectiveOn = DateTime.Now,
-                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
-                    //CodePrefixLength = 1,
-                    IsFuture = false,
-                    SaleZoneRange = 1000,
-                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27, IsDefault = true }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 } },
-                    RoutingProcessType = RoutingProcessType.RoutingProductRoute
-                }
-            });
-        }
+        //private static void RunCompleteProductRouteBuild()
+        //{
+        //    BPInstanceManager bpClient = new BPInstanceManager();
+        //    bpClient.CreateNewProcess(new CreateProcessInput
+        //    {
+        //        InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
+        //        {
+        //            EffectiveOn = DateTime.Now,
+        //            RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
+        //            //CodePrefixLength = 1,
+        //            IsFuture = false,
+        //            SaleZoneRange = 1000,
+        //            SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27, IsDefault = true }, new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 } },
+        //            RoutingProcessType = RoutingProcessType.RoutingProductRoute
+        //        }
+        //    });
+        //}
 
         private static void RunCompleteRouteBuild()
         {

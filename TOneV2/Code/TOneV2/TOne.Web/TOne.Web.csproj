@@ -731,26 +731,6 @@
       <Project>{6f10d0c6-72aa-483c-9a10-bc78d053fc42}</Project>
       <Name>TOne.WhS.BusinessEntity.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Business\TOne.WhS.CDRProcessing.Business.csproj">
-      <Project>{5a382aba-4399-4274-b9b7-046e47aa946a}</Project>
-      <Name>TOne.WhS.CDRProcessing.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Data.SQL\TOne.WhS.CDRProcessing.Data.SQL.csproj">
-      <Project>{c36f6de9-673b-405a-bc92-81985986cef2}</Project>
-      <Name>TOne.WhS.CDRProcessing.Data.SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Data\TOne.WhS.CDRProcessing.Data.csproj">
-      <Project>{c05ffd8e-ae8b-46a4-9fb1-448a2c9205af}</Project>
-      <Name>TOne.WhS.CDRProcessing.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Entities\TOne.WhS.CDRProcessing.Entities.csproj">
-      <Project>{a6bbd20b-b7f1-472f-8b36-a7fc009fccb8}</Project>
-      <Name>TOne.WhS.CDRProcessing.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Web\TOne.WhS.CDRProcessing.Web.csproj">
-      <Project>{c9c6697c-9bab-48a3-8c35-a854ecf652db}</Project>
-      <Name>TOne.WhS.CDRProcessing.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.BP.Arguments\TOne.WhS.CodePreparation.BP.Arguments.csproj">
       <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
       <Name>TOne.WhS.CodePreparation.BP.Arguments</Name>

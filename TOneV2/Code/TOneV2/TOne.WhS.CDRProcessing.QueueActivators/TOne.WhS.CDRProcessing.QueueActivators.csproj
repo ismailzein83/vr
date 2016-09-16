@@ -67,21 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BillingStats\GenerateBillingStatsActivator.cs" />
-    <Compile Include="CDR\GenerateCDRPricesActivator.cs" />
-    <Compile Include="TrafficStats\GenerateDailyStatsActivator.cs" />
-    <Compile Include="TrafficStats\GenerateStatsActivator.cs" />
-    <Compile Include="BillingStats\StoreBillingStatsActivator.cs" />
-    <Compile Include="CDR\StoreCDRFailedActivator.cs" />
-    <Compile Include="CDR\StoreCDRInvalidActivator.cs" />
-    <Compile Include="CDR\StoreCDRMainActivator.cs" />
-    <Compile Include="TrafficStats\GenerateStatsByCodeActivator.cs" />
-    <Compile Include="TrafficStats\StoreDailyStatsActivator.cs" />
-    <Compile Include="CDR\StoreRawCDRActivator.cs" />
-    <Compile Include="CDR\GenerateBillingCDRActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrafficStats\StoreStatsActivator.cs" />
-    <Compile Include="TrafficStats\StoreStatsByCodeActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

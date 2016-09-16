@@ -60,25 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BillingStatisticDataManager.cs" />
-    <Compile Include="TrafficStatisticByCodeDataManager.cs" />
-    <Compile Include="TrafficStatisticByIntervalDataManager.cs" />
-    <Compile Include="CDRDataManager.cs" />
-    <Compile Include="CDRFailedDataManager.cs" />
-    <Compile Include="CDRInvalidDataManager.cs" />
-    <Compile Include="CDRMainDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrafficStatisticDailyDataManager.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Data\TOne.WhS.CDRProcessing.Data.csproj">
-      <Project>{c05ffd8e-ae8b-46a4-9fb1-448a2c9205af}</Project>
-      <Name>TOne.WhS.CDRProcessing.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Entities\TOne.WhS.CDRProcessing.Entities.csproj">
-      <Project>{a6bbd20b-b7f1-472f-8b36-a7fc009fccb8}</Project>
-      <Name>TOne.WhS.CDRProcessing.Entities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

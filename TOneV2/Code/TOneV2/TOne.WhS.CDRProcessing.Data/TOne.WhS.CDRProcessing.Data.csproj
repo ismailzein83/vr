@@ -57,23 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CDRProcessingDataManagerFactory.cs" />
-    <Compile Include="IBillingStatisticDataManager.cs" />
-    <Compile Include="ITrafficStatisticByCodeDataManager.cs" />
-    <Compile Include="ITrafficStatisticByIntervalDataManager.cs" />
-    <Compile Include="ICDRDataManager.cs" />
-    <Compile Include="ICDRFailedDataManager.cs" />
-    <Compile Include="ICDRInvalidDataManager.cs" />
-    <Compile Include="ICDRMainDataManager.cs" />
-    <Compile Include="IDataManager.cs" />
-    <Compile Include="ITrafficStatisticDailyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TOne.WhS.CDRProcessing.Entities\TOne.WhS.CDRProcessing.Entities.csproj">
-      <Project>{a6bbd20b-b7f1-472f-8b36-a7fc009fccb8}</Project>
-      <Name>TOne.WhS.CDRProcessing.Entities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
