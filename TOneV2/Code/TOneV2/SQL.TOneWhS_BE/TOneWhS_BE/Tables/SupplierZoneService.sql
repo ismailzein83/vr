@@ -5,10 +5,13 @@
     [EffectiveServiceFlag] VARCHAR (MAX) NULL,
     [BED]                  DATETIME      NOT NULL,
     [EED]                  DATETIME      NULL,
+    [SourceID]             VARCHAR (50)  NULL,
     [timestamp]            ROWVERSION    NULL,
     CONSTRAINT [PK_SupplierZoneService] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SupplierZoneService_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SupplierZone] ([ID])
 );
+
+
 
 
 
