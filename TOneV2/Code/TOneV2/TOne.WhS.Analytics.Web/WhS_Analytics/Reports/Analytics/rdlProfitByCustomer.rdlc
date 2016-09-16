@@ -1334,7 +1334,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Avg(Fields!AvgMin.Value),Parameters!Digit.Value)</Value>
+                                  <Value>=FormatNumber((FormatNumber(Sum(Fields!Profit.Value),Parameters!Digit.Value))/(FormatNumber(Sum(Fields!SaleDuration.Value),Parameters!Digit.Value)),4)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1355,6 +1355,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2340,7 +2341,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
