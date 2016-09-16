@@ -83,6 +83,7 @@
     <add key="VR_AccountBalance_TransactionDBConnStringKey" value="VR_AccountBalance_TransactionDBConnString"/>
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="IsRuntimeService" value="true"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
   </appSettings>
 
   <vanriseLogging maxLogLevel="Information">
