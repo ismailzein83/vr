@@ -100,6 +100,7 @@
     <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
     <add key="IsRuntimeService" value="true"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="ExposedConnectionStringNames" value="Mediation_GenericRecord_DBConnString"/>
   </appSettings>
   <system.codedom>
