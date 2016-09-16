@@ -53,5 +53,6 @@
     <add key="CP_DBConnStringKey" value="ProtalConnectionString" />
     <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
     <add key="IsRuntimeService" value="false"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
   </appSettings>
 </configuration>
