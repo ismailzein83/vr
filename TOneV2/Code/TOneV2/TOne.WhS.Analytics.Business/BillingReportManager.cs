@@ -74,10 +74,16 @@ namespace TOne.WhS.Analytics.Business
                 analyticQuery.Query.MeasureFields.Add("CostDuration");
             }
 
+            var dates = monthsBetween(query.fromDate, query.toDate.Value);
+            List<string> arrayOfDate = new List<string>();
+            foreach (DateTime dateTime in dates.ToList())
+            {
+                arrayOfDate.Add(dateTime.ToString("yyyy-MM"));
+            }
             List<BusinessCaseStatus> listBusinessCaseStatus = new List<BusinessCaseStatus>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
-
+            int monthCount = 0;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
@@ -85,24 +91,37 @@ namespace TOne.WhS.Analytics.Business
 
                     var monthValue = analyticRecord.DimensionValues[0];
                     if (monthValue != null)
+                    {
+                        if (monthValue.Name != arrayOfDate[monthCount])
+                            while (monthValue.Name != arrayOfDate[monthCount])
+                            {
+                                businessCaseStatus = new BusinessCaseStatus();
+                                businessCaseStatus.MonthYear = arrayOfDate[monthCount];
+                                businessCaseStatus.Amount = 0;
+                                businessCaseStatus.Durations = 0;
+                                listBusinessCaseStatus.Add(businessCaseStatus);
+                                monthCount = monthCount + 1;
+                            }
+
+                        businessCaseStatus = new BusinessCaseStatus();
                         businessCaseStatus.MonthYear = monthValue.Name;
+                        MeasureValue net;
+                        if (isSale)
+                            analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                        businessCaseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
 
-                    MeasureValue net;
-                    if (isSale)
-                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
-                    businessCaseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
 
-
-                    MeasureValue duration;
-                    if (isSale)
-                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out duration);
-                    businessCaseStatus.Durations = Convert.ToDecimal(duration.Value ?? 0.0);
-
-                    listBusinessCaseStatus.Add(businessCaseStatus);
+                        MeasureValue duration;
+                        if (isSale)
+                            analyticRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("CostDuration", out duration);
+                        businessCaseStatus.Durations = Convert.ToDecimal(duration.Value ?? 0.0);
+                        listBusinessCaseStatus.Add(businessCaseStatus);
+                        monthCount = monthCount + 1;
+                    }
                 }
             return listBusinessCaseStatus;
         }
@@ -116,6 +135,12 @@ namespace TOne.WhS.Analytics.Business
             List<BusinessCaseStatus> sortedList = listBusinessCaseStatus.OrderByDescending(o => o.Durations).ToList();
 
             return sortedList;
+        }
+
+        static IEnumerable<DateTime> monthsBetween(DateTime d0, DateTime d1)
+        {
+            return Enumerable.Range(0, (d1.Year - d0.Year) * 12 + (d1.Month - d0.Month + 1))
+                             .Select(m => new DateTime(d0.Year, d0.Month, 1).AddMonths(m));
         }
 
         public ExcelResult ExportCarrierProfile(BusinessCaseStatusQuery businessCaseStatusQuery)
