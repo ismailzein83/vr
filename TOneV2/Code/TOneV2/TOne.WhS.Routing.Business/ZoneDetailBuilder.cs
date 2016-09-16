@@ -20,6 +20,7 @@ namespace TOne.WhS.Routing.Business
         {
             if (customerInfos == null)
                 return;
+
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             List<RoutingCustomerInfoDetails> customerInfoDetails = new List<RoutingCustomerInfoDetails>();
 
@@ -40,6 +41,7 @@ namespace TOne.WhS.Routing.Business
 
             SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerInfos, effectiveOn, isEffectiveInFuture));
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
+            SaleEntityServiceLocator customerServiceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
 
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
 
@@ -65,6 +67,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var customerZone in customerSaleZones)
                 {
                     SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
+                    SaleEntityService customerEntityService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
@@ -92,7 +95,8 @@ namespace TOne.WhS.Routing.Business
                             SellingProductId = customerInfo.SellingProductId,
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
-                            RateSource = customerZoneRate.Source
+                            RateSource = customerZoneRate.Source,
+                            SaleEntityServiceIds = customerEntityService != null ? new HashSet<int>(customerEntityService.Services.Select(itm => itm.ServiceId)) : null
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);

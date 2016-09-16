@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerZoneDetailsDataManager : RoutingDataManager, ICustomerZoneDetailsDataManager
     {
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource" };
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleEntityServiceIds" };
         public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
@@ -50,8 +50,11 @@ namespace TOne.WhS.Routing.Data.SQL
         }
         public void WriteRecordToStream(Entities.CustomerZoneDetail record, object dbApplyStream)
         {
+            string serializedSaleEntityService = record.SaleEntityServiceIds != null ? Vanrise.Common.Serializer.Serialize(record.SaleEntityServiceIds) : null;
+
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId, record.EffectiveRateValue, (int)record.RateSource);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId,
+                                                                               record.EffectiveRateValue, (int)record.RateSource, serializedSaleEntityService);
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {
@@ -63,7 +66,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
                 RoutingProductSource = GetReaderValue<SaleEntityZoneRoutingProductSource>(reader, "RoutingProductSource"),
                 SaleZoneId = (Int64)reader["SaleZoneId"],
-                SellingProductId = GetReaderValue<int>(reader, "SellingProductId")
+                SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
+                SaleEntityServiceIds = Vanrise.Common.Serializer.Deserialize<HashSet<int>>(reader["SaleEntityServiceIds"] as string) 
             };
         }
 
@@ -72,7 +76,6 @@ namespace TOne.WhS.Routing.Data.SQL
             DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(saleZoneIds));
             return GetItemsText(query_GetFilteredCustomerZoneDetailsByZone, CustomerZoneDetailMapper, (cmd) =>
             {
-
                 var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
                 dtPrm.TypeName = "LongIDType";
                 dtPrm.Value = dtZoneIds;
@@ -105,6 +108,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SellingProductId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
+                                                  ,zd.[SaleEntityServiceIds]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredCustomerZoneDetailsByZone = @"                                                       
@@ -115,13 +119,11 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SellingProductId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
+                                                  ,zd.[SaleEntityServiceIds]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 
         #endregion
-
-
-
 
     }
 }

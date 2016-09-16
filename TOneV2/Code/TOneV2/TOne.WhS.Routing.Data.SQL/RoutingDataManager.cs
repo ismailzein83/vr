@@ -128,7 +128,8 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [RoutingProductSource] [tinyint] NULL,
 	                                                    [SellingProductId] [int] NULL,
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
-	                                                    [RateSource] [tinyint] NULL
+	                                                    [RateSource] [tinyint] NULL,
+                                                        [SaleEntityServiceIds] [nvarchar](max) NULL
                                                         ) ON [PRIMARY];
                                                         CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
                                                         (

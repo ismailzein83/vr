@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,15 +18,56 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public IEnumerable<SaleEntityDefaultService> GetEffectiveSaleEntityDefaultServices(DateTime effectiveOn)
+        public IEnumerable<SaleEntityDefaultService> GetEffectiveSaleEntityDefaultServices(DateTime? effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetEffectiveDefaultServices", SaleEntityDefaultServiceMapper, effectiveOn);
         }
 
-        public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServices(Entities.SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+
+        public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServices(Entities.SalePriceListOwnerType ownerType, int ownerId, DateTime? effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetEffectiveZoneServices", SaleEntityZoneServiceMapper, ownerType, ownerId, effectiveOn);
         }
+
+        public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            DataTable saleRateOwners = BuildRoutingOwnerInfoTable(customerInfos);
+            return GetItemsSPCmd("TOneWhS_BE.sp_SaleEntityService_GetEffectiveZoneServicesByOwner", SaleEntityZoneServiceMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@SaleEntityZoneServiceOwner", SqlDbType.Structured);
+                dtPrm.Value = saleRateOwners;
+                cmd.Parameters.Add(dtPrm);
+                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+            });
+        }
+        internal static DataTable BuildRoutingOwnerInfoTable(IEnumerable<RoutingCustomerInfoDetails> customerInfos)
+        {
+            DataTable dtRoutingInfos = GetRoutingOwnerInfoTable();
+            dtRoutingInfos.BeginLoadData();
+            foreach (var c in customerInfos)
+            {
+                DataRow drCustomer = dtRoutingInfos.NewRow();
+                drCustomer["OwnerId"] = c.CustomerId;
+                drCustomer["OwnerTpe"] = (int)SalePriceListOwnerType.Customer;
+                dtRoutingInfos.Rows.Add(drCustomer);
+
+                DataRow drSP = dtRoutingInfos.NewRow();
+                drSP["OwnerId"] = c.SellingProductId;
+                drSP["OwnerTpe"] = (int)SalePriceListOwnerType.SellingProduct;
+                dtRoutingInfos.Rows.Add(drSP);
+            }
+            dtRoutingInfos.EndLoadData();
+            return dtRoutingInfos;
+        }
+        private static DataTable GetRoutingOwnerInfoTable()
+        {
+            DataTable dtRoutingInfos = new DataTable();
+            dtRoutingInfos.Columns.Add("OwnerId", typeof(Int32));
+            dtRoutingInfos.Columns.Add("OwnerTpe", typeof(Int32));
+            return dtRoutingInfos;
+        }
+
 
         public IEnumerable<SaleEntityDefaultService> GetDefaultServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
         {
@@ -40,6 +82,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleEntityService", ref updateHandle);
         }
+
 
         #region Mappers
 

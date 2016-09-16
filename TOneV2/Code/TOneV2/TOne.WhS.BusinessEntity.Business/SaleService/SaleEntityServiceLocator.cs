@@ -40,8 +40,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public SaleEntityService GetCustomerZoneService(int customerId, int sellingProductId, long zoneId)
         {
             SaleEntityService saleEntityService;
+
             if (!HasZoneService(SalePriceListOwnerType.Customer, customerId, zoneId, out saleEntityService))
                 saleEntityService = GetCustomerInheritedZoneService(customerId, sellingProductId, zoneId);
+
             return saleEntityService;
         }
         public SaleEntityService GetCustomerInheritedZoneService(int customerId, int sellingProductId, long zoneId)

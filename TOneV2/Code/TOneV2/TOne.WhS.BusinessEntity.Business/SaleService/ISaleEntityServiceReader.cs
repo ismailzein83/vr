@@ -18,6 +18,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
     }
 
+    public class SaleEntityZoneServicesByOwner
+    {
+        public Dictionary<int, SaleEntityZoneServicesByZone> SaleEntityZoneServicesByCustomer { get; set; }
+        public Dictionary<int, SaleEntityZoneServicesByZone> SaleEntityZoneServicesByProduct { get; set; }
+    }
+
+
     public class SaleEntityDefaultServicesByOwner
     {
         public Dictionary<int, SaleEntityDefaultService> DefaultServicesByProduct { get; set; }

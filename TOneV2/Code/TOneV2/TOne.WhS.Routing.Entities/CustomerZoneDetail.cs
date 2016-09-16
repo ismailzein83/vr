@@ -22,10 +22,12 @@ namespace TOne.WhS.Routing.Entities
         public Decimal EffectiveRateValue { get; set; }
 
         public SalePriceListOwnerType RateSource { get; set; }
+
+        public HashSet<int> SaleEntityServiceIds { get; set; }
     }
 
     public class CustomerZoneDetailByZone : Dictionary<long, List<CustomerZoneDetail>>
-    {
+    { 
 
     }
 
