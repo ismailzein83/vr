@@ -25,17 +25,17 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
     }
 
     function defineScope() {
-        $scope.scopeModal = {};
+        $scope.scopeModel = {};
 
-        $scope.scopeModal.onViewRequiredPermissionReady = function (api) {
+        $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
             viewPermissionAPI = api;
             viewPermissionReadyDeferred.resolve();
         }
-        $scope.scopeModal.onStartNewInstanceRequiredPermissionReady = function (api) {
+        $scope.scopeModel.onStartNewInstanceRequiredPermissionReady = function (api) {
             startNewInstancePermissionAPI = api;
             startNewInstancePermissionReadyDeferred.resolve();
         }
-        $scope.scopeModal.onScheduleTaskRequiredPermissionReady = function (api) {
+        $scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
             scheduleTaskPermissionAPI = api;
             scheduleTaskPermissionReadyDeferred.resolve();
         }
@@ -49,12 +49,12 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
     }
 
     function load() {
-        $scope.scopeModal.isLoading = true;
+        $scope.scopeModel.isLoading = true;
         getBusinessProcessDefinition().then(function () {
             loadAllControls()
         }).catch(function () {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
-            $scope.scopeModal.isLoading = false;
+            $scope.scopeModel.isLoading = false;
         });
     }
 
@@ -63,7 +63,7 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
         return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission, loadScheduleTaskRequiredPermission]).then(function () {
 
         }).finally(function () {
-            $scope.scopeModal.isLoading = false;
+            $scope.scopeModel.isLoading = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
@@ -74,9 +74,9 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
         }
         function loadStaticData() {
 
-            $scope.scopeModal.title = businessProcessDefinitionEntity.Title;
-            $scope.scopeModal.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
-            $scope.scopeModal.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
+            $scope.scopeModel.title = businessProcessDefinitionEntity.Title;
+            $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
+            $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
         }
 
 
@@ -145,9 +145,9 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
 
     function buildBPEntityObjFromScope() {
         var obj = businessProcessDefinitionEntity;
-        obj.Title = $scope.scopeModal.title;
-        obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModal.MaxConcurrentWorkflows;
-        obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModal.NotVisibleInManagementScreen;
+        obj.Title = $scope.scopeModel.title;
+        obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
+        obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
         obj.Configuration.Security = {
             View: viewPermissionAPI.getData(),
             StartNewInstance: startNewInstancePermissionAPI.getData(),
@@ -160,7 +160,7 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
    
 
     function update() {
-        $scope.scopeModal.isLoading = true;
+        $scope.scopeModel.isLoading = true;
 
         return BusinessProcess_BPDefinitionAPIService.UpdateBPDefinition(buildBPEntityObjFromScope()).then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated(businessProcessDefinitionEntity.Title, response, 'Title')) {
@@ -171,7 +171,7 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
         }).finally(function () {
-            $scope.scopeModal.isLoading = false;
+            $scope.scopeModel.isLoading = false;
         });
     }
        

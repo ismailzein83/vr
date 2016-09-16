@@ -1,17 +1,17 @@
 ﻿<div vr-modalcontent width="'50%'" ng-controller="BusinessProcess_BP_TechnicalDefinitionEditorController">
     <vr-modalbody>
-        <vr-form name="formEditBPDefinition">
+        <vr-form name="formEditBPDefinition" vr-loader="scopeModel.isLoading">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModal.title" label="Title" isrequired="true"></vr-textbox>
+                            <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-switch value="scopeModal.NotVisibleInManagementScreen" label="Not Visible In Management"></vr-switch>
+                            <vr-switch value="scopeModel.NotVisibleInManagementScreen" label="Not Visible In Management"></vr-switch>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-textbox typeof="number" decimalprecision="0" value="scopeModal.MaxConcurrentWorkflows" label="Max Instances Per Runtime"></vr-textbox>
+                            <vr-textbox typeof="number" decimalprecision="0" value="scopeModel.MaxConcurrentWorkflows" label="Max Instances Per Runtime"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -19,21 +19,21 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-section title="View">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-section title="Start Instance">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onStartNewInstanceRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onStartNewInstanceRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-section title="Schedule Task">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onScheduleTaskRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onScheduleTaskRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
