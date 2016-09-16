@@ -24,7 +24,7 @@ namespace TOne.WhS.Sales.Business
             ApplyCalculatedRates(input.OwnerType, input.OwnerId, (int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
         }
 
-        private void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        private void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(ownerType, ownerId, sellingNumberPlanId, sellingProductId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
 
@@ -40,7 +40,7 @@ namespace TOne.WhS.Sales.Business
             draftManager.SaveDraft(ownerType, ownerId, newChanges);
         }
 
-        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, int policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             // Get the sale zones of the owner
             RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();

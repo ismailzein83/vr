@@ -27,8 +27,8 @@ namespace TOne.WhS.Routing.Entities
     }
     public class RPRoutingDatabaseInformation : RoutingDatabaseInformation
     {
-        public int DefaultPolicyId { get; set; }
-        public int[] SelectedPoliciesIds { get; set; }
+        public Guid DefaultPolicyId { get; set; }
+        public Guid[] SelectedPoliciesIds { get; set; }
     }
 
     public class RoutingDatabaseSettings

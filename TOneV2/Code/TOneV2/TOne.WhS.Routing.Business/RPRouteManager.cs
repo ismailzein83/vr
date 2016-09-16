@@ -55,12 +55,12 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
         }
 
-        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
+        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
         {
             return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null);
         }
 
-        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId)
+        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId)
         {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             dataManager.RoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
@@ -121,11 +121,11 @@ namespace TOne.WhS.Routing.Business
             if (filter == null)
                 return cachedConfigs.OrderBy(x => x.Title);
 
-            int defaultPolicyId;
+            Guid defaultPolicyId;
             var routingDatabase = GetLatestRoutingDatabase(filter.RoutingDatabaseId);
 
 
-            IEnumerable<int> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(routingDatabase.ID, out defaultPolicyId);
+            IEnumerable<Guid> selectedPolicyIds = this.GetRoutingDatabasePolicyIds(routingDatabase.ID, out defaultPolicyId);
             Func<RPRouteOptionPolicySetting, bool> filterExpression = (itm) => selectedPolicyIds.Contains(itm.ExtensionConfigurationId);
 
             IEnumerable<RPRouteOptionPolicySetting> cachedFilteredConfigs = cachedConfigs.FindAllRecords(filterExpression);
@@ -183,7 +183,7 @@ namespace TOne.WhS.Routing.Business
             return productRoutingDatabases.First();
         }
 
-        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, int policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId)
+        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId)
         {
             return new RPRouteDetail()
             {
@@ -241,7 +241,7 @@ namespace TOne.WhS.Routing.Business
             return detailEntity;
         }
 
-        private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<int, IEnumerable<RPRouteOption>> dicRouteOptions, int policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId)
+        private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<Guid, IEnumerable<RPRouteOption>> dicRouteOptions, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId)
         {
             if (dicRouteOptions == null || !dicRouteOptions.ContainsKey(policyConfigId))
                 return null;
@@ -250,7 +250,7 @@ namespace TOne.WhS.Routing.Business
             return routeOptionDetails.MapRecords(x => RPRouteOptionMapper(x, systemCurrencyId, toCurrencyId));
         }
 
-        private IEnumerable<int> GetRoutingDatabasePolicyIds(int routingDbId, out int defaultPolicyId)
+        private IEnumerable<Guid> GetRoutingDatabasePolicyIds(int routingDbId, out Guid defaultPolicyId)
         {
             var routingDbManager = new RoutingDatabaseManager();
             var routingDbInfoFilter = new RoutingDatabaseInfoFilter() { ProcessType = RoutingProcessType.RoutingProductRoute };

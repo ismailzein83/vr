@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.Business
         private int? _rateCalculationCostColumnConfigId;
         private RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionManager(int routingDatabaseId, int policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        public ZoneRouteOptionManager(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
             _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId);

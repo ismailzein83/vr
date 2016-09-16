@@ -10,7 +10,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public int RoutingDatabaseId { get; set; }
 
-        public int PolicyConfigId { get; set; }
+        public Guid PolicyConfigId { get; set; }
 
         public int NumberOfOptions { get; set; }
 

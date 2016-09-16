@@ -18,7 +18,7 @@ namespace TOne.WhS.Routing.Entities
 
         public Dictionary<int, RPRouteOptionSupplier> OptionsDetailsBySupplier { get; set; }
 
-        public Dictionary<int, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }
+        public Dictionary<Guid, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }
     }
     public class RPRouteBatch
     {

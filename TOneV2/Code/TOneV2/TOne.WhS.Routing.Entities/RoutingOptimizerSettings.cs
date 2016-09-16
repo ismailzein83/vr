@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Entities
 
     public abstract class RoutingOptimizerItemSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
     }
 
     public class QualityRoutingOptimizerItemSettings : RoutingOptimizerItemSettings
