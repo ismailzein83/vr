@@ -10,20 +10,22 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SupplierZoneServicesMigrator : Migrator<SourceRate, SupplierZoneService>
+    public class SaleZoneServicesMigrator : Migrator<SourceRate, SaleEntityZoneService>
     {
-        SupplierZoneServicesDBSyncDataManager dbSyncDataManager;
+        SaleZoneServicesDBSyncDataManager dbSyncDataManager;
         SourceZoneServiceDataManager dataManager;
-        Dictionary<string, SupplierZone> allSupplierZones;
+        Dictionary<string, SaleZone> allSaleZones;
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
-        public SupplierZoneServicesMigrator(MigrationContext context)
+        public SaleZoneServicesMigrator(MigrationContext context)
             : base(context)
         {
-            dbSyncDataManager = new SupplierZoneServicesDBSyncDataManager(Context.UseTempTables);
+            dbSyncDataManager = new SaleZoneServicesDBSyncDataManager(Context.UseTempTables);
             dataManager = new SourceZoneServiceDataManager(Context.ConnectionString);
             TableName = dbSyncDataManager.GetTableName();
-            var dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
-            allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
+
+            var dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
+            allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
+
             var dbTableZoneServicesConfig = Context.DBTables[DBTableName.ZoneServiceConfig];
             allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
 
@@ -31,32 +33,32 @@ namespace TOne.WhS.DBSync.Business
 
         public override void Migrate(MigrationInfoContext context)
         {
-            SupplierZoneServiceManager manager = new SupplierZoneServiceManager();
+            SaleEntityServiceManager manager = new SaleEntityServiceManager();
             context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
-            context.GeneratedIdsInfoContext.TypeId = manager.GetSupplierZoneServiceTypeId();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSaleEntityServiceTypeId();
             base.Migrate(context);
         }
 
-        public override void AddItems(List<SupplierZoneService> itemsToAdd)
+        public override void AddItems(List<SaleEntityZoneService> itemsToAdd)
         {
-            dbSyncDataManager.ApplySupplierZoneServicesToTemp(itemsToAdd, TotalRowsSuccess + 1);
+            dbSyncDataManager.ApplySaleZoneServicesToTemp(itemsToAdd, TotalRowsSuccess + 1);
             TotalRowsSuccess = TotalRowsSuccess + itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceZoneServices(false);
+            return dataManager.GetSourceZoneServices(true);
         }
 
-        public override SupplierZoneService BuildItemFromSource(SourceRate sourceItem)
+        public override SaleEntityZoneService BuildItemFromSource(SourceRate sourceItem)
         {
-            SupplierZone supplierZone = null;
+            SaleZone saleZone = null;
 
 
-            if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
-                allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out supplierZone);
+            if (allSaleZones != null && sourceItem.ZoneId.HasValue)
+                allSaleZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out saleZone);
 
-            if (supplierZone != null && sourceItem.BeginEffectiveDate.HasValue)
+            if (saleZone != null && sourceItem.BeginEffectiveDate.HasValue)
             {
                 List<ZoneService> effectiveServices = new List<ZoneService>();
 
@@ -69,13 +71,13 @@ namespace TOne.WhS.DBSync.Business
                         });
                 }
 
-                return new SupplierZoneService
+                return new SaleEntityZoneService
                 {
                     BED = sourceItem.BeginEffectiveDate.Value,
                     EED = sourceItem.EndEffectiveDate,
-                    EffectiveServices = effectiveServices,
-                    ReceivedServices = effectiveServices,
-                    ZoneId = supplierZone.SupplierZoneId,
+                    Services = effectiveServices,
+                    PriceListId = sourceItem.PriceListId.Value,
+                    ZoneId = saleZone.SaleZoneId,
                     SourceId = sourceItem.SourceId
                 };
             }
@@ -94,7 +96,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourceRate> onItemLoaded)
         {
-            dataManager.LoadSourceItems(false, onItemLoaded);
+            dataManager.LoadSourceItems(true, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

@@ -21,5 +21,15 @@ namespace TOne.WhS.BusinessEntity.Business
             var dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
             return dataManager.GetZoneServicesEffectiveAfter(ownerType, ownerId, minimumDate);
         }
+
+        public int GetSaleEntityServiceTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleEntityServiceType());
+        }
+
+        public Type GetSaleEntityServiceType()
+        {
+            return this.GetType();
+        }
     }
 }

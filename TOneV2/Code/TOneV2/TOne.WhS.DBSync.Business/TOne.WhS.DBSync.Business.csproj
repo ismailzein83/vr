@@ -99,6 +99,7 @@
     <Compile Include="Migrators\Rules\RouteRuleBaseMigrator.cs" />
     <Compile Include="Migrators\Rules\RuleMigrator.cs" />
     <Compile Include="Migrators\SupplierPriceListMigrator.cs" />
+    <Compile Include="Migrators\SaleZoneServicesMigrator.cs" />
     <Compile Include="Migrators\SupplierZoneServicesMigrator.cs" />
     <Compile Include="Migrators\SupplierRateMigrator.cs" />
     <Compile Include="Migrators\SupplierZoneMigrator.cs" />

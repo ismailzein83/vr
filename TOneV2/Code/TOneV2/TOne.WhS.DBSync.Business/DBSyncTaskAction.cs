@@ -142,6 +142,7 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.CustomerZone:
                         iDBSyncDataManager = new CustomerZoneDBSyncDataManager(context.UseTempTables, context.SellingProductId);
                         break;
+
                     case DBTableName.SwitchConnectivity:
                         iDBSyncDataManager = new SwitchConnectivityDBSyncDataManager(context.UseTempTables);
                         break;
@@ -153,6 +154,9 @@ namespace TOne.WhS.DBSync.Business
                         break;
                     case DBTableName.SupplierZoneService:
                         iDBSyncDataManager = new SupplierZoneServicesDBSyncDataManager(context.UseTempTables);
+                        break;
+                    case DBTableName.SaleEntityService:
+                        iDBSyncDataManager = new SaleZoneServicesDBSyncDataManager(context.UseTempTables);
                         break;
 
                 }
@@ -302,6 +306,10 @@ namespace TOne.WhS.DBSync.Business
                     break;
                 case DBTableName.SupplierZoneService:
                     imgrator = new  SupplierZoneServicesMigrator(context);
+                    break;
+
+                case DBTableName.SaleEntityService:
+                    imgrator = new SaleZoneServicesMigrator(context);
                     break;
             }
 

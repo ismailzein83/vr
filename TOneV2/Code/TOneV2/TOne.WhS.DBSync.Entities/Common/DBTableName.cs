@@ -71,6 +71,9 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SupplierZoneService")]
         SupplierZoneService,
 
+        [Description("SaleEntityService")]
+        SaleEntityService,
+
         [Description("Rule")]
         Rule,
 
