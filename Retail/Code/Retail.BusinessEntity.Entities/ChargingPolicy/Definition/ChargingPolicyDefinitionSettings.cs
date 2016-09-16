@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class ChargingPolicyDefinitionSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public virtual string ChargingPolicyEditor { get; set; }
 
@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class ChargingPolicyDefinitionPart
     {        
-        public int PartTypeId { get; set; }
+        public Guid PartTypeId { get; set; }
 
         public string PartTypeTitle { get; set; }
 

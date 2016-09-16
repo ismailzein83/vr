@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class ChargingPolicyRateValue : ChargingPolicyPart
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public abstract void Execute(IChargingPolicyRateValueContext context);
         

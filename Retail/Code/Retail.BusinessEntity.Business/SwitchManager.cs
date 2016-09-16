@@ -137,7 +137,7 @@ namespace Retail.BusinessEntity.Business
             };
         }
 
-        private string GetSwitchSettingsTypeName(int configId)
+        private string GetSwitchSettingsTypeName(Guid configId)
         {
             IEnumerable<ExtensionConfiguration> settingsConfigs = this.GetSwitchSettingsTemplateConfigs();
             if (settingsConfigs == null)

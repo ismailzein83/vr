@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class VolumeDefinitionSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public virtual string VolumeSettingsEditor { get; set; }
     }

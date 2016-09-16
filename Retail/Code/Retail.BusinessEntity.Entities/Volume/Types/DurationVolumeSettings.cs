@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class DurationVolumeSettings : VolumeSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public abstract DurationVolumeBalance CreateBalance(IDurationVolumeCreateBalanceContext context);
 

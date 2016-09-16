@@ -9,7 +9,7 @@ namespace Retail.SMS.Entities
 {
     public abstract class TextMessageVolumeSettings : VolumeSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public abstract TextMessageVolumeBalance CreateBalance(ITextMessageVolumeCreateBalanceContext context);
 

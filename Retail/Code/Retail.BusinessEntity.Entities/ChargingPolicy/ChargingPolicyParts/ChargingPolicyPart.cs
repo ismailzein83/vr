@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class ChargingPolicyPart
     {
-        public int PartTypeId { get; set; }
+        public Guid PartTypeId { get; set; }
 
         public abstract string PartTypeExtensionName
         {

@@ -117,7 +117,7 @@ namespace Retail.BusinessEntity.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<ChargingPolicyDefinitionConfig>(ChargingPolicyDefinitionConfig.EXTENSION_TYPE);
         }
-        public IEnumerable<ChargingPolicyPartConfig> GetChargingPolicyPartTemplateConfigs(int partTypeConfigId)
+        public IEnumerable<ChargingPolicyPartConfig> GetChargingPolicyPartTemplateConfigs(Guid partTypeConfigId)
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             var partType = GetChargingPolicyPartTypeTemplateConfigs().FindRecord(itm => itm.ExtensionConfigurationId == partTypeConfigId);
