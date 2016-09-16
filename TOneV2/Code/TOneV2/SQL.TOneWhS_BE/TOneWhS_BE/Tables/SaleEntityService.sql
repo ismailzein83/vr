@@ -5,10 +5,13 @@
     [Services]    NVARCHAR (MAX) NOT NULL,
     [BED]         DATETIME       NOT NULL,
     [EED]         DATETIME       NULL,
+    [SourceID]    VARCHAR (50)   NULL,
     [timestamp]   ROWVERSION     NULL,
     CONSTRAINT [PK_SaleZoneService] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleZoneService_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 
