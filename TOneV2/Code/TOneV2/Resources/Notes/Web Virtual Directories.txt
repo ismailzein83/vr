@@ -23,7 +23,6 @@
 	WhS_SupplierPriceList	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SupplierPriceList.Web\WhS_SupplierPriceList	
 	WhS_Sales				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Sales.Web\WhS_Sales
 	WhS_Routing				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
-	WhS_CDRProcessing		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRProcessing.Web\WhS_CDRProcessing
 	VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 	Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 	WhS_Analytics		    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Analytics.Web\WhS_Analytics
