@@ -87,9 +87,6 @@ app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService
             if (ctrl.isNormalRateGrid)
                 gridDrillDownTabs.setDrillDownExtensionObject(dataItem);
 
-            if (dataItem.Entity.IsCurrentRateInherited === true)
-                dataItem.Entity.CurrentRate += ' (Inherited)';
-
             var rateChangeType = UtilsService.getEnum(WhS_BE_RateChangeTypeEnum, 'value', dataItem.Entity.ChangeType);
             
             if (rateChangeType != undefined) {

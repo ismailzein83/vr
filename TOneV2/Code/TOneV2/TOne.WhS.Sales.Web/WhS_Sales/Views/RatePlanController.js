@@ -152,9 +152,26 @@
                     return;
 
                 VRNotificationService.showConfirmation('Changing the currency will reset all new rates. Are you sure you want to proceed?').then(function (isConfirmed) {
-                    if (isConfirmed) {
-                        WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), selectedId).then(function () {
-                            draftCurrencyId = selectedId;
+                    if (isConfirmed)
+                    {
+                        var promises = [];
+
+                        var saveChangesPromise = saveChanges(false);
+                        promises.push(saveChangesPromise);
+
+                        var deleteChangedRatesDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(deleteChangedRatesDeferred.promise);
+
+                        saveChangesPromise.then(function () {
+                            WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), selectedId).then(function () {
+                                draftCurrencyId = selectedId;
+                                deleteChangedRatesDeferred.resolve();
+                            }).catch(function (error) {
+                                deleteChangedRatesDeferred.reject(error);
+                            });
+                        });
+
+                        UtilsService.waitMultiplePromises(promises).then(function () {
                             loadGrid();
                         });
                     }
@@ -235,9 +252,23 @@
 
                     VRNotificationService.showSuccess("Settings saved");
 
-                    loadGrid().catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
+                    var promises = [];
+
+                    var saveChangesPromise = saveChanges(false);
+                    promises.push(saveChangesPromise);
+
+                    var loadGridDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadGridDeferred.promise);
+
+                    saveChangesPromise.then(function () {
+                        loadGrid().then(function () {
+                            loadGridDeferred.resolve();
+                        }).catch(function (error) {
+                            loadGridDeferred.reject(error);
+                        });
                     });
+
+                    UtilsService.waitMultiplePromises(promises);
                 };
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdated);
             };
@@ -250,9 +281,23 @@
                     $scope.showApplyButton = true;
                     VRNotificationService.showSuccess("Pricing settings saved");
 
-                    loadGrid().catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
+                    var promises = [];
+
+                    var saveChangesPromise = saveChanges(false);
+                    promises.push(saveChangesPromise);
+
+                    var loadGridDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadGridDeferred.promise);
+
+                    saveChangesPromise.then(function () {
+                        loadGrid().then(function () {
+                            loadGridDeferred.resolve();
+                        }).catch(function (error) {
+                            loadGridDeferred.reject(error);
+                        });
                     });
+
+                    UtilsService.waitMultiplePromises(promises);
                 };
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
@@ -263,46 +308,62 @@
                 var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to apply the calculated rates?");
                 promises.push(confirmPromise);
 
+                var saveChangesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(saveChangesDeferred.promise);
+
                 var applyDeferred = UtilsService.createPromiseDeferred();
                 promises.push(applyDeferred.promise);
 
                 confirmPromise.then(function (confirmed) {
-                    if (confirmed) {
-                        $scope.showApplyButton = false;
-
-                        var input = {
-                            OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
-                            OwnerId: getOwnerId(),
-                            EffectiveOn: new Date(),
-                            RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
-                            PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
-                            NumberOfOptions: $scope.numberOfOptions,
-                            CostCalculationMethods: settings ? settings.costCalculationMethods : null,
-                            SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
-                            RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
-                            CurrencyId: getCurrencyId()
-                        };
-
-                        WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function ()
+                    if (confirmed)
+                    {
+                        saveChanges(false).then(function ()
                         {
-                            applyDeferred.resolve();
-                            VRNotificationService.showSuccess("Rates applied");
-                            pricingSettings = null;
-                            $scope.showCancelButton = true;
-                            
-                            loadGrid().catch(function (error) {
-                                VRNotificationService.notifyException(error, $scope);
+                            saveChangesDeferred.resolve();
+
+                            var input = getApplyCalculatedRatesInput();
+
+                            WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
+                                applyDeferred.resolve();
+                            }).catch(function (error) {
+                                applyDeferred.reject(error);
                             });
 
                         }).catch(function (error) {
-                            applyDeferred.reject(error);
-                            VRNotificationService.notifyException(error, $scope);
+                            saveChangesDeferred.reject(error);
+                        });
+
+                        UtilsService.waitMultiplePromises([saveChangesDeferred.promise, applyDeferred.promise]).then(function () {
+                            VRNotificationService.showSuccess("Rates applied");
+                            pricingSettings = null;
+                            $scope.showApplyButton = false;
+                            $scope.showCancelButton = true;
+
+                            loadGrid().catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            });
                         });
                     }
                     else {
+                        saveChangesDeferred.resolve();
                         applyDeferred.resolve();
                     }
                 });
+
+                function getApplyCalculatedRatesInput() {
+                    return {
+                        OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
+                        OwnerId: getOwnerId(),
+                        EffectiveOn: new Date(),
+                        RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
+                        PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
+                        NumberOfOptions: $scope.numberOfOptions,
+                        CostCalculationMethods: settings ? settings.costCalculationMethods : null,
+                        SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
+                        RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
+                        CurrencyId: getCurrencyId()
+                    };
+                }
 
                 return UtilsService.waitMultiplePromises(promises);
             };
