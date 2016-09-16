@@ -12,7 +12,8 @@ var appControllers = angular.module('appControllers', [
     'ivh.treeview',
     'angularTreeview',
     'datetimepicker',
-    'ui.codemirror'
+    'ui.codemirror',
+    'ngWYSIWYG'
 ]);
 
 

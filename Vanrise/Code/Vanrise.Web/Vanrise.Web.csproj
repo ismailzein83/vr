@@ -244,6 +244,7 @@
     <Content Include="Client\Javascripts\Directives\Inputs\FilterEditor\vr-filtereditor-enum.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\labelSwitcher\vr-switcher-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\labelSwitcher\vr-labelswitcher-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Editor\vr-editor-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\TextBoxMultiple\vr-textbox-multiple-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\TimeSpan\vr-timespan-directive.js" />
     <Content Include="Client\Javascripts\Directives\List\vr-datalist-directive.js" />
@@ -371,6 +372,7 @@
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\style.css" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\themes\default\throbber.gif" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\src\vakata-jstree.js" />
+    <Content Include="Client\Libraries\AngularExtensions\wysiwyg\wysiwyg.min.js" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\angular.treeview.js" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\css\angular.treeview.css" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\img\file.png" />
@@ -1210,6 +1212,7 @@
     <Content Include="Client\Styles\angular-notify.css" />
     <Content Include="Client\Styles\angular-ui-switch.css" />
     <Content Include="Client\Styles\custom.css" />
+    <Content Include="Client\Styles\editor.min.css" />
     <Content Include="Client\Styles\fonts\BoldItalic\OpenSans-BoldItalic.svg" />
     <Content Include="Client\Styles\fonts\Bold\OpenSans-Bold.svg" />
     <Content Include="Client\Styles\fonts\ExtraBoldItalic\OpenSans-ExtraBoldItalic.svg" />
@@ -1220,6 +1223,12 @@
     <Content Include="Client\Styles\fonts\Regular\OpenSans-Regular.svg" />
     <Content Include="Client\Styles\fonts\SemiboldItalic\OpenSans-SemiboldItalic.svg" />
     <Content Include="Client\Styles\fonts\Semibold\OpenSans-Semibold.svg" />
+    <Content Include="Client\Styles\images\header-bg.gif" />
+    <Content Include="Client\Styles\images\header-bg.orig.gif" />
+    <Content Include="Client\Styles\images\icons.old.png" />
+    <Content Include="Client\Styles\images\icons.png" />
+    <Content Include="Client\Styles\images\logo.png" />
+    <Content Include="Client\Styles\images\resize.gif" />
     <Content Include="Client\Styles\ivh-treeview.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Styles\loader.css" />

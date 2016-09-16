@@ -2520,3 +2520,9 @@ div[validationcontainer]{
 .vr-multiple  .glyphicon-plus-sign{
     top:7px
 }
+/*wysiwyg-edit*/
+wysiwyg-edit .tinyeditor .sizer {
+    min-height: 100px;
+    height: 200px;
+    position: relative;
+}
