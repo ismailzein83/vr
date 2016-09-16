@@ -465,20 +465,20 @@ set identity_insert [genericdata].[DataTransformationStepConfig] off;
 --[common].[ExtensionConfiguration]-----------------4001	to 5000---------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
+;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (4001,'VR_GenericData_VRObjectTypes_DataRecordType','Data Record Type','VR_Common_ObjectType','{"Editor":"vr_genericdata_datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}','2016-08-01 10:04:43.020'),
 (4002,'VR_Generic_DataRecordFieldFormula_ParentBusinessEntity','Parent Business Entity','VR_Generic_DataRecordFieldFormula','{"Editor":"vr-genericdata-datarecordtypefields-formula-parentbusinessentity"}','2016-06-30 15:38:26.300'),
 (4003,'VR_GenericData_VRObjectTypes_DataRecordField','Data Record Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator',null,'2016-08-03 11:35:09.467')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
+)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
 merge	[common].[ExtensionConfiguration] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[OldID] = s.[OldID]
 when matched then
 	update set
 	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+	insert([OldID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);

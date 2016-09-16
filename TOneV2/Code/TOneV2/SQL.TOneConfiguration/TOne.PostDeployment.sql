@@ -812,7 +812,7 @@ set identity_insert [genericdata].[GenericRuleDefinition] off;
 --[common].[ExtensionConfiguration]-----------------1001	to 2000---------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
+;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1001,'WhS_BE_SupplierZoneGroup_Specific','Specific Suppliers Zones','WhS_BE_SupplierZoneGroup','{"Editor":"vr-whs-be-supplierzonegroup-selective","RuntimeEditor":""}','2016-06-06 11:08:44.103'),
@@ -832,16 +832,16 @@ as (select * from (values
 (3005,'ReplaceString','Replace String',	'VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-replacestring"}','2016-08-11 17:34:11.917'),
 (3006,'Substring','Substring',	'VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-substring"}','2016-08-11 17:34:11.917')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
+)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
 merge	[common].[ExtensionConfiguration] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[OldID] = s.[OldID]
 when matched then
 	update set
 	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+	insert([OldID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------

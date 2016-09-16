@@ -147,7 +147,7 @@ when not matched by target then
 --[common].[ExtensionConfiguration]-------------------1		to 1000---------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
+;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'VR_Analytic_WidgetSettings_Grid','Grid','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-grid-definition","RuntimeEditor":"vr-analytic-datagrid-analyticrecords"}','2016-04-22 12:47:10.867'),
@@ -163,13 +163,13 @@ as (select * from (values
 (14,'VR_Analytic_Report_MeasureStyle_Compare','Compare Condition','Analytic_MeasureStyleRuleTemplates','{"Editor":"vr-analytic-measurestyle-stylerulecondition-compare","RuntimeEditor":""}','2016-05-27 16:52:56.683'),
 (15,'VR_Analytic_Report_MeasureStyle_Range','Range Condition','Analytic_MeasureStyleRuleTemplates','{"Editor":"vr-analytic-measurestyle-stylerulecondition-range","RuntimeEditor":""}','2016-05-27 16:53:16.430')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
+)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
 merge	[common].[ExtensionConfiguration] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[OldID] = s.[OldID]
 when matched then
 	update set
 	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+	insert([OldID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
