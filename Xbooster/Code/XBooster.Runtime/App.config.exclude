@@ -66,6 +66,7 @@
     <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
     
     <add key="IsRuntimeService" value="true"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
   </appSettings>
 
   <startup>
