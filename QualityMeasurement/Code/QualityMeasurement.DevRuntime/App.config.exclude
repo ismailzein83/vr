@@ -44,6 +44,7 @@
     <add key="QM_BE_DBConnStringKey" value="ConfigurationDBConnString" />
     <add key="QM_CLITester_DBConnStringKey" value="ConfigurationDBConnString" />
     <add key="IsRuntimeService" value="true" />
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="ConnectorEmail" value="WYtp0l4OqaBUNquwGoGhztgUI8jFe5CRaNrzLrr3ESU=" />
     <add key="ConnectorPassword" value="XBJnXe8lZBfUxP9BpalLAg==" />
     <add key="ConnectorUrl" value="dCw8OSmS14MSHGcMFrmxOG+9zd0qm3XhUBY0lfvvRhM=" />
