@@ -65,25 +65,25 @@ namespace TestRuntime.Tasks
 
         }
 
-        private static void RunCompleteProductRouteBuild()
-        {
-            BPInstanceManager bpClient = new BPInstanceManager();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
-                {
-                    EffectiveOn = DateTime.Now,
-                    RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
-                    //CodePrefixLength = 1,
-                    IsFuture = false,
-                    SaleZoneRange = 1000,
-                    SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { 
-                        new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27 }, 
-                        new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 }, 
-                        new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 30 } },
-                    RoutingProcessType = RoutingProcessType.RoutingProductRoute
-                }
-            });
-        }
+        //private static void RunCompleteProductRouteBuild()
+        //{
+        //    BPInstanceManager bpClient = new BPInstanceManager();
+        //    bpClient.CreateNewProcess(new CreateProcessInput
+        //    {
+        //        InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
+        //        {
+        //            EffectiveOn = DateTime.Now,
+        //            RoutingDatabaseType = TOne.WhS.Routing.Entities.RoutingDatabaseType.Current,
+        //            //CodePrefixLength = 1,
+        //            IsFuture = false,
+        //            SaleZoneRange = 1000,
+        //            SupplierZoneRPOptionPolicies = new List<SupplierZoneToRPOptionPolicy>() { 
+        //                new SupplierZoneToRPOptionHighestRatePolicy() { ConfigId = 27 }, 
+        //                new SupplierZoneToRPOptionLowestRatePolicy() { ConfigId = 29 }, 
+        //                new SupplierZoneToRPOptionAverageRatePolicy() { ConfigId = 30 } },
+        //            RoutingProcessType = RoutingProcessType.RoutingProductRoute
+        //        }
+        //    });
+        //}
     }
 }
