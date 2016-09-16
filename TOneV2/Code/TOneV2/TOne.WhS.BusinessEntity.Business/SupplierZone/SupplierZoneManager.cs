@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Caching;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
@@ -132,8 +134,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
                () =>
                {
-                   ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-                   return dataManager.GetSupplierZones().ToDictionary(itm => itm.SupplierZoneId, itm => itm);
+                   DistributedCacher cacher = new DistributedCacher();
+                   Func<SupplierZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierZoneCachedObjectCreationHandler(); };
+                   return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SupplierZone>>("Distributed_GetSupplierZones", objectCreationHandler);
                });
         }
 
@@ -180,6 +183,19 @@ namespace TOne.WhS.BusinessEntity.Business
             int supplierId = supplierZone.SupplierId;
             supplierZoneDetail.SupplierName = caManager.GetCarrierAccountName(supplierId);
             return supplierZoneDetail;
+        }
+
+        private class SupplierZoneCachedObjectCreationHandler : CachedObjectCreationHandler<Dictionary<long, SupplierZone>>
+        {
+            public override Dictionary<long, SupplierZone> CreateObject()
+            {
+                ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+                List<SupplierZone> allSupplierZones = dataManager.GetSupplierZones();
+                if (allSupplierZones == null)
+                    return null;
+
+                return allSupplierZones.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
+            }
         }
 
         #endregion

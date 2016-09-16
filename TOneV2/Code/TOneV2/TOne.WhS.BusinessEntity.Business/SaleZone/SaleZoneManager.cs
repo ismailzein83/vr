@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Caching;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
@@ -205,17 +207,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
             {
-                ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-                IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
-                Dictionary<long, SaleZone> allSaleZonesDic = new Dictionary<long, SaleZone>();
-                if (allSaleZones != null)
-                {
-                    foreach (var saleZone in allSaleZones)
-                    {
-                        allSaleZonesDic.Add(saleZone.SaleZoneId, saleZone);
-                    }
-                }
-                return allSaleZonesDic;
+                DistributedCacher cacher = new DistributedCacher();
+                Func<SaleZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleZoneCachedObjectCreationHandler(); };
+                return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SaleZone>>("Distributed_GetAllSaleZones", objectCreationHandler);
             });
         }
 
@@ -251,6 +245,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name, SellingNumberPlanId = saleZone.SellingNumberPlanId };
         }
 
+
+        private class SaleZoneCachedObjectCreationHandler : CachedObjectCreationHandler<Dictionary<long, SaleZone>>
+        {
+            public override Dictionary<long, SaleZone> CreateObject()
+            {
+                ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+                IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
+                if (allSaleZones == null)
+                    return null;
+
+                return allSaleZones.ToDictionary(itm => itm.SaleZoneId, itm => itm);
+            }
+        }
         #endregion
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

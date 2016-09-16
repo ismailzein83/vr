@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Caching.Runtime;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -37,8 +37,12 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
 
-                ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-                List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(ownerType, ownerId, this._effectiveOn);
+                DistributedCacher cacher = new DistributedCacher();
+                Func<SaleRateCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleRateCachedObjectCreationHandler(ownerType, ownerId, this._effectiveOn); };
+                List<SaleRate> saleRates = cacher.GetOrCreateObject<SaleRateCacheManager, List<SaleRate>>(String.Format("Distributed_GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, _effectiveOn.Date), objectCreationHandler);
+                
+                if (saleRates == null)
+                    return null;
 
                 foreach (SaleRate saleRate in saleRates)
                 {

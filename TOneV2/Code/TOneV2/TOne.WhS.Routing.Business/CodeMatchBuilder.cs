@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Caching;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
@@ -58,7 +60,7 @@ namespace TOne.WhS.Routing.Business
             SaleCodeIterator masterCodeIterator = GetSellingNumberPlanSaleCodeIterator(masterNumberPlan.SellingNumberPlanId, effectiveOn);
             if (masterCodeIterator != null)
                 codeMatch.MasterPlanCodeMatch = masterCodeIterator.GetCodeMatch(number, false);
-            if(customerId.HasValue)
+            if (customerId.HasValue)
             {
                 var carrierAccountManager = new CarrierAccountManager();
                 var customerNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerId.Value);
@@ -142,7 +144,7 @@ namespace TOne.WhS.Routing.Business
             foreach (var saleCodeIterator in saleCodeIterators)
             {
                 var saleCodeMatch = saleCodeIterator.GetCodeMatch(code, isDistinctFromSaleCodes);
-                if(saleCodeMatch != null)
+                if (saleCodeMatch != null)
                     saleCodeMatches.Add(saleCodeMatch);
             }
             if (saleCodeMatches.Count > 0)
@@ -152,12 +154,12 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierCodeIterator in supplierCodeIterators)
                 {
                     SupplierCodeMatch supplierCodeMatch = supplierCodeIterator.GetCodeMatch(code);
-                    if(supplierCodeMatch != null)
+                    if (supplierCodeMatch != null)
                     {
                         SupplierZoneDetail supplierZoneDetail;
                         if (supplierZoneDetailsByZone.TryGetValue(supplierCodeMatch.SupplierZoneId, out supplierZoneDetail))
                         {
-                            if(supplierZoneDetail == null)
+                            if (supplierZoneDetail == null)
                             {
                                 //TODO: log a business error here
                                 continue;
@@ -186,10 +188,10 @@ namespace TOne.WhS.Routing.Business
 
         private SaleCodeIterator GetCustomerSaleCodeIterator(int customerId, DateTime effectiveOn)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();         
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerId);
             return GetSellingNumberPlanSaleCodeIterator(sellingNumberPlanId, effectiveOn);
-           
+
         }
 
         private SaleCodeIterator GetSellingNumberPlanSaleCodeIterator(int sellingNumberPlanId, DateTime effectiveOn)
@@ -198,16 +200,20 @@ namespace TOne.WhS.Routing.Business
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>();
             return cacheManager.GetOrCreateObject(cacheName,
                 () =>
-                {                    
-                    SaleCodeManager saleCodeManager = new SaleCodeManager();
-                    List<SaleCode> customerSaleCodes = saleCodeManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
-                    var cachedCodes = customerSaleCodes.Select(code => cacheManager.CacheAndGetCode(code));
+                {
+                    DistributedCacher cacher = new DistributedCacher();
+                    Func<SaleCodeCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleCodeCachedObjectCreationHandler(sellingNumberPlanId, effectiveOn); };
+                    List<SaleCode> customerSaleCodes = cacher.GetOrCreateObject<SaleCodeCacheManager, List<SaleCode>>(String.Format("Distributed_GetSellingNumberPlanSaleCodes_{0}_{1:MM/dd/yy}", sellingNumberPlanId, effectiveOn.Date), objectCreationHandler);
+
                     if (customerSaleCodes != null)
+                    {
+                        var cachedCodes = customerSaleCodes.Select(code => cacheManager.CacheAndGetCode(code));
                         return new SaleCodeIterator()
                         {
                             CodeIterator = new CodeIterator<SaleCode>(cachedCodes),
                             SellingNumberPlanId = sellingNumberPlanId
                         };
+                    }
                     else
                         return null;
                 });
@@ -220,20 +226,23 @@ namespace TOne.WhS.Routing.Business
             return cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
-                   SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
-                   List<SupplierCode> supplierCodes = supplierCodeManager.GetSupplierCodes(supplierId, effectiveOn);
-                   var cachedCodes = supplierCodes.Select(code => cacheManager.CacheAndGetCode(code));
+                   DistributedCacher cacher = new DistributedCacher();
+                   Func<SupplierCodeCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierCodeCachedObjectCreationHandler(supplierId, effectiveOn); };
+                   List<SupplierCode> supplierCodes = cacher.GetOrCreateObject<SupplierCodeCacheManager, List<SupplierCode>>(String.Format("Distributed_GetSupplierCodes_{0}_{1:MM/dd/yy}", supplierId, effectiveOn.Date), objectCreationHandler);
+
                    if (supplierCodes != null)
+                   {
+                       var cachedCodes = supplierCodes.Select(code => cacheManager.CacheAndGetCode(code));
                        return new SupplierCodeIterator()
                        {
                            CodeIterator = new CodeIterator<SupplierCode>(cachedCodes),
                            SupplierId = supplierId
                        };
+                   }
                    else
                        return null;
                });
         }
-
         #endregion
     }
 }

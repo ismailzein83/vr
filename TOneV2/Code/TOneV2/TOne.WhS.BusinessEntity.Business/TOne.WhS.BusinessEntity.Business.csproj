@@ -52,6 +52,9 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching.Runtime">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -105,9 +108,11 @@
     <Compile Include="RoutingProducts\SaleEntityRoutingProductCacheManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadAllNoCache.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadWithCache.cs" />
+    <Compile Include="SaleCode\SaleCodeCachedObjectCreationHandler.cs" />
     <Compile Include="SaleRate\FutureSaleRateReadWithCache.cs" />
     <Compile Include="SaleRate\ISaleRateReader.cs" />
     <Compile Include="SaleCode\SaleCodeCacheManager.cs" />
+    <Compile Include="SaleRate\SaleRateCachedObjectCreationHandler.cs" />
     <Compile Include="SaleRate\SaleRateCacheManager.cs" />
     <Compile Include="SaleRate\SaleRateReadAllNoCache.cs" />
     <Compile Include="SaleRate\SaleRateReadWithCache.cs" />
@@ -139,10 +144,12 @@
     <Compile Include="Service\SaleEntityServiceLocator.cs" />
     <Compile Include="Service\SaleEntityServiceManager.cs" />
     <Compile Include="Service\SaleEntityServiceReadWithCache.cs" />
+    <Compile Include="SupplierCode\SupplierCodeCachedObjectCreationHandler.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierCode\SupplierCodeManager.cs" />
     <Compile Include="SupplierPriceList\SupplierPriceListManager.cs" />
+    <Compile Include="SupplierRate\SupplierRateCachedObjectCreationHandler.cs" />
     <Compile Include="SupplierRate\SupplierRateCacheManager.cs" />
     <Compile Include="SupplierRate\SupplierRateManager.cs" />
     <Compile Include="SupplierRate\SupplierRateReadAllNoCache.cs" />
