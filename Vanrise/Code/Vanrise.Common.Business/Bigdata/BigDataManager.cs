@@ -261,7 +261,14 @@ namespace Vanrise.Common.Business
             }
             finally
             {
-                (client as IDisposable).Dispose();
+                try
+                {
+                    (client as IDisposable).Dispose();
+                }
+                catch
+                {
+
+                }
             }
             return true;
         }
