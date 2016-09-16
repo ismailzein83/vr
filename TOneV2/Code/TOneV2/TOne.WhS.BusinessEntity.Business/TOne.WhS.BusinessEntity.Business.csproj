@@ -116,7 +116,7 @@
     <Compile Include="SaleRate\SaleRateCacheManager.cs" />
     <Compile Include="SaleRate\SaleRateReadAllNoCache.cs" />
     <Compile Include="SaleRate\SaleRateReadWithCache.cs" />
-    <Compile Include="Service\SaleEntityServiceReadAllNoCache.cs" />
+    <Compile Include="SaleService\SaleEntityServiceReadAllNoCache.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
     <Compile Include="SellingProductManager.cs" />
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
@@ -140,11 +140,11 @@
     <Compile Include="SaleZone\SaleZoneManager.cs" />
     <Compile Include="SellingNumberPlan\SellingNumberPlanManager.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRateLocator.cs" />
-    <Compile Include="Service\ISaleEntityServiceReader.cs" />
-    <Compile Include="Service\SaleEntityServiceCacheManager.cs" />
-    <Compile Include="Service\SaleEntityServiceLocator.cs" />
-    <Compile Include="Service\SaleEntityServiceManager.cs" />
-    <Compile Include="Service\SaleEntityServiceReadWithCache.cs" />
+    <Compile Include="SaleService\ISaleEntityServiceReader.cs" />
+    <Compile Include="SaleService\SaleEntityServiceCacheManager.cs" />
+    <Compile Include="SaleService\SaleEntityServiceLocator.cs" />
+    <Compile Include="SaleService\SaleEntityServiceManager.cs" />
+    <Compile Include="SaleService\SaleEntityServiceReadWithCache.cs" />
     <Compile Include="SupplierCode\SupplierCodeCachedObjectCreationHandler.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
