@@ -20,7 +20,7 @@ namespace Vanrise.Entities
 
     public abstract class StyleFormatingSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
         public virtual string UniqueName { get; set; }
     }
 }

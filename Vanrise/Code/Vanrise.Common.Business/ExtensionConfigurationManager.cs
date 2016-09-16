@@ -28,7 +28,7 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException(string.Format("ExtensionConfigurations for {0}", type));
             return extensionConfigurations.Values.FirstOrDefault(x=>x.Name==name);
         }
-        private Dictionary<int, T> GetCachedExtensionConfigurations<T>(string type) where T : ExtensionConfiguration
+        private Dictionary<Guid, T> GetCachedExtensionConfigurations<T>(string type) where T : ExtensionConfiguration
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCachedExtensionConfigurations_{0}", type), type,
                () =>

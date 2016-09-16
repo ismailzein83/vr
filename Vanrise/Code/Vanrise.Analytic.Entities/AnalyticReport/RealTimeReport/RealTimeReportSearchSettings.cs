@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public class RealTimeReportSearchSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public abstract class VRConcatenatedPartSettings<T> where T : class
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
         public abstract string GetPartText(T context);
     }
 }

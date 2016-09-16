@@ -8,6 +8,6 @@ namespace Vanrise.Integration.Entities
 {
     public abstract class ActionProvisionerDefinitionSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
     }
 }

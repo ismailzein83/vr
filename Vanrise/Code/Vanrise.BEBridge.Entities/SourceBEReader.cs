@@ -8,7 +8,7 @@ namespace Vanrise.BEBridge.Entities
 {
     public abstract class SourceBEReader
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public abstract void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context);
 

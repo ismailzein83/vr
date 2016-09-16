@@ -97,8 +97,6 @@
     <Compile Include="EntitySynchronization\SourceItemSynchronizer.cs" />
     <Compile Include="ExtensionConfigurationManager.cs" />
     <Compile Include="GenericConfig\GenericConfigurationManager.cs" />
-    <Compile Include="GenericDataRecord\DataRecordFieldManager.cs" />
-    <Compile Include="GenericDataRecord\DataRecordTypeManager.cs" />
     <Compile Include="IDManager.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

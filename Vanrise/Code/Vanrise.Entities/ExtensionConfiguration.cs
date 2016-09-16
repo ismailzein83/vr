@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public class ExtensionConfiguration
     {
-        public int ExtensionConfigurationId { get; set; }
+        public Guid ExtensionConfigurationId { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }        
     }

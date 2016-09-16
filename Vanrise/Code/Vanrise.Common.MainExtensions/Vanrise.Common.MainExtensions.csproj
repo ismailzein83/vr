@@ -56,11 +56,6 @@
     <Compile Include="ExchangeRateUpdateService\ExchangeRateActionActionArgument.cs" />
     <Compile Include="ExchangeRateUpdateService\XigniteCurrency.cs" />
     <Compile Include="ExchangeRateUpdateService\XigniteCurrencyReader.cs" />
-    <Compile Include="GenericDataRecord\DataRecordFieldBooleanType.cs" />
-    <Compile Include="GenericDataRecord\DataRecordFieldChoicesType.cs" />
-    <Compile Include="GenericDataRecord\DataRecordFieldDateTimeType.cs" />
-    <Compile Include="GenericDataRecord\DataRecordFieldNumberType.cs" />
-    <Compile Include="GenericDataRecord\DataRecordFieldTextType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceCountryReader\CountryTOneV1SQLReader.cs" />
     <Compile Include="SourceCountryReader\CountryTOneV2SQLReader.cs" />

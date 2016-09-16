@@ -8,6 +8,6 @@ namespace Vanrise.Invoice.Entities
 {
     public abstract class InvoiceGridActionSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
     }
 }

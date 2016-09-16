@@ -8,7 +8,7 @@ namespace Vanrise.Invoice.Entities
 {
     public abstract class InvoiceDataSourceSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
         public abstract IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context);
     }
     public interface IInvoiceDataSourceSettingsContext

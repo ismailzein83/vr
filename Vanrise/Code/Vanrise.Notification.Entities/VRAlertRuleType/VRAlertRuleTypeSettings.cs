@@ -8,7 +8,7 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRAlertRuleTypeSettings
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public virtual string CriteriaEditor { get; set; }
 

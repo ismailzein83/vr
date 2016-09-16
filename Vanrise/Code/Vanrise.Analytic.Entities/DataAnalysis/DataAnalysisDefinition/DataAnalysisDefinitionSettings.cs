@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class DataAnalysisDefinitionSettings 
     {
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         public virtual List<DataAnalysisItemDefinitionConfig> ItemsConfig { get; set; }
     }

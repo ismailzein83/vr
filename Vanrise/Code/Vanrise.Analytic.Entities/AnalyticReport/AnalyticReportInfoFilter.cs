@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticReportInfoFilter
     {
-        public int? TypeId { get; set; }
+        public Guid? TypeId { get; set; }
         public string TypeName { get; set; }
     }
 }

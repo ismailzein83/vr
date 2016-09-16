@@ -57,8 +57,6 @@
     <Compile Include="ICurrencyDataManager.cs" />
     <Compile Include="ICurrencyExchangeRateDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IDataRecordFieldDataManager.cs" />
-    <Compile Include="IDataRecordTypeDataManager.cs" />
     <Compile Include="IGenericConfigurationDataManager.cs" />
     <Compile Include="IIDManagerDataManager.cs" />
     <Compile Include="IRateTypeDataManager.cs" />

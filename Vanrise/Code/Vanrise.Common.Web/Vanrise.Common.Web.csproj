@@ -132,7 +132,6 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
-    <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\TextManipulationController.cs" />
@@ -208,10 +207,6 @@
     <Content Include="Common\Directives\EmailTemplate\Templates\EmailTemplateGridTemplate.html" />
     <Content Include="Common\Directives\EmailTemplate\vr-common-emailtemplate-grid.js" />
     <Content Include="Common\Directives\EmailTemplate\vr-common-emailtemplate-settings-editor.js" />
-    <Content Include="Common\Directives\GenericDataRecord\Templates\DataRecordTypeGrid.html" />
-    <Content Include="Common\Directives\GenericDataRecord\Templates\DataRecordFieldGrid.html" />
-    <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordtype-grid.js" />
-    <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordfield-grid.js" />
     <Content Include="Common\Directives\GridWidthFactor\vr-common-gridwidthfactor-selector.js" />
     <Content Include="Common\Directives\Hour\vr-common-hour-selector.js" />
     <Content Include="Common\Directives\Log\Templates\LogGridTemplate.html" />
@@ -220,16 +215,6 @@
     <Content Include="Common\Directives\Log\vr-common-log-entry-type-selector.js" />
     <Content Include="Common\Directives\Log\vr-common-log-attribute-selector.js" />
     <Content Include="Common\Directives\Log\vr-log-entry-search.js" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveBooleanDirectiveTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveChoicesDirectiveTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveDateTimeDirectiveTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveNumberDirectiveTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveTextDirectiveTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-text-selective.js" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-number-selective.js" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-datetime-selective.js" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-choices-selective.js" />
-    <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-boolean-selective.js" />
     <Content Include="Common\Directives\MainExtensions\StyleFormating\Templates\VRCommonStyleFormatingTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\StyleFormating\vr-common-styleformating-cssclass.js" />
     <Content Include="Common\Directives\MainExtensions\TextManipulation\Templates\AddPrefixDirectiveTemplate.html" />
@@ -296,8 +281,6 @@
     <Content Include="Common\Services\APIServices\CountryAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyExchangeRateAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
-    <Content Include="Common\Services\APIServices\DataRecordFieldAPIService.js" />
-    <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\StyleDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\TextManipulationAPIService.js" />
@@ -320,7 +303,6 @@
     <Content Include="Common\Services\EmailTemplateService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
     <Content Include="Common\Services\CountryService.js" />
-    <Content Include="Common\Services\DataRecordFieldService.js" />
     <Content Include="Common\Services\FileService.js" />
     <Content Include="Common\Services\LogEntryService.js" />
     <Content Include="Common\Services\MasterLogService.js" />
@@ -359,12 +341,6 @@
     <Content Include="Common\Views\ErrorController.js" />
     <Content Include="Common\Views\File\RecentFile.html" />
     <Content Include="Common\Views\File\RecentFileController.js" />
-    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldEditor.html" />
-    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
-    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagement.html" />
-    <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagementController.js" />
-    <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagement.html" />
-    <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
     <Content Include="Common\Views\Logger\LoggerManagement.html" />
     <Content Include="Common\Views\Logger\LoggerManagementController.js" />
     <Content Include="Common\Views\MasterLog\MasterLogManagement.html" />
