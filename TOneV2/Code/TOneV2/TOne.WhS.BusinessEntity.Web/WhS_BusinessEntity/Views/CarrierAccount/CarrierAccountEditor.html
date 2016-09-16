@@ -22,19 +22,25 @@
                                            selectedvalues="scopeModal.selectedCarrierAccountType" onselectionchanged="scopeModal.onCarrierTypeSelectionChanged" />
                             </vr-columns>
                         </span>
+                        <span ng-show="scopeModal.showZoneServiceConfig" vr-loader="scopeModal.isLoadingZoneServiceConfig">
+                            <vr-whs-be-zone-service-config-selector on-ready="scopeModal.onZoneServiceConfigSelectorReady"
+                                                                    selectedvalues="scopeModel.zoneServiceConfigSelectedValues"
+                                                                    normal-col-num="6"
+                                                                    ismultipleselection="true">
+                            </vr-whs-be-zone-service-config-selector>
+                            </span>
+                            <span vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan" vr-disabled="scopeModal.disableSellingNumberPlan">
+                                <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModal.sellingNumberPlan" on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan">
+                                </vr-whs-be-sellingnumberplan-selector>
+                            </span>
 
-                        <span vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan" vr-disabled="scopeModal.disableSellingNumberPlan">
-                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModal.sellingNumberPlan" on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan">
-                            </vr-whs-be-sellingnumberplan-selector>
-                        </span>
-
-                        <vr-columns width="1/2row">
-                            <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired="true"></vr-common-currency-selector>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModal.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
+                            <vr-columns width="1/2row">
+                                <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired="true"></vr-common-currency-selector>
+                            </vr-columns>
+                            <vr-columns width="1/2row">
+                                <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModal.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
+                            </vr-columns>
+</vr-row>
                 </vr-tab>
                 <vr-tab header="'Pricelist Settings'">
                     <vr-row>

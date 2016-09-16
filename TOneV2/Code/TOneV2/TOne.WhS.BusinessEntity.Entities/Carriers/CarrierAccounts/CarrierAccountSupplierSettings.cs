@@ -10,5 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CarrierAccountSupplierSettings
     {
         public RoutingStatus RoutingStatus { get; set; }
+
+        public List<ZoneService> DefaultServices { get; set; }
     }
 }
