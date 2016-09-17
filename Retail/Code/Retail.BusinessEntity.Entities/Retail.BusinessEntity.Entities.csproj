@@ -136,6 +136,12 @@
     <Compile Include="CreditClass\CreditClassInfo.cs" />
     <Compile Include="CreditClass\CreditClassQuery.cs" />
     <Compile Include="CreditClass\CreditControlSettings.cs" />
+    <Compile Include="Distributor\DistributorDetail.cs" />
+    <Compile Include="Distributor\DistributorInfo.cs" />
+    <Compile Include="Distributor\DistributorQuery.cs" />
+    <Compile Include="Distributor\Distributor.cs" />
+    <Compile Include="Distributor\DistributorSetting.cs" />
+    <Compile Include="Distributor\SourceDistributor.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="OperatorDeclaredInfo.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
@@ -147,10 +153,12 @@
     <Compile Include="Package\ServicePackageItemConfig.cs" />
     <Compile Include="Pop\Pop.cs" />
     <Compile Include="Pop\PopQuery.cs" />
+    <Compile Include="POS\POSQuery.cs" />
     <Compile Include="POS\POS.cs" />
     <Compile Include="POS\PosDetail.cs" />
     <Compile Include="POS\POSInfo.cs" />
     <Compile Include="POS\POSSetting.cs" />
+    <Compile Include="POS\SourcePOS.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
     <Compile Include="RevenueComparison\RevenueComparison.cs" />
     <Compile Include="RevenueComparison\RevenueComparisonDetail.cs" />

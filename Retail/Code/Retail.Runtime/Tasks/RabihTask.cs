@@ -22,46 +22,49 @@ namespace Retail.Runtime.Tasks
     {
         public void Execute()
         {
-            
-            BEReceiveDefinitionSettings setting = new BEReceiveDefinitionSettings
-            {
-                SourceBEReader = new FileSourceReader
-                {
-                    Setting = new FileSourceReaderSetting
-                    {
-                        Directory = @"c:\RingoSubscriberFiles",
-                        Mask = "",
-                        Extension = ".csv"
-                    }
-                },
-                EntitySyncDefinitions = new List<EntitySyncDefinition>
-                {
-                    new EntitySyncDefinition
-                    {
-                      TargetBEConvertor = new RingoFileAccountConvertor
-                      {
-                         
-                      },
-                       TargetBESynchronizer = new AccountSynchronizer
-                       {
-                           
-                       }
-                    },
-                    new EntitySyncDefinition
-                    {
-                         TargetBESynchronizer =  new AgentSynchronizer
-                         {
-                             
-                         },
-                         TargetBEConvertor = new AgentConvertor
-                         {
-                             
-                         }
-                    }
-                }
-            };
 
-            var str = Serializer.Serialize(setting);
+            //BEReceiveDefinitionSettings setting = new BEReceiveDefinitionSettings
+            //{
+            //    SourceBEReader = new FileSourceReader
+            //    {
+            //        Setting = new FileSourceReaderSetting
+            //        {
+            //            Directory = @"c:\RingoSubscriberFiles",
+            //            Mask = "",
+            //            Extension = ".csv",
+            //            ConfigId = Guid.NewGuid()
+            //        },
+            //        ConfigId = Guid.NewGuid()
+            //    },
+            //    EntitySyncDefinitions = new List<EntitySyncDefinition>
+            //    { 
+            //        //new EntitySyncDefinition
+            //        //{
+            //        //  TargetBEConvertor = new RingoAccountConvertor{ ConfigId =Guid.NewGuid()},
+            //        //  TargetBESynchronizer = new AccountSynchronizer{ ConfigId =Guid.NewGuid()}
+            //        //}
+            //        ////,
+            //        //new EntitySyncDefinition
+            //        //{
+            //        //     TargetBESynchronizer =  new AgentSynchronizer{ ConfigId =Guid.NewGuid()},
+            //        //     TargetBEConvertor = new AgentConvertor{ ConfigId =Guid.NewGuid()}
+            //        //}
+            //        //, 
+            //        //new EntitySyncDefinition
+            //        //{
+            //        //     TargetBEConvertor = new DistributorConvertor{ ConfigId =Guid.NewGuid()},
+            //        //     TargetBESynchronizer = new DistributorSynchronizer{ ConfigId =Guid.NewGuid()}
+            //        //}
+            //        //,
+            //        new EntitySyncDefinition
+            //        {
+            //            TargetBESynchronizer = new PosSynchronizer{ ConfigId =Guid.NewGuid()},
+            //            TargetBEConvertor = new PointOfSaleConvertor{ ConfigId = Guid.NewGuid()}
+            //        }
+            //    }
+            //};
+
+            //var str = Serializer.Serialize(setting);
 
             var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
@@ -98,7 +101,13 @@ namespace Retail.Runtime.Tasks
             {
                 InputArguments = new SourceBESyncProcessInput()
                 {
-                    BEReceiveDefinitionIds = new List<Guid>() { Guid.Parse("79348eb0-82fd-481e-9c72-d935065dd1cc") },
+                    BEReceiveDefinitionIds = new List<Guid>()
+                    {
+                        Guid.Parse("11ee1491-d953-49ff-8b49-6a4faf7cd169"), 
+                        Guid.Parse("c6d84fbe-7709-4f37-9dfc-a44de77b529f"), 
+                        Guid.Parse("a0e70e6b-65d9-45eb-9462-fe4934310c52"), 
+                        Guid.Parse("79348eb0-82fd-481e-9c72-d935065dd1cc")
+                    },
                     UserId = 1
                 }
             });

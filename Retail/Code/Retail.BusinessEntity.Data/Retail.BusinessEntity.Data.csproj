@@ -60,6 +60,7 @@
     <Compile Include="IChargingPolicyDataManager.cs" />
     <Compile Include="ICreditClassDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDistributorDataManager.cs" />
     <Compile Include="IPopDataManager.cs" />
     <Compile Include="IPOSDataManager.cs" />
     <Compile Include="IServiceTypeDataManager.cs" />

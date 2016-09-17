@@ -16,10 +16,10 @@ namespace Retail.BusinessEntity.Web.Controllers
     {
         [HttpGet]
         [Route("GetPointOfSalesInfo")]
-        public IEnumerable<POSInfo> GetPointOfSalesInfo(string nameFilter)
+        public IEnumerable<POSInfo> GetPointOfSalesInfo()
         {
             POSManager manager = new POSManager();
-            return manager.GetPointOfSalesInfo(nameFilter);
+            return manager.GetPointOfSalesInfo(null);
         }
 
         [HttpPost]
@@ -36,6 +36,14 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             POSManager manager = new POSManager();
             return manager.UpdatePointOfSale(pos);
+        }
+
+        [HttpPost]
+        [Route("GetFilteredPointOfSales")]
+        public object GetFilteredPointOfSales(Vanrise.Entities.DataRetrievalInput<POSQuery> input)
+        {
+            POSManager distributorManager = new POSManager();
+            return GetWebResponse(input, distributorManager.GetFilteredPointOfSales(input));
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 Id = (long)reader["ID"],
                 Name = reader["Name"] as string,
-                Type = reader["TypeID"] as string,
+                Type = reader["Type"] as string,
                 Settings = Serializer.Deserialize<POSSetting>(reader["Settings"] as string),
                 SourceId = reader["SourceID"] as string
             };

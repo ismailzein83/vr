@@ -11,11 +11,12 @@ using Vanrise.BEBridge.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.RingoExtensions.AccountParts;
 using Vanrise.Common;
 
 namespace Retail.BusinessEntity.RingoExtensions
 {
-    public class RingoFileAccountConvertor : TargetBEConvertor
+    public class RingoAccountConvertor : TargetBEConvertor
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
@@ -63,6 +64,7 @@ namespace Retail.BusinessEntity.RingoExtensions
             UpdatePersonalInfoPart(finalBe, newBe);
             UpdateResidentialInfoPart(finalBe, newBe);
             UpdateActivationInfoPart(finalBe, newBe);
+            UpdateEntitiesPart(finalBe, newBe);
 
             context.FinalBE = finalBe;
         }
@@ -87,17 +89,7 @@ namespace Retail.BusinessEntity.RingoExtensions
             FillPersonalInfoPart(accountData, accountRecords);
             FillResidentialProfilePart(accountData, accountRecords);
             FillActivationPart(accountData, accountRecords);
-            FillFinancialPart(accountData, accountRecords);
-        }
-
-        void FillFinancialPart(SourceAccountData accountData, string[] accountRecords)
-        {
-            accountData.Account.Settings.Parts.Add(AccountPartFinancial.ExtensionConfigId, new AccountPart
-            {
-                Settings = new AccountPartFinancial
-                {
-                }
-            });
+            FillEntitiesPart(accountData, accountRecords);
         }
 
         void FillActivationPart(SourceAccountData accountData, string[] accountRecords)
@@ -109,6 +101,28 @@ namespace Retail.BusinessEntity.RingoExtensions
                 Settings = new AccountPartActivation
                 {
                     ActivationDate = activationDate
+                }
+            });
+        }
+
+        void FillEntitiesPart(SourceAccountData accountData, string[] accountRecords)
+        {
+            POSManager posManager = new POSManager();
+            PointOfSale pointOfSale = posManager.GetPOSBySourceId(accountRecords[30]);
+
+            AgentManager agentManager = new AgentManager();
+            Agent agent = agentManager.GetAgentBySourceId(accountRecords[33]);
+
+            DistributorManager distributorManager = new DistributorManager();
+            Distributor distributor = distributorManager.GetDistributorBySourceId(accountRecords[36]);
+
+            accountData.Account.Settings.Parts.Add(AccountPartEntitiesInfo.ExtensionConfigId, new AccountPart
+            {
+                Settings = new AccountPartEntitiesInfo
+                {
+                    PosId = pointOfSale == null ? 0 : pointOfSale.Id,
+                    AgentId = agent == null ? 0 : agent.Id,
+                    DistributorId = distributor == null ? 0 : distributor.Id
                 }
             });
         }
@@ -126,8 +140,8 @@ namespace Retail.BusinessEntity.RingoExtensions
                     FirstName = accountRecords[2],
                     LastName = accountRecords[3],
                     Gender = accountRecords[4] == "M" ? Gender.Male : Gender.Female,
-                    BirthCountryId = country != null ? (int?)country.CountryId : null,
-                    BirthCityId = null,
+                    CountryId = country != null ? (int?)country.CountryId : null,
+                    CityId = null,
                     BirthDate = birthDate
                 }
             });
@@ -156,8 +170,8 @@ namespace Retail.BusinessEntity.RingoExtensions
             AccountPartPersonalInfo personalInfo = newBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
             AccountPartPersonalInfo newPersonalInfo = finalBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
 
-            newPersonalInfo.BirthCityId = personalInfo.BirthCityId;
-            newPersonalInfo.BirthCountryId = personalInfo.BirthCountryId;
+            newPersonalInfo.CityId = personalInfo.CityId;
+            newPersonalInfo.CountryId = personalInfo.CountryId;
             newPersonalInfo.BirthDate = personalInfo.BirthDate;
             newPersonalInfo.FirstName = personalInfo.FirstName;
             newPersonalInfo.Gender = personalInfo.Gender;
@@ -192,6 +206,11 @@ namespace Retail.BusinessEntity.RingoExtensions
             newActivationPart.ActivationDate = activationPart.ActivationDate;
             newActivationPart.Status = activationPart.Status;
             finalBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings = newActivationPart;
+        }
+
+        void UpdateEntitiesPart(SourceAccountData finalBe, SourceAccountData newBe)
+        {
+
         }
 
         #endregion

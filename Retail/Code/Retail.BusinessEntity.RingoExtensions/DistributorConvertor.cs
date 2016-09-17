@@ -11,7 +11,7 @@ using Vanrise.Common;
 
 namespace Retail.BusinessEntity.RingoExtensions
 {
-    public class AgentConvertor : TargetBEConvertor
+    public class DistributorConvertor : TargetBEConvertor
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
@@ -31,21 +31,21 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
-                        SourceAgent agentData = new SourceAgent
+                        SourceDistributor distributorData = new SourceDistributor
                         {
-                            Agent = new Agent()
+                            Distributor = new Distributor()
                         };
                         accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
-                        var sourceId = accountRecords[33];
+                        var sourceId = accountRecords[36];
                         if (string.IsNullOrEmpty(sourceId) || sourceId == "NA")
                             continue;
                         ITargetBE targetBe;
                         if (!targetBes.TryGetValue(sourceId, out targetBe))
                         {
-                            agentData.Agent.SourceId = sourceId;
-                            agentData.Agent.Name = accountRecords[34];
-                            agentData.Agent.Type = accountRecords[35];
-                            targetBes.Add(sourceId, agentData);
+                            distributorData.Distributor.SourceId = sourceId;
+                            distributorData.Distributor.Name = accountRecords[37];
+                            distributorData.Distributor.Type = accountRecords[38];
+                            targetBes.Add(sourceId, distributorData);
                         }
                     }
                     else
@@ -57,17 +57,17 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            SourceAgent existingBe = context.ExistingBE as SourceAgent;
-            SourceAgent newBe = context.NewBE as SourceAgent;
+            SourceDistributor existingBe = context.ExistingBE as SourceDistributor;
+            SourceDistributor newBe = context.NewBE as SourceDistributor;
 
-            SourceAgent finalBe = new SourceAgent
+            SourceDistributor finalBe = new SourceDistributor
             {
-                Agent = Serializer.Deserialize<Agent>(Serializer.Serialize(existingBe.Agent))
+                Distributor = Serializer.Deserialize<Distributor>(Serializer.Serialize(existingBe.Distributor))
             };
 
-            finalBe.Agent.Name = newBe.Agent.Name;
-            finalBe.Agent.Settings = newBe.Agent.Settings;
-            finalBe.Agent.Type = newBe.Agent.Type;
+            finalBe.Distributor.Name = newBe.Distributor.Name;
+            finalBe.Distributor.Settings = newBe.Distributor.Settings;
+            finalBe.Distributor.Type = newBe.Distributor.Type;
 
             context.FinalBE = finalBe;
         }

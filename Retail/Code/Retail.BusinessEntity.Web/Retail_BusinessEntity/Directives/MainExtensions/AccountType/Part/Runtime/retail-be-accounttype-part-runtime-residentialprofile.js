@@ -147,9 +147,9 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
 
             var payload;
 
-            if (mainPayload != undefined && mainPayload.CountryId != undefined) {
+            if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.CountryId != undefined) {
                 payload = {};
-                payload.selectedIds = mainPayload.CountryId;
+                payload.selectedIds = mainPayload.partSettings.CountryId;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
 
@@ -159,15 +159,15 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
 
 
 
-            if (mainPayload != undefined && mainPayload.CountryId != undefined) {
+            if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.CountryId != undefined) {
                 var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadCitiesPromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([cityReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
                     var citiesPayload = {
-                        countryId: mainPayload.CountryId,
-                        selectedIds: mainPayload.CityId
+                        countryId: mainPayload.partSettings.CountryId,
+                        selectedIds: mainPayload.partSettings.CityId
                     }
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);

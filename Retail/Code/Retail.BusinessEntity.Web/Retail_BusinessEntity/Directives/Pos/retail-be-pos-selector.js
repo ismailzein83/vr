@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAgentSelector', ['Retail_BE_AgentAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_AgentAPIService, UtilsService, VRUIUtilsService) {
+app.directive('retailBePosSelector', ['Retail_BE_PosAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_PosAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -24,8 +24,8 @@ app.directive('retailBeAgentSelector', ['Retail_BE_AgentAPIService', 'UtilsServi
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            var agentSelector = new AgentSelector(ctrl, $scope, $attrs);
-            agentSelector.initializeController();
+            var posSelector = new PosSelector(ctrl, $scope, $attrs);
+            posSelector.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -35,7 +35,7 @@ app.directive('retailBeAgentSelector', ['Retail_BE_AgentAPIService', 'UtilsServi
         }
     };
 
-    function AgentSelector(ctrl, $scope, attrs) {
+    function PosSelector(ctrl, $scope, attrs) {
 
         this.initializeController = initializeController;
 
@@ -61,20 +61,20 @@ app.directive('retailBeAgentSelector', ['Retail_BE_AgentAPIService', 'UtilsServi
                     filter = payload.filter;
                 }
 
-                return Retail_BE_AgentAPIService.GetAgentsInfo().then(function (response) {
+                return Retail_BE_PosAPIService.GetPointOfSalesInfo().then(function (response) {
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
                         }
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'AgentId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'PosId', attrs, ctrl);
                         }
                     }
                 });
             };
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('AgentId', attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('PosId', attrs, ctrl);
             };
 
             if (ctrl.onReady != null)
@@ -85,14 +85,14 @@ app.directive('retailBeAgentSelector', ['Retail_BE_AgentAPIService', 'UtilsServi
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Agent";
+        var label = "point Of Sale";
 
         if (attrs.ismultipleselection != undefined) {
-            label = "Agents";
+            label = "Point Of Sales";
             multipleselection = "ismultipleselection";
         }
         if (attrs.customlabel != undefined)
             label = attrs.customlabel;
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="AgentId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="PosId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
     }
 }]);

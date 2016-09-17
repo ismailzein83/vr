@@ -1,0 +1,18 @@
+﻿<vr-tab header="'Entities Info'">
+
+    <vr-row removeline>
+        <span>
+            <retail-be-agent-selector selectedvalues="scopeModel.agent" normal-col-num="6" on-ready="scopeModel.onAgentSelectorDirectiveReady" isrequired></retail-be-agent-selector>
+        </span>
+        <span>
+            <retail-be-distributor-selector selectedvalues="scopeModel.distributor" normal-col-num="6" on-ready="scopeModel.onDistributorSelectorDirectiveReady" isrequired></retail-be-distributor-selector>
+        </span>
+
+    </vr-row>
+    <vr-row removeline>
+        <span>
+            <retail-be-pos-selector selectedvalues="scopeModel.pos" normal-col-num="6" on-ready="scopeModel.onPointOfSaleSelectorDirectiveReady" isrequired></retail-be-pos-selector>
+        </span>
+
+    </vr-row>
+</vr-tab>

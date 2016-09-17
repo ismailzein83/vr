@@ -18,10 +18,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAgent'), account);
         }
 
-        function GetAgentsInfo(nameFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAgentsInfo"), {
-                nameFilter: nameFilter
-            });
+        function GetAgentsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAgentsInfo"));
         }
 
         function HasAddAgentPermission() {

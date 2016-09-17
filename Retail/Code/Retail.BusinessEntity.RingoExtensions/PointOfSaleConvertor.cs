@@ -11,7 +11,7 @@ using Vanrise.Common;
 
 namespace Retail.BusinessEntity.RingoExtensions
 {
-    public class AgentConvertor : TargetBEConvertor
+    public class PointOfSaleConvertor : TargetBEConvertor
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
@@ -31,21 +31,22 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
-                        SourceAgent agentData = new SourceAgent
+                        SourcePOS posData = new SourcePOS
                         {
-                            Agent = new Agent()
+                            PointOfSale = new PointOfSale()
                         };
                         accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
-                        var sourceId = accountRecords[33];
+
+                        var sourceId = accountRecords[30];
                         if (string.IsNullOrEmpty(sourceId) || sourceId == "NA")
                             continue;
                         ITargetBE targetBe;
                         if (!targetBes.TryGetValue(sourceId, out targetBe))
                         {
-                            agentData.Agent.SourceId = sourceId;
-                            agentData.Agent.Name = accountRecords[34];
-                            agentData.Agent.Type = accountRecords[35];
-                            targetBes.Add(sourceId, agentData);
+                            posData.PointOfSale.SourceId = sourceId;
+                            posData.PointOfSale.Name = accountRecords[31];
+                            posData.PointOfSale.Type = accountRecords[32];
+                            targetBes.Add(sourceId, posData);
                         }
                     }
                     else
@@ -57,17 +58,17 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            SourceAgent existingBe = context.ExistingBE as SourceAgent;
-            SourceAgent newBe = context.NewBE as SourceAgent;
+            SourcePOS existingBe = context.ExistingBE as SourcePOS;
+            SourcePOS newBe = context.NewBE as SourcePOS;
 
-            SourceAgent finalBe = new SourceAgent
+            SourcePOS finalBe = new SourcePOS
             {
-                Agent = Serializer.Deserialize<Agent>(Serializer.Serialize(existingBe.Agent))
+                PointOfSale = Serializer.Deserialize<PointOfSale>(Serializer.Serialize(existingBe.PointOfSale))
             };
 
-            finalBe.Agent.Name = newBe.Agent.Name;
-            finalBe.Agent.Settings = newBe.Agent.Settings;
-            finalBe.Agent.Type = newBe.Agent.Type;
+            finalBe.PointOfSale.Name = newBe.PointOfSale.Name;
+            finalBe.PointOfSale.Settings = newBe.PointOfSale.Settings;
+            finalBe.PointOfSale.Type = newBe.PointOfSale.Type;
 
             context.FinalBE = finalBe;
         }

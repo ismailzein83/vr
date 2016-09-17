@@ -15,7 +15,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public DateTime BirthDate { get; set; }
-        public int? BirthCountryId { get; set; }
-        public int? BirthCityId { get; set; }
+        public int? CountryId { get; set; }
+        public int? CityId { get; set; }
     }
 }

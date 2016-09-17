@@ -32,8 +32,7 @@ namespace Retail.BusinessEntity.Business
             };
 
             long agentId;
-            IAgentDataManager dataManager = BEDataManagerFactory.GetDataManager<IAgentDataManager>();
-            if (dataManager.Insert(agent, out agentId))
+            if (TryAddAgent(agent, out agentId))
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
@@ -50,16 +49,13 @@ namespace Retail.BusinessEntity.Business
 
         public UpdateOperationOutput<AgentDetail> UpdateAgent(Agent agent)
         {
-
             var updateOperationOutput = new UpdateOperationOutput<AgentDetail>
             {
                 Result = UpdateOperationResult.Failed,
                 UpdatedObject = null
             };
 
-            IAgentDataManager dataManager = BEDataManagerFactory.GetDataManager<IAgentDataManager>();
-
-            if (dataManager.Update(agent))
+            if (TryUpdateAgent(agent))
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
@@ -69,7 +65,6 @@ namespace Retail.BusinessEntity.Business
             {
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
-
             return updateOperationOutput;
         }
 
@@ -100,6 +95,14 @@ namespace Retail.BusinessEntity.Business
                 IAgentDataManager dataManager = BEDataManagerFactory.GetDataManager<IAgentDataManager>();
                 IEnumerable<Agent> agents = dataManager.GetAgents();
                 return agents.ToDictionary(kvp => kvp.Id, kvp => kvp);
+            });
+        }
+
+        Dictionary<string, Agent> GetCachedAgentsBySourceId()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAgentsBySource", () =>
+            {
+                return GetCachedAgents().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
             });
         }
 
@@ -141,21 +144,25 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
 
-        internal void TryAddAgent(Agent agent, out long agentId)
+        internal bool TryAddAgent(Agent agent, out long agentId)
         {
             agentId = 0;
             if (agent == null)
                 throw new ArgumentNullException("agent");
+            IAgentDataManager dataManager = BEDataManagerFactory.GetDataManager<IAgentDataManager>();
+            return dataManager.Insert(agent, out agentId);
         }
 
-        internal Agent GetAgentBySourceId(string p)
+        public Agent GetAgentBySourceId(string sourceId)
         {
-            throw new NotImplementedException();
+            Dictionary<string, Agent> cachedAgents = this.GetCachedAgentsBySourceId();
+            return cachedAgents.GetRecord(sourceId);
         }
 
-        internal void TryUpdateAgent(Agent agent)
+        internal bool TryUpdateAgent(Agent agent)
         {
-            throw new NotImplementedException();
+            IAgentDataManager dataManager = BEDataManagerFactory.GetDataManager<IAgentDataManager>();
+            return dataManager.Update(agent);
         }
     }
 }

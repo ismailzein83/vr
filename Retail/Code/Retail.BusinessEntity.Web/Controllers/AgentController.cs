@@ -24,10 +24,10 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAgentsInfo")]
-        public IEnumerable<AgentInfo> GetAgentsInfo(string nameFilter)
+        public IEnumerable<AgentInfo> GetAgentsInfo()
         {
             AgentManager agentManager = new AgentManager();
-            return agentManager.GetAgentsInfo(nameFilter);
+            return agentManager.GetAgentsInfo(null);
         }
 
         [HttpPost]

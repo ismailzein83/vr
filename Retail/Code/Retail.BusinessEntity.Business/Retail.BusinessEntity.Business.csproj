@@ -109,6 +109,8 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountServiceManager.cs" />
+    <Compile Include="DistributorManager.cs" />
+    <Compile Include="Extensions\DistributorSynchronizer.cs" />
     <Compile Include="Extensions\PosSynchronizer.cs" />
     <Compile Include="Extensions\AgentSynchronizer.cs" />
     <Compile Include="POSManager.cs" />

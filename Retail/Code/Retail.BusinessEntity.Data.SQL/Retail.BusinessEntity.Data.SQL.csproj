@@ -62,6 +62,7 @@
     <Compile Include="AccountServiceDataManager.cs" />
     <Compile Include="AccountTypeDataManager.cs" />
     <Compile Include="ActionDefinitionDataManager.cs" />
+    <Compile Include="DistributorDataManager.cs" />
     <Compile Include="AgentDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />
     <Compile Include="CreditClassDataManager.cs" />

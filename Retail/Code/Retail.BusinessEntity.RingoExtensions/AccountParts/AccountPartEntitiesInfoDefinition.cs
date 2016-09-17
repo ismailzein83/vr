@@ -7,7 +7,7 @@ using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.RingoExtensions.AccountParts
 {
-    public class AccountPartAgentInfoDefinition : AccountPartDefinitionSettings
+    public class AccountPartEntitiesInfoDefinition : AccountPartDefinitionSettings
     {
 
     }

@@ -128,6 +128,45 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+        Dictionary<string, PointOfSale> GetCachedPointOfSalesBySourceId()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedPointOfSalesBySourceId", () =>
+            {
+                IPOSDataManager dataManager = BEDataManagerFactory.GetDataManager<IPOSDataManager>();
+                IEnumerable<PointOfSale> pointOfSales = dataManager.GetPointOfSales();
+                return pointOfSales.ToDictionary(kvp => kvp.SourceId, kvp => kvp);
+            });
+        }
 
+        internal bool TryAddPOS(PointOfSale pos, out long posId)
+        {
+            posId = 0;
+            if (pos == null)
+                throw new ArgumentNullException("pos");
+            IPOSDataManager dataManager = BEDataManagerFactory.GetDataManager<IPOSDataManager>();
+            return dataManager.Insert(pos, out posId);
+        }
+
+        public PointOfSale GetPOSBySourceId(string sourceId)
+        {
+            Dictionary<string, PointOfSale> cachedPointOfSales = this.GetCachedPointOfSalesBySourceId();
+            return cachedPointOfSales.GetRecord(sourceId);
+        }
+
+        internal bool TryUpdatePOS(PointOfSale pointOfSale)
+        {
+            IPOSDataManager dataManager = BEDataManagerFactory.GetDataManager<IPOSDataManager>();
+            return dataManager.Update(pointOfSale);
+        }
+
+        public IDataRetrievalResult<PosDetail> GetFilteredPointOfSales(DataRetrievalInput<POSQuery> input)
+        {
+            Dictionary<long, PointOfSale> cachedPointOfSales = this.GetCachedPointOfSales();
+
+            Func<PointOfSale, bool> filterExpression = (agent) =>
+                (input.Query.Name == null || agent.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedPointOfSales.ToBigResult(input, filterExpression, PosDetailMapper));
+        }
     }
 }

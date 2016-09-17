@@ -44,7 +44,7 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingCities = value
+                        $scope.scopeModel.isLoadingCities = value;
                     };
                     var payload = {
                         countryId: selectedCountryId
@@ -97,9 +97,9 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
 
             var payload;
 
-            if (mainPayload != undefined && mainPayload.CountryId != undefined) {
+            if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.CountryId != undefined) {
                 payload = {};
-                payload.selectedIds = mainPayload.CountryId;
+                payload.selectedIds = mainPayload.partSettings.CountryId;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
 
@@ -109,15 +109,15 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
 
 
 
-            if (mainPayload != undefined && mainPayload.CountryId != undefined) {
+            if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.CountryId != undefined) {
                 var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadCitiesPromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([cityReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
                     var citiesPayload = {
-                        countryId: mainPayload.CountryId,
-                        selectedIds: mainPayload.CityId
+                        countryId: mainPayload.partSettings.CountryId,
+                        selectedIds: mainPayload.partSettings.CityId
                     }
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);

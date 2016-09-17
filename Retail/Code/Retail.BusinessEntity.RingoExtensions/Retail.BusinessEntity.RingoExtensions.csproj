@@ -63,11 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountParts\AccountPartAgentInfo.cs" />
-    <Compile Include="AccountParts\AccountPartAgentInfoDefinition.cs" />
+    <Compile Include="AccountParts\AccountPartEntitiesInfo.cs" />
+    <Compile Include="AccountParts\AccountPartEntitiesInfoDefinition.cs" />
     <Compile Include="AgentConvertor.cs" />
+    <Compile Include="PointOfSaleConvertor.cs" />
+    <Compile Include="DistributorConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RingoFileAccountConvertor.cs" />
+    <Compile Include="RingoAccountConvertor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
