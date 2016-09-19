@@ -155,8 +155,9 @@
     <Compile Include="SupplierRate\SupplierRateManager.cs" />
     <Compile Include="SupplierRate\SupplierRateReadAllNoCache.cs" />
     <Compile Include="SupplierRate\SupplierRateReadWithCache.cs" />
-    <Compile Include="SupplierService\ISupplierServiceReader.cs" />
-    <Compile Include="SupplierService\SupplierServiceReadAllNoCache.cs" />
+    <Compile Include="SupplierService\ISupplierZoneServiceReader.cs" />
+    <Compile Include="SupplierService\SupplierZoneServiceLocator.cs" />
+    <Compile Include="SupplierService\SupplierZoneServiceReadAllNoCache.cs" />
     <Compile Include="SupplierZoneService\SupplierZoneServiceManager.cs" />
     <Compile Include="SupplierZone\SupplierZoneGroupContext.cs" />
     <Compile Include="SupplierZone\SupplierZoneManager.cs" />

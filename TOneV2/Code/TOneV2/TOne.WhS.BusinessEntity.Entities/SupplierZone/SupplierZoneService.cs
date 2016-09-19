@@ -22,6 +22,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public long ZoneId { get; set; }
 
+        public int PriceListId { get; set; }
+
         public List<ZoneService> ReceivedServices { get; set; }
 
         public List<ZoneService> EffectiveServices { get; set; }

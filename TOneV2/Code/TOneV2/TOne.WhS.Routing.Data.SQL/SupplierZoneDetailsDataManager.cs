@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue" };
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds" };
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -34,8 +34,10 @@ namespace TOne.WhS.Routing.Data.SQL
         }
         public void WriteRecordToStream(SupplierZoneDetail record, object dbApplyStream)
         {
+            string serializedSupplierService = record.SupplierServiceIds != null ? Vanrise.Common.Serializer.Serialize(record.SupplierServiceIds) : null;
+
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, serializedSupplierService);
         }
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {
@@ -73,7 +75,8 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 SupplierId = (int)reader["SupplierId"],
                 SupplierZoneId = (long)reader["SupplierZoneId"],
-                EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue")
+                EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
+                SupplierServiceIds = Vanrise.Common.Serializer.Deserialize<HashSet<int>>(reader["SupplierServiceIds"] as string) 
             };
         }
 
@@ -98,12 +101,14 @@ namespace TOne.WhS.Routing.Data.SQL
                                            SELECT  zd.[SupplierId]
                                                   ,zd.[SupplierZoneId]
                                                   ,zd.[EffectiveRateValue]
+                                                  ,zd.[SupplierServiceIds]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
                                            SELECT  zd.[SupplierId]
                                                   ,zd.[SupplierZoneId]
                                                   ,zd.[EffectiveRateValue]
+                                                  ,zd.[SupplierServiceIds]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId
                                             ";

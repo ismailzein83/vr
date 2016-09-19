@@ -31,11 +31,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            DataTable saleRateOwners = BuildRoutingOwnerInfoTable(customerInfos);
+            DataTable saleEntityServicesOwners = BuildRoutingOwnerInfoTable(customerInfos);
             return GetItemsSPCmd("TOneWhS_BE.sp_SaleEntityService_GetEffectiveZoneServicesByOwner", SaleEntityZoneServiceMapper, (cmd) =>
             {
-                var dtPrm = new SqlParameter("@SaleEntityZoneServiceOwner", SqlDbType.Structured);
-                dtPrm.Value = saleRateOwners;
+                var dtPrm = new SqlParameter("@SaleEntityServicesOwners", SqlDbType.Structured);
+                dtPrm.Value = saleEntityServicesOwners;
                 cmd.Parameters.Add(dtPrm);
                 cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
@@ -104,7 +104,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SaleEntityServiceId = (long)reader["ID"],
                 PriceListId = (int)reader["PriceListID"],
-                ZoneId = (long)reader["ZoneID"],
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
                 Services = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["Services"] as string),
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED")

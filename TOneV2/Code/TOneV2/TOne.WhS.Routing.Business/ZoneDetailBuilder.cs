@@ -115,6 +115,7 @@ namespace TOne.WhS.Routing.Business
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(supplierInfos, effectiveOn, isEffectiveInFuture));
+            SupplierZoneServiceLocator supplierZoneServiceLocator = new SupplierZoneServiceLocator(new SupplierZoneServiceReadAllNoCache(supplierInfos, effectiveOn, isEffectiveInFuture));
 
             Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
@@ -139,6 +140,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierZone in supplierZones)
                 {
                     SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                    SupplierZoneService supplierZoneService = supplierZoneServiceLocator.GetSupplierZoneService(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
 
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
@@ -160,7 +162,8 @@ namespace TOne.WhS.Routing.Business
                         {
                             SupplierId = supplierInfo.SupplierId,
                             SupplierZoneId = supplierZone.SupplierZoneId,
-                            EffectiveRateValue = rateValue
+                            EffectiveRateValue = rateValue,
+                            SupplierServiceIds = supplierZoneService != null ? new HashSet<int>(supplierZoneService.EffectiveServices.Select(itm => itm.ServiceId)) : null
                         };
 
                         onSupplierZoneDetailAvailable(supplierZoneDetail);

@@ -15,15 +15,16 @@ namespace TOne.WhS.BusinessEntity.Business
         ISaleEntityServiceDataManager _saleEntityServiceDataManager;
         SalePriceListManager _salePriceListManager;
         SaleEntityZoneServicesByOwner _allSaleEntityZoneServicesByOwner;
+        SaleEntityDefaultServicesByOwner _defaultSaleEntityZoneServicesByOwner;
         #endregion
 
 
         #region Public Methods
-        public SaleEntityServiceReadAllNoCache(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        public SaleEntityServiceReadAllNoCache(IEnumerable<RoutingCustomerInfoDetails> customerInfoDetails, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             _saleEntityServiceDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
             _salePriceListManager = new SalePriceListManager();
-            _allSaleEntityZoneServicesByOwner = GetAllSaleEntityZoneServicesByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
+            GetAllSaleEntityServicesByOwner(customerInfoDetails, effectiveOn, isEffectiveInFuture, out _allSaleEntityZoneServicesByOwner, out _defaultSaleEntityZoneServicesByOwner);
         }
 
         public SaleEntityZoneServicesByZone GetSaleEntityZoneServicesByZone(SalePriceListOwnerType ownerType, int ownerId)
@@ -41,77 +42,73 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SaleEntityDefaultService GetSaleEntityDefaultService(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
-            //var defaultServicesByOwner = new SaleEntityDefaultServicesByOwner();
-            //defaultServicesByOwner.DefaultServicesByProduct = new Dictionary<int, SaleEntityDefaultService>();
-            //defaultServicesByOwner.DefaultServicesByCustomer = new Dictionary<int, SaleEntityDefaultService>();
+            if (_defaultSaleEntityZoneServicesByOwner == null)
+                return null;
 
-            SaleEntityDefaultService _defaultService = null;
+            var saleEntityServicesByOwnerType = ownerType == SalePriceListOwnerType.Customer ? _defaultSaleEntityZoneServicesByOwner.DefaultServicesByCustomer : _defaultSaleEntityZoneServicesByOwner.DefaultServicesByProduct;
 
-            //var dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
-            //IEnumerable<SaleEntityDefaultService> defaultServices = dataManager.GetEffectiveSaleEntityDefaultServices(_effectiveOn);
+            if (saleEntityServicesByOwnerType == null)
+                return null;
 
-            //if (defaultServices != null)
-            //{
-            //    var salePriceListManager = new SalePriceListManager();
-
-            //    foreach (SaleEntityDefaultService defaultService in defaultServices)
-            //    {
-            //        SalePriceList priceList = salePriceListManager.GetPriceList(defaultService.PriceListId);
-            //        if (priceList == null)
-            //            throw new NullReferenceException("priceList");
-
-            //        if (priceList.OwnerType == SalePriceListOwnerType.SellingProduct)
-            //        {
-            //            if (!defaultServicesByOwner.DefaultServicesByProduct.ContainsKey(priceList.OwnerId))
-            //                defaultServicesByOwner.DefaultServicesByProduct.Add(priceList.OwnerId, defaultService);
-            //        }
-            //        else
-            //        {
-            //            if (!defaultServicesByOwner.DefaultServicesByCustomer.ContainsKey(priceList.OwnerId))
-            //                defaultServicesByOwner.DefaultServicesByCustomer.Add(priceList.OwnerId, defaultService);
-            //        }
-            //    }
-            //}
-
-            //Dictionary<int, SaleEntityDefaultService> defaultServicesByTargetOwner = ownerType == SalePriceListOwnerType.SellingProduct ?
-            //        defaultServicesByOwner.DefaultServicesByProduct :
-            //        defaultServicesByOwner.DefaultServicesByCustomer;
-
-            //defaultServicesByTargetOwner.TryGetValue(ownerId, out _defaultService);
-
-            return _defaultService;
+            return saleEntityServicesByOwnerType.GetRecord(ownerId);
         }
         #endregion
 
 
         #region Private Methods
-        private SaleEntityZoneServicesByOwner GetAllSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        private void GetAllSaleEntityServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfoDetails, DateTime? effectiveOn, bool isEffectiveInFuture, out SaleEntityZoneServicesByOwner saleEntityZoneServicesByOwner, out SaleEntityDefaultServicesByOwner saleEntityDefaultServicesByOwner)
         {
-            SaleEntityZoneServicesByOwner result = new SaleEntityZoneServicesByOwner();
-            result.SaleEntityZoneServicesByCustomer = new Dictionary<int, SaleEntityZoneServicesByZone>();
-            result.SaleEntityZoneServicesByProduct = new Dictionary<int, SaleEntityZoneServicesByZone>();
-            SaleEntityZoneServicesByZone saleEntityZoneServicesByZone;
+            saleEntityZoneServicesByOwner = new SaleEntityZoneServicesByOwner();
+            saleEntityZoneServicesByOwner.SaleEntityZoneServicesByCustomer = new Dictionary<int, SaleEntityZoneServicesByZone>();
+            saleEntityZoneServicesByOwner.SaleEntityZoneServicesByProduct = new Dictionary<int, SaleEntityZoneServicesByZone>();
 
-            IEnumerable<SaleEntityZoneService> saleEntityZoneServices = _saleEntityServiceDataManager.GetEffectiveSaleEntityZoneServicesByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
+            saleEntityDefaultServicesByOwner = new SaleEntityDefaultServicesByOwner();
+            saleEntityDefaultServicesByOwner.DefaultServicesByCustomer = new Dictionary<int, SaleEntityDefaultService>();
+            saleEntityDefaultServicesByOwner.DefaultServicesByProduct = new Dictionary<int, SaleEntityDefaultService>();
+
+            SaleEntityZoneServicesByZone saleEntityZoneServicesByZone;
+            SaleEntityDefaultService saleEntityDefaultServices;
+
+            IEnumerable<SaleEntityZoneService> saleEntityZoneServices = _saleEntityServiceDataManager.GetEffectiveSaleEntityZoneServicesByOwner(customerInfoDetails, effectiveOn, isEffectiveInFuture);
             SaleEntityZoneService tempSaleEntityZoneService;
 
             foreach (SaleEntityZoneService saleEntityZoneService in saleEntityZoneServices)
             {
-                SalePriceList priceList = _salePriceListManager.GetPriceList(saleEntityZoneService.PriceListId);
-                Dictionary<int, SaleEntityZoneServicesByZone> SaleEntityZoneServicesByOwner = priceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleEntityZoneServicesByCustomer : result.SaleEntityZoneServicesByProduct;
-
-                if (!SaleEntityZoneServicesByOwner.TryGetValue(priceList.OwnerId, out saleEntityZoneServicesByZone))
+                if (saleEntityZoneService.ZoneId != default(long))
                 {
-                    saleEntityZoneServicesByZone = new SaleEntityZoneServicesByZone();
-                    SaleEntityZoneServicesByOwner.Add(priceList.OwnerId, saleEntityZoneServicesByZone);
+                    SalePriceList priceList = _salePriceListManager.GetPriceList(saleEntityZoneService.PriceListId);
+                    Dictionary<int, SaleEntityZoneServicesByZone> saleEntityZoneServicesByOwnerType = priceList.OwnerType == SalePriceListOwnerType.Customer ? saleEntityZoneServicesByOwner.SaleEntityZoneServicesByCustomer : saleEntityZoneServicesByOwner.SaleEntityZoneServicesByProduct;
+
+                    if (!saleEntityZoneServicesByOwnerType.TryGetValue(priceList.OwnerId, out saleEntityZoneServicesByZone))
+                    {
+                        saleEntityZoneServicesByZone = new SaleEntityZoneServicesByZone();
+                        saleEntityZoneServicesByOwnerType.Add(priceList.OwnerId, saleEntityZoneServicesByZone);
+                    }
+
+                    if (!saleEntityZoneServicesByZone.TryGetValue(saleEntityZoneService.ZoneId, out tempSaleEntityZoneService))
+                    {
+                        saleEntityZoneServicesByZone.Add(saleEntityZoneService.ZoneId, saleEntityZoneService);
+                    }
                 }
-
-                if (!saleEntityZoneServicesByZone.TryGetValue(saleEntityZoneService.ZoneId, out tempSaleEntityZoneService))
+                else
                 {
-                    saleEntityZoneServicesByZone.Add(saleEntityZoneService.ZoneId, saleEntityZoneService);
+                    SalePriceList priceList = _salePriceListManager.GetPriceList(saleEntityZoneService.PriceListId);
+                    Dictionary<int, SaleEntityDefaultService> saleEntityDefaultServicesByOwnerType = priceList.OwnerType == SalePriceListOwnerType.Customer ? saleEntityDefaultServicesByOwner.DefaultServicesByCustomer : saleEntityDefaultServicesByOwner.DefaultServicesByProduct;
+
+                    if (!saleEntityDefaultServicesByOwnerType.TryGetValue(priceList.OwnerId, out saleEntityDefaultServices))
+                    {
+                        saleEntityDefaultServices = new SaleEntityDefaultService() 
+                        {
+                            BED = saleEntityZoneService.BED,
+                            EED = saleEntityZoneService.EED,
+                            PriceListId = saleEntityZoneService.PriceListId,
+                            SaleEntityServiceId = saleEntityZoneService.SaleEntityServiceId,
+                            Services = saleEntityZoneService.Services
+                        };
+                        saleEntityDefaultServicesByOwnerType.Add(priceList.OwnerId, saleEntityDefaultServices);
+                    }
                 }
             }
-            return result;
         }
         #endregion
     } 

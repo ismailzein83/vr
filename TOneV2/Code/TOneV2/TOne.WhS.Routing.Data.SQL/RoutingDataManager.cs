@@ -112,7 +112,8 @@ namespace TOne.WhS.Routing.Data.SQL
         const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
 	                                                    [SupplierId] [int] NOT NULL,
 	                                                    [SupplierZoneId] [bigint] NOT NULL,
-	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL
+	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL,
+                                                        [SupplierServiceIds] [nvarchar](max) NULL
                                                         ) ON [PRIMARY];
                                                         
                                                         CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 

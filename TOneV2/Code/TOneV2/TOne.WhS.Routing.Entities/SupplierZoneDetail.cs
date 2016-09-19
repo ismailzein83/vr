@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.Entities
         public long SupplierZoneId { get; set; }
 
         public Decimal EffectiveRateValue { get; set; }
+
+        public HashSet<int> SupplierServiceIds { get; set; }
     }
 
     public class SupplierZoneDetailByZone : Dictionary<long, SupplierZoneDetail>
