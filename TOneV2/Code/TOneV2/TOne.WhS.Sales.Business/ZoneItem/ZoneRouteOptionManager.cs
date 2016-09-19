@@ -15,10 +15,10 @@ namespace TOne.WhS.Sales.Business
     {
         private IEnumerable<RPRouteDetail> _routes;
         private List<CostCalculationMethod> _costCalculationMethods;
-        private int? _rateCalculationCostColumnConfigId;
+        private Guid? _rateCalculationCostColumnConfigId;
         private RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionManager(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, int? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        public ZoneRouteOptionManager(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
             _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId);
@@ -78,7 +78,7 @@ namespace TOne.WhS.Sales.Business
                 CostCalculationMethod costCalculationMethod = null;
 
                 if (_rateCalculationCostColumnConfigId != null)
-                    costCalculationMethod = _costCalculationMethods.FindRecord(itm => itm.ConfigId == (int)_rateCalculationCostColumnConfigId);
+                    costCalculationMethod = _costCalculationMethods.FindRecord(itm => itm.ConfigId == (Guid)_rateCalculationCostColumnConfigId);
 
                 if (costCalculationMethod != null)
                 {

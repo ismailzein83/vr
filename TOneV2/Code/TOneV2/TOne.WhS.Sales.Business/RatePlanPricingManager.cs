@@ -26,8 +26,8 @@ namespace TOne.WhS.Sales.Business
 
             return invalidZoneRates;
         }
-
-        private IEnumerable<InvalidZoneRate> ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, out IEnumerable<InvalidZoneRate> invalidZoneRates)
+         
+        private IEnumerable<InvalidZoneRate> ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, Guid selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, out IEnumerable<InvalidZoneRate> invalidZoneRates)
         {
             invalidZoneRates = null;
 
@@ -47,7 +47,7 @@ namespace TOne.WhS.Sales.Business
             return invalidZoneRates;
         }
 
-        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, Guid selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             // Get the sale zones of the owner
             RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();

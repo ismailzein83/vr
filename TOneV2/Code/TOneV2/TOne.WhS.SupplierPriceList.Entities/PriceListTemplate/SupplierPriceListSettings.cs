@@ -8,7 +8,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 {
     public abstract class SupplierPriceListSettings
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
         public abstract ConvertedPriceList Execute(ISupplierPriceListExecutionContext context);
     }
 }

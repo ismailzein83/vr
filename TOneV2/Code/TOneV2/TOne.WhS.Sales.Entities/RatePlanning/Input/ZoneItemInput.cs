@@ -16,7 +16,7 @@ namespace TOne.WhS.Sales.Entities
         public Guid PolicyConfigId { get; set; }
         public int NumberOfOptions { get; set; }
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }
-        public int? RateCalculationCostColumnConfigId { get; set; }
+        public Guid? RateCalculationCostColumnConfigId { get; set; }
         public RateCalculationMethod RateCalculationMethod { get; set; }
         public int CurrencyId { get; set; }
     }

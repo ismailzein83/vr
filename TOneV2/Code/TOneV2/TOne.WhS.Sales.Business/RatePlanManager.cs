@@ -184,7 +184,7 @@ namespace TOne.WhS.Sales.Business
 
             return zoneItem;
         }
-
+          
         #endregion
 
         public bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)

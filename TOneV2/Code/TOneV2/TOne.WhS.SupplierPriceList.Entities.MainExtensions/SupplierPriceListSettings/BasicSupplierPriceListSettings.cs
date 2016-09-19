@@ -12,6 +12,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
     public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
     public class BasicSupplierPriceListSettings : Entities.SupplierPriceListSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("6B36007E-3333-40D3-B574-510C8338E6C0"); } }
      
         #region Properties
         public ListMapping CodeListMapping { get; set; }
