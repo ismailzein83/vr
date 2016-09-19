@@ -222,8 +222,8 @@ namespace TOne.WhS.Routing.Business
                 ExecutedRuleId = routeRule.RuleId,
                 IsBlocked = routeRuleTarget.BlockRoute,
                 OptionsDetailsBySupplier = new Dictionary<int, RPRouteOptionSupplier>(),
-                RPOptionsByPolicy = new Dictionary<int, IEnumerable<RPRouteOption>>()
-            };
+                RPOptionsByPolicy = new Dictionary<Guid, IEnumerable<RPRouteOption>>()
+            };    
             var routeOptionRuleTargets = routeRuleExecutionContext.GetSupplierZoneOptions();
             if (routeOptionRuleTargets != null)
             {
