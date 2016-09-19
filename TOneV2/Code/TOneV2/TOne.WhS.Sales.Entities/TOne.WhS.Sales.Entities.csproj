@@ -131,6 +131,7 @@
     <Compile Include="RatePlanning\Draft\Rate\DraftRateToClose.cs" />
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
+    <Compile Include="RatePlanning\InvalidZoneRate.cs" />
     <Compile Include="RatePlanning\ZoneChanges.cs" />
     <Compile Include="RatePlanning\ZoneItem.cs" />
     <Compile Include="RatePlanning\ZoneRateChangesDetail.cs" />

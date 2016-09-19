@@ -14,30 +14,37 @@ namespace TOne.WhS.Sales.Business
     {
         #region Apply Calculated Rates
 
-        public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
+        public IEnumerable<InvalidZoneRate> ApplyCalculatedRates(ApplyCalculatedRatesInput input)
         {
+            IEnumerable<InvalidZoneRate> invalidZoneRates;
             var ratePlanManager = new RatePlanManager();
 
             int? sellingNumberPlanId = ratePlanManager.GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
             int? sellingProductId = ratePlanManager.GetSellingProductId(input.OwnerType, input.OwnerId, input.EffectiveOn, false);
+            
+            ApplyCalculatedRates(input.OwnerType, input.OwnerId, (int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId, out invalidZoneRates);
 
-            ApplyCalculatedRates(input.OwnerType, input.OwnerId, (int)sellingNumberPlanId, (int)sellingProductId, input.EffectiveOn, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
+            return invalidZoneRates;
         }
 
-        private void ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        private IEnumerable<InvalidZoneRate> ApplyCalculatedRates(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, out IEnumerable<InvalidZoneRate> invalidZoneRates)
         {
+            invalidZoneRates = null;
+
             IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(ownerType, ownerId, sellingNumberPlanId, sellingProductId, effectiveOn, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, selectedCostCalculationMethodConfigId, rateCalculationMethod, currencyId);
 
-            if (zoneItems == null)
-                return;
+            if (zoneItems != null)
+            {
+                Changes newChanges = GetZoneChanges(zoneItems, effectiveOn, out invalidZoneRates);
 
-            Changes newChanges = GetZoneChanges(zoneItems, effectiveOn);
+                if (newChanges != null)
+                {
+                    var draftManager = new RatePlanDraftManager();
+                    draftManager.SaveDraft(ownerType, ownerId, newChanges);
+                }
+            }
 
-            if (newChanges == null)
-                return;
-
-            var draftManager = new RatePlanDraftManager();
-            draftManager.SaveDraft(ownerType, ownerId, newChanges);
+            return invalidZoneRates;
         }
 
         private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, int sellingProductId, DateTime effectiveOn, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, int selectedCostCalculationMethodConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
@@ -84,7 +91,7 @@ namespace TOne.WhS.Sales.Business
             return zoneItems.FindAllRecords(itm => itm.CalculatedRate != null);
         }
 
-        private Changes GetZoneChanges(IEnumerable<ZoneItem> zoneItems, DateTime effectiveOn)
+        private Changes GetZoneChanges(IEnumerable<ZoneItem> zoneItems, DateTime effectiveOn, out IEnumerable<InvalidZoneRate> invalidZoneRates)
         {
             // Create a list of zone changes, each having a new rate, from the calculated rates
             List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
@@ -92,6 +99,7 @@ namespace TOne.WhS.Sales.Business
             var ratePlanManager = new RatePlanManager();
             RatePlanSettingsData ratePlanSettings = ratePlanManager.GetRatePlanSettingsData();
 
+            var invalidZoneRateList = new List<InvalidZoneRate>();
             DateTime newRateBED;
 
             foreach (ZoneItem zoneItem in zoneItems)
@@ -110,10 +118,20 @@ namespace TOne.WhS.Sales.Business
                     BED = newRateBED
                 };
 
-                ZoneChanges zoneItemChanges = new ZoneChanges() { ZoneId = zoneItem.ZoneId, ZoneName = zoneItem.ZoneName, NewRates = new List<DraftRateToChange>() { newRate } };
-                zoneChanges.Add(zoneItemChanges);
+                if (newRate.NormalRate <= 0)
+                {
+                    invalidZoneRateList.Add(new InvalidZoneRate()
+                    {
+                        ZoneName = zoneItem.ZoneName,
+                        Rate = newRate.NormalRate
+                    });
+                }
+
+                var zoneDraft = new ZoneChanges() { ZoneId = zoneItem.ZoneId, ZoneName = zoneItem.ZoneName, NewRates = new List<DraftRateToChange>() { newRate } };
+                zoneChanges.Add(zoneDraft);
             }
 
+            invalidZoneRates = invalidZoneRateList.Count > 0 ? invalidZoneRateList : null;
             return new Changes() { ZoneChanges = zoneChanges };
         }
 
