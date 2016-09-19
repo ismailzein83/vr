@@ -42,7 +42,7 @@ namespace TOne.WhS.DBSync.Business
         {
             ServiceConfigSetting serviceConfigSetting = new ServiceConfigSetting()
             {
-                Color = sourceItem.ServiceColor,
+                Color = sourceItem.ServiceColor != null ? string.Concat("#", sourceItem.ServiceColor) : null,
                 Name = sourceItem.Name,
                 Description = sourceItem.Description
             };
