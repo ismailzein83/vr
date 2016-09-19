@@ -13,6 +13,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class CustomerInvoiceGenerator : InvoiceGenerator
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("BD4F7B2C-1C07-4037-8730-92768BD28900"); } }
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
