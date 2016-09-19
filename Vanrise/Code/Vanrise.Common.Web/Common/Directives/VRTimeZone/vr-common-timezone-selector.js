@@ -12,7 +12,8 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
             onselectitem: "=",
             ondeselectitem: "=",
             hideremoveicon: '@',
-            normalColNum: '@'
+            normalColNum: '@',
+            label:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -58,11 +59,13 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
     function getTimeZoneTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "TimeZone";
+        var label = "Time Zone";
         if (attrs.ismultipleselection != undefined) {
-            label = "TimeZones";
+            label = "Time Zones";
             multipleselection = "ismultipleselection";
         }
+        if (attrs.label != undefined)
+            label = "{{ctrl.label}}";
 
         var addCliked = '';
         if (attrs.showaddbutton != undefined)
@@ -71,7 +74,7 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TimeZoneId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="TimeZone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Time Zone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
     }
 
     function timeZoneCtor(ctrl, $scope, attrs) {
