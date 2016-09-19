@@ -12,5 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public RoutingStatus RoutingStatus { get; set; }
 
         public List<ZoneService> DefaultServices { get; set; }
+
+        public int TimeZoneId { get; set; }
     }
 }

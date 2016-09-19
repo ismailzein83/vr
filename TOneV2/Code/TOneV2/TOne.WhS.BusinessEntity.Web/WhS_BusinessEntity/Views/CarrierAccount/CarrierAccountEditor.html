@@ -1,51 +1,41 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formCarrierAccountEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.name" label="Suffix" ></vr-textbox>
+                            <vr-textbox value="scopeModel.name" label="Suffix"></vr-textbox>
                         </vr-columns>
-                        <span vr-disabled="scopeModal.disableCarrierProfile">
-                            <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady">
+                        <span vr-disabled="scopeModel.disableCarrierProfile">
+                            <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModel.onCarrierProfileDirectiveReady">
                             </vr-whs-be-carrierprofile-selector>
                         </span>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.mask" label="Mask" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.mask" label="Mask" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-whs-be-activationstatus-selector normal-col-num="6" hideremoveicon="true" isrequired on-ready="scopeModal.onActivationStatusDirectiveReady">
+                        <vr-whs-be-activationstatus-selector normal-col-num="6" hideremoveicon="true" isrequired on-ready="scopeModel.onActivationStatusDirectiveReady">
                         </vr-whs-be-activationstatus-selector>
-                        <span vr-disabled="scopeModal.disableCarrierAccountType">
+                        <span vr-disabled="scopeModel.disableCarrierAccountType">
                             <vr-columns width="1/2row">
-                                <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Account Type" datasource="scopeModal.carrierAccountTypes"
-                                           selectedvalues="scopeModal.selectedCarrierAccountType" onselectionchanged="scopeModal.onCarrierTypeSelectionChanged" />
+                                <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Account Type" datasource="scopeModel.carrierAccountTypes"
+                                           selectedvalues="scopeModel.selectedCarrierAccountType" onselectionchanged="scopeModel.onCarrierTypeSelectionChanged" />
                             </vr-columns>
                         </span>
-                        <span ng-show="scopeModal.showZoneServiceConfig" vr-loader="scopeModal.isLoadingZoneServiceConfig">
-                            <vr-whs-be-zone-service-config-selector on-ready="scopeModal.onZoneServiceConfigSelectorReady"
-                                                                    selectedvalues="scopeModel.zoneServiceConfigSelectedValues"
-                                                                    normal-col-num="6"
-                                                                    ismultipleselection="true">
-                            </vr-whs-be-zone-service-config-selector>
-                            </span>
-                            <span vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan" vr-disabled="scopeModal.disableSellingNumberPlan">
-                                <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModal.sellingNumberPlan" on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan">
-                                </vr-whs-be-sellingnumberplan-selector>
-                            </span>
+                        
 
-                            <vr-columns width="1/2row">
-                                <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired="true"></vr-common-currency-selector>
-                            </vr-columns>
-                            <vr-columns width="1/2row">
-                                <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModal.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
-                            </vr-columns>
-</vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true"></vr-common-currency-selector>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Pricelist Settings'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <businessprocess-bp-business-rule-set-selector on-ready="scopeModal.onBPBusinessRuleSetSelectorReady" label="Rule Set" ismultipleselection></businessprocess-bp-business-rule-set-selector>
+                            <businessprocess-bp-business-rule-set-selector on-ready="scopeModel.onBPBusinessRuleSetSelectorReady" label="Rule Set" ismultipleselection></businessprocess-bp-business-rule-set-selector>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
@@ -54,17 +44,43 @@
                             <vr-section title="Automatic Import">
                                 <vr-row>
                                     <vr-columns width="1/2row">
-                                        <vr-textbox type="email" value="scopeModal.automaticPriceListEmail" label="Email"></vr-textbox>
+                                        <vr-textbox type="email" value="scopeModel.automaticPriceListEmail" label="Email"></vr-textbox>
                                     </vr-columns>
                                     <vr-columns width="1/2row">
-                                        <vr-textbox value="scopeModal.automaticPriceListSubjectCode" label="Subject Code"></vr-textbox>
+                                        <vr-textbox value="scopeModel.automaticPriceListSubjectCode" label="Subject Code"></vr-textbox>
                                     </vr-columns>
                                     <vr-columns width="1/2row">
-                                        <vr-textbox value="scopeModal.fileMask" label="File Mask"></vr-textbox>
+                                        <vr-textbox value="scopeModel.fileMask" label="File Mask"></vr-textbox>
                                     </vr-columns>
                                 </vr-row>
                             </vr-section>
-                      </vr-columns>
+                        </vr-columns>
+                </vr-tab>
+                <vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" isrequired="true"></vr-common-timezone-selector>
+                        </vr-columns>
+                        <span vr-loader="scopeModel.isLoadingSellingNumberPlan" ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan">
+                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModel.sellingNumberPlan" on-ready="scopeModel.onSellingNumberPlanDirectiveReady" isrequired="scopeModel.showSellingNumberPlan">
+                            </vr-whs-be-sellingnumberplan-selector>
+                        </span>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" isrequired="true"></vr-common-timezone-selector>
+                        </vr-columns>
+                        <span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfig">
+                            <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
+                                                                    selectedvalues="scopeModel.zoneServiceConfigSelectedValues"
+                                                                    normal-col-num="6"
+                                                                    isrequired="true"
+                                                                    ismultipleselection="true">
+                            </vr-whs-be-zone-service-config-selector>
+                        </span>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
@@ -72,8 +88,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formCarrierAccountEditor" data-onclick="scopeModal.SaveCarrierAccount" haspermission="hasSaveCarrierAccountPermission"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+                <vr-button type="Save" formname="formCarrierAccountEditor" data-onclick="scopeModel.SaveCarrierAccount" haspermission="hasSaveCarrierAccountPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
 

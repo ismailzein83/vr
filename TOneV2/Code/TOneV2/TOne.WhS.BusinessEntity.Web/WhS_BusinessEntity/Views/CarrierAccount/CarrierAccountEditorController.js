@@ -7,6 +7,14 @@
     function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var customerTimeDirectiveAPI;
+        //var customerTimeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var supplierTimeDirectiveAPI;
+       // var supplierTimeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var activationStatusSelectorAPI;
@@ -37,13 +45,13 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {};
-            $scope.scopeModal.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode
-            $scope.scopeModal.disableCarrierAccountType = isEditMode
-            $scope.scopeModal.disableSellingNumberPlan = isEditMode
-            $scope.scopeModal.showZoneServiceConfig = false;
+            $scope.scopeModel = {};
+            $scope.scopeModel.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode
+            $scope.scopeModel.disableCarrierAccountType = isEditMode
+            $scope.scopeModel.disableSellingNumberPlan = isEditMode
+            $scope.scopeModel.showZoneServiceConfig = false;
 
-            $scope.scopeModal.onBPBusinessRuleSetSelectorReady = function (api) {
+            $scope.scopeModel.onBPBusinessRuleSetSelectorReady = function (api) {
                 bpBusinessRuleSetDirectiveAPI = api;
                 bpBusinessRuleSetReadyPromiseDeferred.resolve();
             }
@@ -54,80 +62,141 @@
                     return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
             }
 
-            $scope.scopeModal.SaveCarrierAccount = function () {
+            $scope.scopeModel.SaveCarrierAccount = function () {
                 if (isEditMode)
                     return updateCarrierAccount();
                 else
                     return insertCarrierAccount();
             };
 
-            $scope.scopeModal.onSellingNumberPlanDirectiveReady = function (api) {
+            $scope.scopeModel.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
+                var payload;
+                if (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null)
+                    payload = {
+                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
+                    }
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
             }
 
-            $scope.scopeModal.onZoneServiceConfigSelectorReady = function (api) {
+            $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
+                var payload = {
+                    selectedIds: getDefaultServices()
+                }
+                var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfig = value };              
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
             }
 
-            $scope.scopeModal.onCarrierProfileDirectiveReady = function (api) {
+            $scope.scopeModel.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
 
             }
 
-            $scope.scopeModal.onActivationStatusDirectiveReady = function (api) {
+            $scope.scopeModel.onCustomerTimeSelectorReady = function (api) {
+                customerTimeDirectiveAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomer = value };
+                var payload;
+                if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.TimeZoneId != 0)
+                    payload = {
+                        selectedIds: carrierAccountEntity.CustomerSettings.TimeZoneId
+                    }
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeDirectiveAPI, payload, setLoader);
+
+
+            }
+            $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
+                supplierTimeDirectiveAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSupplier = value };
+                var payload;
+                if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.TimeZoneId != 0)
+                    payload = {
+                        selectedIds: carrierAccountEntity.SupplierSettings.TimeZoneId
+                    }
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeDirectiveAPI, payload, setLoader);
+
+            }
+
+            $scope.scopeModel.onActivationStatusDirectiveReady = function (api) {
                 activationStatusSelectorAPI = api;
                 activationStatusSelectorReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModal.onCurrencySelectorReady = function (api) {
+            $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
-                if ($scope.scopeModal.selectedCarrierAccountType != undefined) {
-                    if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
-                        if (sellingNumberPlanDirectiveAPI != undefined) {
-                            $scope.scopeModal.showSellingNumberPlan = true;
-                            var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
+            $scope.scopeModel.onCarrierTypeSelectionChanged = function () {
+                if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
+
+                    if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
+                        if (sellingNumberPlanDirectiveAPI != undefined) {                           
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
                             var payload = {
                                 selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
                             }
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
                         }
+
+                        if (customerTimeDirectiveAPI != undefined) {
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingCustomer = value };
+                            var payload;
+                            if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.TimeZoneId != 0)
+                                payload = {
+                                    selectedIds: carrierAccountEntity.CustomerSettings.TimeZoneId
+                                }
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeDirectiveAPI, payload, setLoader);
+                        }
+                        $scope.scopeModel.showSellingNumberPlan = true;
+
                     }
                     else {
-                        $scope.scopeModal.sellingNumberPlan = undefined;
-                        $scope.scopeModal.showSellingNumberPlan = false;
+                        $scope.scopeModel.sellingNumberPlan = undefined;
+                        $scope.scopeModel.showSellingNumberPlan = false;
                     }
 
-                    if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Supplier.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
+                    if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Supplier.value || $scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
                         if (zoneServiceConfigSelectorAPI != undefined) {
-                            var setLoader = function (value) { $scope.scopeModal.isLoadingZoneServiceConfig = value };
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfig = value };
                             var payload = {
                                 selectedIds: getDefaultServices()
                             }
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
                         }
-                        $scope.scopeModal.showZoneServiceConfig = true;
+
+                        if (supplierTimeDirectiveAPI != undefined) {
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingSupplier = value };
+                            var payload;
+                            if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.TimeZoneId !=0)
+                                payload = {
+                                    selectedIds:  carrierAccountEntity.SupplierSettings.TimeZoneId
+                                }
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeDirectiveAPI, payload, setLoader);
+                        }
+                        $scope.scopeModel.showZoneServiceConfig = true;
+                       
 
                     }
-                    else
-                        $scope.scopeModal.showZoneServiceConfig = false;
+                    else {
+                        $scope.scopeModel.showZoneServiceConfig = false;
+                    }
+                       
 
                 }
 
             }
 
-            $scope.scopeModal.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
 
         function load() {
 
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 getCarrierAccount()
@@ -139,19 +208,19 @@
                     })
                     .catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        $scope.scopeModal.isLoading = false;
+                        $scope.scopeModel.isLoading = false;
                     });
             } else
                 loadAllControls();
         }
 
-        function loadAllControls() {
+        function loadAllControls() {//, loadCustomerTimeSelector, loadSupplierTimeSelector
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                 .finally(function () {
-                    $scope.scopeModal.isLoading = false;
+                    $scope.scopeModel.isLoading = false;
                 });
         }
 
@@ -191,6 +260,7 @@
 
         }
 
+
         function getCarrierAccount() {
             return WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId)
                 .then(function (carrierAccount) {
@@ -200,25 +270,25 @@
 
         function loadStaticSection() {
             if (carrierAccountEntity != undefined) {
-                $scope.scopeModal.name = carrierAccountEntity.NameSuffix;
-                for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
-                    if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
-                        $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
+                $scope.scopeModel.name = carrierAccountEntity.NameSuffix;
+                for (var i = 0; i < $scope.scopeModel.carrierAccountTypes.length; i++)
+                    if (carrierAccountEntity.AccountType == $scope.scopeModel.carrierAccountTypes[i].value)
+                        $scope.scopeModel.selectedCarrierAccountType = $scope.scopeModel.carrierAccountTypes[i];
 
                 if (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined) {
-                    $scope.scopeModal.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
-                    $scope.scopeModal.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
+                    $scope.scopeModel.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
+                    $scope.scopeModel.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
                     if (carrierAccountEntity.CarrierAccountSettings.PriceListSettings) {
-                        $scope.scopeModal.fileMask = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.FileMask;
-                        $scope.scopeModal.automaticPriceListEmail = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.Email;
-                        $scope.scopeModal.automaticPriceListSubjectCode = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.SubjectCode;
+                        $scope.scopeModel.fileMask = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.FileMask;
+                        $scope.scopeModel.automaticPriceListEmail = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.Email;
+                        $scope.scopeModel.automaticPriceListSubjectCode = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.SubjectCode;
                     }
                 }
             }
         }
 
         function loadCarrierAccountType() {
-            $scope.scopeModal.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
+            $scope.scopeModel.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
         }
 
         function loadCarrierActivationStatusType() {
@@ -246,7 +316,7 @@
         }
 
         function insertCarrierAccount() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(buildCarrierAccountObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "suffix")) {
@@ -257,12 +327,12 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.scopeModal.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 
         function updateCarrierAccount() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             return WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(buildCarrierAccountObjFromScope())
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response, "suffix")) {
@@ -273,7 +343,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.scopeModal.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 
@@ -291,30 +361,33 @@
         function buildCarrierAccountObjFromScope() {
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
-                NameSuffix: $scope.scopeModal.name,
+                NameSuffix: $scope.scopeModel.name,
                 CarrierAccountSettings: {
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
-                    Mask: $scope.scopeModal.mask,
-                    NominalCapacity: $scope.scopeModal.nominalCapacity,
+                    Mask: $scope.scopeModel.mask,
+                    NominalCapacity: $scope.scopeModel.nominalCapacity,
                     PriceListSettings: {
-                        Email: $scope.scopeModal.automaticPriceListEmail,
-                        FileMask: $scope.scopeModal.fileMask,
-                        SubjectCode: $scope.scopeModal.automaticPriceListSubjectCode,
+                        Email: $scope.scopeModel.automaticPriceListEmail,
+                        FileMask: $scope.scopeModel.fileMask,
+                        SubjectCode: $scope.scopeModel.automaticPriceListSubjectCode,
                         BPBusinessRuleSetIds: bpBusinessRuleSetDirectiveAPI.getSelectedIds()
                     }
                 },
                 SupplierSettings: {
-                    DefaultServices: getSelectedDefaultServices()
+                    DefaultServices: getSelectedDefaultServices(),
+                    TimeZoneId: ($scope.scopeModel.showZoneServiceConfig == true) ? supplierTimeDirectiveAPI.getSelectedIds() : undefined
                 },
-                CustomerSettings: {}
+                CustomerSettings: {
+                    TimeZoneId: ($scope.scopeModel.showSellingNumberPlan == true) ? customerTimeDirectiveAPI.getSelectedIds() : undefined
+                }
             };
 
             if (!isEditMode) {
                 obj.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
 
                 obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-                obj.AccountType = $scope.scopeModal.selectedCarrierAccountType.value;
+                obj.AccountType = $scope.scopeModel.selectedCarrierAccountType.value;
             }
 
             return obj;
