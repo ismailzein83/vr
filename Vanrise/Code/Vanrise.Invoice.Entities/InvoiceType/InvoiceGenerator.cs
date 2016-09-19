@@ -8,7 +8,7 @@ namespace Vanrise.Invoice.Entities
 {
     public abstract class InvoiceGenerator
     {
-        public Guid ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public abstract void GenerateInvoice(IInvoiceGenerationContext context);
     }
