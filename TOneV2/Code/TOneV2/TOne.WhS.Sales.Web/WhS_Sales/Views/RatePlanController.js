@@ -221,7 +221,9 @@
             };
             $scope.sellNewCountries = function () {
                 var customerId = $scope.selectedCustomer.CarrierAccountId;
-                var onCountriesSold = function (customerZones) {
+                var onCountriesSold = function (customerZones)
+                {
+                    $scope.showZoneLetters = false; // This is to delete the choices directive from the dom, via ng-if, to avoid index problems
                     $scope.connector.selectedZoneLetterIndex = 0;
 
                     if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)

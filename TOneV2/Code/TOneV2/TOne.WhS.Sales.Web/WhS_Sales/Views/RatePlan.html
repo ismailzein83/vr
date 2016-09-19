@@ -82,14 +82,16 @@
                 </vr-columns>
             </vr-row>
 
-            <vr-row vr-loader="isLoadingZoneLetters" ng-show="showZoneLetters">
-                <vr-columns width="fullrow" ng-if="showZoneLetters">
-                    <vr-choices selectedindex="connector.selectedZoneLetterIndex"
-                                onselectionchanged="onZoneLetterSelectionChanged()">
-                        <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
-                    </vr-choices>
-                </vr-columns>
-            </vr-row>
+            <div style="min-height: 42px;">
+                <vr-row vr-loader="isLoadingZoneLetters" ng-show="showZoneLetters">
+                    <vr-columns width="fullrow" ng-if="showZoneLetters">
+                        <vr-choices selectedindex="connector.selectedZoneLetterIndex"
+                                    onselectionchanged="onZoneLetterSelectionChanged()">
+                            <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
+                        </vr-choices>
+                    </vr-columns>
+                </vr-row>
+            </div>
 
             <div ng-show="showGrid">
                 <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
