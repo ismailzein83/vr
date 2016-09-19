@@ -30,8 +30,11 @@ app.directive('vrCommonCurrencySettingsEditor', ['UtilsService', 'VRUIUtilsServi
                 currencyReadyPromiseDeferred.resolve();
             }
 
-            function initializeController() {
-                defineAPI();
+            function initializeController()
+            {
+                currencyReadyPromiseDeferred.promise.then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
@@ -39,17 +42,15 @@ app.directive('vrCommonCurrencySettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
                 api.load = function (payload) {
                     var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
                     var currencyPayload;
                     if (payload != undefined && payload.data != undefined) {
                         currencyPayload = { selectedIds: payload.data.CurrencyId };
                     }
-                   
-                    currencyReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencyPayload, currencyLoadPromiseDeferred);
-                        });
+                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencyPayload, currencyLoadPromiseDeferred);
+
                     return currencyLoadPromiseDeferred.promise;
-                }
+                };
 
                 api.getData = function () {
                     return {
