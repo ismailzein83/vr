@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public abstract class VRObjectPropertyEvaluator
     {
-        public Guid ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public abstract dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context);
     }

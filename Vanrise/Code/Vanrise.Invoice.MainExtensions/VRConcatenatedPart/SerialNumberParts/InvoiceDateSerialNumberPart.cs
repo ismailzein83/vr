@@ -11,6 +11,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
     public enum InvoiceDate { FromDate = 0, ToDate = 1,IssueDate = 2, DueDate = 3,} 
     public class InvoiceDateSerialNumberPart : VRConcatenatedPartSettings<IInvoiceSerialNumberConcatenatedPartContext>
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("B9CB6032-438E-42FD-9520-E3451FAD6A71"); } }
         public InvoiceDate InvoiceDate { get; set; }
         public string DateFormat { get; set; }
         public override string GetPartText(IInvoiceSerialNumberConcatenatedPartContext context)

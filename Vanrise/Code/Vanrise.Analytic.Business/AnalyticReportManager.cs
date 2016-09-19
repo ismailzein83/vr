@@ -99,12 +99,12 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<AnalyticReportConfiguration> GetAnalyticReportConfigTypes()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurations<AnalyticReportConfiguration>(Constants.AnalyticReportConfigType);
+            return manager.GetExtensionConfigurations<AnalyticReportConfiguration>(AnalyticReportConfiguration.EXTENSION_TYPE);
         }
         public AnalyticReportConfiguration GetAnalyticReportConfigTypeByName(string name)
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            var analyticReportConfiguration = manager.GetExtensionConfigurationByName<AnalyticReportConfiguration>(name, Constants.AnalyticReportConfigType);
+            var analyticReportConfiguration = manager.GetExtensionConfigurationByName<AnalyticReportConfiguration>(name, AnalyticReportConfiguration.EXTENSION_TYPE);
             if (analyticReportConfiguration == null)
                 throw new NullReferenceException("analyticReportConfiguration");
             return analyticReportConfiguration;

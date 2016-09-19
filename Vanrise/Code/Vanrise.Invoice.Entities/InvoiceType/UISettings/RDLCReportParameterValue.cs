@@ -8,7 +8,7 @@ namespace Vanrise.Invoice.Entities
 {
     public abstract class RDLCReportParameterValue
     {
-        public Guid ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
         public abstract dynamic Evaluate(IRDLCReportParameterValueContext context);
     }
 }

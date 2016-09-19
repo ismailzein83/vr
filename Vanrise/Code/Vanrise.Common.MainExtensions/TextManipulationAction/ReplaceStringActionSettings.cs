@@ -10,6 +10,8 @@ namespace Vanrise.Common.MainExtensions.TextManipulationAction
 {
     public class ReplaceStringActionSettings : TextManipulationActionSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("6E193BD6-4B98-4EA6-AA9B-934C65B59810"); } }
         public string StringToReplace { get; set; }
 
         public string NewString { get; set; }

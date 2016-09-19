@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class AnalyticItemAction
     {
-        public Guid ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
         public string Title { get; set; }
         public abstract void Execute(IAnalyticItemActionContext context);
     }

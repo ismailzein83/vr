@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class ExtensionConfiguration
+    public abstract class ExtensionConfiguration
     {
         public Guid ExtensionConfigurationId { get; set; }
         public string Name { get; set; }
-        public string Title { get; set; }        
+        public string Title { get; set; }
     }
 }

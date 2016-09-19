@@ -14,33 +14,33 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<HistorySearchSetting> GetAnalyticReportSettingsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<HistorySearchSetting>(Constants.AnalyticHistoryReportSettingsConfigType);
+            return templateConfigManager.GetExtensionConfigurations<HistorySearchSetting>(HistorySearchSetting.EXTENSION_TYPE);
         }
         public IEnumerable<WidgetDefinitionSetting> GetWidgetsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<WidgetDefinitionSetting>(Constants.AnalyticWidgetsConfigType);
+            return templateConfigManager.GetExtensionConfigurations<WidgetDefinitionSetting>(WidgetDefinitionSetting.EXTENSION_TYPE);
         }
 
         public IEnumerable<RealTimeSearchSetting> GetRealTimeReportSettingsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<RealTimeSearchSetting>(Constants.RealTimeSearchConfigType);
+            return templateConfigManager.GetExtensionConfigurations<RealTimeSearchSetting>(RealTimeSearchSetting.EXTENSION_TYPE);
         }
         public IEnumerable<RealTimeWidgetSetting> GetRealTimeWidgetsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<RealTimeWidgetSetting>(Constants.RealTimeWidgetConfigType);
+            return templateConfigManager.GetExtensionConfigurations<RealTimeWidgetSetting>(RealTimeWidgetSetting.EXTENSION_TYPE);
         }
         public IEnumerable<MeasureStyleRuleTemplate> GetMeasureStyleRuleTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<MeasureStyleRuleTemplate>(Constants.MeasureStyleRuleConfigType);
+            return templateConfigManager.GetExtensionConfigurations<MeasureStyleRuleTemplate>(MeasureStyleRuleTemplate.EXTENSION_TYPE);
         }
         public IEnumerable<AnalyticItemActionTemplate> GetAnalyticItemActionsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<AnalyticItemActionTemplate>(Constants.ItemActionConfigType);
+            return templateConfigManager.GetExtensionConfigurations<AnalyticItemActionTemplate>(AnalyticItemActionTemplate.EXTENSION_TYPE);
         } 
     }
 }

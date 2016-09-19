@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class DARecordAggregate
     {
-        public Guid ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public virtual DataRecordFieldType FieldType { get; set; }
 

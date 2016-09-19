@@ -9,6 +9,8 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class FieldRDLReportParameterValue : RDLCReportParameterValue
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("7A1A9991-EC84-4E92-B1D1-1C5140DF8FF4"); } }
         public Entities.InvoiceField Field { get; set; }
 
         public string FieldName { get; set; }

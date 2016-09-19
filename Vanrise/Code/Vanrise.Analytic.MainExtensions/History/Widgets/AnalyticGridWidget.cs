@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
     public class AnalyticGridWidget : AnalyticHistoryReportWidget
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("7A2A35E2-543A-42C7-B97F-E05EE8D09A00"); } }
         public bool RootDimensionsFromSearchSection { get; set; }
 
         public List<AnalyticGridWidgetDimension> Dimensions { get; set; }

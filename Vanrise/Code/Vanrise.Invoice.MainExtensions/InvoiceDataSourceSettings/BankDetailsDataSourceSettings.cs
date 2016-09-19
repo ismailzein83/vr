@@ -9,6 +9,8 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class BankDetailsDataSourceSettings : InvoiceDataSourceSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("DE6F2641-A4A8-4F56-AEB4-2A0A25000408"); } }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();

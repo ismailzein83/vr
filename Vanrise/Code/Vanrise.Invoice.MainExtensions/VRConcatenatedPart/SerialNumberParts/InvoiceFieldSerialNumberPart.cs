@@ -11,6 +11,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
 {
     public class InvoiceFieldSerialNumberPart : VRConcatenatedPartSettings<IInvoiceSerialNumberConcatenatedPartContext>
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("5C47A8C8-240C-41DA-9A3C-C671BC03D478"); } }
         public Entities.InvoiceField Field { get; set; }
         public string FieldName { get; set; }
         public override string GetPartText(IInvoiceSerialNumberConcatenatedPartContext context)

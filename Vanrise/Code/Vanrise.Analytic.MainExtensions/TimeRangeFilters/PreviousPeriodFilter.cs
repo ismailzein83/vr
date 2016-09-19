@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.MainExtensions.TimeRangeFilters
 {
     public class PreviousPeriodFilter : TimeRangeFilter
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("BCFFD15E-1A84-46E0-8BD6-45B36049E29E"); } }
         public TimeSpan PeriodLength { get; set; }
 
         public TimeSpan PeriodDistanceFromNow { get; set; }

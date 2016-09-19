@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets
 {
     public class TimeVariationChartWidget : RealTimeReportWidget
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("CADC9403-6668-48E9-B452-D398B62921AB"); } }
         public List<RealTimeTimeVariationChartWidgetMeasure> Measures { get; set; }
         public string ChartType { get; set; }
 

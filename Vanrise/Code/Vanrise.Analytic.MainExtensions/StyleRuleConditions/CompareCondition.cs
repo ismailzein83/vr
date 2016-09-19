@@ -10,6 +10,8 @@ namespace Vanrise.Analytic.MainExtensions.StyleRuleConditions
     public enum CompareOperator { Equals = 0, NotEquals = 1, Greater = 2, GreaterOrEquals = 3, Less = 4, LessOrEquals = 5}
     public class CompareCondition : StyleRuleCondition
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("4E972A40-2887-412B-B192-8E4E9739631C"); } }
         public CompareOperator CompareOperator { get; set; }
 
         public dynamic CompareValue { get; set; }
