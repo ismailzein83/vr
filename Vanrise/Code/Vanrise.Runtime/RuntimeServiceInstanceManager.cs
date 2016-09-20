@@ -91,7 +91,7 @@ namespace Vanrise.Runtime
             var services = GetAllServices();
             if (services != null)
             {
-                HashSet<int> runningProcessIds = new HashSet<int>(new RunningProcessManager().GetCachedRunningProcesses().Select(itm => itm.ProcessId));
+                HashSet<int> runningProcessIds = new HashSet<int>(new RunningProcessManager().GetRunningProcessesFromDB().Select(itm => itm.ProcessId));
                 var dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeServiceInstanceDataManager>();
                 bool isAnyDeleted = false;
                 foreach (var service in services)

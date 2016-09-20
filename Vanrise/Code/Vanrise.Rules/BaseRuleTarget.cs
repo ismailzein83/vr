@@ -8,8 +8,8 @@ namespace Vanrise.Rules
 {
     public class BaseRuleTarget
     {
-        public DateTime? EffectiveOn { get; set; }
+        public virtual DateTime? EffectiveOn { get; set; }
 
-        public bool IsEffectiveInFuture { get; set; }
+        public virtual bool IsEffectiveInFuture { get; set; }
     }
 }

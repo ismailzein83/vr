@@ -188,7 +188,7 @@ namespace Vanrise.Runtime
                });
         }
 
-        private static List<RunningProcessInfo> GetRunningProcessesFromDB()
+        internal List<RunningProcessInfo> GetRunningProcessesFromDB()
         {
             IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
             return dataManager.GetRunningProcesses();

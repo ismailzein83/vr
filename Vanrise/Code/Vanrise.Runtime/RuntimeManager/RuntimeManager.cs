@@ -111,7 +111,7 @@ namespace Vanrise.Runtime
 
         internal void Execute()
         {
-            var runningProcessesIds = new RunningProcessManager().GetRunningProcesses().Select(itm => itm.ProcessId).ToList();
+            var runningProcessesIds = new RunningProcessManager().GetRunningProcessesFromDB().Select(itm => itm.ProcessId).ToList();
             if (IsCurrentRuntimeAManager())
             {
                 if (ProcessHeartBeatManager.s_current == null)
