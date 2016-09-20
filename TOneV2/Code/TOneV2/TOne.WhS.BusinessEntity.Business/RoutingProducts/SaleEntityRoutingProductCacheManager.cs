@@ -21,22 +21,22 @@ namespace TOne.WhS.BusinessEntity.Business
         
         public SaleZoneRoutingProduct CacheAndGetSaleZoneRP(SaleZoneRoutingProduct saleZoneRP)
         {
-            Dictionary<long, SaleZoneRoutingProduct> cachedCodesById = this.GetOrCreateObject("cachedSaleZoneRPsById", () => new Dictionary<long, SaleZoneRoutingProduct>());
+            Dictionary<long, SaleZoneRoutingProduct> cachedSaleZoneRPsById = this.GetOrCreateObject("cachedSaleZoneRPsById", () => new Dictionary<long, SaleZoneRoutingProduct>());
             SaleZoneRoutingProduct matchSaleZoneRP;
-            lock (cachedCodesById)
+            lock (cachedSaleZoneRPsById)
             {
-                matchSaleZoneRP = cachedCodesById.GetOrCreateItem(saleZoneRP.SaleEntityRoutingProductId, () => saleZoneRP);
+                matchSaleZoneRP = cachedSaleZoneRPsById.GetOrCreateItem(saleZoneRP.SaleEntityRoutingProductId, () => saleZoneRP);
             }
             return matchSaleZoneRP;
         }
 
         public DefaultRoutingProduct CacheAndGetDefaultRP(DefaultRoutingProduct defaultRP)
         {
-            Dictionary<long, DefaultRoutingProduct> cachedCodesById = this.GetOrCreateObject("cachedSaleZoneRPsById", () => new Dictionary<long, DefaultRoutingProduct>());
+            Dictionary<long, DefaultRoutingProduct> cachedDefaultRPsById = this.GetOrCreateObject("cachedDefaultRPsById", () => new Dictionary<long, DefaultRoutingProduct>());
             DefaultRoutingProduct matchDefaultRP;
-            lock (cachedCodesById)
+            lock (cachedDefaultRPsById)
             {
-                matchDefaultRP = cachedCodesById.GetOrCreateItem(defaultRP.SaleEntityRoutingProductId, () => defaultRP);
+                matchDefaultRP = cachedDefaultRPsById.GetOrCreateItem(defaultRP.SaleEntityRoutingProductId, () => defaultRP);
             }
             return matchDefaultRP;
         }
