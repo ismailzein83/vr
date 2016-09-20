@@ -10,6 +10,10 @@ namespace TOne.WhS.Routing.Data
 {
     public interface ICustomerRouteDataManager : IDataManager, IBulkApplyDataManager<CustomerRoute>, IRoutingDataManager
     {
+        int ParentWFRuntimeProcessId { set; }
+
+        long ParentBPInstanceId { set; }
+
         void ApplyCustomerRouteForDB(object preparedCustomerRoute);
 
         Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input);

@@ -14,6 +14,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class PrepareCustomerRoutesForApplyInput
     {
+        public int ParentWFRuntimeProcessId { get; set; }
+
         public BaseQueue<CustomerRoutesBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
@@ -21,6 +23,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class PrepareCustomerRoutesForApply : DependentAsyncActivity<PrepareCustomerRoutesForApplyInput>
     {
+        [RequiredArgument]        
+        public InArgument<int> ParentWFRuntimeProcessId { get; set; }
+
 
         [RequiredArgument]
         public InArgument<BaseQueue<CustomerRoutesBatch>> InputQueue { get; set; }
@@ -32,6 +37,8 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(PrepareCustomerRoutesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICustomerRouteDataManager customeRoutesDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            customeRoutesDataManager.ParentWFRuntimeProcessId = inputArgument.ParentWFRuntimeProcessId;
+            customeRoutesDataManager.ParentBPInstanceId = handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value;
             PrepareDataForDBApply(previousActivityStatus, handle, customeRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CustomerRoutesBatch => CustomerRoutesBatch.CustomerRoutes);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Customer Routes For Apply is done", null);
         }
@@ -40,6 +47,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new PrepareCustomerRoutesForApplyInput
             {
+                ParentWFRuntimeProcessId = this.ParentWFRuntimeProcessId.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };

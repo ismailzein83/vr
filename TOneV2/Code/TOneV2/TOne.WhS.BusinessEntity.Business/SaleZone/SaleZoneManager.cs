@@ -17,6 +17,16 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
+        public Dictionary<long, SaleZone> GetCachedSaleZones()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
+            {
+                DistributedCacher cacher = new DistributedCacher();
+                Func<SaleZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleZoneCachedObjectCreationHandler(); };
+                return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SaleZone>>("Distributed_GetAllSaleZones", objectCreationHandler);
+            });
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             var saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);
@@ -200,16 +210,6 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreZonesUpdated(ref _updateHandle);
             }
-        }
-
-        private Dictionary<long, SaleZone> GetCachedSaleZones()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
-            {
-                DistributedCacher cacher = new DistributedCacher();
-                Func<SaleZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleZoneCachedObjectCreationHandler(); };
-                return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SaleZone>>("Distributed_GetAllSaleZones", objectCreationHandler);
-            });
         }
 
         private SaleZoneDetail SaleZoneDetailMapper(SaleZone saleZone)

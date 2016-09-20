@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.BP.Arguments
 {
     public class BuildRoutesByCodePrefixInput : BaseProcessInputArgument
     {
+        public int ParentWFRuntimeProcessId { get; set; }
+
         public Dictionary<string,int> SupplierCodeServiceRuntimeProcessIds { get; set; }
 
         public int RoutingDatabaseId { get; set; }

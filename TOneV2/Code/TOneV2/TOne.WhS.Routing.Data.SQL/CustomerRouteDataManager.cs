@@ -13,6 +13,10 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
+        public int ParentWFRuntimeProcessId { get; set; }
+
+        public long ParentBPInstanceId { get; set; }
+
         static CustomerRouteDataManager()
         {
             RouteOption dummy = new RouteOption();

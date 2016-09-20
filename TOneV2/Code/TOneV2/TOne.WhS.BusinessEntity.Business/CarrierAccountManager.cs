@@ -27,6 +27,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
         
+        public Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
+               () =>
+               {
+                   ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+                   IEnumerable<CarrierAccount> carrierAccounts = dataManager.GetCarrierAccounts();
+                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
+               });
+        }
+        
         public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId,bool getCustomers, bool getSuppliers)
         {
             if (getCustomers)
@@ -58,7 +69,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
-        
+
         public IEnumerable<CarrierAccount> GetAllCarriers()
         {
             return GetCachedCarrierAccounts().Values;
@@ -382,17 +393,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
-               () =>
-               {
-                   ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-                   IEnumerable<CarrierAccount> carrierAccounts = dataManager.GetCarrierAccounts();
-                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
-               });
-        }
-        
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();

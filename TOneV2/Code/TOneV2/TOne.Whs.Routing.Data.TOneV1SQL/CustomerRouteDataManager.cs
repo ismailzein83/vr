@@ -11,11 +11,16 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
+        public int ParentWFRuntimeProcessId { get; set; }
+
+        public long ParentBPInstanceId { get; set; }
+
         static CustomerRouteDataManager()
         {
             RouteOption dummy = new RouteOption();
@@ -28,8 +33,14 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
             CustomerRouteBulkInsertInfo customerRouteBulkInsertInfo = preparedCustomerRoute as CustomerRouteBulkInsertInfo;
-            InsertBulkToTable(customerRouteBulkInsertInfo.RouteStreamForBulkInsertInfo);
-            InsertBulkToTable(customerRouteBulkInsertInfo.RouteOptionStreamForBulkInsertInfo);
+            Parallel.For(0, 2, (i) =>
+                {
+                    switch (i)
+                    {
+                        case 0: InsertBulkToTable(customerRouteBulkInsertInfo.RouteStreamForBulkInsertInfo); break;
+                        case 1: InsertBulkToTable(customerRouteBulkInsertInfo.RouteOptionStreamForBulkInsertInfo); break;
+                    }
+                });
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -72,26 +83,52 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             return customerRouteBulkInsert;
         }
 
+        ReserveRouteIdsResponse _lastReservedRouteIds;
+        int _lastTakenId;
+        Vanrise.Runtime.InterRuntimeServiceManager _interRuntimeServiceManager = new Vanrise.Runtime.InterRuntimeServiceManager();
+        CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+        SaleZoneManager _saleZoneManager = new SaleZoneManager();
+        SupplierZoneManager _supplierZoneManager = new SupplierZoneManager();
+        Dictionary<int, CarrierAccount> _allCarriers;
+        Dictionary<long, SaleZone> _allSaleZones;
+        Dictionary<long, SupplierZone> _allSupplierZones;
         public void WriteRecordToStream(TOne.WhS.Routing.Entities.CustomerRoute record, object dbApplyStream)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            int routeId;
+            if (_lastReservedRouteIds == null || _lastReservedRouteIds.EndId == _lastTakenId)
+            {
+                _lastReservedRouteIds = _interRuntimeServiceManager.SendRequest(this.ParentWFRuntimeProcessId, new ReserveRouteIdsRequest { ParentBPInstanceId = this.ParentBPInstanceId });
+                _lastTakenId = _lastReservedRouteIds.StartingId;
+                routeId = _lastTakenId;
+            }
+            else
+            {
+                _lastTakenId++;
+                routeId = _lastTakenId;
+            }
+            if (_allCarriers == null)
+                _allCarriers = _carrierAccountManager.GetCachedCarrierAccounts();
+            if (_allSaleZones == null)
+                _allSaleZones = _saleZoneManager.GetCachedSaleZones();
+            if (_allSupplierZones == null)
+                _allSupplierZones = _supplierZoneManager.GetCachedSupplierZones();
 
-            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(record.CustomerId);
-            SaleZone saleZone = saleZoneManager.GetSaleZone(record.SaleZoneId);
+            CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);// _carrierAccountManager.GetCarrierAccount(record.CustomerId);//
+            SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);// _saleZoneManager.GetSaleZone(record.SaleZoneId);//
 
             CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
-            customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", 0, customer.SourceId, 0, record.Code, saleZone.SourceId,
+            customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, 0, record.Code, saleZone.SourceId,
                 record.Rate, 0, 0, GetDateTimeForBCP(DateTime.Now), 0, 0, 0, record.IsBlocked ? 1 : 0, 0, 0);
 
             foreach (RouteOption option in record.Options)
             {
-                CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(option.SupplierId);
-                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(option.SupplierZoneId);
-                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", 0, supplier.SourceId, supplierZone.SourceId, option.SupplierRate, 0, 0, 0, 0, GetDateTimeForBCP(DateTime.Now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
+                CarrierAccount supplier = _allCarriers.GetRecord(option.SupplierId);// _carrierAccountManager.GetCarrierAccount(option.SupplierId);//
+                SupplierZone supplierZone =  _allSupplierZones.GetRecord(option.SupplierZoneId);// _supplierZoneManager.GetSupplierZone(option.SupplierZoneId);//
+                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate, 0, 0, 0, 0, GetDateTimeForBCP(DateTime.Now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
             }
         }
+
+
 
         public Vanrise.Entities.BigResult<TOne.WhS.Routing.Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<TOne.WhS.Routing.Entities.CustomerRouteQuery> input)
         {
@@ -136,5 +173,30 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             public StreamBulkInsertInfo RouteStreamForBulkInsertInfo { get; set; }
             public StreamBulkInsertInfo RouteOptionStreamForBulkInsertInfo { get; set; }
         }
+    }
+
+    public class ReserveRouteIdsRequest : Vanrise.Runtime.Entities.InterRuntimeServiceRequest<ReserveRouteIdsResponse>
+    {
+        public long ParentBPInstanceId { get; set; }
+        static Dictionary<long, int> s_routingBPInstanceLastReservedRouteId = new Dictionary<long, int>();
+        public override ReserveRouteIdsResponse Execute()
+        {
+            ReserveRouteIdsResponse response = new ReserveRouteIdsResponse();
+            lock(s_routingBPInstanceLastReservedRouteId)
+            {
+                int lastTakenId = s_routingBPInstanceLastReservedRouteId.GetOrCreateItem(this.ParentBPInstanceId);
+                response.StartingId = lastTakenId + 1;
+                response.EndId = response.StartingId + 50000;
+                s_routingBPInstanceLastReservedRouteId[this.ParentBPInstanceId] = response.EndId;
+            }
+            return response;
+        }
+    }
+
+    public class ReserveRouteIdsResponse
+    {
+        public int StartingId { get; set; }
+
+        public int EndId { get; set; }
     }
 }

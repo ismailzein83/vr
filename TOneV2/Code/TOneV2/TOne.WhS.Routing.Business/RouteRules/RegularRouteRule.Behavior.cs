@@ -12,6 +12,37 @@ namespace TOne.WhS.Routing.Business
 {
     public partial class RegularRouteRule : RouteRuleSettings
     {
+        #region Central Execution
+
+        public override bool UseOrderedExecution
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
+        {
+            var options = CreateOptions(context, target);
+            if(options != null)
+            return ApplyOptionsOrder(options);
+            else
+                return null;
+        }
+
+        public override bool IsOptionFiltered(TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)
+        {
+            return FilterOption(target, option);
+        }
+
+        public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
+        {
+            this.ApplyOptionsPercentage<RouteOption>(options);
+        }
+
+        #endregion
+
         #region SaleEntity Execution
 
         public const int ExtensionConfigId = 11;
@@ -39,7 +70,7 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        private IEnumerable<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
+        private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             var options = new List<RouteOptionRuleTarget>();
             if (this.OptionsSettingsGroup != null)
@@ -161,7 +192,7 @@ namespace TOne.WhS.Routing.Business
             return option;
         }
 
-        private IEnumerable<T> ApplyOptionsOrder<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
+        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
         {
             if (this.OptionOrderSettings != null && OptionOrderSettings.Count > 0)
             {
@@ -219,7 +250,7 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
-            return options;
+            return options != null ? options.ToList() : null;
         }
 
         private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RouteOptionOrderSettings optionOrderSettings) where T : IRouteOptionOrderTarget

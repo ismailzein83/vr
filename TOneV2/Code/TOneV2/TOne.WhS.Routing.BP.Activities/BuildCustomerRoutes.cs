@@ -84,6 +84,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
             List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
+            RouteBuilder builder = new RouteBuilder();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -94,7 +95,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate, inputArgument.IsFuture);
 
                         IEnumerable<SellingProductRoute> sellingProductRoute;
-                        RouteBuilder builder = new RouteBuilder();
+                       
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code, out sellingProductRoute);
 
                         if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)

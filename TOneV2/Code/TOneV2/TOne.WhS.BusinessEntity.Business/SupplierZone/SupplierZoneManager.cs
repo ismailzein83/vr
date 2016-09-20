@@ -16,6 +16,18 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierZoneManager : IBusinessEntityManager
     {
         #region Public Methods
+
+        public Dictionary<long, SupplierZone> GetCachedSupplierZones()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
+               () =>
+               {
+                   DistributedCacher cacher = new DistributedCacher();
+                   Func<SupplierZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierZoneCachedObjectCreationHandler(); };
+                   return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SupplierZone>>("Distributed_GetSupplierZones", objectCreationHandler);
+               });
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<SupplierZoneDetails> GetFilteredSupplierZones(Vanrise.Entities.DataRetrievalInput<SupplierZoneQuery> input)
         {
             var allsupplierZones = GetCachedSupplierZones();
@@ -128,17 +140,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-
-        Dictionary<long, SupplierZone> GetCachedSupplierZones()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
-               () =>
-               {
-                   DistributedCacher cacher = new DistributedCacher();
-                   Func<SupplierZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierZoneCachedObjectCreationHandler(); };
-                   return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SupplierZone>>("Distributed_GetSupplierZones", objectCreationHandler);
-               });
-        }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {

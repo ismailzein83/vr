@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOption
+    public class RouteOption : IRouteOptionPercentageTarget
     {
         static RouteOption()
         {
