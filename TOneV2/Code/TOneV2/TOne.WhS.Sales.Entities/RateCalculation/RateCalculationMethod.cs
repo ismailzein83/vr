@@ -8,7 +8,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public abstract class RateCalculationMethod
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void CalculateRate(IRateCalculationMethodContext context);
     }

@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class CodeCriteriaGroupSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract IEnumerable<CodeCriteria> GetCodeCriterias(ICodeCriteriaGroupContext context);
 

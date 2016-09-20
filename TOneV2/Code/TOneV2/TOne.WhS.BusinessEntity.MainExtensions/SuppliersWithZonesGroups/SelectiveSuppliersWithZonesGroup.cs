@@ -10,8 +10,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups
 {
     public class SelectiveSuppliersWithZonesGroup : SuppliersWithZonesGroupSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("11eaa8de-6175-47fb-9c16-c428b735d9e2"); } }
+        public override Guid ConfigId { get { return  new Guid("11eaa8de-6175-47fb-9c16-c428b735d9e2"); } }
         public List<SupplierWithZones> SuppliersWithZones { get; set; }
 
         public override IEnumerable<SupplierWithZones> GetSuppliersWithZones(ISuppliersWithZonesGroupContext context)

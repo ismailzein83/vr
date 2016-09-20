@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -7,6 +8,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan
 {
     public class SelectiveSellingNumberPlan : SaleZoneGroupSettings
     {
+        public override Guid ConfigId { get { return new Guid("d566ce83-0010-42ab-88bc-b8b3eaf5b556"); } }
         public List<int> SellingNumberPlanIds { get; set; }
         public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)
         {

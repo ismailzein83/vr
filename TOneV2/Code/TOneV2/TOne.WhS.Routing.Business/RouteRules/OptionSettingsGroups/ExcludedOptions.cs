@@ -8,8 +8,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups
 {
     public class ExcludedOptions : RouteOptionSettingsGroup
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("49938afb-0296-40f1-9ef7-9d790cd1eba4"); } }
+        public override Guid ConfigId { get { return new Guid("49938afb-0296-40f1-9ef7-9d790cd1eba4"); } }
         public List<RouteOptionSettings> Options { get; set; }
 
         public override IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context)

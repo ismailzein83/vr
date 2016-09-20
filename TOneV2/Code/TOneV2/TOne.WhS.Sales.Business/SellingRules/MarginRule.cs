@@ -9,8 +9,8 @@ namespace TOne.WhS.Sales.Business.SellingRules
 {
     public class MarginRule : SellingRuleSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("04fdcf7e-ba4f-4274-8da8-3c40db867170"); } }
+        public override Guid ConfigId { get { return new Guid("04fdcf7e-ba4f-4274-8da8-3c40db867170"); } }
+
         public decimal FromRate { get; set; }
         public decimal ToRate { get; set; }
         public decimal MinMargin { get; set; }

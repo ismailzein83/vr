@@ -9,8 +9,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups
 {
     public class SelectiveCodeCriteriaGroup : CodeCriteriaGroupSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("1deaf809-7eaa-4380-802f-aeb18c6a2368"); } }
+        public override Guid ConfigId { get { return new Guid("1deaf809-7eaa-4380-802f-aeb18c6a2368"); } }
         public List<CodeCriteria> Codes { get; set; }
 
         public override IEnumerable<CodeCriteria> GetCodeCriterias(ICodeCriteriaGroupContext context)

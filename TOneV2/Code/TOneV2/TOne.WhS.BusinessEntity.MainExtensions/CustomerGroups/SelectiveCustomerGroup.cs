@@ -10,8 +10,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
 {
     public class SelectiveCustomerGroup : CustomerGroupSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("967c9c1f-0a9f-41ca-8a19-3a70338fe853"); } }
+        public override Guid ConfigId { get { return new Guid("967c9c1f-0a9f-41ca-8a19-3a70338fe853"); } }
 
         public List<int> CustomerIds { get; set; } 
 

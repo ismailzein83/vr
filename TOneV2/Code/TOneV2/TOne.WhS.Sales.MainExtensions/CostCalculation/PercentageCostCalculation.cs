@@ -10,8 +10,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 {
     public class PercentageCostCalculation : CostCalculationMethod
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("B1975F3C-528B-410C-ABDF-887DEC0D1B44"); } }
+        public override Guid ConfigId { get { return  new Guid("B1975F3C-528B-410C-ABDF-887DEC0D1B44"); } }
         public RouteOptionPercentageSettings PercentageSettings { get; set; }
 
         public override void CalculateCost(ICostCalculationMethodContext context)

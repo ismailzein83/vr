@@ -6,8 +6,9 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
 {
     public class OptionOrderByQuality : RouteOptionOrderSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("c107e207-6597-4e45-b22f-d4f0bb7dd211"); } }
+
+        public override Guid ConfigId { get { return new Guid("c107e207-6597-4e45-b22f-d4f0bb7dd211"); } }
+
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
             context.OrderDitection = OrderDirection.Descending;

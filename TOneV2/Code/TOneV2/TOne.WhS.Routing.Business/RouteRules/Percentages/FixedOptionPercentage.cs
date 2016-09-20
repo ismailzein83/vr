@@ -7,8 +7,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
 {
     public class FixedOptionPercentage : RouteOptionPercentageSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("9d6d19c0-4904-4e91-8831-80619abec818"); } }
+        public override Guid ConfigId { get { return new Guid("9d6d19c0-4904-4e91-8831-80619abec818"); } }
+
         public List<Decimal> Percentages { get; set; }
 
         public override void Execute(IRouteOptionPercentageExecutionContext context)

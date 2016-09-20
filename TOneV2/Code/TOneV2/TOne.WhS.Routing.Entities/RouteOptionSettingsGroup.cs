@@ -8,7 +8,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteOptionSettingsGroup
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context);
     }

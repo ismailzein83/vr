@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class SaleZoneGroupSettings : Vanrise.GenericData.Entities.IBusinessEntityGroup
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public int SellingNumberPlanId { get; set; }
 

@@ -9,8 +9,7 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
 {
     public class MarginPercentageRateCalculationMethod : RateCalculationMethod
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36"); } }
+        public override Guid ConfigId { get { return  new Guid("84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36"); } }
         public decimal MarginPercentage { get; set; }
 
         public override void CalculateRate(IRateCalculationMethodContext context)

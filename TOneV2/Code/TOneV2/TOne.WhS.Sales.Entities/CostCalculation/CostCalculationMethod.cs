@@ -8,7 +8,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public abstract class CostCalculationMethod
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public string Title { get; set; }
 
