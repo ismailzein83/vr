@@ -20,5 +20,5 @@
     SwitchConnectivity: { value: 18, description: "SwitchConnectivity", defaultMigrate: true },
     ZoneServicesConfig: { value: 19, description: "Zone Services", defaultMigrate: true },
     SupplierZoneServices: { value: 20, description: "Supplier Zone Services", defaultMigrate: true },
-    SaleZoneServices: { value: 21, description: "Sale Zone Services", defaultMigrate: true }
+    SaleEntityServices: { value: 21, description: "Sale Entity Services", defaultMigrate: true }
 });
