@@ -28,7 +28,7 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetRouteOptionRuleSettingsTemplates")]
-        public List<TemplateConfig> GetRouteOptionRuleSettingsTemplates()
+        public IEnumerable<RouteOptionRuleConfig> GetRouteOptionRuleSettingsTemplates()
         {
             RouteOptionRuleManager manager = new RouteOptionRuleManager();
             return manager.GetRouteOptionRuleTypesTemplates();

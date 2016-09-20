@@ -163,8 +163,6 @@ namespace TOne.WhS.DBSync.Business
                     Options = GetOptions(sourceRule),
                 },
                 OptionPercentageSettings = GetOptionPercentageSettings(sourceRule),
-                ConfigId = RegularRouteRule.ExtensionConfigId
-
             };
         }
         RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)

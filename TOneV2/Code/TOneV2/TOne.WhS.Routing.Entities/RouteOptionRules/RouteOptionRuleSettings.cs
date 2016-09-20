@@ -8,7 +8,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteOptionRuleSettings
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target);
     }

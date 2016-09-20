@@ -93,7 +93,6 @@ namespace TOne.WhS.DBSync.Business
                     Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
                     Settings = new BlockRouteOptionRule
                     {
-                        ConfigId = BlockRouteOptionRule.ExtensionConfigId
                     },
                     Criteria = new RouteOptionRuleCriteria
                     {

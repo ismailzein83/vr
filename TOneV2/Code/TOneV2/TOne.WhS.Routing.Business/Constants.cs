@@ -16,9 +16,9 @@ namespace TOne.WhS.Routing.Business
 
         //public const string RouteRuleOptionPercentageSettings = "WhS_Routing_RouteRuleOptionPercentageSettings";
 
-        public const string RouteRuleSettingsConfigType = "WhS_Routing_RouteRuleSettingsType";
+     //   public const string RouteRuleSettingsConfigType = "WhS_Routing_RouteRuleSettingsType";
 
-        public const string RouteOptionRuleConfigType = "WhS_Routing_RouteOptionRuleSettingsType";
+       // public const string RouteOptionRuleConfigType = "WhS_Routing_RouteOptionRuleSettingsType";
 
         public const string SupplierZoneToRPOptionConfigType = "WhS_Routing_SupplierZoneToRPOptionType";
 

@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteRuleSettingsConfig : ExtensionConfiguration
+    public class RouteOptionRuleConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "WhS_Routing_RouteRuleSettingsType";
         public string Editor { get; set; }

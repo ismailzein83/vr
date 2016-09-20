@@ -64,7 +64,7 @@ namespace TOne.WhS.Routing.Business
                             currentPriority = priority;
                             currentRules = new List<Vanrise.Rules.BaseRule>();
                         }
-                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.TemplateConfigID
+                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId
                                                          && (!routingProductId.HasValue || (itm.Criteria.RoutingProductId.HasValue && routingProductId.Value == itm.Criteria.RoutingProductId.Value)));
                         if (ruleTypeRules != null)
                             currentRules.AddRange(ruleTypeRules);
@@ -75,15 +75,15 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
-        int GetRuleTypePriority(TemplateConfig ruleTypeConfig)
+        int GetRuleTypePriority(RouteRuleSettingsConfig ruleTypeConfig)
         {
-            return ruleTypeConfig.Settings != null ? (ruleTypeConfig.Settings as RouteRuleTypeSettings).Priority : int.MaxValue;
+            return ruleTypeConfig.Priority.HasValue ? ruleTypeConfig.Priority.Value : int.MaxValue;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetRouteRuleTypesTemplates()
+        public IEnumerable<RouteRuleSettingsConfig> GetRouteRuleTypesTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.RouteRuleSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
         }
 
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()

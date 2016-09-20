@@ -8,7 +8,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteRuleSettings
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
 
         public virtual bool UseOrderedExecution
         {
