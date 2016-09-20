@@ -132,29 +132,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.PercentageProfit = Convert.ToDouble(percentageProfit.Value ?? 0.0);
                     carrierSummary.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage(carrierSummary.PercentageProfit);
 
-
-
-                    //MeasureValue costCommissionValue;
-                    //analyticRecord.MeasureValues.TryGetValue("CostCommissions", out costCommissionValue);
-                    //carrierSummary.CostCommissionValue = Convert.ToDouble(costCommissionValue.Value ?? 0.0);
-                    //carrierSummary.CostCommissionValueFormatted = ReportHelpers.FormatNumber(carrierSummary.CostCommissionValue);
-
-                    //MeasureValue saleCommissionValue;
-                    //analyticRecord.MeasureValues.TryGetValue("SaleCommissions", out saleCommissionValue);
-                    //carrierSummary.SaleCommissionValue = Convert.ToDouble(saleCommissionValue.Value ?? 0.0);
-                    //carrierSummary.SaleCommissionValueFormatted = ReportHelpers.FormatNumber(carrierSummary.SaleCommissionValue);
-
-
                     carrierSummary.AvgMin = (carrierSummary.SaleDuration.Value != 0) ? (decimal)(((double)carrierSummary.Profit.Value) / (double)carrierSummary.SaleDuration.Value) : 0;
                     totalAvgMin = totalAvgMin + carrierSummary.AvgMin;
                       
                     netProft = netProft + (carrierSummary.SaleNet - carrierSummary.CostNet);
 
-                    
                     carrierSummary.AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0) ? ReportHelpers.FormatLongNumberDigit((decimal)carrierSummary.Profit / carrierSummary.SaleDuration) : "0.00";
-
-                    //carrierSummary.ProfitPercentageFormatted = carrierSummary.SaleNet == 0 ? "" : (carrierSummary.SaleNet.HasValue) ? ReportHelpers.FormatNumberPercentage(carrierSummary.Profit / carrierSummary.SaleNet) : "-100%";
-
 
                     listCarrierSummaryDetailed.Add(carrierSummary);
                 }

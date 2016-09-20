@@ -47,7 +47,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("CostRate");
                 listMeasures.Add("CostDurationDetails");
                 listMeasures.Add("CostNet");
-                //listMeasures.Add("CostCommissions");
                 listMeasures.Add("CostExtraCharges");
                 listMeasures.Add("CostOffPeakDuration");
                 listMeasures.Add("CostOffPeakRate");
@@ -61,7 +60,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("SaleRate");
                 listMeasures.Add("SaleDurationDetails");
                 listMeasures.Add("SaleNet");
-                //listMeasures.Add("SaleCommissions");
                 listMeasures.Add("SaleExtraCharges");
                 listMeasures.Add("SaleOffPeakDuration");
                 listMeasures.Add("SaleOffPeakRate");
