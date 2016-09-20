@@ -43,7 +43,7 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        Vanrise.Rules.RuleTree[] GetRuleTreesByPriority(int? routingProductId)
+        internal Vanrise.Rules.RuleTree[] GetRuleTreesByPriority(int? routingProductId)
         {
             return GetCachedOrCreate(string.Format("GetRuleTreesByPriority_{0}", routingProductId.HasValue ? routingProductId.Value : 0),
                 () =>
