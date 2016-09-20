@@ -19,12 +19,14 @@ namespace TOne.WhS.Analytics.Business
         private readonly IBillingReportDataManager _datamanager;
         private readonly CarrierAccountManager _carrierAccountManager;
         private readonly SaleZoneManager _saleZoneManager;
+        private readonly SupplierZoneManager _supplierZoneManager;
 
         public BillingReportManager()
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingReportDataManager>();
             _carrierAccountManager = new CarrierAccountManager();
             _saleZoneManager = new SaleZoneManager();
+            _supplierZoneManager = new SupplierZoneManager();
         }
 
         private List<BusinessCaseStatus> GetBusinessCaseStatusDurationAmount(BusinessCaseStatusQuery query, bool isSale)
@@ -130,7 +132,10 @@ namespace TOne.WhS.Analytics.Business
             List<BusinessCaseStatus> listBusinessCaseStatus = _datamanager.GetBusinessCaseStatus(query.fromDate, query.toDate, query.customerId, query.topDestination, isSale, isAmount, query.currencyId);
             for (int i = 0; i < listBusinessCaseStatus.Count; i++)
             {
-                listBusinessCaseStatus[i].Zone = _saleZoneManager.GetSaleZoneName(listBusinessCaseStatus[i].ZoneId);
+                if (isSale)
+                    listBusinessCaseStatus[i].Zone = _saleZoneManager.GetSaleZoneName(listBusinessCaseStatus[i].ZoneId);
+                else
+                    listBusinessCaseStatus[i].Zone = _supplierZoneManager.GetSupplierZoneName(listBusinessCaseStatus[i].ZoneId);
             }
             List<BusinessCaseStatus> sortedList = listBusinessCaseStatus.OrderByDescending(o => o.Durations).ToList();
 
