@@ -9,13 +9,14 @@
             restrict: "E",
             scope: {
                 onReady: "=",
+                normalColNum: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var radiusSQLDataManagerSetting = new RadiusSQLDataManagerSetting($scope, ctrl, $attrs);
                 radiusSQLDataManagerSetting.initializeController();
             },
-            controllerAs: "Ctrl",
+            controllerAs: "ctrlData",
             bindToController: true,
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/RadiusDataManagers/Templates/SQLRadiusSWDataManagerTemplate.html"
 
@@ -46,7 +47,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "TOne.WhS.RouteSync.TelesRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.TelesRadius.SQL",
+                        $type: "TOne.WhS.RouteSync.MVTSRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.MVTSRadius.SQL",
                         ConnectionString: $scope.scopeModel.connectionString
                     }
                     return data;
@@ -59,6 +60,6 @@
         }
     }
 
-    app.directive('whsRoutesyncRadiusSqldatamanager', RadiusSQLDataManagerConfig);
+    app.directive('whsRoutesyncMvtsradiusSqldatamanager', RadiusSQLDataManagerConfig);
 
 })(app);

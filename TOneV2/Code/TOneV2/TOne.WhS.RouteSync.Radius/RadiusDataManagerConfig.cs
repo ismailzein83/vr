@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace TOne.WhS.RouteSync.TelesRadius
+namespace TOne.WhS.RouteSync.Radius
 {
     public class RadiusDataManagerConfig : ExtensionConfiguration
     {

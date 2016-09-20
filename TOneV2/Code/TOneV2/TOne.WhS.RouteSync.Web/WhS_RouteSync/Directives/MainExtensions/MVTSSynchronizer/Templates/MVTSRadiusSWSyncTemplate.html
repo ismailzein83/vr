@@ -6,8 +6,18 @@
     </vr-columns>
 </vr-row>
 <vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Redundant" collapsible>
+            <whs-routesync-radiusdatamanagers-settings on-ready="onRedundantRadiusDataManagerSettingsDirectiveReady" normal-col-num="6"></whs-routesync-radiusdatamanagers-settings>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
     <vr-columns width="1/2row">
         <vr-textbox label="Separator" type="text" value="scopeModel.separator" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox type="number" label="Number Of Options" isrequired minvalue="1" decimalprecision="0" value="scopeModel.numberOfOptions"></vr-textbox>
     </vr-columns>
 </vr-row>
 <vr-row>

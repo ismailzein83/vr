@@ -2,9 +2,9 @@
 
     'use strict';
 
-    TelesRadiusSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_BE_CarrierAccountAPIService', 'VRNotificationService'];
+    MVTSRadiusSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_BE_CarrierAccountAPIService', 'VRNotificationService'];
 
-    function TelesRadiusSWSync(UtilsService, VRUIUtilsService, WhS_BE_CarrierAccountAPIService, VRNotificationService) {
+    function MVTSRadiusSWSync(UtilsService, VRUIUtilsService, WhS_BE_CarrierAccountAPIService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,23 +12,28 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var telesRadiusSWSyncronizer = new TelesRadiusSWSyncronizer($scope, ctrl, $attrs);
-                telesRadiusSWSyncronizer.initializeController();
+                var mvtsRadiusSWSyncronizer = new MVTSRadiusSWSyncronizer($scope, ctrl, $attrs);
+                mvtsRadiusSWSyncronizer.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/TelesSynchronizer/Templates/TelesRadiusSWSyncTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/MVTSSynchronizer/Templates/MVTSRadiusSWSyncTemplate.html"
 
         };
-        function TelesRadiusSWSyncronizer($scope, ctrl, $attrs) {
+        function MVTSRadiusSWSyncronizer($scope, ctrl, $attrs) {
             var gridAPI;
 
             var radiusDataManager;
+            var redundantRadiusDataManager;
+
             var carrierAccountsAPI;
             var carrierAccountsPromiseDiffered;
 
             var radiusDataManagerSettingsDirectiveAPI;
             var radiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var redundantRadiusDataManagerSettingsDirectiveAPI;
+            var redundantRadiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
 
@@ -44,6 +49,11 @@
                     radiusDataManagerSettingsDirectiveReadyDeferred.resolve();
                 };
 
+                $scope.onRedundantRadiusDataManagerSettingsDirectiveReady = function (api) {
+                    redundantRadiusDataManagerSettingsDirectiveAPI = api;
+                    redundantRadiusDataManagerSettingsDirectiveReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -54,15 +64,18 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    var telesRadiusSWSynSettings;
+                    var mvtsRadiusSWSynSettings;
 
                     if (payload != undefined) {
-                        telesRadiusSWSynSettings = payload.switchSynchronizerSettings;
+                        mvtsRadiusSWSynSettings = payload.switchSynchronizerSettings;
                     }
 
-                    if (telesRadiusSWSynSettings) {
-                        $scope.scopeModel.separator = telesRadiusSWSynSettings.MappingSeparator;
-                        radiusDataManager = telesRadiusSWSynSettings.DataManager;
+                    if (mvtsRadiusSWSynSettings) {
+                        $scope.scopeModel.separator = mvtsRadiusSWSynSettings.MappingSeparator;
+                        $scope.scopeModel.numberOfOptions = mvtsRadiusSWSynSettings.NumberOfOptions;
+
+                        radiusDataManager = mvtsRadiusSWSynSettings.DataManager;
+                        redundantRadiusDataManager = mvtsRadiusSWSynSettings.RedundantDataManager;
                     }
 
                     var loadCarrierMappingPromise = loadCarrierMappings(payload);
@@ -71,6 +84,9 @@
                     var loadDataManagerSettings = loadSwitchSyncSettingsDirective();
                     promises.push(loadDataManagerSettings);
 
+                    var loadRedundantDataManagerSettings = loadRedundantSwitchSyncSettingsDirective();
+                    promises.push(loadRedundantDataManagerSettings);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -78,10 +94,12 @@
 
                 function getData() {
                     var data = {
-                        $type: "TOne.WhS.RouteSync.TelesRadius.TelesRadiusSWSync, TOne.WhS.RouteSync.TelesRadius",
+                        $type: "TOne.WhS.RouteSync.MVTSRadius.MVTSRadiusSWSync, TOne.WhS.RouteSync.MVTSRadius",
                         DataManager: getDataManager(),
+                        RedundantDataManager: getRedundantDataManager(),
                         CarrierMappings: getCarrierMappings(),
-                        MappingSeparator: $scope.scopeModel.separator
+                        MappingSeparator: $scope.scopeModel.separator,
+                        NumberOfOptions: $scope.scopeModel.numberOfOptions
                     }
                     return data;
                 }
@@ -152,6 +170,10 @@
                 return radiusDataManagerSettingsDirectiveAPI.getData().DataManager;
             }
 
+            function getRedundantDataManager() {
+                return redundantRadiusDataManagerSettingsDirectiveAPI.getData().DataManager;
+            }
+
             function loadSwitchSyncSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -165,9 +187,23 @@
 
                 return radiusDataManagerSettingsDirectiveReadyDeferred.promise;
             }
+
+            function loadRedundantSwitchSyncSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload;
+                    if (redundantRadiusDataManager != undefined) {
+                        settingsDirectivePayload = { radiusDataManagersSettings: redundantRadiusDataManager }
+                    }
+                    VRUIUtilsService.callDirectiveLoad(redundantRadiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, redundantRadiusDataManagerSettingsDirectiveReadyDeferred);
+                });
+
+                return redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise;
+            }
         }
     }
 
-    app.directive('whsRoutesyncTelesradiusSwsync', TelesRadiusSWSync);
+    app.directive('whsRoutesyncMvtsradiusSwsync', MVTSRadiusSWSync);
 
 })(app);

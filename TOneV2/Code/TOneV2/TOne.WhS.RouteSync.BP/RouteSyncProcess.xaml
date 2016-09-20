@@ -13,6 +13,7 @@
  xmlns:twrba="clr-namespace:TOne.WhS.RouteSync.BP.Arguments;assembly=TOne.WhS.RouteSync.BP.Arguments"
  xmlns:twrba1="clr-namespace:TOne.WhS.RouteSync.BP.Activities;assembly=TOne.WhS.RouteSync.BP.Activities"
  xmlns:twre="clr-namespace:TOne.WhS.RouteSync.Entities;assembly=TOne.WhS.RouteSync.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
@@ -33,6 +34,7 @@
       <x:String>TOne.WhS.RouteSync.Entities</x:String>
       <x:String>TOne.WhS.RouteSync.BP.Activities</x:String>
       <x:String>Vanrise.BusinessProcess.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -140,6 +142,8 @@
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
           <Sequence.Variables>
             <Variable x:TypeArguments="s:Guid" Name="switchesInitializationDataId" />
+            <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessCompleted" />
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
           </Sequence.Variables>
           <twrba1:SaveSwitchesInitializationData sap2010:WorkflowViewState.IdRef="SaveSwitchesInitializationData_1">
             <twrba1:SaveSwitchesInitializationData.SwitchesInitializationData>
@@ -163,11 +167,8 @@
               <ActivityAction.Argument>
                 <DelegateInArgument x:TypeArguments="twre:RouteRangeInfo" Name="routeRange" />
               </ActivityAction.Argument>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-                <Sequence.Variables>
-                  <Variable x:TypeArguments="vbe:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
-                </Sequence.Variables>
-                <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+              <Sequence DisplayName="RouteRange_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
                   <vbw:RunProcess.Input>
                     <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                       <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new TOne.WhS.RouteSync.BP.Arguments.RouteSyncForRangeProcessInput
@@ -179,6 +180,11 @@
             }</mca:CSharpValue>
                     </InArgument>
                   </vbw:RunProcess.Input>
+                  <vbw:RunProcess.ProcessCompletedEventPayload>
+                    <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                      <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+                    </OutArgument>
+                  </vbw:RunProcess.ProcessCompletedEventPayload>
                 </vbw:RunProcess>
                 <If sap2010:WorkflowViewState.IdRef="If_2">
                   <If.Condition>
@@ -190,17 +196,14 @@
                     <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
                       <TerminateWorkflow.Reason>
                         <InArgument x:TypeArguments="x:String">
-                          <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">String.Format("Processing code prfix '{0}' for customer {1} failed due to error: {2}", routeRange.CodePrefix, routeRange.CustomerId, 
+                          <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">String.Format("Processing code prefix '{0}' for customer {1} failed due to error: {2}", routeRange.CodePrefix, routeRange.CustomerId, 
 subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
                         </InArgument>
                       </TerminateWorkflow.Reason>
                     </TerminateWorkflow>
                   </If.Then>
                   <If.Else>
-                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
-                      <Sequence.Variables>
-                        <Variable x:TypeArguments="x:Int32" Name="subProcessCompleted" />
-                      </Sequence.Variables>
+                    <Sequence DisplayName="SubProcess_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_7">
                       <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
                         <Assign.To>
                           <OutArgument x:TypeArguments="x:Int32">
@@ -261,7 +264,7 @@ subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
         </InArgument>
       </local:FinalizeRouteSyncSwitches.SwitchesInProcess>
     </local:FinalizeRouteSyncSwitches>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWwvPgOJAg4CAQFGC0aCAQIBAkoFSmMDAeABSwVWJQMB0QFXBWIaAwHCAWMFcyEDAawBdAWEASkDAZYBhQEF+wEKAgEY/AEFhwInAgEJSkNKYAMB4QFOC050AwHZAVMLU2MDAdIBXwtfagMBygFaC1p5AwHDAWsLa3UDAbsBcAtweQMBtAFmC2Z6AwGtAXwLfGIDAaUBgQELgQF6AwGeAXcLd3IDAZcBiAELiAFlAgEZjAEJ6gEUAgEp7QEJ+QEUAgEghAILhAJyAgER/wEL/wFyAgEKkAELmwEzAwGFAZwBC+kBHQIBKu4BC/gBLQIBIZMBEZMB5gEDAY4BmAERmAFxAwGGAZ8BEZ8BegIBfaYBD+cBGgIBK/EBEfUBIAIBIqoBEbYBIgIBcbcBEeYBFgIBLK0BF7MBIAIBc6oBqgGqAbABAgFyugEXugG5AQIBLb4BFcUBKQIBZsgBFeQBIAIBN8EBG8IBPQIBZ8wBF9cBIAIBT9gBF+MBMgIBONQBHdQBbwIBW88BHc8BdQIBUOABHeABlwECAUTbAR3bAZ4CAgE5</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWwxQAOMAg4CAQFIC0iCAQIBAkwFTGMDAfUBTQVYJQMB5gFZBWQaAwHXAWUFdSEDAcEBdgWGASkDAasBhwEF/gEKAgEY/wEFigInAgEJTENMYAMB9gFQC1B0AwHuAVULVWMDAecBYQthagMB3wFcC1x5AwHYAW0LbXUDAdABcgtyeQMByQFoC2h6AwHCAX4LfmIDAboBgwELgwF6AwGzAXkLeXIDAawBigELigFlAgEZjgEJ7QEUAgEp8AEJ/AEUAgEghwILhwJyAgERggILggJyAgEKkQE5kQE8AgEqlAELnwEzAwGWAaABC+wBHQIBK/EBC/sBLQIBIZcBEZcB5gEDAaEBnAERnAFxAwGXAaMBEaMBegMBjAGqAQ/qARoCASz0ARH4ASACASKrARG8ASICAXS9ARHpARYCAS2uARe0ASADAYEBuQEXuQGKAQIBdqsBggGrAYgBAgF1wAEXwAG5AQIBLsQBFcsBKQIBaM4BFecBIAIBOccBG8gBPQIBac8BF9oBIAIBUdsBF+YBMgIBOtcBHdcBbwIBXdIBHdIBdQIBUuMBHeMBlwECAUbeAR3eAZ4CAgE7</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.RouteSync.Radius;
 
 namespace TOne.WhS.RouteSync.TelesRadius
 {
     public class TelesRadiusSWSync : SwitchRouteSynchronizer
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("423064C2-ACE8-4D70-8CFF-CDAA1461DBBE"); } }
+
         public IRadiusDataManager DataManager { get; set; }
         /// <summary>
         /// Key = Carrier Account Id
@@ -34,7 +38,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
                     {
                         //    if (string.IsNullOrEmpty(CustomerMapping))
                         //        continue;
-                        RadiusConvertedRoute radiusRoute = new RadiusConvertedRoute()
+                        TelesRadiusConvertedRoute radiusRoute = new TelesRadiusConvertedRoute()
                         {
                             CustomerId = string.IsNullOrEmpty(CustomerMapping) ? "Customer_No_Mapping" : CustomerMapping,
                             Code = route.Code,

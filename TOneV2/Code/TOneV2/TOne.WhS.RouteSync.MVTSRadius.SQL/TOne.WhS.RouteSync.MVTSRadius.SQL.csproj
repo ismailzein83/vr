@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{359EE74F-6A9D-4657-856A-347FE0C5BF6B}</ProjectGuid>
+    <ProjectGuid>{89FE058F-9F8F-4AFB-BDA9-992941CB2140}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.WhS.RouteSync.TelesRadius.Postgres</RootNamespace>
-    <AssemblyName>TOne.WhS.RouteSync.TelesRadius.Postgres</AssemblyName>
+    <RootNamespace>TOne.WhS.RouteSync.MVTSRadius.SQL</RootNamespace>
+    <AssemblyName>TOne.WhS.RouteSync.MVTSRadius.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Npgsql">
-      <HintPath>..\Resources\DLLs\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,22 +41,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Caching">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadiusPostgresDataManager.cs" />
+    <Compile Include="RadiusSQLDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
@@ -69,10 +60,6 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Radius\TOne.WhS.RouteSync.Radius.csproj">
       <Project>{0f005ef5-f26b-4f30-ae68-ce841d744e68}</Project>
       <Name>TOne.WhS.RouteSync.Radius</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.RouteSync.TelesRadius\TOne.WhS.RouteSync.TelesRadius.csproj">
-      <Project>{1759bc47-ff2d-4aeb-bd44-684d1d172677}</Project>
-      <Name>TOne.WhS.RouteSync.TelesRadius</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

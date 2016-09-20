@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using Npgsql;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Data;
+using TOne.WhS.RouteSync.Radius;
 
 namespace TOne.WhS.RouteSync.TelesRadius.Postgres
 {
     public class RadiusPostgresDataManager : BaseDataManager, IRadiusDataManager
     {
-        int _configId;
-        public int ConfigId
+        Guid _configId;
+        public Guid ConfigId
         {
             get
             {

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.RouteSync.Business;
 using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.RouteSync.TelesRadius;
+using TOne.WhS.RouteSync.Radius;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.RouteSync.Web.Controllers

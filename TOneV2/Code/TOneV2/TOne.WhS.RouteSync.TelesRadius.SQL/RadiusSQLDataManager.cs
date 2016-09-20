@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.RouteSync.Radius;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.RouteSync.TelesRadius.SQL
@@ -17,7 +16,8 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
 
         }
         string _connectionString;
-        int _configId;
+        Guid _configId;
+        public Guid ConfigId { get { return _configId; } set { _configId = new Guid("09ED9252-AF87-447D-9C40-738CF222C64E"); } }
         public void ApplyRadiusRoutesForDB(object preparedRadiusRoutes)
         {
             InsertBulkToTable(preparedRadiusRoutes as BaseBulkInsertInfo);
@@ -52,7 +52,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
         }
         public void WriteRecordToStream(ConvertedRoute record, object dbApplyStream)
         {
-            RadiusConvertedRoute radiusRoute = record as RadiusConvertedRoute;
+            TelesRadiusConvertedRoute radiusRoute = record as TelesRadiusConvertedRoute;
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}", radiusRoute.CustomerId, radiusRoute.Code, radiusRoute.Options);
         }
@@ -84,17 +84,6 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
         public void SwapTables()
         {
             ExecuteNonQueryText("sp_RadiusRoute_SwapTables", null);
-        }
-        public int ConfigId
-        {
-            get
-            {
-                return _configId;
-            }
-            set
-            {
-                _configId = value;
-            }
         }
 
         #endregion

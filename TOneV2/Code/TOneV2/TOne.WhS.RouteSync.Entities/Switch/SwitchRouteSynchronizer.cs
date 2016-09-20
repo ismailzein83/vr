@@ -8,7 +8,7 @@ namespace TOne.WhS.RouteSync.Entities
 {
     public abstract class SwitchRouteSynchronizer
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public abstract void Initialize(ISwitchRouteSynchronizerInitializeContext context);
 

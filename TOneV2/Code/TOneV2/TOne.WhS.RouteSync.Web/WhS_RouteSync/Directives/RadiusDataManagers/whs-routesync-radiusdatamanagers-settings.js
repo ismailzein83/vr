@@ -18,7 +18,7 @@
                 var radiusDataManagersSettings = new RadiusDataManagersSettings($scope, ctrl, $attrs);
                 radiusDataManagersSettings.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "ctrlSettings",
             bindToController: true,
             templateUrl: '/Client/Modules/Whs_RouteSync/Directives/RadiusDataManagers/Templates/RadiusDataManagersTemplate.html'
         };
