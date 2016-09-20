@@ -8,6 +8,6 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRAlertRuleCriteria
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
     }
 }

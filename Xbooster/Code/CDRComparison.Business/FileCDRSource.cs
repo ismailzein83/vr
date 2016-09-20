@@ -11,6 +11,8 @@ namespace CDRComparison.Business
 {
     public class FileCDRSource : CDRSource
     {
+        public override Guid ConfigId { get { return new Guid("536a5a84-3874-4ca2-8c5e-a7071fa9f79d"); } }
+
         public long FileId { get; set; }
 
         public bool IsCompressed { get; set; }

@@ -72,7 +72,7 @@
 
                         if (configId != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, configId, 'TemplateConfigID');
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, configId, 'ExtensionConfigurationId');
 
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
@@ -102,7 +102,7 @@
                     var data;
                     if ($scope.scopeModel.selectedTemplateConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.TemplateConfigID;
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                     }
                     return data;
                 };

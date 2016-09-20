@@ -42,8 +42,8 @@
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
               + ' selectedvalues="selectedTemplateConfig"'
-               + 'datavaluefield="TemplateConfigID"'
-              + ' datatextfield="Name"'
+               + 'datavaluefield="ExtensionConfigurationId"'
+              + ' datatextfield="Title"'
               + label
                + ' isrequired="fieldmappingCtrl.isrequired"'
               + 'hideremoveicon>'
@@ -121,7 +121,7 @@
                                 }
                                 if (configDetails != undefined)
                                 {
-                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, configDetails.ConfigId, 'TemplateConfigID');
+                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, configDetails.ConfigId, 'ExtensionConfigurationId');
                                 } else if ($scope.templateConfigs.length == 1)
                                     $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
@@ -142,7 +142,7 @@
                     if ($scope.selectedTemplateConfig != undefined && directiveAPI != undefined) {
                         data = directiveAPI.getData();
                         if (data != undefined) {
-                            data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                            data.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
                     return data;

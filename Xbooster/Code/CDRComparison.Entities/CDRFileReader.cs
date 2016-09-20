@@ -8,7 +8,7 @@ namespace CDRComparison.Entities
 {
     public abstract class CDRFileReader
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void ReadCDRs(IReadCDRsFromFileContext context);
 

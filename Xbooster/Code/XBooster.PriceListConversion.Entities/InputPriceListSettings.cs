@@ -9,7 +9,7 @@ namespace XBooster.PriceListConversion.Entities
 {
     public abstract class InputPriceListSettings
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
 
         public abstract PriceList Execute(IInputPriceListExecutionContext context);
     }

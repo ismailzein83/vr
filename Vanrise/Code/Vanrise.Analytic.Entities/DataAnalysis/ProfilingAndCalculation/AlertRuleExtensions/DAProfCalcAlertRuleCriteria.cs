@@ -13,5 +13,12 @@ namespace Vanrise.Analytic.Entities
         public Guid DAProfCalcOutputItemDefinitionId { get; set; }
 
         public RecordFilterGroup FilterGroup { get; set; }
+
+
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

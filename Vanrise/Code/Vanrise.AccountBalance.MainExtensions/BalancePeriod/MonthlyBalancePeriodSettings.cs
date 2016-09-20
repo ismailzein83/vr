@@ -18,5 +18,10 @@ namespace Vanrise.AccountBalance.MainExtensions.BalancePeriod
                 currentDate = currentDate.AddMonths(1);
             context.NextPeriodDate = currentDate;
         }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

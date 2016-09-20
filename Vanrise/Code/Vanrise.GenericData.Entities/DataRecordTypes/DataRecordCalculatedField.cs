@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public abstract class DataRecordFieldFormula
     {
-        public int ConfigId { get; set; }
+        public  abstract Guid ConfigId { get; }
 
         public abstract dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context);
 

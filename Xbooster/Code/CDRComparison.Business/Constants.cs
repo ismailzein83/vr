@@ -8,7 +8,7 @@ namespace CDRComparison.Business
 {
     public static class Constants
     {
-        public const string CDRSourceConfigType = "CDRComparison_CDRSource";
-        public const string FileReaderConfigType = "CDRComparison_FileReader";
+      //  public const string CDRSourceConfigType = "CDRComparison_CDRSource";
+       // public const string FileReaderConfigType = "CDRComparison_FileReader";
     }
 }

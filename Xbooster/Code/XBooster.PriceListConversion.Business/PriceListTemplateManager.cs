@@ -27,7 +27,7 @@ namespace XBooster.PriceListConversion.Business
             var priceListTemplates = GetCachedPriceListTemplates();
 
             Func<PriceListTemplate, bool> filterExpression = (itm) =>
-                 (itm.Type == Constants.OutputPriceListTemplate
+                 (itm.Type == OutputPriceListTemplateConfig.EXTENSION_TYPE
                  && itm.UserId == _loggedInUserId
                  && (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower()) ));
 
@@ -49,7 +49,7 @@ namespace XBooster.PriceListConversion.Business
 
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
             priceListTemplate.UserId = _loggedInUserId;
-            priceListTemplate.Type = Constants.OutputPriceListTemplate;
+            priceListTemplate.Type = OutputPriceListTemplateConfig.EXTENSION_TYPE;
             bool insertActionSucc = dataManager.InsertPriceListTemplate(priceListTemplate, out priceListTemplateId);
 
             if (insertActionSucc)
@@ -70,7 +70,7 @@ namespace XBooster.PriceListConversion.Business
         {
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
             priceListTemplate.UserId = _loggedInUserId;
-            priceListTemplate.Type = Constants.OutputPriceListTemplate;
+            priceListTemplate.Type = OutputPriceListTemplateConfig.EXTENSION_TYPE;
             bool updateActionSucc = dataManager.UpdatePriceListTemplate(priceListTemplate);
             UpdateOperationOutput<PriceListTemplateDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail>();
 
@@ -102,7 +102,7 @@ namespace XBooster.PriceListConversion.Business
 
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
             priceListTemplate.UserId = _loggedInUserId;
-            priceListTemplate.Type = Constants.InputPriceListTemplate;
+            priceListTemplate.Type = InputPriceListTemplateConfig.EXTENSION_TYPE;
             bool insertActionSucc = dataManager.InsertPriceListTemplate(priceListTemplate, out priceListTemplateId);
 
             if (insertActionSucc)
@@ -123,7 +123,7 @@ namespace XBooster.PriceListConversion.Business
         {
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
             priceListTemplate.UserId = _loggedInUserId;
-            priceListTemplate.Type = Constants.InputPriceListTemplate;
+            priceListTemplate.Type = InputPriceListTemplateConfig.EXTENSION_TYPE;
             bool updateActionSucc = dataManager.UpdatePriceListTemplate(priceListTemplate);
             UpdateOperationOutput<PriceListTemplateDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail>();
 
@@ -145,30 +145,30 @@ namespace XBooster.PriceListConversion.Business
         }
 
 
-        public IEnumerable<TemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
+        public IEnumerable<OutputPriceListConfigurationTemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.OutputPriceListConfigurationTemplateConfigs);
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations <OutputPriceListConfigurationTemplateConfig>(OutputPriceListConfigurationTemplateConfig.EXTENSION_TYPE);
         }
-        public IEnumerable<TemplateConfig> GetInputPriceListConfigurationTemplateConfigs()
+        public IEnumerable<InputPriceListConfigurationTemplateConfig> GetInputPriceListConfigurationTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.InputPriceListConfigurationTemplateConfigs);
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<InputPriceListConfigurationTemplateConfig>(InputPriceListConfigurationTemplateConfig.EXTENSION_TYPE);
         }
         public IEnumerable<PriceListTemplateInfo> GetOutputPriceListTemplates(PriceListTemplateFilter filter)
         {
             Dictionary<int, PriceListTemplate> priceListTemplates = GetCachedPriceListTemplates();
-            return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper,itm => itm.UserId == _loggedInUserId && itm.Type == Constants.OutputPriceListTemplate);
+            return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper, itm => itm.UserId == _loggedInUserId && itm.Type == OutputPriceListTemplateConfig.EXTENSION_TYPE);
         }
         public IEnumerable<PriceListTemplateInfo> GetInputPriceListTemplates(PriceListTemplateFilter filter)
         {
             Dictionary<int, PriceListTemplate> priceListTemplates = GetCachedPriceListTemplates();
-            return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper, itm => itm.UserId == _loggedInUserId && itm.Type == Constants.InputPriceListTemplate);
+            return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper, itm => itm.UserId == _loggedInUserId && itm.Type == InputPriceListTemplateConfig.EXTENSION_TYPE);
         }
-        public IEnumerable<TemplateConfig> GetOutputFieldMappingTemplateConfigs()
+        public IEnumerable<OutputFieldMappingTemplateConfig> GetOutputFieldMappingTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.OutputFieldMappingTemplateConfigs);
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<OutputFieldMappingTemplateConfig>(OutputFieldMappingTemplateConfig.EXTENSION_TYPE);
         }
         #endregion
 

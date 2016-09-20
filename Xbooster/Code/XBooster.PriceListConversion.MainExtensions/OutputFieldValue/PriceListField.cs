@@ -8,6 +8,7 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputFieldValue
 {
     public class PriceListField : Entities.OutputFieldValue
     {
+        public override Guid ConfigId { get { return new Guid("26cbdf89-7d0e-4ae0-bff4-949ef4cb1b65"); } }
         public string FieldName { get; set; }
         public override void Execute(Entities.IFieldValueExecutionContext context)
         {

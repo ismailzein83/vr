@@ -14,6 +14,8 @@ namespace CDRComparison.MainExtensions
 {
     public class ExcelFileReader : CDRFileReader
     {
+        public override Guid ConfigId { get { return new Guid("61e3f8d9-5e5b-49ef-9ae3-df77bf1d674f"); } }
+
         #region Properties
 
         public int FirstRowIndex { get; set; }

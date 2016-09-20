@@ -18,14 +18,14 @@ namespace CDRComparison.Web.Controllers
 
         [HttpGet]
         [Route("GetCDRSourceTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetCDRSourceTemplateConfigs()
+        public IEnumerable<Entities.CDRSourceConfigType> GetCDRSourceTemplateConfigs()
         {
             return _manager.GetCDRSourceTemplateConfigs();
         }
 
         [HttpGet]
         [Route("GetFileReaderTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetFileReaderTemplateConfigs()
+        public IEnumerable<FileReaderConfigType> GetFileReaderTemplateConfigs()
         {
             return _manager.GetFileReaderTemplateConfigs();
         }

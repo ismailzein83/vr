@@ -15,6 +15,8 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
     public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
     public class BasicInputPriceListSettings : Entities.InputPriceListSettings
     {
+        public override Guid ConfigId { get { return new Guid("613bf2aa-0f36-44f7-b311-9c34f023b273"); } }
+
         #region Properties
         public ExcelConversionSettings ExcelConversionSettings { get; set; }
         public CodeLayout CodeLayout { get; set; }

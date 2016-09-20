@@ -22,7 +22,7 @@ namespace Vanrise.AccountBalance.Entities
 
     public abstract class BalanceAlertThreshold
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract Decimal GetThreshold(IBalanceAlertThresholdContext context);
     }

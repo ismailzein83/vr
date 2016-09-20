@@ -8,7 +8,7 @@ namespace CDRComparison.Entities
 {
     public abstract class CDRSource
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
 
         public List<NormalizationRule> NormalizationRules { get; set; }
 

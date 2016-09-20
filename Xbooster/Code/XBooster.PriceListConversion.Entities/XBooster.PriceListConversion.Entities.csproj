@@ -45,6 +45,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.ExcelConversion.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
     </Reference>
@@ -52,11 +56,16 @@
   <ItemGroup>
     <Compile Include="Context\IFieldValueExecutionContext.cs" />
     <Compile Include="Context\IInputPriceListExecutionContext.cs" />
+    <Compile Include="InputPriceListConfigurationTemplateConfig.cs" />
+    <Compile Include="InputPriceListTemplateConfig.cs" />
     <Compile Include="OutputFieldMapping.cs" />
+    <Compile Include="OutputFieldMappingTemplateConfig.cs" />
     <Compile Include="OutputFieldValue.cs" />
     <Compile Include="InputPriceListSettings.cs" />
     <Compile Include="Context\IOutputPriceListExecutionContext.cs" />
     <Compile Include="OutputPriceListConfiguration.cs" />
+    <Compile Include="OutputPriceListConfigurationTemplateConfig.cs" />
+    <Compile Include="OutputPriceListTemplateConfig.cs" />
     <Compile Include="OutputTable.cs" />
     <Compile Include="PriceListConversionInput.cs" />
     <Compile Include="PriceList.cs" />

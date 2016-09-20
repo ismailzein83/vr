@@ -130,7 +130,7 @@
 
                         getCDRSourceTemplateConfigsPromise.then(function () {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, cdrSource.ConfigId, 'TemplateConfigID');
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, cdrSource.ConfigId, 'ExtensionConfigurationId');
 
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
@@ -199,7 +199,7 @@
                     var data;
                     if ($scope.scopeModel.selectedTemplateConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.TemplateConfigID;
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         data.NormalizationRules = getNormalizationRules();
                         data.DurationTimeUnit = $scope.scopeModel.selectedDurationTimeUnit.value
                     }

@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 {
     public class ParentBusinessEntityFieldFormula : DataRecordFieldFormula
     {
+        public override Guid ConfigId { get { return new Guid("fc4b69f0-d577-4319-8d10-ed8f95e07441"); } }
+
         public string ChildFieldName { get; set; }
 
         public override dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context)

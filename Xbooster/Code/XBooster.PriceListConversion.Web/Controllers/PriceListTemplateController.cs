@@ -57,7 +57,7 @@ namespace XBooster.PriceListConversion.Web.Controllers
 
         [HttpGet]
         [Route("GetOutputPriceListConfigurationTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
+        public IEnumerable<OutputPriceListConfigurationTemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
         {
             return _manager.GetOutputPriceListConfigurationTemplateConfigs();
         }
@@ -83,13 +83,13 @@ namespace XBooster.PriceListConversion.Web.Controllers
         }
         [HttpGet]
         [Route("GetInputPriceListConfigurationTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetInputPriceListConfigurationTemplateConfigs()
+        public IEnumerable<InputPriceListConfigurationTemplateConfig> GetInputPriceListConfigurationTemplateConfigs()
         {
             return _manager.GetInputPriceListConfigurationTemplateConfigs();
         }
         [HttpGet]
         [Route("GetOutputFieldMappingTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetOutputFieldMappingTemplateConfigs()
+        public IEnumerable<OutputFieldMappingTemplateConfig> GetOutputFieldMappingTemplateConfigs()
         {
             return _manager.GetOutputFieldMappingTemplateConfigs();
         }

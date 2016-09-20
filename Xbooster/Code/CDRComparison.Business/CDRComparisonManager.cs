@@ -11,16 +11,16 @@ namespace CDRComparison.Business
 {
     public class CDRComparisonManager
     {
-        public IEnumerable<TemplateConfig> GetCDRSourceTemplateConfigs()
+        public IEnumerable<CDRSourceConfigType> GetCDRSourceTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.CDRSourceConfigType);
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<CDRSourceConfigType>(CDRSourceConfigType.EXTENSION_TYPE);
         }
 
-        public IEnumerable<TemplateConfig> GetFileReaderTemplateConfigs()
+        public IEnumerable<FileReaderConfigType> GetFileReaderTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.FileReaderConfigType);
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<FileReaderConfigType>(FileReaderConfigType.EXTENSION_TYPE);
         }
 
         public CDRComparisonSummary GetCDRComparisonSummary(string tableKey)

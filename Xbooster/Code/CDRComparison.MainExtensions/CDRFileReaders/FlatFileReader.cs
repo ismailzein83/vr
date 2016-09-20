@@ -11,6 +11,8 @@ namespace CDRComparison.MainExtensions
 {
     public class FlatFileReader : CDRFileReader
     {
+        public override Guid ConfigId { get { return new Guid("ff8e5a92-6404-4f69-b62d-1537daecb184"); } }
+
         #region Properties
 
         public char? Delimiter { get; set; }

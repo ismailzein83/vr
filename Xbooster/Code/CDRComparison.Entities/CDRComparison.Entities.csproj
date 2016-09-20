@@ -55,12 +55,14 @@
     <Compile Include="CDRComparisonSummary.cs" />
     <Compile Include="CDRSourceConfig.cs" />
     <Compile Include="CDRSourceConfigFilter.cs" />
+    <Compile Include="CDRSourceConfigType.cs" />
     <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="DisputeCDR\DisputeCDR.cs" />
     <Compile Include="DisputeCDR\DisputeCDRBatch.cs" />
     <Compile Include="DisputeCDR\DisputeCDRQuery.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ExcelFileCDRSample.cs" />
+    <Compile Include="FileReaderConfigType.cs" />
     <Compile Include="MissingCDR\MissingCDR.cs" />
     <Compile Include="MissingCDR\MissingCDRBatch.cs" />
     <Compile Include="MissingCDR\MissingCDRBigResult.cs" />

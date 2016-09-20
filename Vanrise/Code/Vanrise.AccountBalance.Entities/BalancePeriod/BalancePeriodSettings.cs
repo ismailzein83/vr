@@ -8,7 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public abstract class BalancePeriodSettings
     {
-        public int ConfigId { get; set; }
+        public abstract  Guid ConfigId { get; }
 
         public abstract void Execute(IBalancePeriodContext context);
     }

@@ -14,6 +14,8 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
 {
     public class BasicOutputPriceListSettings : Entities.OutputPriceListSettings
     {
+        public override Guid ConfigId { get { return new Guid("66268265-af69-42d7-aaed-9185ea2fe466"); } }
+
         public int TemplateFileId { get; set; }
         public List<OutputTable> Tables { get; set; }
         public string DateTimeFormat { get; set; }
