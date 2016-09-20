@@ -36,14 +36,24 @@
             $scope.scopeModel.isNewRateValid = function (dataItem) {
                 if (dataItem.isExcluded)
                     return null;
-                if (dataItem.newRate != undefined && dataItem.newRate != null && Number(dataItem.newRate) > 0)
+                if (dataItem.newRate != undefined && dataItem.newRate != null && Number(dataItem.newRate) <= 0)
                     return 'New rate must be > 0';
                 return null;
             };
 
-            $scope.scopeModel.save = function () {
+            $scope.scopeModel.save = function ()
+            {
+                var normalRatesByZone = {};
+
+                for (var i = 0; i < $scope.scopeModel.invalidRates.length; i++)
+                {
+                    var dataItem = $scope.scopeModel.invalidRates[i];
+                    if (!dataItem.isExcluded)
+                        normalRatesByZone[dataItem.ZoneId] = dataItem.newRate;
+                }
+
                 if ($scope.onSaved != undefined && $scope.onSaved != null && typeof ($scope.onSaved) == 'function')
-                    $scope.onSaved();
+                    $scope.onSaved(normalRatesByZone);
                 $scope.modalContext.closeModal();
             };
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
@@ -102,11 +103,11 @@ namespace TOne.WhS.Sales.Business
         public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
         {
             Changes draft = GetDraft(ownerType, ownerId);
-            
+
             if (draft != null)
             {
                 draft.CurrencyId = newCurrencyId;
-                
+
                 if (draft.ZoneChanges != null)
                 {
                     foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
@@ -117,78 +118,54 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        //public void AddNormalRatesToDraft(SalePriceListOwnerType ownerType, int ownerId, Dictionary<string, decimal> normalRatesByZone, DateTime effectiveOn)
-        //{
-        //    if (normalRatesByZone == null)
-        //        return;
+        public void AddNormalRatesToDraft(AddNormalRatesToDraftInput input)
+        {
+            if (input.NormalRatesByZone == null)
+                return;
 
-        //    Changes draft = GetDraft(ownerType, ownerId);
+            Changes existingDraft = GetDraft(input.OwnerType, input.OwnerId);
+            
+            var newDraft = new Changes();
+            newDraft.CurrencyId = input.CurrencyId;
+            newDraft.ZoneChanges = new List<ZoneChanges>();
 
-        //    if (draft != null && draft.ZoneChanges != null)
-        //    {
-        //        var newDraft = new Changes();
-        //        newDraft.DefaultChanges = draft.DefaultChanges;
-        //        newDraft.ZoneChanges = new List<ZoneChanges>();
+            var manager = new RatePlanManager();
+            RatePlanSettingsData settings = manager.GetRatePlanSettingsData();
 
-        //        var manager = new RatePlanManager();
-        //        RatePlanSettingsData settings = manager.GetRatePlanSettingsData();
+            ZoneChanges zoneDraft;
+            List<DraftRateToChange> newRates;
+            var saleZoneManager = new SaleZoneManager();
 
-        //        ZoneChanges zoneDraft;
-        //        List<DraftRateToChange> newRates;
+            foreach (KeyValuePair<long, decimal> kvp in input.NormalRatesByZone)
+            {
+                zoneDraft = (existingDraft != null && existingDraft.ZoneChanges != null) ? existingDraft.ZoneChanges.FindRecord(x => x.ZoneId == kvp.Key) : null;
 
-        //        foreach (KeyValuePair<string, decimal> kvp in normalRatesByZone)
-        //        {
-        //            zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneName == kvp.Key);
+                if (zoneDraft != null)
+                {
+                    newRates = zoneDraft.NewRates != null ? new List<DraftRateToChange>(zoneDraft.NewRates) : new List<DraftRateToChange>();
+                }
+                else
+                {
+                    zoneDraft = new ZoneChanges();
+                    newRates = new List<DraftRateToChange>();
+                }
 
-        //            if (zoneDraft != null)
-        //            {
-        //                if (zoneDraft.NewRates == null)
-        //                    zoneDraft.NewRates = new List<DraftRateToChange>();
-        //            }
-        //            else
-        //            {
-        //            }
+                newRates.Add(new DraftRateToChange()
+                {
+                    ZoneId = kvp.Key,
+                    NormalRate = kvp.Value,
+                    BED = input.EffectiveOn.Date.AddDays(settings.IncreasedRateDayOffset)
+                });
 
-        //            newRates = (zoneDraft != null && zoneDraft.NewRates != null) ? new List<DraftRateToChange>(zoneDraft.NewRates) : new List<DraftRateToChange>();
+                zoneDraft.ZoneId = kvp.Key;
+                zoneDraft.ZoneName = saleZoneManager.GetSaleZoneName(kvp.Key);
+                zoneDraft.NewRates = newRates;
 
-        //            newRates.Add(new DraftRateToChange()
-        //            {
-        //                ZoneId = zoneDraft.ZoneId,
-        //                NormalRate = kvp.Value,
-        //                BED = effectiveOn.Date.AddDays(settings.IncreasedRateDayOffset)
-        //            });
+                newDraft.ZoneChanges.Add(zoneDraft);
+            }
 
-        //            if (zoneDraft != null)
-        //            {
-        //                var newRates = zoneDraft.NewRates != null ? new List<DraftRateToChange>(zoneDraft.NewRates) : new List<DraftRateToChange>();
-                        
-                        
-
-        //                zoneDraft.NewRates = newRates;
-        //            }
-        //            else
-        //            {
-        //                zoneDraft = new ZoneChanges();
-        //                var newRates = new List<DraftRateToChange>();
-        //                newRates.Add(new DraftRateToChange()
-        //                {
-        //                    ZoneId = zoneDraft.ZoneId,
-        //                    NormalRate = kvp.Value,
-        //                    BED = effectiveOn.Date.AddDays(settings.IncreasedRateDayOffset)
-        //                });
-        //                zoneDraft.NewRates = newRates;
-        //            }
-
-        //            newDraft.ZoneChanges.Add(zoneDraft);
-        //        }
-
-        //        foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
-        //        {
-        //            if (normalRatesByZone.ContainsKey(zoneDraft.ZoneName))
-        //                zoneDraft.NewRates = GetChangedOtherRates(zoneDraft.NewRates);
-        //        }
-        //    }
-        //}
+            SaveDraft(input.OwnerType, input.OwnerId, newDraft);
+        }
 
         private IEnumerable<DraftRateToChange> GetChangedOtherRates(IEnumerable<DraftRateToChange> changedRates)
         {
@@ -197,7 +174,7 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (DraftRateToChange changedRate in changedRates)
                 {
-                    if (!changedRate.RateTypeId.HasValue)
+                    if (changedRate.RateTypeId.HasValue)
                         changedOtherRates.Add(changedRate);
                 }
             }

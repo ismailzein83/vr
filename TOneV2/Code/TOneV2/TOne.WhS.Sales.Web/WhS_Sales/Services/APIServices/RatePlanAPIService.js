@@ -96,6 +96,10 @@
             });
         }
 
+        function AddNormalRatesToDraft(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "AddNormalRatesToDraft"), input);
+        }
+
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -111,7 +115,8 @@
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
             DeleteChangedRates: DeleteChangedRates,
-            GetInheritedService: GetInheritedService
+            GetInheritedService: GetInheritedService,
+            AddNormalRatesToDraft: AddNormalRatesToDraft
         };
 
     }

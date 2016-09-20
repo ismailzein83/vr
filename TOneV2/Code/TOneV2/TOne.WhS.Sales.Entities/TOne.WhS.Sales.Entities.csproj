@@ -122,6 +122,7 @@
     <Compile Include="RatePlanning\Draft\Service\Zone\DraftNewZoneService.cs" />
     <Compile Include="RatePlanning\Draft\Service\Zone\DraftResetZoneService.cs" />
     <Compile Include="RatePlanning\Enums.cs" />
+    <Compile Include="RatePlanning\Input\AddNormalRatesToDraftInput.cs" />
     <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />

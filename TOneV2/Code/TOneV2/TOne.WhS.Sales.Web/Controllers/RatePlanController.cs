@@ -135,5 +135,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new DefaultItemManager();
             return manager.GetInheritedService(ownerType, ownerId, effectiveOn, zoneId);
         }
+
+        [HttpPost]
+        [Route("AddNormalRatesToDraft")]
+        public void AddNormalRatesToDraft(AddNormalRatesToDraftInput input)
+        {
+            var manager = new RatePlanDraftManager();
+            manager.AddNormalRatesToDraft(input);
+        }
     }
 }

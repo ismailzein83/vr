@@ -3,7 +3,7 @@
         <vr-form name="formInvalidAppliedZoneRates">
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.invalidRates" hidegridmenu="true">
+                    <vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.invalidRates" maxheight="500px" hidegridmenu="true">
                         <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Exclude'" disablesorting="true">
@@ -21,7 +21,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" formname="formInvalidAppliedZoneRates" data-onclick="scopeModel.save"></vr-button>
-                <vr-button type="Cancel" formname="formInvalidAppliedZoneRates" data-onclick="scopeModel.cancel"></vr-button>
+                <vr-button type="Cancel" data-onclick="scopeModel.cancel"></vr-button>
             </div>
         </vr-actionbar>
     </div>

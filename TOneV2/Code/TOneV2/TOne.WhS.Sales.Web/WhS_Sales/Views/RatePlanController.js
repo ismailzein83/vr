@@ -344,8 +344,20 @@
                         {
                             if (invalidRates != undefined && invalidRates != null)
                             {
-                                var onSaved = function () {
-                                    console.log('onSaved');
+                                var onSaved = function (normalRatesByZone)
+                                {
+                                    var input = {
+                                        OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
+                                        OwnerId: getOwnerId(),
+                                        EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                                        NormalRatesByZone: normalRatesByZone,
+                                        CurrencyId: getCurrencyId()
+                                    };
+                                    WhS_Sales_RatePlanAPIService.AddNormalRatesToDraft(input).then(function () {
+                                        onRatesApplied();
+                                    }).catch(function (error) {
+                                        VRNotificationService.notifyException(error, $scope);
+                                    });
                                 };
                                 var onCancelled = function () {
                                     WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), getCurrencyId());
@@ -354,14 +366,7 @@
                             }
                             else
                             {
-                                VRNotificationService.showSuccess("Rates applied");
-                                pricingSettings = null;
-                                $scope.showApplyButton = false;
-                                $scope.showCancelButton = true;
-
-                                loadGrid().catch(function (error) {
-                                    VRNotificationService.notifyException(error, $scope);
-                                });
+                                onRatesApplied();
                             }
                         });
                     }
@@ -384,6 +389,16 @@
                         RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
                         CurrencyId: getCurrencyId()
                     };
+                }
+                function onRatesApplied() {
+                    VRNotificationService.showSuccess("Rates applied");
+                    pricingSettings = null;
+                    $scope.showApplyButton = false;
+                    $scope.showCancelButton = true;
+
+                    loadGrid().catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

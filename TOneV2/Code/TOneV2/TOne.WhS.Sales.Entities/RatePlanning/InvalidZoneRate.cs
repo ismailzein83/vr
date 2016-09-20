@@ -8,6 +8,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public class InvalidRate
     {
+        public long ZoneId { get; set; }
         public string ZoneName { get; set; }
         public decimal Rate { get; set; }
     }
