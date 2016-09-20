@@ -10,6 +10,29 @@ namespace TOne.WhS.Routing.Entities
     {
         public int ConfigId { get; set; }
 
+        public virtual bool UseOrderedExecution
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public virtual List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
+        {
+            return null;
+        }
+
+        public virtual bool IsOptionFiltered(RouteRuleTarget target, RouteOptionRuleTarget option)
+        {
+            return false;
+        }
+
+        public virtual void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
+        {
+
+        }
+
         public abstract void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target);
 
         public abstract void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target);
