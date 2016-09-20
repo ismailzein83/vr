@@ -8,8 +8,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateType
 {
     public class DaysOfWeekRateTypeSettings : PricingRuleRateTypeItemSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("d642aa26-c072-43ef-98f1-ee84f05f4069"); } }
+        public override Guid ConfigId { get { return new Guid("d642aa26-c072-43ef-98f1-ee84f05f4069"); } }
         public List<DayOfWeek> Days { get; set; }
 
         public List<Vanrise.Entities.TimeRange> TimeRanges { get; set; }

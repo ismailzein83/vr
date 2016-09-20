@@ -10,8 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.VRActions
 {
     public class DAProfCalcAlertRuleAction : VRAction
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("EED64841-21FE-4AA1-996F-0415C9412427"); } }
+        public override Guid ConfigId { get { return  new Guid("EED64841-21FE-4AA1-996F-0415C9412427"); } }
         public Guid MailMessageTemplateId { get; set; }
 
 

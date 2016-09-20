@@ -8,7 +8,7 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRAction
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
         public string ActionName { get; set; }
         public abstract void Execute(IVRActionExecutionContext context);
 

@@ -10,8 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.SearchSettings
     public class DefaultRealTimeReportSearch: RealTimeReportSearchSettings 
     {
 
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("A1CB1C46-0FFA-41B0-82B0-2CCE407AD86C"); } }
+        public override Guid ConfigId { get { return new Guid("A1CB1C46-0FFA-41B0-82B0-2CCE407AD86C"); } }
         public int TimeIntervalInMin { get; set; }
         public List<DefaultSearchSettingsFilter> Filters { get; set; }
 

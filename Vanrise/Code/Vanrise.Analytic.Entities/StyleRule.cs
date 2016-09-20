@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Entities
 
     public abstract class StyleRuleCondition
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
         public abstract bool Evaluate(IStyleRuleConditionContext context);
     }
 

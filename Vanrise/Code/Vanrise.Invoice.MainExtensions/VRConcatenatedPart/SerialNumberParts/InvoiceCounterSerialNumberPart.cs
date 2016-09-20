@@ -13,8 +13,7 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
     public enum CounterType {Yearly = 0 }
     public class InvoiceCounterSerialNumberPart : VRConcatenatedPartSettings<IInvoiceSerialNumberConcatenatedPartContext>
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("034D0103-916C-48DC-8A7F-986DEB09FE3F"); } }
+        public override Guid ConfigId { get { return  new Guid("034D0103-916C-48DC-8A7F-986DEB09FE3F"); } }
         public bool UsePartnerCount { get; set; }
         public int OverAllStartUpCounter { get; set; }
         public CounterType? Type { get; set; }

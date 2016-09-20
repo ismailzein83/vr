@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public abstract class TextManipulationActionSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract string GetDescription();
 

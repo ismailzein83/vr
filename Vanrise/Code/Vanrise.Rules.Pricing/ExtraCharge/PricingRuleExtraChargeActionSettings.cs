@@ -8,7 +8,7 @@ namespace Vanrise.Rules.Pricing
 {
     public abstract class PricingRuleExtraChargeActionSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         internal protected abstract void Execute(IPricingRuleExtraChargeActionContext context);
 

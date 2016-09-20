@@ -11,8 +11,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateValue
 {
     public class FixedRateValueSettings : PricingRuleRateValueSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("53f5fb2a-0390-4821-a795-9146615cf584"); } }
+        public override Guid ConfigId { get { return new Guid("53f5fb2a-0390-4821-a795-9146615cf584"); } }
         public Decimal NormalRate { get; set; }
 
         public Dictionary<int, Decimal> RatesByRateType { get; set; }

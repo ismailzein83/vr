@@ -9,8 +9,7 @@ namespace Vanrise.GenericData.MainExtensions.VRObjectTypes
 {
     public class VRDataRecordFieldPropertyEvaluator : VRObjectPropertyEvaluator
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("F663BF74-99DB-4746-8CBC-E74198E1786C"); } }
+        public override Guid ConfigId { get { return new Guid("F663BF74-99DB-4746-8CBC-E74198E1786C"); } }
         public string FieldName { get; set; }
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)

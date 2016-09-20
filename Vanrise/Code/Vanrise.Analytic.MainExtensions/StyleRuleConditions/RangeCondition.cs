@@ -9,8 +9,7 @@ namespace Vanrise.Analytic.MainExtensions.StyleRuleConditions
 {
     public class RangeCondition : StyleRuleCondition
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("8C5B1E66-20F0-4B26-BC4F-01060B3C3DAA"); } }
+        public override Guid ConfigId { get { return  new Guid("8C5B1E66-20F0-4B26-BC4F-01060B3C3DAA"); } }
         public dynamic RangeStart { get; set; }
 
         public dynamic RangeEnd { get; set; }

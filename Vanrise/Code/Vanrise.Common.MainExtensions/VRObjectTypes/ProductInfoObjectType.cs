@@ -10,8 +10,7 @@ namespace Vanrise.Common.MainExtensions.VRObjectTypes
 {
     public class ProductInfoObjectType : VRObjectType
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("4CD9F093-41D3-42AE-B878-9AFBDB656262"); } }
+        public override Guid ConfigId { get { return new Guid("4CD9F093-41D3-42AE-B878-9AFBDB656262"); } }
         public override dynamic GetDefaultValue()
         {
             ProductInfoTechnicalSettings productInfoTechnicalSettings = new ProductInfoTechnicalSettings();

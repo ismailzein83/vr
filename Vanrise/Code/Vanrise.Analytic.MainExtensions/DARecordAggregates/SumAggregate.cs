@@ -10,8 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
 {
     public class SumAggregate : DARecordAggregate
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("DC962A83-2FDA-456F-9940-15E9BE787D89"); } }
+        public override Guid ConfigId { get { return new Guid("DC962A83-2FDA-456F-9940-15E9BE787D89"); } }
         public override DataRecordFieldType FieldType
         {
             get

@@ -9,8 +9,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 {
     public class RegularTariffSettings : PricingRuleTariffSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("35acc9c2-0675-4347-ba3e-a81025c1be12"); } }
+        public override Guid ConfigId { get { return new Guid("35acc9c2-0675-4347-ba3e-a81025c1be12"); } }
         public Decimal CallFee { get; set; }
 
         public int FirstPeriod { get; set; }

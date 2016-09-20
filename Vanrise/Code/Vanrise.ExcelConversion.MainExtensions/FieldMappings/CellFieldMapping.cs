@@ -10,8 +10,7 @@ namespace Vanrise.ExcelConversion.MainExtensions.FieldMappings
 {
     public class CellFieldMapping : FieldMapping
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("ab48ff16-7b04-42ff-8525-c68590a88799"); } }
+        public override Guid ConfigId { get { return new Guid("ab48ff16-7b04-42ff-8525-c68590a88799"); } }
         public int? SheetIndex { get; set; }
 
         public int? RowIndex { get; set; }

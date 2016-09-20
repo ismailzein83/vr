@@ -14,6 +14,6 @@ namespace Vanrise.Invoice.Entities
     }
     public abstract class InvoiceUISubSectionSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
     }
 }

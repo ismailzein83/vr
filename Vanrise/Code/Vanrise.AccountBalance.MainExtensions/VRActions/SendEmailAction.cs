@@ -11,6 +11,7 @@ namespace Vanrise.AccountBalance.MainExtensions.VRActions
 {
     public class SendEmailAction : VRAction
     {
+        public override Guid ConfigId { get { return new Guid("be74a60e-d312-4b4f-bd76-5b7be81abe62"); } }
         const string MAILTEMPLATE_ACCOUNTOBJECTNAME = "Account";
 
         public Guid MailTemplateId { get; set; }

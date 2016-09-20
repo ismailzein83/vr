@@ -9,8 +9,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
 {
     public class FixedExtraChargeSettings : PricingRuleExtraChargeActionSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("9b441d3f-1a1d-4060-8bb1-740cef377e0d"); } }
+        public override Guid ConfigId { get { return  new Guid("9b441d3f-1a1d-4060-8bb1-740cef377e0d"); } }
 
         public Decimal FromRate { get; set; }
 

@@ -9,8 +9,7 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
 {
     public class GenericSearchSettings : AnalyticHistoryReportSearchSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("BCC9AD0B-46EC-4ED1-B79F-47B4518F76B8"); } }
+        public override Guid ConfigId { get { return  new Guid("BCC9AD0B-46EC-4ED1-B79F-47B4518F76B8"); } }
         public bool IsRequiredGroupingDimensions { get; set; }
         public bool ShowCurrency { get; set; }
         public List<GenericSearchSettingsDimension> GroupingDimensions { get; set; }

@@ -10,8 +10,7 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class ItemsDataSourceSettings : InvoiceDataSourceSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("6721BF29-D257-47D9-8D56-4EE10538BFDC"); } }
+        public override Guid ConfigId { get { return new Guid("6721BF29-D257-47D9-8D56-4EE10538BFDC"); } }
         public List<string> ItemSetNames { get; set; }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {

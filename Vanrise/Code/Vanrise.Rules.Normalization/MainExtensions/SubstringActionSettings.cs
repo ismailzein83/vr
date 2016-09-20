@@ -8,8 +8,7 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 {
     public class SubstringActionSettings : NormalizeNumberActionSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("b285d8dd-b628-4df0-b28c-114ebb9bed5a"); } }
+        public override Guid ConfigId { get { return new Guid("b285d8dd-b628-4df0-b28c-114ebb9bed5a"); } }
         public int StartIndex { get; set; }
 
         public int? Length { get; set; }

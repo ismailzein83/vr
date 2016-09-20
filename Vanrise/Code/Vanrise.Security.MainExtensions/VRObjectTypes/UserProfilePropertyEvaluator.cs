@@ -12,8 +12,7 @@ namespace Vanrise.Security.MainExtensions.VRObjectTypes
 
     public class UserProfilePropertyEvaluator : VRObjectPropertyEvaluator
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("2A2F21E2-1B3E-456D-9D91-B0898B3F6D49"); } }
+        public override Guid ConfigId { get { return  new Guid("2A2F21E2-1B3E-456D-9D91-B0898B3F6D49"); } }
         public UserField UserField { get; set; }
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)

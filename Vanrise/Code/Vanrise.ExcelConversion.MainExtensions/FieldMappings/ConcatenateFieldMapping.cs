@@ -10,8 +10,7 @@ namespace Vanrise.ExcelConversion.MainExtensions.FieldMappings
 {
     public class ConcatenateFieldMapping : FieldMapping
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("17abfa66-d659-4e5c-b1c9-f7b408e8de00"); } }
+        public override Guid ConfigId { get { return  new Guid("17abfa66-d659-4e5c-b1c9-f7b408e8de00"); } }
         public List<ConcatenatedPart> Parts { get; set; }
 
         public override object GetFieldValue(IGetFieldValueContext context)

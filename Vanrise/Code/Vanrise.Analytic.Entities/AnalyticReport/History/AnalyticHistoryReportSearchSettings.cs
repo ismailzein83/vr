@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class AnalyticHistoryReportSearchSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
     }
 }

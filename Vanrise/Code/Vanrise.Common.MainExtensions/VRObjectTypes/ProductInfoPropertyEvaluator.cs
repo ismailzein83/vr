@@ -11,8 +11,7 @@ namespace Vanrise.Common.MainExtensions.VRObjectTypes
 
     public class ProductInfoPropertyEvaluator : VRObjectPropertyEvaluator
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("385C968A-415A-49E2-B7EF-189C2A6DD484"); } }
+        public override Guid ConfigId { get { return  new Guid("385C968A-415A-49E2-B7EF-189C2A6DD484"); } }
         public ProductField ProductField { get; set; }
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)

@@ -9,8 +9,7 @@ namespace Vanrise.Common.MainExtensions.TextManipulationAction
 {
     public class AddPrefixActionSettings : TextManipulationActionSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("1789A664-94FC-4702-8625-80B28A3E0E54"); } }
+        public override Guid ConfigId { get { return new Guid("1789A664-94FC-4702-8625-80B28A3E0E54"); } }
         public string Prefix { get; set; }
 
         public override string GetDescription()

@@ -9,8 +9,7 @@ namespace Vanrise.Common.MainExtensions.TextManipulationAction
 {
     public class SubstringActionSettings : TextManipulationActionSettings
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("E7BA05B0-4982-4D1D-9CAB-43EF692F4F17"); } }
+        public override Guid ConfigId { get { return new Guid("E7BA05B0-4982-4D1D-9CAB-43EF692F4F17"); } }
         public int StartIndex { get; set; }
 
         public int? Length { get; set; }

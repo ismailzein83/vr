@@ -8,7 +8,7 @@ namespace Vanrise.Rules.Pricing
 {
     public abstract class PricingRuleTariffSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
         
         public int CurrencyId { get; set; }
 

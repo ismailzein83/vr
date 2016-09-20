@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public abstract class VRObjectType
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public virtual dynamic GetDefaultValue()
         {

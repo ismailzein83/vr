@@ -8,7 +8,7 @@ namespace Vanrise.Invoice.Entities
 {
     public abstract class ItemsFilter
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
         public abstract IEnumerable<dynamic> GetFilteredItems(IItemsFilterContext context);
     }
     public interface IItemsFilterContext

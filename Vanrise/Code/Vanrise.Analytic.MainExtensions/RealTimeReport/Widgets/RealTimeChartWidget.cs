@@ -9,8 +9,7 @@ namespace Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets
 {
     public class RealTimeChartWidget:  RealTimeReportWidget
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("DBEFFA6E-E75E-497F-8ACF-8F15469D9B90"); } }
+        public override Guid ConfigId { get { return  new Guid("DBEFFA6E-E75E-497F-8ACF-8F15469D9B90"); } }
         public List<RealTimeChartWidgetDimension> Dimensions { get; set; }
         public List<RealTimeChartWidgetMeasure> Measures { get; set; }
         public string TopMeasure { get; set; }

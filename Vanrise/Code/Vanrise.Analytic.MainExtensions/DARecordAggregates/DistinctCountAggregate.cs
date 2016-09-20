@@ -10,8 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
 {
     public class DistinctCountAggregate : DARecordAggregate
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("982B1256-3F3E-4CA6-9D23-8844B060062D"); } }
+        public override Guid ConfigId { get { return new Guid("982B1256-3F3E-4CA6-9D23-8844B060062D"); } }
         public override DataRecordFieldType FieldType
         {
             get

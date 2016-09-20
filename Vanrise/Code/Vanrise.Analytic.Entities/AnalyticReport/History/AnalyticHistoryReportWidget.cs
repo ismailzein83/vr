@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class AnalyticHistoryReportWidget
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public int AnalyticTableId { get; set; }
         public string WidgetTitle { get; set; }

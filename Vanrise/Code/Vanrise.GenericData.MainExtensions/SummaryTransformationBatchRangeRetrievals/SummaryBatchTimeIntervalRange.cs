@@ -11,8 +11,7 @@ namespace Vanrise.GenericData.MainExtensions
     public enum SummaryBatchIntervalType { Minutes = 0, Hours = 1, Days = 2 }
     public class SummaryBatchTimeIntervalRange : SummaryTransformationBatchRangeRetrieval
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("c47176fb-32eb-430c-b92d-d34dfadcddf9"); } }
+        public override Guid ConfigId { get { return  new Guid("c47176fb-32eb-430c-b92d-d34dfadcddf9"); } }
         public SummaryBatchIntervalType IntervalType { get; set; }
 
         public int IntervalOffset { get; set; }

@@ -8,7 +8,7 @@ namespace Vanrise.ExcelConversion.Entities
 {
     public abstract class ConcatenatedPart
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract string GetPartText(IGetConcatenatedPartTextContext context);
     }

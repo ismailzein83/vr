@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class TimeRangeFilter
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void Evaluate(ITimeRangeFilterContext context);
     }

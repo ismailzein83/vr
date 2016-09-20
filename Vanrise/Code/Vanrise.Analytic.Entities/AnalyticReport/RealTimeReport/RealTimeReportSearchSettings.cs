@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class RealTimeReportSearchSettings
+    public abstract class RealTimeReportSearchSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
     }
 }

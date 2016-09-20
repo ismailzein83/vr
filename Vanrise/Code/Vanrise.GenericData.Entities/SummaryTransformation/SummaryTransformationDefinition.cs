@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.Entities
 
     public abstract class SummaryTransformationBatchRangeRetrieval
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart);
     }

@@ -8,7 +8,7 @@ namespace Vanrise.Security.Entities
 {
     public abstract class GroupSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract bool IsMember(IGroupSettingsContext context);
     }

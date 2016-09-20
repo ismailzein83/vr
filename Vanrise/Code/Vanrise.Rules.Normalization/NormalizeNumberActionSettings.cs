@@ -8,7 +8,7 @@ namespace Vanrise.Rules.Normalization
 {
     public abstract class NormalizeNumberActionSettings
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract string GetDescription();
 
