@@ -44,39 +44,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    return saleRates.ToDictionary(cn => cn.SupplierRateId, cn => cacheManager.CacheAndGetRate(cn));
                });
         }
-        public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)
-        {
-            CallCost callSale = null;
-            SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));
-
-            SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
-            SupplierRateManager supplierRateManager = new SupplierRateManager();
-            if (supplierZoneRate != null)
-            {
-                int currencyId = supplierRateManager.GetCurrencyId(supplierZoneRate.Rate);
-                PurchasePricingRuleManager purchasePricingRuleManager = new PurchasePricingRuleManager();
-                PurchasePricingRulesInput purchasePricingRulesInput = new PurchasePricingRulesInput
-                {
-                    SupplierId = supplierId,
-                    SupplierZoneId = supplierZoneId,
-                    Rate = supplierZoneRate.Rate,
-                    DurationInSeconds = durationInSeconds,
-                    EffectiveOn = effectiveOn
-                };
-                var pricingRulesResult = purchasePricingRuleManager.ApplyPricingRules(purchasePricingRulesInput);
-                callSale = new CallCost
-                {
-                    RateValue = pricingRulesResult.Rate,
-                    TotalNet = pricingRulesResult.TotalAmount,
-                    CurrencyId = currencyId,
-                    EffectiveDurationInSeconds = pricingRulesResult.EffectiveDurationInSeconds,
-                    ExtraChargeValue = pricingRulesResult.ExtraChargeValue,
-                    RateType = pricingRulesResult.RateType
-
-                };
-            }
-            return callSale;
-        }
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;

@@ -46,7 +46,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                 if ($scope.selectedCustomerGroupTemplate != undefined) {
                     if (customerGroupDirectiveAPI != undefined) {
                         customerGroupSettings = customerGroupDirectiveAPI.getData();
-                        customerGroupSettings.ConfigId = $scope.selectedCustomerGroupTemplate.TemplateConfigID;
+                        customerGroupSettings.ConfigId = $scope.selectedCustomerGroupTemplate.ExtensionConfigurationId;
                     }
                 }
                 return customerGroupSettings;
@@ -68,7 +68,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                         $scope.customerGroupTemplates.push(item);
                     });
                     if (customerConfigId != undefined)
-                        $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, customerConfigId, "TemplateConfigID");
+                        $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, customerConfigId, "ExtensionConfigurationId");
                     
                 });
                 promises.push(loadCustomerGroupTemplatesPromise);

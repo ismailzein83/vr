@@ -70,11 +70,6 @@
   <ItemGroup>
     <Compile Include="CodeCriteriaGroups\SelectiveCodeCriteriaGroup.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
-    <Compile Include="PricingRules\ExtraChargeActions\FixedExtraChargeSettings.cs" />
-    <Compile Include="PricingRules\ExtraChargeActions\PercentageExtraChargeSettings.cs" />
-    <Compile Include="PricingRules\RateTypeSettings\DaysOfWeekRateTypeSettings.cs" />
-    <Compile Include="PricingRules\RateTypeSettings\SpecificDayRateTypeSettings.cs" />
-    <Compile Include="PricingRules\TariffSettings\RegularTariffSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />

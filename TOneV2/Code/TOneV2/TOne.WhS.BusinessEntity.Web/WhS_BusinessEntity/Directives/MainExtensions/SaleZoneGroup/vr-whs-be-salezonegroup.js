@@ -70,7 +70,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                     });
 
                     if (saleZoneConfigId != undefined)
-                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneConfigId, "TemplateConfigID");
+                        $scope.selectedSaleZoneGroupTemplate = UtilsService.getItemByVal($scope.saleZoneGroupTemplates, saleZoneConfigId, "ExtensionConfigurationId");
 
                 });
                 promises.push(loadSaleZoneGroupTemplatesPromise);
@@ -95,7 +95,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                 if ($scope.selectedSaleZoneGroupTemplate != undefined) {
                     if (saleZoneGroupDirectiveAPI != undefined) {
                         saleZoneGroupSettings = saleZoneGroupDirectiveAPI.getData();
-                        saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.TemplateConfigID;
+                        saleZoneGroupSettings.ConfigId = $scope.selectedSaleZoneGroupTemplate.ExtensionConfigurationId;
                     }
                 }
                 return saleZoneGroupSettings;

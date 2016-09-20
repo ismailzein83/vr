@@ -7,7 +7,5 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class PricingRuleTariffContext : IPricingRuleTariffContext
-    {
-    }
+   
 }

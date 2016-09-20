@@ -110,6 +110,7 @@
     <Compile Include="SellingRuleManager.cs" />
     <Compile Include="SellingRules\FixedRule.cs" />
     <Compile Include="SellingRules\MarginRule.cs" />
+    <Compile Include="SellingRules\SellingRuleSettingsConfig.cs" />
     <Compile Include="UtilitiesManager.cs" />
     <Compile Include="ZoneItem\ZoneRateManager.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionManager.cs" />

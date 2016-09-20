@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteOptionFilterSettings
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public abstract void Execute(IRouteOptionFilterExecutionContext context);
     }    

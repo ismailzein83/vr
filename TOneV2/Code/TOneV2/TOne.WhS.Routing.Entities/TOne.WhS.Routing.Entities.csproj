@@ -67,6 +67,11 @@
     <Compile Include="CodeSaleZone.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="RouteOptionSettingsGroupConfig.cs" />
+    <Compile Include="RouteRuleOptionFilterSettingsConfig.cs" />
+    <Compile Include="RouteRuleOptionOrderSettingsConfig.cs" />
+    <Compile Include="RouteRuleOptionPercentageSettingsConfig.cs" />
+    <Compile Include="RouteRuleSettingsConfig.cs" />
     <Compile Include="RoutingOptimizerSettings.cs" />
     <Compile Include="RoutingOptimizerSettingsConfig.cs" />
     <Compile Include="Settings\RouteBuildConfiguration.cs" />

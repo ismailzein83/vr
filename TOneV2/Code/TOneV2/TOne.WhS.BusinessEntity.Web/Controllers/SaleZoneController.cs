@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
         [HttpGet]
         [Route("GetSaleZoneGroupTemplates")]
-        public List<TemplateConfig> GetSaleZoneGroupTemplates()
+        public IEnumerable<SaleZoneGroupConfig> GetSaleZoneGroupTemplates()
         {
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZoneGroupTemplates();

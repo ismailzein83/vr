@@ -61,9 +61,9 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
         function addNewItem(itemAdded) {
             var dataItem = {
                 id: ctrl.datasource.length + 1,
-                configId: itemAdded.TemplateConfigID,
+                configId: itemAdded.ExtensionConfigurationId,
                 editor: itemAdded.Editor,
-                name: itemAdded.Name,
+                name: itemAdded.Title,
                 percentageValue: undefined
             };
 
@@ -74,7 +74,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             };
 
             for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
-                if (ctrl.optionOrderSettingsGroupTemplates[x].TemplateConfigID == itemAdded.TemplateConfigID) {
+                if (ctrl.optionOrderSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
                     existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
                     ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
                     break;
@@ -88,7 +88,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             var configId = dataItem.configId;
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
             for (var x = 0; x < existingItems.length; x++) {
-                if (existingItems[x].TemplateConfigID == configId) {
+                if (existingItems[x].ExtensionConfigurationId == configId) {
                     ctrl.optionOrderSettingsGroupTemplates.push(existingItems[x]);
                     existingItems.splice(x, 1);
                     break;
@@ -103,7 +103,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             }
             angular.forEach(ctrl.optionOrderSettingsGroupTemplates, function (dataItem) {
                 if (dataItem.Settings != null && dataItem.Settings.IsRequired) {
-                    requiredFiltersNames.push(dataItem.Name);
+                    requiredFiltersNames.push(dataItem.Title);
                 }
             });
             var result = null;
@@ -182,7 +182,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                         for (var x = 0; x < ctrl.datasource.length; x++) {
                             var itemFound = false;
                             for (var j = 0; j < ctrl.optionOrderSettingsGroupTemplates.length; j++) {
-                                if (ctrl.datasource[x].configId == ctrl.optionOrderSettingsGroupTemplates[j].TemplateConfigID) {
+                                if (ctrl.datasource[x].configId == ctrl.optionOrderSettingsGroupTemplates[j].ExtensionConfigurationId) {
                                     existingItems.push(ctrl.optionOrderSettingsGroupTemplates[j]);
                                     ctrl.optionOrderSettingsGroupTemplates.splice(j, 1);
                                     itemFound = true;
@@ -200,7 +200,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                             var currentRequiredItem = requiredItems[y];
                             for (var z = 0 ; z < ctrl.optionOrderSettingsGroupTemplates.length; z++) {
                                 var currentItem = ctrl.optionOrderSettingsGroupTemplates[z];
-                                if (currentItem.TemplateConfigID == currentRequiredItem.TemplateConfigID) {
+                                if (currentItem.ExtensionConfigurationId == currentRequiredItem.ExtensionConfigurationId) {
                                     addNewItem(currentItem);
                                     break;
                                 }
@@ -213,14 +213,14 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                 promises.push(loadTemplatesPromise);
 
                 function addOrderOptionItemToGrid(optionOrderItem) {
-                    var matchItem = UtilsService.getItemByVal(ctrl.optionOrderSettingsGroupTemplates, optionOrderItem.payload.ConfigId, "TemplateConfigID");
+                    var matchItem = UtilsService.getItemByVal(ctrl.optionOrderSettingsGroupTemplates, optionOrderItem.payload.ConfigId, "ExtensionConfigurationId");
                     if (matchItem == null)
                         return;
                     var dataItem = {
                         id: ctrl.datasource.length + 1,
-                        configId: matchItem.TemplateConfigID,
+                        configId: matchItem.ExtensionConfigurationId,
                         editor: matchItem.Editor,
-                        name: matchItem.Name,
+                        name: matchItem.Title,
                         percentageValue: optionOrderItem.payload.PercentageValue
                     };
                     var dataItemPayload = optionOrderItem.payload;

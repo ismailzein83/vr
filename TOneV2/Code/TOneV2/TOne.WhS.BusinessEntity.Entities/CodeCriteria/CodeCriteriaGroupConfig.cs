@@ -7,10 +7,10 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierZoneGroupTemplate : ExtensionConfiguration
+    public class CodeCriteriaGroupConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "WhS_BE_SupplierZoneGroup";
+        public const string EXTENSION_TYPE = "WhS_BE_CodeCriteriaGroup";
         public string Editor { get; set; }
-        public string RuntimeEditor { get; set; }
+        public string BehaviorFQTN { get; set; }
     }
 }

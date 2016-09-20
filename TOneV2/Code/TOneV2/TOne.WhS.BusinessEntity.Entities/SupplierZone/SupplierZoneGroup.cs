@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class SupplierZoneGroup : Vanrise.GenericData.Entities.IBusinessEntityGroup
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
         public abstract IEnumerable<long> GetSupplierZoneIds(ISupplierZoneGroupContext context);
         public abstract string GetDescription(ISupplierZoneGroupContext context);
         IEnumerable<object> Vanrise.GenericData.Entities.IBusinessEntityGroup.GetIds(IBusinessEntityGroupContext context)

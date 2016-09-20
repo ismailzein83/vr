@@ -59,47 +59,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, saleZoneId);
         }
 
-        public CallSale GetCallSale(int customerId, long saleZoneId, int durationInSeconds, DateTime effectiveOn)
-        {
-            CallSale callSale = null;
-
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
-            if (customerSellingProduct == null)
-                return null;
-            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
-            var customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, saleZoneId);
-
-            if (customerZoneRate != null)
-            {
-                int currencyId = GetCurrencyId(customerZoneRate.Rate);
-
-                SalePricingRuleManager salePricingRuleManager = new SalePricingRuleManager();
-                SalePricingRulesInput salePricingRulesInput = new SalePricingRulesInput
-                {
-                    CustomerId = customerId,
-                    SaleZoneId = saleZoneId,
-                    SellingProductId = customerSellingProduct.SellingProductId,
-                    DurationInSeconds = durationInSeconds,
-                    Rate = customerZoneRate.Rate,
-                    EffectiveOn = effectiveOn
-                };
-                var pricingRulesResult = salePricingRuleManager.ApplyPricingRules(salePricingRulesInput);
-
-                callSale = new CallSale
-                {
-                    RateValue = pricingRulesResult.Rate,
-                    TotalNet = pricingRulesResult.TotalAmount,
-                    CurrencyId = currencyId,
-                    EffectiveDurationInSeconds = pricingRulesResult.EffectiveDurationInSeconds,
-                    ExtraChargeValue = pricingRulesResult.ExtraChargeValue,
-                    RateType = pricingRulesResult.RateType,
-
-                };
-            }
-            return callSale;
-        }
-
         public IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();

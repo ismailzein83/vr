@@ -9,6 +9,8 @@ namespace TOne.WhS.Sales.Business.SellingRules
 {
     public class FixedRule : SellingRuleSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("3e5af0d9-aa44-4f38-9acd-2368416c6044"); } }
         public decimal FromRate { get; set; }
         public decimal ToRate { get; set; }
         public override void Execute(ISellingRuleExecutionContext context)

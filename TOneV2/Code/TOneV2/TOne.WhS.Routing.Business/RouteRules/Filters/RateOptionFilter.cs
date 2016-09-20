@@ -7,6 +7,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Filters
     public enum RateOptionType { Fixed = 0, Percentage = 1 }
     public class RateOptionFilter : RouteOptionFilterSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("06d12b16-9759-48cb-b794-8624ac9d5467"); } }
         public RateOption RateOption { get; set; }
         public RateOptionType RateOptionType { get; set; }
         public decimal RateOptionValue { get; set; }

@@ -13,13 +13,13 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<CostCalculationMethodSetting>(Constants.CostCalculationMethod).OrderBy(x => x.Title);
+            return extensionConfigManager.GetExtensionConfigurations<CostCalculationMethodSetting>(CostCalculationMethodSetting.EXTENSION_TYPE).OrderBy(x => x.Title);
         }
 
         public IEnumerable<RateCalculationMethodSetting> GetRateCalculationMethodTemplates()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(Constants.RateCalculationMethod).OrderBy(x => x.Title);
+            return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(RateCalculationMethodSetting.EXTENSION_TYPE).OrderBy(x => x.Title);
         }
     }
 }

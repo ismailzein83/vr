@@ -298,7 +298,7 @@
                 });
 
                 if (codeCriteriaGroupPayload != undefined)
-                    $scope.scopeModal.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.scopeModal.codeCriteriaGroupTemplates, codeCriteriaGroupPayload.ConfigId, "TemplateConfigID");
+                    $scope.scopeModal.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.scopeModal.codeCriteriaGroupTemplates, codeCriteriaGroupPayload.ConfigId, "ExtensionConfigurationId");
             });
 
             promises.push(loadCodeCriteriaGroupTemplatesPromise);
@@ -356,7 +356,7 @@
                 });
 
                 if (routeOptionRuleSettingsPayload != undefined)
-                    $scope.scopeModal.selectedrouteOptionRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModal.routeOptionRuleSettingsTemplates, routeOptionRuleSettingsPayload.RouteOptionRuleSettings.ConfigId, "TemplateConfigID");
+                    $scope.scopeModal.selectedrouteOptionRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModal.routeOptionRuleSettingsTemplates, routeOptionRuleSettingsPayload.RouteOptionRuleSettings.ConfigId, "ExtensionConfigurationId");
             });
 
             promises.push(loadRouteOptionRuleSettingsTemplatesPromise);

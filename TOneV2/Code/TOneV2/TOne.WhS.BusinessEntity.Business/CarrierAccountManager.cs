@@ -139,28 +139,28 @@ namespace TOne.WhS.BusinessEntity.Business
                 return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetCustomersGroupTemplates()
+        public IEnumerable<CustomerGroupConfig> GetCustomersGroupTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CustomerGroupConfig>(CustomerGroupConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<SupplierGroupConfig> GetSupplierGroupTemplates()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SupplierGroupConfig>(SupplierGroupConfig.EXTENSION_TYPE);
         }
         
-        public List<Vanrise.Entities.TemplateConfig> GetSupplierGroupTemplates()
+        public IEnumerable<SuppliersWithZonesGroupSettingsConfig> GetSuppliersWithZonesGroupsTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SupplierGroupConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SuppliersWithZonesGroupSettingsConfig>(SuppliersWithZonesGroupSettingsConfig.EXTENSION_TYPE);
         }
-        
-        public List<Vanrise.Entities.TemplateConfig> GetSuppliersWithZonesGroupsTemplates()
+
+        public IEnumerable<CustomerGroupConfig> GetCustomerGroupTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SuppliersWithZonesGroupSettingsConfigType);
-        }
-        
-        public List<Vanrise.Entities.TemplateConfig> GetCustomerGroupTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CustomerGroupConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CustomerGroupConfig>(CustomerGroupConfig.EXTENSION_TYPE);
         }
         
         public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)

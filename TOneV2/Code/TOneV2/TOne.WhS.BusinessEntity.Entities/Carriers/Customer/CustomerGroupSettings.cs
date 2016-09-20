@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class CustomerGroupSettings : Vanrise.GenericData.Entities.IBusinessEntityGroup
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public abstract IEnumerable<int> GetCustomerIds(ICustomerGroupContext context);
 

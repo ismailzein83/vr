@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.Web.Controllers
     {
         [HttpGet]
         [Route("GetRouteOptionSettingsGroupTemplates")]
-        public List<TemplateConfig> GetRouteOptionSettingsGroupTemplates()
+        public IEnumerable<RouteOptionSettingsGroupConfig> GetRouteOptionSettingsGroupTemplates()
         {
             RouteRuleSettingsManager manager = new RouteRuleSettingsManager();
             return manager.GetRouteOptionSettingsGroupTemplates();
@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetRouteOptionOrderSettingsTemplates")]
-        public List<TemplateConfig> GetRouteOptionOrderSettingsTemplates()
+        public IEnumerable<RouteRuleOptionOrderSettingsConfig> GetRouteOptionOrderSettingsTemplates()
         {
             RouteRuleSettingsManager manager = new RouteRuleSettingsManager();
             return manager.GetRouteOptionOrderSettingsTemplates();
@@ -32,7 +32,7 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetRouteOptionFilterSettingsTemplates")]
-        public List<TemplateConfig> GetRouteOptionFilterSettingsTemplates()
+        public IEnumerable<RouteRuleOptionFilterSettingsConfig> GetRouteOptionFilterSettingsTemplates()
         {
             RouteRuleSettingsManager manager = new RouteRuleSettingsManager();
             return manager.GetRouteOptionFilterSettingsTemplates();
@@ -40,7 +40,7 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetRouteOptionPercentageSettingsTemplates")]
-        public List<TemplateConfig> GetRouteOptionPercentageSettingsTemplates()
+        public IEnumerable<RouteRuleOptionPercentageSettingsConfig> GetRouteOptionPercentageSettingsTemplates()
         {
             RouteRuleSettingsManager manager = new RouteRuleSettingsManager();
             return manager.GetRouteOptionPercentageSettingsTemplates();

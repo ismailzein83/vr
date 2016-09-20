@@ -10,6 +10,7 @@ using Vanrise.Rules.Web.Controllers;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Web.Controllers
 {
@@ -35,7 +36,7 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetCodeCriteriaGroupTemplates")]
-        public List<TemplateConfig> GetCodeCriteriaGroupTemplates()
+        public IEnumerable<CodeCriteriaGroupConfig> GetCodeCriteriaGroupTemplates()
         {
             CodeManager manager = new CodeManager();
             return manager.GetCodeCriteriaGroupTemplates();

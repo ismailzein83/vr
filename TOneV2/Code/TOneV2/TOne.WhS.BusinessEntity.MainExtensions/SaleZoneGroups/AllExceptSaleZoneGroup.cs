@@ -11,6 +11,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 {
     public class AllExceptSaleZoneGroup : SaleZoneGroupSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("9d83276e-92cd-42e5-9f36-1f9c56ed8a3f"); } }
         public List<long> ZoneIds { get; set; }
 
         public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)

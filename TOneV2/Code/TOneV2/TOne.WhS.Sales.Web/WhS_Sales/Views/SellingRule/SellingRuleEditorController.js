@@ -212,7 +212,7 @@
                 });
 
                 if (sellingRuleSettingsPayload != undefined)
-                    $scope.scopeModel.selectedSellingRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.sellingRuleSettingsTemplates, sellingRuleSettingsPayload.SellingRuleSettings.ConfigId, "TemplateConfigID");
+                    $scope.scopeModel.selectedSellingRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.sellingRuleSettingsTemplates, sellingRuleSettingsPayload.SellingRuleSettings.ConfigId, "ExtensionConfigurationId");
             });
 
             promises.push(loadSellingRuleSettingsTemplatesPromise);

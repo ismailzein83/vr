@@ -122,7 +122,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SupplierZoneGroupTemplate> GetSupplierZoneGroupTemplates()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<SupplierZoneGroupTemplate>(Constants.SupplierZoneGroupTemplate);
+            return templateConfigManager.GetExtensionConfigurations<SupplierZoneGroupTemplate>(SupplierZoneGroupTemplate.EXTENSION_TYPE);
         }
 
         #endregion

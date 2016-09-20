@@ -10,7 +10,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 {
     public class SelectiveSaleZoneGroup : SaleZoneGroupSettings
     {
-        public const int ExtensionConfigId = 1;
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("d566ce83-0010-42ab-88bc-b8b3eaf5b556"); } }
+
         public List<long> ZoneIds { get; set; }
 
         public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)

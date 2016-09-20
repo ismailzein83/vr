@@ -8,13 +8,13 @@ namespace TOne.WhS.Routing.Business
 {
     public static class Constants
     {
-        public const string RouteOptionSettingsGroup = "WhS_Routing_RouteOptionSettingsGroup";
+      //  public const string RouteOptionSettingsGroup = "WhS_Routing_RouteOptionSettingsGroup";
 
-        public const string RouteRuleOptionOrderSettings = "WhS_Routing_RouteRuleOptionOrderSettings";
+      //  public const string RouteRuleOptionOrderSettings = "WhS_Routing_RouteRuleOptionOrderSettings";
 
-        public const string RouteRuleOptionFilterSettings = "WhS_Routing_RouteRuleOptionFilterSettings";
+       // public const string RouteRuleOptionFilterSettings = "WhS_Routing_RouteRuleOptionFilterSettings";
 
-        public const string RouteRuleOptionPercentageSettings = "WhS_Routing_RouteRuleOptionPercentageSettings";
+        //public const string RouteRuleOptionPercentageSettings = "WhS_Routing_RouteRuleOptionPercentageSettings";
 
         public const string RouteRuleSettingsConfigType = "WhS_Routing_RouteRuleSettingsType";
 

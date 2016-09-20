@@ -8,8 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public abstract class SuppliersWithZonesGroupSettings
     {
-        public int ConfigId { get; set; }
-
+        public virtual  Guid ConfigId { get; set; }
         public abstract IEnumerable<SupplierWithZones> GetSuppliersWithZones(ISuppliersWithZonesGroupContext context);
         public abstract string GetDescription(ISuppliersWithZonesGroupContext context);
     }    

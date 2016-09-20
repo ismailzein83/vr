@@ -15,10 +15,10 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-        public List<Vanrise.Entities.TemplateConfig> GetCodeCriteriaGroupTemplates()
+        public IEnumerable<CodeCriteriaGroupConfig> GetCodeCriteriaGroupTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CodeCriteriaGroupConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CodeCriteriaGroupConfig>(CodeCriteriaGroupConfig.EXTENSION_TYPE);
         }
         #endregion
 

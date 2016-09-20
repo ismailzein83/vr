@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpGet]
         [Route("GetSellingRuleSettingsTemplates")]
-        public List<TemplateConfig> GetSellingRuleSettingsTemplates()
+        public IEnumerable<SellingRuleSettingsConfig> GetSellingRuleSettingsTemplates()
         {
             SellingRuleManager manager = new SellingRuleManager();
             return manager.GetSellingRuleTypesTemplates();

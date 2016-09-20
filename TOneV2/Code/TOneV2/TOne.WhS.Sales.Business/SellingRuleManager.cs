@@ -57,10 +57,10 @@ namespace TOne.WhS.Sales.Business
             return false;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetSellingRuleTypesTemplates()
+        public IEnumerable<SellingRuleSettingsConfig> GetSellingRuleTypesTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SellingRuleSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SellingRuleSettingsConfig>(SellingRuleSettingsConfig.EXTENSION_TYPE);
         }
     }
 }

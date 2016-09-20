@@ -11,28 +11,28 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteRuleSettingsManager
     {
-        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionSettingsGroupTemplates()
+        public IEnumerable<RouteOptionSettingsGroupConfig> GetRouteOptionSettingsGroupTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.RouteOptionSettingsGroup);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RouteOptionSettingsGroupConfig>(RouteOptionSettingsGroupConfig.EXTENSION_TYPE);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionOrderSettingsTemplates()
+        public IEnumerable<RouteRuleOptionOrderSettingsConfig> GetRouteOptionOrderSettingsTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.RouteRuleOptionOrderSettings);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RouteRuleOptionOrderSettingsConfig>(RouteRuleOptionOrderSettingsConfig.EXTENSION_TYPE);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionFilterSettingsTemplates()
+        public IEnumerable<RouteRuleOptionFilterSettingsConfig> GetRouteOptionFilterSettingsTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.RouteRuleOptionFilterSettings);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RouteRuleOptionFilterSettingsConfig>(RouteRuleOptionFilterSettingsConfig.EXTENSION_TYPE);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetRouteOptionPercentageSettingsTemplates()
+        public IEnumerable<RouteRuleOptionPercentageSettingsConfig> GetRouteOptionPercentageSettingsTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.RouteRuleOptionPercentageSettings);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RouteRuleOptionPercentageSettingsConfig>(RouteRuleOptionPercentageSettingsConfig.EXTENSION_TYPE);
         }
 
         public IEnumerable<RoutingOptimizerSettingsConfig> GetRoutingOptimizerSettingsConfigs()

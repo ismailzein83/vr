@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public abstract class RouteOptionOrderSettings
     {
-        public int ConfigId { get; set; }
+        public virtual  Guid ConfigId { get; set; }
 
         public decimal? PercentageValue { get; set; }
 

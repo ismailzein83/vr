@@ -29,6 +29,8 @@ namespace TOne.WhS.Routing.Business
 
     public class RoutingOptimizationOptionPercentage : RouteOptionPercentageSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("fa264705-917a-4a55-ac12-0a3418b9c7d7"); } }
         public List<RoutingOptimizationOptionPercentageItem> Items { get; set; }
         public override void Execute(IRouteOptionPercentageExecutionContext context)
         {

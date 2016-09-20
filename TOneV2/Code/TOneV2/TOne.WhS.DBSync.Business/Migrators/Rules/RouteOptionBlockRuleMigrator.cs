@@ -101,10 +101,8 @@ namespace TOne.WhS.DBSync.Business
                         {
                             SuppliersWithZones = new List<SupplierWithZones> { new SupplierWithZones { SupplierId = _allCarrierAccounts[sourceRule.SupplierId].CarrierAccountId, SupplierZoneIds = lstZoneIds } }
                              ,
-                            ConfigId = SelectiveSuppliersWithZonesGroup.ExtensionConfigId
                         }
                     }
-
                 }
             };
         }

@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetSupplierGroupTemplates")]
-        public List<TemplateConfig> GetSupplierGroupTemplates()
+        public IEnumerable<SupplierGroupConfig> GetSupplierGroupTemplates()
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetSupplierGroupTemplates();
@@ -56,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCustomerGroupTemplates")]
-        public List<TemplateConfig> GetCustomerGroupTemplates()
+        public IEnumerable<CustomerGroupConfig> GetCustomerGroupTemplates()
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCustomerGroupTemplates();
@@ -80,7 +80,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         
         [HttpGet]
         [Route("GetSuppliersWithZonesGroupsTemplates")]
-        public List<TemplateConfig> GetSuppliersWithZonesGroupsTemplates()
+        public IEnumerable<SuppliersWithZonesGroupSettingsConfig> GetSuppliersWithZonesGroupsTemplates()
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetSuppliersWithZonesGroupsTemplates();

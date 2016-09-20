@@ -37,9 +37,9 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
         ctrl.addFilter = function () {
             var dataItem = {
                 id: ctrl.datasource.length + 1,
-                configId: ctrl.selectedOptionFilterSettingsGroupTemplate.TemplateConfigID,
+                configId: ctrl.selectedOptionFilterSettingsGroupTemplate.ExtensionConfigurationId,
                 editor: ctrl.selectedOptionFilterSettingsGroupTemplate.Editor,
-                name: ctrl.selectedOptionFilterSettingsGroupTemplate.Name
+                name: ctrl.selectedOptionFilterSettingsGroupTemplate.Title
             };
 
             dataItem.onDirectiveReady = function (api) {
@@ -49,7 +49,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             };
 
             for (var x = 0; x < ctrl.optionFilterSettingsGroupTemplates.length; x++) {
-                if (ctrl.optionFilterSettingsGroupTemplates[x].TemplateConfigID == ctrl.selectedOptionFilterSettingsGroupTemplate.TemplateConfigID) {
+                if (ctrl.optionFilterSettingsGroupTemplates[x].ExtensionConfigurationId == ctrl.selectedOptionFilterSettingsGroupTemplate.ExtensionConfigurationId) {
                     existingItems.push(ctrl.optionFilterSettingsGroupTemplates[x]);
                     ctrl.optionFilterSettingsGroupTemplates.splice(x, 1);
                     break;
@@ -64,7 +64,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             var configId = dataItem.configId;
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
             for (var x = 0; x < existingItems.length; x++) {
-                if (existingItems[x].TemplateConfigID == configId) {
+                if (existingItems[x].ExtensionConfigurationId == configId) {
                     ctrl.optionFilterSettingsGroupTemplates.push(existingItems[x]);
                     existingItems.splice(x, 1);
                     break;
@@ -122,7 +122,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                         for (var x = 0; x < ctrl.datasource.length; x++) {
                             var itemFound = false;
                             for (var j = 0; j < ctrl.optionFilterSettingsGroupTemplates.length; j++) {
-                                if (ctrl.datasource[x].configId == ctrl.optionFilterSettingsGroupTemplates[j].TemplateConfigID) {
+                                if (ctrl.datasource[x].configId == ctrl.optionFilterSettingsGroupTemplates[j].ExtensionConfigurationId) {
                                     existingItems.push(ctrl.optionFilterSettingsGroupTemplates[j]);
                                     ctrl.optionFilterSettingsGroupTemplates.splice(j, 1);
                                     itemFound = true;
@@ -139,15 +139,15 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                 promises.push(loadTemplatesPromise);
 
                 function addFilterItemToGrid(filterItem) {
-                    var matchItem = UtilsService.getItemByVal(ctrl.optionFilterSettingsGroupTemplates, filterItem.payload.ConfigId, "TemplateConfigID");
+                    var matchItem = UtilsService.getItemByVal(ctrl.optionFilterSettingsGroupTemplates, filterItem.payload.ConfigId, "ExtensionConfigurationId");
                     if (matchItem == null)
                         return;
 
                     var dataItem = {
                         id: ctrl.datasource.length + 1,
-                        configId: matchItem.TemplateConfigID,
+                        configId: matchItem.ExtensionConfigurationId,
                         editor: matchItem.Editor,
-                        name: matchItem.Name
+                        name: matchItem.Title
                     };
                     var dataItemPayload = filterItem.payload;
 

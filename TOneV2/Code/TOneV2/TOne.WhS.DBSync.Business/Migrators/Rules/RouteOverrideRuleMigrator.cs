@@ -124,12 +124,10 @@ namespace TOne.WhS.DBSync.Business
                 CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
                 {
                     Codes = codeCriterias,
-                    ConfigId = SelectiveCodeCriteriaGroup.ExtensionConfigId
                 },
                 CustomerGroupSettings = new SelectiveCustomerGroup
                 {
                     CustomerIds = new List<int>() { _allCarrierAccounts[sourceRule.CustomerId].CarrierAccountId },
-                    ConfigId = SelectiveCustomerGroup.ExtensionConfigId
                 }
             };
         }
@@ -163,7 +161,6 @@ namespace TOne.WhS.DBSync.Business
                 OptionsSettingsGroup = new SelectiveOptions
                 {
                     Options = GetOptions(sourceRule),
-                    ConfigId = SelectiveOptions.ExtensionConfigId
                 },
                 OptionPercentageSettings = GetOptionPercentageSettings(sourceRule),
                 ConfigId = RegularRouteRule.ExtensionConfigId
@@ -174,11 +171,10 @@ namespace TOne.WhS.DBSync.Business
         {
             return new RouteRuleCriteria
             {
-                SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, ConfigId = SelectiveSaleZoneGroup.ExtensionConfigId, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
+                SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
                 CustomerGroupSettings = new SelectiveCustomerGroup
                 {
                     CustomerIds = new List<int>() { _allCarrierAccounts[sourceRule.CustomerId].CarrierAccountId },
-                    ConfigId = SelectiveCustomerGroup.ExtensionConfigId
                 }
             };
         }
@@ -187,7 +183,7 @@ namespace TOne.WhS.DBSync.Business
             if (sourceRule.SupplierOptions.Sum(s => s.Percentage) != (short)100)
                 return null;
 
-            FixedOptionPercentage setting = new FixedOptionPercentage { Percentages = new List<decimal>(), ConfigId = FixedOptionPercentage.ExtensionConfigId };
+            FixedOptionPercentage setting = new FixedOptionPercentage { Percentages = new List<decimal>() };
             foreach (var option in sourceRule.SupplierOptions)
                 setting.Percentages.Add(option.Percentage);
             return setting;

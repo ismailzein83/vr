@@ -124,7 +124,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                             });
 
                             if (optionSettingsGroupPayload != undefined) {
-                                $scope.selectedOptionSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionSettingsGroupTemplates, optionSettingsGroupPayload.OptionsSettingsGroup.ConfigId, "TemplateConfigID");
+                                $scope.selectedOptionSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionSettingsGroupTemplates, optionSettingsGroupPayload.OptionsSettingsGroup.ConfigId, "ExtensionConfigurationId");
                             }
                         });
 
@@ -220,7 +220,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                             });
 
                             if (optionPercentageSettingsGroupPayload != undefined)
-                                $scope.selectedPercentageSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionPercentageSettingsGroupTemplates, optionPercentageSettingsGroupPayload.ConfigId, "TemplateConfigID");
+                                $scope.selectedPercentageSettingsGroupTemplate = UtilsService.getItemByVal($scope.optionPercentageSettingsGroupTemplates, optionPercentageSettingsGroupPayload.ConfigId, "ExtensionConfigurationId");
                         });
 
                         promises.push(loadRouteOptionPercentageSettingsGroupTemplatesPromise);

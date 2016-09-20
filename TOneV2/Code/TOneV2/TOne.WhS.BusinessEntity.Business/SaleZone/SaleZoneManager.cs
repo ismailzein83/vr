@@ -68,11 +68,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return string.Empty;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetSaleZoneGroupTemplates()
+        public IEnumerable<SaleZoneGroupConfig> GetSaleZoneGroupTemplates()
         {
-
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SaleZoneGroupConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SaleZoneGroupConfig>(SaleZoneGroupConfig.EXTENSION_TYPE);
         }
 
         public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds)
