@@ -14,6 +14,6 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class PackageItemSettings
     {
-        public Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
     }
 }

@@ -9,6 +9,8 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTarif
 {
     public class SingleDurationTariff : ChargingPolicyDurationTariff
     {
+        public override Guid ConfigId { get { return new Guid("e879d6d5-6cbe-4391-b1e0-29fd7c378f65"); } }
+
         public Vanrise.Rules.Pricing.PricingRuleTariffSettings TariffSettings { get; set; }
 
         public override void Execute(IChargingPolicyDurationTariffContext context)

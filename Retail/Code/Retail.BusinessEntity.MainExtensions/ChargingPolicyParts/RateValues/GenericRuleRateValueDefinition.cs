@@ -9,5 +9,9 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateValues
 {
     public class GenericRuleRateValueDefinition : BaseChargingPolicyPartRuleDefinition
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

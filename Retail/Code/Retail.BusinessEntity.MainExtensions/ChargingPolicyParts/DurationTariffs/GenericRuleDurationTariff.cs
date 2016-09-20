@@ -19,5 +19,10 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTarif
             ruleManager.ApplyTariffRule(pricingRuleContext, ruleTree, context.RuleTarget);
             Helper.UpdateVoiceTariffContext(context, pricingRuleContext);
         }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class RecurringPeriodSettings
     {
-        public Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void Execute(IRecurringPeriodContext context);
     }

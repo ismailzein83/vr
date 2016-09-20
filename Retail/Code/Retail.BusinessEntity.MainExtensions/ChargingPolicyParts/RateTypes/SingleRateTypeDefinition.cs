@@ -9,5 +9,10 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateTypes
 {
     public class SingleRateTypeDefinition : ChargingPolicyPartDefinitionSettings
     {
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

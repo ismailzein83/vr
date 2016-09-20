@@ -9,5 +9,9 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.DurationTarif
 {
     public class GenericRuleDurationTariffDefinition : BaseChargingPolicyPartRuleDefinition
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

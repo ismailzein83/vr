@@ -19,5 +19,10 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateValues
             ruleManager.ApplyRateValueRule(pricingRuleContext, ruleTree, context.RuleTarget);
             Helper.UpdateVoiceRateValueContext(context, pricingRuleContext);
         }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

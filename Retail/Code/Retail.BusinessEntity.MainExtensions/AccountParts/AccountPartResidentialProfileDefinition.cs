@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartResidentialProfileDefinition : AccountPartDefinitionSettings
     {
+        public override Guid ConfigId { get { return new Guid("747d0c68-a508-4aa3-8d02-0d3cdfe72149"); } }
+
     }
 }

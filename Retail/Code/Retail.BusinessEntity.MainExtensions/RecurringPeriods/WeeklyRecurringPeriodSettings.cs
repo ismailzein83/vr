@@ -9,6 +9,8 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringPeriods
 {
     public class WeeklyRecurringPeriodSettings : RecurringPeriodSettings
     {
+        public override Guid ConfigId { get { return new Guid("d6d3fbcc-fb40-44e4-9fa1-dd7f1dbb6751"); } }
+
         public DayOfWeek DayOfWeek { get; set; }
 
         public override void Execute(IRecurringPeriodContext context)

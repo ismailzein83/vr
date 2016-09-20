@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class AccountPartDefinitionSettings
     {
-        
-        public Guid ConfigId { get; set; }
+
+        public abstract Guid ConfigId { get;}
     }
 }

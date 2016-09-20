@@ -9,6 +9,7 @@ namespace Retail.SMS.Entities
 {
     public class SMSChargingPolicyDefinitionSettings : ChargingPolicyDefinitionSettings
     {
+
         public override string ChargingPolicyEditor
         {
             get
@@ -19,6 +20,11 @@ namespace Retail.SMS.Entities
             {
 
             }
+        }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

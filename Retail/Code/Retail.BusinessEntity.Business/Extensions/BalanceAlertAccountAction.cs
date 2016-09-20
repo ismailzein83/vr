@@ -11,6 +11,8 @@ namespace Retail.BusinessEntity.Business.Extensions
 {
     public class BalanceAlertAccountAction : VRAction
     {
+        public override Guid ConfigId { get { return new Guid("a8e093f4-f9c3-420b-99b7-32eea2c1df78"); } }
+
         public Guid ActionDefinitionId { get; set; }
 
         public ActionBPSettings ActionBPSettings { get; set; }

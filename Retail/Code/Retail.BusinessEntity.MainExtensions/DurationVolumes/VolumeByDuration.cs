@@ -21,5 +21,10 @@ namespace Retail.BusinessEntity.MainExtensions.DurationVolumes
         {
             throw new NotImplementedException();
         }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

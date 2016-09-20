@@ -20,5 +20,10 @@ namespace Retail.SMS.Entities
                 
             }
         }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

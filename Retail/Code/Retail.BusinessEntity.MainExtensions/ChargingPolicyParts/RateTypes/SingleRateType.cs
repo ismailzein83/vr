@@ -19,5 +19,10 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts.RateTypes
             this.RateTypeSettings.ApplyRateTypeRule(pricingRuleContext);
             Helper.UpdateVoiceRateTypeContext(context, pricingRuleContext);
         }
+
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

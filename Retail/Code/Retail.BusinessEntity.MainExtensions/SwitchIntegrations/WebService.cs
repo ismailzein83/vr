@@ -10,6 +10,7 @@ namespace Retail.BusinessEntity.MainExtensions.SwitchIntegrations
     public enum WebServiceRequestType {  Get = 1, Post = 2}
     public class WebService : SwitchIntegration
     {
+        public override Guid ConfigId { get { return new Guid("c6af019e-2caf-4fab-9889-74737b13bb0d"); } }
         public string URL { get; set; }
 
         public WebServiceRequestType RequestType { get; set; }
@@ -17,5 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.SwitchIntegrations
         public string CredentialLogic { get; set; }
 
         public string MappingLogic { get; set; }
+
+ 
     }
 }

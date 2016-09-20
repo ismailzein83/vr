@@ -11,6 +11,8 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
     public enum FinancialField { CreditClass = 0, CurrencyID = 1 }
     public class FinancialRetailAccountPropertyEvaluator : VRObjectPropertyEvaluator
     {
+        public override Guid ConfigId { get { return new Guid("2fba38a1-b755-4089-a0bb-0258e598a7ee"); } }
+
         public FinancialField FinancialField { get; set; }
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)

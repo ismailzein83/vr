@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Retail.BusinessEntity.Entities
 {
     public abstract class ChargingPolicyDurationTariff : ChargingPolicyPart
-    {        
-        public Guid ConfigId { get; set; }
+    {
+        public abstract Guid ConfigId { get; }
 
         public abstract void Execute(IChargingPolicyDurationTariffContext context);
 
