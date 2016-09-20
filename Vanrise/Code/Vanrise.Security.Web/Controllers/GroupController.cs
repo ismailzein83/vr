@@ -57,7 +57,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetGroupTemplate")]
-        public List<Vanrise.Entities.TemplateConfig> GetGroupTemplate()
+        public IEnumerable<GroupSettingsConfig> GetGroupTemplate()
         {
 
             return _manager.GetGroupTemplate();

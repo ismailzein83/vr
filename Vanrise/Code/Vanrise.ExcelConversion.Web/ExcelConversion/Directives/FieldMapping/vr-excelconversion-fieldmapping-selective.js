@@ -41,8 +41,8 @@
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
               + ' selectedvalues="selectedTemplateConfig"'
-               + 'datavaluefield="TemplateConfigID"'
-              + ' datatextfield="Name"'
+               + 'datavaluefield="ExtensionConfigurationId"'
+              + ' datatextfield="Title"'
               + label
                + ' isrequired="fieldmappingCtrl.isrequired"'
               + 'hideremoveicon>'
@@ -121,7 +121,7 @@
                                     $scope.templateConfigs.push(response[i]);
                                 }
                                 if (fieldMapping !=undefined)
-                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, fieldMapping.ConfigId, 'TemplateConfigID');
+                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, fieldMapping.ConfigId, 'ExtensionConfigurationId');
                                 else
                                    $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
@@ -143,7 +143,7 @@
 
                         data = directiveAPI.getData();
                         if (data != undefined) {
-                            data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                            data.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
                             data.FieldName = fieldMapping !=undefined?fieldMapping.FieldName:undefined,
                             data.FieldType= fieldMapping !=undefined?fieldMapping.FieldType:undefined
                         }

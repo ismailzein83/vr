@@ -180,6 +180,7 @@
     <Compile Include="RecordFilter\RecordFilterGroupExpressionInput.cs" />
     <Compile Include="StagingSummary\StageRecordInfo.cs" />
     <Compile Include="StagingSummary\StagingSummaryRecord.cs" />
+    <Compile Include="SummaryBatchIntervalSettingsConfig.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionQuery.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfoFilter.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionInfo.cs" />

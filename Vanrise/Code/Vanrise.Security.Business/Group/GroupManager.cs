@@ -132,10 +132,10 @@ namespace Vanrise.Security.Business
             return false;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetGroupTemplate()
+        public IEnumerable<GroupSettingsConfig> GetGroupTemplate()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.GroupSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<GroupSettingsConfig>(GroupSettingsConfig.EXTENSION_TYPE);
         }
         #endregion
         

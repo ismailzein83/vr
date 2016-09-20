@@ -11,10 +11,10 @@ namespace Vanrise.Rules.Normalization
 {
    public  class NormalizationRuleManager
     {
-       public List<TemplateConfig> GetNormalizeNumberActionSettingsTemplates()
+       public IEnumerable<NormalizeNumberActionSettingsConfig> GetNormalizeNumberActionSettingsTemplates()
        {
-           TemplateConfigManager manager = new TemplateConfigManager();
-           return manager.GetTemplateConfigurations(Constants.NormalizeNumberActionConfigType);
+           ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+           return manager.GetExtensionConfigurations<NormalizeNumberActionSettingsConfig>(NormalizeNumberActionSettingsConfig.EXTENSION_TYPE);
        }
     }
 }

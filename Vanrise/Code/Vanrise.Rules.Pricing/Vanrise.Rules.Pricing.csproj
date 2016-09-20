@@ -49,11 +49,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="ExtraCharge\IPricingRuleExtraChargeActionContext.cs" />
     <Compile Include="ExtraCharge\IPricingRuleExtraChargeContext.cs" />
     <Compile Include="ExtraCharge\PricingRuleExtraChargeActionContext.cs" />
     <Compile Include="ExtraCharge\PricingRuleExtraChargeActionSettings.cs" />
+    <Compile Include="ExtraCharge\PricingRuleExtraChargeActionSettingsConfig.cs" />
     <Compile Include="ExtraCharge\PricingRuleExtraChargeSettings.cs" />
     <Compile Include="PricingRuleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,11 +61,14 @@
     <Compile Include="RateType\IPricingRuleRateTypeItemContext.cs" />
     <Compile Include="RateType\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="RateType\PricingRuleRateTypeItemSettings.cs" />
+    <Compile Include="RateType\PricingRuleRateTypeItemSettingsConfig.cs" />
     <Compile Include="RateType\PricingRuleRateTypeSettings.cs" />
     <Compile Include="RateValue\IPricingRuleRateValueContext.cs" />
     <Compile Include="RateValue\PricingRuleRateValueSettings.cs" />
+    <Compile Include="RateValue\PricingRuleRateValueSettingsConfig.cs" />
     <Compile Include="Tariff\IPricingRuleTariffContext.cs" />
     <Compile Include="Tariff\PricingRuleTariffSettings.cs" />
+    <Compile Include="Tariff\PricingRuleTariffSettingsConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">

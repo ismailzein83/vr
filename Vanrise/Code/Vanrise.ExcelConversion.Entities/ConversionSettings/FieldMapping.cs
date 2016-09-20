@@ -10,7 +10,7 @@ namespace Vanrise.ExcelConversion.Entities
 
     public abstract class FieldMapping
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public string FieldName { get; set; }
 

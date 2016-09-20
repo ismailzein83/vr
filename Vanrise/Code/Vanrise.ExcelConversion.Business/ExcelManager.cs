@@ -172,15 +172,15 @@ namespace Vanrise.ExcelConversion.Business
             return eSheet;
 
         }
-        public IEnumerable<TemplateConfig> GetFieldMappingTemplateConfigs()
+        public IEnumerable<FieldMappingConfig> GetFieldMappingTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.FieldMappingConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<FieldMappingConfig>(FieldMappingConfig.EXTENSION_TYPE);
         }
-        public IEnumerable<TemplateConfig> GetConcatenatedPartTemplateConfigs()
+        public IEnumerable<ConcatenatedPartConfig> GetConcatenatedPartTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.ConcatenatedPartConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ConcatenatedPartConfig>(ConcatenatedPartConfig.EXTENSION_TYPE);
         }
     }
 }

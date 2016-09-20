@@ -127,11 +127,6 @@ namespace Vanrise.GenericData.Business
 
             return updateOperationOutput;
         }
-        public List<Vanrise.Entities.TemplateConfig> GetDataRecordFieldTypeTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.DataRecordFieldConfigType);
-        }
         public dynamic CreateDataRecordObject(string dataRecordTypeName)
         {
             Type dataRecordRuntimeType = GetDataRecordRuntimeType(dataRecordTypeName);

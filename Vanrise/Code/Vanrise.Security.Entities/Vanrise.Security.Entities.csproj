@@ -67,6 +67,7 @@
     <Compile Include="Group\GroupInfo.cs" />
     <Compile Include="Group\GroupQuery.cs" />
     <Compile Include="Group\GroupSettings.cs" />
+    <Compile Include="Group\GroupSettingsConfig.cs" />
     <Compile Include="Group\IGroupSettingsContext.cs" />
     <Compile Include="ISecurityContext.cs" />
     <Compile Include="MenuItem.cs" />

@@ -15,7 +15,7 @@ namespace Vanrise.Rules.Web.Controllers
     {
         [HttpGet]
         [Route("GetNormalizeNumberActionSettingsTemplates")]
-        public List<TemplateConfig> GetNormalizeNumberActionSettingsTemplates()
+        public IEnumerable<NormalizeNumberActionSettingsConfig> GetNormalizeNumberActionSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizeNumberActionSettingsTemplates();

@@ -8,6 +8,8 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 {
     public class AddPrefixActionSettings : NormalizeNumberActionSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("2b333f37-21b2-436c-92f5-cfaa9912b388"); } }
         public string Prefix { get; set; }
 
         public override string GetDescription()

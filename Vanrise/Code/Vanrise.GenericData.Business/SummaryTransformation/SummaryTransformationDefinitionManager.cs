@@ -96,10 +96,10 @@ namespace Vanrise.GenericData.Business
 
             return updateOperationOutput;
         }
-        public List<Vanrise.Entities.TemplateConfig> GetSummaryBatchIntervalSourceTemplates()
+        public IEnumerable<SummaryBatchIntervalSettingsConfig> GetSummaryBatchIntervalSourceTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SummaryBatchIntervalSettingsTemplateConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SummaryBatchIntervalSettingsConfig>(SummaryBatchIntervalSettingsConfig.EXTENSION_TYPE);
         }
         #endregion
 

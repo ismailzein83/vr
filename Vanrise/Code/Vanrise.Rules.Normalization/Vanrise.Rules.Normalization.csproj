@@ -49,7 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="INormalizeNumberActionContext.cs" />
     <Compile Include="INormalizeRuleContext.cs" />
     <Compile Include="MainExtensions\AddPrefixActionSettings.cs" />
@@ -57,6 +56,7 @@
     <Compile Include="MainExtensions\SubstringActionSettings.cs" />
     <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="NormalizeNumberActionSettings.cs" />
+    <Compile Include="NormalizeNumberActionSettingsConfig.cs" />
     <Compile Include="NormalizeNumberSettings.cs" />
     <Compile Include="NormalizeNumberTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

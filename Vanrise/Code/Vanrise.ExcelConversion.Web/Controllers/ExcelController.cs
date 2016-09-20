@@ -30,14 +30,14 @@ namespace Vanrise.ExcelConversion.Web
         }
         [HttpGet]
         [Route("GetFieldMappingTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetFieldMappingTemplateConfigs()
+        public IEnumerable<FieldMappingConfig> GetFieldMappingTemplateConfigs()
         {
             ExcelManager manager = new ExcelManager();
             return manager.GetFieldMappingTemplateConfigs();
         }
         [HttpGet]
         [Route("GetConcatenatedPartTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetConcatenatedPartTemplateConfigs()
+        public IEnumerable<ConcatenatedPartConfig> GetConcatenatedPartTemplateConfigs()
         {
             ExcelManager manager = new ExcelManager();
             return manager.GetConcatenatedPartTemplateConfigs();

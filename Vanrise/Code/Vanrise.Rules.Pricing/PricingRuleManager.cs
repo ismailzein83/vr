@@ -5,31 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Rules.Pricing;
 
 namespace Vanrise.Rules.Pricing
 {
     public class PricingRuleManager
     {
-        public List<TemplateConfig> GetPricingRuleRateTypeTemplates()
+        public IEnumerable<PricingRuleRateTypeItemSettingsConfig> GetPricingRuleRateTypeTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.PricingRuleRateTypeSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<PricingRuleRateTypeItemSettingsConfig>(PricingRuleRateTypeItemSettingsConfig.EXTENSION_TYPE);
         }
-        public List<TemplateConfig> GetPricingRuleTariffTemplates()
+        public IEnumerable<PricingRuleTariffSettingsConfig> GetPricingRuleTariffTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.PricingRuleTariffSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<PricingRuleTariffSettingsConfig>(PricingRuleTariffSettingsConfig.EXTENSION_TYPE);
         }
-        public List<TemplateConfig> GetPricingRuleExtraChargeTemplates()
+        public IEnumerable<PricingRuleExtraChargeActionSettingsConfig> GetPricingRuleExtraChargeTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.PricingRuleExtraChargeSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<PricingRuleExtraChargeActionSettingsConfig>(PricingRuleExtraChargeActionSettingsConfig.EXTENSION_TYPE);
         }
 
-        public List<TemplateConfig> GetPricingRuleRateValueTemplates()
+        public IEnumerable<PricingRuleRateValueSettingsConfig> GetPricingRuleRateValueTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.PricingRuleRateValueSettingsConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<PricingRuleRateValueSettingsConfig>(PricingRuleRateValueSettingsConfig.EXTENSION_TYPE);
         }
     }
 }

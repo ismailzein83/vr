@@ -54,7 +54,7 @@ app.directive("vrGenericdataSummarytransformationSummarybatchstartidentification
                     if ($scope.selectedSummaryBatchIntervalSourceTypeTemplate != undefined) {
                         if (summaryBatchIntervalSourceDirectiveAPI != undefined) {
                             sourceSummaryBatchInterval = summaryBatchIntervalSourceDirectiveAPI.getData();
-                            sourceSummaryBatchInterval.ConfigId = $scope.selectedSummaryBatchIntervalSourceTypeTemplate.TemplateConfigID
+                            sourceSummaryBatchInterval.ConfigId = $scope.selectedSummaryBatchIntervalSourceTypeTemplate.ExtensionConfigurationId
 
                         }
                     }
@@ -78,7 +78,7 @@ app.directive("vrGenericdataSummarytransformationSummarybatchstartidentification
                             $scope.summaryBatchIntervalSourceTypeTemplates.push(item);
                         });
                         if (sourceConfigId != undefined)
-                            $scope.selectedSummaryBatchIntervalSourceTypeTemplate = UtilsService.getItemByVal($scope.summaryBatchIntervalSourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                            $scope.selectedSummaryBatchIntervalSourceTypeTemplate = UtilsService.getItemByVal($scope.summaryBatchIntervalSourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
                     });
                     promises.push(loadSummaryBatchIntervalTypeTemplatesPromise);
 

@@ -52,9 +52,9 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
             ctrl.addFilter = function () {
                 var dataItem = {
                     id: ctrl.datasource.length + 1,
-                    configId: ctrl.selectedActionTemplate.TemplateConfigID,
+                    configId: ctrl.selectedActionTemplate.ExtensionConfigurationId,
                     editor: ctrl.selectedActionTemplate.Editor,
-                    name: ctrl.selectedActionTemplate.Name
+                    name: ctrl.selectedActionTemplate.Title
                 };
 
                 dataItem.onDirectiveReady = function (api) {
@@ -125,15 +125,15 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 promises.push(loadTemplatesPromise);
 
                 function addFilterItemToGrid(filterItem) {
-                    var matchItem = UtilsService.getItemByVal(ctrl.templates, filterItem.payload.ConfigId, "TemplateConfigID");
+                    var matchItem = UtilsService.getItemByVal(ctrl.templates, filterItem.payload.ConfigId, "ExtensionConfigurationId");
                     if (matchItem == null)
                         return;
 
                     var dataItem = {
                         id: ctrl.datasource.length + 1,
-                        configId: matchItem.TemplateConfigID,
+                        configId: matchItem.ExtensionConfigurationId,
                         editor: matchItem.Editor,
-                        name: matchItem.Name
+                        name: matchItem.Title
                     };
                     var dataItemPayload = filterItem.payload;
 

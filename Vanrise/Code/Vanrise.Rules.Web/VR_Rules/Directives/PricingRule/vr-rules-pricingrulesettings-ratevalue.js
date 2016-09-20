@@ -54,7 +54,7 @@
 
                 api.getData = function () {
                     var data = directiveAPI.getData();
-                    data.ConfigId = $scope.selectedRateValueTemplate.TemplateConfigID;
+                    data.ConfigId = $scope.selectedRateValueTemplate.ExtensionConfigurationId;
                     return data;
                 };
 
@@ -76,7 +76,7 @@
 
                     loadTemplatesPromise.then(function () {
                         if (settings != undefined) {
-                            $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, settings.ConfigId, 'TemplateConfigID');
+                            $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, settings.ConfigId, 'ExtensionConfigurationId');
                         }
                         else if ($scope.rateValueTemplates.length > 0)
                             $scope.selectedRateValueTemplate = $scope.rateValueTemplates[0];

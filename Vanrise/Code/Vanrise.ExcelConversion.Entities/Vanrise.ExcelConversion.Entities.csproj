@@ -51,8 +51,10 @@
     <Compile Include="ConversionOutput\ConvertedExcelList.cs" />
     <Compile Include="ConversionOutput\ConvertedExcelRecord.cs" />
     <Compile Include="ConversionSettings\ConcatenatedPart.cs" />
+    <Compile Include="ConversionSettings\ConcatenatedPartConfig.cs" />
     <Compile Include="ConversionSettings\ExcelConversionSettings.cs" />
     <Compile Include="ConversionSettings\FieldMapping.cs" />
+    <Compile Include="ConversionSettings\FieldMappingConfig.cs" />
     <Compile Include="ConversionSettings\IGetConcatenatedPartTextContext.cs" />
     <Compile Include="ConversionSettings\IGetFieldValueContext.cs" />
     <Compile Include="ConversionSettings\ListMapping.cs" />
@@ -65,6 +67,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>

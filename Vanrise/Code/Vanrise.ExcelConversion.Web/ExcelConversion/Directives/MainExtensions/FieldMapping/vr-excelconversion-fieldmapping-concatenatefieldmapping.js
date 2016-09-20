@@ -55,7 +55,7 @@
                 ctrl.addField = function () {
                     var dataItem = {
                         id: ctrl.datasource.length + 1,
-                        configId: $scope.selectedTemplateConfig.TemplateConfigID,
+                        configId: $scope.selectedTemplateConfig.ExtensionConfigurationId,
                         editor: $scope.selectedTemplateConfig.Editor,
                         name: $scope.selectedTemplateConfig.Name
                     };
@@ -148,13 +148,13 @@
                     }
 
                     function addFilterItemToGrid(filterItem) {
-                        var matchItem = UtilsService.getItemByVal($scope.templateConfigs, filterItem.payload.concatenatedPart.ConfigId, "TemplateConfigID");
+                        var matchItem = UtilsService.getItemByVal($scope.templateConfigs, filterItem.payload.concatenatedPart.ConfigId, "ExtensionConfigurationId");
                         if (matchItem == null)
                             return;
 
                         var dataItem = {
                             id: ctrl.datasource.length + 1,
-                            configId: matchItem.TemplateConfigID,
+                            configId: matchItem.ExtensionConfigurationId,
                             editor: matchItem.Editor,
                             name: matchItem.Name
                         };

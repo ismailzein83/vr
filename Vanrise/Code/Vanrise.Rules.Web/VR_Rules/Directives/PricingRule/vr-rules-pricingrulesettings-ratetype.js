@@ -38,9 +38,9 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             ctrl.addFilter = function () {
                 var dataItem = {
                     id: ctrl.datasource.length + 1,
-                    configId: ctrl.selectedTemplate.TemplateConfigID,
+                    configId: ctrl.selectedTemplate.ExtensionConfigurationId,
                     editor: ctrl.selectedTemplate.Editor,
-                    name: ctrl.selectedTemplate.Name
+                    name: ctrl.selectedTemplate.Title
                 };
                 dataItem.onDirectiveReady = function (api) {
                     dataItem.directiveAPI = api;
@@ -138,15 +138,15 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 promises.push(loadTemplatesPromise);
 
                 function addFilterItemToGrid(filterItem) {
-                    var matchItem = UtilsService.getItemByVal(ctrl.rateTypeTemplates, filterItem.payload.ConfigId, "TemplateConfigID");
+                    var matchItem = UtilsService.getItemByVal(ctrl.rateTypeTemplates, filterItem.payload.ConfigId, "ExtensionConfigurationId");
                     if (matchItem == null)
                         return;
 
                     var dataItem = {
                         id: ctrl.datasource.length + 1,
-                        configId: matchItem.TemplateConfigID,
+                        configId: matchItem.ExtensionConfigurationId,
                         editor: matchItem.Editor,
-                        name: matchItem.Name
+                        name: matchItem.Title
                     };
                     var dataItemPayload = filterItem.payload;
 

@@ -9,6 +9,8 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 {
     public class ReplaceStringActionSettings : NormalizeNumberActionSettings
     {
+        Guid _configId;
+        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("12a627f4-5e64-4957-b3f9-e0b890955037"); } }
         public string StringToReplace { get; set; }
 
         public string NewString { get; set; }

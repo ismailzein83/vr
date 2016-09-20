@@ -8,7 +8,7 @@ namespace Vanrise.Rules.Pricing
 {
     public abstract class PricingRuleRateTypeItemSettings
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         public int RateTypeId { get; set; }
 

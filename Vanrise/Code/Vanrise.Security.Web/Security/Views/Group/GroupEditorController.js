@@ -128,7 +128,7 @@
                 });
 
                 if (goupPayload) {
-                    $scope.scopeModal.selectedGroupTypeTemplate = UtilsService.getItemByVal($scope.scopeModal.groupTypeTemplates, goupPayload.settings.ConfigId, "TemplateConfigID");
+                    $scope.scopeModal.selectedGroupTypeTemplate = UtilsService.getItemByVal($scope.scopeModal.groupTypeTemplates, goupPayload.settings.ConfigId, "ExtensionConfigurationId");
                 }
             });
             promises.push(groupTemplateLoad);

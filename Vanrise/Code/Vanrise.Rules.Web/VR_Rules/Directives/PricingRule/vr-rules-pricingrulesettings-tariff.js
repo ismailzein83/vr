@@ -51,7 +51,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
 
             api.getData = function () {
                 var obj = directiveReadyAPI.getData();
-                obj.ConfigId = $scope.selectedPricingRuleTariffSettings.TemplateConfigID;
+                obj.ConfigId = $scope.selectedPricingRuleTariffSettings.ExtensionConfigurationId;
                 obj.CurrencyId = currencyDirectiveAPI.getSelectedIds();
                 return obj;
             }
@@ -73,7 +73,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
 
                 loadTariffTemplatesPromise.then(function () {
                     if (settings != undefined)
-                        $scope.selectedPricingRuleTariffSettings = UtilsService.getItemByVal($scope.pricingRuleTariffSettings, settings.ConfigId, 'TemplateConfigID');
+                        $scope.selectedPricingRuleTariffSettings = UtilsService.getItemByVal($scope.pricingRuleTariffSettings, settings.ConfigId, 'ExtensionConfigurationId');
                     else if ($scope.pricingRuleTariffSettings.length > 0)
                         $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[0];
                 });

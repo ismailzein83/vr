@@ -14,14 +14,14 @@ namespace Vanrise.Rules.Web.Controllers
     {
         [HttpGet]
         [Route("GetPricingRuleRateTypeTemplates")]
-        public List<TemplateConfig> GetPricingRuleRateTypeTemplates()
+        public IEnumerable<PricingRuleRateTypeItemSettingsConfig> GetPricingRuleRateTypeTemplates()
         {
             PricingRuleManager manager = new PricingRuleManager();
             return manager.GetPricingRuleRateTypeTemplates();
         }
         [HttpGet]
         [Route("GetPricingRuleTariffTemplates")]
-        public List<TemplateConfig> GetPricingRuleTariffTemplates()
+        public IEnumerable<PricingRuleTariffSettingsConfig> GetPricingRuleTariffTemplates()
         {
             PricingRuleManager manager = new PricingRuleManager();
             return manager.GetPricingRuleTariffTemplates();
@@ -29,7 +29,7 @@ namespace Vanrise.Rules.Web.Controllers
 
         [HttpGet]
         [Route("GetPricingRuleExtraChargeTemplates")]
-        public List<TemplateConfig> GetPricingRuleExtraChargeTemplates()
+        public IEnumerable<PricingRuleExtraChargeActionSettingsConfig> GetPricingRuleExtraChargeTemplates()
         {
             PricingRuleManager manager = new PricingRuleManager();
             return manager.GetPricingRuleExtraChargeTemplates();
@@ -37,7 +37,7 @@ namespace Vanrise.Rules.Web.Controllers
 
         [HttpGet]
         [Route("GetPricingRuleRateValueTemplates")]
-        public List<TemplateConfig> GetPricingRuleRateValueTemplates()
+        public IEnumerable<PricingRuleRateValueSettingsConfig> GetPricingRuleRateValueTemplates()
         {
             PricingRuleManager manager = new PricingRuleManager();
             return manager.GetPricingRuleRateValueTemplates();

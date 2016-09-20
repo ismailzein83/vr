@@ -12,7 +12,6 @@
             HasAddDataRecordType:HasAddDataRecordType,
             UpdateDataRecordType: UpdateDataRecordType,
             HasUpdateDataRecordType:HasUpdateDataRecordType,
-            GetDataRecordFieldTypeTemplates: GetDataRecordFieldTypeTemplates,
             GetDataRecordTypeInfo: GetDataRecordTypeInfo
         });
         function GetDataRecordTypeInfo(filter) {
@@ -36,9 +35,6 @@
         }
         function HasUpdateDataRecordType() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", ['UpdateDataRecordType']));
-        }
-        function GetDataRecordFieldTypeTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordFieldTypeTemplates"));
         }
     }
 

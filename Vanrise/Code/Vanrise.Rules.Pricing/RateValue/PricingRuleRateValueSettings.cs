@@ -9,7 +9,7 @@ namespace Vanrise.Rules.Pricing
 {
     public abstract class PricingRuleRateValueSettings
     {
-        public int ConfigId { get; set; }
+        public virtual Guid ConfigId { get; set; }
 
         protected abstract void Execute(IPricingRuleRateValueContext context);
 

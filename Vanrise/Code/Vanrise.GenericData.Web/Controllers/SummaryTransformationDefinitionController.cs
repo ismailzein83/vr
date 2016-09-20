@@ -56,7 +56,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetSummaryBatchIntervalSourceTemplates")]
-        public List<TemplateConfig> GetSummaryBatchIntervalSourceTemplates()
+        public IEnumerable<SummaryBatchIntervalSettingsConfig> GetSummaryBatchIntervalSourceTemplates()
         {
             SummaryTransformationDefinitionManager manager = new SummaryTransformationDefinitionManager();
             return manager.GetSummaryBatchIntervalSourceTemplates();
