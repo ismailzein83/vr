@@ -14,12 +14,33 @@ namespace TOne.WhS.DBSync.Business
         SourceFlaggedServiceDataManager dataManager;
         ZoneServiceConfigDBSyncDataManager dbSyncDataManager;
 
+        static Dictionary<string, string> S_ServiceColors = new Dictionary<string, string>();
+
         public FlaggedServiceMigrator(MigrationContext context)
             : base(context)
         {
             dataManager = new SourceFlaggedServiceDataManager(Context.ConnectionString);
             dbSyncDataManager = new ZoneServiceConfigDBSyncDataManager(context.UseTempTables);
             TableName = dbSyncDataManager.GetTableName();
+            FillServiceColors(S_ServiceColors);
+
+        }
+
+        private void FillServiceColors(Dictionary<string, string> S_ServiceColors)
+        {
+            S_ServiceColors.Add("WHS", "#C0C0C0");
+            S_ServiceColors.Add("RTL", "#0000FF");
+            S_ServiceColors.Add("PRM", "#FFA500");
+            S_ServiceColors.Add("VID", "#800000");
+            S_ServiceColors.Add("PRC", "#800000");
+            S_ServiceColors.Add("CLI", "#FF0000");
+            S_ServiceColors.Add("DRC", "#00FF00");
+            S_ServiceColors.Add("DUM", "#00FF00");
+            S_ServiceColors.Add("TRS", "#FFFF00");
+            S_ServiceColors.Add("3GM", "#000000");
+            S_ServiceColors.Add("GRY", "#000000");
+            S_ServiceColors.Add("ALG", "#FFFF00");
+            S_ServiceColors.Add("TDM", "#FFFF00");
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -42,7 +63,7 @@ namespace TOne.WhS.DBSync.Business
         {
             ServiceConfigSetting serviceConfigSetting = new ServiceConfigSetting()
             {
-                Color = sourceItem.ServiceColor != null ? string.Concat("#", sourceItem.ServiceColor) : null,
+                Color = sourceItem.ServiceColor != null ? string.Concat("#", sourceItem.ServiceColor) : S_ServiceColors[sourceItem.Symbol],
                 Name = sourceItem.Name,
                 Description = sourceItem.Description
             };
