@@ -95,14 +95,19 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     loadRuleDefinition(selectedItem.GenericRuleDefinitionId).then(function (response) {
                         if (response.CriteriaDefinition.Fields) {
                             for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
+                                var fuleField =  response.CriteriaDefinition.Fields[i];
                                 var filterItem = {
-                                    RuleFields: response.CriteriaDefinition.Fields[i],
+                                    RuleFields:fuleField,
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                     loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                 };
                                 var payload;
                                 if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && mainPayload.ruleFieldsMappings.length > 0 && firstTimeload)
-                                    payload = mainPayload.ruleFieldsMappings[i].Value;
+                                {
+                                    var ruleFieldsMapping = UtilsService.getItemByVal(mainPayload.ruleFieldsMappings, fuleField.FieldName, "RuleCriteriaFieldName");
+                                    if (ruleFieldsMapping != undefined)
+                                      payload = ruleFieldsMapping.Value;
+                                }
                                 addFilterItemToGrid(filterItem, payload);
                             }
                         }
