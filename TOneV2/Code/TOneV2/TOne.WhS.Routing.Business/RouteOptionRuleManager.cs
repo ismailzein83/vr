@@ -77,7 +77,7 @@ namespace TOne.WhS.Routing.Business
 
         int GetRuleTypePriority(RouteOptionRuleConfig ruleTypeConfig)
         {
-            return ruleTypeConfig.Priority.HasValue != null ? ruleTypeConfig.Priority.Value : int.MaxValue;
+            return ruleTypeConfig.Priority.HasValue ? ruleTypeConfig.Priority.Value : int.MaxValue;
         }
 
         public IEnumerable<RouteOptionRuleConfig> GetRouteOptionRuleTypesTemplates()
