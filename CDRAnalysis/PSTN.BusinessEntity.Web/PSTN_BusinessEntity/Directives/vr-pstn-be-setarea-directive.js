@@ -66,7 +66,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
                         });
 
                         if (payload != undefined)
-                            $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, payload.ConfigId, "TemplateConfigID");
+                            $scope.selectedTemplate = UtilsService.getItemByVal($scope.templates, payload.ConfigId, "ExtensionConfigurationId");
                         var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         readyPromiseDeferred.promise.then(function () {
                             VRUIUtilsService.callDirectiveLoad(setAreaSettingsDirectiveAPI, payload, directiveLoadPromiseDeferred);
@@ -84,7 +84,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
 
             api.getData = function () {
                 var data = setAreaSettingsDirectiveAPI.getData();
-                data.ConfigId = $scope.selectedTemplate.TemplateConfigID;
+                data.ConfigId = $scope.selectedTemplate.ExtensionConfigurationId;
 
                 return data;
             };

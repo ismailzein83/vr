@@ -1,9 +1,10 @@
 ﻿
+using System;
 namespace PSTN.BusinessEntity.Entities
 {
     public abstract class NormalizationRuleAdjustNumberActionSettings
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract string GetDescription();
 

@@ -50,7 +50,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetNormalizationRuleAdjustNumberActionSettingsTemplates")]
-        public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
+        public IEnumerable<AdjustNumberActionConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleAdjustNumberActionSettingsTemplates();
@@ -58,7 +58,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetNormalizationRuleSetAreaSettingsTemplates")]
-        public List<TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
+        public IEnumerable<SetAreaConfig> GetNormalizationRuleSetAreaSettingsTemplates()
         {
             NormalizationRuleManager manager = new NormalizationRuleManager();
             return manager.GetNormalizationRuleSetAreaSettingsTemplates();

@@ -195,16 +195,16 @@ namespace PSTN.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
-        public List<TemplateConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
+        public IEnumerable<AdjustNumberActionConfig> GetNormalizationRuleAdjustNumberActionSettingsTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.AdjustNumberActionConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<AdjustNumberActionConfig>(AdjustNumberActionConfig.EXTENSION_TYPE);
         }
 
-        public List<TemplateConfig> GetNormalizationRuleSetAreaSettingsTemplates()
+        public IEnumerable<SetAreaConfig> GetNormalizationRuleSetAreaSettingsTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SetAreaConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SetAreaConfig>(SetAreaConfig.EXTENSION_TYPE);
         }
 
         public override NormalizationRuleDetail MapToDetails(NormalizationRule rule)

@@ -5,6 +5,8 @@ namespace PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber
 {
     public class SubstringActionSettings : NormalizationRuleAdjustNumberActionSettings
     {
+        public override Guid ConfigId { get { return new Guid("819f222e-5a68-4563-9655-f4298c34453e"); } }
+
         public int StartIndex { get; set; }
 
         public int Length { get; set; }

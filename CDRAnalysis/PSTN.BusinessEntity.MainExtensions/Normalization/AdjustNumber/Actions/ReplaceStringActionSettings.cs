@@ -1,9 +1,12 @@
 ﻿using PSTN.BusinessEntity.Entities;
+using System;
 
 namespace PSTN.BusinessEntity.MainExtensions.Normalization.AdjustNumber
 {
     public class ReplaceStringActionSettings : NormalizationRuleAdjustNumberActionSettings
     {
+        public override Guid ConfigId { get { return new Guid("a34217b8-79a0-4eae-bb96-59badb29dc03"); } }
+
         public string StringToReplace { get; set; }
 
         public string NewString { get; set; }

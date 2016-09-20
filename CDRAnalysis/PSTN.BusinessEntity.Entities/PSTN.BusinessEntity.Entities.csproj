@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -49,6 +52,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdjustNumberActionConfig.cs" />
+    <Compile Include="SetAreaConfig.cs" />
     <Compile Include="TrunkType.cs" />
     <Compile Include="TrunkDirection.cs" />
     <Compile Include="Normalization\NormalizationRuleDetail.cs" />

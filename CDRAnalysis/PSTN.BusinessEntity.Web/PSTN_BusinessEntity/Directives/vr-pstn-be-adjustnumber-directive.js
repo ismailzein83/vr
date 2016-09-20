@@ -157,10 +157,10 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             var actionItem = {
                 ActionId: $scope.actions.length + 1,
 
-                ConfigId: (dbAction != null) ? dbAction.ConfigId : $scope.selectedActionTemplate.TemplateConfigID,
+                ConfigId: (dbAction != null) ? dbAction.ConfigId : $scope.selectedActionTemplate.ExtensionConfigurationId,
 
                 Editor: (dbAction != null) ?
-                    UtilsService.getItemByVal($scope.actionTemplates, dbAction.ConfigId, "TemplateConfigID").Editor :
+                    UtilsService.getItemByVal($scope.actionTemplates, dbAction.ConfigId, "ExtensionConfigurationId").Editor :
                     $scope.selectedActionTemplate.Editor,
 
                 Data: (dbAction != null) ? dbAction : {},
