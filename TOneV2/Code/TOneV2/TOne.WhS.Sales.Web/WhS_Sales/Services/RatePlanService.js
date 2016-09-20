@@ -9,7 +9,8 @@
             sellNewCountries: sellNewCountries,
             editSettings: editSettings,
             editPricingSettings: editPricingSettings,
-            viewFutureRate: viewFutureRate
+            viewFutureRate: viewFutureRate,
+            viewInvalidRates: viewInvalidRates
         };
 
         function sellNewCountries(customerId, onCountriesSold) {
@@ -65,6 +66,22 @@
             var settings = {};
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureRate.html", parameters, settings);
+        }
+
+        function viewInvalidRates(invalidRates, onSaved, onCancelled)
+        {
+            var parameters = {
+                invalidRates: invalidRates
+            };
+
+            var settings = {
+                onScopeReady: function (modalScope) {
+                    modalScope.onSaved = onSaved;
+                    modalScope.onCancelled = onCancelled;
+                }
+            };
+
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/InvalidRate.html", parameters, settings);
         }
     }
 

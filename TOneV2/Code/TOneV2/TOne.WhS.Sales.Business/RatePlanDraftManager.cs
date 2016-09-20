@@ -110,11 +110,98 @@ namespace TOne.WhS.Sales.Business
                 if (draft.ZoneChanges != null)
                 {
                     foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
-                        zoneDraft.NewRates = null;
+                        zoneDraft.NewRates = GetChangedOtherRates(zoneDraft.NewRates);
                 }
 
                 SaveDraft(ownerType, ownerId, draft);
             }
+        }
+
+        //public void AddNormalRatesToDraft(SalePriceListOwnerType ownerType, int ownerId, Dictionary<string, decimal> normalRatesByZone, DateTime effectiveOn)
+        //{
+        //    if (normalRatesByZone == null)
+        //        return;
+
+        //    Changes draft = GetDraft(ownerType, ownerId);
+
+        //    if (draft != null && draft.ZoneChanges != null)
+        //    {
+        //        var newDraft = new Changes();
+        //        newDraft.DefaultChanges = draft.DefaultChanges;
+        //        newDraft.ZoneChanges = new List<ZoneChanges>();
+
+        //        var manager = new RatePlanManager();
+        //        RatePlanSettingsData settings = manager.GetRatePlanSettingsData();
+
+        //        ZoneChanges zoneDraft;
+        //        List<DraftRateToChange> newRates;
+
+        //        foreach (KeyValuePair<string, decimal> kvp in normalRatesByZone)
+        //        {
+        //            zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneName == kvp.Key);
+
+        //            if (zoneDraft != null)
+        //            {
+        //                if (zoneDraft.NewRates == null)
+        //                    zoneDraft.NewRates = new List<DraftRateToChange>();
+        //            }
+        //            else
+        //            {
+        //            }
+
+        //            newRates = (zoneDraft != null && zoneDraft.NewRates != null) ? new List<DraftRateToChange>(zoneDraft.NewRates) : new List<DraftRateToChange>();
+
+        //            newRates.Add(new DraftRateToChange()
+        //            {
+        //                ZoneId = zoneDraft.ZoneId,
+        //                NormalRate = kvp.Value,
+        //                BED = effectiveOn.Date.AddDays(settings.IncreasedRateDayOffset)
+        //            });
+
+        //            if (zoneDraft != null)
+        //            {
+        //                var newRates = zoneDraft.NewRates != null ? new List<DraftRateToChange>(zoneDraft.NewRates) : new List<DraftRateToChange>();
+                        
+                        
+
+        //                zoneDraft.NewRates = newRates;
+        //            }
+        //            else
+        //            {
+        //                zoneDraft = new ZoneChanges();
+        //                var newRates = new List<DraftRateToChange>();
+        //                newRates.Add(new DraftRateToChange()
+        //                {
+        //                    ZoneId = zoneDraft.ZoneId,
+        //                    NormalRate = kvp.Value,
+        //                    BED = effectiveOn.Date.AddDays(settings.IncreasedRateDayOffset)
+        //                });
+        //                zoneDraft.NewRates = newRates;
+        //            }
+
+        //            newDraft.ZoneChanges.Add(zoneDraft);
+        //        }
+
+        //        foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
+        //        {
+        //            if (normalRatesByZone.ContainsKey(zoneDraft.ZoneName))
+        //                zoneDraft.NewRates = GetChangedOtherRates(zoneDraft.NewRates);
+        //        }
+        //    }
+        //}
+
+        private IEnumerable<DraftRateToChange> GetChangedOtherRates(IEnumerable<DraftRateToChange> changedRates)
+        {
+            var changedOtherRates = new List<DraftRateToChange>();
+            if (changedRates != null)
+            {
+                foreach (DraftRateToChange changedRate in changedRates)
+                {
+                    if (!changedRate.RateTypeId.HasValue)
+                        changedOtherRates.Add(changedRate);
+                }
+            }
+            return changedOtherRates.Count > 0 ? changedOtherRates : null;
         }
     }
 }

@@ -82,7 +82,7 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpPost]
         [Route("ApplyCalculatedRates")]
-        public IEnumerable<InvalidZoneRate> ApplyCalculatedRates(ApplyCalculatedRatesInput input)
+        public IEnumerable<InvalidRate> ApplyCalculatedRates(ApplyCalculatedRatesInput input)
         {
             var ratePlanPricingManager = new RatePlanPricingManager();
             return ratePlanPricingManager.ApplyCalculatedRates(input);

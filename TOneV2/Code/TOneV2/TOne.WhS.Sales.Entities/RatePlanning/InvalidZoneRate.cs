@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class InvalidZoneRate
+    public class InvalidRate
     {
         public string ZoneName { get; set; }
         public decimal Rate { get; set; }

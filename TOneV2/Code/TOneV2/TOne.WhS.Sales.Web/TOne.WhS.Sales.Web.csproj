@@ -205,6 +205,8 @@
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />
     <Content Include="WhS_Sales\Views\FutureRate.html" />
     <Content Include="WhS_Sales\Views\FutureRateController.js" />
+    <Content Include="WhS_Sales\Views\InvalidRate.html" />
+    <Content Include="WhS_Sales\Views\InvalidRateController.js" />
     <Content Include="WhS_Sales\Views\RatePlanPreview.html" />
     <Content Include="WhS_Sales\Views\RatePlanPreviewController.js" />
     <Content Include="WhS_Sales\Views\RatePlanPricingSettings.html" />

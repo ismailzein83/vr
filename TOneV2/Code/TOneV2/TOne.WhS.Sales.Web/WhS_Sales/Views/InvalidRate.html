@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_InvalidRateController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formInvalidAppliedZoneRates">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.invalidRates" hidegridmenu="true">
+                        <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Exclude'" disablesorting="true">
+                            <vr-switch value="dataItem.isExcluded"></vr-switch>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'New Rate'" disablesorting="true">
+                            <vr-textbox type="number" value="dataItem.newRate" minvalue="0" customvalidate="viewScope.scopeModel.isNewRateValid(dataItem)" isrequired="!dataItem.isExcluded"></vr-textbox>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formInvalidAppliedZoneRates" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Cancel" formname="formInvalidAppliedZoneRates" data-onclick="scopeModel.cancel"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

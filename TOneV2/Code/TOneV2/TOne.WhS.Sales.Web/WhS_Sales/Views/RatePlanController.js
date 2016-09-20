@@ -316,6 +316,8 @@
                 var applyDeferred = UtilsService.createPromiseDeferred();
                 promises.push(applyDeferred.promise);
 
+                var invalidRates;
+
                 confirmPromise.then(function (confirmed) {
                     if (confirmed)
                     {
@@ -325,8 +327,11 @@
 
                             var input = getApplyCalculatedRatesInput();
 
-                            WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function () {
+                            WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function (response)
+                            {
+                                invalidRates = response;
                                 applyDeferred.resolve();
+
                             }).catch(function (error) {
                                 applyDeferred.reject(error);
                             });
@@ -335,15 +340,29 @@
                             saveChangesDeferred.reject(error);
                         });
 
-                        UtilsService.waitMultiplePromises([saveChangesDeferred.promise, applyDeferred.promise]).then(function () {
-                            VRNotificationService.showSuccess("Rates applied");
-                            pricingSettings = null;
-                            $scope.showApplyButton = false;
-                            $scope.showCancelButton = true;
+                        UtilsService.waitMultiplePromises([saveChangesDeferred.promise, applyDeferred.promise]).then(function ()
+                        {
+                            if (invalidRates != undefined && invalidRates != null)
+                            {
+                                var onSaved = function () {
+                                    console.log('onSaved');
+                                };
+                                var onCancelled = function () {
+                                    WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), getCurrencyId());
+                                };
+                                WhS_Sales_RatePlanService.viewInvalidRates(invalidRates, onSaved, onCancelled);
+                            }
+                            else
+                            {
+                                VRNotificationService.showSuccess("Rates applied");
+                                pricingSettings = null;
+                                $scope.showApplyButton = false;
+                                $scope.showCancelButton = true;
 
-                            loadGrid().catch(function (error) {
-                                VRNotificationService.notifyException(error, $scope);
-                            });
+                                loadGrid().catch(function (error) {
+                                    VRNotificationService.notifyException(error, $scope);
+                                });
+                            }
                         });
                     }
                     else {
