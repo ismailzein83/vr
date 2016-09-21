@@ -46,12 +46,103 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 existingRateGroupByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingRateGroup);
 
-                if(zoneToProcess.ChangeType == ZoneChangeType.New)
+                if (zoneToProcess.ChangeType == ZoneChangeType.New)
                     CreateRatesForNewZones(zoneToProcess, sellingNumberPlanId, saleAreaSettingsData, zonesByType, effectiveDate, salePriceListsByOwner);
+                else if (zoneToProcess.ChangeType == ZoneChangeType.Renamed)
+                {
+                    existingRateGroupByZoneName.TryGetValue(zoneToProcess.RecentZoneName, out existingRateGroup);
+                    GenerateRatesForRenamedZoneFromOriginalZone(zoneToProcess, existingRateGroup,effectiveDate, salePriceListsByOwner);
+                }
                 else
                     PrepareDataForPreview(zoneToProcess, existingRateGroup);
             }
         }
+
+        private void GenerateRatesForRenamedZoneFromOriginalZone(ZoneToProcess zoneToProcess, ExistingRateGroup existingRateGroup, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
+        {
+            if (existingRateGroup != null)
+            {
+                ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
+                SaleRateManager saleRateManager = new SaleRateManager();
+
+                var e =  existingRateGroup.NormalRates.GetEnumerator();
+
+                while (e.MoveNext())
+                {
+                    ExistingRate lastExistingRate = GetLastExistingRateFromConnectedExistingRates(e.Current.Value);
+                    Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
+                    PriceListToAdd priceListToAdd = new PriceListToAdd()
+                    {
+                        OwnerId = owner.OwnerId,
+                        OwnerType = owner.OwnerType,
+                        EffectiveOn = effectiveDate,
+                        CurrencyId = saleRateManager.GetCurrencyId(lastExistingRate.RateEntity)
+                    };
+
+                    priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
+
+                    RateToAdd rateToAdd = new RateToAdd()
+                    {
+                        PriceListToAdd = priceListToAdd,
+                        Rate = lastExistingRate.RateEntity.NormalRate,
+                        ZoneName = zoneToProcess.ZoneName,
+                    };
+
+                    foreach (AddedZone addedZone in zoneToProcess.AddedZones)
+                    {
+                        rateToAdd.AddedRates.Add(new AddedRate()
+                        {
+                            BED = addedZone.BED,
+                            EED = addedZone.EED,
+                            PriceListToAdd = rateToAdd.PriceListToAdd,
+                            NormalRate = rateToAdd.Rate,
+                            AddedZone = addedZone
+                        });
+                    }
+
+                    zoneToProcess.RatesToAdd.Add(rateToAdd);
+                }
+            }
+        }
+
+        private void GenerateRatesForRenamedZoneFromOriginalZone(ZoneToProcess zoneToProcess, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
+        {
+           foreach (NotImportedRate notImportedRate in zoneToProcess.NotImportedNormalRates)
+            {
+                PriceListToAdd priceListToAdd = new PriceListToAdd()
+                {
+                    OwnerId = notImportedRate.OwnerId,
+                    OwnerType = notImportedRate.OwnerType,
+                    EffectiveOn = effectiveDate,
+                   //CurrencyId = notImportedRate.
+                };
+
+                priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
+
+                RateToAdd rateToAdd = new RateToAdd()
+                {
+                    PriceListToAdd = priceListToAdd,
+                    Rate = notImportedRate.Rate,
+                    ZoneName = zoneToProcess.ZoneName,
+                };
+
+                foreach (AddedZone addedZone in zoneToProcess.AddedZones)
+                {
+                    rateToAdd.AddedRates.Add(new AddedRate()
+                    {
+                        BED = addedZone.BED,
+                        EED = addedZone.EED,
+                        PriceListToAdd = rateToAdd.PriceListToAdd,
+                        NormalRate = rateToAdd.Rate,
+                        AddedZone = addedZone
+                    });
+                }
+
+                zoneToProcess.RatesToAdd.Add(rateToAdd);
+            }
+        }
+
+        
 
         private void PrepareDataForPreview(ZoneToProcess zoneToProcess, ExistingRateGroup existingRateGroup)
         {

@@ -16,7 +16,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
     {
         readonly string[] _columns = { "ProcessInstanceID", "CountryID", "ZoneName", "RecentZoneName", "ZoneChangeType", "ZoneBED", "ZoneEED", "SystemRate", "SystemRateBED", 
                                          "SystemRateEED", "ImportedRate", "ImportedRateBED", "RateChangeType", "SystemZoneServiceIds", "SystemZoneServiceBED", "SystemZoneServiceEED", "ImportedZoneServiceIds", "ImportedZoneServiceBED", "ZoneServiceChangeType" };
-       
+
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static SupplierZonePreviewDataManager()
         {
@@ -46,7 +46,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         }
 
 
-       public IEnumerable<ZoneRatePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query)
+        public IEnumerable<ZoneRatePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query)
         {
             return GetItemsSP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetFiltered]", ZoneRatePreviewMapper, query.ProcessInstanceId, query.CountryId, query.OnlyModified);
         }
@@ -74,10 +74,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 GetRoundedRate(record.ImportedRate),
                 record.ImportedRateBED,
                 (int)record.ChangeTypeRate,
-                 Vanrise.Common.Serializer.Serialize(record.SystemServiceIds),
+                record.SystemServiceIds != null ? Vanrise.Common.Serializer.Serialize(record.SystemServiceIds) : null,
                 record.SystemServicesBED,
                 record.SystemServicesEED,
-                Vanrise.Common.Serializer.Serialize(record.ImportedServiceIds),
+               record.ImportedServiceIds != null ? Vanrise.Common.Serializer.Serialize(record.ImportedServiceIds) : null,
                 record.ImportedServicesBED,
                 (int)record.ZoneServicesChangeType);
 
@@ -113,10 +113,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 ImportedRate = GetReaderValue<decimal?>(reader, "ImportedRate"),
                 ImportedRateBED = GetReaderValue<DateTime?>(reader, "ImportedRateBED"),
                 ChangeTypeRate = (RateChangeType)GetReaderValue<int>(reader, "RateChangeType"),
-                NewCodes = GetReaderValue<int>(reader,"NewCodes"),
-                DeletedCodes = GetReaderValue<int>(reader,"DeletedCodes"),
-                CodesMovedFrom = GetReaderValue<int>(reader,"CodesMovedFrom"),
-                CodesMovedTo = GetReaderValue<int>(reader,"CodesMovedTo")
+                NewCodes = GetReaderValue<int>(reader, "NewCodes"),
+                DeletedCodes = GetReaderValue<int>(reader, "DeletedCodes"),
+                CodesMovedFrom = GetReaderValue<int>(reader, "CodesMovedFrom"),
+                CodesMovedTo = GetReaderValue<int>(reader, "CodesMovedTo")
 
             };
             return zoneRatePreviewDetail;
@@ -129,6 +129,6 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             return null;
         }
 
-        
+
     }
 }
