@@ -18,7 +18,8 @@ namespace Xbooster.Web
                 "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/CDRComparison", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/XBooster_PriceListConversion", "*.js", true));
+                "~/Client/Modules/XBooster_PriceListConversion", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/VR_GenericData", "*.js", true));
         }
     }
 }

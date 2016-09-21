@@ -11,3 +11,4 @@ VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
 ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
 XBooster_PriceListConversion	C:\TFS\Xbooster\Code\XBooster.PriceListConversion.Web\XBooster_PriceListConversion
+VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
