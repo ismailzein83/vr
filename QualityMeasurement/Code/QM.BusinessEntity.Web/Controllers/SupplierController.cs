@@ -57,7 +57,7 @@ namespace QM.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetSupplierSourceTemplates")]
-        public List<TemplateConfig> GetSupplierSourceTemplates()
+        public IEnumerable<SourceSupplierReaderConfig> GetSupplierSourceTemplates()
         {
             SupplierManager manager = new SupplierManager();
             return manager.GetSupplierSourceTemplates();

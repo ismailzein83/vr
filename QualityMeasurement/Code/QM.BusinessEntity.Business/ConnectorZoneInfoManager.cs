@@ -48,10 +48,10 @@ namespace QM.BusinessEntity.Business
             return null;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetConnectorZoneTemplates()
+        public IEnumerable<ConnectorZoneReaderConfig> GetConnectorZoneTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.ConnectorZoneReaderConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ConnectorZoneReaderConfig>(ConnectorZoneReaderConfig.EXTENSION_TYPE);
         }
 
         #endregion

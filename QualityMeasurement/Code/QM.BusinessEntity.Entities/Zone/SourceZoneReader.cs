@@ -9,7 +9,7 @@ namespace QM.BusinessEntity.Entities
 {
     public abstract class SourceZoneReader : Vanrise.Entities.EntitySynchronization.ISourceItemReader<SourceZone>
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract bool UseSourceItemId
         {

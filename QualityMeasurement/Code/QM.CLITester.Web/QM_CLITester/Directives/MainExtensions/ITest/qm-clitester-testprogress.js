@@ -49,7 +49,7 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
             var api = {};
             api.getData = function () {
                 var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
-                CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                 return {
                     $type: "QM.CLITester.Business.TestProgressTaskActionArgument, QM.CLITester.Business",
                     CLITestConnector: CLITestConnectorObj,
@@ -74,7 +74,7 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
                     });
 
                     if (sourceConfigId != undefined)
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
                 });
 
             }

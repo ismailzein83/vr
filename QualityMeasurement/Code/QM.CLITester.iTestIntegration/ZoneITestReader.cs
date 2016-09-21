@@ -10,6 +10,8 @@ namespace QM.CLITester.iTestIntegration
 {
     public class ZoneITestReader : SourceZoneReader
     {
+        public override Guid ConfigId { get { return new Guid("f7559c74-4ce9-4f2a-bbb4-6e92f60f0643"); } }
+
         public override bool UseSourceItemId
         {
             get { return false; }

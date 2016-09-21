@@ -10,7 +10,7 @@ namespace QM.CLITester.Entities
 {    
     public abstract class CLITesterConnectorBase
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;  }
 
         public abstract InitiateTestOutput InitiateTest(IInitiateTestContext context);
 

@@ -9,6 +9,7 @@ namespace QM.BusinessEntity.MainExtensions.SourceSuppliersReaders
 {
     public class SupplierTOneV2SQLReader : SourceSupplierReader 
     {
+        public override Guid ConfigId { get { return new Guid("d6381dfc-f4d8-499a-9d4d-0d0eaaac5d32"); } }
         public string ConnectionString { get; set; }
 
         public override bool UseSourceItemId

@@ -70,7 +70,7 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                         schedulerTaskAction = {};
                         schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
                         schedulerTaskAction.SourceZoneReader = sourceTypeDirectiveAPI.getData();
-                        schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                        schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                         if (countrySourceTypeDirectiveAPI != undefined) {
                             schedulerTaskAction.SourceZoneReader.CountryReader = countrySourceTypeDirectiveAPI.getData();
                         }
@@ -94,7 +94,7 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                     if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined)
                         sourceConfigId = payload.data.SourceZoneReader.ConfigId;
                     if (sourceConfigId != undefined)
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
                 });
                 promises.push(zoneSourceTemplatesLoad);

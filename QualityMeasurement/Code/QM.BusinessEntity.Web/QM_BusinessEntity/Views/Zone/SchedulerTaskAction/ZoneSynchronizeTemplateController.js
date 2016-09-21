@@ -30,7 +30,7 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
                     schedulerTaskAction = {};
                     schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
                     schedulerTaskAction.SourceZoneReader = sourceTypeDirectiveAPI.getData();
-                    schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                    schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                     if(countrySourceTypeDirectiveAPI != undefined){
                         schedulerTaskAction.SourceZoneReader.CountryReader = countrySourceTypeDirectiveAPI.getData();
                     }
@@ -67,7 +67,7 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
             if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceZoneReader != undefined)
                 sourceConfigId = $scope.schedulerTaskAction.data.SourceZoneReader.ConfigId;
             if (sourceConfigId != undefined)
-                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
         });
     }

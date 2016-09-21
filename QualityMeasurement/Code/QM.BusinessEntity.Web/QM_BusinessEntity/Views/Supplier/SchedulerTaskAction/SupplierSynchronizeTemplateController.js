@@ -23,7 +23,7 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
                     schedulerTaskAction = {};
                     schedulerTaskAction.$type = "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
                     schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
-                    schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                    schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                 }
             }
             return schedulerTaskAction;
@@ -55,7 +55,7 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
             });
 
             if (sourceConfigId != undefined)
-                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
         });
     }

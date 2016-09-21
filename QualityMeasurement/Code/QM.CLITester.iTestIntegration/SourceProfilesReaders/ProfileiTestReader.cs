@@ -7,6 +7,8 @@ namespace QM.CLITester.iTestIntegration.SourceProfilesReaders
 {
     public class ProfileiTestReader : SourceProfileReader
     {
+
+        public override Guid ConfigId { get { return new Guid("8cea6378-48fb-4d91-a9b5-9e0c3209321e"); } }
         ServiceActions _serviceActions = new ServiceActions();
 
         public override bool UseSourceItemId

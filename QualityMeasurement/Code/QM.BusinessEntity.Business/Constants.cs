@@ -8,9 +8,5 @@ namespace QM.BusinessEntity.Business
 {
     public static class Constants
     {
-        public const string SourceSupplierReaderConfigType = "QM_BE_SourceSupplierReader";
-        public const string SourceZoneReaderConfigType = "QM_BE_SourceZoneReader";
-        public const string ConnectorZoneReaderConfigType = "QM_BE_ConnectorZoneReader";
-        
     }
 }

@@ -93,10 +93,10 @@ namespace QM.CLITester.Business
             dataManager.UpdateSynchronize(profile);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetProfileSourceTemplates()
+        public IEnumerable<SourceProfileReaderConfig> GetProfileSourceTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SourceProfileReaderConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SourceProfileReaderConfig>(SourceProfileReaderConfig.EXTENSION_TYPE);
         }
 
         #region Private Members

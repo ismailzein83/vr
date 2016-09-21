@@ -12,6 +12,7 @@ namespace QM.CLITester.Entities.VRObjectTypes
     RingDuration = 13, CallDuration = 14, ReleaseCode = 15, ToMail = 16 }
     public class TestResultPropertyEvaluator : VRObjectPropertyEvaluator
     {
+        public override Guid ConfigId { get { return new Guid("3c2d781d-5089-4d1e-9061-fa5a895ae9a2"); } }
         public TestCallDetailField TestCallDetailField { get; set; }
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {

@@ -53,7 +53,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                         schedulerTaskAction = {};
                         schedulerTaskAction.$type = "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
                         schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
-                        schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                        schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                     }
                 }
                 return schedulerTaskAction;
@@ -74,7 +74,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                     });
 
                     if (sourceConfigId != undefined)
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
                 });
                 promises.push(loadSupplierSourcePromise);

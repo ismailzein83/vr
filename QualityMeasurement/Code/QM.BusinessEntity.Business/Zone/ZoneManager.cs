@@ -41,11 +41,11 @@ namespace QM.BusinessEntity.Business
             });
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetZoneSourceTemplates()
+        public IEnumerable<SourceZoneReaderConfig> GetZoneSourceTemplates()
         {
 
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SourceZoneReaderConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SourceZoneReaderConfig>(SourceZoneReaderConfig.EXTENSION_TYPE);
         }
 
         public IEnumerable<ZoneInfo> GetZonesInfo(ZoneInfoFilter filter)

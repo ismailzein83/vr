@@ -16,7 +16,7 @@ namespace QM.BusinessEntity.Web.Controllers
     {
         [HttpGet]
         [Route("GetConnectorZoneTemplates")]
-        public List<TemplateConfig> GetConnectorZoneTemplates()
+        public IEnumerable<ConnectorZoneReaderConfig> GetConnectorZoneTemplates()
         {
             ConnectorZoneInfoManager manager = new ConnectorZoneInfoManager();
             return manager.GetConnectorZoneTemplates();

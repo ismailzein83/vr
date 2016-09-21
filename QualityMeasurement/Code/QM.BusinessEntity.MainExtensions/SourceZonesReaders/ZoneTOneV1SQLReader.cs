@@ -9,6 +9,8 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
 {
     public class ZoneTOneV1SQLReader : SourceZoneReader 
     {
+        public override Guid ConfigId { get { return new Guid("3b68fae1-c18f-4d15-8c56-74e12a56fd47"); } }
+
         public string ConnectionString { get; set; }
         public string ZoneNames { get; set; }
 

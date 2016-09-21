@@ -52,6 +52,8 @@
     <Compile Include="AddTestCallOutput.cs" />
     <Compile Include="CallTestStatus.cs" />
     <Compile Include="CLITesterConnectorBase.cs" />
+    <Compile Include="CliTesterConnectorInitiateTestConfig.cs" />
+    <Compile Include="CliTesterConnectorTestProgressConfig.cs" />
     <Compile Include="GetBeforeIdInput.cs" />
     <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="LastCallUpdateOutput.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Profiles\SourceProfile.cs" />
     <Compile Include="Profiles\SourceProfileReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceProfileReaderConfig.cs" />
     <Compile Include="TaskCheckProgressContext.cs" />
     <Compile Include="TestCall.cs" />
     <Compile Include="TestCallDetail.cs" />

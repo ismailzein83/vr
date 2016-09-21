@@ -119,11 +119,11 @@ namespace QM.BusinessEntity.Business
 
             dataManager.UpdateSupplierFromeSource(supplier);
         }
-        public List<Vanrise.Entities.TemplateConfig> GetSupplierSourceTemplates()
+        public IEnumerable<SourceSupplierReaderConfig> GetSupplierSourceTemplates()
         {
 
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SourceSupplierReaderConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SourceSupplierReaderConfig>(SourceSupplierReaderConfig.EXTENSION_TYPE);
         }
 
         public Supplier GetSupplierbySourceId(string sourceSupplierId)

@@ -54,7 +54,7 @@ app.directive("vrQmClitesterSourceprofilereader", ['UtilsService', 'VRUIUtilsSer
                
                 var sourceProfileReader;
                 sourceProfileReader = sourceTemplateDirectiveAPI.getData();
-                sourceProfileReader.ConfigID = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                sourceProfileReader.ConfigID = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
 
                 return {
                     $type: "QM.CLITester.Business.ProfileSyncTaskActionArgument, QM.CLITester.Business",
@@ -74,7 +74,7 @@ app.directive("vrQmClitesterSourceprofilereader", ['UtilsService', 'VRUIUtilsSer
                     });
 
                     if (sourceConfigId != undefined)
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
                 });
                 promises.push(loadProfileSourcePromise);

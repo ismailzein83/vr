@@ -17,7 +17,7 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
         $scope.schedulerTaskAction.getData = function () {
 
             var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
-            CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+            CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
             return {
                 $type: "QM.CLITester.Business.InitiateTestTaskActionArgument, QM.CLITester.Business",
                 CLITestConnector: CLITestConnectorObj,
@@ -52,7 +52,7 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
             });
 
             if (sourceConfigId != undefined)
-                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
         });
     }
 

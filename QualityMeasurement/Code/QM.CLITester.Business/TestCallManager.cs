@@ -196,16 +196,16 @@ namespace QM.CLITester.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, testBigResult, handler);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetInitiateTestTemplates()
+        public IEnumerable<CliTesterConnectorInitiateTestConfig> GetInitiateTestTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CliTesterConnectorInitiateTest);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CliTesterConnectorInitiateTestConfig>(CliTesterConnectorInitiateTestConfig.EXTENSION_TYPE);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetTestProgressTemplates()
+        public IEnumerable<CliTesterConnectorTestProgressConfig> GetTestProgressTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CliTesterConnectorTestProgress);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CliTesterConnectorTestProgressConfig>(CliTesterConnectorTestProgressConfig.EXTENSION_TYPE);
         }
 
          #region Private Members

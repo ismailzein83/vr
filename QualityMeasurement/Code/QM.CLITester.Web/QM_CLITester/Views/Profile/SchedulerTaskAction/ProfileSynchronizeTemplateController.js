@@ -20,7 +20,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
         $scope.schedulerTaskAction.getData = function () {
             var sourceProfileReader;
             sourceProfileReader = sourceTypeDirectiveAPI.getData();
-            sourceProfileReader.ConfigID = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+            sourceProfileReader.ConfigID = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
 
             return {
                 $type: "QM.CLITester.Business.ProfileSyncTaskActionArgument, QM.CLITester.Business",
@@ -37,7 +37,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
 
         var data = $scope.schedulerTaskAction.data;
         if (data != null &&  data.SourceProfileReader !=undefined) {
-            $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, data.SourceProfileReader.ConfigId, "TemplateConfigID");
+            $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, data.SourceProfileReader.ConfigId, "ExtensionConfigurationId");
         }
 
         if (data.SourceProfileReader && sourceTypeDirectiveAPI != undefined) {
@@ -76,7 +76,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
             });
 
             if (sourceConfigId != undefined)
-                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
         });
     }

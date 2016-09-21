@@ -49,6 +49,9 @@
     <Compile Include="ConnectorResultMapping.cs" />
     <Compile Include="ConnectorZoneInfo.cs" />
     <Compile Include="ConnectorZoneInfoToUpdate.cs" />
+    <Compile Include="ConnectorZoneReaderConfig.cs" />
+    <Compile Include="SourceSupplierReaderConfig.cs" />
+    <Compile Include="SourceZoneReaderConfig.cs" />
     <Compile Include="Supplier\SourceSupplier.cs" />
     <Compile Include="Supplier\SourceSupplierReader.cs" />
     <Compile Include="Supplier\SupplierQuery.cs" />

@@ -62,7 +62,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpGet]
         [Route("GetInitiateTestTemplates")]
-        public List<TemplateConfig> GetInitiateTestTemplates()
+        public IEnumerable<CliTesterConnectorInitiateTestConfig> GetInitiateTestTemplates()
         {
             TestCallManager manager = new TestCallManager();
             return manager.GetInitiateTestTemplates();
@@ -70,7 +70,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpGet]
         [Route("GetTestProgressTemplates")]
-        public List<TemplateConfig> GetTestProgressTemplates()
+        public IEnumerable<CliTesterConnectorTestProgressConfig> GetTestProgressTemplates()
         {
             TestCallManager manager = new TestCallManager();
             return manager.GetTestProgressTemplates();

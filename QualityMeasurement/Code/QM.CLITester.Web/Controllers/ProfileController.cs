@@ -48,7 +48,7 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpGet]
         [Route("GetProfileSourceTemplates")]
-        public List<TemplateConfig> GetProfileSourceTemplates()
+        public IEnumerable<SourceProfileReaderConfig> GetProfileSourceTemplates()
         {
             ProfileManager manager = new ProfileManager();
             return manager.GetProfileSourceTemplates();

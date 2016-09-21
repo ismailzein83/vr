@@ -16,7 +16,7 @@ namespace QM.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetZoneSourceTemplates")]
-        public List<TemplateConfig> GetZoneSourceTemplates()
+        public IEnumerable<SourceZoneReaderConfig> GetZoneSourceTemplates()
         {
             ZoneManager manager = new ZoneManager();
             return manager.GetZoneSourceTemplates();
