@@ -9,27 +9,19 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[common].[ExtensionConfiguration]--------------------5001	to 6000---------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
-as (select * from (values
+--[common].[ExtensionConfiguration]-----------------------------------------------------
+BEGIN
+set nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(5001,'FixedBalanceAlertThreshold','Fixed','VR_AccountBalance_BalanceAlertThreshold','{"Editor":"vr-accountbalance-balancealertthreshold-fixed"}','2016-07-22 16:34:25.840')
+('497557D1-399E-4AF5-BA10-A03338D1CAF4','FixedBalanceAlertThreshold','Fixed','VR_AccountBalance_BalanceAlertThreshold','{"Editor":"vr-accountbalance-balancealertthreshold-fixed"}'),
+('BE74A60E-D312-4B4F-BD76-5B7BE81ABE62','Email','Email','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"vr-notification-action-email"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
-merge	[common].[ExtensionConfiguration] as t
-using	cte_data as s
-on		1=1 and t.[OldID] = s.[OldID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
-when not matched by target then
-	insert([OldID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[ExtensionConfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+END
 
 --[sec].[BusinessEntityModule]-------------1801 to 1900---------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
@@ -48,9 +40,11 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
+--------------------------------------------------------------------------------------------------------------
+END
 
 --[sec].[BusinessEntity]-------------------5701 to 6000-------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -72,8 +66,11 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
+--------------------------------------------------------------------------------------------------------------
+END
+
 --[bp].[BPDefinition]----------------------6001 to 7000---------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [bp].[BPDefinition] on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
@@ -94,3 +91,6 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 set identity_insert [bp].[BPDefinition] off;
+----------------------------------------------------------------------------------------------------
+END
+

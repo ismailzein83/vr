@@ -9,53 +9,9 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[common].[ExtensionConfiguration]--------------------2001	to 3000---------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(2002,'Retail_BE_RetailAccount_Financial','Financial','Retail_BE_RetailAccountObjectType_PropertyEvaluator','{"Editor":"retail_be_retailaccountobjecttype_financial"}','2016-08-02 17:36:16.847'),
-(2001,'RateValue','Rate Value','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_RateValue"}','2016-06-10 14:40:39.067'),
-(2003,'DurationTariff','Duration Tariff','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_DurationTariff"}','2016-06-10 14:40:39.067'),
-(2004,'SingleRateValue','Single Rate Value','Retail_BE_ChargingPolicyPart_RateValue','{"DefinitionEditor":"retail-be-chargingpolicypart-ratevalues-single","RuntimeEditor":"retail-be-chargingpolicypart-ratevalue-single-runtimeeditor"}','2016-06-10 14:52:36.013'),
-(2008,'SingleDurationTariff','Single Duration Tariff','Retail_BE_ChargingPolicyPart_DurationTariff','{"DefinitionEditor":"retail-be-chargingpolicypart-durationtarrifs-single","RuntimeEditor":"retail-be-chargingpolicypart-durationtariff-single-runtimeeditor"}','2016-06-10 14:54:09.673'),
-(2010,'ChargingPolicyVoice','Voice','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-voice-chargingpolicydefinition"}','2016-06-10 16:56:38.573'),
-(2011,'Radius','Radius','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-radius"}','2016-06-16 10:32:52.190'),
-(2012,'WebService','Web Service','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-webservice"}','2016-06-16 10:32:52.190'),
-(2013,'ChargingPolicyItem','Charging Policy','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-chargingpolicy"}','2016-06-16 12:16:42.837'),
-(2014,'VolumeItem','Volume','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-volume"}','2016-06-16 12:17:01.750'),
-(2015,'Activation','Activation','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-activation", "RuntimeEditor":"retail-be-accounttype-part-runtime-activation"}','2016-06-20 16:40:53.030'),
-(2016,'Financial','Financial','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-financial", "RuntimeEditor":"retail-be-accounttype-part-runtime-financial"}','2016-06-20 16:40:53.030'),
-(2017,'Generic','Generic','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-generic", "RuntimeEditor":"retail-be-accounttype-part-runtime-generic"}','2016-06-20 16:40:53.030'),
-(2018,'Residential Profile','Residential Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-residentialprofile" , "RuntimeEditor":"retail-be-accounttype-part-runtime-residentialprofile"}','2016-06-20 16:40:53.030'),
-(2019,'Company Profile','Company Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-companyprofile", "RuntimeEditor":"retail-be-accounttype-part-runtime-companyprofile"}','2016-06-20 16:40:53.030'),
-(2020,'RadiusSQL','Radius SQL','Retail_BE_ProvisionerDefinition','{"DefinitionEditor":"retail-be-provisioner-definitionsettings-radiussql", "RuntimeEditor":"retail-be-provisioner-runtimesettings-radiussql"}','2016-07-14 14:24:55.840'),
-(2021,'Regular','Regular','Retail_BE_ActionBPDefinition','{"DefinitionEditor":"retail-be-actionbpdefinition-definitionsettings-regular", "RuntimeEditor":"retail-be-actionbpdefinition-runtimesettings-regular"}','2016-07-14 14:25:52.233'),
-(2022,'VR_Common_VRObjectType_RetailAccount','Retail Account','VR_Common_ObjectType','{"Editor":"retail_be_retailaccountobjecttype", "PropertyEvaluatorExtensionType": "Retail_BE_RetailAccountObjectType_PropertyEvaluator"}','2016-07-20 14:50:05.030'),
-(2023,'ChargingPolicyData','Data','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-data-chargingpolicydefinition"}','2016-06-10 16:56:38.573'),
-(2024,'FixedBalanceAlertThreshold','Fixed','VR_AccountBalance_BalanceAlertThreshold','{"Editor":"vr-accountbalance-balancealertthreshold-fixed"}','2016-07-22 16:34:25.840'),
-(2025,'BalanceAlertAccountAction','Account Action','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"retail-be-action-balancealertaccount"}','2016-07-22 17:35:01.247'),
-(2026,'Email','Email','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"vr-notification-action-email"}','2016-07-26 16:38:22.353'),
-(2027,'Personal Info','Personal Info','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-personalinfo" , "RuntimeEditor":"retail-be-accounttype-part-runtime-personalinfo"}','2016-08-18 08:57:51.717'),
-(3003,'retail_BE_VRObjectTypes_Financial','Financial','VR_GenericData_DataRecordObjectType_PropertyEvaluator','{"Editor":"retail_be_retailaccountobjecttype_financial"}','2016-08-03 11:35:09.467'),
-(3004,'AddPrefix','Add Prefix','VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-addprefix"}','2016-08-11 17:34:11.917'),
-(3005,'ReplaceString','Replace String','VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-replacestring"}','2016-08-11 17:34:11.917'),
-(3006,'Substring','Substring','VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-substring"}','2016-08-11 17:34:11.917')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
-merge	[common].[ExtensionConfiguration] as t
-using	cte_data as s
-on		1=1 and t.[OldID] = s.[OldID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
-when not matched by target then
-	insert([OldID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
-
+--common.[extensionconfiguration]-------------------------------------------------------------------BEGINset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('3900317C-B982-4D8B-BD0D-01215AC1F3D9','Personal Info','Personal Info','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-personalinfo" , "RuntimeEditor":"retail-be-accounttype-part-runtime-personalinfo"}'),('2FBA38A1-B755-4089-A0BB-0258E598A7EE','Retail_BE_RetailAccount_Financial','Financial','Retail_BE_RetailAccountObjectType_PropertyEvaluator','{"Editor":"retail_be_retailaccountobjecttype_financial"}'),('747D0C68-A508-4AA3-8D02-0D3CDFE72149','Residential Profile','Residential Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-residentialprofile" , "RuntimeEditor":"retail-be-accounttype-part-runtime-residentialprofile"}'),('3EC960FE-31A9-46CC-A418-18E8BA530523','Target Synchronizer','Target Synchronizer','VR_BEBridge_BEAccountSynchronizer','{"Editor":"retail-be-bebridgesynchronizer-account"}'),('E879D6D5-6CBE-4391-B1E0-29FD7C378F65','SingleDurationTariff','Single Duration Tariff','Retail_BE_ChargingPolicyPart_DurationTariff','{"DefinitionEditor":"retail-be-chargingpolicypart-durationtarrifs-single","RuntimeEditor":"retail-be-chargingpolicypart-durationtariff-single-runtimeeditor"}'),('BA425FA1-13CA-4F44-883A-2A12B7E3F988','Financial','Financial','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-financial", "RuntimeEditor":"retail-be-accounttype-part-runtime-financial"}'),('E5EBA8E1-B0DC-4977-B770-2B9F62DCBC17','DurationTariff','Duration Tariff','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_DurationTariff"}'),('A8E093F4-F9C3-420B-99B7-32EEA2C1DF78','BalanceAlertAccountAction','Account Action','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"retail-be-action-balancealertaccount"}'),('A4011953-B2CC-4C91-89CB-3ADFF84D94D1','Account Convertor','Account Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-be-account-convertor-editor"}'),('FE81B4B3-D90C-47DE-B40C-3B4379E880A4','Distributor Synchronizer','Distributor Synchronizer','VR_BEBridge_BESynchronizer','{"Editor":"retail-be-distributor-synchronizer-editor"}'),('3E20362A-340D-493D-BB25-3DE674CDCD1D','Generic','Generic','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-generic", "RuntimeEditor":"retail-be-accounttype-part-runtime-generic"}'),('26EF5E51-C9C9-4D87-97B8-4506F42892AC','Pos Convertor','Pos Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-be-pos-convertor-editor"}'),('1AFF2BF7-1F15-4E0B-ACCF-457EDF36A342','Company Profile','Company Profile','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-companyprofile", "RuntimeEditor":"retail-be-accounttype-part-runtime-companyprofile"}'),('02F5EB86-AF71-4D35-9E5A-4739A43F2438','Pos Synchronizer','Pos Synchronizer','VR_BEBridge_BESynchronizer','{"Editor":"retail-be-pos-synchronizer-editor"}'),('44EBA251-6032-4F0F-A254-4CCF0ED62DB2','Distributor Convertor','Distributor Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-be-distributor-convertor-editor"}'),('5D41FC92-ECCB-48CD-A32E-4DDE13E757ED','Agent Synchronizer','Agent Synchronizer','VR_BEBridge_BESynchronizer','{"Editor":"retail-be-agent-synchronizer-editor"}'),('6BA989F8-71D6-42DC-80F0-5128EBB8FFD2','ChargingPolicyVoice','Voice','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-voice-chargingpolicydefinition"}'),('91E3809B-244F-4EE8-8487-567E10E2FBC7','Monthly Recurring Period','Monthly','Retail_BE_RecurringPeriod','{"Editor":"retail-be-recurringperiod-monthly"}'),('1DD9CB13-CCBB-47EF-8514-6CCA50AEF298','VR_Common_VRObjectType_RetailAccount','Retail Account','VR_Common_ObjectType','{"Editor":"retail_be_retailaccountobjecttype", "PropertyEvaluatorExtensionType": "Retail_BE_RetailAccountObjectType_PropertyEvaluator"}'),('2B442DB1-B688-47CB-91CF-6D1A8435633D','SingleRateValue','Single Rate Value','Retail_BE_ChargingPolicyPart_RateValue','{"DefinitionEditor":"retail-be-chargingpolicypart-ratevalues-single","RuntimeEditor":"retail-be-chargingpolicypart-ratevalue-single-runtimeeditor"}'),('80B1AFC2-3222-41D5-84B6-7004838BFBA9','Entities Info','Entities info','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-entitiesinfo", "RuntimeEditor":"retail-be-accounttype-part-runtime-entitiesinfo"}'),('C6AF019E-2CAF-4FAB-9889-74737B13BB0D','WebService','Web Service','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-webservice"}'),('A982BC4B-89B9-4A84-ABAE-78B1D1C37941','Activation','Activation','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-be-accounttype-part-definition-activation", "RuntimeEditor":"retail-be-accounttype-part-runtime-activation"}'),('4E993EFD-6AFE-4C3A-ACA2-83CD5C8FFC35','ChargingPolicyData','Data','Retail_BE_ChargingPolicyDefinition','{"Editor":"retail-data-chargingpolicydefinition"}'),('EA5E2836-4A3D-466E-969E-844545E46A29','Target Convertor','Target Convertor','VR_BEBridge_RingoAccountConvertor','{"Editor":"retail-be-ringo-bebridge-accountconvertor"}'),('CD147065-88F3-4337-A625-8578708C4A53','Account Synchronizer','Account Synchronizer','VR_BEBridge_BESynchronizer','{"Editor":"retail-be-account-synchronizer-editor"}'),('F3CEE2A7-1D63-4804-B9C0-9ABA4F43F480','ChargingPolicyItem','Charging Policy','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-chargingpolicy"}'),('E548DC54-6664-45E6-B5CF-9B84D046D782','VolumeItem','Volume','Retail_BE_ServicePackageItem','{"Editor":"retail-be-package-packageitem-volume"}'),('077ECA6F-3CB8-42C3-95F4-9C563EB2BDCB','Agent Convertor','Agent Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-be-agent-convertor-editor"}'),('B2255268-649B-4648-8584-C00AB98E56DE','Regular','Regular','Retail_BE_ActionBPDefinition','{"DefinitionEditor":"retail-be-actionbpdefinition-definitionsettings-regular", "RuntimeEditor":"retail-be-actionbpdefinition-runtimesettings-regular"}'),('7E54E33D-EF53-4DA9-9786-DC6721BEF618','RateValue','Rate Value','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_RateValue"}'),('D6D3FBCC-FB40-44E4-9FA1-DD7F1DBB6751','Weekly Recurring Period','Weekly','Retail_BE_RecurringPeriod','{"Editor":"retail-be-recurringperiod-weekly"}'),('A7F4E906-CFB0-48FB-843A-F25DBACB934E','RadiusSQL','Radius SQL','Retail_BE_ProvisionerDefinition','{"DefinitionEditor":"retail-be-provisioner-definitionsettings-radiussql", "RuntimeEditor":"retail-be-provisioner-runtimesettings-radiussql"}'),('983C3D4F-5233-4D00-805C-F60D9015FF7C','Radius','Radius','Retail_BE_SwitchIntegration','{"Editor":"retail-be-switchintegrations-radius"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------END
 --[sec].[Module]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -81,9 +37,12 @@ when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
+----------------------------------------------------------------------------------------------------
+END
 
 --[sec].[View]--------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
+
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -136,8 +95,12 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
+----------------------------------------------------------------------------------------------------
+
+END
 
 --[sec].[BusinessEntityModule]--------------------1701 to 1800--------------------------------------
+BEGIN
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
@@ -157,9 +120,10 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
+END
 
 --[sec].[BusinessEntity]-------------------5401 to 5700-------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -189,9 +153,12 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
+--------------------------------------------------------------------------------------------------------------
+
+END
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
@@ -259,9 +226,12 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+----------------------------------------------------------------------------------------------------
+END
 
 --[genericdata].[DataStore]-------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
+
 set nocount on;
 set identity_insert [genericdata].[DataStore] on;
 ;with cte_data([ID],[Name],[Settings])
@@ -280,9 +250,12 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 set identity_insert [genericdata].[DataStore] off;
+----------------------------------------------------------------------------------------------------
+
+END
 
 --[genericdata].[DataRecordType]--------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [genericdata].[DataRecordType] on;
 ;with cte_data([ID],[Name],[ParentID],[Fields],[CreatedTime])
@@ -323,9 +296,12 @@ when not matched by target then
 	insert([ID],[Name],[ParentID],[Fields])
 	values(s.[ID],s.[Name],s.[ParentID],s.[Fields]);
 set identity_insert [genericdata].[DataRecordType] off;
+----------------------------------------------------------------------------------------------------
+
+END
 
 --[genericdata].[DataRecordStorage]-----------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [genericdata].[DataRecordStorage] on;
 ;with cte_data([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings],[State])
@@ -354,8 +330,12 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);
 set identity_insert [genericdata].[DataRecordStorage] off;
 
---[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+
+END
+
+--[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [genericdata].[BusinessEntityDefinition] on;
 ;with cte_data([ID],[Name],[Title],[Settings],[CreatedTime])
@@ -390,9 +370,12 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
 set identity_insert [genericdata].[BusinessEntityDefinition] off;
+----------------------------------------------------------------------------------------------------
+
+END
 
 --[Analytic].[AnalyticReport]-----------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [Analytic].[AnalyticReport] on;
 ;with cte_data([ID],[UserID],[Name],[AccessType],[Settings],[CreatedTime])
@@ -417,8 +400,12 @@ when not matched by target then
 	values(s.[ID],s.[UserID],s.[Name],s.[AccessType],s.[Settings]);
 set identity_insert [Analytic].[AnalyticReport] off;
 
---[Analytic].[AnalyticTable]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+
+END
+
+--[Analytic].[AnalyticTable]------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [Analytic].[AnalyticTable] on;
 ;with cte_data([ID],[Name],[Settings],[CreatedTime])
@@ -438,9 +425,12 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 set identity_insert [Analytic].[AnalyticTable] off;
+----------------------------------------------------------------------------------------------------
+
+END
 
 --[Analytic].[AnalyticItemConfig]-------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [Analytic].[AnalyticItemConfig] on;
 ;with cte_data([ID],[TableId],[ItemType],[Name],[Title],[Config],[CreatedTime])
@@ -494,9 +484,11 @@ when not matched by target then
 	insert([ID],[TableId],[ItemType],[Name],[Title],[Config])
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
 set identity_insert [Analytic].[AnalyticItemConfig] off;
+----------------------------------------------------------------------------------------------------
+END
 
 --[Retail_BE].[AccountType]-------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [Retail_BE].[AccountType] on;
 ;with cte_data([ID],[Name],[Title],[Settings],[CreatedTime])
@@ -519,9 +511,12 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
 set identity_insert [Retail_BE].[AccountType] off;
+----------------------------------------------------------------------------------------------------
+END
+
 
 --[Retail].[ServiceType]----------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [Retail].[ServiceType] on;
 ;with cte_data([ID],[Name],[Title],[Settings],[CreatedTime])
@@ -546,8 +541,11 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
 set identity_insert [Retail].[ServiceType] off;
 
---[Retail_BE].[StatusDefinition]--------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+END
+
+--[Retail_BE].[StatusDefinition]--------------------------------------------------------------------
+BEGIN
 set nocount on;
 ;with cte_data([ID],[Name],[EntityType],[Settings],[CreatedTime])
 as (select * from (values
@@ -575,9 +573,11 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[EntityType],[Settings])
 	values(s.[ID],s.[Name],s.[EntityType],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+END
 
 --[Retail_BE].[AccountPartDefinition]---------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [Retail_BE].[AccountPartDefinition] on;
 ;with cte_data([ID],[Title],[Name],[Details],[CreatedTime])
@@ -605,9 +605,11 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [Retail_BE].[AccountPartDefinition] off;
+----------------------------------------------------------------------------------------------------
+END
 
 --[Retail_BE].[ActionDefinition]--------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 ;with cte_data([ID],[Name],[Settings],[EntityType],[CreatedTime])
 as (select * from (values
@@ -631,9 +633,11 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings],[EntityType])
 	values(s.[ID],s.[Name],s.[Settings],s.[EntityType]);
+----------------------------------------------------------------------------------------------------
+END
 
 --[common].[StyleDefinition]------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 ;with cte_data([ID],[Name],[Settings],[CreatedTime])
 as (select * from (values
@@ -656,8 +660,11 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 
---[genericdata].[GenericBusinessEntity]-------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+END
+
+--[genericdata].[GenericBusinessEntity]-------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [genericdata].[GenericBusinessEntity] on;
 ;with cte_data([ID],[BusinessEntityDefinitionID],[Details],[CreatedTime])
@@ -685,9 +692,11 @@ when not matched by target then
 	insert([ID],[BusinessEntityDefinitionID],[Details])
 	values(s.[ID],s.[BusinessEntityDefinitionID],s.[Details]);
 set identity_insert [genericdata].[GenericBusinessEntity] off;
+----------------------------------------------------------------------------------------------------
+END
 
 --[genericdata].[GenericRuleDefinition]-------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [genericdata].[GenericRuleDefinition] on;
 ;with cte_data([ID],[Name],[Details],[CreatedTime])
@@ -717,9 +726,11 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[GenericRuleDefinition] off;
+----------------------------------------------------------------------------------------------------
+END
 
 --[bp].[BPDefinition]----------------------5001 to 6000---------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [bp].[BPDefinition] on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
@@ -739,9 +750,11 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 set identity_insert [bp].[BPDefinition] off;
+----------------------------------------------------------------------------------------------------
+END
 
 --[common].[Setting]---------------------------201 to 300-------------------------------------------
-----------------------------------------------------------------------------------------------------
+BEGIN
 set nocount on;
 set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
@@ -760,3 +773,6 @@ when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[Setting] off;
+----------------------------------------------------------------------------------------------------
+
+END
