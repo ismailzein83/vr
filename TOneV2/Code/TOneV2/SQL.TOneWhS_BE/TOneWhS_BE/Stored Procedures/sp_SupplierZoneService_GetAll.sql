@@ -7,6 +7,7 @@ BEGIN
 
 SELECT  supzs.ID,
         supzs.ZoneID,
+		supzs.PriceListID,
         supzs.ReceivedServicesFlag,
         supzs.EffectiveServiceFlag,
         supzs.BED,

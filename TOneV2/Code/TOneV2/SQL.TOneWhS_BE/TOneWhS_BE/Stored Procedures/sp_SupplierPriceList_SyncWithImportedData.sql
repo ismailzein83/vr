@@ -43,8 +43,8 @@ ELSE
 	Select srnew.ID, @PriceListId, srnew.ZoneID, srnew.CurrencyID, srnew.NormalRate, srnew.OtherRates, srnew.RateTypeID, srnew.BED, srnew.EED
 	from TOneWhS_BE.SPL_SupplierRate_New srnew WITH(NOLOCK) Where srnew.ProcessInstanceID = @ProcessInstanceId
 
-	Insert into TOnewhs_BE.SupplierZoneService(ID,ZoneID,ReceivedServicesFlag,EffectiveServiceFlag,BED,EED)
-	Select srnew.ID,srnew.ZoneID, srnew.ZoneServices, srnew.ZoneServices, srnew.BED, srnew.EED
+	Insert into TOnewhs_BE.SupplierZoneService(ID, PriceListID,ZoneID,ReceivedServicesFlag,EffectiveServiceFlag,BED,EED)
+	Select srnew.ID,@PriceListId,srnew.ZoneID, srnew.ZoneServices, srnew.ZoneServices, srnew.BED, srnew.EED
 	from TOnewhs_BE.SPL_SupplierZoneService_New srnew WITH(NOLOCK) Where srnew.ProcessInstanceID = @ProcessInstanceId
 	
 	Update ToneWhs_be.SupplierZone

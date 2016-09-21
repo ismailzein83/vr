@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SupplierZonesServices_GetByDate] 
+CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierZonesServices_GetByDate] 
 	-- Add the parameters for the stored procedure here
 	@SupplierId INT,
 	@When DateTime
@@ -13,7 +13,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT  szs.[ID],szs.[ZoneID],szs.[ReceivedServicesFlag],szs.[EffectiveServiceFlag],szs.[BED],szs.[EED]
+	SELECT  szs.[ID],szs.[PriceListID],szs.[ZoneID],szs.[ReceivedServicesFlag],szs.[EffectiveServiceFlag],szs.[BED],szs.[EED]
 	FROM	[TOneWhS_BE].SupplierZoneService szs WITH(NOLOCK) 
 			LEFT JOIN [TOneWhS_BE].SupplierZone sz WITH(NOLOCK) ON szs.ZoneID=sz.ID 
 	Where	(szs.EED is null or szs.EED > @when)

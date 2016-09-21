@@ -14,6 +14,7 @@ BEGIN
 		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
 			SELECT  supzs.ID,
 					supzs.ZoneID,
+					supzs.PriceListID,
 					supzs.ReceivedServicesFlag,
 					supzs.EffectiveServiceFlag,
 					supzs.BED,

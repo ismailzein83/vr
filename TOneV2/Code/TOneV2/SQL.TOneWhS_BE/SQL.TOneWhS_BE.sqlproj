@@ -403,5 +403,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetDefaultServicesEffectiveAfter.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetEffectiveZoneServicesByOwner.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetEffectiveZoneServicesBySuppliers.sql" />
   </ItemGroup>
 </Project>
