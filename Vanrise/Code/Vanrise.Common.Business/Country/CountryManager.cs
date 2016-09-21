@@ -253,11 +253,10 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetCountrySourceTemplates()
+        public IEnumerable<SourceCountryReaderConfig> GetCountrySourceTemplates()
         {
-
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SourceCountryReaderConfigType);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SourceCountryReaderConfig>(SourceCountryReaderConfig.EXTENSION_TYPE);
         }
 
         public Dictionary<string, long> GetExistingItemIds()

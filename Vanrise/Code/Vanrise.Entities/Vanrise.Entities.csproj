@@ -62,6 +62,7 @@
     <Compile Include="Settings\BankDetailsSettings\BankDetailsSettings.cs" />
     <Compile Include="Settings\ProductInfoTechnicalSettings\ProductInfo.cs" />
     <Compile Include="Settings\ProductInfoTechnicalSettings\ProductInfoTechnicalSettings.cs" />
+    <Compile Include="SourceCountryReaderConfig.cs" />
     <Compile Include="TextFilterType.cs" />
     <Compile Include="TextManipulation\ITextManipulationActionContext.cs" />
     <Compile Include="TextManipulation\ITextManipulationContext.cs" />

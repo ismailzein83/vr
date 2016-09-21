@@ -54,7 +54,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
                 if ($scope.selectedCountrySourceTypeTemplate != undefined) {
                     if (countrySourceDirectiveAPI != undefined) {
                         sourceCountry = countrySourceDirectiveAPI.getData();
-                        sourceCountry.ConfigId = $scope.selectedCountrySourceTypeTemplate.TemplateConfigID
+                        sourceCountry.ConfigId = $scope.selectedCountrySourceTypeTemplate.ExtensionConfigurationId
 
                     }
                 }
@@ -80,7 +80,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
                         $scope.countrySourceTypeTemplates.push(item);
                     });
                     if (sourceConfigId != undefined)
-                        $scope.selectedCountrySourceTypeTemplate = UtilsService.getItemByVal($scope.countrySourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                        $scope.selectedCountrySourceTypeTemplate = UtilsService.getItemByVal($scope.countrySourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
 
                 });
                 promises.push(loadCountryTypeTemplatesPromise);

@@ -9,6 +9,8 @@ namespace Vanrise.Common.MainExtensions
 {
     public class CountryTOneV2SQLReader : SourceCountryReader
     {
+        public override Guid ConfigId { get { return new Guid("5B63FFFD-8DD6-4365-9933-D62D1979E16E"); } }
+
         public string ConnectionString { get; set; }
         public override bool UseSourceItemId
         {

@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public abstract class SourceCountryReader : EntitySynchronization.ISourceItemReader<SourceCountry>
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract bool UseSourceItemId
         {

@@ -1,8 +1,8 @@
 ﻿<vr-section title="Country Settings">
     <vr-row>
         <vr-columns width="1/2row">
-            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Country Source Type" datasource="countrySourceTypeTemplates" text="None"
-                        selectedvalues="selectedCountrySourceTypeTemplate" isrequired="true">
+            <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Country Source Type" datasource="countrySourceTypeTemplates" text="None"
+                       selectedvalues="selectedCountrySourceTypeTemplate" isrequired="true">
             </vr-select>
         </vr-columns>
         <vr-columns width="fullrow" vr-loader="isLoadingCountrySourceTypeDirective" ng-if="selectedCountrySourceTypeTemplate.Editor">

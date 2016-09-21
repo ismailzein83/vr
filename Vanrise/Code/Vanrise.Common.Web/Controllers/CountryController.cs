@@ -58,7 +58,7 @@ namespace Vanrise.Common.Web.Controllers
         }
         [HttpGet]
         [Route("GetCountrySourceTemplates")]
-        public List<TemplateConfig> GetCountrySourceTemplates()
+        public IEnumerable<SourceCountryReaderConfig> GetCountrySourceTemplates()
         {
             CountryManager manager = new CountryManager();
             return manager.GetCountrySourceTemplates();
