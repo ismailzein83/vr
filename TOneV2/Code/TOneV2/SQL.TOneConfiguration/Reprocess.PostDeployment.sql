@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 --[sec].[View]-----------------------------19001 to 20000-------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -29,9 +29,11 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,9 +53,11 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+----------------------------------------------------------------------------------------------------
+end
 
 --[sec].[BusinessEntityModule]-------------1601 to 1700---------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
@@ -74,9 +78,11 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[BusinessEntity]------------------4801 to 5100----------------------------------------------------------
-------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -95,9 +101,11 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
+------------------------------------------------------------------------------------------------------------
+end
 
 --[bp].[BPDefinition]---------------------- -1 to -1000---------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [bp].[BPDefinition] on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
@@ -118,3 +126,5 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 set identity_insert [bp].[BPDefinition] off;
+----------------------------------------------------------------------------------------------------
+end

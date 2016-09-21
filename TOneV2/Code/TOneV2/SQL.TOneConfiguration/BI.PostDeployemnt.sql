@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 --[sec].[WidgetDefinition]--------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[WidgetDefinition] on;
 ;with cte_data([ID],[Name],[DirectiveName],[Setting])
@@ -32,8 +32,12 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting]);
 set identity_insert [sec].[WidgetDefinition] off;
 
+----------------------------------------------------------------------------------------------------
+
+end
+
 --[sec].[Module]------------------------------1301 to 1400------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -53,9 +57,12 @@ when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
+--------------------------------------------------------------------------------------------------------------
+
+end
 
 --[sec].[viewtype]---------------------------301 to 400---------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[Details])
 as (select * from (values
@@ -72,9 +79,13 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[Details])
 	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+----------------------------------------------------------------------------------------------------
+
+end
 
 --[sec].[View]-----------------------------13001 to 14000------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -94,9 +105,12 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
+---------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[BusinessEntity]------------------3601 to 3900----------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -116,8 +130,12 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
+----------------------------------------------------------------------------------------------------------------
+end
+
 --[sec].[systemaction]------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
@@ -137,3 +155,6 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+----------------------------------------------------------------------------------------------------
+
+end

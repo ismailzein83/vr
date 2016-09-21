@@ -10,6 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 --[BI].[SchemaConfiguration]------------------------------------------------------------------------
+begin
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [BI].[SchemaConfiguration] on;
@@ -104,9 +105,10 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [BI].[SchemaConfiguration] off;
+end
 
 --[sec].[Module]------------------------------901 to 1000------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -127,9 +129,12 @@ when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
+--------------------------------------------------------------------------------------------------------------
+
+end
 
 --[sec].[View]-----------------------------9001 to 10000--------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -158,9 +163,12 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
+---------------------------------------------------------------------------------------------------------------
+
+end
 
 --[sec].[BusinessEntityModule]------------------------901 to 1000----------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
@@ -179,9 +187,11 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[BusinessEntity]------------------2401 to 2700----------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -211,33 +221,12 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
+----------------------------------------------------------------------------------------------------------------
+end
 
---[common].[TemplateConfig]----------20001 to 30000---------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [common].[TemplateConfig] on;
-;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(30001,'Add Prefix','PSTN_BE_AdjustNumberAction','vr-pstn-be-addprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.AddPrefixActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
-(30002,'Substring','PSTN_BE_AdjustNumberAction','vr-pstn-be-substring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.SubstringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
-(30003,'Replace Characters','PSTN_BE_AdjustNumberAction','vr-pstn-be-replacestring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.ReplaceStringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
-(30004,'Set Area Prefix','PSTN_BE_SetArea','vr-pstn-be-setareaprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.SetArea.Behaviors.SetAreaPrefixBehavior, PSTN.BusinessEntity.MainExtensions',null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
-merge	[common].[TemplateConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
-set identity_insert [common].[TemplateConfig] off;
-
+--common.ExtensionConfiguration---------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B1281B56-E156-40A2-ABCF-3766A80C63A0','Set Area Prefix','Set Area Prefix','PSTN_BE_SetArea','{"Editor":"vr-pstn-be-setareaprefix"}'),('A34217B8-79A0-4EAE-BB96-59BADB29DC03','Replace Characters','Replace Characters','VRCommon_StyleFormating','{"Editor":"vr-pstn-be-replacestring"}'),('D235FD23-F660-496E-9F71-67226154727A','Add Prefix','Add Prefix','PSTN_BE_AdjustNumberAction','{"Editor":"vr-pstn-be-addprefix"}'),('819F222E-5A68-4563-9655-F4298C34453E','Substring','Substring','VRCommon_StyleFormating','{"Editor":"vr-pstn-be-substring"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[ExtensionConfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 --rules.RuleType------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [rules].[RuleType] on;
 ;with cte_data([ID],[Type])
@@ -256,9 +245,12 @@ when not matched by target then
 	insert([ID],[Type])
 	values(s.[ID],s.[Type]);
 set identity_insert [rules].[RuleType] off;
+----------------------------------------------------------------------------------------------------
+
+end
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
@@ -330,9 +322,11 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+----------------------------------------------------------------------------------------------------
+end
 
 --[bp].[BPTaskType]----------------------10001 to 20000---------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [bp].[BPTaskType] on;
 ;with cte_data([ID],[Name],[Settings])
@@ -351,9 +345,11 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 set identity_insert [bp].[BPTaskType] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[bp].[BPDefinition]---------------------1001 to 2000----------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [bp].[BPDefinition] on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config],[CreatedTime])
@@ -382,8 +378,12 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 set identity_insert [bp].[BPDefinition] off;
 
---[common].[Setting]---------------------------701 to 800-------------------------------------------
 ----------------------------------------------------------------------------------------------------
+
+end
+
+--[common].[Setting]---------------------------701 to 800-------------------------------------------
+begin
 set nocount on;
 set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
@@ -402,3 +402,6 @@ when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[Setting] off;
+----------------------------------------------------------------------------------------------------
+
+end
