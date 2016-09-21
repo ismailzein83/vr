@@ -8,27 +8,4 @@ Post-Deployment Script Template
  Example:      :setvar TableName MyTable							
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
-*/
---[common].[TemplateConfig]------------------90001 to 100000--------------------------------------------------
---------------------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [common].[TemplateConfig] on;
-;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(90001,'Cell Value','ExcelConversion_FieldMapping','vr-excelconversion-fieldmapping-cellfieldmapping',null,null),
-(90002,'Concatenate Text','ExcelConversion_FieldMapping','vr-excelconversion-fieldmapping-concatenatefieldmapping',null,null),
-(90003,'Cell Value','ExcelConversion_ConcatenatedPart','vr-excelconversion-concatenatedpart-cellfield',null,null),
-(90004,'Constant','ExcelConversion_ConcatenatedPart','vr-excelconversion-concatenatedpart-constant',null,null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
-merge	[common].[TemplateConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
-set identity_insert [common].[TemplateConfig] off;
+*/--common.[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('096B0021-49A1-44F6-B601-406372DC5038','Constant','Constant','VR_ExcelConversion_ConcatenatedPart','{"Editor":"vr-excelconversion-concatenatedpart-constant"}'),('AB48FF16-7B04-42FF-8525-C68590A88799','Cell Value','Cell Value','VR_ExcelConversion_FieldMapping','{"Editor":"vr-excelconversion-fieldmapping-cellfieldmapping"}'),('17ABFA66-D659-4E5C-B1C9-F7B408E8DE00','Concatenate Text','Concatenate Text','VR_ExcelConversion_FieldMapping','{"Editor":"vr-excelconversion-fieldmapping-concatenatefieldmapping"}'),('18280F63-B0F1-42C8-A3CB-D487F17A8236','Cell Value','Cell Value','VR_ExcelConversion_ConcatenatedPart','{"Editor":"vr-excelconversion-concatenatedpart-cellfield"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
