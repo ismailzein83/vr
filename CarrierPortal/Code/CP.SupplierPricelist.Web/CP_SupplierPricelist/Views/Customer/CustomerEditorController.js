@@ -138,7 +138,7 @@
                     sourceConfigId = customerEntity.Settings.PriceListConnector.ConfigId;
 
                 if (sourceConfigId != undefined)
-                    $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                    $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
             });
         }
 

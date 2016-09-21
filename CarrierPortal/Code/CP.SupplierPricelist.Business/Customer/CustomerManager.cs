@@ -14,7 +14,14 @@ namespace CP.SupplierPricelist.Business
         protected CustomerDetail MapToDetails(Customer customer)
         {
             string configName = "";
-            TemplateConfig config = new TemplateConfigManager().GetTemplateConfiguration(customer.Settings.PriceListConnector.ConfigId);
+            IEnumerable<CustomerConnectorConfig> configs = new ExtensionConfigurationManager().GetExtensionConfigurations<CustomerConnectorConfig>(CustomerConnectorConfig.EXTENSION_TYPE);
+              
+            CustomerConnectorConfig config = null;
+            if(configs != null)
+            {
+                config = configs.FindRecord(x => x.ExtensionConfigurationId == customer.Settings.PriceListConnector.ConfigId);
+            }
+
             if (config != null)
                 configName = config.Name;
             return new CustomerDetail
@@ -161,10 +168,10 @@ namespace CP.SupplierPricelist.Business
 
         }
 
-        public List<TemplateConfig> GetConnectorTemplates()
+        public IEnumerable<CustomerConnectorConfig> GetConnectorTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CustomerConnector);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CustomerConnectorConfig>(CustomerConnectorConfig.EXTENSION_TYPE);
         }
         #endregion
 

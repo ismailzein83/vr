@@ -119,10 +119,10 @@ namespace CP.SupplierPricelist.Business
             return dataManager.UpdatePriceListUpload(id, result, status, uploadInformation, uploadRetryCount);
         }
 
-        public List<Vanrise.Entities.TemplateConfig> GetConnectorTemplates()
+        public IEnumerable<CustomerConnectorConfig> GetConnectorTemplates()
         {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.CustomerConnector);
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CustomerConnectorConfig>(CustomerConnectorConfig.EXTENSION_TYPE);
         }
 
         public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage, long alertFileId)

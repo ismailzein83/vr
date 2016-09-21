@@ -8,6 +8,6 @@ namespace CP.SupplierPricelist.Business
 {
     public class Constants
     {
-        public const string CustomerConnector = "CP_SupplierPriceList_CustomerConnector";
+       // public const string CustomerConnector = "CP_SupplierPriceList_CustomerConnector";
     }
 }

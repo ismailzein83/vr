@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerConnectorConfig.cs" />
     <Compile Include="CustomerOutput.cs" />
     <Compile Include="Customer\Customer.cs" />
     <Compile Include="Customer\CustomerDetail.cs" />

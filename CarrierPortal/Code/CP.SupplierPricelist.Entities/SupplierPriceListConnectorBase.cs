@@ -6,7 +6,7 @@ namespace CP.SupplierPricelist.Entities
 {
     public abstract class SupplierPriceListConnectorBase
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
         public abstract PriceListUploadOutput UploadPriceList(IPriceListUploadContext context);
 
         public abstract PriceListProgressOutput GetPriceListResult(IPriceListProgressContext context);

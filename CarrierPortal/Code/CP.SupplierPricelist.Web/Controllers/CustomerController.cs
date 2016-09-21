@@ -22,7 +22,7 @@ namespace CP.SupplierPricelist.Web.Controllers
 
         [HttpGet]
         [Route("GetCustomerTemplates")]
-        public List<TemplateConfig> GetCustomerTemplates()
+        public IEnumerable<CustomerConnectorConfig> GetCustomerTemplates()
         {
             CustomerManager manager = new CustomerManager();
             return manager.GetConnectorTemplates();
