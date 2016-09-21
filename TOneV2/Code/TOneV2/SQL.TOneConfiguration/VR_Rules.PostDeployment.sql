@@ -9,31 +9,4 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[common].[TemplateConfig]----------------------70001 to 80000-------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [common].[TemplateConfig] on;
-;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(70001,'Add Prefix','VR_Rules_NormalizeNumberAction','vr-rules-normalizationnumbersettings-addprefix',null,null),
-(70002,'Replace String','VR_Rules_NormalizeNumberAction','vr-rules-normalizationnumbersettings-replacestring',null,null),
-(70003,'Substring','VR_Rules_NormalizeNumberAction','vr-rules-normalizationnumbersettings-substring',null,null),
-(70004,'Days Of Week','VR_Rules_PricingRuleRateTypeSettings','vr-rules-pricingrulesettings-ratetype-daysofweek',null,null),
-(70005,'Specific','VR_Rules_PricingRuleRateTypeSettings','vr-rules-pricingrulesettings-ratetype-specific',null,null),
-(70006,'rules','VR_Rules_PricingRuleTariffSettings','vr-rules-pricingrulesettings-tariff-regular',null,null),
-(70007,'Fixed Extra Charge','VR_Rules_PricingRuleExtraChargeSettings','vr-rules-pricingrulesettings-extracharge-fixed',null,null),
-(70008,'Percentage Extra Charge','VR_Rules_PricingRuleExtraChargeSettings','vr-rules-pricingrulesettings-extracharge-percentage',null,null),
-(70009,'Fixed Rate Value','VR_Rules_PricingRuleRateValueSettings','vr-rules-pricingrulesettings-ratevalue-fixed',null,null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
-merge	[common].[TemplateConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
-set identity_insert [common].[TemplateConfig] off;
+--common.[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B285D8DD-B628-4DF0-B28C-114EBB9BED5A','Substring','ReplaceString','VR_Rules_NormalizeNumberAction','{"Editor":"vr-rules-normalizationnumbersettings-substring"}'),('9B441D3F-1A1D-4060-8BB1-740CEF377E0D','Fixed Extra Charge','Fixed Extra Charge','VR_Rules_PricingRuleExtraChargeSettings','{"Editor":"vr-rules-pricingrulesettings-extracharge-fixed"}'),('53F5FB2A-0390-4821-A795-9146615CF584','Fixed Rate Value','Fixed Rate Value','VR_Rules_PricingRuleRateValueSettings','{"Editor":"vr-rules-pricingrulesettings-ratevalue-fixed"}'),('35ACC9C2-0675-4347-BA3E-A81025C1BE12','Regular','Regular','VR_Rules_PricingRuleTariffSettings','{"Editor":"vr-rules-pricingrulesettings-tariff-regular"}'),('9387367E-4BBC-4F8A-958F-AF27EFFC7EC4','Percentage Extra Charge','Percentage Extra Charge','VR_Rules_PricingRuleExtraChargeSettings','{"Editor":"vr-rules-pricingrulesettings-extracharge-percentage"}'),('2B333F37-21B2-436C-92F5-CFAA9912B388','AddPrefix','AddPrefix','VR_Rules_NormalizeNumberAction','{"Editor":"vr-rules-normalizationnumbersettings-addprefix"}'),('12A627F4-5E64-4957-B3F9-E0B890955037','ReplaceString','ReplaceString','VR_Rules_NormalizeNumberAction','{"Editor":"vr-rules-normalizationnumbersettings-replacestring"}'),('D642AA26-C072-43EF-98F1-EE84F05F4069','Days Of Week','Days Of Week','VR_Rules_PricingRuleRateTypeSettings','{"Editor":"vr-rules-pricingrulesettings-ratetype-daysofweek"}'),('F87EE98B-673F-4095-8658-F6AA7E3966D3','Specific','Specific','VR_Rules_PricingRuleRateTypeSettings','{"Editor":"vr-rules-pricingrulesettings-ratetype-specific"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
