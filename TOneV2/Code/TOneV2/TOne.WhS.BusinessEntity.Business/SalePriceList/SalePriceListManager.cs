@@ -30,9 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public SalePriceList GetPriceList(int priceListId)
         {
-            List<SalePriceList> salePriceLists = GetCachedSalePriceLists();
-            var salePriceList = salePriceLists.FindRecord(x => x.PriceListId == priceListId);
-            return salePriceList;
+            return GetCachedSalePriceLists().GetRecord(priceListId);
         }
 
         public long ReserveIdRange(int numberOfIds)
@@ -55,13 +53,13 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Private Members
-        List<SalePriceList> GetCachedSalePriceLists()
+        Dictionary<int, SalePriceList> GetCachedSalePriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCashedSalePriceLists"),
                () =>
                {
                    ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
-                   return dataManager.GetPriceLists();
+                   return dataManager.GetPriceLists().ToDictionary(itm => itm.PriceListId, itm => itm);
                });
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
