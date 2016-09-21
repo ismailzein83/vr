@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 --[sec].[SystemAction]------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,9 +72,13 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+----------------------------------------------------------------------------------------------------
+end
+
 
 --[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
@@ -95,9 +99,12 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
+--------------------------------------------------------------------------------------------------------------
+end
+
 
 --[sec].[BusinessEntity]------------------301 to 600----------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -129,8 +136,11 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
---[sec].[Module]------------------------------101 to 200------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+end
+
+--[sec].[Module]------------------------------101 to 200------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -150,9 +160,13 @@ when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
+--------------------------------------------------------------------------------------------------------------
+end
+
 
 --[sec].[View]-----------------------------1001 to 2000--------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -185,30 +199,11 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
-
---[common].[TemplateConfig]----------50001 to 60000---------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [common].[TemplateConfig] on;
-;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(50001,'Static Group','VR_Sec_GroupSettings','vr-sec-group-static',null,null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
-merge	[common].[TemplateConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
-set identity_insert [common].[TemplateConfig] off;
+---------------------------------------------------------------------------------------------------------------
+end
 
 --[common].[Setting]--------------------1 to 100----------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
@@ -230,8 +225,11 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[Setting] off;
 
---[common].[RateType]--------------------------- -1 to -100 ----------------------------------------
 ----------------------------------------------------------------------------------------------------
+end
+
+--[common].[RateType]--------------------------- -1 to -100 ----------------------------------------
+begin
 set nocount on;
 set identity_insert [common].[RateType] on;
 ;with cte_data([ID],[Name])
@@ -253,39 +251,7 @@ when not matched by target then
 	values(s.[ID],s.[Name]);
 set identity_insert [common].[RateType] off
 
---[common].[ExtensionConfiguration]--------------------3001	to 4000---------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(3001,'CSSClass','CSS Class','VRCommon_StyleFormating','{"Editor":"vr-common-styleformating-cssclass"}','2016-07-20 14:50:05.030')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
-merge	[common].[ExtensionConfiguration] as t
-using	cte_data as s
-on		1=1 and t.[OldID] = s.[OldID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
-when not matched by target then
-	insert([OldID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+end
 
---[common].[VRObjectTypeDefinition]-----------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[Settings],[CreatedTime])
-as (select * from (values
-('62B9A4DA-0018-4514-BCFD-8268A58F53A2','Product','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoObjectType, Vanrise.Common.MainExtensions","ConfigId":3011},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Product Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Product Name","Description":"Name of the product","PropertyEvaluator":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoPropertyEvaluator, Vanrise.Common.MainExtensions","ProductField":0,"ConfigId":3012}},"Version Number":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Version Number","Description":"Version number","PropertyEvaluator":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoPropertyEvaluator, Vanrise.Common.MainExtensions","ProductField":1,"ConfigId":3012}}}}','2016-08-29 11:22:53.927')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings],[CreatedTime]))
-merge	[common].[VRObjectTypeDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+--common.[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('385C968A-415A-49E2-B7EF-189C2A6DD484','VR_Common_VRObjectTypes_ProductInfoPropertyEvaluator','ProductInfo Property','VR_Common_ProductInfo_PropertyEvaluator','{"Editor":"vr-common-productinfopropertyevaluator"}'),('E7BA05B0-4982-4D1D-9CAB-43EF692F4F17','Substring','Substring','VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-substring"}'),('55CC79FE-4569-4D34-A1D2-49FAA6445979','VR_Common_VRObjectTypes_Text','Text','VR_Common_ObjectType','{"Editor":"vr-common-textobjecttype", "PropertyEvaluatorExtensionType": "VR_Common_TextValue_PropertyEvaluator"}'),('1789A664-94FC-4702-8625-80B28A3E0E54','AddPrefix','Add Prefix','VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-addprefix"}'),('6E193BD6-4B98-4EA6-AA9B-934C65B59810','ReplaceString','Replace String','VRCommon_TextManipulationActionSettings','{"Editor":"vr-common-textmanipulationsettings-replacestring"}'),('4CD9F093-41D3-42AE-B878-9AFBDB656262','VR_Common_VRObjectTypes_ProductInfoObjectType','Product Information','VR_Common_ObjectType','{"Editor":"vr-common-productinfoobjecttype", "PropertyEvaluatorExtensionType": "VR_Common_ProductInfo_PropertyEvaluator"}'),('BD6BFC0B-92FF-4ECE-8A18-C3AD4B108FA0','VR_Common_VRObjectTypes_TextValuePropertyEvaluator','Text Value','VR_Common_TextValue_PropertyEvaluator','{"Editor":"vr-common-textvaluepropertyevaluator"}'),('C1C2F3B8-9707-4FD1-B871-C4018FD77B04','CSSClass','CSS Class','VRCommon_StyleFormating','{"Editor":"vr-common-styleformating-cssclass"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end--common.[VRObjectTypeDefinition]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('1C93042E-939B-4022-9F13-43C3718EF644','Text','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.TextObjectType, Vanrise.Common.MainExtensions","ConfigId":"55cc79fe-4569-4d34-a1d2-49faa6445979"},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Value":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Value","Description":"Value","PropertyEvaluator":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.TextValuePropertyEvaluator, Vanrise.Common.MainExtensions","ConfigId":"bd6bfc0b-92ff-4ece-8a18-c3ad4b108fa0"}}}}'),('62B9A4DA-0018-4514-BCFD-8268A58F53A2','Product','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoObjectType, Vanrise.Common.MainExtensions","ConfigId":"4cd9f093-41d3-42ae-b878-9afbdb656262"},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Product Name":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Product Name","Description":"Name of the product","PropertyEvaluator":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoPropertyEvaluator, Vanrise.Common.MainExtensions","ProductField":0,"ConfigId":"385c968a-415a-49e2-b7ef-189c2a6dd484"}},"Version Number":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Version Number","Description":"Version number","PropertyEvaluator":{"$type":"Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoPropertyEvaluator, Vanrise.Common.MainExtensions","ProductField":1,"ConfigId":"385c968a-415a-49e2-b7ef-189c2a6dd484"}}}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[common].[VRObjectTypeDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);----------------------------------------------------------------------------------------------------end
