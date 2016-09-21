@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierswithzonesSelective', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','VRUIUtilsService',
-function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, VRUIUtilsService) {
+app.directive('vrWhsBeSupplierswithzonesSelective', ['UtilsService', '$compile','VRUIUtilsService',
+function (UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',

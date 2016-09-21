@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SuppliersWithZonesGroupSettingsConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "WhS_BE_SaleZoneGroup";
+        public const string EXTENSION_TYPE = "WhS_BE_SuppliersWithZonesGroupSettings";
         public string Editor { get; set; }
         public string BehaviorFQTN { get; set; }
     }
