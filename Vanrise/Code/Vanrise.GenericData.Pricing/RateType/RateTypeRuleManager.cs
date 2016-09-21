@@ -16,6 +16,21 @@ namespace Vanrise.GenericData.Pricing
             this.ApplyRateTypeRule(context, () => base.GetMatchRule(ruleDefinitionId, target), target);
         }
 
+        public IEnumerable<int> GetRateTypes(int ruleDefinitionId, GenericRuleTarget target)
+        {
+            HashSet<int> distinctRateTypes = new HashSet<int>();
+            var ruleMatch = base.GetMatchRule(ruleDefinitionId, target);
+            if(ruleMatch != null)
+            {
+                foreach (PricingRuleRateTypeItemSettings item in ruleMatch.Settings.Items)
+                {
+                    distinctRateTypes.Add(item.RateTypeId);
+                }
+            }
+
+            return distinctRateTypes;
+        }
+
         public void ApplyRateTypeRule(IPricingRuleRateTypeContext context, RuleTree ruleTree, GenericRuleTarget target)
         {
             this.ApplyRateTypeRule(context, () => ruleTree.GetMatchRule(target) as RateTypeRule, target);
