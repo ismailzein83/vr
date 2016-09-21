@@ -374,6 +374,7 @@
     <Content Include="WhS_BusinessEntity\Services\VolumeCommitmentService.js" />
     <Content Include="WhS_BusinessEntity\Services\ZoneServiceConfigService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingNumberPlanService.js" />
+    <Content Include="WhS_BusinessEntity\Style\WhsBusinessEntity.css" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />
