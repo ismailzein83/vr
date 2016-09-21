@@ -14,8 +14,10 @@ namespace TOne.WhS.Routing.Business
         RouteRule _routeRule;
         internal List<RouteOptionRuleTarget> _supplierZoneOptions = new List<RouteOptionRuleTarget>();
         HashSet<int> _filteredSupplierIds;
-        public RPRouteRuleExecutionContext(RouteRule routeRule)
+        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions;
+        public RPRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
         {
+            _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
             _routeRule = routeRule;
             SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
             {
@@ -34,8 +36,7 @@ namespace TOne.WhS.Routing.Business
 
         public bool TryAddSupplierZoneOption(RouteOptionRuleTarget optionTarget)
         {
-            RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
-            var routeOptionRule = routeOptionRuleManager.GetMatchRule(optionTarget);
+            var routeOptionRule = GetRouteOptionRule(optionTarget);
             if (routeOptionRule != null)
             {
                 optionTarget.ExecutedRuleId = routeOptionRule.RuleId;
@@ -88,6 +89,20 @@ namespace TOne.WhS.Routing.Business
                     List<SupplierCodeMatchWithRate> supplierCodeMatches;
                     if (this.SupplierCodeMatchesBySupplier.TryGetValue(supplierId, out supplierCodeMatches))
                         return supplierCodeMatches;
+                }
+            }
+            return null;
+        }
+
+        private RouteOptionRule GetRouteOptionRule(RouteOptionRuleTarget targetOption)
+        {
+            if (_ruleTreesForRouteOptions != null)
+            {
+                foreach (var ruleTree in _ruleTreesForRouteOptions)
+                {
+                    var matchRule = ruleTree.GetMatchRule(targetOption) as RouteOptionRule;
+                    if (matchRule != null)
+                        return matchRule;
                 }
             }
             return null;

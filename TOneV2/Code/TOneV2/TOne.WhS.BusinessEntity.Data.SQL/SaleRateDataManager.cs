@@ -51,19 +51,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetBetweenPeriod", SaleRateMapper, fromTime, tillTime);
         }
-        public List<SaleRate> GetEffectiveSaleRateByCustomers(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
-        {
-            DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerInfos);
-            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleRate_GetEffectiveByCustomers]", SaleRateMapper, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@ActiveCustomersInfo", SqlDbType.Structured);
-                dtPrm.Value = dtActiveCustomers;
-                cmd.Parameters.Add(dtPrm);
-                cmd.Parameters.Add(new SqlParameter("@CustomerOwnerType", SalePriceListOwnerType.Customer));
-                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
-                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
-            });
-        }
 
         public List<SaleRate> GetEffectiveSaleRateByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
@@ -137,8 +124,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");
-
+            
             saleRate.RateChange = (Entities.RateChangeType)GetReaderValue<byte>(reader, "Change");
+            saleRate.CurrencyId = GetReaderValue<int?>(reader, "CurrencyId");
             return saleRate;
         }
 
