@@ -16,7 +16,7 @@ namespace Vanrise.BusinessProcess
     {
         static int s_maxWorkflowsPerServiceInstance = 5;
         static int s_maxConcurrentWorkflowsPerDefinition = 5;
-        static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 1;
+        static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 0;
 
         BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
         IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
