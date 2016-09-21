@@ -375,7 +375,7 @@
                     }
                 },
                 SupplierSettings: {
-                    DefaultServices: getSelectedDefaultServices(),
+                    DefaultServices:($scope.scopeModel.showZoneServiceConfig == true) ? getSelectedDefaultServices() : null,
                     TimeZoneId: ($scope.scopeModel.showZoneServiceConfig == true) ? supplierTimeDirectiveAPI.getSelectedIds() : undefined
                 },
                 CustomerSettings: {
@@ -386,7 +386,7 @@
             if (!isEditMode) {
                 obj.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
 
-                obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                obj.SellingNumberPlanId = ($scope.scopeModel.showSellingNumberPlan == true) ? sellingNumberPlanDirectiveAPI.getSelectedIds() : null;
                 obj.AccountType = $scope.scopeModel.selectedCarrierAccountType.value;
             }
 
