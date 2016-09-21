@@ -439,5 +439,6 @@
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
     <None Include="ClearVoice.PostDeployment.sql" />
+    <None Include="VR_BEBridge.PostDeployment.sql" />
   </ItemGroup>
 </Project>
