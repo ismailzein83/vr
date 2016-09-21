@@ -82,7 +82,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SupplierZoneServiceId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
-                PriceListId = (int)reader["PriceListID"],
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["ReceivedServicesFlag"] as string),
                 EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["EffectiveServiceFlag"] as string),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
