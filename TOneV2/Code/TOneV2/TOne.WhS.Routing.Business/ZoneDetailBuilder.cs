@@ -67,7 +67,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var customerZone in customerSaleZones)
                 {
                     SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
-                    SaleEntityService customerEntityService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
+                    SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
@@ -96,7 +96,7 @@ namespace TOne.WhS.Routing.Business
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
-                            SaleEntityServiceIds = customerEntityService != null ? new HashSet<int>(customerEntityService.Services.Select(itm => itm.ServiceId)) : null
+                            SaleEntityServiceIds = customerService != null ? new HashSet<int>(customerService.Services.Select(itm => itm.ServiceId)) : null
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
@@ -140,7 +140,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierZone in supplierZones)
                 {
                     SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
-                    SupplierZoneService supplierZoneService = supplierZoneServiceLocator.GetSupplierZoneService(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                    List<ZoneService> supplierZoneServices = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
 
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
@@ -163,7 +163,7 @@ namespace TOne.WhS.Routing.Business
                             SupplierId = supplierInfo.SupplierId,
                             SupplierZoneId = supplierZone.SupplierZoneId,
                             EffectiveRateValue = rateValue,
-                            SupplierServiceIds = supplierZoneService != null ? new HashSet<int>(supplierZoneService.EffectiveServices.Select(itm => itm.ServiceId)) : null
+                            SupplierServiceIds = supplierZoneServices != null ? new HashSet<int>(supplierZoneServices.Select(itm => itm.ServiceId)) : null
                         };
 
                         onSupplierZoneDetailAvailable(supplierZoneDetail);

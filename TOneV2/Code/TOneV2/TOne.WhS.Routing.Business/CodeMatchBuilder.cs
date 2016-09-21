@@ -168,7 +168,8 @@ namespace TOne.WhS.Routing.Business
                             SupplierCodeMatchWithRate supplierCodeMatchWithRate = new SupplierCodeMatchWithRate
                             {
                                 CodeMatch = supplierCodeMatch,
-                                RateValue = supplierZoneDetail.EffectiveRateValue
+                                RateValue = supplierZoneDetail.EffectiveRateValue,
+                                SupplierServiceIds = supplierZoneDetail.SupplierServiceIds
                             };
                             supplierCodeMatches.Add(supplierCodeMatchWithRate);
                             supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, supplierCodeMatchWithRate);
