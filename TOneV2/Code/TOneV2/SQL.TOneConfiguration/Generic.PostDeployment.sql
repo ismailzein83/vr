@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 --[sec].[Module]---------------------------301 to 400---------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -29,9 +29,11 @@ when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[viewtype]-----------------------101 to 200-------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[Details])
 as (select * from (values
@@ -50,9 +52,12 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[Details])
 	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+----------------------------------------------------------------------------------------------------
+end
 
 --[sec].[View]-----------------------------3001 to 4000-------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -79,9 +84,11 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[BusinessEntityModule]-------------301 to 400---------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
@@ -100,9 +107,11 @@ when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[BusinessEntity]-------------------601 to 900--------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -130,9 +139,11 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[sec].[SystemAction]----------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
@@ -230,9 +241,11 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+--------------------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[GenericRuleTypeConfig]-------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [genericdata].[GenericRuleTypeConfig] on;
 ;with cte_data([ID],[Name],[Title],[Details])
@@ -257,9 +270,11 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Details])
 	values(s.[ID],s.[Name],[Title],s.[Details]);
 set identity_insert [genericdata].[GenericRuleTypeConfig] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[ExpressionBuilderConfig]-----------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [genericdata].[ExpressionBuilderConfig] on;
 ;with cte_data([ID],[Name],[Details])
@@ -278,9 +293,11 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[ExpressionBuilderConfig] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[DataTransformationStepConfig]------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [genericdata].[DataTransformationStepConfig] on;
 ;with cte_data([ID],[Name],[Details])
@@ -309,9 +326,12 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[DataTransformationStepConfig] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[DataStoreConfig]-------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [genericdata].[DataStoreConfig] on;
 ;with cte_data([ID],[Name],[Details])
@@ -330,9 +350,11 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[DataStoreConfig] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[DataRecordFieldTypeConfig]---------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [genericdata].[DataRecordFieldTypeConfig] on;
 ;with cte_data([ID],[Name],[Details])
@@ -359,30 +381,11 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [genericdata].[DataRecordFieldTypeConfig] off;
-
---[common].[TemplateConfig]-----------------60001 to 70000------------------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [common].[TemplateConfig] on;
-;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(60001,'Time Interval','VR_GenericData_SummaryBatchIntervalSettings','vr-genericdata-summarytransformation-timeinterval-selector',null,null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
-merge	[common].[TemplateConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
-set identity_insert [common].[TemplateConfig] off;
+end
 
 --[queue].[QueueActivatorConfig]----------------1 to 500--------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [queue].[QueueActivatorConfig] on;
 ;with cte_data([ID],[Name],[Details])
@@ -405,9 +408,12 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [queue].[QueueActivatorConfig] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+begin
+
 set nocount on;
 set identity_insert [genericdata].[BusinessEntityDefinition] on;
 ;with cte_data([ID],[Name],[Title],[Settings])
@@ -427,9 +433,11 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
 set identity_insert [genericdata].[BusinessEntityDefinition] off;
+----------------------------------------------------------------------------------------------------
+end
 
 --[genericdata].[DataTransformationStepConfig]----------------21-500--------------------------------
-----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 set identity_insert [genericdata].[DataTransformationStepConfig] on;
 ;with cte_data([ID],[Name],[Details])
@@ -461,24 +469,7 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[DataTransformationStepConfig] off;
-
---[common].[ExtensionConfiguration]-----------------4001	to 5000---------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(4001,'VR_GenericData_VRObjectTypes_DataRecordType','Data Record Type','VR_Common_ObjectType','{"Editor":"vr_genericdata_datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}','2016-08-01 10:04:43.020'),
-(4002,'VR_Generic_DataRecordFieldFormula_ParentBusinessEntity','Parent Business Entity','VR_Generic_DataRecordFieldFormula','{"Editor":"vr-genericdata-datarecordtypefields-formula-parentbusinessentity"}','2016-06-30 15:38:26.300'),
-(4003,'VR_GenericData_VRObjectTypes_DataRecordField','Data Record Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator',null,'2016-08-03 11:35:09.467')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([OldID],[Name],[Title],[ConfigType],[Settings],[CreatedTime]))
-merge	[common].[ExtensionConfiguration] as t
-using	cte_data as s
-on		1=1 and t.[OldID] = s.[OldID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
-when not matched by target then
-	insert([OldID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[OldID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+end
+
+--common.[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('C47176FB-32EB-430C-B92D-D34DFADCDDF9','Time Interval','Time Interval','VR_GenericData_SummaryBatchIntervalSettings','{"Editor":"vr-genericdata-summarytransformation-timeinterval-selector"}'),('F663BF74-99DB-4746-8CBC-E74198E1786C','VR_GenericData_VRObjectTypes_DataRecordField','Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator','{"Editor":"vr_genericdata_datarecordobjectfield"}'),('FC4B69F0-D577-4319-8D10-ED8F95E07441','VR_Generic_DataRecordFieldFormula_ParentBusinessEntity','Parent Business Entity','VR_Generic_DataRecordFieldFormula','{"Editor":"vr-genericdata-datarecordtypefields-formula-parentbusinessentity"}'),('BBC57155-0412-4371-83E5-1917A8BEA468','VR_GenericData_VRObjectTypes_DataRecordType','Data Record','VR_Common_ObjectType','{"Editor":"vr_genericdata_datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
