@@ -24,6 +24,8 @@
         <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Start API Test" Width="116px" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Start GUI Test" style="height: 26px" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Unit Test" Width="144px" />
         <br />
         Token :
         <asp:TextBox ID="TextBox7" runat="server" Width="1076px"></asp:TextBox>

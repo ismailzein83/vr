@@ -66,6 +66,39 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="TOne.WhS.BusinessEntity.Data">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data.SQL">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.SupplierPriceList.BP">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.SupplierPriceList.BP.Arguments">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.SupplierPriceList.Business">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.SupplierPriceList.Entities">
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\..\..\..\TFS\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebDriver">
       <HintPath>..\packages\Selenium.WebDriver.2.53.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
@@ -111,7 +144,10 @@
     <Compile Include="ClassCode\SupplierZones.cs" />
     <Compile Include="ClassCode\SwitchClass.cs" />
     <Compile Include="ClassCode\Switches.cs" />
+    <Compile Include="ExistingCodes.cs" />
+    <Compile Include="FakreManagers\CodeGroupDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="WebForm1.aspx.cs">
       <DependentUpon>WebForm1.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

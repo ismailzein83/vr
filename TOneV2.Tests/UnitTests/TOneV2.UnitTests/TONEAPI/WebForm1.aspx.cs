@@ -41,7 +41,7 @@ namespace TONEAPI
         public void bindgrid()
         {
             connect con = new connect();
-            DataSet ds = con.getdata(" select * from [ToneV2testing].[dbo].[logging]   where eventdate > dateadd(hh,-1,getdate()) order   by eventdate desc");
+            DataSet ds = con.getdatas(" select * from [ToneV2testing].[dbo].[logging]   where eventdate > dateadd(hh,-1,getdate()) order   by eventdate desc");
             GridView1.DataSource = ds.Tables[0];
             GridView1.DataBind();
 
@@ -378,8 +378,8 @@ namespace TONEAPI
            GUIcountry();
            GUICities();
            codegroup();
-            currencies();
-           ratetypes();
+         //   currencies();
+        //   ratetypes();
            carrierprofile();
            carrieraccount();
             bindgrid();
@@ -526,7 +526,7 @@ namespace TONEAPI
             catch(Exception Ex)
             {
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Fail','adding country failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-                driver.Close();
+             //   driver.Close();
             }
 
         }
@@ -1757,6 +1757,19 @@ namespace TONEAPI
         public void switchconnect()
         {
 
+        }
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            UnitTest1 t = new UnitTest1();
+           
+            connect con = new connect();
+            DataSet dprc = con.getdata("select * from testcasedate where testcase='testcase51'");
+            foreach (DataRow _r in dprc.Tables[0].Rows)
+            {
+                t.process_pricelist_testcase(_r["testcase"].ToString(), _r["description"].ToString(),int.Parse(_r["pricelisttype"].ToString()));
+            }
+            bindgrid();
         }
     }
     }
