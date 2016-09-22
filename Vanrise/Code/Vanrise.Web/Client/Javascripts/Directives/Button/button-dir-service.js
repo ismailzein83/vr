@@ -306,8 +306,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Send Email',
                     class: "glyphicon glyphicon-envelope"
                 }
-
-                
+            case 'ExcludeAll':
+                return {
+                    text: 'Exclude All',
+                    class: "glyphicon glyphicon-eject"
+                }
         } 
     }
 }]);
