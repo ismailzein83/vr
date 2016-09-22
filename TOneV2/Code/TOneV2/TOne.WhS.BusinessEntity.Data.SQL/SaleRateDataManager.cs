@@ -23,6 +23,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public SaleRate GetSaleRateById(long rateId)
+        {
+            return GetItemSP("TOneWhS_BE.sp_SaleRate_GetByID", SaleRateMapper, rateId);
+        }
         public IEnumerable<SaleRate> GetFilteredSaleRates(SaleRateQuery query)
         {
             string zonesids = null;

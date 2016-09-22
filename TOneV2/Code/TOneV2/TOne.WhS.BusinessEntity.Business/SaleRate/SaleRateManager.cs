@@ -36,7 +36,29 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());
         }
-
+        public RateChangeType GetSaleRateChange(DateTime fromTime, DateTime tillTime, long rateId)
+        {
+            Dictionary<long, SaleRate> saleRates = GetCachedSaleRatesInBetweenPeriod(fromTime, tillTime);
+            SaleRate rate;
+            if (saleRates != null)
+            {
+                saleRates.TryGetValue(rateId, out rate);
+                if (rate != null) return rate.RateChange;
+            }
+            else saleRates = new Dictionary<long, SaleRate>();
+            rate = GetSaleRateByRateId(rateId);
+            if (rate != null)
+            {
+                saleRates[rate.SaleRateId] = rate;
+                return rate.RateChange;
+            }
+            throw new ArgumentNullException(String.Format("SaleRate: {0}", rateId));
+        }
+        private SaleRate GetSaleRateByRateId(long rateId)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetSaleRateById(rateId);
+        }
         public Dictionary<long, SaleRate> GetCachedSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>();
@@ -131,10 +153,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 saleRateDetail.Entity = entity;
                 saleRateDetail.ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId);
-                
+
                 if (entity.RateTypeId.HasValue)
                     saleRateDetail.RateTypeName = _rateTypeManager.GetRateTypeName(entity.RateTypeId.Value);
-                
+
                 return saleRateDetail;
             }
 
