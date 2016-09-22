@@ -250,7 +250,7 @@ namespace Vanrise.Analytic.Business
 
         public bool DoesUserHaveAccess(int userId, int analyticTableId, List<string> measureNames)
         {
-            var filterdMeasures = this.GetMeasures(analyticTableId).Where(k => measureNames.Contains(k.Key)).Select(v => v.Value);
+            var filterdMeasures = this.GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(analyticTableId, AnalyticItemType.Measure).Where(measureConfig => measureNames.Contains(measureConfig.Name)).Select(measureConfig => measureConfig);
             SecurityManager secManager = new SecurityManager();
 
             try
