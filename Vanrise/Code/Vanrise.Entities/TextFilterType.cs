@@ -8,8 +8,7 @@ namespace Vanrise.Entities
 {
     public enum TextFilterType
     {
-        Equals = 0,
-        NotEquals = 1,
-        Contains = 2
+        StartsWith = 0,
+        Contains = 1
     }
 }

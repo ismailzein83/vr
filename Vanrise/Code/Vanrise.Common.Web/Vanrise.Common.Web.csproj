@@ -176,10 +176,14 @@
     <Content Include="Common\Constant\HourEnum.js" />
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Constant\ProductInfoPropertyEnum.js" />
+    <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Common\Directives\City\Templates\citySelectorTemplate.html" />
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
     <Content Include="Common\Directives\City\vr-common-city-selector.js" />
+    <Content Include="Common\Directives\Filter\Text\Templates\TextFilterTemplate.html" />
+    <Content Include="Common\Directives\Filter\Text\vr-common-filter-text.js" />
+    <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
     <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-selector.js" />

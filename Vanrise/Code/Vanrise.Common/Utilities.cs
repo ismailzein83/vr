@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Common
 {
@@ -227,6 +228,25 @@ namespace Vanrise.Common
             return (T)deserializedAsObject;
         }
 
+        public static bool IsTextMatched(string target, string match, TextFilterType textFilterType)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (match == null)
+                throw new ArgumentNullException("match");
+
+            target = target.ToLower();
+            match = match.ToLower();
+
+            switch (textFilterType)
+            {
+                case TextFilterType.StartsWith:
+                    return target.StartsWith(match);
+                case TextFilterType.Contains:
+                    return target.Contains(match);
+            }
+            throw new ArgumentException("textFilterType");
+        }
     }
 
     public interface IPropValueReader
