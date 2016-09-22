@@ -146,8 +146,9 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'Business Entities','Business Entities',null,'/Client/images/menu-icons/Business Entities.png',2,0),
-(102,'Lookups','Lookups',101,null,1,0)
+('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities','Business Entities',null,'/Client/images/menu-icons/Business Entities.png',2,0),
+('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups','Lookups','E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,2,1),
+('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',5,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -172,21 +173,21 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'Countries','Countries','#/view/Common/Views/Country/CountryManagement',102,'VRCommon/Country/GetFilteredCountries',null,null,null,0,5),
-(1002,'Cities','Cities','#/view/Common/Views/City/CityManagement',102,'VRCommon/City/GetFilteredCities',null,null,null,0,10),
-(1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,'VRCommon/Currency/GetFilteredCurrencies',null,null,null,0,15),
-(1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,'VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies',null,null,null,0,20),
-(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,'VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
-
-(1007,'Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement',3,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15),
+('66DE2441-8A96-41E7-94EA-9F8AF38A3515','Style Definitions','Style Definitions','#/view/Common/Views/StyleDefinition/StyleDefinitionManagement','A459D3D0-35AE-4B0E-B267-54436FDA729A','VRCommon/StyleDefinition/GetFilteredStyleDefinitions',null,null,null,0,7),
+('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,15),
+('604B2CB5-B839-4E51-8D13-3C1C84D05DEE','Countries','Countries','#/view/Common/Views/Country/CountryManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/Country/GetFilteredCountries',null,null,null,0,5),
+('25994374-CB99-475B-8047-3CDB7474A083','Cities','Cities','#/view/Common/Views/City/CityManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/City/GetFilteredCities',null,null,null,0,10),
+('9F691B87-4936-4C4C-A757-4B3E12F7E1D9','Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/Currency/GetFilteredCurrencies',null,null,null,0,15),
+('E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9','Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies',null,null,null,0,20),
+('4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712','Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
 --(1008,'Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement',3,'VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,9),
-(1009,'Settings','Settings','#/view/Common/Views/Settings/SettingsManagement',3,'VRCommon/Settings/GetFilteredSettings',null,null,null,0,10),
+('C8272FEA-32E8-4C3B-949A-50090DB82981','Settings','Settings','#/view/Common/Views/Settings/SettingsManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/Settings/GetFilteredSettings',null,null,null,0,10),
+('3FDB5A9D-F366-4C9E-9316-D2CB90F51C0B','Email Templates','Email Templates','#/view/Common/Views/EmailTemplate/EmailTemplateManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/EmailTemplate/GetFilteredEmailTemplates',null,null,null,0,5),
+('CFCF02C6-0C70-443D-A91E-B8D291F5263E','Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,0,55),
+('33AC6A20-F8BE-4D6F-A659-F643DADE1065','Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,0,60),
 
-(1020,'Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement',-100,'VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,0,55),
-(1021,'Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement',-100,'VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,0,60),
-
-(1022,'Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement',3,'VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9),
-(1030,'Time Zone','Time Zone Management','#/view/Common/Views/VRTimeZone/VRTimeZoneManagement',102,'VRCommon/TimeZone/GetFilteredVRTimeZones',null,null,null,0,30)
+('40A3247C-375A-4FE3-8E5E-8370D086F8FA','Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,0,9),
+('0F111ADC-B7F6-46A4-81BC-72FFDEB305EB','Time Zone','Time Zone Management','#/view/Common/Views/VRTimeZone/VRTimeZoneManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/TimeZone/GetFilteredVRTimeZones',null,null,null,0,9)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

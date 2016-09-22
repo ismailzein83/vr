@@ -16,7 +16,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(701,'Queueing',null,1,null,20,null)
+('2F940ED6-799C-4411-8FE3-339600964FE1','Queueing',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,4,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -39,10 +39,10 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(7001,'Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement',701,'VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions',null,null,'0',0,1),
-(7002,'Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement',701,'VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows',null,null,'0',0,2),
-(7003,'Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement',701,'VR_Queueing/QueueInstance/GetFilteredQueueInstances',null,null,'0',0,3),
-(7004,'Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement',701,'VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader',null,null,'0',0,4)
+('8D33039E-FD2D-476B-A122-C7BBB238D201','Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions',null,null,'0',0,2),
+('3EE0BB0A-C14A-4325-8449-AD7A148CF088','Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows',null,null,'0',0,3),
+('844DA1DD-E5CF-42F2-A14D-39219237EF4B','Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/QueueInstance/GetFilteredQueueInstances',null,null,'0',0,4),
+('F6D44233-74BD-4103-B4A6-39B8AC300185','Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader',null,null,'0',0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

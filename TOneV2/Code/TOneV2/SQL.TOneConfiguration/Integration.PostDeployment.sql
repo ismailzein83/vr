@@ -16,7 +16,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(401,'Data Sources',null,1,null,10,0)
+('551E5CAE-69CA-478B-B823-8E2CEDBC1841','Data Sources',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,8,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -39,9 +39,9 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(4001,'Management','Data Sources Management','#/view/Integration/Views/DataSourceManagement',401,'VR_Integration/DataSource/GetFilteredDataSources',null,null,null,0,1),
-(4002,'Log','Log History','#/view/Integration/Views/DataSourceLogManagement',401,'VR_Integration/DataSourceLog/GetFilteredDataSourceLogs',null,null,null,0,2),
-(4003,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',401,'VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches',null,null,null,0,3)
+('FFC528C2-BF74-40E5-B7FE-A3B6F04B76ED','Management','Data Sources Management','#/view/Integration/Views/DataSourceManagement','551E5CAE-69CA-478B-B823-8E2CEDBC1841','VR_Integration/DataSource/GetFilteredDataSources',null,null,null,0,1),
+('3EBA3C0E-28CA-4003-959B-96D30D6747B7','Log','Log History','#/view/Integration/Views/DataSourceLogManagement','551E5CAE-69CA-478B-B823-8E2CEDBC1841','VR_Integration/DataSourceLog/GetFilteredDataSourceLogs',null,null,null,0,2),
+('C0231D0B-93E8-45C5-9899-532923814C8C','Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement','551E5CAE-69CA-478B-B823-8E2CEDBC1841','VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches',null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

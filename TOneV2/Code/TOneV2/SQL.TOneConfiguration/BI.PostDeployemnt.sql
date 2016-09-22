@@ -43,8 +43,8 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1301,'Dynamic Management',null,1,null,45,0),
-(1302,'Business Intelligence',null,null,'/Client/images/menu-icons/busines intel.png',100,1)
+('42BE0E81-EAEE-490D-A342-028FB111DE19','Dynamic Management',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,6,0),
+('EB303A61-929A-4D33-BF50-18F40308BC86','Business Intelligence',null,null,'/images/menu-icons/busines intel.png',18,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -91,8 +91,8 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(13001,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1301,'VR_Sec/Widget/GetFilteredWidgets',null,null,null,0,1),
-(13002,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1301,'VR_Sec/View/GetFilteredViews & VR_Sec/View/GetFilteredDynamicViews',null,null,null,0,2)
+('1A2C8311-F0CE-40EC-A864-D815EF65301C','Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement','42BE0E81-EAEE-490D-A342-028FB111DE19','VR_Sec/Widget/GetFilteredWidgets',null,null,null,0,2),
+('21F5BF24-36A9-4CFF-B027-FC61AC57A838','Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement','42BE0E81-EAEE-490D-A342-028FB111DE19','VR_Sec/View/GetFilteredViews & VR_Sec/View/GetFilteredDynamicViews',null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

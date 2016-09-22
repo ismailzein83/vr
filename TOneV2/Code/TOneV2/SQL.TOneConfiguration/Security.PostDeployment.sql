@@ -200,10 +200,10 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administration','Administration',null,'/Client/images/menu-icons/admin.png',1,0),
-(2,'Security',null,1,null,2,0),
-(3,'System',null,1,null,1,0),
-(-100,'System Configuration','System Configuration',null,'/Client/images/menu-icons/Administration.png',0,0)
+('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration','Administration',null,'/Client/images/menu-icons/admin.png',1,0),
+('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,2,0),
+('BAAF681E-AB1C-4A64-9A35-3F3951398881','System',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,2,0),
+('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','System Configuration','System Configuration',null,'/images/menu-icons/Administration.png',4,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -248,13 +248,15 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users'					,'Users'				,'#/view/Security/Views/User/UserManagement'				,2,'VR_Sec/Users/GetFilteredUsers'	,null,null,null,0,1),
-(2,'Groups'					,'Groups'				,'#/view/Security/Views/Group/GroupManagement'				,2,'VR_Sec/Group/GetFilteredGroups'	,null,null,null,0,2),
-(3,'System Entities'		,'System Entities'		,'#/view/Security/Views/Permission/BusinessEntityManagement',2,'VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,3),
-(4,'System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement',2,'VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,4),
-(5,'Views','Views'			,'#/view/Security/Views/View/ViewManagement'										,3,'VR_Sec/View/GetFilteredViews'	,null,null,null,0,1),
-(6,'Menus','Menus'			,'#/view/Security/Views/Menu/MenuManagement'										,3,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,2),
-(7,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,3,'VR_Sec/Users/GetFilteredUsers'	,null,null,null,0,25)
+('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Tenants/GetFilteredTenants',null,null,null,0,6),
+('17B7D7F7-0A1E-4AC1-B2A9-CC71755E3216','Users','Users','#/view/Security/Views/User/UserManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Users/GetFilteredUsers',null,null,null,0,1),
+('6D39DDC2-E5EB-46C3-A926-37D59A9FD1AD','Groups','Groups','#/view/Security/Views/Group/GroupManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Group/GetFilteredGroups',null,null,null,0,2),
+('147C1862-9B0C-4285-B415-00C9210FC691','System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,3),
+('7AFED44F-6470-47C7-B6E8-B1652D17EB6D','System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,4),
+('5B11405B-F0E1-408C-BCF5-0AB328955B12','Views','Views','#/view/Security/Views/View/ViewManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/View/GetFilteredViews',null,null,null,0,1),
+('E4101095-F599-414F-8E8C-4790E9FF00FA','Menus','Menus','#/view/Security/Views/Menu/MenuManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/View/UpdateViewsRank',null,null,null,0,2),
+('DCF8CA21-852C-41B9-9101-6990E545509D','Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/Users/GetFilteredUsers',null,null,null,0,25),
+('8D00870A-6906-44AC-B04D-D9B12C3259D6','Views','View Management','#/view/Security/Views/View/ViewManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/View/GetFilteredViews',null,null,null,0,4)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

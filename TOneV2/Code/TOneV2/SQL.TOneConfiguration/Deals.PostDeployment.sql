@@ -16,7 +16,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1701,'Deals',null,null,'/images/menu-icons/Deals Module.png',55,0)
+('670FD0F9-6DCE-4567-8E12-DC3E5830B549','Deals',null,null,'/images/menu-icons/Deals Module.png',15,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -40,17 +40,14 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(18001,'Deals Analysis','Deals Analysis Management','#/view/WhS_BusinessEntity/Views/Deal/DealAnalysisManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,1),
-(18002,'Deals Management','Deals Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,2),
-
-(18003,'Bilateral Agreement','Bilateral Agreement','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,3),
-(18004,'Volume Commitment','Volume Commitment','#/view/WhS_BusinessEntity/Views/Deal/VolumeCommitmentManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,4),
-
-(18005,'Progress Reprot','Progress Reprot','#/view/WhS_BusinessEntity/Views/Deal/DealProgressManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,5),
-(18006,'Over All Progress Report','Over All Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,6),
-
-(18007,'Alerts Management','Alerts Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,7),
-(18008,'Alerts History','Alerts History','#/view/WhS_BusinessEntity/Views/Deal/DealManagement',1701,'WhS_BE/Deal/GetFilteredDeals',null,null,null,0,8)
+('1437E823-0D44-4176-82F2-5E1D2F4D83EA','Deals Analysis','Deals Analysis Management','#/view/WhS_BusinessEntity/Views/Deal/DealAnalysisManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,2),
+('6177DE52-9D79-438D-8B33-ED820FD7D5C5','Deals Management','Deals Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,3),
+('E207E8D2-EF62-484C-A103-97758DBA5FC3','Bilateral Agreement','Bilateral Agreement','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,4),
+('95F31CAF-F3F0-4617-B253-031A8FD69866','Volume Commitment','Volume Commitment','#/view/WhS_BusinessEntity/Views/Deal/VolumeCommitmentManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,5),
+('AE14C61E-F568-4592-BE3E-0BF678AD3A42','Progress Report','Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealProgressManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,6),
+('B16DFE22-64A3-4AB2-AC57-004BA6EA4C69','Over All Progress Report','Over All Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,7),
+('82D7BD5F-4867-43EC-A5AD-3B5CF0612B04','Alerts Management','Alerts Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,8),
+('94CED066-2F04-4397-9AF8-3E91C167B8F5','Alerts History','Alerts History','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,9)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
