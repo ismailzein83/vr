@@ -20,5 +20,7 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SupplierRate> GetEffectiveSupplierRates(int supplierId, DateTime effectiveDate);
 
         bool AreSupplierRatesUpdated(ref object updateHandle);
+
+        SupplierRate GetSupplierRateById(long rateId);
     }
 }

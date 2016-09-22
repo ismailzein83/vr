@@ -24,6 +24,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public SupplierRate GetSupplierRateById(long rateId)
+        {
+            return GetItemSP("TOneWhS_BE.sp_SupplierRate_GetByID", SupplierRateMapper, rateId);
+        }
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
@@ -98,6 +103,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
+
 
     }
 }

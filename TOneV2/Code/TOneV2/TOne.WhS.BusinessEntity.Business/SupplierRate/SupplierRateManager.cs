@@ -33,7 +33,31 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));
             return supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
         }
-        public Dictionary<long, SupplierRate> GetCachedSupplierRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
+        public RateChangeType GetSupplierRateChange(DateTime fromTime, DateTime tillTime, long rateId)
+        {
+            Dictionary<long, SupplierRate> supplierRates = GetCachedSupplierRatesInBetweenPeriod(fromTime, tillTime);
+            SupplierRate rate;
+            if (supplierRates != null)
+            {
+                supplierRates.TryGetValue(rateId, out rate);
+                if (rate != null) return rate.RateChange;
+            }
+            else supplierRates = new Dictionary<long, SupplierRate>();
+            rate = GetSupplierRateByRateId(rateId);
+            if (rate != null)
+            {
+                supplierRates[rate.SupplierRateId] = rate;
+                return rate.RateChange;
+            }
+            throw new ArgumentNullException(String.Format("CostRate: {0}", rateId));
+        }
+
+        private SupplierRate GetSupplierRateByRateId(long rateId)
+        {
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+            return dataManager.GetSupplierRateById(rateId);
+        }
+        private Dictionary<long, SupplierRate> GetCachedSupplierRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>();
             return cacheManager.GetOrCreateObject("GetSupplierRatesInBetweenPeriod",
