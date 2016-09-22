@@ -24,17 +24,17 @@ namespace Vanrise.Security.Business
       
         #region Public Members
 
-        public bool UpdateModuleRank(int moduleId,int? parentId, int rank)
+        public bool UpdateModuleRank(Guid moduleId,Guid? parentId, int rank)
         {
             return _dataManager.UpdateModuleRank(moduleId,parentId, rank);
         }
-        public Module GetModule(int moduleId)
+        public Module GetModule(Guid moduleId)
         {
             var allModules = GetCachedModules();
             return allModules.GetRecord(moduleId);
         }
 
-        public string GetModuleName(int moduleId)
+        public string GetModuleName(Guid moduleId)
         {
             Module module = GetModule(moduleId);
             if (module == null)
@@ -53,16 +53,14 @@ namespace Vanrise.Security.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int moduleId = -1;
-
+            moduleObject.ModuleId =  Guid.NewGuid();
             IModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
-            bool insertActionSucc = dataManager.AddModule(moduleObject, out moduleId);
+            bool insertActionSucc = dataManager.AddModule(moduleObject);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                moduleObject.ModuleId = moduleId;
                 insertOperationOutput.InsertedObject = ModuleDetailMapper(moduleObject);
             }
             else
@@ -110,7 +108,7 @@ namespace Vanrise.Security.Business
                 return _dataManager.AreModulesUpdated(ref _updateHandle);
             }
         }
-        private Dictionary<int, Module> GetCachedModules()
+        private Dictionary<Guid, Module> GetCachedModules()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetModules",
                () =>

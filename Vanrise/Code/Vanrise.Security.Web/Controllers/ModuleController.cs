@@ -21,7 +21,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetModule")]
-        public Module GetModule(int moduleId)
+        public Module GetModule(Guid moduleId)
         {
             return _manager.GetModule(moduleId);
         }

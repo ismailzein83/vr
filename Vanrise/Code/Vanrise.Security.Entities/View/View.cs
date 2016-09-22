@@ -10,7 +10,7 @@ namespace Vanrise.Security.Entities
 
     public class View
     {
-        public int ViewId { get; set; }
+        public Guid ViewId { get; set; }
 
         public string Name { get; set; }
 
@@ -18,7 +18,7 @@ namespace Vanrise.Security.Entities
 
         public string Url { get; set; }
 
-        public int ModuleId { get; set; }
+        public Guid ModuleId { get; set; }
 
         public string ActionNames { get; set; }
 

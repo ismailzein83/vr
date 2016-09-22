@@ -8,7 +8,7 @@ namespace Vanrise.Security.Entities
     public enum MenuType { Module = 0, View = 1 }
     public class MenuItem
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 

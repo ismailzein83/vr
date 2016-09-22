@@ -34,14 +34,14 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetView")]
-        public View GetView(int viewId)
+        public View GetView(Guid viewId)
         {
             return _manager.GetView(viewId);
         }
 
         [HttpGet]
         [Route("DeleteView")]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(int viewId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(Guid viewId)
         {
             return _manager.DeleteView(viewId);
         }

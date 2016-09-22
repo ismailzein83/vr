@@ -39,7 +39,7 @@ namespace Vanrise.Security.Business
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int viewId = -1;
+            view.ViewId = Guid.NewGuid();
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             if(view.ViewTypeName != null)
             {
@@ -47,13 +47,12 @@ namespace Vanrise.Security.Business
                 int viewTypeId = viewTypeManager.GetViewTypeIdByName(view.ViewTypeName);
                 view.Type = viewTypeId;
             }
-            bool insertActionSucc = dataManager.AddView(view, out viewId);
+            bool insertActionSucc = dataManager.AddView(view);
 
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                view.ViewId = viewId;
                 insertOperationOutput.InsertedObject = ViewDetailMapper(view);
             }
             else
@@ -85,7 +84,7 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
-        public View GetView(int viewId)
+        public View GetView(Guid viewId)
         {
             var allViews = GetCachedViews();
             return allViews.GetRecord(viewId);
@@ -94,9 +93,9 @@ namespace Vanrise.Security.Business
         public List<View> GetViews()
         {
             return GetCachedViews().Values.ToList();
-        } 
+        }
 
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(int viewId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(Guid viewId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
@@ -147,7 +146,7 @@ namespace Vanrise.Security.Business
                 }else if (menuItem.MenuType == MenuType.View)
                 {
                     rank++;
-                    UpdateViewRank(menuItem.Id, 1, rank);
+                    UpdateViewRank(menuItem.Id, Guid.Empty, rank);
                 }               
             }
             return true;
@@ -176,7 +175,7 @@ namespace Vanrise.Security.Business
 
 
 
-        public bool UpdateViewRank(int viewId,int moduleId,int rank)
+        public bool UpdateViewRank(Guid viewId,Guid moduleId,int rank)
         {
             return _dataManager.UpdateViewRank(viewId, moduleId,rank);
         }
@@ -213,7 +212,7 @@ namespace Vanrise.Security.Business
                 return _dataManager.AreViewsUpdated(ref _updateHandle);
             }
         }
-        private Dictionary<int, View> GetCachedViews()
+        private Dictionary<Guid, View> GetCachedViews()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetViews",
                () =>

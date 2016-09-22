@@ -24,7 +24,7 @@ namespace Vanrise.Security.Data.SQL
         {
             return GetItemsSP("sec.sp_Module_GetAll", ModuleMapper);
         }
-        public bool UpdateModuleRank(int moduleId,int? parentId, int rank)
+        public bool UpdateModuleRank(Guid moduleId, Guid? parentId, int rank)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_UpdateRank", moduleId, parentId,rank);
             return (recordesEffected > 0);
@@ -33,12 +33,10 @@ namespace Vanrise.Security.Data.SQL
         {
             return base.IsDataUpdated("sec.[Module]", ref _updateHandle);
         }
-        public bool AddModule(Entities.Module moduleObject, out int moduleId)
+        public bool AddModule(Entities.Module moduleObject)
         {
-            object moduleID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", out moduleID, moduleObject.Name,moduleObject.ParentId, moduleObject.AllowDynamic);
-            moduleId = (recordesEffected > 0) ? (int)moduleID : -1;
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert",moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId, moduleObject.AllowDynamic);
 
             return (recordesEffected > 0);
         }
@@ -55,10 +53,10 @@ namespace Vanrise.Security.Data.SQL
         {
             Entities.Module module = new Entities.Module
             {
-                ModuleId = (int)reader["Id"],
+                ModuleId =GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
                 Url = reader["Url"] as string,
-                ParentId = GetReaderValue<int>(reader, "ParentId"),
+                ParentId = GetReaderValue<Guid?>(reader, "ParentId"),
                 Icon = reader["Icon"] as string,
                 AllowDynamic = true,// GetReaderValue<Boolean>(reader, "AllowDynamic"),
                 Rank = GetReaderValue<int>(reader, "Rank"),

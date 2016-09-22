@@ -31,7 +31,7 @@ namespace Vanrise.Security.Business
 
             foreach (Module item in modules)
             {
-                if (item.ParentId == 0)
+                if (item.ParentId == null)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules);
 
@@ -56,7 +56,7 @@ namespace Vanrise.Security.Business
 
             foreach (Module item in modules)
             {
-                if (item.ParentId == 0 || item.ParentId == null)
+                if (item.ParentId == null)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules, views, withEmptyChilds);
                     if (withEmptyChilds)

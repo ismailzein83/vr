@@ -10,10 +10,10 @@ namespace Vanrise.Security.Data
     public interface IViewDataManager : IDataManager
     {
         List<View> GetViews();
-        bool AddView(View view, out int insertedId);
+        bool AddView(View view);
         bool UpdateView(View view);
-        bool DeleteView(int viewId);
-        bool UpdateViewRank(int viewId,int moduleId,int rank);
+        bool DeleteView(Guid viewId);
+        bool UpdateViewRank(Guid viewId, Guid moduleId, int rank);
 
         bool AreViewsUpdated(ref object updateHandle);
     }

@@ -25,7 +25,7 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_View_GetAll", ViewMapper);
         }
 
-        public bool AddView(View view, out int insertedId)
+        public bool AddView(View view)
         {
             string serialziedContent = null;
             if (view.ViewContent != null)
@@ -40,10 +40,8 @@ namespace Vanrise.Security.Data.SQL
                     serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
-            object viewId;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Title, view.Url, view.ModuleId,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", view.ViewId, view.Name, view.Title, view.Url, view.ModuleId,
                serialziedAudience, serialziedContent, serializedSettings, view.Type);
-            insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
         }
         public bool UpdateView(View view)
@@ -65,13 +63,13 @@ namespace Vanrise.Security.Data.SQL
                serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             return (recordesEffected > 0);
         }
-        public bool DeleteView(int viewId)
+        public bool DeleteView(Guid viewId)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Delete", viewId);
             return (recordesEffected > 0);
         }
 
-        public bool UpdateViewRank(int viewId,int moduleId, int rank)
+        public bool UpdateViewRank(Guid viewId, Guid moduleId, int rank)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_UpdateRank", viewId,moduleId, rank);
             return (recordesEffected > 0);
@@ -89,11 +87,11 @@ namespace Vanrise.Security.Data.SQL
 
             View instance = new View
             {
-                ViewId = (int)reader["Id"],
+                ViewId = GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 Url = reader["Url"] as string,
-                ModuleId = (int)reader["Module"],
+                ModuleId = GetReaderValue <Guid>(reader,"Module"),
                 ActionNames = GetReaderValue<string>(reader, "ActionNames"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
