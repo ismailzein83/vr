@@ -124,6 +124,7 @@
     <Compile Include="RatePlanning\Enums.cs" />
     <Compile Include="RatePlanning\Input\AddNormalRatesToDraftInput.cs" />
     <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
+    <Compile Include="RatePlanning\Input\TryApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemsInput.cs" />
@@ -133,7 +134,7 @@
     <Compile Include="RatePlanning\Draft\Rate\DraftRateToClose.cs" />
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
-    <Compile Include="RatePlanning\InvalidZoneRate.cs" />
+    <Compile Include="RatePlanning\CalculatedRate.cs" />
     <Compile Include="RatePlanning\ZoneChanges.cs" />
     <Compile Include="RatePlanning\ZoneItem.cs" />
     <Compile Include="RatePlanning\ZoneRateChangesDetail.cs" />

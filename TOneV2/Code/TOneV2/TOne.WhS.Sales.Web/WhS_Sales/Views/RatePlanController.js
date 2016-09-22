@@ -329,7 +329,7 @@
                 var applyDeferred = UtilsService.createPromiseDeferred();
                 promises.push(applyDeferred.promise);
 
-                var invalidRates;
+                var calculatedRates;
 
                 confirmPromise.then(function (confirmed) {
                     if (confirmed)
@@ -337,49 +337,31 @@
                         saveChanges(false).then(function ()
                         {
                             saveChangesDeferred.resolve();
-
-                            var input = getApplyCalculatedRatesInput();
-
-                            WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(input).then(function (response)
-                            {
-                                invalidRates = response;
+                            var tryApplyInput = getTryApplyCalculatedRatesInput();
+                            WhS_Sales_RatePlanAPIService.TryApplyCalculatedRates(tryApplyInput).then(function (response) {
+                                calculatedRates = response;
                                 applyDeferred.resolve();
-
                             }).catch(function (error) {
                                 applyDeferred.reject(error);
                             });
-
                         }).catch(function (error) {
                             saveChangesDeferred.reject(error);
                         });
 
                         UtilsService.waitMultiplePromises([saveChangesDeferred.promise, applyDeferred.promise]).then(function ()
                         {
-                            if (invalidRates != undefined && invalidRates != null)
-                            {
-                                var onSaved = function (normalRatesByZone)
-                                {
-                                    var input = {
-                                        OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
-                                        OwnerId: getOwnerId(),
-                                        EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-                                        NormalRatesByZone: normalRatesByZone,
-                                        CurrencyId: getCurrencyId()
-                                    };
-                                    WhS_Sales_RatePlanAPIService.AddNormalRatesToDraft(input).then(function () {
+                            if (calculatedRates == undefined || calculatedRates == null)
+                                onRatesApplied();
+                            else {
+                                var onSaved = function (validCalculatedRates) {
+                                    var applyInput = getApplyCalculatedRatesInput(validCalculatedRates);
+                                    WhS_Sales_RatePlanAPIService.ApplyCalculatedRates(applyInput).then(function () {
                                         onRatesApplied();
                                     }).catch(function (error) {
                                         VRNotificationService.notifyException(error, $scope);
                                     });
                                 };
-                                var onCancelled = function () {
-                                    WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), getCurrencyId());
-                                };
-                                WhS_Sales_RatePlanService.viewInvalidRates(invalidRates, onSaved, onCancelled);
-                            }
-                            else
-                            {
-                                onRatesApplied();
+                                WhS_Sales_RatePlanService.viewInvalidRates(calculatedRates, onSaved);
                             }
                         });
                     }
@@ -389,7 +371,7 @@
                     }
                 });
 
-                function getApplyCalculatedRatesInput() {
+                function getTryApplyCalculatedRatesInput() {
                     var input = {
                         OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                         OwnerId: getOwnerId(),
@@ -411,6 +393,15 @@
                     }
 
                     return input;
+                }
+                function getApplyCalculatedRatesInput(validCalculatedRates) {
+                    return {
+                        OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
+                        OwnerId: getOwnerId(),
+                        CalculatedRates: validCalculatedRates,
+                        EffectiveOn: new Date(),
+                        CurrencyId: getCurrencyId()
+                    };
                 }
                 function onRatesApplied() {
                     VRNotificationService.showSuccess("Rates applied");
@@ -864,6 +855,7 @@
             $scope.showSettingsButton = show;
             $scope.showPricingButton = show;
             $scope.showCancelButton = show;
+            $scope.showApplyButton = show;
         }
 
         function defineSaveButtonMenuActions() {

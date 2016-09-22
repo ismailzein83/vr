@@ -118,55 +118,6 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        public void AddNormalRatesToDraft(AddNormalRatesToDraftInput input)
-        {
-            if (input.NormalRatesByZone == null)
-                return;
-
-            Changes existingDraft = GetDraft(input.OwnerType, input.OwnerId);
-            
-            var newDraft = new Changes();
-            newDraft.CurrencyId = input.CurrencyId;
-            newDraft.ZoneChanges = new List<ZoneChanges>();
-
-            var manager = new RatePlanManager();
-            RatePlanSettingsData settings = manager.GetRatePlanSettingsData();
-
-            ZoneChanges zoneDraft;
-            List<DraftRateToChange> newRates;
-            var saleZoneManager = new SaleZoneManager();
-
-            foreach (KeyValuePair<long, decimal> kvp in input.NormalRatesByZone)
-            {
-                zoneDraft = (existingDraft != null && existingDraft.ZoneChanges != null) ? existingDraft.ZoneChanges.FindRecord(x => x.ZoneId == kvp.Key) : null;
-
-                if (zoneDraft != null)
-                {
-                    newRates = zoneDraft.NewRates != null ? new List<DraftRateToChange>(zoneDraft.NewRates) : new List<DraftRateToChange>();
-                }
-                else
-                {
-                    zoneDraft = new ZoneChanges();
-                    newRates = new List<DraftRateToChange>();
-                }
-
-                newRates.Add(new DraftRateToChange()
-                {
-                    ZoneId = kvp.Key,
-                    NormalRate = kvp.Value,
-                    BED = input.EffectiveOn.Date.AddDays(settings.IncreasedRateDayOffset)
-                });
-
-                zoneDraft.ZoneId = kvp.Key;
-                zoneDraft.ZoneName = saleZoneManager.GetSaleZoneName(kvp.Key);
-                zoneDraft.NewRates = newRates;
-
-                newDraft.ZoneChanges.Add(zoneDraft);
-            }
-
-            SaveDraft(input.OwnerType, input.OwnerId, newDraft);
-        }
-
         private IEnumerable<DraftRateToChange> GetChangedOtherRates(IEnumerable<DraftRateToChange> changedRates)
         {
             var changedOtherRates = new List<DraftRateToChange>();

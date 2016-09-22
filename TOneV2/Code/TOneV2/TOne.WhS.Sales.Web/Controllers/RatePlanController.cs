@@ -81,11 +81,19 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpPost]
-        [Route("ApplyCalculatedRates")]
-        public IEnumerable<InvalidRate> ApplyCalculatedRates(ApplyCalculatedRatesInput input)
+        [Route("TryApplyCalculatedRates")]
+        public CalculatedRates TryApplyCalculatedRates(TryApplyCalculatedRatesInput input)
         {
-            var ratePlanPricingManager = new RatePlanPricingManager();
-            return ratePlanPricingManager.ApplyCalculatedRates(input);
+            var manager = new RatePlanPricingManager();
+            return manager.TryApplyCalculatedRates(input);
+        }
+
+        [HttpPost]
+        [Route("ApplyCalculatedRates")]
+        public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
+        {
+            var manager = new RatePlanPricingManager();
+            manager.ApplyCalculatedRates(input);
         }
 
         [HttpGet]
@@ -134,14 +142,6 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             var manager = new DefaultItemManager();
             return manager.GetInheritedService(ownerType, ownerId, effectiveOn, zoneId);
-        }
-
-        [HttpPost]
-        [Route("AddNormalRatesToDraft")]
-        public void AddNormalRatesToDraft(AddNormalRatesToDraftInput input)
-        {
-            var manager = new RatePlanDraftManager();
-            manager.AddNormalRatesToDraft(input);
         }
     }
 }

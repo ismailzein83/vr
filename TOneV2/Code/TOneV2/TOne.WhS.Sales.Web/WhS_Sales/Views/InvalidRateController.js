@@ -6,8 +6,10 @@
 
     function InvalidRateController($scope, UtilsService, VRNavigationService)
     {
-        var invalidRates;
+        var calculatedRates;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var areAllRatesExcluded = false;
 
         loadParameters();
         defineScope();
@@ -18,7 +20,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                invalidRates = parameters.invalidRates;
+                calculatedRates = parameters.calculatedRates;
             }
         }
         function defineScope()
@@ -43,18 +45,36 @@
 
             $scope.scopeModel.save = function ()
             {
-                var normalRatesByZone = {};
+                var validCalculatedRates = [];
+                if (calculatedRates.ValidCalculatedRates != null) {
+                    for (var i = 0; i < calculatedRates.ValidCalculatedRates.length; i++)
+                        validCalculatedRates.push(calculatedRates.ValidCalculatedRates[i]);
+                }
 
                 for (var i = 0; i < $scope.scopeModel.invalidRates.length; i++)
                 {
                     var dataItem = $scope.scopeModel.invalidRates[i];
-                    if (!dataItem.isExcluded)
-                        normalRatesByZone[dataItem.ZoneId] = dataItem.newRate;
+                    if (!dataItem.isExcluded) {
+                        validCalculatedRates.push({
+                            ZoneId: dataItem.ZoneId,
+                            ZoneName: dataItem.ZoneName,
+                            CurrentRate: dataItem.CurrentRate,
+                            CalculatedRate: dataItem.newRate
+                        });
+                    }
                 }
 
                 if ($scope.onSaved != undefined && $scope.onSaved != null && typeof ($scope.onSaved) == 'function')
-                    $scope.onSaved(normalRatesByZone);
+                    $scope.onSaved(validCalculatedRates);
+
                 $scope.modalContext.closeModal();
+            };
+
+            $scope.scopeModel.excludeAll = function () {
+                areAllRatesExcluded = !areAllRatesExcluded;
+                for (var i = 0; i < $scope.scopeModel.invalidRates.length; i++) {
+                    $scope.scopeModel.invalidRates[i].isExcluded = areAllRatesExcluded;
+                }
             };
 
             $scope.scopeModel.cancel = function () {
@@ -77,9 +97,11 @@
         {
             gridReadyDeferred.promise.then(function ()
             {
-                if (invalidRates != undefined) {
-                    for (var i = 0; i < invalidRates.length; i++) {
-                        var dataItem = invalidRates[i];
+                if (calculatedRates != undefined && calculatedRates.InvalidCalculatedRates != null)
+                {
+                    for (var i = 0; i < calculatedRates.InvalidCalculatedRates.length; i++)
+                    {
+                        var dataItem = calculatedRates.InvalidCalculatedRates[i];
                         dataItem.isExcluded = false;
                         $scope.scopeModel.invalidRates.push(dataItem);
                     }

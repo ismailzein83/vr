@@ -47,6 +47,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "SaveChanges"), input);
         }
 
+        function TryApplyCalculatedRates(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "TryApplyCalculatedRates"), input);
+        }
+
         function ApplyCalculatedRates(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ApplyCalculatedRates"), input);
         }
@@ -93,10 +97,6 @@
             });
         }
 
-        function AddNormalRatesToDraft(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "AddNormalRatesToDraft"), input);
-        }
-
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -106,14 +106,14 @@
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
             GetRateCalculationMethodTemplates: GetRateCalculationMethodTemplates,
             SaveChanges: SaveChanges,
+            TryApplyCalculatedRates: TryApplyCalculatedRates,
             ApplyCalculatedRates: ApplyCalculatedRates,
             CheckIfDraftExists: CheckIfDraftExists,
             DeleteDraft: DeleteDraft,
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
             DeleteChangedRates: DeleteChangedRates,
-            GetInheritedService: GetInheritedService,
-            AddNormalRatesToDraft: AddNormalRatesToDraft
+            GetInheritedService: GetInheritedService
         };
 
     }

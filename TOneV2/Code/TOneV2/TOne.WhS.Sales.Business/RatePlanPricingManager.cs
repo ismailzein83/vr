@@ -12,46 +12,70 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanPricingManager
     {
-        #region Apply Calculated Rates
-
-        public IEnumerable<InvalidRate> ApplyCalculatedRates(ApplyCalculatedRatesInput input)
+        public CalculatedRates TryApplyCalculatedRates(TryApplyCalculatedRatesInput input)
         {
-            IEnumerable<InvalidRate> invalidRates;
+            CalculatedRates calculatedRates = GetCalculatedRates(input);
+
+            if (calculatedRates.InvalidCalculatedRates.Count > 0)
+                return calculatedRates;
+
+            else if (calculatedRates.ValidCalculatedRates.Count > 0)
+            {
+                var context = new ApplyCalculatedRatesInput()
+                {
+                    OwnerType = input.OwnerType,
+                    OwnerId = input.OwnerId,
+                    CalculatedRates = calculatedRates.ValidCalculatedRates,
+                    EffectiveOn = input.EffectiveOn,
+                    CurrencyId = input.CurrencyId
+                };
+                ApplyCalculatedRates(context);
+            }
+
+            return null;
+        }
+        private CalculatedRates GetCalculatedRates(TryApplyCalculatedRatesInput input)
+        {
+            CalculatedRates rates = new CalculatedRates()
+            {
+                ValidCalculatedRates = new List<CalculatedZoneRate>(),
+                InvalidCalculatedRates = new List<CalculatedZoneRate>()
+            };
+
+            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(input);
+
+            foreach (ZoneItem zoneItem in zoneItems)
+            {
+                var rate = new CalculatedZoneRate()
+                {
+                    ZoneId = zoneItem.ZoneId,
+                    ZoneName = zoneItem.ZoneName,
+                    CurrentRate = zoneItem.CurrentRate,
+                    CalculatedRate = zoneItem.CalculatedRate.Value
+                };
+                if (zoneItem.CalculatedRate.Value > 0)
+                    rates.ValidCalculatedRates.Add(rate);
+                else
+                    rates.InvalidCalculatedRates.Add(rate);
+            }
+
+            return rates;
+        }
+        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(TryApplyCalculatedRatesInput input)
+        {
             var ratePlanManager = new RatePlanManager();
 
             int? sellingNumberPlanId = ratePlanManager.GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
             int? sellingProductId = ratePlanManager.GetSellingProductId(input.OwnerType, input.OwnerId, input.EffectiveOn, false);
 
-            ApplyCalculatedRates(input, sellingNumberPlanId.Value, sellingProductId.Value, out invalidRates);
+            if (!sellingNumberPlanId.HasValue)
+                throw new NullReferenceException("sellingNumberPlanId");
+            if (!sellingProductId.HasValue)
+                throw new NullReferenceException("sellingProductId");
 
-            return invalidRates;
-        }
-
-        private IEnumerable<InvalidRate> ApplyCalculatedRates(ApplyCalculatedRatesInput input, int sellingNumberPlanId, int sellingProductId, out IEnumerable<InvalidRate> invalidRates)
-        {
-            invalidRates = null;
-
-            IEnumerable<ZoneItem> zoneItems = GetZoneItemsWithCalculatedRate(input, sellingNumberPlanId, sellingProductId);
-
-            if (zoneItems != null)
-            {
-                Changes newDraft = GetNewDraft(zoneItems, input.EffectiveOn, input.CurrencyId, out invalidRates);
-
-                if (newDraft != null)
-                {
-                    var draftManager = new RatePlanDraftManager();
-                    draftManager.SaveDraft(input.OwnerType, input.OwnerId, newDraft);
-                }
-            }
-
-            return invalidRates;
-        }
-
-        private IEnumerable<ZoneItem> GetZoneItemsWithCalculatedRate(ApplyCalculatedRatesInput input, int sellingNumberPlanId, int sellingProductId)
-        {
             // Get the sale zones of the owner
             RatePlanZoneManager ratePlanZoneManager = new RatePlanZoneManager();
-            IEnumerable<SaleZone> zones = ratePlanZoneManager.GetFilteredZones(input.OwnerType, input.OwnerId, sellingNumberPlanId, input.EffectiveOn, input.CountryIds, null, input.ZoneNameFilterType, input.ZoneNameFilter);
+            IEnumerable<SaleZone> zones = ratePlanZoneManager.GetFilteredZones(input.OwnerType, input.OwnerId, sellingNumberPlanId.Value, input.EffectiveOn, input.CountryIds, null, input.ZoneNameFilterType, input.ZoneNameFilter);
 
             if (zones == null)
                 return null;
@@ -66,8 +90,8 @@ namespace TOne.WhS.Sales.Business
             var draftManager = new RatePlanDraftManager();
             Changes changes = draftManager.GetDraft(input.OwnerType, input.OwnerId);
 
-            var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, input.EffectiveOn, changes, input.CurrencyId);
-            var routingProductSetter = new ZoneRoutingProductManager(sellingProductId, customerId, input.EffectiveOn, changes);
+            var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, changes, input.CurrencyId);
+            var routingProductSetter = new ZoneRoutingProductManager(sellingProductId.Value, customerId, input.EffectiveOn, changes);
 
             foreach (SaleZone zone in zones)
             {
@@ -88,61 +112,61 @@ namespace TOne.WhS.Sales.Business
             ZoneRouteOptionManager routeOptionSetter = new ZoneRouteOptionManager(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
 
             routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
-            return zoneItems.FindAllRecords(itm => itm.CalculatedRate != null);
+            return zoneItems.FindAllRecords(x => x.CalculatedRate != null);
         }
 
-        private Changes GetNewDraft(IEnumerable<ZoneItem> zoneItems, DateTime effectiveOn, int currencyId, out IEnumerable<InvalidRate> invalidRates)
+        public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
         {
-            // Create a list of zone changes, each having a new rate, from the calculated rates
-            List<ZoneChanges> zoneChanges = new List<ZoneChanges>();
+            Changes newDraft = GetNewDraft(input.CalculatedRates, input.EffectiveOn, input.CurrencyId);
+
+            if (newDraft != null)
+            {
+                var draftManager = new RatePlanDraftManager();
+                draftManager.SaveDraft(input.OwnerType, input.OwnerId, newDraft);
+            }
+        }
+        private Changes GetNewDraft(IEnumerable<CalculatedZoneRate> calculatedRates, DateTime effectiveOn, int currencyId)
+        {
+            Changes newDraft = null;
+
+            if (calculatedRates == null)
+                return newDraft;
+
+            newDraft = new Changes()
+            {
+                CurrencyId = currencyId,
+                ZoneChanges = new List<ZoneChanges>()
+            };
 
             var ratePlanManager = new RatePlanManager();
             RatePlanSettingsData ratePlanSettings = ratePlanManager.GetRatePlanSettingsData();
 
-            var invalidRateList = new List<InvalidRate>();
             DateTime newRateBED;
 
-            foreach (ZoneItem zoneItem in zoneItems)
+            foreach (CalculatedZoneRate calculatedRate in calculatedRates)
             {
-                if (!zoneItem.CalculatedRate.HasValue)
-                    continue;
-
-                if (zoneItem.CalculatedRate.Value > 0)
-                {
-                    newRateBED = (!zoneItem.CurrentRate.HasValue || zoneItem.CalculatedRate.Value > zoneItem.CurrentRate.Value) ?
+                newRateBED = (!calculatedRate.CurrentRate.HasValue || calculatedRate.CalculatedRate > calculatedRate.CurrentRate.Value) ?
                     effectiveOn.AddDays(ratePlanSettings.IncreasedRateDayOffset) :
                     effectiveOn.AddDays(ratePlanSettings.DecreasedRateDayOffset);
 
-                    DraftRateToChange newRate = new DraftRateToChange()
-                    {
-                        ZoneId = zoneItem.ZoneId,
-                        NormalRate = zoneItem.CalculatedRate.Value,
-                        BED = newRateBED
-                    };
-
-                    var zoneDraft = new ZoneChanges() { ZoneId = zoneItem.ZoneId, ZoneName = zoneItem.ZoneName, NewRates = new List<DraftRateToChange>() { newRate } };
-                    zoneChanges.Add(zoneDraft);
-                }
-                else
+                DraftRateToChange newRate = new DraftRateToChange()
                 {
-                    invalidRateList.Add(new InvalidRate()
-                    {
-                        ZoneId = zoneItem.ZoneId,
-                        ZoneName = zoneItem.ZoneName,
-                        Rate = zoneItem.CalculatedRate.Value
-                    });
-                }
+                    ZoneId = calculatedRate.ZoneId,
+                    NormalRate = calculatedRate.CalculatedRate,
+                    BED = newRateBED
+                };
+
+                var zoneDraft = new ZoneChanges()
+                {
+                    ZoneId = calculatedRate.ZoneId,
+                    ZoneName = calculatedRate.ZoneName,
+                    NewRates = new List<DraftRateToChange>() { newRate }
+                };
+
+                newDraft.ZoneChanges.Add(zoneDraft);
             }
 
-            invalidRates = invalidRateList.Count > 0 ? invalidRateList : null;
-
-            return new Changes()
-            {
-                CurrencyId = currencyId,
-                ZoneChanges = zoneChanges
-            };
+            return newDraft;
         }
-
-        #endregion
     }
 }

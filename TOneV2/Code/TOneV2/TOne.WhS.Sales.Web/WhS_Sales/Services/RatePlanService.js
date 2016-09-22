@@ -68,16 +68,15 @@
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureRate.html", parameters, settings);
         }
 
-        function viewInvalidRates(invalidRates, onSaved, onCancelled)
+        function viewInvalidRates(calculatedRates, onSaved)
         {
             var parameters = {
-                invalidRates: invalidRates
+                calculatedRates: calculatedRates
             };
 
             var settings = {
                 onScopeReady: function (modalScope) {
                     modalScope.onSaved = onSaved;
-                    modalScope.onCancelled = onCancelled;
                 }
             };
 

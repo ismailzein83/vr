@@ -1,16 +1,19 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_InvalidRateController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
-        <vr-form name="formInvalidAppliedZoneRates">
+        <vr-form name="formInvalidRate">
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.invalidRates" maxheight="500px" hidegridmenu="true">
                         <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Calculated Rate'" field="'CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Exclude'" disablesorting="true">
                             <vr-switch value="dataItem.isExcluded"></vr-switch>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'New Rate'" disablesorting="true">
-                            <vr-textbox type="number" value="dataItem.newRate" minvalue="0" customvalidate="viewScope.scopeModel.isNewRateValid(dataItem)" isrequired="!dataItem.isExcluded"></vr-textbox>
+                            <span vr-disabled="dataItem.isExcluded">
+                                <vr-textbox type="number" value="dataItem.newRate" minvalue="0" customvalidate="viewScope.scopeModel.isNewRateValid(dataItem)" isrequired="!dataItem.isExcluded"></vr-textbox>
+                            </span>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
@@ -20,7 +23,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formInvalidAppliedZoneRates" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formInvalidRate" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="ExcludeAll" data-onclick="scopeModel.excludeAll"></vr-button>
                 <vr-button type="Cancel" data-onclick="scopeModel.cancel"></vr-button>
             </div>
         </vr-actionbar>
