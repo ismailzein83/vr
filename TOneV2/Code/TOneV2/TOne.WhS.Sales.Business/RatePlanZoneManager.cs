@@ -11,39 +11,51 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanZoneManager
     {
-        public IEnumerable<SaleZone> GetRatePlanZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn, char zoneLetter, int fromRow, int toRow)
+        public IEnumerable<SaleZone> GetRatePlanZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn, IEnumerable<int> countryIds, char zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter, int fromRow, int toRow)
         {
-            IEnumerable<SaleZone> zones = GetZones(ownerType, ownerId, sellingNumberPlanId, effectiveOn);
-            zones = GetFilteredZones(zones, zoneLetter);
+            IEnumerable<SaleZone> zones = GetFilteredZones(ownerType, ownerId, sellingNumberPlanId, effectiveOn, countryIds, zoneLetter, zoneNameFilterType, zoneNameFilter);
             return GetPagedZones(zones, fromRow, toRow);
         }
 
-        // GetZones is public because it's invoked by ApplyCalculatedRates of RatePlanManager
-        public IEnumerable<SaleZone> GetZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn)
+        public IEnumerable<SaleZone> GetFilteredZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn, IEnumerable<int> countryIds, char? zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter)
         {
+            IEnumerable<SaleZone> zones = null;
+
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-                if (sellingNumberPlanId != null)
-                {
-                    SaleZoneManager saleZoneManager = new SaleZoneManager();
-                    return saleZoneManager.GetSaleZones((int)sellingNumberPlanId, effectiveOn);
-                }
+                if (!sellingNumberPlanId.HasValue)
+                    throw new ArgumentNullException("sellingNumberPlanId");
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                zones = saleZoneManager.GetSaleZones(sellingNumberPlanId.Value, effectiveOn);
             }
             else
             {
                 CustomerZoneManager manager = new CustomerZoneManager();
-                return manager.GetCustomerSaleZones(ownerId, effectiveOn, false);
+                zones = manager.GetCustomerSaleZones(ownerId, effectiveOn, false);
             }
 
-            return null;
+            return GetMatchedZones(zones, countryIds, zoneLetter, zoneNameFilterType, zoneNameFilter);
         }
 
-        IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> zones, char zoneLetter)
+        private IEnumerable<SaleZone> GetMatchedZones(IEnumerable<SaleZone> zones, IEnumerable<int> countryIds, char? zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter)
         {
-            return zones.FindAllRecords(itm => itm.Name != null && itm.Name.Length > 0 && char.ToLower(itm.Name.ElementAt(0)) == char.ToLower(zoneLetter));
+            if (zones == null)
+                return null;
+
+            if (zoneNameFilterType.HasValue && zoneNameFilter == null)
+                throw new ArgumentNullException("zoneNameFilter");
+            if (zoneNameFilter != null && !zoneNameFilterType.HasValue)
+                throw new ArgumentNullException("zoneNameFilterType");
+
+            return zones.FindAllRecords
+            (
+                x => (countryIds == null || countryIds.Contains(x.CountryId))
+                && (!zoneLetter.HasValue || (x.Name != null && x.Name.Length > 0 && char.ToLower(x.Name.ElementAt(0)) == char.ToLower(zoneLetter.Value)))
+                && (!zoneNameFilterType.HasValue || Vanrise.Common.Utilities.IsTextMatched(x.Name, zoneNameFilter, zoneNameFilterType.Value))
+            );
         }
 
-        IEnumerable<SaleZone> GetPagedZones(IEnumerable<SaleZone> zones, int fromRow, int toRow)
+        private IEnumerable<SaleZone> GetPagedZones(IEnumerable<SaleZone> zones, int fromRow, int toRow)
         {
             if (zones == null)
                 return zones;

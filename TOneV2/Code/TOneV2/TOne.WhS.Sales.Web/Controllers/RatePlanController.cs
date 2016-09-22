@@ -24,12 +24,12 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.ValidateCustomer(customerId, effectiveOn);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetZoneLetters")]
-        public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
+        public IEnumerable<char> GetZoneLetters(ZoneLettersInput input)
         {
             var manager = new RatePlanManager();
-            return manager.GetZoneLetters(ownerType, ownerId);
+            return manager.GetZoneLetters(input);
         }
 
         [HttpPost]

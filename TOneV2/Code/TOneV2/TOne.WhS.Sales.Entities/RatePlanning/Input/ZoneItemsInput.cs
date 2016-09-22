@@ -26,5 +26,8 @@ namespace TOne.WhS.Sales.Entities
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }
         public Guid CostCalculationMethodConfigId { get; set; }
         public RateCalculationMethod RateCalculationMethod { get; set; }
+        public IEnumerable<int> CountryIds { get; set; }
+        public string ZoneNameFilter { get; set; }
+        public Vanrise.Entities.TextFilterType? ZoneNameFilterType { get; set; }
     }
 }

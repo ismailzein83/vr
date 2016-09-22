@@ -44,27 +44,32 @@ namespace TOne.WhS.Sales.Business
 
         #region Get Zone Letters
 
-        public IEnumerable<char> GetZoneLetters(SalePriceListOwnerType ownerType, int ownerId)
+        public IEnumerable<char> GetZoneLetters(ZoneLettersInput input)
         {
-            IEnumerable<char> zoneLetters = null;
+            IEnumerable<SaleZone> zones = null;
 
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            if (input.OwnerType == SalePriceListOwnerType.SellingProduct)
             {
-                IEnumerable<SaleZone> saleZones = GetSellingProductZones(ownerId, DateTime.Now);
-
-                if (saleZones != null)
-                    zoneLetters = saleZones.MapRecords(itm => char.ToUpper(itm.Name[0]), itm => itm.Name != null && itm.Name.Length > 0).Distinct().OrderBy(itm => itm);
+                zones = GetSellingProductZones(input.OwnerId, input.EffectiveOn);
             }
-            else if (ownerType == SalePriceListOwnerType.Customer)
+            else
             {
-                CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-                zoneLetters = customerZoneManager.GetCustomerZoneLetters(ownerId);
+                var customerZoneManager = new CustomerZoneManager();
+                zones = customerZoneManager.GetCustomerSaleZones(input.OwnerId, input.EffectiveOn, false);
             }
 
-            return zoneLetters;
+            zones = zones.FindAllRecords
+            (
+                x => (input.CountryIds == null || input.CountryIds.Contains(x.CountryId))
+                && (!input.ZoneNameFilterType.HasValue || Vanrise.Common.Utilities.IsTextMatched(x.Name, input.ZoneNameFilter, input.ZoneNameFilterType.Value))
+            );
+
+            if (zones == null)
+                return null;
+            return zones.MapRecords(x => char.ToUpper(x.Name[0]), x => x.Name != null && x.Name.Length > 0).Distinct().OrderBy(x => x);
         }
 
-        IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)
+        private IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)
         {
             IEnumerable<SaleZone> zones;
 
@@ -90,7 +95,7 @@ namespace TOne.WhS.Sales.Business
             int? sellingNumberPlanId = GetSellingNumberPlanId(input.Filter.OwnerType, input.Filter.OwnerId);
 
             RatePlanZoneManager manager = new RatePlanZoneManager();
-            IEnumerable<SaleZone> zones = manager.GetRatePlanZones(input.Filter.OwnerType, input.Filter.OwnerId, sellingNumberPlanId, DateTime.Now, input.Filter.ZoneLetter, input.FromRow, input.ToRow);
+            IEnumerable<SaleZone> zones = manager.GetRatePlanZones(input.Filter.OwnerType, input.Filter.OwnerId, sellingNumberPlanId, DateTime.Now, input.Filter.CountryIds, input.Filter.ZoneLetter, input.Filter.ZoneNameFilterType, input.Filter.ZoneNameFilter, input.FromRow, input.ToRow);
 
             if (zones != null)
             {

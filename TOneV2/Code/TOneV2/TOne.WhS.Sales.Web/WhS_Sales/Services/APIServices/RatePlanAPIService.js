@@ -15,11 +15,8 @@
             });
         }
 
-        function GetZoneLetters(ownerType, ownerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneLetters"), {
-                ownerType: ownerType,
-                ownerId: ownerId
-            });
+        function GetZoneLetters(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneLetters"), input);
         }
 
         function GetZoneItems(input) {

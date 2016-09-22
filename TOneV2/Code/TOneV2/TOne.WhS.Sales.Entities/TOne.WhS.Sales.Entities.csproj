@@ -127,6 +127,7 @@
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemsInput.cs" />
+    <Compile Include="RatePlanning\Input\ZoneLettersInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneRateChangesQuery.cs" />
     <Compile Include="RatePlanning\Input\ZoneRoutingProductChangesQuery.cs" />
     <Compile Include="RatePlanning\Draft\Rate\DraftRateToClose.cs" />

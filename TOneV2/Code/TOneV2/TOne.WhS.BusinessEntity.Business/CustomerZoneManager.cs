@@ -57,16 +57,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return countriesToSell;
         }
-        public IEnumerable<char> GetCustomerZoneLetters(int customerId)
-        {
-            IEnumerable<char> letters = null;
-            IEnumerable<SaleZone> saleZones = GetCustomerSaleZones(customerId, DateTime.Now, false);
-
-            if (saleZones != null)
-                letters = saleZones.MapRecords(itm => char.ToUpper(itm.Name[0]), itm => itm.Name != null && itm.Name.Length > 0).Distinct().OrderBy(itm => itm);
-
-            return letters;
-        }
         public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
         {
             IEnumerable<SaleZone> saleZones = null;

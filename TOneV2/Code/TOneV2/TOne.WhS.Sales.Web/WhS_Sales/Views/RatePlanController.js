@@ -27,6 +27,12 @@
         var draftCurrencyId;
         var defaultCustomerCurrencyId;
 
+        var countrySelectorAPI;
+        var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var textFilterAPI;
+        var textFilterReadyDeferred = UtilsService.createPromiseDeferred();
+
         var defaultItem;
 
         var gridAPI;
@@ -179,6 +185,16 @@
                 });
             };
 
+            $scope.onCountrySelectorReady = function (api) {
+                countrySelectorAPI = api;
+                countrySelectorReadyDeferred.resolve();
+            };
+
+            $scope.onTextFilterReady = function (api) {
+                textFilterAPI = api;
+                textFilterReadyDeferred.resolve();
+            };
+
             $scope.defaultItemTabs = [{
                 title: "Default Services",
                 directive: "vr-whs-sales-default-service",
@@ -223,9 +239,6 @@
                 var customerId = $scope.selectedCustomer.CarrierAccountId;
                 var onCountriesSold = function (customerZones)
                 {
-                    $scope.showZoneLetters = false; // This is to delete the choices directive from the dom, via ng-if, to avoid index problems
-                    $scope.connector.selectedZoneLetterIndex = 0;
-
                     if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
                         loadRatePlan();
                 };
@@ -377,7 +390,7 @@
                 });
 
                 function getApplyCalculatedRatesInput() {
-                    return {
+                    var input = {
                         OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                         OwnerId: getOwnerId(),
                         EffectiveOn: new Date(),
@@ -387,8 +400,17 @@
                         CostCalculationMethods: settings ? settings.costCalculationMethods : null,
                         SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
                         RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
-                        CurrencyId: getCurrencyId()
+                        CurrencyId: getCurrencyId(),
+                        CountryIds: countrySelectorAPI.getSelectedIds()
                     };
+
+                    var textFilterData = textFilterAPI.getData();
+                    if (textFilterData != undefined) {
+                        input.ZoneNameFilterType = textFilterData.TextFilterType;
+                        input.ZoneNameFilter = textFilterData.Text;
+                    }
+
+                    return input;
                 }
                 function onRatesApplied() {
                     VRNotificationService.showSuccess("Rates applied");
@@ -445,7 +467,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, getSystemCurrencyId]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, getSystemCurrencyId, loadCountrySelector, loadTextFilter]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterSection = false;
@@ -510,11 +532,33 @@
                 systemCurrencyId = response;
             });
         }
+        function loadCountrySelector()
+        {
+            var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            countrySelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, undefined, countrySelectorLoadDeferred);
+            });
+
+            return countrySelectorLoadDeferred.promise;
+        }
+        function loadTextFilter() {
+            var textFilterLoadDeferred = UtilsService.createPromiseDeferred();
+            
+            textFilterReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(textFilterAPI, undefined, textFilterLoadDeferred);
+            });
+
+            return textFilterLoadDeferred.promise;
+        }
 
         function loadRatePlan()
         {
             $scope.isLoadingRatePlan = true;
             var promises = [];
+
+            $scope.showZoneLetters = false; // This is to delete the choices directive from the dom, via ng-if, to avoid index problems
+            $scope.connector.selectedZoneLetterIndex = 0;
 
             var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
 
@@ -545,11 +589,17 @@
                 }
                 else {
                     loadGridDeferred.resolve();
+                    showRatePlan(false);
 
-                    if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-                        VRNotificationService.showInformation('No effective zones exist for this selling product');
-                    else
-                        VRNotificationService.showInformation("No countries are sold to this customer or no effective zones exist for its assigned selling product");
+                    if (isFilterApplied()) {
+                        VRNotificationService.showInformation('No effective zones match the filter');
+                    }
+                    else {
+                        if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+                            VRNotificationService.showInformation('No effective zones exist for this selling product');
+                        else
+                            VRNotificationService.showInformation("No countries are sold to this customer or no effective zones exist for its assigned selling product");
+                    }
                 }
             });
 
@@ -590,7 +640,20 @@
             }
 
             function getZoneLetters() {
-                return WhS_Sales_RatePlanAPIService.GetZoneLetters(ownerTypeValue, getOwnerId()).then(function (response) {
+                var input = {
+                    OwnerType: ownerTypeValue,
+                    OwnerId: getOwnerId(),
+                    EffectiveOn: new Date(),
+                    CountryIds: countrySelectorAPI.getSelectedIds()
+                };
+
+                var textFilterData = textFilterAPI.getData();
+                if (textFilterData != undefined) {
+                    input.ZoneNameFilterType = textFilterData.TextFilterType;
+                    input.ZoneNameFilter = textFilterData.Text;
+                }
+
+                return WhS_Sales_RatePlanAPIService.GetZoneLetters(input).then(function (response) {
                     if (response) {
                         $scope.zoneLetters.length = 0;
 
@@ -614,7 +677,7 @@
             VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
 
             function getGridQuery() {
-                return {
+                var gridQuery = {
                     OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
                     ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
@@ -626,8 +689,17 @@
                     RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
                     Settings: ratePlanSettingsData,
                     CurrencyId: getCurrencyId(),
-                    onNewZoneServiceChanged: onNewZoneServiceChanged
+                    onNewZoneServiceChanged: onNewZoneServiceChanged,
+                    CountryIds: countrySelectorAPI.getSelectedIds()
                 };
+
+                var textFilterData = textFilterAPI.getData();
+                if (textFilterData != undefined) {
+                    gridQuery.ZoneNameFilter = textFilterData.Text;
+                    gridQuery.ZoneNameFilterType = textFilterData.TextFilterType;
+                }
+
+                return gridQuery;
             }
 
             return gridLoadDeferred.promise;
@@ -864,6 +936,15 @@
         }
         function getCurrencyId() {
             return (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? systemCurrencyId : currencySelectorAPI.getSelectedIds();
+        }
+        function isFilterApplied() {
+            var selectedCountryIds = countrySelectorAPI.getSelectedIds();
+            if (selectedCountryIds != undefined)
+                return true;
+            var textFilterData = textFilterAPI.getData();
+            if (textFilterData != undefined)
+                return true;
+            return false;
         }
     }
 
