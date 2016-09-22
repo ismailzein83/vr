@@ -172,9 +172,11 @@
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-grid.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-settings.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
-    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RateDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByRateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByServiceDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-rate.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-service.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\Templates\ExcludedOptionDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />

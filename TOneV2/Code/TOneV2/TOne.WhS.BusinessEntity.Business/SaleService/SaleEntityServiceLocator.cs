@@ -55,6 +55,22 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleEntityService;
         }
 
+        public SaleEntityService GetRoutingCustomerZoneService(int customerId, int sellingProductId, long zoneId)
+        {
+            SaleEntityService saleEntityService = GetCustomerZoneService(customerId, sellingProductId, zoneId);
+
+            if (saleEntityService == null)
+                throw new NullReferenceException(string.Format("customerService. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerId, sellingProductId));
+
+            if (saleEntityService.Services == null)
+                throw new NullReferenceException(string.Format("customerService.Services. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerId, sellingProductId));
+
+            if (saleEntityService.Services.Count == 0)
+                throw new Exception(string.Format("customerService.Services count is 0. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerId, sellingProductId));
+
+            return saleEntityService;
+        }
+
         private bool HasDefaultService(SalePriceListOwnerType ownerType, int ownerId, out SaleEntityService saleEntityService)
         {
             SaleEntityDefaultService defaultService = _reader.GetSaleEntityDefaultService(ownerType, ownerId);

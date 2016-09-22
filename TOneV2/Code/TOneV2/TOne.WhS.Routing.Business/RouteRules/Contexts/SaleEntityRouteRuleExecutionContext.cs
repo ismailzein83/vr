@@ -16,6 +16,7 @@ namespace TOne.WhS.Routing.Business
         internal List<RouteOptionRuleTarget> _options = new List<RouteOptionRuleTarget>();
         HashSet<int> _filteredSupplierIds;
         Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions;
+
         public SaleEntityRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
         {
             _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
@@ -40,6 +41,9 @@ namespace TOne.WhS.Routing.Business
         }
 
         public int? NumberOfOptions { get; internal set; }
+
+        public HashSet<int> CustomerServices { get; internal set; }
+
 
         public bool TryAddOption(RouteOptionRuleTarget optionTarget)
         {
@@ -125,7 +129,6 @@ namespace TOne.WhS.Routing.Business
             }
             return _validSupplierCodeMatches;
         }
-
 
         public SupplierCodeMatchWithRate GetSupplierCodeMatch(int supplierId)
         {

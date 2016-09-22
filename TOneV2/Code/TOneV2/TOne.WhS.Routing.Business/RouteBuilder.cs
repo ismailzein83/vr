@@ -151,11 +151,13 @@ namespace TOne.WhS.Routing.Business
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             var maxNumberOfOptions = configManager.GetRouteBuildNumberOfOptions();
+            
+            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
+            routeRuleExecutionContext.CustomerServices = customerZoneDetail.SaleEntityServiceIds;
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
@@ -176,7 +178,7 @@ namespace TOne.WhS.Routing.Business
                     route.Options = new List<RouteOption>();
                     foreach (RouteOptionRuleTarget targetOption in routeOptionRuleTargets)
                     {
-                        if (!routeRule.Settings.IsOptionFiltered(routeRuleTarget, targetOption))
+                        if (!routeRule.Settings.IsOptionFiltered(routeRuleExecutionContext, routeRuleTarget, targetOption))
                         {
                             RouteOption routeOption = routeRuleExecutionContext.CreateOptionFromTarget(targetOption);
                             if (!routeOption.IsBlocked)

@@ -23,7 +23,7 @@ namespace TOne.WhS.Routing.Entities
             return null;
         }
 
-        public virtual bool IsOptionFiltered(RouteRuleTarget target, RouteOptionRuleTarget option)
+        public virtual bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
             return false;
         }

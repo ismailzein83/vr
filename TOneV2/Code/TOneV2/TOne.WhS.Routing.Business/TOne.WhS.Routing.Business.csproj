@@ -86,6 +86,7 @@
     <Compile Include="CustomerRouteManager.cs" />
     <Compile Include="Extensions\RouteSyncReader.cs" />
     <Compile Include="RouteRules\Filters\RateOptionFilter.cs" />
+    <Compile Include="RouteRules\Filters\ServiceOptionFilter.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\ExcludedOptions.cs" />
     <Compile Include="TrafficStatsQualityMeasure\TrafficStatsQualityMeasureManager.cs" />
     <Compile Include="RouteOptionRuleManager.cs" />

@@ -10,7 +10,7 @@ using TOne.WhS.BusinessEntity.Data;
 using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
-{
+{ 
     public class ZoneServiceConfigManager
     {
        
@@ -53,8 +53,8 @@ namespace TOne.WhS.BusinessEntity.Business
                    return rateTypes.ToDictionary(x => x.ZoneServiceConfigId, x => x);
                });
         }
-
        
+
         public IEnumerable<ZoneServiceConfigInfo> GetAllZoneServiceConfigs(ZoneServiceConfigFilter filter)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
@@ -96,6 +96,29 @@ namespace TOne.WhS.BusinessEntity.Business
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
             return allZoneServiceConfigs.GetRecord(ZoneServiceConfigId);
         }
+        public List<ZoneService> GetChildServicesByZoneServices(List<ZoneService> zoneServices)
+        {
+            IEnumerable<ZoneServiceConfig> zoneServiceConfigs = this.GetCachedZoneServiceConfigs().Values;
+
+            if (zoneServices == null || zoneServiceConfigs == null)
+                return null;
+
+            List<ZoneService> supplierChildServices = new List<ZoneService>();
+
+            foreach (ZoneService zoneService in zoneServices)
+            {
+                foreach (ZoneServiceConfig zoneServiceConfig in zoneServiceConfigs)
+                {
+                    if (zoneServiceConfig.Settings.ParentId.HasValue && zoneServiceConfig.Settings.ParentId.Value == zoneService.ServiceId)
+                    {
+                        supplierChildServices.Add(new ZoneService() { ServiceId = zoneServiceConfig.ZoneServiceConfigId });
+                    }
+                }
+            }
+
+            return supplierChildServices;
+        }
+
         public TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail>();

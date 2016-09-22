@@ -25,7 +25,7 @@ function (UtilsService, WhS_Routing_RateOptionTypeEnum, WhS_Routing_RateOptionEn
             }
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/RateDirective.html';
+            return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/FilterByRateDirective.html';
         }
 
     };

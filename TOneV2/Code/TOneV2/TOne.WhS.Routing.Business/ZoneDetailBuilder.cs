@@ -67,7 +67,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var customerZone in customerSaleZones)
                 {
                     SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
-                    SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
+                    SaleEntityService customerService = customerServiceLocator.GetRoutingCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
@@ -140,7 +140,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierZone in supplierZones)
                 {
                     SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
-                    List<ZoneService> supplierZoneServices = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                    List<ZoneService> supplierZoneServices = supplierZoneServiceLocator.GetRoutingSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId, true);
 
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {

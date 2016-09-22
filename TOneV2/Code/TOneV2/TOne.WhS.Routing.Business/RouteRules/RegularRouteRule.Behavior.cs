@@ -25,15 +25,15 @@ namespace TOne.WhS.Routing.Business
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             var options = CreateOptions(context, target);
-            if(options != null)
-            return ApplyOptionsOrder(options);
+            if (options != null)
+                return ApplyOptionsOrder(options);
             else
                 return null;
         }
 
-        public override bool IsOptionFiltered(TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)
+        public override bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)
         {
-            return FilterOption(target, option);
+            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServices, target, option);
         }
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
@@ -56,7 +56,7 @@ namespace TOne.WhS.Routing.Business
                 int optionsAdded = 0;
                 foreach (RouteOptionRuleTarget option in options)
                 {
-                    if (!FilterOption(target, option))
+                    if (!FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServices, target, option))
                     {
                         if (context.TryAddOption(option))
                         {
@@ -142,7 +142,7 @@ namespace TOne.WhS.Routing.Business
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                             {
                                 var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
-                                if (!FilterOption(target, option))
+                                if (!FilterOption(supplierCodeMatch, null, target, option))
                                     context.TryAddSupplierZoneOption(option);
                             }
                         }
@@ -157,7 +157,7 @@ namespace TOne.WhS.Routing.Business
                     foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                     {
                         var option = CreateOption(target, supplierCodeMatch, null);
-                        if (!FilterOption(target, option))
+                        if (!FilterOption(supplierCodeMatch, null, target, option))
                             context.TryAddSupplierZoneOption(option);
                     }
                 }
@@ -263,7 +263,7 @@ namespace TOne.WhS.Routing.Business
             return optionOrderContext;
         }
 
-        private bool FilterOption(RouteRuleTarget target, RouteOptionRuleTarget option)
+        private bool FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
             if (this.OptionFilters != null)
             {
@@ -272,7 +272,9 @@ namespace TOne.WhS.Routing.Business
                     var routeOptionFilterExecutionContext = new RouteOptionFilterExecutionContext()
                     {
                         Option = option,
-                        SaleRate = target.SaleRate
+                        SaleRate = target.SaleRate,
+                        CustomerServices = customerServiceIds,
+                        SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null
                     };
                     optionFilter.Execute(routeOptionFilterExecutionContext);
                     if (routeOptionFilterExecutionContext.FilterOption)

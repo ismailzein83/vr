@@ -17,6 +17,10 @@ namespace TOne.WhS.Routing.Entities
 
         IRouteOptionFilterTarget Option { get; }
 
+        HashSet<int> SupplierServices { get; set; }
+
+        HashSet<int> CustomerServices { get; set; }
+
         bool FilterOption { get; set; }
     }
 }
