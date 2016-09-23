@@ -9,8 +9,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 {
     public class MVTSRadiusSWSync : SwitchRouteSynchronizer
     {
-        Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320"); } }
+        public override Guid ConfigId { get { return new Guid("6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320"); } }
 
         public IRadiusDataManager DataManager { get; set; }
 

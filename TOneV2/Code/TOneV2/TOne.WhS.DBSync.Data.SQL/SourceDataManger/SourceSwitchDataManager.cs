@@ -23,9 +23,10 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 SourceId = arg["SwitchID"].ToString(),
                 Name = arg["Name"] as string,
+                Configuration = arg["Configuration"] as string
             };
         }
 
-        const string query_getSourceSwitches = @"SELECT [SwitchID] ,[Name] FROM [dbo].[Switch] WITH (NOLOCK)";
+        const string query_getSourceSwitches = @"SELECT [SwitchID] ,[Name], [Configuration] FROM [dbo].[Switch] WITH (NOLOCK)";
     }
 }

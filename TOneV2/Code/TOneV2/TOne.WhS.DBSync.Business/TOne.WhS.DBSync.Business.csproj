@@ -119,8 +119,10 @@
     <Compile Include="DBSyncTaskAction.cs" />
     <Compile Include="DBSyncTaskActionArgument.cs" />
     <Compile Include="SwitchMigration\ISwitchParser.cs" />
+    <Compile Include="SwitchMigration\MVTSSwitchMigrationParser.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRulesManager.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRulesMigrator.cs" />
+    <Compile Include="SwitchMigration\SwitchMigrationParser.cs" />
     <Compile Include="SwitchMigration\TelesSwitchParser.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +149,22 @@
     <ProjectReference Include="..\TOne.WhS.DBSync.Entities\TOne.WhS.DBSync.Entities.csproj">
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.MVTSRadius.SQL\TOne.WhS.RouteSync.MVTSRadius.SQL.csproj">
+      <Project>{89fe058f-9f8f-4afb-bda9-992941cb2140}</Project>
+      <Name>TOne.WhS.RouteSync.MVTSRadius.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.MVTSRadius\TOne.WhS.RouteSync.MVTSRadius.csproj">
+      <Project>{580b6401-8d74-475a-abbf-69d6b8504344}</Project>
+      <Name>TOne.WhS.RouteSync.MVTSRadius</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Radius\TOne.WhS.RouteSync.Radius.csproj">
+      <Project>{0f005ef5-f26b-4f30-ae68-ce841d744e68}</Project>
+      <Name>TOne.WhS.RouteSync.Radius</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Business\TOne.WhS.Routing.Business.csproj">
       <Project>{923447e8-0d0b-4296-976a-8f486a8694d3}</Project>

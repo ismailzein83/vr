@@ -11,7 +11,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
     public class TelesRadiusSWSync : SwitchRouteSynchronizer
     {
         Guid _configId;
-        public override Guid ConfigId { get { return _configId; } set { _configId = new Guid("423064C2-ACE8-4D70-8CFF-CDAA1461DBBE"); } }
+        public override Guid ConfigId { get { return new Guid("423064C2-ACE8-4D70-8CFF-CDAA1461DBBE"); } }
 
         public IRadiusDataManager DataManager { get; set; }
         /// <summary>

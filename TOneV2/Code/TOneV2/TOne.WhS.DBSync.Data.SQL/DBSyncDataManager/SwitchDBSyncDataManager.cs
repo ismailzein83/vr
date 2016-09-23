@@ -25,6 +25,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
+            dt.Columns.Add("Settings", typeof(string));
             dt.BeginLoadData();
             foreach (var item in switches)
             {
@@ -32,7 +33,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 int index = 0;
                 row[index++] = item.Name;
                 row[index++] = item.SourceId;
-
+                row[index++] = item.Settings != null ? Vanrise.Common.Serializer.Serialize(item.Settings) : null;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
@@ -41,17 +42,19 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, Switch> GetSwitches(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[Name], [SourceID] FROM "
+            return GetItemsText("SELECT [ID]  ,[Name], [SourceID], [Settings] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SwitchMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public Switch SwitchMapper(IDataReader reader)
         {
+            string settings = reader["Settings"] as string;
             return new Switch
             {
                 SwitchId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 SourceId = reader["SourceID"] as string,
+                Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<SwitchSettings>(settings) : null
             };
         }
 
