@@ -45,8 +45,6 @@
                 }
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (api) {
                     daProfCalcOutputItemDefinitionId = dataAnalysisItemDefinitionSelectorAPI.getSelectedIds();
-                   
-                    console.log(daProfCalcOutputItemDefinitionId);
 
                     if (daProfCalcOutputItemDefinitionId != undefined) {
                         VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(daProfCalcOutputItemDefinitionId).then(function (response) {
@@ -141,8 +139,6 @@
                                 if (criteria != undefined) {
                                     recordFilterDirectivePayload.FilterGroup = criteria.FilterGroup;
                                 }
-
-                                console.log(recordFilterDirectivePayload);
 
                                 VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
                             });
