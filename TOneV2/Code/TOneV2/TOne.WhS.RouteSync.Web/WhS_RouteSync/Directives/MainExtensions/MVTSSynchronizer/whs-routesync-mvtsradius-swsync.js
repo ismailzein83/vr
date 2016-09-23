@@ -123,8 +123,8 @@
                                  var carrierMapping = {
                                      CarrierAccountId: response[i].CarrierAccountId,
                                      CarrierAccountName: response[i].Name,
-                                     CustomerMapping: accountCarrierMappings != undefined ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
-                                     SupplierMapping: accountCarrierMappings != undefined ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
+                                     CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
+                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
                                  };
 
                                  $scope.scopeModel.carrierAccountMappings.push(carrierMapping);

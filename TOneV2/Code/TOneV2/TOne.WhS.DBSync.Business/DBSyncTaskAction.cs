@@ -235,10 +235,6 @@ namespace TOne.WhS.DBSync.Business
             IMigrator imgrator = null;
             switch ((DBTableName)System.Enum.Parse(typeof(DBTableName), table.Name))
             {
-                case DBTableName.Switch:
-                    imgrator = new SwitchMigrator(context);
-                    break;
-
                 case DBTableName.Currency:
                     imgrator = new CurrencyMigrator(context);
                     break;
@@ -261,6 +257,10 @@ namespace TOne.WhS.DBSync.Business
 
                 case DBTableName.CarrierAccount:
                     imgrator = new CarrierAccountMigrator(context);
+                    break;
+
+                case DBTableName.Switch:
+                    imgrator = new SwitchMigrator(context);
                     break;
 
                 case DBTableName.SaleZone:

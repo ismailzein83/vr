@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.DBSync.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.MVTSRadius;
 using TOne.WhS.RouteSync.MVTSRadius.SQL;
@@ -19,12 +20,12 @@ namespace TOne.WhS.DBSync.Business
         {
             _configuration = configuration;
         }
-        public override SwitchRouteSynchronizer GetSwitchRouteSynchronizer(Dictionary<string, CarrierAccount> allCarrierAccounts)
+        public override SwitchRouteSynchronizer GetSwitchRouteSynchronizer(MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
         {
-            return ReadXml(allCarrierAccounts);
+            return ReadXml(allCarrierAccounts, context);
         }
 
-        private MVTSRadiusSWSync ReadXml(Dictionary<string, CarrierAccount> allCarrierAccounts)
+        private MVTSRadiusSWSync ReadXml(Dictionary<string, CarrierAccount> allCarrierAccounts, MigrationContext context)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(_configuration);
@@ -35,12 +36,12 @@ namespace TOne.WhS.DBSync.Business
 
             MVTSRadiusSWSync synchroniser = new MVTSRadiusSWSync()
             {
-                CarrierMappings = BuildCarrierMapping(xml.DocumentElement.SelectSingleNode("CarrierMapping"), allCarrierAccounts),
+                CarrierMappings = BuildCarrierMapping(xml.DocumentElement.SelectSingleNode("CarrierMapping"), allCarrierAccounts, context),
                 NumberOfOptions = GetMaximumSuppliersNumber(parametersNode),
                 MappingSeparator = ";",
             };
-            string connectionString ;
-            string redundantConnectionString ;
+            string connectionString;
+            string redundantConnectionString;
 
             GetConnectionStrings(parametersNode, out connectionString, out redundantConnectionString);
             if (!string.IsNullOrEmpty(connectionString))
@@ -85,9 +86,8 @@ namespace TOne.WhS.DBSync.Business
             return parametersNode.SelectSingleNode("Parameter[@Name='" + name + "']");
         }
 
-        private Dictionary<string, TOne.WhS.RouteSync.MVTSRadius.MVTSRadiusSWSync.CarrierMapping> BuildCarrierMapping(XmlNode parentCarrierMappingNode, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        private Dictionary<string, TOne.WhS.RouteSync.MVTSRadius.MVTSRadiusSWSync.CarrierMapping> BuildCarrierMapping(XmlNode parentCarrierMappingNode, Dictionary<string, CarrierAccount> allCarrierAccounts, MigrationContext context)
         {
-            int counter = 0;
             if (parentCarrierMappingNode == null)
                 return null;
 
@@ -116,14 +116,21 @@ namespace TOne.WhS.DBSync.Business
 
                 if (inTrunkList != null || outTrunkList != null)
                 {
-                    TOne.WhS.RouteSync.MVTSRadius.MVTSRadiusSWSync.CarrierMapping carrierMapping = new MVTSRadiusSWSync.CarrierMapping()
+                    CarrierAccount carrier;
+                    if (allCarrierAccounts.TryGetValue(carrierAccountId, out carrier))
                     {
-                        CarrierId = counter,//allCarrierAccounts[carrierAccountId].CarrierAccountId,
-                        CustomerMapping = inTrunkList,
-                        SupplierMapping = outTrunkList
-                    };
-                    counter++;
-                    mappings.Add(carrierMapping.CarrierId.ToString(), carrierMapping);
+                        TOne.WhS.RouteSync.MVTSRadius.MVTSRadiusSWSync.CarrierMapping carrierMapping = new MVTSRadiusSWSync.CarrierMapping()
+                        {
+                            CarrierId = carrier.CarrierAccountId,
+                            CustomerMapping = inTrunkList,
+                            SupplierMapping = outTrunkList
+                        };
+                        mappings.Add(carrierMapping.CarrierId.ToString(), carrierMapping);
+                    }
+                    else
+                    {
+                        context.WriteWarning(string.Format("Carrier Account ID {0} doesn't exist in Carrier Accounts", carrierAccountId));
+                    }
                 }
             }
             return mappings.Count > 0 ? mappings : null;

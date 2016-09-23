@@ -4,9 +4,6 @@ namespace TOne.WhS.DBSync.Entities
 {
     public enum DBTableName
     {
-        [Description("Switch")]
-        Switch,
-
         [Description("Currency")]
         Currency,
 
@@ -28,6 +25,9 @@ namespace TOne.WhS.DBSync.Entities
 
         [Description("CarrierAccount")]
         CarrierAccount,
+
+        [Description("Switch")]
+        Switch,
 
         [Description("SaleZone")]
         SaleZone,

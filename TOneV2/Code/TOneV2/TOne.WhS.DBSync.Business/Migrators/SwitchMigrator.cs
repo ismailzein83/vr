@@ -58,7 +58,7 @@ namespace TOne.WhS.DBSync.Business
             {
                 Name = sourceItem.Name,
                 SourceId = sourceItem.SourceId,
-                Settings = parser != null ? new SwitchSettings() { RouteSynchronizer = parser.GetSwitchRouteSynchronizer(_allCarrierAccounts) } : null
+                Settings = parser != null ? new SwitchSettings() { RouteSynchronizer = parser.GetSwitchRouteSynchronizer(Context, _allCarrierAccounts) } : null
             };
         }
 
