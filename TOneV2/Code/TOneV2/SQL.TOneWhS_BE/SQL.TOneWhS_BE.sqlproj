@@ -217,7 +217,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_InsertRates.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFilteredByOwner.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetExistingByZoneIDs.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveByCustomers.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetByOwnerAndEffective.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_CloseRates.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_GetAll.sql" />
@@ -404,5 +403,7 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityService_GetEffectiveZoneServicesByOwner.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetEffectiveZoneServicesBySuppliers.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetByID.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetByID.sql" />
   </ItemGroup>
 </Project>

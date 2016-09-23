@@ -16,11 +16,11 @@ SET NOCOUNT ON;
 
 
 
-SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change
+SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change, sr.CurrencyID
 FROM	[TOneWhS_BE].SaleRate sr with(nolock)
 		JOIN [TOneWhS_BE].SalePriceList spl with(nolock) ON sr.PriceListID = spl.ID 
 		Join @SaleRateOwner sro on sro.OwnerId = spl.OwnerId and sro.OwnerTpe = spl.OwnerType
 Where	((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
 		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL)))
-		group by sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change
+		group by sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change, sr.CurrencyID
 END
