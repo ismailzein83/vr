@@ -86,6 +86,17 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
+
+        public int GetVRTimeZoneTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetVRTimeZoneType());
+        }
+
+        public Type GetVRTimeZoneType()
+        {
+            return this.GetType();
+        }
+
         #endregion
 
         #region Private Classes

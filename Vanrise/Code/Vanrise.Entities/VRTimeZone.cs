@@ -32,6 +32,8 @@ namespace Vanrise.Entities
         public string Name { get; set; }
 
         public VRTimeZoneSettings Settings { get; set; }
+
+        public string SourceId { get; set; }
     }
 
     public class VRTimeZoneSettings
