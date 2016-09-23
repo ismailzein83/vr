@@ -28,23 +28,33 @@ namespace Vanrise.Common
             //parameters.ReferencedAssemblies.Add("System.dll");
             //parameters.ReferencedAssemblies.Add("System.Data.dll");
 
-            parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
-            parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
-            parameters.ReferencedAssemblies.Add(typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).Assembly.Location);//this is needed for dynamic variables
+            HashSet<string> referencedAssembliesFullNames = new HashSet<string>();
 
-            string path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+            //parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
+            //parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
+            var runtimeBinderAssembly = typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).Assembly;
+            referencedAssembliesFullNames.Add(runtimeBinderAssembly.FullName);
+            parameters.ReferencedAssemblies.Add(runtimeBinderAssembly.Location);//this is needed for dynamic variables
+            string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            if (System.Web.HttpContext.Current != null)
+                path = Path.Combine(path, "bin");
             foreach (string fileName in Directory.GetFiles(path, "*.dll"))
             {
                 FileInfo info = new FileInfo(fileName);
-                parameters.ReferencedAssemblies.Add(info.FullName);
+                Assembly.LoadFile(info.FullName);
+                //parameters.ReferencedAssemblies.Add(info.FullName);
             }
 
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 try
                 {
-                    if (!parameters.ReferencedAssemblies.Contains(assembly.Location))
+                    if (!referencedAssembliesFullNames.Contains(assembly.FullName))// parameters.ReferencedAssemblies.Contains(assembly.Location))
+                    {
                         parameters.ReferencedAssemblies.Add(assembly.Location);
+                        referencedAssembliesFullNames.Add(assembly.FullName);
+                    }
+                        
                 }
                 catch (NotSupportedException ex)
                 { 

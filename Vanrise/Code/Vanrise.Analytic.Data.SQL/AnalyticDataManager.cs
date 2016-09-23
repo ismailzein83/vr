@@ -28,14 +28,38 @@ namespace Vanrise.Analytic.Data.SQL
             HashSet<string> includedSQLAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
             string query = BuildAnalyticQuery(input, out includedSQLDimensions_Local, out includedSQLAggregates, parameterValues);
+            
+            if(parameterValues.Count > 0)
+            {
+                StringBuilder parameterDeclarationBuilder = new StringBuilder();
+                StringBuilder parameterAssignementBuilder = new StringBuilder();
+                foreach(var prm in parameterValues)
+                {
+                    if (parameterDeclarationBuilder.Length > 0)
+                        parameterDeclarationBuilder.Append(", ");
+                    if (parameterAssignementBuilder.Length > 0)
+                        parameterAssignementBuilder.Append(", ");
+                    parameterDeclarationBuilder.Append(String.Format("{0} varchar(max)", prm.Key));
+                    parameterAssignementBuilder.Append(String.Format("{0} = {0}_FromOut", prm.Key));
+                }
+                query = string.Format(@"DECLARE {0}  
+                SELECT {1}
+                   {2} ", parameterDeclarationBuilder, parameterAssignementBuilder, query);
+            }
+            if (input.Query.CurrencyId.HasValue)
+            {
+                query = string.Format(@"DECLARE @Currency int
+                SELECT @Currency = @Currency_FromOut
+                {0}", query);
+            }
             List<DBAnalyticRecord> dbRecords = GetItemsText(query, (reader) => SQLRecordMapper(reader, input.Query.TimeGroupingUnit, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
-                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}_FromOut", prm.Key), prm.Value));
                 }
                 if (input.Query.CurrencyId.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
+                    cmd.Parameters.Add(new SqlParameter("@Currency_FromOut", input.Query.CurrencyId.Value));
             });
             includedSQLDimensions = includedSQLDimensions_Local;
             return dbRecords;
@@ -216,7 +240,7 @@ namespace Vanrise.Analytic.Data.SQL
             StringBuilder singleTableQueryBodyBuilder = new StringBuilder(@" #TABLENAME# ant WITH(NOLOCK)  
                                                                               #JOINPART#                                                                
 			                                                                WHERE
-			                                                               (#TIMECOLUMNNAME# >= #FromTime#  AND  (#TIMECOLUMNNAME# <= #ToTime# or #ToTime# IS NULL))
+			                                                               (#TIMECOLUMNNAME# >= #FromTime#  AND #TIMECOLUMNNAME# <= #ToTime#)
                                                                             #FILTERPART#");
             singleTableQueryBodyBuilder.Replace("#TIMECOLUMNNAME#", GetTable().Settings.TimeColumnName);
             singleTableQueryBodyBuilder.Replace("#TABLENAME#", timeRangeTableName.TableName);

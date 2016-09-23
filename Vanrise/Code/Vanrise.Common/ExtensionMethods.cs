@@ -267,7 +267,7 @@ namespace Vanrise.Common
                 if (list != null)
                     pagedList = list.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
             }
-            return pagedList;
+            return pagedList.ToList();
         }
 
 

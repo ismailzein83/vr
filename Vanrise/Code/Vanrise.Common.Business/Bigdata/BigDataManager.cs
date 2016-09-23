@@ -227,50 +227,7 @@ namespace Vanrise.Common.Business
 
         private bool TryCreateServiceClient(BigDataService bigDataService, Action<IBigDataWCFService> onClientReady)
         {
-            Binding binding;
-            string serviceURL;
-
-            binding = new NetTcpBinding(SecurityMode.None)
-            {
-                MaxBufferPoolSize = int.MaxValue,
-                MaxBufferSize = int.MaxValue,
-                MaxReceivedMessageSize = int.MaxValue
-            };
-            serviceURL = String.Format(bigDataService.URL);
-
-            binding.OpenTimeout = TimeSpan.FromMinutes(5);
-            binding.CloseTimeout = TimeSpan.FromMinutes(5);
-            binding.SendTimeout = TimeSpan.FromMinutes(5);
-            binding.ReceiveTimeout = TimeSpan.FromMinutes(5);
-
-            ChannelFactory<IBigDataWCFService> channelFactory = new ChannelFactory<IBigDataWCFService>(binding, new EndpointAddress(serviceURL));
-            IChannel channel = channelFactory.CreateChannel() as IChannel;
-            try
-            {
-                channel.Open(_pingBigDataServiceTimeOutInterval);
-            }
-            catch
-            {
-                LoggerFactory.GetLogger().WriteWarning("cannot connect to BigDataService '{0}'", serviceURL);
-                return false;
-            }
-            IBigDataWCFService client = channel as IBigDataWCFService; 
-            try
-            {
-                onClientReady(client);
-            }
-            finally
-            {
-                try
-                {
-                    (client as IDisposable).Dispose();
-                }
-                catch
-                {
-
-                }
-            }
-            return true;
+            return ServiceClientFactory.TryCreateTCPServiceClient<IBigDataWCFService>(bigDataService.URL, onClientReady);            
         }
 
         #endregion

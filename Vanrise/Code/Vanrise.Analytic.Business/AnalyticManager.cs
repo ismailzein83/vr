@@ -22,17 +22,14 @@ namespace Vanrise.Analytic.Business
             // CheckAnalyticRequiredPermission(input);
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
-            IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
 
             if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
             {
                 string[] measureProperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
-
-            dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(input.Query);
-
-            return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
+            
+            return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
         }
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
@@ -428,10 +425,9 @@ namespace Vanrise.Analytic.Business
 
         private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>
         {
-            IAnalyticDataManager _dataManager;
-            public AnalyticRecordRequestHandler(IAnalyticDataManager dataManager)
+            
+            public AnalyticRecordRequestHandler()
             {
-                _dataManager = dataManager;
             }
             public override AnalyticRecord EntityDetailMapper(AnalyticRecord entity)
             {
@@ -442,7 +438,9 @@ namespace Vanrise.Analytic.Business
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
                 HashSet<string> includeDBDimensions;
-                var dbRecords = _dataManager.GetAnalyticRecords(input, out includeDBDimensions);
+                IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
+                dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(input.Query);
+                var dbRecords = dataManager.GetAnalyticRecords(input, out includeDBDimensions);
                 var query = input.Query;
 
 
@@ -478,7 +476,7 @@ namespace Vanrise.Analytic.Business
                 var analyticBigResult = new AnalyticSummaryBigResult<AnalyticRecord>()
                 {
                     ResultKey = input.ResultKey,
-                    Data = pagedRecords,
+                    Data = pagedRecords.ToList(),
                     TotalCount = allRecords.Count()
                 };
                 if (input.Query.WithSummary)
