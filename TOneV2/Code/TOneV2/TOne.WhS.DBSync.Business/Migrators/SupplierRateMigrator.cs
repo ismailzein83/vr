@@ -16,7 +16,6 @@ namespace TOne.WhS.DBSync.Business
         SourceRateDataManager dataManager;
         Dictionary<string, SupplierZone> allSupplierZones;
         Dictionary<string, SupplierPriceList> allSupplierPriceLists;
-        Dictionary<string, Currency> allCurrencies;
         int _offPeakRateTypeId;
         int _weekendRateTypeId;
         public SupplierRateMigrator(MigrationContext context)
@@ -27,10 +26,8 @@ namespace TOne.WhS.DBSync.Business
             TableName = dbSyncDataManager.GetTableName();
             var dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
             var dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
-            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
             allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
             allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
-            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
             _offPeakRateTypeId = context.OffPeakRateTypeId;
             _weekendRateTypeId = context.WeekendRateTypeId;
         }
@@ -58,9 +55,6 @@ namespace TOne.WhS.DBSync.Business
         {
             SupplierZone supplierZone = null;
             SupplierPriceList supplierPriceList = null;
-            Currency currency = null;
-            if (allCurrencies != null)
-                allCurrencies.TryGetValue(sourceItem.CurrencyId, out currency);
             if (allSupplierPriceLists != null && sourceItem.PriceListId.HasValue)
                 allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out supplierPriceList);
 
@@ -73,13 +67,12 @@ namespace TOne.WhS.DBSync.Business
              else if (sourceItem.RateType.HasValue && sourceItem.RateType == RateTypeEnum.Weekend)
                 rateTypeId = _weekendRateTypeId;
 
-            if (supplierZone != null && supplierPriceList != null && currency != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
+            if (supplierZone != null && supplierPriceList != null && sourceItem.BeginEffectiveDate.HasValue && sourceItem.Rate.HasValue)
                 return new SupplierRate
                 {
                     BED = sourceItem.BeginEffectiveDate.Value,
                     EED = sourceItem.EndEffectiveDate,
                     NormalRate = sourceItem.Rate.Value,
-                    CurrencyId = currency.CurrencyId,
                     PriceListId = supplierPriceList.PriceListId,
                     ZoneId = supplierZone.SupplierZoneId,
                     RateTypeId = rateTypeId,

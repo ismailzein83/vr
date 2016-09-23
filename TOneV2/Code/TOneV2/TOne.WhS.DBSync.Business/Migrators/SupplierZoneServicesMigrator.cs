@@ -60,14 +60,18 @@ namespace TOne.WhS.DBSync.Business
             {
                 List<ZoneService> effectiveServices = new List<ZoneService>();
 
-                foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
+                if (allZoneServicesConfig != null)
                 {
-                    if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceItem.ServicesFlag.Value)) == Convert.ToInt32(item.Value.SourceId))
-                        effectiveServices.Add(new ZoneService()
-                        {
-                            ServiceId = Convert.ToInt32(item.Value.ZoneServiceConfigId)
-                        });
+                    foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
+                    {
+                        if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceItem.ServicesFlag.Value)) == Convert.ToInt32(item.Value.SourceId))
+                            effectiveServices.Add(new ZoneService()
+                            {
+                                ServiceId = Convert.ToInt32(item.Value.ZoneServiceConfigId)
+                            });
+                    }
                 }
+
 
                 return new SupplierZoneService
                 {

@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="Common\IMigrator.cs" />
     <Compile Include="Common\Migrator.cs" />
+    <Compile Include="Migrators\VRTimeZoneMigrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
     <Compile Include="Migrators\FlaggedServiceMigrator.cs" />

@@ -23,6 +23,8 @@ namespace TOne.WhS.DBSync.Entities
         [Description("CarrierProfile")]
         CarrierProfile,
 
+        [Description("ZoneServiceConfig")]
+        ZoneServiceConfig,
 
         [Description("CarrierAccount")]
         CarrierAccount,
@@ -65,14 +67,15 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SwitchConnectivity")]
         SwitchConnectivity,
 
-        [Description("ZoneServiceConfig")]
-        ZoneServiceConfig,
 
         [Description("SupplierZoneService")]
         SupplierZoneService,
 
         [Description("SaleEntityService")]
         SaleEntityService,
+
+        [Description("VRTimeZone")]
+        VRTimeZone,
 
         [Description("Rule")]
         Rule,

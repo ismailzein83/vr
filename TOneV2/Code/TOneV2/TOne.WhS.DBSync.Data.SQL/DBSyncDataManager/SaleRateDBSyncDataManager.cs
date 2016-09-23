@@ -25,7 +25,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
             dt.Columns.Add("PriceListID", typeof(int));
             dt.Columns.Add("ZoneID", typeof(string));
-            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "CurrencyID", DataType = typeof(int) });
             dt.Columns.Add("Rate", typeof(decimal));
             dt.Columns.Add("OtherRates", typeof(string));
             dt.Columns.Add("BED", typeof(DateTime));
@@ -34,29 +33,21 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "RateTypeID", DataType = typeof(int) });
             dt.Columns.Add("SourceID", typeof(string));
-           
+
             dt.BeginLoadData();
             foreach (var item in saleRates)
             {
                 DataRow row = dt.NewRow();
-                int index = 0;
-                row[index++] = item.PriceListId;
-                row[index++] = item.ZoneId;
-                if (item.CurrencyId == null)
-                    row[index++] = DBNull.Value;
-                else
-                    row[index++] = item.CurrencyId;
-                row[index++] = item.NormalRate;
-                row[index++] = Vanrise.Common.Serializer.Serialize(item.OtherRates);
-                row[index++] = item.BED;
-                if (item.EED == null)
-                    row[index++] = DBNull.Value;
-                else
-                    row[index++] = item.EED;
-                row[index++] = item.RateChange;
-                row[index++] = startingId++;
-                row[index++] = item.RateTypeId.HasValue ? item.RateTypeId : (object)DBNull.Value;
-                row[index++] = item.SourceId;
+                row["PriceListID"] = item.PriceListId;
+                row["ZoneID"] = item.ZoneId;
+                row["Rate"] = item.NormalRate;
+                row["OtherRates"] = Vanrise.Common.Serializer.Serialize(item.OtherRates);
+                row["BED"] = item.BED;
+                row["EED"] = item.EED.HasValue ? item.EED : (object)DBNull.Value;
+                row["Change"] = item.RateChange;
+                row["ID"] = startingId++;
+                row["RateTypeID"] = item.RateTypeId.HasValue ? item.RateTypeId : (object)DBNull.Value;
+                row["SourceID"] = item.SourceId;
 
                 dt.Rows.Add(row);
             }

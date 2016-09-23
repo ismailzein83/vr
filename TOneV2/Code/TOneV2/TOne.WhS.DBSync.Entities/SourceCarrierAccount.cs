@@ -19,6 +19,8 @@ namespace TOne.WhS.DBSync.Entities
 
         public short ProfileId { get; set; }
 
+        public short ServicesFlag { get; set; }
+
         public string CurrencyId { get; set; }
 
         public SourceActivationStatus ActivationStatus { get; set; }

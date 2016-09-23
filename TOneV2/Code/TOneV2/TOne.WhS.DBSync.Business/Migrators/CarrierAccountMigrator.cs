@@ -13,6 +13,7 @@ namespace TOne.WhS.DBSync.Business
         SourceCarrierAccountDataManager dataManager;
         Dictionary<string, CarrierProfile> allCarrierProfiles;
         Dictionary<string, Currency> allCurrencies;
+        Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
         public CarrierAccountMigrator(MigrationContext context)
             : base(context)
         {
@@ -23,6 +24,8 @@ namespace TOne.WhS.DBSync.Business
             var dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
             allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+            var dbTableZoneServicesConfig = Context.DBTables[DBTableName.ZoneServiceConfig];
+            allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -99,6 +102,22 @@ namespace TOne.WhS.DBSync.Business
                         break;
                 }
 
+                List<ZoneService> defaultServices = new List<ZoneService>();
+
+                if (allZoneServicesConfig != null)
+                {
+                    foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
+                    {
+                        if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceItem.ServicesFlag)) == Convert.ToInt32(item.Value.SourceId))
+                            defaultServices.Add(new ZoneService()
+                            {
+                                ServiceId = Convert.ToInt32(item.Value.ZoneServiceConfigId)
+                            });
+                    }
+                }
+
+
+                carrierAccountSupplierSettings.DefaultServices = defaultServices;
 
                 carrierAccountSettings.Mask = sourceItem.CarrierMask;
 
@@ -120,7 +139,7 @@ namespace TOne.WhS.DBSync.Business
                 TotalRowsFailed++;
                 return null;
             }
-                
+
 
         }
 

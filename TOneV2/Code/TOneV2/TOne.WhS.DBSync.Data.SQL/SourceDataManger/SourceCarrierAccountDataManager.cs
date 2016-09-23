@@ -17,23 +17,24 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCarrierAccounts, SourceCarrierAccountMapper, null);
         }
 
-        private SourceCarrierAccount SourceCarrierAccountMapper(IDataReader arg)
+        private SourceCarrierAccount SourceCarrierAccountMapper(IDataReader reader)
         {
             SourceCarrierAccount sourceCarrierAccount = new SourceCarrierAccount()
             {
-                SourceId = arg["CarrierAccountID"].ToString(),
-                NameSuffix = arg["NameSuffix"] as string,
-                ProfileId = (short)arg["ProfileID"],
-                ActivationStatus = (SourceActivationStatus)arg["ActivationStatus"],
-                AccountType = (SourceAccountType)arg["AccountType"],
-                CurrencyId = arg["CurrencyID"] as string,
-                CarrierMask = arg["CarrierMask"] as string,
+                SourceId = reader["CarrierAccountID"].ToString(),
+                NameSuffix = reader["NameSuffix"] as string,
+                ProfileId = (short)reader["ProfileID"],
+                ServicesFlag = (short)reader["ServicesFlag"],
+                ActivationStatus = (SourceActivationStatus)reader["ActivationStatus"],
+                AccountType = (SourceAccountType)reader["AccountType"],
+                CurrencyId = reader["CurrencyID"] as string,
+                CarrierMask = reader["CarrierMask"] as string,
             };
             return sourceCarrierAccount;
         }
 
         const string query_getSourceCarrierAccounts = @"SELECT  ca.CarrierAccountID CarrierAccountID, ca.ProfileID ProfileID, ca.ActivationStatus ActivationStatus,  
-                                                                ca.AccountType AccountType, ca.NameSuffix NameSuffix, 
+                                                                ca.AccountType AccountType, ca.NameSuffix NameSuffix, ca.ServicesFlag ServicesFlag,
                                                                 cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask 
                                                                 FROM  CarrierAccount ca WITH (NOLOCK) INNER JOIN CarrierProfile cp 
                                                                 ON ca.ProfileID = cp.ProfileID WHERE (ca.IsDeleted = 'N')";

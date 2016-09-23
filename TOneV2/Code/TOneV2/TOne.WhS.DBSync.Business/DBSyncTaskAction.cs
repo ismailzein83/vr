@@ -159,6 +159,10 @@ namespace TOne.WhS.DBSync.Business
                         iDBSyncDataManager = new SaleZoneServicesDBSyncDataManager(context.UseTempTables);
                         break;
 
+                    case DBTableName.VRTimeZone:
+                        iDBSyncDataManager = new VRTimeZoneDBSyncDataManager(context.UseTempTables);
+                        break;
+
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
 
@@ -310,6 +314,10 @@ namespace TOne.WhS.DBSync.Business
 
                 case DBTableName.SaleEntityService:
                     imgrator = new SaleZoneServicesMigrator(context);
+                    break;
+
+                case DBTableName.VRTimeZone:
+                    imgrator = new VRTimeZoneMigrator(context);
                     break;
             }
 

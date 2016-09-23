@@ -25,7 +25,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
             dt.Columns.Add("PriceListID", typeof(int));
             dt.Columns.Add("ZoneID", typeof(string));
-            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "CurrencyID", DataType = typeof(int) });
             dt.Columns.Add("NormalRate", typeof(decimal));
             dt.Columns.Add("OtherRates", typeof(string));
             dt.Columns.Add("BED", typeof(DateTime));
@@ -41,7 +40,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 DataRow row = dt.NewRow();
                 row["PriceListID"] = item.PriceListId;
                 row["ZoneID"] = item.ZoneId;
-                row["CurrencyID"] = item.CurrencyId.HasValue ? item.CurrencyId : (object)DBNull.Value;
                 row["NormalRate"] = item.NormalRate;
                 row["OtherRates"] = Vanrise.Common.Serializer.Serialize(item.OtherRates);
                 row["BED"] = item.BED;
