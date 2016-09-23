@@ -92,28 +92,28 @@ namespace TOne.WhS.Sales.BP.Activities
             if (newDefaultRoutingProduct == null)
                 return;
 
-            var ratePlanManager = new TOne.WhS.Sales.Business.SaleEntityRoutingProductManager();
+            var ratePlanManager = new TOne.WhS.BusinessEntity.Business.SaleEntityRoutingProductManager();
             long startingId = ratePlanManager.ReserveIdRange(1);
 
             newDefaultRoutingProduct.SaleEntityRoutingProductId = (int)startingId;
         }
 
-        private void ReserveNewRateIds(IEnumerable<NewRate> newRates)
-        {
-            var saleRateManager = new SaleRateManager();
-            long startingId = saleRateManager.ReserveIdRange(newRates.Count());
-
-            foreach (NewRate newRate in newRates)
-                newRate.RateId = startingId++;
-        }
-
         private void ReserveNewSaleZoneRoutingProductIds(IEnumerable<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts)
         {
-            var ratePlanManager = new TOne.WhS.Sales.Business.SaleEntityRoutingProductManager();
+            var ratePlanManager = new TOne.WhS.BusinessEntity.Business.SaleEntityRoutingProductManager();
             long startingId = ratePlanManager.ReserveIdRange(newSaleZoneRoutingProducts.Count());
 
             foreach (NewSaleZoneRoutingProduct newSaleZoneRoutingProduct in newSaleZoneRoutingProducts)
                 newSaleZoneRoutingProduct.SaleEntityRoutingProductId = startingId++;
+        }
+
+        private void ReserveNewRateIds(IEnumerable<NewRate> newRates)
+        {
+            var saleRateManager = new TOne.WhS.BusinessEntity.Business.SaleRateManager();
+            long startingId = saleRateManager.ReserveIdRange(newRates.Count());
+
+            foreach (NewRate newRate in newRates)
+                newRate.RateId = startingId++;
         }
 
         private void ReserveNewDefaultServiceId(NewDefaultService newDefaultService)
@@ -121,7 +121,7 @@ namespace TOne.WhS.Sales.BP.Activities
             if (newDefaultService == null)
                 return;
 
-            var saleEntityServiceManager = new TOne.WhS.Sales.Business.SaleEntityServiceManager();
+            var saleEntityServiceManager = new TOne.WhS.BusinessEntity.Business.SaleEntityServiceManager();
             long startingId = saleEntityServiceManager.ReserveIdRange(1);
 
             newDefaultService.SaleEntityServiceId = startingId;
@@ -132,7 +132,7 @@ namespace TOne.WhS.Sales.BP.Activities
             if (newSaleZoneServices == null)
                 return;
 
-            var saleEntityServiceManager = new TOne.WhS.Sales.Business.SaleEntityServiceManager();
+            var saleEntityServiceManager = new TOne.WhS.BusinessEntity.Business.SaleEntityServiceManager();
             long startingId = saleEntityServiceManager.ReserveIdRange(newSaleZoneServices.Count());
 
             foreach (NewSaleZoneService newSaleZoneService in newSaleZoneServices)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -20,6 +21,13 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
             return dataManager.GetZoneServicesEffectiveAfter(ownerType, ownerId, minimumDate);
+        }
+
+        public long ReserveIdRange(int numberOfIds)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(this.GetSaleEntityServiceType(), numberOfIds, out startingId);
+            return startingId;
         }
 
         public int GetSaleEntityServiceTypeId()
