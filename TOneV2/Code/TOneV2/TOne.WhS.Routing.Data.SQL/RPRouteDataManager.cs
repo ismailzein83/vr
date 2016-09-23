@@ -96,7 +96,7 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        public Dictionary<int, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId)
+        public Dictionary<Guid, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId)
         {
             object routeOptionsSerialized = ExecuteScalarText(query_GetRouteOptions, (cmd) =>
             {
@@ -108,7 +108,7 @@ namespace TOne.WhS.Routing.Data.SQL
             if (routeOptionsSerialized == null)
                 return null;
 
-            return Vanrise.Common.Serializer.Deserialize<Dictionary<int, IEnumerable<RPRouteOption>>>(routeOptionsSerialized.ToString());
+            return Vanrise.Common.Serializer.Deserialize<Dictionary<Guid, IEnumerable<RPRouteOption>>>(routeOptionsSerialized.ToString());
         }
 
         public Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId)

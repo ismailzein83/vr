@@ -105,7 +105,7 @@ namespace TOne.WhS.Routing.Business
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             manager.RoutingDatabase = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
 
-            Dictionary<int, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId);
+            Dictionary<Guid, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId);
             if (allOptions == null || !allOptions.ContainsKey(input.Query.PolicyOptionConfigId))
                 return null;
 
