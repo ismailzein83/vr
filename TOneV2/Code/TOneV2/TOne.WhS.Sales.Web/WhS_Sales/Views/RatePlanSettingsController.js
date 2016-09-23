@@ -30,10 +30,21 @@
             }];
 
             $scope.saveSettings = function () {
-                var settings = {};
-                settings.costCalculationMethods = $scope.tabItems[0].directiveAPI ? $scope.tabItems[0].directiveAPI.getData() : null;
 
-                if ($scope.onSettingsUpdated && typeof $scope.onSettingsUpdated == "function")
+                var settings;
+                var costCalculationMethods;
+
+                var directiveAPI = $scope.tabItems[0].directiveAPI;
+                if (directiveAPI != undefined)
+                    costCalculationMethods = directiveAPI.getData();
+
+                if (costCalculationMethods != undefined) {
+                    settings = {
+                        costCalculationMethods: costCalculationMethods
+                    };
+                }
+
+                if ($scope.onSettingsUpdated != null && typeof $scope.onSettingsUpdated == "function")
                     $scope.onSettingsUpdated(settings);
 
                 $scope.modalContext.closeModal();

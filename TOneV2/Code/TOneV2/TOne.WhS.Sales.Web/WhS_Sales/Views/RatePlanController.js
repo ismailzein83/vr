@@ -249,7 +249,9 @@
             {
                 var onSettingsUpdated = function (updatedSettings)
                 {
-                    if (updatedSettings != undefined)
+                    if (updatedSettings == undefined)
+                        settings = undefined;
+                    else
                     {
                         settings = {};
                         if (updatedSettings.costCalculationMethods != undefined)
@@ -262,8 +264,9 @@
                         $scope.showPricingButton = (settings.costCalculationMethods != undefined);
                     }
 
-                    $scope.showApplyButton = false;
                     pricingSettings = null;
+                    $scope.showApplyButton = false;
+                    $scope.showPricingButton = (settings != undefined);
 
                     VRNotificationService.showSuccess("Settings saved");
 
@@ -572,6 +575,7 @@
                 if ($scope.zoneLetters.length > 0) {
                     $scope.showSaveButton = true;
                     $scope.showSettingsButton = true;
+                    $scope.showPricingButton = (settings != undefined)
 
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
