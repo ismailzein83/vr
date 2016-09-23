@@ -5,12 +5,11 @@
                    selectedvalues="scopeModel.selectedTemplateConfig"
                    datavaluefield="ExtensionConfigurationId"
                    datatextfield="Title"
-                   isrequired="true"
-                   label="Radius Data Manager"
-                   hideremoveicon>
+                   isrequired="ctrlSettings.isrequired"
+                   label="Radius Data Manager">
         </vr-select>
     </vr-columns>
 </vr-row>
 <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"
-                     on-ready="scopeModel.onDirectiveReady" isrequired="ctrlSettings.isrequired" normal-col-num="{{ctrlSettings.normalColNum}}" customvalidate="ctrlSettings.customvalidate">
+                     on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrlSettings.normalColNum}}" customvalidate="ctrlSettings.customvalidate">
 </vr-directivewrapper>

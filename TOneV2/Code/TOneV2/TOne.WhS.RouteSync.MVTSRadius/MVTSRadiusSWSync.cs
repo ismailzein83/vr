@@ -27,7 +27,8 @@ namespace TOne.WhS.RouteSync.MVTSRadius
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
             this.DataManager.PrepareTables();
-            this.RedundantDataManager.PrepareTables();
+            if (this.RedundantDataManager != null)
+                this.RedundantDataManager.PrepareTables();
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -84,7 +85,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
                 if (priority == 0)
                     break;
 
-                if (CarrierMappings.TryGetValue(routeOption.SupplierId, out carrierMapping))
+                if (CarrierMappings.TryGetValue(routeOption.SupplierId, out carrierMapping) && carrierMapping.SupplierMapping != null)
                 {
                     foreach (string supplierMapping in carrierMapping.SupplierMapping)
                     {
@@ -134,13 +135,15 @@ namespace TOne.WhS.RouteSync.MVTSRadius
         public override void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context)
         {
             this.DataManager.InsertRoutes(context.ConvertedRoutes);
-            this.RedundantDataManager.InsertRoutes(context.ConvertedRoutes);
+            if (this.RedundantDataManager != null)
+                this.RedundantDataManager.InsertRoutes(context.ConvertedRoutes);
         }
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
             this.DataManager.SwapTables();
-            this.RedundantDataManager.SwapTables();
+            if (this.RedundantDataManager != null)
+                this.RedundantDataManager.SwapTables();
         }
 
         public class CarrierMapping
