@@ -145,8 +145,8 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities','Business Entities',null,'/Client/images/menu-icons/Business Entities.png',2,0),
-('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups','Lookups','E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,2,1),
+('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities','Business Entities',null,'/Client/images/menu-icons/Business Entities.png',10,0),
+('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups','Lookups','E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,1,1),
 ('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,4,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))

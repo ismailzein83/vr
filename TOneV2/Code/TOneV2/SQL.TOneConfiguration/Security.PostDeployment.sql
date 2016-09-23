@@ -199,10 +199,10 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration','Administration',null,'/Client/images/menu-icons/admin.png',1,0),
-('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,2,0),
-('BAAF681E-AB1C-4A64-9A35-3F3951398881','System',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,2,0),
-('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','System Configuration','System Configuration',null,'/images/menu-icons/Administration.png',4,0)
+('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration','Administration',null,'/Client/images/menu-icons/admin.png',5,0),
+('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0),
+('BAAF681E-AB1C-4A64-9A35-3F3951398881','System',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,1,0),
+('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','System Configuration','System Configuration',null,'/images/menu-icons/Administration.png',1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

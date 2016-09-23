@@ -70,7 +70,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('7EEDFB12-C71A-4EE0-AC97-0B553B4A0ED1','Carriers',null,null,null,3,1),
+('7EEDFB12-C71A-4EE0-AC97-0B553B4A0ED1','Carriers',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,3,1),
 ('9A21CD8B-67FA-4DCD-8852-616A99E42C82','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,4,0),
 ('CDCFC24F-B6E6-4F8C-8C80-16923885ACC5','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',7,0),
 ('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',8,0),
