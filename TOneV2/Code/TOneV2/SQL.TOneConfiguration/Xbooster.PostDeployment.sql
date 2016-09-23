@@ -16,8 +16,8 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1401,'CDR Tools',null,null,'/images/menu-icons/CDR Compare Tool.png',4,0),
-(1402,'Supplier Rate Management',null,null,'/images/menu-icons/Supplier Rate Managment.png',5,0)
+('e73c4aba-fd03-4137-b047-f3fb4f7eed03','CDR Tools',null,null,'/images/menu-icons/CDR Compare Tool.png',4,0),
+('e73c4aba-fd03-4137-b047-f3fb4f7eed03','Supplier Rate Management',null,null,'/images/menu-icons/Supplier Rate Managment.png',5,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -40,9 +40,9 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,0,1),
-(14002,'Input Template Conversion','Input Template Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1402,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,0,1),
-(14003,'Output Template','Output Template','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1402,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,0,2)
+('9a6e34b4-138c-407c-90c1-40bff59b767c','CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison','a6c324ae-e0dd-4ddc-bb61-10b560f5c3b5','CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,0,1),
+('de48546c-84c0-45b1-9ba2-cffd67b2cc57','Input Template Conversion','Input Template Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion','bb288557-717b-476d-bfc0-1c87d5af9d93','XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,0,1),
+('0a1c68fa-b4e3-492b-9f32-b9fb4bd6926f','Output Template','Output Template','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement','bb288557-717b-476d-bfc0-1c87d5af9d93','XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,0,2)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))

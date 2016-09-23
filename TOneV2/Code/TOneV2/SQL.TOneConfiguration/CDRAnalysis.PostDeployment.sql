@@ -114,9 +114,9 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(901,'Fraud Analysis',null,null,'/images/menu-icons/other.png',11,0),
+('c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fraud Analysis',null,null,'/images/menu-icons/other.png',11,0),
 --(902,'Reports',null,null,'/images/menu-icons/busines intel.png',14,0),
-(903,'Network Infrastructure',null,1,null,30,0)
+('8437594d-5472-4f4e-8ef2-d15c32834714','Network Infrastructure',null,1,null,30,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -140,17 +140,17 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(9001,'Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement',1,'PSTN_BE/NormalizationRule/GetFilteredNormalizationRules',null,null,null,0,31),
-(9002,'Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',901,'Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null,null,null,0,1),
-(9003,'Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement',901,'Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null,null,null,0,2),
-(9004,'Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',901,'Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries',null,null,null,0,3),
-(9005,'White Numbers','White Numbers','#/view/FraudAnalysis/Views/AccountStatus/AccountStatusManagement',901,'Fzero_FraudAnalysis/AccountStatus/GetAccountStatusesData',null,null,null,0,4),
+('f09a8ccf-f0ee-4eef-bb19-24b1abf902ae','Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','PSTN_BE/NormalizationRule/GetFilteredNormalizationRules',null,null,null,0,31),
+('9d9043eb-18e8-4c52-a69b-ee10954dcfa5','Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement','c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null,null,null,0,1),
+('949681f0-3701-4d43-85e5-1bb61bce7f28','Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement','c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null,null,null,0,2),
+('aa1dc522-730c-4f30-a41e-a847389f15ef','Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis','c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries',null,null,null,0,3),
+('cf2beab7-a69f-4834-9818-cee0e9b39e68','White Numbers','White Numbers','#/view/FraudAnalysis/Views/AccountStatus/AccountStatusManagement','c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fzero_FraudAnalysis/AccountStatus/GetAccountStatusesData',null,null,null,0,4),
 --(9006,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',902,null,null,null,null,0,1),
 --(9007,'Detected Lines Summary','Detected Lines Summary','#/view/FraudAnalysis/Views/Reports/BlockedLines',902,null,null,null,null,0,2),
 --(9008,'Detected Lines Details','Detected Lines Details','#/view/FraudAnalysis/Views/Reports/LinesDetected',902,null,null,null,null,0,3),
-(9008,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement',903,'PSTN_BE/Switch/GetFilteredSwitches',null,null,null,0,1),
-(9009,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement',903,'PSTN_BE/Trunk/GetFilteredTrunks',null,null,null,0,2),
-(9010,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',903,'PSTN_BE/SwitchBrand/GetFilteredBrands',null,null,null,0,3)
+('db3b1776-cbcc-4490-92bc-529cd9f3b8bb','Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement','8437594d-5472-4f4e-8ef2-d15c32834714','PSTN_BE/Switch/GetFilteredSwitches',null,null,null,0,1),
+('bfdb6651-df90-4c12-85f0-5c3a78299ac8','Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement','8437594d-5472-4f4e-8ef2-d15c32834714','PSTN_BE/Trunk/GetFilteredTrunks',null,null,null,0,2),
+('eb2d5ea0-4ae1-4219-8152-487f13ef2b88','Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement','8437594d-5472-4f4e-8ef2-d15c32834714','PSTN_BE/SwitchBrand/GetFilteredBrands',null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

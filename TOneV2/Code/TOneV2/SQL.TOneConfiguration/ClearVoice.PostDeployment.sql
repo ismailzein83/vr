@@ -48,8 +48,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
-(1002,'Dynamic Management','Dynamic Management',1,null,13,0)
+('21e542bb-6bfb-4dbb-b359-ea50e3b42c57','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -78,12 +77,12 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(10001,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',1001,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,10),
-(10002,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',1001,'QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,11),
-(10004,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,12),
-(10003,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',1001,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,12),
-(10005,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',101,'QM_BE/Zone/GetFilteredZones',null,null,null,0,20),
-(10006,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',101,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,21)
+('b5b041a1-f037-42fc-9750-7802b9610aab','Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,10),
+('7ce99d52-af55-4111-b59b-e6de6995b84f','Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,11),
+('d845620f-f6c1-49c6-a521-0629ea8d2c66','History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,12),
+('c65ed28a-36d0-4047-bec5-030d35b02308','Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,12),
+('7e71942c-9569-43e0-a3e0-5f24b45de666','Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_BE/Zone/GetFilteredZones',null,null,null,0,20),
+('0abbf4d1-1050-42ce-bf29-9af1d5ca4d4e','Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,21)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

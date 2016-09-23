@@ -16,7 +16,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(801,'Pricelist Management',null,null,'/images/menu-icons/Purchase Area.png',10,0)
+('0d24e501-99c1-47ce-a002-282a86826107','Pricelist Management',null,null,'/images/menu-icons/Purchase Area.png',10,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -41,10 +41,10 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(8001,'Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement',1,'CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15),
-(8002,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',801,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
-(8003,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',801,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11),
-(8004,'Pricelists History','Pricelists History','#/view/CP_SupplierPricelist/Views/SupplierPriceList/PriceLists',801,'CP_SupPriceList/PriceList/GetFilteredPriceLists',null,null,null,0,12)
+('ade187cf-146c-45db-882a-2c943d38dd70','Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15),
+('e2ed2857-dea3-42fe-8041-b2b06eb1e20e','Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
+('ea38345e-2354-4e67-9fac-d5612fae62c3','Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11),
+('a33a27e2-16e9-4475-b75c-e4e1320ce31f','Pricelists History','Pricelists History','#/view/CP_SupplierPricelist/Views/SupplierPriceList/PriceLists','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetFilteredPriceLists',null,null,null,0,12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

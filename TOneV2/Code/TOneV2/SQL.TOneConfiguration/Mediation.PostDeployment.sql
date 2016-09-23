@@ -17,7 +17,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(17001,'Mediation Definitions', 'Mediation Definitions', '#/view/Mediation_Generic/Views/MediationDefinition/MediationDefinitionManagement', 3, 'Mediation_Generic/MediationSettingDefinition/GetFilteredMediationSettingDefinitions', NULL, NULL, NULL, 0, 200)
+('AFD3C5EB-1745-4AEC-82DD-83FFBDE81900','Mediation Definitions', 'Mediation Definitions', '#/view/Mediation_Generic/Views/MediationDefinition/MediationDefinitionManagement', 'D5C1101C-E949-468F-ABCF-2E262D6239AD', 'Mediation_Generic/MediationSettingDefinition/GetFilteredMediationSettingDefinitions', NULL, NULL, NULL, 0, 200)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
@@ -203,3 +203,7 @@ when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 set identity_insert [common].[Setting] off;
+
+
+
+--sec.Module--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('D5C1101C-E949-468F-ABCF-2E262D6239AD','Mediation',null,null,null,3,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))merge	[sec].[Module] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]when not matched by target then	insert([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])	values(s.[ID],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
