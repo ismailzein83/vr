@@ -43,7 +43,9 @@ namespace TOne.WhS.DBSync.Business
         public override VRTimeZone BuildItemFromSource(SourceCustomTimeZoneInfo sourceItem)
         {
             VRTimeZoneSettings timeZoneSettings = new VRTimeZoneSettings();
+
             timeZoneSettings.Offset = TimeSpan.FromMinutes(sourceItem.BaseUtcOffset);
+
             return new VRTimeZone
             {
                 Name = sourceItem.DisplayName,
@@ -54,7 +56,9 @@ namespace TOne.WhS.DBSync.Business
 
         public override void FillTableInfo(bool useTempTables)
         {
-           
+            DBTable dbTableVRTimeZone = Context.DBTables[DBTableName.VRTimeZone];
+            if (dbTableVRTimeZone != null)
+                dbTableVRTimeZone.Records = dbSyncDataManager.GetVrTimeZones(useTempTables);
         }
 
     }

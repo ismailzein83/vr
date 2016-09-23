@@ -4,6 +4,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -14,6 +15,7 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, CarrierProfile> allCarrierProfiles;
         Dictionary<string, Currency> allCurrencies;
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
+        Dictionary<string, VRTimeZone> allTimeZones;
         public CarrierAccountMigrator(MigrationContext context)
             : base(context)
         {
@@ -26,6 +28,8 @@ namespace TOne.WhS.DBSync.Business
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
             var dbTableZoneServicesConfig = Context.DBTables[DBTableName.ZoneServiceConfig];
             allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
+            var dbTableVRTimeZone = context.DBTables[DBTableName.VRTimeZone];
+            allTimeZones = (Dictionary<String, VRTimeZone>)dbTableVRTimeZone.Records;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -102,22 +106,7 @@ namespace TOne.WhS.DBSync.Business
                         break;
                 }
 
-                List<ZoneService> defaultServices = new List<ZoneService>();
-
-                if (allZoneServicesConfig != null)
-                {
-                    foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
-                    {
-                        if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceItem.ServicesFlag)) == Convert.ToInt32(item.Value.SourceId))
-                            defaultServices.Add(new ZoneService()
-                            {
-                                ServiceId = Convert.ToInt32(item.Value.ZoneServiceConfigId)
-                            });
-                    }
-                }
-
-
-                carrierAccountSupplierSettings.DefaultServices = defaultServices;
+                FillTimeZoneAndDefaultServicesForCarrierAccount(sourceItem, carrierAccountCustomerSettings, carrierAccountSupplierSettings);
 
                 carrierAccountSettings.Mask = sourceItem.CarrierMask;
 
@@ -143,6 +132,58 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
+        private void FillTimeZoneAndDefaultServicesForCarrierAccount(SourceCarrierAccount sourceItem, CarrierAccountCustomerSettings carrierAccountCustomerSettings, CarrierAccountSupplierSettings carrierAccountSupplierSettings)
+        {
+            if (sourceItem.AccountType == SourceAccountType.Client && sourceItem.CustomerGMTTime.HasValue)
+                FillTimeZoneForCustomer(sourceItem.CustomerGMTTime.Value, carrierAccountCustomerSettings);
+            else if (sourceItem.AccountType == SourceAccountType.Termination && sourceItem.GMTTime.HasValue)
+            {
+                FillTimeZoneForSupplier(sourceItem.GMTTime.Value, carrierAccountSupplierSettings);
+                FillDefualtServices(sourceItem, carrierAccountSupplierSettings);
+            }
+            else
+            {
+                FillTimeZoneForCustomer(sourceItem.CustomerGMTTime.Value, carrierAccountCustomerSettings);
+                FillTimeZoneForSupplier(sourceItem.GMTTime.Value, carrierAccountSupplierSettings);
+                FillDefualtServices(sourceItem, carrierAccountSupplierSettings);
+            }
+        }
+
+        private void FillTimeZoneForSupplier(short supplierOffset, CarrierAccountSupplierSettings carrierAccountSupplierSettings)
+        {
+            TimeSpan offSet = TimeSpan.FromMinutes(supplierOffset);
+            VRTimeZone timeZone = allTimeZones.Values.FindRecord(item => item.Settings != null && item.Settings.Offset == offSet);
+
+            if (timeZone != null)
+                carrierAccountSupplierSettings.TimeZoneId = timeZone.TimeZoneId;
+        }
+
+        private void FillTimeZoneForCustomer(short customerOffset, CarrierAccountCustomerSettings carrierAccountCustomerSettings)
+        {
+            TimeSpan offSet = TimeSpan.FromMinutes(customerOffset);
+            VRTimeZone timeZone = allTimeZones.Values.FindRecord(item => item.Settings != null && item.Settings.Offset == offSet);
+
+            if (timeZone != null)
+                carrierAccountCustomerSettings.TimeZoneId = timeZone.TimeZoneId;
+        }
+
+
+        private void FillDefualtServices(SourceCarrierAccount sourceItem, CarrierAccountSupplierSettings carrierAccountSupplierSettings)
+        {
+            List<ZoneService> defaultServices = new List<ZoneService>();
+            if (allZoneServicesConfig != null)
+            {
+                foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
+                {
+                    if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceItem.ServicesFlag)) == Convert.ToInt32(item.Value.SourceId))
+                        defaultServices.Add(new ZoneService()
+                        {
+                            ServiceId = Convert.ToInt32(item.Value.ZoneServiceConfigId)
+                        });
+                }
+            }
+            carrierAccountSupplierSettings.DefaultServices = defaultServices;
+        }
         public override void FillTableInfo(bool useTempTables)
         {
             DBTable dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];

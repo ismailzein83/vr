@@ -23,6 +23,10 @@ namespace TOne.WhS.DBSync.Entities
 
         public string CurrencyId { get; set; }
 
+        public short? CustomerGMTTime { get; set; }
+
+        public short? GMTTime { get; set; }
+
         public SourceActivationStatus ActivationStatus { get; set; }
 
         public SourceAccountType AccountType { get; set; }

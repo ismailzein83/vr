@@ -26,6 +26,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 ProfileId = (short)reader["ProfileID"],
                 ServicesFlag = (short)reader["ServicesFlag"],
                 ActivationStatus = (SourceActivationStatus)reader["ActivationStatus"],
+                CustomerGMTTime = GetReaderValue<short?>(reader, "CustomerGMTTime"),
+                GMTTime = GetReaderValue<short?>(reader, "GMTTime"),
                 AccountType = (SourceAccountType)reader["AccountType"],
                 CurrencyId = reader["CurrencyID"] as string,
                 CarrierMask = reader["CarrierMask"] as string,
@@ -34,7 +36,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
         const string query_getSourceCarrierAccounts = @"SELECT  ca.CarrierAccountID CarrierAccountID, ca.ProfileID ProfileID, ca.ActivationStatus ActivationStatus,  
-                                                                ca.AccountType AccountType, ca.NameSuffix NameSuffix, ca.ServicesFlag ServicesFlag,
+                                                                ca.AccountType AccountType, ca.NameSuffix NameSuffix, ca.ServicesFlag ServicesFlag, ca.GMTTime GMTTime, ca.CustomerGMTTime CustomerGMTTime,
                                                                 cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask 
                                                                 FROM  CarrierAccount ca WITH (NOLOCK) INNER JOIN CarrierProfile cp 
                                                                 ON ca.ProfileID = cp.ProfileID WHERE (ca.IsDeleted = 'N')";
