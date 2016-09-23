@@ -38,13 +38,13 @@
             });
         }
 
-        //function HasAddVRAlertRuleTypePermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRuleType']));
-        //}
+        function HasAddVRAlertRuleTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRuleType']));
+        }
 
-        //function HasUpdateVRAlertRuleTypePermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRuleType']));
-        //}
+        function HasEditVRAlertRuleTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRuleType']));
+        }
 
 
         return ({
@@ -54,8 +54,8 @@
             UpdateVRAlertRuleType: UpdateVRAlertRuleType,
             GetVRAlertRuleTypeSettingsExtensionConfigs: GetVRAlertRuleTypeSettingsExtensionConfigs,
             GetVRAlertRuleTypesInfo: GetVRAlertRuleTypesInfo,
-            //HasUpdateVRAlertRuleTypePermission: HasUpdateVRAlertRuleTypePermission,
-            //HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission
+            HasAddVRAlertRuleTypePermission: HasAddVRAlertRuleTypePermission,
+            HasEditVRAlertRuleTypePermission: HasEditVRAlertRuleTypePermission
         });
     }
 
