@@ -17,18 +17,8 @@ namespace TOne.WhS.Sales.Business
     {
         #region Fields
 
-        IRatePlanDataManager _dataManager;
-        RoutingProductManager _routingProductManager;
-
-        #endregion
-
-        #region Constructors
-
-        public RatePlanManager()
-        {
-            _dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            _routingProductManager = new RoutingProductManager();
-        }
+        IRatePlanDataManager _dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+        RoutingProductManager _routingProductManager = new RoutingProductManager();
 
         #endregion
 
