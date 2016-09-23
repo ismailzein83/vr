@@ -36,11 +36,15 @@
         </vr-columns>
     </vr-row>
     <vr-row removeline="true">
-        <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showResetLink" ng-if="!scopeModel.isCurrentServiceInherited || !scopeModel.renderResetLink">
-            <vr-label isvalue="true">
-                <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.reset()">Reset to default</span>
-            </vr-label>
-        </vr-columns>
+        <span ng-if="scopeModel.renderResetLink">
+            <span ng-if="!scopeModel.isCurrentServiceInherited">
+                <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showResetLink">
+                    <vr-label isvalue="true">
+                        <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.reset()">Reset to default</span>
+                    </vr-label>
+                </vr-columns>
+            </span>
+        </span>
         <vr-columns colnum="1" simplecol="true" ng-show="scopeModel.showUndoLink">
             <vr-label isvalue="true">
                 <span style="text-decoration: underline; cursor: pointer" ng-click="scopeModel.undo()">Undo</span>

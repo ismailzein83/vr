@@ -36,6 +36,7 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
         function initializeController() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.renderResetLink = false;
 
             $scope.scopeModel.onCurrentServiceViewerReady = function (api) {
                 currentServiceViewerAPI = api;
