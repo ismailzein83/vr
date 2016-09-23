@@ -121,12 +121,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     }
 
 
-                    NotImportedZoneService notImportedZoneService = notImportedZone.NotImportedZoneService;
-                    zoneRatePreview.ZoneServicesChangeType = notImportedZone.HasChanged ? ZoneServiceChangeType.Deleted : ZoneServiceChangeType.NotChanged;
-                    zoneRatePreview.SystemServicesBED = notImportedZoneService.BED;
-                    zoneRatePreview.SystemServicesEED = notImportedZoneService.EED;
-                    zoneRatePreview.SystemServiceIds = notImportedZoneService.ZoneServicesIds;
-
+                    if(notImportedZone.NotImportedZoneService != null)
+                    {
+                        NotImportedZoneService notImportedZoneService = notImportedZone.NotImportedZoneService;
+                        zoneRatePreview.ZoneServicesChangeType = notImportedZone.HasChanged ? ZoneServiceChangeType.Deleted : ZoneServiceChangeType.NotChanged;
+                        zoneRatePreview.SystemServicesBED = notImportedZoneService.BED;
+                        zoneRatePreview.SystemServicesEED = notImportedZoneService.EED;
+                        zoneRatePreview.SystemServiceIds = notImportedZoneService.ZoneServicesIds;
+                    }
+                    
                     zonesRatesPreview.Add(zoneRatePreview);
                 }
             }
