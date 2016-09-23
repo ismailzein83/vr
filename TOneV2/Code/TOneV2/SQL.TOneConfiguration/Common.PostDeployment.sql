@@ -142,13 +142,12 @@ end
 --[sec].[Module]------------------------------101 to 200------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities','Business Entities',null,'/Client/images/menu-icons/Business Entities.png',2,0),
 ('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups','Lookups','E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,2,1),
-('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',5,0)
+('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,4,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -160,7 +159,6 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
-set identity_insert [sec].[Module] off;
 --------------------------------------------------------------------------------------------------------------
 end
 
@@ -169,7 +167,6 @@ end
 begin
 
 set nocount on;
-set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +196,6 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
-set identity_insert [sec].[View] off;
 ---------------------------------------------------------------------------------------------------------------
 end
 

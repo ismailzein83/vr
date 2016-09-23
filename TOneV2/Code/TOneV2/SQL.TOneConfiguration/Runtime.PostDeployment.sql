@@ -15,13 +15,11 @@ Post-Deployment Script Template
 --[sec].[View]-----------------------------5001 to 6000-------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('95ABA81F-01BB-40B5-8194-5F67718F6C04','Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,4),
 ('C65ED28A-36D0-4047-BEC5-030D35B02308','My Scheduler Service','Scheduler Service','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}','50624672-CD25-44FD-8580-0E3AC8E34C71','VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,6)
-
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -33,7 +31,6 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
-set identity_insert [sec].[View] off;
 --------------------------------------------------------------------------------------------------------------
 
 end

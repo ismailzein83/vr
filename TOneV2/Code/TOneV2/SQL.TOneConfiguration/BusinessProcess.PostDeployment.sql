@@ -12,7 +12,6 @@ Post-Deployment Script Template
 --[sec].[Module]---------------------------601 to 700---------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,6 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
-set identity_insert [sec].[Module] off;
 --------------------------------------------------------------------------------------------------------------
 
 end
@@ -37,7 +35,6 @@ end
 --[sec].[View]-----------------------------6001 to 7000-------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +55,6 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
-set identity_insert [sec].[View] off;
 --------------------------------------------------------------------------------------------------------------
 
 end
