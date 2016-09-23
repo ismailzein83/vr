@@ -32,10 +32,12 @@ namespace Vanrise.Queueing
 
             Func<QueueExecutionFlowStage, bool> filterExpression = (stage) =>
             {
-                if(filter != null && filter.Filters != null)
+                if(filter != null )
                 {
                     QueueExecutionFlowStageFilterContext filterContext = new QueueExecutionFlowStageFilterContext { Stage = stage };
-                    if (filter.Filters.Any(itm => !itm.IsMatch(filterContext)))
+                    if (filter.Filters != null && filter.Filters.Any(itm => !itm.IsMatch(filterContext)))
+                        return false;
+                    if (filter.InculdesStageNames!=null  && !filter.InculdesStageNames.Contains(stage.StageName))
                         return false;
                 }
                 return true;

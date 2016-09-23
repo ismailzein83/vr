@@ -9,6 +9,7 @@ app.directive('vrQueueingExecutionflowStageSelector', ['VR_Queueing_ExecutionFlo
                 ismultipleselection: '@',
                 selectedvalues: '=',
                 onselectionchanged: '=',
+                onblurdropdown:'=',
                 onselectitem: '=',
                 ondeselectitem: '=',
                 isrequired: '=',
@@ -64,6 +65,8 @@ app.directive('vrQueueingExecutionflowStageSelector', ['VR_Queueing_ExecutionFlo
                         filter = payload.filter;
                         executionFlowDefinitionId = payload.executionFlowDefinitionId;
                     }
+                    if (filter != undefined && filter.Filters == undefined)
+                        return;
 
                     if (executionFlowDefinitionId != undefined && executionFlowDefinitionId != 0) {
                         return VR_Queueing_ExecutionFlowDefinitionAPIService.GetExecutionFlowStagesInfo(executionFlowDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
@@ -107,7 +110,7 @@ app.directive('vrQueueingExecutionflowStageSelector', ['VR_Queueing_ExecutionFlo
             return '<div>' +
                    '<vr-select ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="StageName" datavaluefield="StageName" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
+                       '" onselectitem="ctrl.onselectitem" onblurdropdown="ctrl.onblurdropdown" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</div>'
         }

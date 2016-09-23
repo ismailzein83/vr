@@ -8,6 +8,7 @@ namespace Vanrise.Queueing.Entities
 {
     public class QueueExecutionFlowStageFilter
     {
+        public  List<string> InculdesStageNames { set; get; }
         public List<IQueueExecutionFlowStageFilter> Filters { get; set; }
     }
 }
