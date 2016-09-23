@@ -1,14 +1,17 @@
 ﻿CREATE TABLE [sec].[Module] (
-    [Id]           INT            IDENTITY (1, 1) NOT NULL,
-    [Name]         NVARCHAR (255) NOT NULL,
-    [Url]          NVARCHAR (255) NULL,
-    [ParentId]     INT            NULL,
-    [Icon]         NVARCHAR (50)  NULL,
-    [Rank]         INT            NULL,
-    [AllowDynamic] BIT            NULL,
-    [timestamp]    ROWVERSION     NULL,
-    CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([Id] ASC)
+    [ID]           UNIQUEIDENTIFIER NOT NULL,
+    [Name]         NVARCHAR (255)   NOT NULL,
+    [Url]          NVARCHAR (255)   NULL,
+    [ParentId]     UNIQUEIDENTIFIER NULL,
+    [Icon]         NVARCHAR (50)    NULL,
+    [Rank]         INT              NULL,
+    [AllowDynamic] BIT              NULL,
+    [timestamp]    ROWVERSION       NULL,
+    CONSTRAINT [PK_Module_1] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [FK_Module_Module] FOREIGN KEY ([ID]) REFERENCES [sec].[Module] ([ID])
 );
+
+
 
 
 

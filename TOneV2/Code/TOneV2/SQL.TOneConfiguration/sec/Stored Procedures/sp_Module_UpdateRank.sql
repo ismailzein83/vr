@@ -5,8 +5,8 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_Module_UpdateRank]
 	-- Add the parameters for the stored procedure here
-	@moduleId INT,
-	@parentId INT = null,
+	@moduleId uniqueidentifier,
+	@parentId uniqueidentifier = null,
 @rank INT
 AS
 BEGIN

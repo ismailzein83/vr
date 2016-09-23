@@ -1,16 +1,13 @@
 ﻿CREATE PROCEDURE [sec].[sp_Module_Insert] 
-	
+	@Id uniqueidentifier,
 	@Name Nvarchar(255),
-	@ParentId int,
-	@AllowDynamic bit,
-	@Id int out
+	@ParentId uniqueidentifier,
+	@AllowDynamic bit
 AS
 BEGIN
 IF NOT EXISTS(select null from sec.[Module] where Name = @Name and ParentId = @ParentId)
 	BEGIN
-		Insert into sec.[Module] ([Name],ParentId,AllowDynamic)
-		values(@Name,@ParentId, @AllowDynamic)
-		
-		SET @Id = SCOPE_IDENTITY()
+		Insert into sec.[Module] (ID,[Name],ParentId,AllowDynamic)
+		values(@Id,@Name,@ParentId, @AllowDynamic)
 	END
 END

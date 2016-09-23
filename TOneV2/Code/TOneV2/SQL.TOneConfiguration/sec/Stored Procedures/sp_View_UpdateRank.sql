@@ -5,8 +5,8 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_View_UpdateRank]
 	-- Add the parameters for the stored procedure here
-@viewId INT,
-@ModuleId int,
+@viewId uniqueidentifier,
+@ModuleId uniqueidentifier,
 @rank INT
 AS
 BEGIN

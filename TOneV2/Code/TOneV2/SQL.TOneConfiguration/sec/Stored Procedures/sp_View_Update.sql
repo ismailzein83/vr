@@ -5,11 +5,11 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_View_Update]
 	-- Add the parameters for the stored procedure here
-	@pageID INT ,
+	@pageID uniqueidentifier ,
 	@PageName NVARCHAR(255),
 	@Title NVARCHAR(255),
 	@Url NVARCHAR(255),
-	@Module INT,
+	@Module uniqueidentifier,
 	@Audience NVARCHAR(255),
 	@Content NVARCHAR(max),
 	@Settings nvarchar(max),

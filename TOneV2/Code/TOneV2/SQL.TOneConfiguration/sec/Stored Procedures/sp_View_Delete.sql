@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE sec.sp_View_Delete 
+CREATE PROCEDURE [sec].[sp_View_Delete] 
 	-- Add the parameters for the stored procedure here
-	@Id INT
+	@Id uniqueidentifier
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from

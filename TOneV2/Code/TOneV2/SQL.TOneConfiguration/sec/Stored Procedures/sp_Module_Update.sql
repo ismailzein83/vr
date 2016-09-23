@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [sec].[sp_Module_Update] 
-	@ID int,
+	@ID uniqueidentifier,
 	@Name Nvarchar(255),
-	@ParentId int,
+	@ParentId uniqueidentifier,
 	@AllowDynamic bit
 AS
 BEGIN
