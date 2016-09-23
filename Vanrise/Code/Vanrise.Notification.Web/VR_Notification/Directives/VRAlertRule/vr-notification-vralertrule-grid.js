@@ -61,6 +61,7 @@ app.directive('vrNotificationVralertruleGrid', ['VR_Notification_VRAlertRuleAPIS
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editVRAlertRule,
+                    haspermission: hasEditVRAlertRulePermission
                 });
             }
             function editVRAlertRule(vrAlertRuleItem) {
@@ -69,6 +70,9 @@ app.directive('vrNotificationVralertruleGrid', ['VR_Notification_VRAlertRuleAPIS
                 };
 
                 VR_Notification_VRAlertRuleService.editVRAlertRule(vrAlertRuleItem.Entity.VRAlertRuleId, onVRAlertRuleUpdated);
+            }
+            function hasEditVRAlertRulePermission() {
+                return VR_Notification_VRAlertRuleAPIService.HasEditVRAlertRulePermission();
             }
         }
     }]);

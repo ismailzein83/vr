@@ -28,20 +28,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'UpdateVRAlertRule'), vrAlertRuleItem);
         }
 
+        function HasAddVRAlertRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRule']));
+        }
 
-        //function GetVRAlertRulesInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRAlertRulesInfo"), {
-        //        filter: filter
-        //    });
-        //}
-
-        //function HasAddVRAlertRulePermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRule']));
-        //}
-
-        //function HasUpdateVRAlertRulePermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRule']));
-        //}
+        function HasEditVRAlertRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRule']));
+        }
 
 
         return ({
@@ -49,9 +42,8 @@
             GetVRAlertRule: GetVRAlertRule,
             AddVRAlertRule: AddVRAlertRule,
             UpdateVRAlertRule: UpdateVRAlertRule,
-            //GetVRAlertRulesInfo: GetVRAlertRulesInfo,
-            //HasAddVRAlertRulePermission: HasAddVRAlertRulePermission,
-            //HasUpdateVRAlertRulePermission: HasUpdateVRAlertRulePermission,
+            HasAddVRAlertRulePermission: HasAddVRAlertRulePermission,
+            HasEditVRAlertRulePermission: HasEditVRAlertRulePermission,
         });
     }
 

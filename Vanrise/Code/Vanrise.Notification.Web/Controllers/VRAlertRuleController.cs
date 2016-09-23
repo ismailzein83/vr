@@ -42,13 +42,5 @@ namespace Vanrise.Notification.Web.Controllers
         {
             return _manager.UpdateVRAlertRule(vrAlertRuleItem);
         }
-
-        //[HttpGet]
-        //[Route("GetVRAlertRulesInfo")]
-        //public IEnumerable<VRAlertRuleInfo> GetVRAlertRulesInfo(string filter = null)
-        //{
-        //    VRAlertRuleFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRAlertRuleFilter>(filter) : null;
-        //    return _manager.GetVRAlertRulesInfo(deserializedFilter);
-        //}
     }
 }
