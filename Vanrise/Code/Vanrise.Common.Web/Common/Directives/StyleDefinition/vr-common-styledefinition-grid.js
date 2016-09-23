@@ -65,9 +65,6 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
                     haspermission: hasEditStyleDefinitionPermission
                 });
             }
-            function hasEditStyleDefinitionPermission() {
-                return VRCommon_StyleDefinitionAPIService.HasUpdateStyleDefinitionPermission();
-            }
             function editStyleDefinition(styleDefinitionItem) {
                 var onStyleDefinitionUpdated = function (updatedStyleDefinition) {
                     gridAPI.itemUpdated(updatedStyleDefinition);
@@ -75,5 +72,9 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
 
                 VRCommon_StyleDefinitionService.editStyleDefinition(styleDefinitionItem.Entity.StyleDefinitionId, onStyleDefinitionUpdated);
             }
+            function hasEditStyleDefinitionPermission() {
+                return VRCommon_StyleDefinitionAPIService.HasEditStyleDefinitionPermission();
+            }
+
         }
     }]);

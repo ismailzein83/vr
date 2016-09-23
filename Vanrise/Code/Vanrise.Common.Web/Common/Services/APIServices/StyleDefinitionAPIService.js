@@ -27,15 +27,6 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateStyleDefinition'), styleDefinitionItem);
         }
 
-
-        function HasAddStyleDefinitionPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddStyleDefinition']));
-        }
-
-        function HasUpdateStyleDefinitionPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateStyleDefinition']));
-        }
-
         function GetStyleFormatingExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetStyleFormatingExtensionConfigs"));
         }
@@ -47,15 +38,24 @@
         }
 
 
+        function HasAddStyleDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddStyleDefinition']));
+        }
+
+        function HasEditStyleDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateStyleDefinition']));
+        }
+
+
         return ({
             GetFilteredStyleDefinitions: GetFilteredStyleDefinitions,
             GetStyleDefinition: GetStyleDefinition,
             AddStyleDefinition: AddStyleDefinition,
-            HasAddStyleDefinitionPermission: HasAddStyleDefinitionPermission,
-            HasUpdateStyleDefinitionPermission:HasUpdateStyleDefinitionPermission,
             UpdateStyleDefinition: UpdateStyleDefinition,
             GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
-            GetStyleDefinitionsInfo: GetStyleDefinitionsInfo
+            GetStyleDefinitionsInfo: GetStyleDefinitionsInfo,
+            HasAddStyleDefinitionPermission: HasAddStyleDefinitionPermission,
+            HasEditStyleDefinitionPermission: HasEditStyleDefinitionPermission,
         });
     }
 

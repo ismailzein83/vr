@@ -24,9 +24,11 @@
                 }
                 VRCommon_StyleDefinitionService.addStyleDefinition(onStyleDefinitionAdded);
             };
+
             $scope.hasAddStyleDefinitionPermission =function () {
                 return VRCommon_StyleDefinitionAPIService.HasAddStyleDefinitionPermission()
             }
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
