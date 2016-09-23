@@ -36,6 +36,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             if (context.Routes == null || CarrierMappings == null)
                 return;
 
+            List<string> invalidRoutes = new List<string>();
             CarrierMapping carrierMapping;
             List<ConvertedRoute> radiusRoutes = new List<ConvertedRoute>();
             foreach (var route in context.Routes)
@@ -45,7 +46,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
                     if (carrierMapping.CustomerMapping == null)
                         continue;
 
-                    List<MVTSRadiusOption> options = BuildOptions(route.Options);
+                    List<MVTSRadiusOption> options = BuildOptions(route, invalidRoutes);
                     string radiusRouteOptions = options != null && options.Count > 0 ? String.Join("|", options.Select(itm => itm.Option)) : "BLK";
 
                     foreach (string CustomerMapping in carrierMapping.CustomerMapping)
@@ -64,12 +65,13 @@ namespace TOne.WhS.RouteSync.MVTSRadius
                     }
                 }
             }
+            context.InvalidRoutes = invalidRoutes.Count > 0 ? invalidRoutes : null;
             context.ConvertedRoutes = radiusRoutes;
         }
 
-        private List<MVTSRadiusOption> BuildOptions(List<RouteOption> routeOptions)
+        private List<MVTSRadiusOption> BuildOptions(Route route, List<string> invalidRoutes)
         {
-            if (routeOptions == null)
+            if (route == null || route.Options == null)
                 return null;
 
             int priority = NumberOfOptions;
@@ -78,9 +80,9 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             List<MVTSRadiusOption> options = new List<MVTSRadiusOption>();
             StringBuilder strOptions = new StringBuilder();
 
-            MVTSRouteSyncOptions roundedOptions = BuildRoundedPercentages(routeOptions);
+            MVTSRouteSyncOptions roundedOptions = BuildRoundedPercentages(route, invalidRoutes);
 
-            foreach (RouteOption routeOption in routeOptions)
+            foreach (RouteOption routeOption in route.Options)
             {
                 if (priority == 0)
                     break;
@@ -109,11 +111,11 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             return options;
         }
 
-        private MVTSRouteSyncOptions BuildRoundedPercentages(List<RouteOption> routeOptions)
+        private MVTSRouteSyncOptions BuildRoundedPercentages(Route route, List<string> invalidRoutes)
         {
             MVTSRouteSyncOptions mvtsRouteSyncOptions = new MVTSRouteSyncOptions();
             int roundedPercentages = 0;
-            foreach (RouteOption routeOption in routeOptions)
+            foreach (RouteOption routeOption in route.Options)
             {
                 int? roundedPercentage = null;
                 if (routeOption.Percentage.HasValue)
@@ -121,7 +123,12 @@ namespace TOne.WhS.RouteSync.MVTSRadius
                     roundedPercentage = Convert.ToInt32(routeOption.Percentage.Value);
                     roundedPercentages += roundedPercentage.Value;
                 }
-                mvtsRouteSyncOptions.Add(routeOption.SupplierId, roundedPercentage);
+                if (!mvtsRouteSyncOptions.ContainsKey(routeOption.SupplierId))
+                    mvtsRouteSyncOptions.Add(routeOption.SupplierId, roundedPercentage);
+                else
+                {
+                    invalidRoutes.Add(string.Format("Customer {0} and Code {1} have the supplier {2} more than once", route.CustomerId, route.Code, routeOption.SupplierId));
+                }
             }
             if (roundedPercentages > 0 && roundedPercentages < 100)
             {

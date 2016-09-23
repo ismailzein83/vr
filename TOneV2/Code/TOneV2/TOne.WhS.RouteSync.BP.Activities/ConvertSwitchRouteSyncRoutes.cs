@@ -76,6 +76,13 @@ namespace TOne.WhS.RouteSync.BP.Activities
                             InitializationData = switchInProcess.InitializationData
                         };
                         switchInProcess.Switch.RouteSynchronizer.ConvertRoutes(switchRouteSynchronizerConvertRoutesContext);
+                        if (switchRouteSynchronizerConvertRoutesContext.InvalidRoutes != null && switchRouteSynchronizerConvertRoutesContext.InvalidRoutes.Count > 0)
+                        {
+                            foreach (string invalidRoute in switchRouteSynchronizerConvertRoutesContext.InvalidRoutes)
+                            {
+                                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Warning, invalidRoute);
+                            }
+                        }
                         if (switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes != null && switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes.Count > 0)
                         {
                             totalBatchesConverted++;
@@ -136,6 +143,13 @@ namespace TOne.WhS.RouteSync.BP.Activities
             }
 
             public List<ConvertedRoute> ConvertedRoutes
+            {
+                get;
+                set;
+            }
+
+
+            public List<string> InvalidRoutes
             {
                 get;
                 set;

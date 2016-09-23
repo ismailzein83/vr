@@ -110,7 +110,8 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, x => RPRouteOptionMapper(x, null, null)));
+            int counter = 0;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, x => RPRouteOptionMapper(x, null, null, counter++)));
         }
 
         public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(RPRouteOptionPolicyFilter filter)
@@ -197,7 +198,7 @@ namespace TOne.WhS.Routing.Business
             };
         }
 
-        private RPRouteOptionDetail RPRouteOptionMapper(RPRouteOption routeOption, int? systemCurrencyId, int? toCurrencyId)
+        private RPRouteOptionDetail RPRouteOptionMapper(RPRouteOption routeOption, int? systemCurrencyId, int? toCurrencyId, int optionOrder)
         {
             if (routeOption == null)
                 return null;
@@ -206,7 +207,8 @@ namespace TOne.WhS.Routing.Business
             {
                 Entity = routeOption,
                 SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId),
-                ConvertedSupplierRate = routeOption.SupplierRate
+                ConvertedSupplierRate = routeOption.SupplierRate,
+                OptionOrder = optionOrder
             };
 
             if (toCurrencyId.HasValue)
@@ -247,7 +249,8 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             IEnumerable<RPRouteOption> routeOptionDetails = dicRouteOptions[policyConfigId].Take(numberOfOptions);
-            return routeOptionDetails.MapRecords(x => RPRouteOptionMapper(x, systemCurrencyId, toCurrencyId));
+            int counter = 0;
+            return routeOptionDetails.MapRecords(x => RPRouteOptionMapper(x, systemCurrencyId, toCurrencyId, counter++));
         }
 
         private IEnumerable<Guid> GetRoutingDatabasePolicyIds(int routingDbId, out Guid defaultPolicyId)

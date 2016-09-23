@@ -32,7 +32,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         SwitchRouteSyncInitializationData InitializationData { set; }
     }
-    
+
     public interface ISwitchRouteSynchronizerConvertRoutesContext
     {
         RouteRangeType? RouteRangeType { get; }
@@ -44,6 +44,8 @@ namespace TOne.WhS.RouteSync.Entities
         List<Route> Routes { get; }
 
         List<ConvertedRoute> ConvertedRoutes { set; }
+
+        List<string> InvalidRoutes { set; }
     }
 
     public interface ISwitchRouteSynchronizerUpdateConvertedRoutesContext
