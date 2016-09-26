@@ -15,7 +15,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('696F8D6E-3798-44C4-8DAD-598EC4AEB875','Reprocess Definition','Reprocess Definition','#/view/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionManagement','E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Reprocess/ReprocessDefinition/GetFilteredReprocessDefinitions',null,null,null,0,4)
+('696F8D6E-3798-44C4-8DAD-598EC4AEB875','Reprocess Definitions','Reprocess Definitions Management','#/view/Reprocess/Views/ReprocessDefinition/ReprocessDefinitionManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Reprocess/ReprocessDefinition/GetFilteredReprocessDefinitions',null,null,null,0,25)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
