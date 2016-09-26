@@ -25,11 +25,11 @@
         function setTitle() {
             if (isEditMode) {
                 var receiveDefinitionName = (entitySyncDefinitions != undefined) ? '' : null;
-                $scope.title = utilsService.buildTitleForUpdateEditor(receiveDefinitionName, 'ReceiveDefinition');
+                $scope.title = utilsService.buildTitleForUpdateEditor(receiveDefinitionName, 'Entity Definition Setting');
 
             }
             else {
-                $scope.title = utilsService.buildTitleForAddEditor('ReceiveDefinition');
+                $scope.title = utilsService.buildTitleForAddEditor('Entity Definition Setting');
             }
         }
         function loadAllControls() {
