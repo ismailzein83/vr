@@ -57,15 +57,6 @@ namespace TOne.WhS.RouteSync.BP.Activities
                 bool hasItem = false;
                 do
                 {
-
-                } while (!ShouldStop(handle) && hasItem);
-            });
-
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            {
-                bool hasItem = false;
-                do
-                {
                     hasItem = inputArgument.SwitchInProcess.RouteQueue.TryDequeue((routeBatch) =>
                     {
                         SwitchRouteSynchronizerConvertRoutesContext switchRouteSynchronizerConvertRoutesContext = new SwitchRouteSynchronizerConvertRoutesContext
