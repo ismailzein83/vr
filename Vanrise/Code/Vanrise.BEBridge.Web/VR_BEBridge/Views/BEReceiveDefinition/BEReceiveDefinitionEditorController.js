@@ -1,20 +1,18 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    function beReceiveDefinitionEditorController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, beRecieveDefinitionApiService) {
+    function beReceiveDefinitionEditorController($scope, UtilsService, vrNotificationService, vrNavigationService, VRUIUtilsService, beRecieveDefinitionApiService) {
 
         var isEditMode;
+        var entitySettings = [];
         var recevieDefinitionId;
         var receveiveDEfinitionEntity;
 
-        var targetSynchronizerApi;
-        var targetSynchronizerReadyDeferred = utilsService.createPromiseDeferred();
-
-        var targetConvertorApi;
-        var targetConvertorReadyDeferred = utilsService.createPromiseDeferred();
-
         var sourceReaderApi;
-        var sourceReaderReadyDeferred = utilsService.createPromiseDeferred();
+        var sourceReaderReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var beSettingsAPI;
+        var beSettingsAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -30,15 +28,15 @@
         function setTitle() {
             if (isEditMode) {
                 var receiveDefinitionName = (receveiveDEfinitionEntity != undefined) ? receveiveDEfinitionEntity.Name : null;
-                $scope.title = utilsService.buildTitleForUpdateEditor(receiveDefinitionName, 'ReceiveDefinition');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(receiveDefinitionName, 'ReceiveDefinition');
 
             }
             else {
-                $scope.title = utilsService.buildTitleForAddEditor('ReceiveDefinition');
+                $scope.title = UtilsService.buildTitleForAddEditor('ReceiveDefinition');
             }
         }
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTargetAnalysisDefinitions, loadTargetConvertorDefinitions, loadTSourceReaderDefinitions]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTSourceReaderDefinitions, loadBESyncSettings]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -72,14 +70,27 @@
             var settings =
             {
                 SourceBEReader: sourceReaderApi.getData(),
-                TargetBEConvertor: targetConvertorApi.getData(),
-                TargetBESynchronizer: targetSynchronizerApi.getData()
+                EntitySyncDefinitions: GetEntitySyncDefinitions()
             }
             return {
                 BEReceiveDefinitionId: receveiveDEfinitionEntity != undefined ? receveiveDEfinitionEntity.BEReceiveDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
                 Settings: settings
             };
+        }
+
+        function GetEntitySyncDefinitions() {
+            var gridData = beSettingsAPI.getData();
+            var settings = [];
+            for (var i = 0; i < gridData.Fields.length; i++) {
+                var setting = {
+                    TargetBEConvertor: gridData.Fields[i].TargetBEConvertor,
+                    TargetBESynchronizer: gridData.Fields[i].TargetBESynchronizer
+                };
+                settings.push(setting);
+            }
+
+            return settings;
         }
         function update() {
             $scope.scopeModel.isLoading = true;
@@ -100,8 +111,9 @@
             $scope.scopeModel.isLoading = true;
             return beRecieveDefinitionApiService.AddReceiveDefinition(buildStatusChargingSetObjFromScope()).then(function (response) {
                 if (vrNotificationService.notifyOnItemAdded('ReceiveDefinition', response, 'Name')) {
-                    if ($scope.onReceiveDefinitionAdded != undefined)
+                    if ($scope.onReceiveDefinitionAdded != undefined) {
                         $scope.onReceiveDefinitionAdded(response.InsertedObject);
+                    }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -110,7 +122,21 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+        function loadBESyncSettings() {
 
+            var loadBESyncSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            beSettingsAPIReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = (receveiveDEfinitionEntity != undefined)
+                        ? { Fields: receveiveDEfinitionEntity.Settings.EntitySyncDefinitions }
+                        : undefined;
+
+                    VRUIUtilsService.callDirectiveLoad(beSettingsAPI, directivePayload, loadBESyncSettingsPromiseDeferred);
+                });
+
+            return loadBESyncSettingsPromiseDeferred.promise;
+        }
 
         function defineScope() {
             $scope.scopeModel = {};
@@ -124,47 +150,25 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.onTargetSynchronizerDirectiveReady = function (api) {
-                targetSynchronizerApi = api;
-                targetSynchronizerReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onTargetConvertorDirectiveReady = function (api) {
-                targetConvertorApi = api;
-                targetConvertorReadyDeferred.resolve();
-            };
+
             $scope.scopeModel.onSourceReaderDirectiveReady = function (api) {
                 sourceReaderApi = api;
                 sourceReaderReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onBESyncSettingsDirectiveReady = function (api) {
+                beSettingsAPI = api;
+                beSettingsAPIReadyPromiseDeferred.resolve();
+            }
         }
 
-        function loadTargetAnalysisDefinitions() {
-            var loadTargetAnalysisPromiseDeferred = utilsService.createPromiseDeferred();
-            targetSynchronizerReadyDeferred.promise.then(function () {
-                var payloadDirective;
-                if (receveiveDEfinitionEntity != undefined)
-                    payloadDirective = { Settings: receveiveDEfinitionEntity.Settings.TargetBESynchronizer };
-                vruiUtilsService.callDirectiveLoad(targetSynchronizerApi, payloadDirective, loadTargetAnalysisPromiseDeferred);
-            });
-            return loadTargetAnalysisPromiseDeferred.promise;
-        }
-        function loadTargetConvertorDefinitions() {
-            var loadTargetConvertorPromiseDeferred = utilsService.createPromiseDeferred();
-            targetConvertorReadyDeferred.promise.then(function () {
-                var payloadDirective;
-                if (receveiveDEfinitionEntity != undefined)
-                    payloadDirective = { Settings: receveiveDEfinitionEntity.Settings.TargetBEConvertor };
-                vruiUtilsService.callDirectiveLoad(targetConvertorApi, payloadDirective, loadTargetConvertorPromiseDeferred);
-            });
-            return loadTargetConvertorPromiseDeferred.promise;
-        }
         function loadTSourceReaderDefinitions() {
-            var loadSourceReaderPromiseDeferred = utilsService.createPromiseDeferred();
+            var loadSourceReaderPromiseDeferred = UtilsService.createPromiseDeferred();
             sourceReaderReadyDeferred.promise.then(function () {
                 var payloadDirective;
                 if (receveiveDEfinitionEntity != undefined)
                     payloadDirective = { Settings: receveiveDEfinitionEntity.Settings.SourceBEReader };
-                vruiUtilsService.callDirectiveLoad(sourceReaderApi, payloadDirective, loadSourceReaderPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(sourceReaderApi, payloadDirective, loadSourceReaderPromiseDeferred);
             });
             return loadSourceReaderPromiseDeferred.promise;
         }

@@ -56,7 +56,7 @@
                     var promises = [];
                     var settings;
                     if (payload != undefined) {
-                        settings = payload.Settings;
+                        settings = payload.targetBESynchronizer;
                     }
                     var loadDefinitionExtensionConfigsPromise = loadDefinitionExtensionConfigs();
                     promises.push(loadDefinitionExtensionConfigsPromise);

@@ -64,10 +64,6 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Sequence_Main" sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <Sequence.Variables>
-      <Variable x:TypeArguments="vq:BaseQueue(vbe:SourceBatches)" Name="queueSourceBatch" />
-      <Variable x:TypeArguments="vbe:SourceBEReader" Name="sourceBEReader" />
-    </Sequence.Variables>
     <ForEach x:TypeArguments="s:Guid" DisplayName="ForEach&lt;Guid&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
       <ForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(s:Guid)">
@@ -126,9 +122,7 @@
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
             <Parallel.Variables>
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="readSourceBEsStatus" />
-              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="convertSourceToTargetStatus" />
-              <Variable x:TypeArguments="vq:BaseQueue(vbe:TargetBEBatch)" Name="queueTargetsToInsert" />
-              <Variable x:TypeArguments="vq:BaseQueue(vbe:TargetBEBatch)" Name="queueTargetsToUpdate" />
+              <Variable x:TypeArguments="vq:BaseQueue(vbe:SourceBatches)" Name="queueSourceBatch" />
             </Parallel.Variables>
             <vbba1:ReadSourceBEs PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="ReadSourceBEs_1">
               <vbba1:ReadSourceBEs.OutputQueues>
@@ -162,26 +156,27 @@
                 <ActivityAction.Argument>
                   <DelegateInArgument x:TypeArguments="vbe:EntitySyncDefinition" Name="entitySyncDefinition" />
                 </ActivityAction.Argument>
-                <Parallel DisplayName="ConvertAndSave_Parallel">
+                <Parallel DisplayName="ConvertAndSave_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_3">
                   <Parallel.Variables>
                     <Variable x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)" Name="queueSaveBatchProcessingContext" />
+                    <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="convertSourceToTargetStatus" />
                   </Parallel.Variables>
-                  <vbba1:ConvertSourceToTargetBEs>
+                  <vbba1:ConvertSourceToTargetBEs sap2010:WorkflowViewState.IdRef="ConvertSourceToTargetBEs_2">
                     <vbba1:ConvertSourceToTargetBEs.BatchProcessingContextQueue>
                       <InArgument x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">
                         <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">queueBatchProcessingContextList[beRecieveDefinition.Settings.EntitySyncDefinitions.IndexOf(entitySyncDefinition)]</mca:CSharpValue>
                       </InArgument>
                     </vbba1:ConvertSourceToTargetBEs.BatchProcessingContextQueue>
-                    <vbba1:ConvertSourceToTargetBEs.PreviousActivityStatus>
-                      <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                        <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">readSourceBEsStatus</mca:CSharpValue>
-                      </InArgument>
-                    </vbba1:ConvertSourceToTargetBEs.PreviousActivityStatus>
                     <vbba1:ConvertSourceToTargetBEs.OutputQueue>
                       <OutArgument x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">
                         <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">queueSaveBatchProcessingContext</mca:CSharpReference>
                       </OutArgument>
                     </vbba1:ConvertSourceToTargetBEs.OutputQueue>
+                    <vbba1:ConvertSourceToTargetBEs.PreviousActivityStatus>
+                      <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                        <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">readSourceBEsStatus</mca:CSharpValue>
+                      </InArgument>
+                    </vbba1:ConvertSourceToTargetBEs.PreviousActivityStatus>
                     <vbba1:ConvertSourceToTargetBEs.Status>
                       <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
                         <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">convertSourceToTargetStatus</mca:CSharpReference>
@@ -197,9 +192,8 @@
                         <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">entitySyncDefinition.TargetBEConvertor</mca:CSharpValue>
                       </InArgument>
                     </vbba1:ConvertSourceToTargetBEs.TargetConverter>
-                    <sap2010:WorkflowViewState.IdRef>ConvertSourceToTargetBEs_2</sap2010:WorkflowViewState.IdRef>
                   </vbba1:ConvertSourceToTargetBEs>
-                  <vbba1:SaveTargetBEs Status="{x:Null}">
+                  <vbba1:SaveTargetBEs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveTargetBEs_2">
                     <vbba1:SaveTargetBEs.BatchProcessingContextQueue>
                       <InArgument x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">
                         <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">queueSaveBatchProcessingContext</mca:CSharpValue>
@@ -215,9 +209,7 @@
                         <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">entitySyncDefinition.TargetBESynchronizer</mca:CSharpValue>
                       </InArgument>
                     </vbba1:SaveTargetBEs.TargetBESynchronizer>
-                    <sap2010:WorkflowViewState.IdRef>SaveTargetBEs_2</sap2010:WorkflowViewState.IdRef>
                   </vbba1:SaveTargetBEs>
-                  <sap2010:WorkflowViewState.IdRef>Parallel_3</sap2010:WorkflowViewState.IdRef>
                 </Parallel>
               </ActivityAction>
             </ParallelForEach>
@@ -225,7 +217,7 @@
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwiQgPlAQ4CAQFHBeMBDwIBAkoLSnQDAeoBUQnhARQCAQNWEVa0AQIBBFoLZSoDAdsBZgtxMQMBzAFyC30mAwG9AX4L4AEWAgELXRFdeQMB4wFiEWJgAwHcAW4RbpoBAwHUAWkRaXEDAc0BehF6iwEDAcUBdRF15QEDAb4BhQENmgEjAwGQAZsBDd8BHwIBDJIBE5IBhgEDAbIBiAETiAGcAQMBpwGXAROXAXoDAZwBjQETjQGAAQMBkQGeAROeAaQBAwGFAaUBEd0BHAIBDakBE8kBNAIBNsoBE9sBKQIBDrEBGbEBeAIBeKwBGawB6gECAWu7ARm7AYgBAgFewAEZwAGQAQIBUcUBGcUBigECAUS2ARm2AZgBAgE31wEZ1wGQAQIBKdIBGdIBgAECARzNARnNAZgBAgEP</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwiQgPdAQ4CAQFDBdsBDwIBAkYLRnQDAa0BTQnZARQCAQNSEVK0AQIBBFYLYSoDAaIBYgttMQMBlwFuC3kmAwGMAXoL2AEWAgEJWRFZeQMBqAFeEV5gAwGjAWoRapoBAwGdAWURZXEDAZgBdhF2iwEDAZIBcRFx5QEDAY0Bfw2UASMCAW+VAQ3XAR8CAQqMAROMAYYBAwGFAYIBE4IBnAECAX6RARORAXoCAXeHAROHAYABAgFwmAETmAGkAQIBaJ8BEdUBHAIBC6QBE8MBNAIBK8QBE9QBKQIBDLEBGbEBeAIBXqcBGacB6gECAVS2ARm2AYgBAgFKrAEZrAGgAQIBQLsBGbsBkAECATbAARnAAYoBAgEs0QEZ0QGQAQIBIcwBGcwBgAECARfHARnHAZgBAgEN</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

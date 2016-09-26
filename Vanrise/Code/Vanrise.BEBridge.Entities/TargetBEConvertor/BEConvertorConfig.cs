@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.BEBridge.Entities
 {
-    public class AccountConvertorConfig : ExtensionConfiguration
+    public class BEConvertorConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_BEBridge_RingoAccountConvertor";
+        public const string EXTENSION_TYPE = "VR_BEBridge_BEConvertor";
         public string Editor { get; set; }
     }
 }

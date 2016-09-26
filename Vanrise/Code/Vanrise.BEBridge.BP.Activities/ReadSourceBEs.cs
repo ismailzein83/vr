@@ -31,6 +31,20 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             List<BatchProcessingContext> pendingBatchProcessings = new List<BatchProcessingContext>();
+            Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
+            {
+                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
+                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues);
+                lock (pendingBatchProcessings)
+                {
+                    pendingBatchProcessings.Add(batchProcessContext);
+                }
+            };
+
+
+            SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
+            inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
+
             System.Threading.Tasks.Task taskCheckPendingBatches = new System.Threading.Tasks.Task(() =>
             {
                 while (pendingBatchProcessings.Count > 0)
@@ -50,17 +64,7 @@ namespace Vanrise.BEBridge.BP.Activities
             });
             taskCheckPendingBatches.Start();
 
-            Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
-            {
-                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
-                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues);
-                lock (pendingBatchProcessings)
-                {
-                    pendingBatchProcessings.Add(batchProcessContext);
-                }
-            };
-            SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext = new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved);
-            inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
+
             while (taskCheckPendingBatches != null)//wait all pending batches
             {
                 System.Threading.Thread.Sleep(250);

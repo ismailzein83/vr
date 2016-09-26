@@ -7,6 +7,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 {
     public class FileSourceReader : SourceBEReader
     {
+
         public FileSourceReaderSetting Setting { get; set; }
         public override void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context)
         {
@@ -52,7 +53,13 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 
     public class FileSourceReaderSetting
     {
-        public Guid ConfigId { get; set; }
+        public Guid ConfigId
+        {
+            get
+            {
+                return new Guid("e2f68462-88d7-41ac-863f-f21a8fd5cc48");
+            }
+        }
         public string Extension { get; set; }
         public string Mask { get; set; }
         public string Directory { get; set; }

@@ -55,15 +55,15 @@
                 var api = {};
                 api.load = function (payload) {
                     var promises = [];
-                    var recurringPeriodSettings;
+                    var settings;
 
                     if (payload != undefined) {
-                        recurringPeriodSettings = payload.Settings;
+                        settings = payload.targetBEConvertor;
                     }
                     var loadDefinitionExtensionConfigsPromise = loadDefinitionExtensionConfigs();
                     promises.push(loadDefinitionExtensionConfigsPromise);
 
-                    if (recurringPeriodSettings != undefined) {
+                    if (settings != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -74,8 +74,8 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.extensionConfigs.push(response[i]);
                                 }
-                                if (recurringPeriodSettings != undefined)
-                                    $scope.selectedExtensionConfig = utilsService.getItemByVal($scope.extensionConfigs, recurringPeriodSettings.ConfigId, 'ExtensionConfigurationId');
+                                if (settings != undefined)
+                                    $scope.selectedExtensionConfig = utilsService.getItemByVal($scope.extensionConfigs, settings.ConfigId, 'ExtensionConfigurationId');
                                 else if ($scope.extensionConfigs.length > 0)
                                     $scope.selectedExtensionConfig = $scope.extensionConfigs[0];
                             }
@@ -87,7 +87,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = recurringPeriodSettings;
+                            var directivePayload = settings;
                             vruiUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -107,10 +107,10 @@
             }
         }
         function getTemplate(attrs) {
-            var label = "label='Source Reader'";
+            var label = "label='Target Convertor'";
 
             if (attrs.hidelabel != undefined) {
-                label = "label='Source Readers'";
+                label = "label='Target Convertors'";
             }
 
             return '<vr-row><vr-columns colnum="{{targetBeConvertorCtrl.normalColNum * 2}}">'

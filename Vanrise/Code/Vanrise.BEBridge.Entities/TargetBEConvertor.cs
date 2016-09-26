@@ -8,6 +8,7 @@ namespace Vanrise.BEBridge.Entities
 {
     public abstract class TargetBEConvertor
     {
+        public string Name { get; set; }
         public Guid ConfigId { get; set; }
 
         public abstract void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context);
