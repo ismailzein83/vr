@@ -16,7 +16,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','Business Process',null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,4,0),
-('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Process',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,9,0)
+('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Process',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,20,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

@@ -42,8 +42,8 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('42BE0E81-EAEE-490D-A342-028FB111DE19','Dynamic Management',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,6,0),
-('EB303A61-929A-4D33-BF50-18F40308BC86','Business Intelligence',null,null,'/images/menu-icons/busines intel.png',18,1)
+('42BE0E81-EAEE-490D-A342-028FB111DE19','Dynamic Management',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,30,0),
+('EB303A61-929A-4D33-BF50-18F40308BC86','Business Intelligence',null,null,'/images/menu-icons/busines intel.png',35,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

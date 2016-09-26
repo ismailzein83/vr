@@ -72,26 +72,33 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('7EEDFB12-C71A-4EE0-AC97-0B553B4A0ED1','Carriers',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,3,1),
 ('9A21CD8B-67FA-4DCD-8852-616A99E42C82','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,4,0),
-('CDCFC24F-B6E6-4F8C-8C80-16923885ACC5','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',7,0),
-('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',8,0),
-('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',13,0),
-('B0478718-55C4-4722-BEC2-4D044A92C00C','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',9,0),
-('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Sale Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,2,0),
-('4E881659-0067-4FFF-B42F-E2750EC46B82','Sale Rules',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,3,0),
-('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',14,0),
-('8F443685-3AC6-4C48-9298-017D74221EAF','Purchase Entities',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,2,0),
-('DD18AB4F-2317-4E1E-8CF7-D52C6C8271AF','Purchase Rules',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,3,0),
-('B8A1B5F8-BA13-4232-AF84-7DD255FCED20','Routing',null,null,'/images/menu-icons/Routing.png',10,0),('64B2C608-7CAB-49D5-A1EE-85843A4BE6A5','Routing',null,null,null,6,1),
-('65CB7925-20DD-4C57-BCD0-8FA4A48EFD01','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',11,0),
-('5EA95F6C-D3C8-426D-A8F0-8F4B0ECE478C','Routing Rules',null,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20',null,2,0),
-('55733AB2-3087-4229-9EE8-9CBE88C734B4','CDR Process Rules',null,'BE6A7ADC-F901-4113-8840-ABC499307908',null,4,0),
-('BE6A7ADC-F901-4113-8840-ABC499307908','CDR Process',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0),
-('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',16,1),
-('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing',null,null,'/images/menu-icons/billing.png',17,0),
+
+('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',15,0),
+('8F443685-3AC6-4C48-9298-017D74221EAF','Entities',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,2,0),
+('DD18AB4F-2317-4E1E-8CF7-D52C6C8271AF','Rules',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,3,0),
+
+('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',20,0),
+('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,2,0),
+('4E881659-0067-4FFF-B42F-E2750EC46B82','Rules',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,3,0),
+
+('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',25,0),
+
+('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing',null,null,'/images/menu-icons/billing.png',30,0),
 ('DEF902AB-B628-4B3F-9A6E-1A0E9B012428','Reports',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,3,0),
-('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',19,0),
-('60A0AC91-3681-4EAA-8BE6-699C7456C4E8','Rules',null,'DD18AB4F-2317-4E1E-8CF7-D52C6C8271AF',null,5,0),('B7FF3D54-E624-4036-9502-754AB7ED662C','Rules',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,5,0),
-('4AB7951A-3659-4A36-9C9F-627E638F3CC7','Invoices',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,2,0)
+('4AB7951A-3659-4A36-9C9F-627E638F3CC7','Invoices',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,2,0),
+
+('B8A1B5F8-BA13-4232-AF84-7DD255FCED20','Routing',null,null,'/images/menu-icons/Routing.png',35,0),
+('5EA95F6C-D3C8-426D-A8F0-8F4B0ECE478C','Routing Rules',null,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20',null,2,0),
+
+('65CB7925-20DD-4C57-BCD0-8FA4A48EFD01','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',40,0),
+
+('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',45,1),
+
+('BE6A7ADC-F901-4113-8840-ABC499307908','CDR Process',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,25,0),
+('55733AB2-3087-4229-9EE8-9CBE88C734B4','CDR Process Rules',null,'BE6A7ADC-F901-4113-8840-ABC499307908',null,4,0),
+
+('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',50,0)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -163,7 +170,7 @@ as (select * from (values
 ('4B867DAE-6B56-4350-B08E-B4A44ABD5301','CDR Log','CDR Log',null,'DEF902AB-B628-4B3F-9A6E-1A0E9B012428',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":34,"TypeId":13}',202,7),
 ('1830E6B7-9500-4EA6-A554-8D0C73F14587','Zone Service','Zone Service','#/view/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','WhS_BE/ZoneServiceConfig/GetFilteredZoneServiceConfigs',null,null,null,0,7),
 ('2C5F7879-1D71-47BF-ADFE-221CBD9A8D3E','Supplier Services','Supplier Services','#/view/WhS_BusinessEntity/Views/SupplierService/SupplierServiceManagement','8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierZoneService/GetFilteredSupplierZoneServices',null,null,null,0,5),
-('2B913255-F217-4975-ABB7-765EE7FC733F','Sale Price Lists','Sale Price Lists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList','1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,0,8),
+('2B913255-F217-4975-ABB7-765EE7FC733F','Sale Pricelists','Sale Pricelists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList','1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,0,8),
 ('6EDB23CF-5ECF-4020-80CE-21241D661720','Traffic Summary','Traffic Summary',null,'AA3D81AD-8F6A-442F-82C6-6AAE37AACA10',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":33,"TypeId":4}',202,3),
 ('35A37920-8BD4-471C-9BB8-4D3C13DFC732','CDR Search Log','CDR Search Log',null,'DEF902AB-B628-4B3F-9A6E-1A0E9B012428',null,null,null,'{"$type":"Vanrise.GenericData.Entities.DataRecordSearchPageSettings, Vanrise.GenericData.Entities","Sources":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DRSearchPageStorageSource, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.DRSearchPageStorageSource, Vanrise.GenericData.Entities","Title":"Source 1","DataRecordTypeId":42,"RecordStorageIds":{"$type":"System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib","$values":[44]},"GridColumns":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"IDonSwitch","FieldTitle":"ID on Switch"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"Tag","FieldTitle":"Tag"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"AttemptDateTime","FieldTitle":"Attempt Time"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"AlertDateTime","FieldTitle":"Alert Time"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"ConnectDateTime","FieldTitle":"Connect Time"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"DisconnectDateTime","FieldTitle":"Disconnect Time"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"DurationInSeconds","FieldTitle":"Duration in Seconds"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"InTrunk","FieldTitle":"In Trunk"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"InCircuit","FieldTitle":"In Circuit"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"CDPNOut","FieldTitle":"CDPN Out"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"IsRerouted","FieldTitle":"Is Rerouted"},{"$type":"Vanrise.GenericData.Entities.DRSearchPageGridColumn, Vanrise.GenericData.Entities","FieldName":"CauseTo","FieldTitle":"Cause to"}]}}]}}',103,12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -15,7 +15,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('2F940ED6-799C-4411-8FE3-339600964FE1','Queueing',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,4,1)
+('2F940ED6-799C-4411-8FE3-339600964FE1','Queueing',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,15,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
