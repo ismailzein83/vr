@@ -3,23 +3,22 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_Agent_Update]
-	@ID INT,
+create PROCEDURE [Retail].[sp_Distributor_Insert]
 	@Name NVARCHAR(255),
 	@Type nvarchar(255),
 	@Settings NVARCHAR(MAX),
-	@SourceID nvarchar(255)
+	@SourceID nvarchar(255),
+	@ID INT OUT
 AS
 BEGIN
 	IF NOT EXISTS
 	(
-		SELECT 1 FROM Retail.Agent
-		WHERE ID != @ID
-			AND Name = @Name
+		SELECT 1 FROM Retail.Distributor
+		WHERE Name = @Name 
 	)
 	BEGIN
-		UPDATE Retail.Agent
-		SET Name = @Name, [Type] = @Type, Settings = @Settings, SourceID = @SourceID
-		WHERE ID = @ID
+		INSERT INTO Retail.Distributor (Name, Type, Settings,  SourceID)
+		VALUES (@Name, @Type, @Settings,@SourceID)
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

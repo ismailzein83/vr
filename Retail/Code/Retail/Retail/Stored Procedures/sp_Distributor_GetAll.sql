@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_Agent_Update]
+create PROCEDURE [Retail].[sp_Distributor_GetAll]
 	@ID INT,
 	@Name NVARCHAR(255),
 	@Type nvarchar(255),
@@ -13,12 +13,12 @@ AS
 BEGIN
 	IF NOT EXISTS
 	(
-		SELECT 1 FROM Retail.Agent
+		SELECT 1 FROM Retail.Distributor
 		WHERE ID != @ID
 			AND Name = @Name
 	)
 	BEGIN
-		UPDATE Retail.Agent
+		UPDATE Retail.Distributor
 		SET Name = @Name, [Type] = @Type, Settings = @Settings, SourceID = @SourceID
 		WHERE ID = @ID
 	END

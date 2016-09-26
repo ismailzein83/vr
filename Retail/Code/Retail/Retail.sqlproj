@@ -226,5 +226,9 @@
     <Build Include="Retail\Stored Procedures\sp_Agent_Update.sql" />
     <Build Include="Retail\Stored Procedures\sp_Agent_Insert.sql" />
     <Build Include="Retail\Stored Procedures\sp_Agent_GetAll.sql" />
+    <Build Include="Retail\Tables\Distributor.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Distributor_Update.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Distributor_Insert.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Distributor_GetAll.sql" />
   </ItemGroup>
 </Project>

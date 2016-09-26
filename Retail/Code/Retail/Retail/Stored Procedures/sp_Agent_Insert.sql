@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [Retail].[sp_Agent_Insert]
 	@Name NVARCHAR(255),
-	@Type INT,
+	@Type nvarchar(255),
 	@Settings NVARCHAR(MAX),
 	@SourceID nvarchar(255),
 	@ID INT OUT

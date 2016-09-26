@@ -3,10 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [Retail].[sp_POS_Update]
+CREATE PROCEDURE [Retail].[sp_POS_Update]
 	@ID INT,
 	@Name NVARCHAR(255),
-	@Type INT,
+	@Type nvarchar(255),
 	@Settings NVARCHAR(MAX),
 	@SourceID nvarchar(255)
 AS
