@@ -78,6 +78,7 @@
     <Compile Include="RateManagement\Actions\Service\DefaultServiceToClose.cs" />
     <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToAdd.cs" />
     <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToClose.cs" />
+    <Compile Include="RateManagement\Default\DefaultData.cs" />
     <Compile Include="RateManagement\Preview\DefaultRoutingProductPreview.cs" />
     <Compile Include="RateManagement\Preview\DefaultServicePreview.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewQuery.cs" />

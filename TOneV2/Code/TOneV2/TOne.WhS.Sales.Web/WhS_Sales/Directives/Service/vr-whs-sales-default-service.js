@@ -36,6 +36,7 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
         function initializeController() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.isServiceRequired = false;
             $scope.scopeModel.renderResetLink = false;
 
             $scope.scopeModel.onCurrentServiceViewerReady = function (api) {
@@ -115,9 +116,19 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                 
                 if (defaultItem != undefined)
                 {
+                    if (defaultItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                        $scope.scopeModel.isServiceRequired = defaultItem.CurrentServices == null;
+                        $scope.scopeModel.renderResetLink = false;
+                    }
+                    else {
+                        $scope.scopeModel.isServiceRequired = false;
+                        $scope.scopeModel.renderResetLink = true;
+                    }
+
                     $scope.scopeModel.renderResetLink = defaultItem.OwnerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value;
 
-                    if (defaultItem.CurrentServices != null) {
+                    if (defaultItem.CurrentServices != null)
+                    {
                         var currentServiceIds = UtilsService.getPropValuesFromArray(defaultItem.CurrentServices, 'ServiceId');
 
                         var loadCurrentServiceViewerPromise = currentServiceViewerAPI.load({ selectedIds: currentServiceIds });
@@ -143,7 +154,8 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                         // Note that the user can't undo a closed service. This should be resolved in the draft preview page
                         setServiceDates(defaultItem.CurrentServiceBED, defaultItem.ClosedService.EED);
                     }
-                    else if (defaultItem.NewService != null) {
+                    else if (defaultItem.NewService != null)
+                    {
                         defaultItem.IsDirty = true;
                         var newServiceIds = UtilsService.getPropValuesFromArray(defaultItem.NewService.Services, 'ServiceId');
                         oldIds = newServiceIds;

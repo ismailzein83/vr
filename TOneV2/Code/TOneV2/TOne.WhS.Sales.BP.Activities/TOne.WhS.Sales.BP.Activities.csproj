@@ -84,6 +84,7 @@
     <Compile Include="ApplySaleZoneServicePreviewsToDB.cs" />
     <Compile Include="GetExistingSaleEntityDefaultServices.cs" />
     <Compile Include="GetExistingSaleEntityZoneServices.cs" />
+    <Compile Include="StructureDefaultData.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />
     <Compile Include="PrepareDefaultServicePreview.cs" />
     <Compile Include="PrepareExistingDefaultServices.cs" />

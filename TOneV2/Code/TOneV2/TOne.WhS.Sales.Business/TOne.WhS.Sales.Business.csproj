@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRules\Conditions\MissingSellingProductDefaultServiceCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
