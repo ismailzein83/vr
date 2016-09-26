@@ -114,6 +114,9 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
+GO--delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts'
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D')
+
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
 
