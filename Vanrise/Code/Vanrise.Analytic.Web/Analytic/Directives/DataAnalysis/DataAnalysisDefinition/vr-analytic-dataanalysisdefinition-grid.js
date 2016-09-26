@@ -80,6 +80,7 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                 return [{
                     name: 'Edit',
                     clicked: editDataAnalysisDefinition,
+                    haspermission: hasEditDataAnalysisDefinitionPermission
                 }];
             }
             function editDataAnalysisDefinition(dataAnalysisDefinitionItem) {
@@ -89,6 +90,9 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                 };
 
                 VR_Analytic_DataAnalysisDefinitionService.editDataAnalysisDefinition(dataAnalysisDefinitionItem.Entity.DataAnalysisDefinitionId, onDataAnalysisDefinitionUpdated);
+            }
+            function hasEditDataAnalysisDefinitionPermission() {
+                return VR_Analytic_DataAnalysisDefinitionAPIService.HasEditDataAnalysisDefinitionPermission();
             }
         }
     }]);

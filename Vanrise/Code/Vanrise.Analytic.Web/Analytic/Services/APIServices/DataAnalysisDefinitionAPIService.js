@@ -3,9 +3,9 @@
 
     "use strict";
 
-    DataAnalysisDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig'];
+    DataAnalysisDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig', 'SecurityService'];
 
-    function DataAnalysisDefinitionAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
+    function DataAnalysisDefinitionAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig, SecurityService) {
 
         var controllerName = "DataAnalysisDefinition";
 
@@ -38,6 +38,14 @@
             });
         }
 
+        function HasAddDataAnalysisDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['AddDataAnalysisDefinition']));
+        }
+
+        function HasEditDataAnalysisDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['UpdateDataAnalysisDefinition']));
+        }
+
 
         return ({
             GetFilteredDataAnalysisDefinitions: GetFilteredDataAnalysisDefinitions,
@@ -45,7 +53,9 @@
             AddDataAnalysisDefinition: AddDataAnalysisDefinition,
             UpdateDataAnalysisDefinition: UpdateDataAnalysisDefinition,
             GetDataAnalysisDefinitionSettingsExtensionConfigs: GetDataAnalysisDefinitionSettingsExtensionConfigs,
-            GetDataAnalysisDefinitionsInfo: GetDataAnalysisDefinitionsInfo
+            GetDataAnalysisDefinitionsInfo: GetDataAnalysisDefinitionsInfo,
+            HasAddDataAnalysisDefinitionPermission: HasAddDataAnalysisDefinitionPermission,
+            HasEditDataAnalysisDefinitionPermission: HasEditDataAnalysisDefinitionPermission
         });
     }
 

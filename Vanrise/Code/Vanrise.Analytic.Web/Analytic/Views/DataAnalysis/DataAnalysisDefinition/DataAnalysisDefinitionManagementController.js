@@ -2,9 +2,9 @@
 
     "use strict";
 
-    DataAnalysisDefinitionManagementController.$inject = ['$scope', 'VR_Analytic_DataAnalysisDefinitionService', 'UtilsService', 'VRUIUtilsService'];
+    DataAnalysisDefinitionManagementController.$inject = ['$scope', 'VR_Analytic_DataAnalysisDefinitionService', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataAnalysisDefinitionManagementController($scope, VR_Analytic_DataAnalysisDefinitionService, UtilsService, VRUIUtilsService) {
+    function DataAnalysisDefinitionManagementController($scope, VR_Analytic_DataAnalysisDefinitionService, VR_Analytic_DataAnalysisDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
 
@@ -26,6 +26,10 @@
 
                 VR_Analytic_DataAnalysisDefinitionService.addDataAnalysisDefinition(onDataAnalysisDefinitionAdded);
             };
+
+            $scope.hasAddDataAnalysisDefinitionPermission = function () {
+                return VR_Analytic_DataAnalysisDefinitionAPIService.HasAddDataAnalysisDefinitionPermission()
+            }
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
