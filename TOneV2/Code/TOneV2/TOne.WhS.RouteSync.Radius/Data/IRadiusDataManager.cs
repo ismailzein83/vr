@@ -10,7 +10,7 @@ namespace TOne.WhS.RouteSync.Radius
 {
     public interface IRadiusDataManager : IBulkApplyDataManager<ConvertedRoute>
     {
-        Guid ConfigId { get; set; }
+        Guid ConfigId { get; }
         void PrepareTables();
         void InsertRoutes(List<ConvertedRoute> radiusRoutes);
         void SwapTables();

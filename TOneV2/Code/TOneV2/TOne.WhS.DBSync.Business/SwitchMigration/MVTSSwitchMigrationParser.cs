@@ -45,11 +45,11 @@ namespace TOne.WhS.DBSync.Business
 
             GetConnectionStrings(parametersNode, out connectionString, out redundantConnectionString);
             if (!string.IsNullOrEmpty(connectionString))
-                synchroniser.DataManager = new RadiusSQLDataManager() { ConnectionString = connectionString };
-
-            if (!string.IsNullOrEmpty(redundantConnectionString))
-                synchroniser.RedundantDataManager = new RadiusSQLDataManager() { ConnectionString = redundantConnectionString };
-
+                synchroniser.DataManager = new RadiusSQLDataManager()
+                {
+                    ConnectionString = new RouteSync.Radius.RadiusConnectionString() { ConnectionString = connectionString },
+                    RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<RouteSync.Radius.RadiusConnectionString> { new RouteSync.Radius.RadiusConnectionString() { ConnectionString = redundantConnectionString } } : null
+                };
             return synchroniser;
         }
 

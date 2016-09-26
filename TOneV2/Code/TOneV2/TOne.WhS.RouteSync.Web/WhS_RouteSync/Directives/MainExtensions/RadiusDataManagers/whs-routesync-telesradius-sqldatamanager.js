@@ -18,7 +18,7 @@
             },
             controllerAs: "ctrlData",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/RadiusDataManagers/Templates/SQLRadiusSWDataManagerTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/RadiusDataManagers/Templates/SingleSQLRadiusSWDataManagerTemplate.html"
 
         };
         function RadiusSQLDataManagerSetting($scope, ctrl, $attrs) {
@@ -39,7 +39,7 @@
                 api.load = function (payload) {
 
                     if (payload != undefined) {
-                        $scope.scopeModel.connectionString = payload.radiusDataManagersSettings.ConnectionString;
+                        $scope.scopeModel.connectionString = payload.radiusDataManagersSettings.ConnectionString.ConnectionString;
                     }
                 };
 
@@ -48,7 +48,7 @@
                 function getData() {
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.TelesRadius.SQL",
-                        ConnectionString: $scope.scopeModel.connectionString
+                        ConnectionString: { ConnectionString: $scope.scopeModel.connectionString }
                     }
                     return data;
                 }

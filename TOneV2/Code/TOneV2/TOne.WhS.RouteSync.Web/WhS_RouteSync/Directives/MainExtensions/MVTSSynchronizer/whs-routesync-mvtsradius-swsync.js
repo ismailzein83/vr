@@ -24,7 +24,7 @@
             var gridAPI;
 
             var radiusDataManager;
-            var redundantRadiusDataManager;
+            //var redundantRadiusDataManager;
 
             var carrierAccountsAPI;
             var carrierAccountsPromiseDiffered;
@@ -32,8 +32,8 @@
             var radiusDataManagerSettingsDirectiveAPI;
             var radiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var redundantRadiusDataManagerSettingsDirectiveAPI;
-            var redundantRadiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            //var redundantRadiusDataManagerSettingsDirectiveAPI;
+            //var redundantRadiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
 
@@ -49,10 +49,10 @@
                     radiusDataManagerSettingsDirectiveReadyDeferred.resolve();
                 };
 
-                $scope.onRedundantRadiusDataManagerSettingsDirectiveReady = function (api) {
-                    redundantRadiusDataManagerSettingsDirectiveAPI = api;
-                    redundantRadiusDataManagerSettingsDirectiveReadyDeferred.resolve();
-                };
+                //$scope.onRedundantRadiusDataManagerSettingsDirectiveReady = function (api) {
+                //    redundantRadiusDataManagerSettingsDirectiveAPI = api;
+                //    redundantRadiusDataManagerSettingsDirectiveReadyDeferred.resolve();
+                //};
 
                 defineAPI();
             }
@@ -75,7 +75,7 @@
                         $scope.scopeModel.numberOfOptions = mvtsRadiusSWSynSettings.NumberOfOptions;
 
                         radiusDataManager = mvtsRadiusSWSynSettings.DataManager;
-                        redundantRadiusDataManager = mvtsRadiusSWSynSettings.RedundantDataManager;
+                        //redundantRadiusDataManager = mvtsRadiusSWSynSettings.RedundantDataManager;
                     }
 
                     var loadCarrierMappingPromise = loadCarrierMappings(payload);
@@ -84,8 +84,8 @@
                     var loadDataManagerSettings = loadSwitchSyncSettingsDirective();
                     promises.push(loadDataManagerSettings);
 
-                    var loadRedundantDataManagerSettings = loadRedundantSwitchSyncSettingsDirective();
-                    promises.push(loadRedundantDataManagerSettings);
+                    //var loadRedundantDataManagerSettings = loadRedundantSwitchSyncSettingsDirective();
+                    //promises.push(loadRedundantDataManagerSettings);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -96,7 +96,7 @@
                     var data = {
                         $type: "TOne.WhS.RouteSync.MVTSRadius.MVTSRadiusSWSync, TOne.WhS.RouteSync.MVTSRadius",
                         DataManager: getDataManager(),
-                        RedundantDataManager: getRedundantDataManager(),
+                        //RedundantDataManager: getRedundantDataManager(),
                         CarrierMappings: getCarrierMappings(),
                         MappingSeparator: $scope.scopeModel.separator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions
@@ -170,9 +170,9 @@
                 return radiusDataManagerSettingsDirectiveAPI.getData().DataManager;
             }
 
-            function getRedundantDataManager() {
-                return redundantRadiusDataManagerSettingsDirectiveAPI.getData().DataManager;
-            }
+            //function getRedundantDataManager() {
+            //    return redundantRadiusDataManagerSettingsDirectiveAPI.getData().DataManager;
+            //}
 
             function loadSwitchSyncSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -188,19 +188,19 @@
                 return radiusDataManagerSettingsDirectiveReadyDeferred.promise;
             }
 
-            function loadRedundantSwitchSyncSettingsDirective() {
-                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            //function loadRedundantSwitchSyncSettingsDirective() {
+            //    var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
-                    var settingsDirectivePayload;
-                    if (redundantRadiusDataManager != undefined) {
-                        settingsDirectivePayload = { radiusDataManagersSettings: redundantRadiusDataManager }
-                    }
-                    VRUIUtilsService.callDirectiveLoad(redundantRadiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, redundantRadiusDataManagerSettingsDirectiveReadyDeferred);
-                });
+            //    redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
+            //        var settingsDirectivePayload;
+            //        if (redundantRadiusDataManager != undefined) {
+            //            settingsDirectivePayload = { radiusDataManagersSettings: redundantRadiusDataManager }
+            //        }
+            //        VRUIUtilsService.callDirectiveLoad(redundantRadiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, redundantRadiusDataManagerSettingsDirectiveReadyDeferred);
+            //    });
 
-                return redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise;
-            }
+            //    return redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise;
+            //}
         }
     }
 

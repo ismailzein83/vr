@@ -58,6 +58,7 @@
     <Compile Include="Data\IRadiusDataManager.cs" />
     <Compile Include="MVTS\MVTSRadiusConvertedRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadiusConnectionString.cs" />
     <Compile Include="RadiusConvertedRoute.cs" />
     <Compile Include="RadiusDataManagerConfig.cs" />
     <Compile Include="RadiusDataManagersSettingManager.cs" />

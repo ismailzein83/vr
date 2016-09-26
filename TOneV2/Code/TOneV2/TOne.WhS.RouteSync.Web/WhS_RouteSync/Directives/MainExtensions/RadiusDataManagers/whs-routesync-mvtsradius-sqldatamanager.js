@@ -18,7 +18,7 @@
             },
             controllerAs: "ctrlData",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/RadiusDataManagers/Templates/SQLRadiusSWDataManagerTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/RadiusDataManagers/Templates/DoubleSQLRadiusSWDataManagerTemplate.html"
 
         };
         function RadiusSQLDataManagerSetting($scope, ctrl, $attrs) {
@@ -39,16 +39,24 @@
                 api.load = function (payload) {
 
                     if (payload != undefined) {
-                        $scope.scopeModel.connectionString = payload.radiusDataManagersSettings.ConnectionString;
+                        $scope.scopeModel.connectionString = payload.radiusDataManagersSettings.ConnectionString.ConnectionString;
+                        $scope.scopeModel.redundantConnectionString = payload.radiusDataManagersSettings.RedundantConnectionStrings != undefined ? payload.radiusDataManagersSettings.RedundantConnectionStrings[0].ConnectionString : null;
                     }
                 };
 
                 api.getData = getData;
 
                 function getData() {
+                    var redundantConnectionStrings;
+                    if ($scope.scopeModel.redundantConnectionString != undefined) {
+                        redundantConnectionStrings = [];
+                        redundantConnectionStrings.push({ ConnectionString: $scope.scopeModel.redundantConnectionString });
+                    }
+
                     var data = {
                         $type: "TOne.WhS.RouteSync.MVTSRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.MVTSRadius.SQL",
-                        ConnectionString: $scope.scopeModel.connectionString
+                        ConnectionString: { ConnectionString: $scope.scopeModel.connectionString },
+                        RedundantConnectionStrings: redundantConnectionStrings
                     }
                     return data;
                 }

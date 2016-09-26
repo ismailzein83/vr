@@ -13,7 +13,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
         public IRadiusDataManager DataManager { get; set; }
 
-        public IRadiusDataManager RedundantDataManager { get; set; }
 
         /// <summary>
         /// Key = Carrier Account Id
@@ -27,8 +26,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
             this.DataManager.PrepareTables();
-            if (this.RedundantDataManager != null)
-                this.RedundantDataManager.PrepareTables();
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -142,15 +139,11 @@ namespace TOne.WhS.RouteSync.MVTSRadius
         public override void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context)
         {
             this.DataManager.InsertRoutes(context.ConvertedRoutes);
-            if (this.RedundantDataManager != null)
-                this.RedundantDataManager.InsertRoutes(context.ConvertedRoutes);
         }
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
             this.DataManager.SwapTables();
-            if (this.RedundantDataManager != null)
-                this.RedundantDataManager.SwapTables();
         }
 
         public class CarrierMapping

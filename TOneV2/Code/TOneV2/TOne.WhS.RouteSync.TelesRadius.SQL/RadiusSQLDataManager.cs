@@ -15,9 +15,9 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
         {
 
         }
-        string _connectionString;
-        Guid _configId;
-        public Guid ConfigId { get { return _configId; } set { _configId = new Guid("09ED9252-AF87-447D-9C40-738CF222C64E"); } }
+        RadiusConnectionString _connectionString;
+
+        public Guid ConfigId { get { return new Guid("09ED9252-AF87-447D-9C40-738CF222C64E"); } }
         public void ApplyRadiusRoutesForDB(object preparedRadiusRoutes)
         {
             InsertBulkToTable(preparedRadiusRoutes as BaseBulkInsertInfo);
@@ -26,7 +26,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
         #region BaseSQLDataManager Overriden Methods
         protected override string GetConnectionString()
         {
-            return _connectionString;
+            return _connectionString.ConnectionString;
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
 
         #region IRadiusDataManager
 
-        public string ConnectionString
+        public RadiusConnectionString ConnectionString
         {
             get { return _connectionString; }
             set { _connectionString = value; }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Npgsql;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Data;
@@ -13,17 +10,9 @@ namespace TOne.WhS.RouteSync.TelesRadius.Postgres
 {
     public class RadiusPostgresDataManager : BaseDataManager, IRadiusDataManager
     {
-        Guid _configId;
         public Guid ConfigId
         {
-            get
-            {
-                return _configId;
-            }
-            set
-            {
-                _configId = value;
-            }
+            get { throw new NotImplementedException(); }
         }
 
         public void PrepareTables()
