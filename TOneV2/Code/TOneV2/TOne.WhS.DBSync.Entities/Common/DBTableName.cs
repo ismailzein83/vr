@@ -10,7 +10,6 @@ namespace TOne.WhS.DBSync.Entities
         [Description("CurrencyExchangeRate")]
         CurrencyExchangeRate,
 
-
         [Description("Country")]
         Country,
 
@@ -70,14 +69,11 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SwitchConnectivity")]
         SwitchConnectivity,
 
-
         [Description("SupplierZoneService")]
         SupplierZoneService,
 
         [Description("SaleEntityService")]
         SaleEntityService,
-
-        
 
         [Description("Rule")]
         Rule,

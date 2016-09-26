@@ -28,6 +28,9 @@ namespace TOne.WhS.DBSync.Business
 
         private void FillServiceColors(Dictionary<string, string> S_ServiceColors)
         {
+            if (S_ServiceColors.Count > 0)
+                return;
+
             S_ServiceColors.Add("WHS", "#C0C0C0");
             S_ServiceColors.Add("RTL", "#0000FF");
             S_ServiceColors.Add("PRM", "#FFA500");
