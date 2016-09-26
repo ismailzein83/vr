@@ -81,6 +81,8 @@
     <Compile Include="Base Classes\AsyncActivityHandle.cs" />
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
+    <Compile Include="BPContext.cs" />
+    <Compile Include="IBPContext.cs" />
     <Compile Include="InterBPServicePendingEventsRequest.cs" />
     <Compile Include="RuntimeServices\BPRegulatorRuntimeService.cs" />
     <Compile Include="RuntimeServices\BusinessProcessService.cs" />
