@@ -41,7 +41,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
         {
-            return dataManager.GetSourcePriceLists(true);
+            return dataManager.GetSourcePriceLists(true, Context.MigratePriceListData);
         }
 
         public override SalePriceList BuildItemFromSource(SourcePriceList sourceItem)

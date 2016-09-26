@@ -47,7 +47,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
         {
-            return dataManager.GetSourcePriceLists(false);
+            return dataManager.GetSourcePriceLists(false, Context.MigratePriceListData);
         }
 
 
@@ -105,7 +105,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourcePriceList> onItemLoaded)
         {
-            dataManager.LoadSourceItems(false, onItemLoaded);
+            dataManager.LoadSourceItems(false, Context.MigratePriceListData, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

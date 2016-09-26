@@ -29,6 +29,7 @@ namespace TOne.WhS.DBSync.Business
                 context.SellingProductId = dbSyncTaskActionArgument.SellingProductId;
                 context.OffPeakRateTypeId = dbSyncTaskActionArgument.OffPeakRateTypeId;
                 context.WeekendRateTypeId = dbSyncTaskActionArgument.WeekendRateTypeId;
+                context.MigratePriceListData = dbSyncTaskActionArgument.MigratePriceListData;
                 context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
                 context.DBTables = FillDBTables(context);
                 migrationManager = ConstructMigrationManager(context);

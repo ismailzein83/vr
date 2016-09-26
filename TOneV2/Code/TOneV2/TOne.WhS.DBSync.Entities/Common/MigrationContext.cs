@@ -19,6 +19,7 @@ namespace TOne.WhS.DBSync.Entities
         public int OffPeakRateTypeId { get; set; }
         public int WeekendRateTypeId { get; set; }
 
+        public bool MigratePriceListData { get; set; }
         public void WriteException(Exception ex)
         {
             LoggerFactory.GetExceptionLogger().WriteException(ex);

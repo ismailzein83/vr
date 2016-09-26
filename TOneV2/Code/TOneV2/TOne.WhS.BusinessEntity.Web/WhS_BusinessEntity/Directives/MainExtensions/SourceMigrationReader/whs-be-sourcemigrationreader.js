@@ -117,6 +117,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.SellingProductId = sellingProductDirectiveAPI.getSelectedIds();
                     schedulerTaskAction.OffPeakRateTypeId = offPeakRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.WeekendRateTypeId = weekendRateTypeSelectorAPI.getSelectedIds();
+                    schedulerTaskAction.MigratePriceListData = $scope.migratePriceListData;
                     var selectedTables = [];
 
                     $scope.migrationTablesSelectedValues;
@@ -133,6 +134,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                 api.load = function (payload) {
 
+                    $scope.migratePriceListData = true;
+
                     if (payload != undefined && payload.data != undefined) {
                         $scope.connectionString = payload.data.ConnectionString;
                         $scope.useTempTables = payload.data.UseTempTables;
@@ -140,6 +143,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         sellingProductId = payload.data.SellingProductId;
                         offPeakRateTypeId = payload.data.OffPeakRateTypeId;
                         weekendRateTypeId = payload.data.WeekendRateTypeId;
+                        $scope.migratePriceListData = payload.data.MigratePriceListData;
                         $scope.migrationTablesSelectedValues = [];
 
 
