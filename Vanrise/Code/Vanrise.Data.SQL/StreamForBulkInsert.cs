@@ -11,6 +11,14 @@ namespace Vanrise.Data.SQL
         string _filePath;
         System.IO.StreamWriter _streamWriter;
 
+        int _recordsCount;
+        public int RecordCount
+        {
+            get
+            {
+                return _recordsCount;
+            }
+        }
 
         internal StreamForBulkInsert(string filePath)
         {
@@ -28,16 +36,28 @@ namespace Vanrise.Data.SQL
         public void WriteRecord(string format, params object[] args)
         {
             this._streamWriter.WriteLine(format, args);
+            _recordsCount++;
         }
         public void WriteRecord(string value)
         {
             this._streamWriter.WriteLine(value);
+            _recordsCount++;
         }
 
+        bool _isClosed;
         public void Close()
         {
             _streamWriter.Close();
             _streamWriter.Dispose();
+            _isClosed = true;
+        }
+
+        internal bool IsClosed
+        {
+            get
+            {
+                return _isClosed;
+            }
         }
     }
 }

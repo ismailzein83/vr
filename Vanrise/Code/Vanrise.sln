@@ -297,6 +297,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Analytic.BP.Argumen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Caching.Runtime", "Vanrise.Caching.Runtime\Vanrise.Caching.Runtime.csproj", "{C6B2D722-14CE-4ED4-8B2B-52588494E449}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7F78E8A3-3D23-42B4-ADE4-6CDB27BC9DF6}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 128
@@ -1993,5 +1998,8 @@ Global
 		{1C62D57F-BA03-42F7-9362-CB097E1145AC} = {375D020B-2FA0-4D68-B841-E74E1FD15B16}
 		{74BCFDD5-6F60-4976-A31C-712BECCC2787} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{C6B2D722-14CE-4ED4-8B2B-52588494E449} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
