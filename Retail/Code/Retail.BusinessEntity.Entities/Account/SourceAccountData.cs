@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BEBridge.Entities;
+using Vanrise.GenericData.Transformation.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -18,5 +19,7 @@ namespace Retail.BusinessEntity.Entities
         {
             get { return this.Account.AccountId; }
         }
+        public List<MappingRule> IdentificationRulesToInsert { get; set; }
+        public List<MappingRule> IdentificationRulesToUpdate { get; set; }
     }
 }

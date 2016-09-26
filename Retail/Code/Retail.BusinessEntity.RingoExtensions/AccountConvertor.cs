@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic.FileIO;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
@@ -13,10 +11,13 @@ using Vanrise.Entities;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.RingoExtensions.AccountParts;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Transformation.Entities;
+using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Retail.BusinessEntity.RingoExtensions
 {
-    public class RingoAccountConvertor : TargetBEConvertor
+    public class AccountConvertor : TargetBEConvertor
     {
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
@@ -32,13 +33,21 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
+                        accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
+                        string accountName = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
                         SourceAccountData accountData = new SourceAccountData
                         {
-                            Account = new Account { TypeId = 19 }
+                            Account = new Account { TypeId = 19 },
+                            IdentificationRulesToInsert = new List<MappingRule>
+                            {
+                                GetMappingRule(accountRecords[22], accountName)
+                            },
+                            IdentificationRulesToUpdate = new List<MappingRule>()
                         };
-                        accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
+
+
                         var sourceId = accountRecords[22];
-                        accountData.Account.Name = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
+                        accountData.Account.Name = accountName;
                         accountData.Account.SourceId = sourceId;
                         FillAccountSettings(accountData, accountRecords);
 
@@ -49,6 +58,29 @@ namespace Retail.BusinessEntity.RingoExtensions
                 }
             }
             context.TargetBEs = lstTargets;
+        }
+
+        private MappingRule GetMappingRule(string msisdn, string accountName)
+        {
+            MappingRule rule = new MappingRule
+            {
+                BeginEffectiveTime = DateTime.Now,
+                Settings = new MappingRuleSettings(),
+                Criteria = new GenericRuleCriteria
+                {
+                    FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
+                },
+                DefinitionId = 17,
+                Description = string.Format("{0} Identification Rule", accountName)
+            };
+            rule.Criteria.FieldsValues.Add("MSISDN", new StaticValues
+            {
+                Values = new List<object>
+                {
+                    msisdn
+                }
+            });
+            return rule;
         }
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
@@ -90,6 +122,22 @@ namespace Retail.BusinessEntity.RingoExtensions
             FillResidentialProfilePart(accountData, accountRecords);
             FillActivationPart(accountData, accountRecords);
             FillEntitiesPart(accountData, accountRecords);
+            FillOtherPart(accountData, accountRecords);
+        }
+
+        void FillOtherPart(SourceAccountData accountData, string[] accountRecords)
+        {
+            bool isTheft = false;
+            bool.TryParse(accountRecords[28], out isTheft);
+            accountData.Account.Settings.Parts.Add(AccountPartOtherInfo.ExtensionConfigId, new AccountPart
+            {
+                Settings = new AccountPartOtherInfo
+                {
+                    CNIC = accountRecords[14],
+                    IsTheft = isTheft,
+                    TaxCode = accountRecords[9]
+                }
+            });
         }
 
         void FillActivationPart(SourceAccountData accountData, string[] accountRecords)
@@ -210,7 +258,12 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         void UpdateEntitiesPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
+            AccountPartEntitiesInfo oldPart = newBe.Account.Settings.Parts[AccountPartEntitiesInfo.ExtensionConfigId].Settings as AccountPartEntitiesInfo;
+            AccountPartEntitiesInfo newPart = finalBe.Account.Settings.Parts[AccountPartEntitiesInfo.ExtensionConfigId].Settings as AccountPartEntitiesInfo;
 
+            newPart.PosId = oldPart.PosId;
+            newPart.AgentId = oldPart.AgentId;
+            newPart.DistributorId = oldPart.DistributorId;
         }
 
         #endregion

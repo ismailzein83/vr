@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Transformation.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -16,14 +19,32 @@ namespace Retail.BusinessEntity.Business
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
             AccountManager accountManager = new AccountManager();
-            long accountId;
             foreach (var targetAccount in context.TargetBE)
             {
                 SourceAccountData accountData = targetAccount as SourceAccountData;
+                long accountId;
                 accountManager.TryAddAccount(accountData.Account, out accountId);
+                if (accountId > 0)
+                    foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
+                    {
+                        mappingRule.Settings.Value = accountId;
+                        var manager = GetRuleManager(mappingRule.DefinitionId);
+                        manager.AddGenericRule(mappingRule);
+                    }
             }
         }
 
+        IGenericRuleManager GetRuleManager(int ruleDefinitionId)
+        {
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
+
+            GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
+            GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
+
+            Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
+            return Activator.CreateInstance(managerType) as IGenericRuleManager;
+        }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             AccountManager accountManager = new AccountManager();

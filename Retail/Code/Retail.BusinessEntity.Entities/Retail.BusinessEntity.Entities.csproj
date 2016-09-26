@@ -56,6 +56,18 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
