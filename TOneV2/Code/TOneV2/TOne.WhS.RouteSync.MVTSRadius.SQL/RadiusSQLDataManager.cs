@@ -27,10 +27,32 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         {
             RadiusRouteBulkInsertInfo radiusRouteBulkInsertInfo = preparedRadiusRoutes as RadiusRouteBulkInsertInfo;
 
-            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers) =>
+            PrepareDataManagers();
+            Dictionary<MVTSRadiusSQLDataManager, BulkInsertStreams> dataManagersStreams = new Dictionary<MVTSRadiusSQLDataManager, BulkInsertStreams>();
+            foreach (var dataManagerEntry in _mvtsRadiusSQLDataManagers)
             {
-                mvtsRadiusSQLDataManagers.ApplyRadiusRoutesForDB(radiusRouteBulkInsertInfo.RadiusRouteStreamBulkInsertInfo, radiusRouteBulkInsertInfo.RadiusRoutePercentageStreamBulkInsertInfo);
+                var dataManagerIndex = dataManagerEntry.Key;
+                BaseBulkInsertInfo routeStreamInfo = dataManagerIndex == 0 ? radiusRouteBulkInsertInfo.RadiusRouteStreamBulkInsertInfo : radiusRouteBulkInsertInfo.RadiusRouteStreamBulkInsertInfo.CreateOutputCopy();
+                BaseBulkInsertInfo routePercentageStreamInfo = dataManagerIndex == 0 ? radiusRouteBulkInsertInfo.RadiusRoutePercentageStreamBulkInsertInfo : radiusRouteBulkInsertInfo.RadiusRoutePercentageStreamBulkInsertInfo.CreateOutputCopy();
+                dataManagersStreams.Add(dataManagerEntry.Value, new BulkInsertStreams
+                {
+                    RouteStream = routeStreamInfo,
+                    RoutePercentageStream = routePercentageStreamInfo
+                });
+            }
+
+            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManager, dataManagerIndex) =>
+            {
+                BulkInsertStreams streams = dataManagersStreams[mvtsRadiusSQLDataManager];
+                mvtsRadiusSQLDataManager.ApplyRadiusRoutesForDB(streams.RouteStream, streams.RoutePercentageStream);
             });
+        }
+
+        private class BulkInsertStreams
+        {
+            public BaseBulkInsertInfo RouteStream { get; set; }
+
+            public BaseBulkInsertInfo RoutePercentageStream { get; set; }
         }
 
         #region IBulkApplyDataManager
@@ -106,7 +128,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         }
         public void PrepareTables()
         {
-            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers) =>
+            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers, dataManagerIndex) =>
             {
                 mvtsRadiusSQLDataManagers.PrepareTables();
             });
@@ -121,7 +143,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         }
         public void SwapTables()
         {
-            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers) =>
+            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers, dataManagerIndex) =>
             {
                 mvtsRadiusSQLDataManagers.SwapTables();
             });
@@ -130,7 +152,17 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 
         #endregion
 
-        private void ExecMVTSRadiusSQLDataManagerAction(Action<MVTSRadiusSQLDataManager> action)
+        private void ExecMVTSRadiusSQLDataManagerAction(Action<MVTSRadiusSQLDataManager, int> action)
+        {
+            PrepareDataManagers();
+
+            Parallel.For(0, _mvtsRadiusSQLDataManagers.Count, (i) =>
+            {
+                action(_mvtsRadiusSQLDataManagers[i], i);
+            });
+        }
+
+        private void PrepareDataManagers()
         {
             if (_mvtsRadiusSQLDataManagers == null)
             {
@@ -148,11 +180,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                     }
                 }
             }
-
-            Parallel.For(0, _mvtsRadiusSQLDataManagers.Count, (i) =>
-            {
-                action(_mvtsRadiusSQLDataManagers[i]);
-            });
         }
 
         #region constants
@@ -189,7 +216,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             return _radiusConnectionString.ConnectionString;
         }
 
-        public void ApplyRadiusRoutesForDB(StreamBulkInsertInfo radiusRouteStreamBulkInsertInfo, StreamBulkInsertInfo radiusRoutePercentageStreamBulkInsertInfo)
+        public void ApplyRadiusRoutesForDB(BaseBulkInsertInfo radiusRouteStreamBulkInsertInfo, BaseBulkInsertInfo radiusRoutePercentageStreamBulkInsertInfo)
         {
             Parallel.For(0, 2, (i) =>
             {

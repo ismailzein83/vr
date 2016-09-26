@@ -25,7 +25,13 @@ namespace TOne.WhS.Routing.Data.SQL
         readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
-            InsertBulkToTable(preparedCustomerRoute as BaseBulkInsertInfo);
+            var streamInfo = preparedCustomerRoute as StreamBulkInsertInfo;
+            DateTime start = DateTime.Now;
+            InsertBulkToTable(streamInfo);
+            if(this.BPContext != null)
+            {
+                this.BPContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Routes saved to database in {1}", streamInfo.Stream.RecordCount, (DateTime.Now - start));
+            }
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -227,5 +233,12 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     #FILTER#";
 
         #endregion
+
+
+        public Vanrise.BusinessProcess.IBPContext BPContext
+        {
+            set;
+            get;
+        }
     }
 }

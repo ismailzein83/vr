@@ -30,6 +30,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(ApplyCustomerRoutesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            dataManager.BPContext = new Vanrise.BusinessProcess.BPContext(handle);
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Data;
 
 namespace TOne.WhS.Routing.Data
@@ -13,6 +14,8 @@ namespace TOne.WhS.Routing.Data
         int ParentWFRuntimeProcessId { set; }
 
         long ParentBPInstanceId { set; }
+
+        IBPContext BPContext { set; }
 
         void ApplyCustomerRouteForDB(object preparedCustomerRoute);
 

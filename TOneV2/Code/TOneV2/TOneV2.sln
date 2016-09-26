@@ -104,6 +104,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0E59C264-D69A-4109-B33E-71E1460C2F5B}"
 	ProjectSection(SolutionItems) = preProject
 		Performance1.psess = Performance1.psess
+		Performance2.psess = Performance2.psess
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Analytics.Web", "TOne.Analytics.Web\TOne.Analytics.Web.csproj", "{9D04963A-ABEA-49B3-9855-5B64B3B85619}"
@@ -5764,5 +5765,8 @@ Global
 		{F738F0BD-3811-49EE-B0F0-C08A3A808E23} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{4F4B9329-A4B1-4751-BD26-82409634DBF0} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{89FE058F-9F8F-4AFB-BDA9-992941CB2140} = {4F4B9329-A4B1-4751-BD26-82409634DBF0}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

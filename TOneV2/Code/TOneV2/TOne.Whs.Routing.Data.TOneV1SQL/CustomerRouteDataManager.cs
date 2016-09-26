@@ -173,6 +173,13 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             public StreamBulkInsertInfo RouteStreamForBulkInsertInfo { get; set; }
             public StreamBulkInsertInfo RouteOptionStreamForBulkInsertInfo { get; set; }
         }
+
+
+        public Vanrise.BusinessProcess.IBPContext BPContext
+        {
+            set;
+            get;
+        }
     }
 
     public class ReserveRouteIdsRequest : Vanrise.Runtime.Entities.InterRuntimeServiceRequest<ReserveRouteIdsResponse>
