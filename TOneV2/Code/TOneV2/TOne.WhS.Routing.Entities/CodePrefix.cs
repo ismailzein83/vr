@@ -14,6 +14,10 @@ namespace TOne.WhS.Routing.Entities
         public bool IsCodeDivided { get; set; }
 
         public int CodeCount { get; set; }
+        public override string ToString()
+        {
+            return Code;
+        }
     }
 
     public class CodePrefixSaleCodes

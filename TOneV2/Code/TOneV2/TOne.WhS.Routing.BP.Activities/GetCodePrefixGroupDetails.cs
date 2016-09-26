@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 using System.Linq;
 using System.Text;
+using System;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -22,14 +23,9 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             IEnumerable<CodePrefix> codePrefixGroup = this.CodePrefixGroup.Get(context);
 
-            StringBuilder strBuilder = new StringBuilder();
-            foreach (CodePrefix codePrefix in codePrefixGroup)
-            {
-                strBuilder.Append(string.Format("{0}, ", codePrefix.Code));
-            }
-            strBuilder = strBuilder.Remove(strBuilder.Length - 2, 2);
+            string codePrefixGroupDescription = String.Join<CodePrefix>(",", codePrefixGroup);
 
-            this.CodePrefixGroupDescription.Set(context, strBuilder.ToString());
+            this.CodePrefixGroupDescription.Set(context, codePrefixGroupDescription);
             this.CodePrefixGroupCount.Set(context, codePrefixGroup.Sum(itm => itm.CodeCount));
         }
     }
