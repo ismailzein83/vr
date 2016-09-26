@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone", "Customer" },
-                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration" },
+                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "DurationNet" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -89,9 +89,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
                         ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.CostNet);
 
-                    MeasureValue saleDuration;
-                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                    lossesByCarrier.Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    MeasureValue DurationNet;
+                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out DurationNet);
+                    lossesByCarrier.Duration = Convert.ToDecimal(DurationNet.Value ?? 0.0);
                     lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
                         ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.Duration);
               

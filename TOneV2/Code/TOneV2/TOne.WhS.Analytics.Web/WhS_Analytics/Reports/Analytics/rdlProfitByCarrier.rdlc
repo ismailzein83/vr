@@ -677,7 +677,7 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
-                <Margin>False</Margin>
+                <Margin>True</Margin>
                 <Interval>1</Interval>
                 <ChartMajorGridLines>
                   <Enabled>False</Enabled>
@@ -713,11 +713,11 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
-                <IncludeZero>false</IncludeZero>
                 <ChartAxisScaleBreak>
                   <Style />
                 </ChartAxisScaleBreak>
@@ -789,12 +789,12 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
                 <Scalar>true</Scalar>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
-                <IncludeZero>false</IncludeZero>
                 <ChartAxisScaleBreak>
                   <Style />
                 </ChartAxisScaleBreak>
@@ -809,6 +809,7 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
+                <Margin>True</Margin>
                 <CrossAt>NaN</CrossAt>
                 <Location>Opposite</Location>
                 <Minimum>NaN</Minimum>

@@ -90,18 +90,40 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     LossesByZonesFormatted rateLossFromatted = new LossesByZonesFormatted();
 
-                    MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
-                    rateLossFromatted.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
+
+
+                    MeasureValue saleRate;
+                    analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
+                    rateLossFromatted.SaleRate = Convert.ToDecimal(saleRate.Value ?? 0.0);
+                    rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.SaleRate);
+
+                    MeasureValue costRate;
+                    analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
+                    rateLossFromatted.CostRate = Convert.ToDecimal(costRate.Value ?? 0.0);
+                    rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.CostRate);
+
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    rateLossFromatted.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleDuration);
+
+                    MeasureValue costDuration;
+                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
+                    rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
+                    rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostDuration);
+
+                  //  MeasureValue saleNet;
+                  //  analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    rateLossFromatted.SaleNet = rateLossFromatted.SaleRate *rateLossFromatted.SaleDuration;
                     rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleNet);
 
-                    MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                    rateLossFromatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
+                    //MeasureValue costNet;
+                   // analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    rateLossFromatted.CostNet = rateLossFromatted.CostRate * rateLossFromatted.CostDuration;
                     rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostNet);
 
                     var loss = rateLossFromatted.CostNet - rateLossFromatted.SaleNet;
-                    if (loss < 0) continue;
+                    if (loss <= 0) continue;
 
                     var supplierZoneValue = analyticRecord.DimensionValues[0];
                     if (supplierZoneValue != null)
@@ -120,34 +142,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (customerValue != null)
                         rateLossFromatted.Customer = customerValue.Name;
 
-                    MeasureValue saleRate;
-                    analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
-                    rateLossFromatted.SaleRate = Convert.ToDouble(saleRate.Value ?? 0.0);
-                    rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.SaleRate);
-
-                    MeasureValue costRate;
-                    analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
-                    rateLossFromatted.CostRate = Convert.ToDouble(costRate.Value ?? 0.0);
-                    rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.CostRate);
-
-                    MeasureValue saleDuration;
-                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                    rateLossFromatted.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleDuration);
-
-                    MeasureValue costDuration;
-                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                    rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostDuration);
 
 
 
-                    rateLossFromatted.LossFormatted = ReportHelpers.FormatNumber(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)));
-
+                    rateLossFromatted.LossFormatted = ReportHelpers.FormatLongNumberDigit(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)));
+        
                     MeasureValue percentageLoss;
                     analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
 
-                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet);
+                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(System.Math.Abs((decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet);
 
                     listRateLossFromatted.Add(rateLossFromatted);
                 }

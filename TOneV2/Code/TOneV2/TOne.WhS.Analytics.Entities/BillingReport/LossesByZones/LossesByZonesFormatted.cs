@@ -15,20 +15,20 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string Supplier { get; set; }
         public string CustomerID { get; set; }
         public string Customer { get; set; }
-        public double? SaleRate { get; set; }
+        public decimal? SaleRate { get; set; }
         public string SaleRateFormatted { get; set; }
-        public double? CostRate { get; set; }
+        public decimal? CostRate { get; set; }
         public string CostRateFormatted { get; set; }
         public decimal? CostDuration { get; set; }
         public string CostDurationFormatted { get; set; }
         public decimal? SaleDuration { get; set; }
         public string SaleDurationFormatted { get; set; }
-        public double? CostNet { get; set; }
+        public decimal? CostNet { get; set; }
         public string CostNetFormatted { get; set; }
-        public double? SaleNet { get; set; }
+        public decimal? SaleNet { get; set; }
         public string SaleNetFormatted { get; set; }
         public int SaleZoneID { get; set; }
-        public double Loss { get; set; }
+        public decimal Loss { get; set; }
         public string LossFormatted { get; set; }
         public string LossPerFormatted { get; set; }
         public string CarrierGroupsNames { get; set; }

@@ -70,7 +70,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public static string FormatNumberDigitRate(Decimal? number)
         {
             int precision = 4;//Digit Rate 
-            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
+            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", (number.HasValue) ? Math.Truncate(number.Value * 10000) / 10000 : number);
         }
         public static string FormatNumberDigitRate(Double? number)
         {
@@ -87,10 +87,18 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             return String.Format("{0:#,###0}", number);
         }
-
+        public static string FormatNumberPercentage(int number)
+        {
+            return String.Format("{0:#,##0.00%}",  number);
+        }
         public static string FormatNumberPercentage(Double? number)
         {
             return String.Format("{0:#,##0.00%}", (number.HasValue) ? Math.Truncate(number.Value *10000)/10000 : number);
+        }
+
+        public static string FormatNumberPercentage(Decimal? number)
+        {
+            return String.Format("{0:#,##0.00%}", (number.HasValue) ? Math.Truncate(number.Value * 10000) / 10000 : number);
         }
         public static string FormatNumberUnsignedPercentage(Double? number)
         {
