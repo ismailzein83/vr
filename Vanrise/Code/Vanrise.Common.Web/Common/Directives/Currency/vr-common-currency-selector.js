@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCommon_CurrencyService', 'UtilsService', 'VRUIUtilsService',
-    function (VRCommon_CurrencyAPIService, VRCommon_CurrencyService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCommon_CurrencyService', 'UtilsService', 'VRUIUtilsService', '$filter',
+    function (VRCommon_CurrencyAPIService, VRCommon_CurrencyService, UtilsService, VRUIUtilsService, $filter) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -130,8 +130,9 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                         {
                             if (response != null)
                             {
-                                for (var i = 0; i < response.length; i++)
-                                    ctrl.datasource.push(response[i]);
+                                var data = $filter('orderBy')(response, 'Symbol');
+                                for (var i = 0; i < data.length; i++)
+                                    ctrl.datasource.push(data[i]);
 
                                 if (selectedIds != undefined)
                                     VRUIUtilsService.setSelectedValues(selectedIds, 'CurrencyId', attrs, ctrl);
