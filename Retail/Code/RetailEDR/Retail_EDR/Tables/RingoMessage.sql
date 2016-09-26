@@ -13,6 +13,9 @@
     [StateRequest]              SMALLINT       NULL,
     [FlagCredit]                SMALLINT       NULL,
     [TransferredCredit]         INT            NULL,
-    [FlagRequestCreditTransfer] SMALLINT       NULL
+    [FlagRequestCreditTransfer] SMALLINT       NULL,
+    [AccountID]                 BIGINT         NULL
 );
+
+
 

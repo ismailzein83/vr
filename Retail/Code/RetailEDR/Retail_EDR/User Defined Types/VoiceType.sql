@@ -26,5 +26,8 @@
     [Balance]             DECIMAL (20, 10) NULL,
     [MTCost]              VARCHAR (256)    NULL,
     [TermDesc]            VARCHAR (256)    NULL,
-    [TypeCalled]          VARCHAR (32)     NULL);
+    [TypeCalled]          VARCHAR (32)     NULL,
+    [Zone]                BIGINT           NULL);
+
+
 

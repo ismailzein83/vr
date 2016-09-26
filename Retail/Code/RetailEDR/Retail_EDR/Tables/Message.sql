@@ -24,6 +24,9 @@
     [FileName]            VARCHAR (64)     NULL,
     [FileDate]            DATETIME         NULL,
     [CreationDate]        DATETIME         NULL,
-    [TypeMessage]         VARCHAR (32)     NULL
+    [TypeMessage]         VARCHAR (32)     NULL,
+    [Zone]                BIGINT           NULL
 );
+
+
 
