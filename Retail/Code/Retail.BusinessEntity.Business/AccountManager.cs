@@ -109,15 +109,17 @@ namespace Retail.BusinessEntity.Business
         {
             ValidateAccountToAdd(account);
 
-            var accountTypeManager = new AccountTypeManager();
-            var accountType = accountTypeManager.GetAccountType(account.TypeId);
-            if (accountType == null)
-                throw new NullReferenceException("AccountType is null");
-            if (accountType.Settings == null)
-                throw new NullReferenceException("AccountType settings is null");
+            if (account.StatusId == Guid.Empty)
+            {
+                var accountTypeManager = new AccountTypeManager();
+                var accountType = accountTypeManager.GetAccountType(account.TypeId);
+                if (accountType == null)
+                    throw new NullReferenceException("AccountType is null");
+                if (accountType.Settings == null)
+                    throw new NullReferenceException("AccountType settings is null");
 
-            account.StatusId = accountType.Settings.InitialStatusId;
-
+                account.StatusId = accountType.Settings.InitialStatusId;
+            }
 
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
 

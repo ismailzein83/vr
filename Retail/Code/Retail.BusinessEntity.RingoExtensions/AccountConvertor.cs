@@ -44,13 +44,11 @@ namespace Retail.BusinessEntity.RingoExtensions
                             },
                             IdentificationRulesToUpdate = new List<MappingRule>()
                         };
-
-
                         var sourceId = accountRecords[22];
                         accountData.Account.Name = accountName;
                         accountData.Account.SourceId = sourceId;
                         FillAccountSettings(accountData, accountRecords);
-
+                        accountData.Account.StatusId = Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
                         lstTargets.Add(accountData);
                     }
                     else

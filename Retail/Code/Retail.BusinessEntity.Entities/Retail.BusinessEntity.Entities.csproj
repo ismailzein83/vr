@@ -155,6 +155,7 @@
     <Compile Include="Distributor\DistributorSetting.cs" />
     <Compile Include="Distributor\SourceDistributor.cs" />
     <Compile Include="EntityType.cs" />
+    <Compile Include="Event\Event.cs" />
     <Compile Include="OperatorDeclaredInfo.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />
