@@ -249,7 +249,8 @@ as (select * from (values
 ('6D39DDC2-E5EB-46C3-A926-37D59A9FD1AD','Groups','Groups','#/view/Security/Views/Group/GroupManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Group/GetFilteredGroups',null,null,null,0,5),
 ('147C1862-9B0C-4285-B415-00C9210FC691','System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,10),
 ('7AFED44F-6470-47C7-B6E8-B1652D17EB6D','System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,15),
-('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement','9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Tenants/GetFilteredTenants',null,null,null,0,20),
+
+('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Sec/Tenants/GetFilteredTenants',null,null,null,0,50),
 
 ('5B11405B-F0E1-408C-BCF5-0AB328955B12','Views','Views','#/view/Security/Views/View/ViewManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/View/GetFilteredViews',null,null,null,0,1),
 ('E4101095-F599-414F-8E8C-4790E9FF00FA','Menus','Menus','#/view/Security/Views/Menu/MenuManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/View/UpdateViewsRank',null,null,null,0,5),
