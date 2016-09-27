@@ -1,0 +1,26 @@
+﻿
+
+<vr-section title="Market Price">
+    <div>
+        <vr-row removeline>
+            <vr-columns width="fullrow" simplecol>
+                <vr-button type="Add" data-onclick="ctrl.onAddMarketPrice" standalone></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-datagrid on-ready="ctrl.onGridReady"
+                             datasource="ctrl.marketPrices"
+                             menuactions="ctrl.menuActions"
+                             ondeleterow="ctrl.onDeleteMarketPrice"
+                             enabledraggablerow="true"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Services'" type="'Text'" field="'ServiceNames'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Currency'" type="'Text'" field="'CurrencyName'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Minimum'" type="'Text'" field="'Minimum'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Maximum'" type="'Text'" field="'Maximum'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-section>

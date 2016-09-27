@@ -2,7 +2,7 @@
 app.directive('vrWhsRoutingRouteoptionrulesettingsBlock', ['UtilsService',
     function (UtilsService) {
 
-        var directiveDefinitionObject = {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '='
@@ -24,13 +24,11 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsBlock', ['UtilsService',
                     }
                 }
             },
-            template: function (element, attrs) {
-                return '';
-            }
-
+            templateUrl: '/Client/Modules/WhS_Routing/Directives/Extensions/RouteOptionRuleSettings/Templates/RouteOptionRulesSettingsBlockTemplate.html'
         };
 
         function blockCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
             function initializeController() {
                 defineAPI();
@@ -52,8 +50,5 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsBlock', ['UtilsService',
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
-        return directiveDefinitionObject;
     }]);

@@ -11,9 +11,15 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredRouteOptionRules"), input);
         }
 
-        function GetRule(routeRuleId) {
+        function GetRuleEditorRuntime(routeOptionRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRuleEditorRuntime"), {
+                ruleId: routeOptionRuleId
+            });
+        }
+
+        function GetRule(routeOptionRuleId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRule"), {
-                ruleId: routeRuleId
+                ruleId: routeOptionRuleId
             });
         }
 
@@ -48,6 +54,7 @@
 
         return ({
             GetFilteredRouteOptionRules: GetFilteredRouteOptionRules,
+            GetRuleEditorRuntime: GetRuleEditorRuntime,
             GetRule: GetRule,
             AddRule: AddRule,
             UpdateRule: UpdateRule,

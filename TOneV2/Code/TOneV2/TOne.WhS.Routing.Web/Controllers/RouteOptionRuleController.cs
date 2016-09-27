@@ -35,6 +35,14 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetRuleEditorRuntime")]
+        public RouteOptionRuleEditorRuntime GetRuleEditorRuntime(int ruleId)
+        {
+            RouteOptionRuleManager manager = new RouteOptionRuleManager();
+            return manager.GetRuleEditorRuntime(ruleId);
+        }
+
+        [HttpGet]
         [Route("GetRule")]
         public new RouteOptionRule GetRule(int ruleId)
         {

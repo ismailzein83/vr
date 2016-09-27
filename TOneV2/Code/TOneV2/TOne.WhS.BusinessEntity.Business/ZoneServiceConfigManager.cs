@@ -96,6 +96,17 @@ namespace TOne.WhS.BusinessEntity.Business
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
             return allZoneServiceConfigs.GetRecord(ZoneServiceConfigId);
         }
+
+        public string GetServiceSymbol(int serviceId)
+        {
+            ZoneServiceConfig zoneServiceConfig = GetZoneServiceConfig(serviceId);
+
+            if (zoneServiceConfig == null)
+                throw new NullReferenceException(string.Format("zoneServiceConfig Id: {0} does not exist", serviceId));
+
+            return zoneServiceConfig.Symbol;
+        }
+
         public List<ZoneService> GetChildServicesByZoneServices(List<ZoneService> zoneServices)
         {
             IEnumerable<ZoneServiceConfig> zoneServiceConfigs = this.GetCachedZoneServiceConfigs().Values;

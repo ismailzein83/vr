@@ -171,7 +171,10 @@
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-details.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-grid.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-settings.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\Templates\RouteOptionRulesSettingsBlockTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\Templates\RouteOptionRulesSettingsMarketPriceTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-marketprice.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByRateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByServiceDirective.html" />
@@ -252,6 +255,7 @@
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
     <Content Include="WhS_Routing\Services\RouteOptionRuleService.js" />
+    <Content Include="WhS_Routing\Services\MarketPriceService.js" />
     <Content Include="WhS_Routing\Services\RouteRuleService.js" />
     <Content Include="WhS_Routing\Services\RPRouteService.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\RPBuildProductRoutesProcess.html" />
@@ -266,6 +270,8 @@
     <Content Include="WhS_Routing\Views\RouteOptionRule\RouteOptionRuleEditorController.js" />
     <Content Include="WhS_Routing\Views\RouteOptionRule\RouteOptionRuleManagement.html" />
     <Content Include="WhS_Routing\Views\RouteOptionRule\RouteOptionRuleManagementController.js" />
+    <Content Include="WhS_Routing\Views\RouteOptionRule\RouteOptionRuleSettings\MarketPriceEditor.html" />
+    <Content Include="WhS_Routing\Views\RouteOptionRule\RouteOptionRuleSettings\MarketPriceEditorController.js" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteManagement.html" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteManagementController.js" />
     <Content Include="WhS_Routing\Views\RouteRule\RouteRuleEditor.html" />

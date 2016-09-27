@@ -113,6 +113,22 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeOptionRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
+        public RouteOptionRuleEditorRuntime GetRuleEditorRuntime(int ruleId)
+        {
+            RouteOptionRuleEditorRuntime routeOptionRuleEditorRuntime = new RouteOptionRuleEditorRuntime();
+            routeOptionRuleEditorRuntime.Entity = base.GetRule(ruleId);
+
+            if (routeOptionRuleEditorRuntime.Entity == null)
+                throw new NullReferenceException(string.Format("routeOptionRuleEditorRuntime.Entity for Rule ID: {0} is null", ruleId));
+
+            if (routeOptionRuleEditorRuntime.Entity.Settings == null)
+                throw new NullReferenceException(string.Format("routeOptionRuleEditorRuntime.Entity.Settings for Rule ID: {0} is null", ruleId));
+
+           routeOptionRuleEditorRuntime.SettingsEditorRuntime = routeOptionRuleEditorRuntime.Entity.Settings.GetEditorRuntime();
+
+            return routeOptionRuleEditorRuntime;
+        }
+
         public override RouteOptionRuleDetail MapToDetails(RouteOptionRule rule)
         {
             return new RouteOptionRuleDetail
