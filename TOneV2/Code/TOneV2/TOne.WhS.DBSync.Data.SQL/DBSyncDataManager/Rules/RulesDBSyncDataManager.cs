@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Rules;
+using Rule = Vanrise.Rules.Entities.Rule;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -22,9 +23,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             _useTempTables = useTempTables;
         }
 
-        public void ApplyRouteRulesToTemp(List<BaseRule> routeRules)
+        public void ApplyRouteRulesToTemp(List<Rule> routeRules)
         {
-            RouteRuleManager routeRuleManager = new RouteRuleManager();
             DataTable dt = new DataTable { TableName = MigrationUtils.GetTableName(_schema, _tableName, _useTempTables) };
             dt.Columns.Add("RuleDetails", typeof(string));
             dt.Columns.Add("TypeID", typeof(int));
@@ -32,26 +32,26 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("EED", typeof(DateTime));
 
             dt.BeginLoadData();
-            foreach (var routeRule in routeRules)
+            foreach (var rule in routeRules)
             {
                 DataRow row = dt.NewRow();
-                row["RuleDetails"] = Serializer.Serialize(routeRule);
-                row["TypeID"] = routeRuleManager.GetRuleTypeId();
-                row["BED"] = routeRule.BeginEffectiveTime;
-                row["EED"] = routeRule.EndEffectiveTime ?? (object)DBNull.Value;
+                row["RuleDetails"] = rule.RuleDetails;
+                row["TypeID"] = rule.TypeId;
+                row["BED"] = rule.BED;
+                row["EED"] = rule.EED ?? (object)DBNull.Value;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
-        public Dictionary<string, RouteRule> GetRouteRules(bool useTempTables)
+        public Dictionary<string, Rule> GetRouteRules(bool useTempTables)
         {
             return GetItemsText("SELECT [ID] ,[RuleDetails]  ,[BED] ,EED, SourceID FROM"
                 + MigrationUtils.GetTableName(_schema, _tableName, useTempTables), RouteRuleMapper, null).ToDictionary(k => k.SourceId, v => v);
         }
-        private RouteRule RouteRuleMapper(IDataReader reader)
+        private Rule RouteRuleMapper(IDataReader reader)
         {
-            RouteRule rule = Serializer.Deserialize<RouteRule>(reader["RuleDetails"] as string);
+            Rule rule = Serializer.Deserialize<Rule>(reader["RuleDetails"] as string);
             if (rule != null)
                 rule.SourceId = reader["SourceID"] as string;
             return rule;

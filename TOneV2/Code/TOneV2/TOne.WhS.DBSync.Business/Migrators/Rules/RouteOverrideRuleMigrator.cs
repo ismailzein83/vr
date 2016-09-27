@@ -11,6 +11,8 @@ using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
 using TOne.WhS.Routing.Business.RouteRules.Percentages;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
+using Vanrise.Rules.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -18,6 +20,7 @@ namespace TOne.WhS.DBSync.Business
     {
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SaleZone> _allSaleZones;
+        readonly int _routeRuleTypeId;
         public RouteOverrideRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
@@ -26,6 +29,9 @@ namespace TOne.WhS.DBSync.Business
 
             var dbTableSaleZones = Context.MigrationContext.DBTables[DBTableName.SaleZone];
             _allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZones.Records;
+
+            RouteRuleManager manager = new RouteRuleManager();
+            _routeRuleTypeId = manager.GetRuleTypeId();
         }
         public override IEnumerable<SourceRule> GetRouteRules()
         {
@@ -87,21 +93,33 @@ namespace TOne.WhS.DBSync.Business
         SourceRule GetSourceRuleFromCodes(IEnumerable<SourceRouteOverrideRule> rules)
         {
             SourceRouteOverrideRule sourceRule = rules.First();
-
+            var details = GetRuleDetailsFromCode(rules, sourceRule);
             return new SourceRule
             {
-                RouteRule = new RouteRule
+                Rule = new Rule
                 {
-                    BeginEffectiveTime = rules.Min(r => r.BED),
-                    EndEffectiveTime = null,
-                    Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
-                    Criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule),
-                    Settings = GetRuleSettings(sourceRule)
-
+                    BED = rules.Min(r => r.BED),
+                    EED = null,
+                    RuleDetails = Serializer.Serialize(details),
+                    TypeId = _routeRuleTypeId
                 }
             };
         }
+
+        RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
+        {
+            RouteRule details = new RouteRule
+            {
+                BeginEffectiveTime = rules.Min(r => r.BED),
+                EndEffectiveTime = null,
+                Description = sourceRule.Reason,
+                Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                Criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule),
+                Settings = GetRuleSettings(sourceRule)
+            };
+            return details;
+        }
+
         List<CodeCriteria> GetRuleCodeCriterias(IEnumerable<SourceRouteOverrideRule> rules)
         {
             List<CodeCriteria> criterias = new List<CodeCriteria>();
@@ -142,17 +160,30 @@ namespace TOne.WhS.DBSync.Business
 
             return new SourceRule
             {
-                RouteRule = new RouteRule
+                Rule = new Rule
                 {
-                    BeginEffectiveTime = rules.Min(r => r.BED),
-                    EndEffectiveTime = null,
-                    Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
-                    Criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule),
-                    Settings = GetRuleSettings(sourceRule)
+                    BED = rules.Min(r => r.BED),
+                    EED = null,
+                    TypeId = _routeRuleTypeId,
+                    RuleDetails = Serializer.Serialize(GetRuleDetailsFromZone(rules, sourceRule, lstZoneIds))
                 }
             };
         }
+
+        private RouteRule GetRuleDetailsFromZone(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, List<long> lstZoneIds)
+        {
+            RouteRule details = new RouteRule
+            {
+                BeginEffectiveTime = rules.Min(r => r.BED),
+                EndEffectiveTime = null,
+                Description = sourceRule.Reason,
+                Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                Criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule),
+                Settings = GetRuleSettings(sourceRule)
+            };
+            return details;
+        }
+
         RegularRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
         {
             return new RegularRouteRule

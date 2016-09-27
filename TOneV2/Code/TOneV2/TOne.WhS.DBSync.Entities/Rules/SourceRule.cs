@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities.EntitySynchronization;
 using Vanrise.Rules;
+using Vanrise.Rules.Entities;
 
 namespace TOne.WhS.DBSync.Entities
 {
@@ -15,6 +16,6 @@ namespace TOne.WhS.DBSync.Entities
             get;
             set;
         }
-        public BaseRule RouteRule { get; set; }
+        public Rule Rule { get; set; }
     }
 }

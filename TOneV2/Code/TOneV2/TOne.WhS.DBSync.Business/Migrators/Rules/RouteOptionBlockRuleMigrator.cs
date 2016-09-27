@@ -12,6 +12,8 @@ using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
 using TOne.WhS.Routing.Business.RouteRules.Percentages;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
+using Vanrise.Rules.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -20,6 +22,7 @@ namespace TOne.WhS.DBSync.Business
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly Dictionary<string, SupplierZone> _allSupplierZones;
+        readonly int _routeOptionRuleTypeId;
         public RouteOptionBlockRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
@@ -31,6 +34,9 @@ namespace TOne.WhS.DBSync.Business
 
             var dtTableSupplierZones = Context.MigrationContext.DBTables[DBTableName.SupplierZone];
             _allSupplierZones = (Dictionary<string, SupplierZone>)dtTableSupplierZones.Records;
+
+            RouteOptionRuleManager manager = new RouteOptionRuleManager();
+            _routeOptionRuleTypeId = manager.GetRuleTypeId();
         }
         public override IEnumerable<SourceRule> GetRouteRules()
         {
@@ -76,34 +82,57 @@ namespace TOne.WhS.DBSync.Business
         }
         SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOptionBlockRule> rules)
         {
+
             SourceRouteOptionBlockRule sourceRule = rules.First();
 
             List<long> lstZoneIds = new List<long>();
 
-
             foreach (var rule in rules)
                 lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
+
+            var settings = GetRouteOptionRuleSettings(rules, sourceRule, lstZoneIds);
+
             return new SourceRule
             {
-                RouteRule = new RouteOptionRule()
+                Rule = new Rule
                 {
-                    BeginEffectiveTime = rules.Min(r => r.BED),
-                    EndEffectiveTime = null,
-                    Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
-                    Settings = new BlockRouteOptionRule
+                    BED = rules.Min(r => r.BED),
+                    EED = null,
+                    TypeId = _routeOptionRuleTypeId,
+                    RuleDetails = Serializer.Serialize(settings)
+                }
+            };
+        }
+
+        RouteOptionRule GetRouteOptionRuleSettings(IEnumerable<SourceRouteOptionBlockRule> rules, SourceRouteOptionBlockRule sourceRule,
+           List<long> lstZoneIds)
+        {
+            RouteOptionRule settings = new RouteOptionRule()
+            {
+                BeginEffectiveTime = rules.Min(r => r.BED),
+                EndEffectiveTime = null,
+                Description = sourceRule.Reason,
+                Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                Settings = new BlockRouteOptionRule
+                {
+                },
+                Criteria = new RouteOptionRuleCriteria
+                {
+                    SuppliersWithZonesGroupSettings = new SelectiveSuppliersWithZonesGroup
                     {
-                    },
-                    Criteria = new RouteOptionRuleCriteria
-                    {
-                        SuppliersWithZonesGroupSettings = new SelectiveSuppliersWithZonesGroup
-                        {
-                            SuppliersWithZones = new List<SupplierWithZones> { new SupplierWithZones { SupplierId = _allCarrierAccounts[sourceRule.SupplierId].CarrierAccountId, SupplierZoneIds = lstZoneIds } }
-                             ,
-                        }
+                        SuppliersWithZones =
+                            new List<SupplierWithZones>
+                            {
+                                new SupplierWithZones
+                                {
+                                    SupplierId = _allCarrierAccounts[sourceRule.SupplierId].CarrierAccountId,
+                                    SupplierZoneIds = lstZoneIds
+                                }
+                            }
                     }
                 }
             };
+            return settings;
         }
     }
 }

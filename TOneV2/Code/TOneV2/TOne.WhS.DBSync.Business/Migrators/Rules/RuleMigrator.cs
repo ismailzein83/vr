@@ -2,10 +2,11 @@
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Rules;
+using Vanrise.Rules.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class RuleMigrator : Migrator<SourceRule, BaseRule>
+    public class RuleMigrator : Migrator<SourceRule, Rule>
     {
         MigrationContext _migrationContext;
         readonly RulesDBSyncDataManager _dbSyncDataManager;
@@ -23,11 +24,6 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
-        public override void AddItems(List<BaseRule> itemsToAdd)
-        {
-            _dbSyncDataManager.ApplyRouteRulesToTemp(itemsToAdd);
-            TotalRowsSuccess = itemsToAdd.Count;
-        }
 
         public override IEnumerable<SourceRule> GetSourceItems()
         {
@@ -51,9 +47,15 @@ namespace TOne.WhS.DBSync.Business
             return routeRules;
         }
 
-        public override BaseRule BuildItemFromSource(SourceRule sourceItem)
+        public override Rule BuildItemFromSource(SourceRule sourceItem)
         {
-            return sourceItem.RouteRule;
+            return sourceItem.Rule;
+        }
+
+        public override void AddItems(List<Rule> itemsToAdd)
+        {
+            _dbSyncDataManager.ApplyRouteRulesToTemp(itemsToAdd);
+            TotalRowsSuccess = itemsToAdd.Count;
         }
     }
 }
