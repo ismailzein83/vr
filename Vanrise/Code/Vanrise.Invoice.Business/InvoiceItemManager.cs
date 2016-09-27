@@ -15,8 +15,8 @@ namespace Vanrise.Invoice.Business
         #region Public Methods
         public IDataRetrievalResult<InvoiceItemDetail> GetFilteredInvoiceItems(DataRetrievalInput<InvoiceItemQuery> input)
         {
-            IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
-            return BigDataManager.Instance.RetrieveData(input, new InvoiceItemRequestHandler(dataManager));
+           
+            return BigDataManager.Instance.RetrieveData(input, new InvoiceItemRequestHandler());
         }
 
         public static string ExecuteItemSetNameParts(List<InvoiceItemConcatenatedPart> itemSetNameParts, dynamic invoiceItemDetails,string currentItemSetName)
@@ -61,9 +61,9 @@ namespace Vanrise.Invoice.Business
         private class InvoiceItemRequestHandler : BigDataRequestHandler<InvoiceItemQuery, Entities.InvoiceItem, Entities.InvoiceItemDetail>
         {
             IInvoiceItemDataManager _dataManager;
-            public InvoiceItemRequestHandler(IInvoiceItemDataManager dataManager)
+            public InvoiceItemRequestHandler()
             {
-                _dataManager = dataManager;
+                _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
             }
             public override InvoiceItemDetail EntityDetailMapper(Entities.InvoiceItem entity)
             {

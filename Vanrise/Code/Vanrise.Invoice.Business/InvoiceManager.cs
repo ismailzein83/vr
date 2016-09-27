@@ -19,8 +19,8 @@ namespace Vanrise.Invoice.Business
         #region Public Methods
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
-            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler(dataManager)) as Vanrise.Entities.BigResult<InvoiceDetail>;
+         
+            var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
             if(result != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
@@ -145,9 +145,9 @@ namespace Vanrise.Invoice.Business
         private class InvoiceRequestHandler : BigDataRequestHandler<InvoiceQuery, Entities.Invoice, Entities.InvoiceDetail>
         {
             IInvoiceDataManager _dataManager;
-            public InvoiceRequestHandler(IInvoiceDataManager dataManager)
+            public InvoiceRequestHandler()
             {
-                _dataManager = dataManager;
+                _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             }
             public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
             {
