@@ -24,6 +24,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
             dt.Columns.Add("ZoneID", typeof(long));
+            dt.Columns.Add("PriceListID", typeof(int));
             dt.Columns.Add("ReceivedServicesFlag", typeof(string));
             dt.Columns.Add("EffectiveServiceFlag", typeof(string));
             dt.Columns.Add("BED", typeof(DateTime));
@@ -36,6 +37,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 DataRow row = dt.NewRow();
                 row["ZoneID"] = item.ZoneId;
+                row["PriceListID"] = item.PriceListId;
                 row["ReceivedServicesFlag"] = Vanrise.Common.Serializer.Serialize(item.ReceivedServices);
                 row["EffectiveServiceFlag"] = Vanrise.Common.Serializer.Serialize(item.EffectiveServices);
                 row["BED"] = item.BED;

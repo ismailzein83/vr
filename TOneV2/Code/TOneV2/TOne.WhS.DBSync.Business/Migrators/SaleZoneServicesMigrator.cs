@@ -16,6 +16,7 @@ namespace TOne.WhS.DBSync.Business
         SourceZoneServiceDataManager dataManager;
         Dictionary<string, SaleZone> allSaleZones;
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
+        Dictionary<string, SalePriceList> allSalePriceLists;
         public SaleZoneServicesMigrator(MigrationContext context)
             : base(context)
         {
@@ -28,6 +29,9 @@ namespace TOne.WhS.DBSync.Business
 
             var dbTableZoneServicesConfig = Context.DBTables[DBTableName.ZoneServiceConfig];
             allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
+            
+            var dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
+            allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
 
         }
 
@@ -53,12 +57,14 @@ namespace TOne.WhS.DBSync.Business
         public override SaleEntityZoneService BuildItemFromSource(SourceRate sourceItem)
         {
             SaleZone saleZone = null;
-
-
             if (allSaleZones != null && sourceItem.ZoneId.HasValue)
                 allSaleZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out saleZone);
 
-            if (saleZone != null && sourceItem.BeginEffectiveDate.HasValue)
+            SalePriceList salePriceList = null;
+            if (allSalePriceLists != null && sourceItem.PriceListId.HasValue)
+                allSalePriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out salePriceList);
+
+            if (saleZone != null && salePriceList != null && sourceItem.BeginEffectiveDate.HasValue)
             {
                 List<ZoneService> effectiveServices = new List<ZoneService>();
 
@@ -76,7 +82,7 @@ namespace TOne.WhS.DBSync.Business
                     BED = sourceItem.BeginEffectiveDate.Value,
                     EED = sourceItem.EndEffectiveDate,
                     Services = effectiveServices,
-                    PriceListId = sourceItem.PriceListId.Value,
+                    PriceListId = salePriceList.PriceListId,
                     ZoneId = saleZone.SaleZoneId,
                     SourceId = sourceItem.SourceId
                 };

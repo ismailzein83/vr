@@ -16,6 +16,7 @@ namespace TOne.WhS.DBSync.Business
         SourceZoneServiceDataManager dataManager;
         Dictionary<string, SupplierZone> allSupplierZones;
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
+        Dictionary<string, SupplierPriceList> allSupplierPriceLists;
         public SupplierZoneServicesMigrator(MigrationContext context)
             : base(context)
         {
@@ -26,6 +27,8 @@ namespace TOne.WhS.DBSync.Business
             allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
             var dbTableZoneServicesConfig = Context.DBTables[DBTableName.ZoneServiceConfig];
             allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
+            var dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
+            allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
 
         }
 
@@ -52,11 +55,14 @@ namespace TOne.WhS.DBSync.Business
         {
             SupplierZone supplierZone = null;
 
-
             if (allSupplierZones != null && sourceItem.ZoneId.HasValue)
                 allSupplierZones.TryGetValue(sourceItem.ZoneId.Value.ToString(), out supplierZone);
 
-            if (supplierZone != null && sourceItem.BeginEffectiveDate.HasValue)
+            SupplierPriceList supplierPriceList = null;
+            if (allSupplierPriceLists != null && sourceItem.PriceListId.HasValue)
+                allSupplierPriceLists.TryGetValue(sourceItem.PriceListId.Value.ToString(), out supplierPriceList);
+
+            if (supplierZone != null && supplierPriceList != null && sourceItem.BeginEffectiveDate.HasValue)
             {
                 List<ZoneService> effectiveServices = new List<ZoneService>();
 
@@ -78,6 +84,7 @@ namespace TOne.WhS.DBSync.Business
                     BED = sourceItem.BeginEffectiveDate.Value,
                     EED = sourceItem.EndEffectiveDate,
                     EffectiveServices = effectiveServices,
+                    PriceListId = supplierPriceList.PriceListId,
                     ReceivedServices = effectiveServices,
                     ZoneId = supplierZone.SupplierZoneId,
                     SourceId = sourceItem.SourceId
