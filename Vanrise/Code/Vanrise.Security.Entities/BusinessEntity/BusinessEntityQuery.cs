@@ -8,6 +8,6 @@ namespace Vanrise.Security.Entities
 {
     public class BusinessEntityQuery
     {
-        public int ModuleId { get; set; }
+        public Guid ModuleId { get; set; }
     }
 }

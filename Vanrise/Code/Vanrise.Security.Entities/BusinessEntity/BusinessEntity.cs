@@ -8,13 +8,13 @@ namespace Vanrise.Security.Entities
 {
     public class BusinessEntity
     {
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
 
         public string Name { get; set; }
 
         public string Title { get; set; }
 
-        public int ModuleId { get; set; }
+        public Guid ModuleId { get; set; }
 
         public bool BreakInheritance { get; set; }
 
@@ -23,7 +23,7 @@ namespace Vanrise.Security.Entities
 
     public class BusinessEntityInfo
     {
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
 
         public string Name { get; set; }
 

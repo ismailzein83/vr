@@ -68,7 +68,7 @@ namespace Vanrise.Security.Business
         {
             List<Vanrise.Security.Entities.Permission> permissions = new List<Vanrise.Security.Entities.Permission>();
             BusinessEntityModuleManager manager = new BusinessEntityModuleManager();
-            BusinessEntityModule module = manager.GetBusinessEntityModules().First(itm => !itm.ParentId.HasValue || itm.ParentId.Value == 0);
+            BusinessEntityModule module = manager.GetBusinessEntityModules().First(itm => !itm.ParentId.HasValue || itm.ParentId.Value == Guid.Empty);
 
             foreach (int userId in input.UserIds)
             {

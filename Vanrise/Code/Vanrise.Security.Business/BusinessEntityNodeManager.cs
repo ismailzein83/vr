@@ -32,7 +32,7 @@ namespace Vanrise.Security.Business
 
             foreach (BusinessEntityModule item in modules)
             {
-                if (item.ParentId == 0)
+                if (item.ParentId == Guid.Empty || item.ParentId == null)
                 {
                     retVal.Add(GetModuleNode(item, modules, entities, null,true));
                 }
@@ -49,7 +49,7 @@ namespace Vanrise.Security.Business
 
             foreach (BusinessEntityModule item in modules)
             {
-                if (item.ParentId == 0)
+                if (item.ParentId == Guid.Empty || item.ParentId == null)
                 {
                     retVal.Add(GetModuleNode(item, modules, null, null, true));
                 }
@@ -137,7 +137,7 @@ namespace Vanrise.Security.Business
                 }
                 else if (businessEntityNode.EntType == EntityType.ENTITY)
                 {
-                    _beManager.UpdateBusinessEntityRank(businessEntityNode.EntityId, 1);
+                    _beManager.UpdateBusinessEntityRank(businessEntityNode.EntityId, Guid.Empty);
                 }
             }
             return true;
@@ -228,7 +228,7 @@ namespace Vanrise.Security.Business
         {
             foreach (var beNode in beNodes)
             {
-                if (beNode.EntType == targetType && beNode.EntityId.ToString() == targetId)
+                if (beNode.EntType == targetType && targetId.Equals(beNode.EntityId.ToString(),StringComparison.InvariantCultureIgnoreCase))
                     return beNode;
                 else if (beNode.Children != null)
                 {

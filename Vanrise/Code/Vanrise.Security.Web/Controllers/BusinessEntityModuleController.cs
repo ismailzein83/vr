@@ -17,7 +17,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetBusinessEntityModuleById")]
-        public BusinessEntityModule GetBusinessEntityModuleById(int moduleId)
+        public BusinessEntityModule GetBusinessEntityModuleById(Guid moduleId)
         {
             return _manager.GetBusinessEntityModuleById(moduleId);
         }

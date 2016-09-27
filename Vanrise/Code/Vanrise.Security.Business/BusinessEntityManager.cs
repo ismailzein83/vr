@@ -41,20 +41,20 @@ namespace Vanrise.Security.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, businessEntites.ToBigResult(input, filterExpression, BusinessEntityDetailMapper));
         }
 
-        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesByIds(List<int> entitiesIds)
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesByIds(List<Guid> entitiesIds)
         {
             var businessEntites = GetBusinessEntites();
             return businessEntites.MapRecords(BusinessEntityInfoMapper, (prod) => (entitiesIds.Contains(prod.EntityId)));
         }
 
 
-        public BusinessEntity GetBusinessEntityById(int entityId)
+        public BusinessEntity GetBusinessEntityById(Guid entityId)
         {
             var cachedEntities = GetCachedBusinessEntities();
             return cachedEntities.FindRecord(entity => entity.EntityId == entityId);
         }
 
-        public IEnumerable<BusinessEntity> GetBusinessEntitiesByModuleId(int moduleId)
+        public IEnumerable<BusinessEntity> GetBusinessEntitiesByModuleId(Guid moduleId)
         {
             //TODO: pass the holder id to load the saved permissions
               var cachedEntities = GetCachedBusinessEntities();
@@ -62,7 +62,7 @@ namespace Vanrise.Security.Business
         }
         public string GetBusinessEntityName(EntityType entityType, string entityId)
         {
-            int convertedEntityId = Convert.ToInt32(entityId);
+            Guid convertedEntityId = Guid.Parse(entityId);
 
             if (entityType == EntityType.MODULE)
                 return _beModuleManager.GetBusinessEntityModuleName(convertedEntityId);
@@ -81,16 +81,15 @@ namespace Vanrise.Security.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int entityId = -1;
+            businessEntity.EntityId = Guid.NewGuid();
 
             IBusinessEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
-            bool insertActionSucc = dataManager.AddBusinessEntity(businessEntity, out entityId);
+            bool insertActionSucc = dataManager.AddBusinessEntity(businessEntity);
 
             if (insertActionSucc)
             {
                 SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                businessEntity.EntityId = entityId;
                 insertOperationOutput.InsertedObject = BusinessEntityDetailMapper(businessEntity);
             }
             else
@@ -124,7 +123,7 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public bool UpdateBusinessEntityRank(int entityId, int moduleId)
+        public bool UpdateBusinessEntityRank(Guid entityId, Guid moduleId)
         {
             IBusinessEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
             return dataManager.UpdateBusinessEntityRank(entityId, moduleId);
@@ -133,7 +132,7 @@ namespace Vanrise.Security.Business
 
         #region Private Methods
 
-        Dictionary<int, BusinessEntity> GetCachedBusinessEntities()
+        Dictionary<Guid, BusinessEntity> GetCachedBusinessEntities()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBusinessEntites",
             () =>

@@ -20,18 +20,18 @@ namespace Vanrise.Security.Business
             return GetCachedBusinessEntityModules().Values;
         }
 
-        public BusinessEntityModule GetBusinessEntityModuleById(int moduleId)
+        public BusinessEntityModule GetBusinessEntityModuleById(Guid moduleId)
         {
             var cachedModules = GetCachedBusinessEntityModules();
             return cachedModules.FindRecord(module => module.ModuleId == moduleId);
         }
 
-        public string GetBusinessEntityModuleName(int moduleId)
+        public string GetBusinessEntityModuleName(Guid moduleId)
         {
             BusinessEntityModule module = GetBusinessEntityModuleById(moduleId);
             return module != null ? module.Name : null;
         }
-        public  bool UpdateBusinessEntityModuleRank(int moduleId, int? parentId)
+        public bool UpdateBusinessEntityModuleRank(Guid moduleId, Guid? parentId)
         {
             IBusinessEntityModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
             return dataManager.UpdateBusinessEntityModuleRank(moduleId, parentId);
@@ -46,16 +46,15 @@ namespace Vanrise.Security.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int moduleId = -1;
+            moduleObject.ModuleId = Guid.NewGuid();
 
             IBusinessEntityModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
-            bool insertActionSucc = dataManager.AddBusinessEntityModule(moduleObject, out moduleId);
+            bool insertActionSucc = dataManager.AddBusinessEntityModule(moduleObject);
 
             if (insertActionSucc)
             {
                 SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                moduleObject.ModuleId = moduleId;
                 insertOperationOutput.InsertedObject = moduleObject;
             }
             else
@@ -92,7 +91,7 @@ namespace Vanrise.Security.Business
         
         #region Private Methods
 
-        Dictionary<int, BusinessEntityModule> GetCachedBusinessEntityModules()
+        Dictionary<Guid, BusinessEntityModule> GetCachedBusinessEntityModules()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetModules",
             () =>

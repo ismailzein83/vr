@@ -13,7 +13,7 @@ namespace Vanrise.Security.Entities
 
     public class RequiredPermissionEntry
     {
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
 
         public List<string> PermissionOptions { get; set; }
     }

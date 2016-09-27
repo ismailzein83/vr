@@ -9,7 +9,7 @@ namespace Vanrise.Security.Entities
 {
     public class BusinessEntityNode
     {
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
 
         public string Name { get; set; }
 

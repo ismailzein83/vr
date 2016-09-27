@@ -23,13 +23,13 @@ namespace Vanrise.Security.Web.Controllers
         }
         [HttpPost]
         [Route("GetBusinessEntitiesByIds")]
-        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesByIds(List<int> entitiesIds)
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesByIds(List<Guid> entitiesIds)
         {
             return _manager.GetBusinessEntitiesByIds(entitiesIds);
         }
         [HttpGet]
         [Route("GetBusinessEntity")]
-        public BusinessEntity GetBusinessEntity(int entityId)
+        public BusinessEntity GetBusinessEntity(Guid entityId)
         {
             return _manager.GetBusinessEntityById(entityId);
         }

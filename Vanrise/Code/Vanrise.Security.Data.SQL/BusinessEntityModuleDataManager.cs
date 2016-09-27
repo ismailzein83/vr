@@ -31,13 +31,9 @@ namespace Vanrise.Security.Data.SQL
         {
             return base.IsDataUpdated("sec.BusinessEntityModule", ref updateHandle);
         }
-        public bool AddBusinessEntityModule(Entities.BusinessEntityModule moduleObject, out int moduleId)
+        public bool AddBusinessEntityModule(Entities.BusinessEntityModule moduleObject)
         {
-            object moduleID;
-
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Insert", out moduleID, moduleObject.Name, moduleObject.ParentId, moduleObject.BreakInheritance);
-            moduleId = (recordesEffected > 0) ? (int)moduleID : -1;
-
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.BreakInheritance);
             return (recordesEffected > 0);
         }
 
@@ -50,7 +46,7 @@ namespace Vanrise.Security.Data.SQL
 
 
 
-        public bool UpdateBusinessEntityModuleRank(int moduleId, int? parentId)
+        public bool UpdateBusinessEntityModuleRank(Guid moduleId, Guid? parentId)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_UpdateParent", moduleId, parentId);
             return (recordesEffected > 0);
@@ -61,10 +57,10 @@ namespace Vanrise.Security.Data.SQL
         {
             Entities.BusinessEntityModule module = new Entities.BusinessEntityModule
             {
-                ModuleId = (int)reader["Id"],
+                ModuleId = GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
                // Title = reader["Title"] as string,
-                ParentId = GetReaderValue<int>(reader, "ParentId"),
+                ParentId = GetReaderValue<Guid?>(reader, "ParentId"),
                 BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = new List<string>() { "View", "Add", "Edit", "Delete", "Full Control" }
             };

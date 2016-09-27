@@ -12,9 +12,9 @@ namespace Vanrise.Security.Data
         IEnumerable<Vanrise.Security.Entities.BusinessEntityModule> GetModules();
 
         bool ToggleBreakInheritance(string entityId);
-        bool AddBusinessEntityModule(BusinessEntityModule moduleObject, out int moduleId);
+        bool AddBusinessEntityModule(BusinessEntityModule moduleObject);
         bool UpdateBusinessEntityModule(BusinessEntityModule moduleObject);
-        bool UpdateBusinessEntityModuleRank(int moduleId, int? parentId);
+        bool UpdateBusinessEntityModuleRank(Guid moduleId, Guid? parentId);
         bool AreBusinessEntityModulesUpdated(ref object updateHandle);
     }
 }

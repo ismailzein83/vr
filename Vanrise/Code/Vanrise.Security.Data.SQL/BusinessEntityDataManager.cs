@@ -31,7 +31,7 @@ namespace Vanrise.Security.Data.SQL
         {
             return base.IsDataUpdated("sec.BusinessEntity", ref updateHandle);
         }
-        public bool AddBusinessEntity(BusinessEntity businessEntity, out int entityId)
+        public bool AddBusinessEntity(BusinessEntity businessEntity)
         {
             string sertializedObject = null;
             if(businessEntity.PermissionOptions !=null)
@@ -40,8 +40,7 @@ namespace Vanrise.Security.Data.SQL
             }
             object entityID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Insert", out entityID, businessEntity.Name,businessEntity.Title, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
-            entityId = (recordesEffected > 0) ? (int)entityID : -1;
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Insert", businessEntity.EntityId, businessEntity.Name, businessEntity.Title, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
 
             return (recordesEffected > 0);
         }
@@ -59,7 +58,7 @@ namespace Vanrise.Security.Data.SQL
 
 
 
-        public bool UpdateBusinessEntityRank(int entityId, int moduleId)
+        public bool UpdateBusinessEntityRank(Guid entityId, Guid moduleId)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_UpdateModule", entityId, moduleId);
             return (recordesEffected > 0);
@@ -71,10 +70,10 @@ namespace Vanrise.Security.Data.SQL
         {
             Entities.BusinessEntity module = new Entities.BusinessEntity
             {
-                EntityId = (int)reader["Id"],
+                EntityId = GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
-                ModuleId = (int)reader["ModuleId"],
+                ModuleId =  GetReaderValue<Guid>(reader,"ModuleId"),
                 BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader["PermissionOptions"] as string)
             };
