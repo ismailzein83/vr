@@ -144,10 +144,9 @@ namespace Vanrise.Invoice.Business
 
         private class InvoiceRequestHandler : BigDataRequestHandler<InvoiceQuery, Entities.Invoice, Entities.InvoiceDetail>
         {
-            IInvoiceDataManager _dataManager;
             public InvoiceRequestHandler()
             {
-                _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+               
             }
             public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
             {
@@ -155,6 +154,7 @@ namespace Vanrise.Invoice.Business
             }
             public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
             {
+                IInvoiceDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
                 return _dataManager.GetGetFilteredInvoices(input);
             }
         }

@@ -60,10 +60,8 @@ namespace Vanrise.Invoice.Business
 
         private class InvoiceItemRequestHandler : BigDataRequestHandler<InvoiceItemQuery, Entities.InvoiceItem, Entities.InvoiceItemDetail>
         {
-            IInvoiceItemDataManager _dataManager;
             public InvoiceItemRequestHandler()
             {
-                _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
             }
             public override InvoiceItemDetail EntityDetailMapper(Entities.InvoiceItem entity)
             {
@@ -75,6 +73,8 @@ namespace Vanrise.Invoice.Business
 
             public override IEnumerable<Entities.InvoiceItem> RetrieveAllData(DataRetrievalInput<InvoiceItemQuery> input)
             {
+                IInvoiceItemDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
+
                 if (input.Query.ItemSetNameParts != null && input.Query.ItemSetNameParts.Count>0)
                 {
                     input.Query.ItemSetName = InvoiceItemManager.ExecuteItemSetNameParts(input.Query.ItemSetNameParts, input.Query.InvoiceItemDetails,input.Query.ItemSetName);
