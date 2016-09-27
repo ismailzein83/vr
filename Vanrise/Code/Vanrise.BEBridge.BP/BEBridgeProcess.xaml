@@ -125,6 +125,11 @@
               <Variable x:TypeArguments="vq:BaseQueue(vbe:SourceBatches)" Name="queueSourceBatch" />
             </Parallel.Variables>
             <vbba1:ReadSourceBEs PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="ReadSourceBEs_1">
+              <vbba1:ReadSourceBEs.BeDefinitionId>
+                <InArgument x:TypeArguments="s:Guid">
+                  <mca:CSharpValue x:TypeArguments="s:Guid">recieveDefinitionId</mca:CSharpValue>
+                </InArgument>
+              </vbba1:ReadSourceBEs.BeDefinitionId>
               <vbba1:ReadSourceBEs.OutputQueues>
                 <InArgument x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">
                   <mca:CSharpValue x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">queueBatchProcessingContextList</mca:CSharpValue>
@@ -217,7 +222,7 @@
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwiQgPdAQ4CAQFDBdsBDwIBAkYLRnQDAa0BTQnZARQCAQNSEVK0AQIBBFYLYSoDAaIBYgttMQMBlwFuC3kmAwGMAXoL2AEWAgEJWRFZeQMBqAFeEV5gAwGjAWoRapoBAwGdAWURZXEDAZgBdhF2iwEDAZIBcRFx5QEDAY0Bfw2UASMCAW+VAQ3XAR8CAQqMAROMAYYBAwGFAYIBE4IBnAECAX6RARORAXoCAXeHAROHAYABAgFwmAETmAGkAQIBaJ8BEdUBHAIBC6QBE8MBNAIBK8QBE9QBKQIBDLEBGbEBeAIBXqcBGacB6gECAVS2ARm2AYgBAgFKrAEZrAGgAQIBQLsBGbsBkAECATbAARnAAYoBAgEs0QEZ0QGQAQIBIcwBGcwBgAECARfHARnHAZgBAgEN</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwjQgPiAQ4CAQFDBeABDwIBAkYLRnQDAbQBTQneARQCAQNSEVK0AQIBBFYLYSoDAakBYgttMQMBngFuC3kmAwGTAXoL3QEWAgEJWRFZeQMBrwFeEV5gAwGqAWoRapoBAwGkAWURZXEDAZ8BdhF2iwEDAZkBcRFx5QEDAZQBfw2ZASMCAW+aAQ3cAR8CAQqRARORAYYBAwGMAYIBE4IBYgMBhQGHAROHAZwBAgF+lgETlgF6AgF3jAETjAGAAQIBcJ0BE50BpAECAWikARHaARwCAQupARPIATQCASvJARPZASkCAQy2ARm2AXgCAV6sARmsAeoBAgFUuwEZuwGIAQIBSrEBGbEBoAECAUDAARnAAZABAgE2xQEZxQGKAQIBLNYBGdYBkAECASHRARnRAYABAgEXzAEZzAGYAQIBDQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

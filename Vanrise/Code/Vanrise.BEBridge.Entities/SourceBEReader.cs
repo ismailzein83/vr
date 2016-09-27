@@ -21,6 +21,8 @@ namespace Vanrise.BEBridge.Entities
     public interface ISourceBEReaderRetrieveUpdatedBEsContext
     {
         void OnSourceBEBatchRetrieved(SourceBEBatch sourceBEs, SourceBEBatchRetrievedContext context);
+
+        object ReaderState { get; set; }
     }
 
     public interface ISourceBEReaderSetBatchImportedContext

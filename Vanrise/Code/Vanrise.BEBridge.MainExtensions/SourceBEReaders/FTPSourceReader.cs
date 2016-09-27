@@ -16,6 +16,11 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
         public FTPSourceReaderSetting Setting { get; set; }
         public override void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context)
         {
+            FTPSourceReaderState state = context.ReaderState as FTPSourceReaderState;
+            if (state == null)
+            {
+                state = new FTPSourceReaderState();
+            }
             _ftp = new Ftp();
             string mask = string.IsNullOrEmpty(Setting.Mask) ? "" : Setting.Mask;
             Regex regEx = new Regex(mask);
@@ -35,10 +40,14 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                     {
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
+                            if (Setting.BasedOnTime && DateTime.Compare(state.LastRetrievedFileTime, fileObj.Modified) >= 0)
+                                continue;
                             String filePath = Setting.Directory + "/" + fileObj.Name;
                             context.OnSourceBEBatchRetrieved(GetFileSourceBatch(_ftp, fileObj, filePath), null);
+                            state.LastRetrievedFileTime = fileObj.Modified;
                         }
                     }
+                    context.ReaderState = state;
                 }
             }
             else
@@ -84,5 +93,11 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
         public string ServerIp { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public bool BasedOnTime { get; set; }
+    }
+
+    public class FTPSourceReaderState
+    {
+        public DateTime LastRetrievedFileTime { get; set; }
     }
 }
