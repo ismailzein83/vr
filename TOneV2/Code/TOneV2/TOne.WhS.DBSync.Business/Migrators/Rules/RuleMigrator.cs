@@ -43,7 +43,8 @@ namespace TOne.WhS.DBSync.Business
                     DefaultSellingNumberPlanId = Context.DefaultSellingNumberPlanId
                 }
             };
-            //_routeRuleBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
+            _routeRuleBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
+            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
             _routeRuleBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
             routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
 

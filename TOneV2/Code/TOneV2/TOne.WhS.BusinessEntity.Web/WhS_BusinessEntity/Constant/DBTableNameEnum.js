@@ -21,5 +21,6 @@
     File: { value: 19, description: "File", defaultMigrate: false },
     SwitchConnectivity: { value: 20, description: "SwitchConnectivity", defaultMigrate: true },
     SupplierZoneServices: { value: 21, description: "Supplier Zone Services", defaultMigrate: true },
-    SaleEntityServices: { value: 22, description: "Sale Entity Services", defaultMigrate: true }
+    SaleEntityServices: { value: 22, description: "Sale Entity Services", defaultMigrate: true },
+    Rule: { value: 23, description: "Rules", defaultMigrate: true }
 });
