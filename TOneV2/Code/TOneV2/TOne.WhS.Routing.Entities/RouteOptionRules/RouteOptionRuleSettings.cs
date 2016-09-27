@@ -10,6 +10,16 @@ namespace TOne.WhS.Routing.Entities
     {
         public abstract Guid ConfigId { get; }
 
+        public virtual RouteOptionRuleSettingsEditorRuntime GetEditorRuntime()
+        {
+            return null;
+        }
+
         public abstract void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target);
+    }
+
+    public abstract class RouteOptionRuleSettingsEditorRuntime
+    {
+
     }
 }

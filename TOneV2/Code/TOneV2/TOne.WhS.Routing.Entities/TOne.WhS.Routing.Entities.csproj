@@ -68,6 +68,7 @@
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
     <Compile Include="RouteOptionRuleConfig.cs" />
+    <Compile Include="RouteOptionRules\RouteOptionRuleEditorRuntime.cs" />
     <Compile Include="RouteOptionSettingsGroupConfig.cs" />
     <Compile Include="RouteRuleOptionFilterSettingsConfig.cs" />
     <Compile Include="RouteRuleOptionOrderSettingsConfig.cs" />
