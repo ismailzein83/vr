@@ -133,14 +133,20 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                 mvtsRadiusSQLDataManagers.PrepareTables();
             });
         }
-        public void InsertRoutes(List<ConvertedRoute> radiusRoutes)
+
+        public Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (ConvertedRoute route in radiusRoutes)
                 WriteRecordToStream(route, dbApplyStream);
-            Object preparedRadiusRoutes = FinishDBApplyStream(dbApplyStream);
-            ApplyRadiusRoutesForDB(preparedRadiusRoutes);
+            return FinishDBApplyStream(dbApplyStream);
         }
+
+        public void ApplySwitchRouteSyncRoutes(object preparedItemsForApply)
+        {
+            ApplyRadiusRoutesForDB(preparedItemsForApply);
+        }
+
         public void SwapTables()
         {
             ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers, dataManagerIndex) =>

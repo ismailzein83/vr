@@ -10,7 +10,6 @@ namespace TOne.WhS.RouteSync.TelesRadius
 {
     public class TelesRadiusSWSync : SwitchRouteSynchronizer
     {
-        Guid _configId;
         public override Guid ConfigId { get { return new Guid("423064C2-ACE8-4D70-8CFF-CDAA1461DBBE"); } }
 
         public IRadiusDataManager DataManager { get; set; }
@@ -71,15 +70,19 @@ namespace TOne.WhS.RouteSync.TelesRadius
             return strOptions.Length == 0 ? "BLK" : strOptions.ToString();
         }
 
-        public override void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context)
+        public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
         {
-            this.DataManager.InsertRoutes(context.ConvertedRoutes);
-            //throw new NotImplementedException();
+            return this.DataManager.PrepareDataForApply(context.ConvertedRoutes);
         }
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
             this.DataManager.SwapTables();
+        }
+
+        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
+        {
+            this.DataManager.ApplySwitchRouteSyncRoutes(context.PreparedItemsForApply);
         }
     }
 

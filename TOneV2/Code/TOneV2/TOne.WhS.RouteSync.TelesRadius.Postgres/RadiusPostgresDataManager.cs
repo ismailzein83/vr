@@ -20,11 +20,6 @@ namespace TOne.WhS.RouteSync.TelesRadius.Postgres
             throw new NotImplementedException();
         }
 
-        public void InsertRoutes(List<ConvertedRoute> radiusRoutes)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SwapTables()
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(""))
@@ -61,6 +56,18 @@ namespace TOne.WhS.RouteSync.TelesRadius.Postgres
         }
 
         public void WriteRecordToStream(ConvertedRoute record, object dbApplyStream)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void ApplySwitchRouteSyncRoutes(object preparedItemsForApply)
         {
             throw new NotImplementedException();
         }

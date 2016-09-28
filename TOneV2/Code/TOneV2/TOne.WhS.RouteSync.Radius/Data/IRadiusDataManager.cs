@@ -12,7 +12,8 @@ namespace TOne.WhS.RouteSync.Radius
     {
         Guid ConfigId { get; }
         void PrepareTables();
-        void InsertRoutes(List<ConvertedRoute> radiusRoutes);
+        Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes);
+        void ApplySwitchRouteSyncRoutes(Object preparedItemsForApply);
         void SwapTables();
     }
 }

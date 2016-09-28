@@ -109,45 +109,18 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         public class SwitchRouteSynchronizerConvertRoutesContext : ISwitchRouteSynchronizerConvertRoutesContext
         {
-            public RouteRangeType? RouteRangeType
-            {
-                get;
-                set;
-            }
+            public RouteRangeType? RouteRangeType { get; set; }
 
-            public RouteRangeInfo RouteRangeInfo
-            {
-                get;
-                set;
-            }
+            public RouteRangeInfo RouteRangeInfo { get; set; }
 
-            public SwitchRouteSyncInitializationData InitializationData
-            {
-                get;
-                set;
-            }
+            public SwitchRouteSyncInitializationData InitializationData { get; set; }
 
-            public List<Route> Routes
-            {
-                get;
-                set;
-            }
+            public List<Route> Routes { get; set; }
 
-            public List<ConvertedRoute> ConvertedRoutes
-            {
-                get;
-                set;
-            }
+            public List<ConvertedRoute> ConvertedRoutes { get; set; }
 
-
-            public List<string> InvalidRoutes
-            {
-                get;
-                set;
-            }
+            public List<string> InvalidRoutes { get; set; }
         }
-
-
         #endregion
     }
 }

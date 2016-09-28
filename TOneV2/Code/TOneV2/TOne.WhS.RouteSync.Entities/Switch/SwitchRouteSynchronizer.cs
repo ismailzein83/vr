@@ -14,9 +14,11 @@ namespace TOne.WhS.RouteSync.Entities
 
         public abstract void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context);
 
-        public abstract void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context);
+        public abstract Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context);
 
         public abstract void Finalize(ISwitchRouteSynchronizerFinalizeContext context);
+
+        public abstract void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
     }
 
     public enum RouteSyncDeliveryMethod { Batches = 0, AllRoutes = 1 }
@@ -48,7 +50,14 @@ namespace TOne.WhS.RouteSync.Entities
         List<string> InvalidRoutes { set; }
     }
 
-    public interface ISwitchRouteSynchronizerUpdateConvertedRoutesContext
+    public interface ISwitchRouteSynchronizerFinalizeContext
+    {
+        RouteRangeType? RouteRangeType { get; }
+
+        SwitchRouteSyncInitializationData InitializationData { get; }
+    }
+
+    public interface ISwitchRouteSynchronizerPrepareDataForApplyContext
     {
         RouteRangeType? RouteRangeType { get; }
 
@@ -59,10 +68,8 @@ namespace TOne.WhS.RouteSync.Entities
         List<ConvertedRoute> ConvertedRoutes { get; }
     }
 
-    public interface ISwitchRouteSynchronizerFinalizeContext
+    public interface ISwitchRouteSynchronizerApplyRoutesContext
     {
-        RouteRangeType? RouteRangeType { get; }
-
-        SwitchRouteSyncInitializationData InitializationData { get; }
+        Object PreparedItemsForApply { get; }
     }
 }

@@ -17,5 +17,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
         public BaseQueue<RouteBatch> RouteQueue { get; set; }
 
         public BaseQueue<ConvertedRouteBatch> ConvertedRouteQueue { get; set; }
+
+        public BaseQueue<Object> PreparedRoutesForApplyQueue { get; set; }
     }
 }

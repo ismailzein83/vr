@@ -73,14 +73,20 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
 
             ExecuteNonQueryText(query.ToString(), null);
         }
-        public void InsertRoutes(List<ConvertedRoute> radiusRoutes)
+
+        public Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (ConvertedRoute route in radiusRoutes)
                 WriteRecordToStream(route, dbApplyStream);
-            Object preparedRadiusRoutes = FinishDBApplyStream(dbApplyStream);
-            ApplyRadiusRoutesForDB(preparedRadiusRoutes);
+            return FinishDBApplyStream(dbApplyStream);
         }
+
+        public void ApplySwitchRouteSyncRoutes(object preparedItemsForApply)
+        {
+            ApplyRadiusRoutesForDB(preparedItemsForApply);
+        }
+
         public void SwapTables()
         {
             ExecuteNonQueryText("sp_RadiusRoute_SwapTables", null);

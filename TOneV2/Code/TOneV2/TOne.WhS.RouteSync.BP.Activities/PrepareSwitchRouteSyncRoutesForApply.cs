@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.RouteSync.BP.Activities
 {
     #region Argument Classes
 
-    public class UpdateSwitchRouteSyncRoutesInput
+    public class PrepareSwitchRouteSyncRoutesForApplyInput
     {
         public RouteRangeType? RangeType { get; set; }
 
@@ -19,14 +18,14 @@ namespace TOne.WhS.RouteSync.BP.Activities
         public SwitchInProcess SwitchInProcess { get; set; }
     }
 
-    public class UpdateSwitchRouteSyncRoutesOutput
+    public class PrepareSwitchRouteSyncRoutesForApplyOutput
     {
 
     }
 
     #endregion
 
-    public sealed class UpdateSwitchRouteSyncRoutes : DependentAsyncActivity<UpdateSwitchRouteSyncRoutesInput, UpdateSwitchRouteSyncRoutesOutput>
+    public sealed class PrepareSwitchRouteSyncRoutesForApply : DependentAsyncActivity<PrepareSwitchRouteSyncRoutesForApplyInput, PrepareSwitchRouteSyncRoutesForApplyOutput>
     {
         [RequiredArgument]
         public InArgument<RouteRangeType?> RangeType { get; set; }
@@ -37,8 +36,15 @@ namespace TOne.WhS.RouteSync.BP.Activities
         [RequiredArgument]
         public InArgument<SwitchInProcess> SwitchInProcess { get; set; }
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            var switcheInProcess = this.SwitchInProcess.Get(context);
+            if (switcheInProcess.PreparedRoutesForApplyQueue == null)
+                switcheInProcess.PreparedRoutesForApplyQueue = new MemoryQueue<Object>();
+            base.OnBeforeExecute(context, handle);
+        }
 
-        protected override UpdateSwitchRouteSyncRoutesOutput DoWorkWithResult(UpdateSwitchRouteSyncRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override PrepareSwitchRouteSyncRoutesForApplyOutput DoWorkWithResult(PrepareSwitchRouteSyncRoutesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             int totalBatchesUpdated = 0;
             long totalRoutesUpdated = 0;
@@ -50,26 +56,27 @@ namespace TOne.WhS.RouteSync.BP.Activities
                 {
                     hasItem = inputArgument.SwitchInProcess.ConvertedRouteQueue.TryDequeue((convertedRouteBatch) =>
                     {
-                        SwitchRouteSynchronizerUpdateConvertedRoutesContext switchRouteSynchronizerUpdateConvertedRoutesContext = new SwitchRouteSynchronizerUpdateConvertedRoutesContext
+                        SwitchRouteSynchronizerPrepareDataForApplyContext switchRouteSynchronizerPrepareDataForApplyContext = new SwitchRouteSynchronizerPrepareDataForApplyContext
                         {
                             ConvertedRoutes = convertedRouteBatch.ConvertedRoutes,
                             RouteRangeType = inputArgument.RangeType,
                             RouteRangeInfo = inputArgument.RangeInfo,
                             InitializationData = switchInProcess.InitializationData
                         };
-                        switchInProcess.Switch.RouteSynchronizer.UpdateConvertedRoutes(switchRouteSynchronizerUpdateConvertedRoutesContext);
+                        Object preparedItemsForDBApply = switchInProcess.Switch.RouteSynchronizer.PrepareDataForApply(switchRouteSynchronizerPrepareDataForApplyContext);
+                        inputArgument.SwitchInProcess.PreparedRoutesForApplyQueue.Enqueue(preparedItemsForDBApply);
                         totalBatchesUpdated++;
                         totalRoutesUpdated += convertedRouteBatch.ConvertedRoutes.Count;
                         handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Batches updated, {1} Routes", totalBatchesUpdated, totalRoutesUpdated);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
-            return new UpdateSwitchRouteSyncRoutesOutput { };
+            return new PrepareSwitchRouteSyncRoutesForApplyOutput { };
         }
 
-        protected override UpdateSwitchRouteSyncRoutesInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PrepareSwitchRouteSyncRoutesForApplyInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new UpdateSwitchRouteSyncRoutesInput
+            return new PrepareSwitchRouteSyncRoutesForApplyInput
             {
                 RangeInfo = this.RangeInfo.Get(context),
                 RangeType = this.RangeType.Get(context),
@@ -77,42 +84,24 @@ namespace TOne.WhS.RouteSync.BP.Activities
             };
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, UpdateSwitchRouteSyncRoutesOutput result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareSwitchRouteSyncRoutesForApplyOutput result)
         {
 
         }
 
         #region Private Classes
 
-        private class SwitchRouteSynchronizerUpdateConvertedRoutesContext : ISwitchRouteSynchronizerUpdateConvertedRoutesContext
+        private class SwitchRouteSynchronizerPrepareDataForApplyContext : ISwitchRouteSynchronizerPrepareDataForApplyContext
         {
-            public RouteRangeType? RouteRangeType
-            {
-                get;
-                set;
-            }
+            public RouteRangeType? RouteRangeType { get; set; }
 
-            public RouteRangeInfo RouteRangeInfo
-            {
-                get;
-                set;
-            }
+            public RouteRangeInfo RouteRangeInfo { get; set; }
 
-            public SwitchRouteSyncInitializationData InitializationData
-            {
-                get;
-                set;
-            }
+            public SwitchRouteSyncInitializationData InitializationData { get; set; }
 
-            public List<ConvertedRoute> ConvertedRoutes
-            {
-                get;
-                set;
-            }
+            public List<ConvertedRoute> ConvertedRoutes { get; set; }
         }
-
 
         #endregion
     }
-
 }

@@ -136,9 +136,15 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             return mvtsRouteSyncOptions;
         }
 
-        public override void UpdateConvertedRoutes(ISwitchRouteSynchronizerUpdateConvertedRoutesContext context)
+
+        public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
         {
-            this.DataManager.InsertRoutes(context.ConvertedRoutes);
+            return this.DataManager.PrepareDataForApply(context.ConvertedRoutes);
+        }
+
+        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
+        {
+            this.DataManager.ApplySwitchRouteSyncRoutes(context.PreparedItemsForApply);
         }
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
