@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Rules;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -10,12 +11,15 @@ namespace TOne.WhS.Routing.Entities
     {
         public abstract Guid ConfigId { get; }
 
+
+        public abstract void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target);
+
         public virtual RouteOptionRuleSettingsEditorRuntime GetEditorRuntime()
         {
             return null;
         }
 
-        public abstract void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target);
+        public virtual void RefreshState(IRefreshRuleStateContext context) { }
     }
 
     public abstract class RouteOptionRuleSettingsEditorRuntime

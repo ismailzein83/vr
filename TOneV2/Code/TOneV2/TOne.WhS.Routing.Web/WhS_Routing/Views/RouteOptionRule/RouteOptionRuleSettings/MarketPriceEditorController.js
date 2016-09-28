@@ -14,9 +14,6 @@
         var zoneServiceConfigSelectorAPI;
         var zoneServiceConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var currencySelectorAPI;
-        var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -38,10 +35,6 @@
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
                 zoneServiceConfigSelectorReadyDeferred.resolve();
-            }
-            $scope.scopeModel.onCurrencySelectorReady = function (api) {
-                currencySelectorAPI = api;
-                currencySelectorReadyDeferred.resolve();
             }
 
             $scope.scopeModel.validateZoneServiceConfig = function () {
@@ -92,7 +85,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadZoneServiceConfigSelector, loadCurrencySelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadZoneServiceConfigSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -125,21 +118,6 @@
 
                 return zoneServiceConfigSelectorLoadDeferred.promise;
             }
-            function loadCurrencySelector() {
-
-                var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                currencySelectorReadyDeferred.promise.then(function () {
-                    var currencySelectorPayload = {};
-                    if (marketPriceEntity != undefined) {
-                        currencySelectorPayload.selectedIds = marketPriceEntity.CurrencyId;
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
-                });
-
-                return currencySelectorLoadDeferred.promise;
-            }
         }
 
         function insert() {
@@ -163,14 +141,12 @@
 
             var marketPriceObj = {
                 ServiceIds: zoneServiceConfigSelectorAPI.getSelectedIds(),
-                CurrencyId: currencySelectorAPI.getSelectedIds(),
                 Minimum: $scope.scopeModel.minRate,
                 Maximum: $scope.scopeModel.maxRate,
             };
 
-            //Names to display at the grid
+            //ServiceNames to display at the grid
             marketPriceObj.ServiceNames = buildServiceNames($scope.scopeModel.zoneServiceConfigSelectedValues);
-            marketPriceObj.CurrencyName = $scope.scopeModel.currencySelectedValues.Symbol;
 
             return marketPriceObj;
         }

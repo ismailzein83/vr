@@ -134,5 +134,10 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
+
+        public override void RefreshRuleState(Vanrise.Rules.IRefreshRuleStateContext context)
+        {
+            this.Settings.RefreshState(context);
+        }
     }
 }

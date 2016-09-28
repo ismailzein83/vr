@@ -157,7 +157,8 @@ namespace TOne.WhS.Routing.Business
             routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
-            routeRuleExecutionContext.CustomerServices = customerZoneDetail.SaleEntityServiceIds;
+            routeRuleExecutionContext.SaleEntityServiceIds = customerZoneDetail.SaleEntityServiceIds;
+            routeRuleExecutionContext.CustomerServiceIds = customerZoneDetail.CustomerServiceIds;
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;

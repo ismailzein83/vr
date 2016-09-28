@@ -16,44 +16,64 @@ namespace TOne.WhS.Routing.Business
         #region Properties
         public override Guid ConfigId { get { return new Guid("{9D66822E-ADB3-4088-8E94-33647E523C29}"); } }
 
-        public List<MarketPrice> MarketPrices { get; set; }
+        public int CurrencyId { get; set; }
 
+        public Dictionary<string, MarketPrice> MarketPrices { get; set; }
         #endregion
 
 
         #region Public Methods
         public override void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target)
         {
-            throw new NotImplementedException();
+            MarketPrice tempMarketPrice;
+
+            if (context.CustomerServiceIds == null)
+                return;
+
+            if (MarketPrices.TryGetValue(context.CustomerServiceIds, out tempMarketPrice))
+            {
+                if(target.SupplierRate < tempMarketPrice.ConvertedMinimum || target.SupplierRate > tempMarketPrice.ConvertedMaximum)
+                    target.BlockOption = true;
+            }
         }
 
         public override RouteOptionRuleSettingsEditorRuntime GetEditorRuntime()
         {
             MarketPriceEditorRuntime marketPriceEditorRuntime = new MarketPriceEditorRuntime();
-            marketPriceEditorRuntime.Services = new Dictionary<int, string>(); ;
-            marketPriceEditorRuntime.Currency = new Dictionary<int, string>();
+            marketPriceEditorRuntime.Services = new Dictionary<int, string>();
 
             ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
-            CurrencyManager currencyManager = new CurrencyManager();
 
-            foreach (MarketPrice itm in MarketPrices)
+            foreach (MarketPrice itm in MarketPrices.Values)
             {
-                //Services
                 foreach (int serviceId in itm.ServiceIds)
                 {
                     if (!marketPriceEditorRuntime.Services.ContainsKey(serviceId))
                         marketPriceEditorRuntime.Services.Add(serviceId, zoneServiceConfigManager.GetServiceSymbol(serviceId));
                 }
-
-                //Currencies
-                if (!marketPriceEditorRuntime.Currency.ContainsKey(itm.CurrencyId))
-                    marketPriceEditorRuntime.Currency.Add(itm.CurrencyId, currencyManager.GetCurrencySymbol(itm.CurrencyId));
             }
 
             return marketPriceEditorRuntime;
         }
 
+        public override void RefreshState(Vanrise.Rules.IRefreshRuleStateContext context)
+        {
+            if (MarketPrices == null)
+                return;
 
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            int systemCurrencyId = configManager.GetSystemCurrencyId();
+
+            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            decimal exchangeRate = currencyExchangeRateManager.ConvertValueToCurrency(1, CurrencyId, systemCurrencyId, context.EffectiveDate);
+
+            foreach (KeyValuePair<string, MarketPrice> marketPrice in MarketPrices)
+            {
+                MarketPrice currentItem = marketPrice.Value;
+                currentItem.ConvertedMinimum = currentItem.Minimum * exchangeRate;
+                currentItem.ConvertedMaximum = currentItem.Maximum * exchangeRate;
+            }
+        }
         #endregion
     }
 
@@ -62,17 +82,17 @@ namespace TOne.WhS.Routing.Business
     {
         public List<int> ServiceIds { get; set; }
 
-        public int CurrencyId { get; set; }
-
         public decimal Minimum { get; set; }
 
         public decimal Maximum { get; set; }
+
+        public decimal? ConvertedMinimum;
+
+        public decimal? ConvertedMaximum;
     }
 
     public class MarketPriceEditorRuntime : RouteOptionRuleSettingsEditorRuntime
     {
         public Dictionary<int, string> Services { get; set; }
-
-        public Dictionary<int, string> Currency { get; set; }
     }
 }

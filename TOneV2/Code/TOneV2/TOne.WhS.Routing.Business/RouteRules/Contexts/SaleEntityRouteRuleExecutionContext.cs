@@ -42,8 +42,9 @@ namespace TOne.WhS.Routing.Business
 
         public int? NumberOfOptions { get; internal set; }
 
-        public HashSet<int> CustomerServices { get; internal set; }
+        public HashSet<int> SaleEntityServiceIds { get; internal set; }
 
+        public string CustomerServiceIds { get; internal set; }
 
         public bool TryAddOption(RouteOptionRuleTarget optionTarget)
         {
@@ -63,12 +64,12 @@ namespace TOne.WhS.Routing.Business
         internal RouteOption CreateOptionFromTarget(RouteOptionRuleTarget targetOption)
         {
             var routeOptionRule = GetRouteOptionRule(targetOption);
-            
+
             if (routeOptionRule != null)
             {
                 targetOption.ExecutedRuleId = routeOptionRule.RuleId;
-                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext();
-                routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, targetOption);                
+                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { CustomerServiceIds = CustomerServiceIds };
+                routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, targetOption);
             }
             RouteOption routeOption = new RouteOption
             {
@@ -125,7 +126,7 @@ namespace TOne.WhS.Routing.Business
                             }
                         }
                     }
-                }                
+                }
             }
             return _validSupplierCodeMatches;
         }

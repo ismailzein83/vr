@@ -87,6 +87,7 @@ namespace TOne.WhS.Routing.Business
                         rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
+                        HashSet<int> saleEntityServiceIds = customerService != null ? new HashSet<int>(customerService.Services.Select(itm => itm.ServiceId)) : null;
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
                             CustomerId = customerInfo.CustomerId,
@@ -96,7 +97,8 @@ namespace TOne.WhS.Routing.Business
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
-                            SaleEntityServiceIds = customerService != null ? new HashSet<int>(customerService.Services.Select(itm => itm.ServiceId)) : null
+                            SaleEntityServiceIds = saleEntityServiceIds,
+                            CustomerServiceIds = saleEntityServiceIds != null ? string.Join<int>(", ", saleEntityServiceIds.OrderBy(itm => itm)) : null
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
