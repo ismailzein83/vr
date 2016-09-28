@@ -6,6 +6,8 @@ namespace TOne.WhS.DBSync.Entities
 
     public enum SourceAccountType : byte { Client = 0, Exchange = 1, Termination = 2 }
 
+    public enum SourceRoutingStatus : byte { Blocked = 0, BlockedInbound = 1, BlockedOutbound = 2, Enabled = 3 }
+
     public class SourceCarrierAccount : ISourceItem
     {
 
@@ -28,7 +30,7 @@ namespace TOne.WhS.DBSync.Entities
         public short? GMTTime { get; set; }
 
         public SourceActivationStatus ActivationStatus { get; set; }
-
+        public SourceRoutingStatus RoutingStatus { get; set; }
         public SourceAccountType AccountType { get; set; }
 
         public string CarrierMask { get; set; }

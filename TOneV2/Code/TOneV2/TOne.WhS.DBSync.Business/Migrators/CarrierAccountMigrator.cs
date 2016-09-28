@@ -85,6 +85,26 @@ namespace TOne.WhS.DBSync.Business
                         break;
                 }
 
+                switch (sourceItem.RoutingStatus)
+                {
+                    case SourceRoutingStatus.Blocked:
+                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        break;
+                    case SourceRoutingStatus.BlockedInbound:
+                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.Enabled;
+                        break;
+                    case SourceRoutingStatus.BlockedOutbound:
+                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.Enabled;
+                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        break;
+                    case SourceRoutingStatus.Enabled:
+                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.Enabled;
+                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.Enabled;
+                        break;
+                }
+
                 CarrierAccountType accountType;
 
                 switch (sourceItem.AccountType)
