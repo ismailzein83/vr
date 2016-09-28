@@ -16,5 +16,9 @@ namespace Vanrise.Rules
         public DateTime BeginEffectiveTime { get; set; }
 
         public DateTime? EndEffectiveTime { get; set; }
+
+        public DateTime? LastRefreshedTime { get; set; }
+
+        public virtual void RefreshRuleState(IRefreshRuleStateContext context) { }
     }
 }

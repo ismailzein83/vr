@@ -46,6 +46,7 @@
     <Compile Include="BaseRule.cs" />
     <Compile Include="BaseRuleStructureBehavior.cs" />
     <Compile Include="BaseRuleTarget.cs" />
+    <Compile Include="IRefreshRuleStateContext.cs" />
     <Compile Include="IRuleExecutionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleManager.cs" />
