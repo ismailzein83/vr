@@ -43,5 +43,10 @@ namespace QM.CLITester.iTestIntegration
                 return null;
 
         }
+
+        public override Guid ConfigId
+        {
+             get{return new Guid("BB371F00-B036-4745-BDBC-65637F253054");}
+        }
     }
 }
