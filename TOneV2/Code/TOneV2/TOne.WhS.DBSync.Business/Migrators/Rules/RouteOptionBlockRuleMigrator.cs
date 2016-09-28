@@ -89,7 +89,10 @@ namespace TOne.WhS.DBSync.Business
             List<long> lstZoneIds = new List<long>();
 
             foreach (var rule in rules)
-                lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
+                if (!_allSupplierZones.ContainsKey(rule.SupplierZoneId.ToString()))
+                    this.TotalRowsFailed++;
+                else
+                    lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
 
             var settings = GetRouteOptionRuleSettings(rules, sourceRule, lstZoneIds);
 
