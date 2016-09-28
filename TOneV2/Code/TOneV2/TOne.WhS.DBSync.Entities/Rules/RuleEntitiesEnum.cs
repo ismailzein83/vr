@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.DBSync.Entities
 {
-    public class RuleMigrationContext
+    public enum RuleEntitiesEnum
     {
-        public bool GetEffectiveOnly { get; set; }
-        public MigrationContext MigrationContext { get; set; }
+        RouteOverride,
+        RouteOptionBlock
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Rules;
@@ -8,22 +9,19 @@ namespace TOne.WhS.DBSync.Business
 {
     public class RuleMigrator : Migrator<SourceRule, Rule>
     {
-        MigrationContext _migrationContext;
         readonly RulesDBSyncDataManager _dbSyncDataManager;
         RouteRuleBaseMigrator _routeRuleBaseMigrator;
-
 
         public RuleMigrator(MigrationContext context)
             : base(context)
         {
-            _migrationContext = context;
+
             _dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
         }
         public override void FillTableInfo(bool useTempTables)
         {
 
         }
-
 
         public override IEnumerable<SourceRule> GetSourceItems()
         {
@@ -39,11 +37,22 @@ namespace TOne.WhS.DBSync.Business
                     DefaultSellingNumberPlanId = Context.DefaultSellingNumberPlanId
                 }
             };
-            _routeRuleBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
-            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
-            _routeRuleBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
-            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
 
+            foreach (RuleEntitiesEnum ruleEntitiesEnum in Enum.GetValues(typeof(RuleEntitiesEnum)))
+            {
+                switch (ruleEntitiesEnum)
+                {
+                    case RuleEntitiesEnum.RouteOverride:
+                        _routeRuleBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
+                        break;
+                    case RuleEntitiesEnum.RouteOptionBlock:
+                        _routeRuleBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
+                        break;
+                }
+            }
+
+            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
+            _routeRuleBaseMigrator.WriteFaildRowsLog();
             return routeRules;
         }
 

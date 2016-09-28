@@ -18,6 +18,11 @@ namespace TOne.WhS.DBSync.Business
 {
     public class RouteOverrideRuleMigrator : RouteRuleBaseMigrator
     {
+        public override string EntityName
+        {
+            get { return "Route Override"; }
+        }
+
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly int _routeRuleTypeId;
@@ -156,7 +161,10 @@ namespace TOne.WhS.DBSync.Business
             List<long> lstZoneIds = new List<long>();
 
             foreach (var rule in rules)
-                lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
+                if (!_allSaleZones.ContainsKey(rule.SaleZoneId.ToString()))
+                    this.TotalRowsFailed++;
+                else
+                    lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
 
             return new SourceRule
             {

@@ -19,8 +19,12 @@ namespace TOne.WhS.DBSync.Business
 {
     public class RouteOptionBlockRuleMigrator : RouteRuleBaseMigrator
     {
+        public override string EntityName
+        {
+            get { return "Route Option Block"; }
+        }
+
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
-        readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly Dictionary<string, SupplierZone> _allSupplierZones;
         readonly int _routeOptionRuleTypeId;
         public RouteOptionBlockRuleMigrator(RuleMigrationContext context)
@@ -28,9 +32,6 @@ namespace TOne.WhS.DBSync.Business
         {
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-
-            var dbTableSaleZones = Context.MigrationContext.DBTables[DBTableName.SaleZone];
-            _allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZones.Records;
 
             var dtTableSupplierZones = Context.MigrationContext.DBTables[DBTableName.SupplierZone];
             _allSupplierZones = (Dictionary<string, SupplierZone>)dtTableSupplierZones.Records;
@@ -46,7 +47,7 @@ namespace TOne.WhS.DBSync.Business
             var blockRules = dataManager.GetRouteOptionBlockRules();
 
             routeRules.AddRange(GetRulesWithZone(blockRules.Where(o => o.SupplierZoneId.HasValue)));
-
+            WriteFaildRowsLog();
             return routeRules;
         }
         IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOptionBlockRule> blockRules)
