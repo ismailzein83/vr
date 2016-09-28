@@ -19,6 +19,8 @@ namespace Vanrise.Rules
 
         public DateTime? LastRefreshedTime { get; set; }
 
+        public virtual TimeSpan RefreshTimeSpan { get { return new TimeSpan(1, 0, 0); } }
+
         public virtual void RefreshRuleState(IRefreshRuleStateContext context) { }
     }
 }

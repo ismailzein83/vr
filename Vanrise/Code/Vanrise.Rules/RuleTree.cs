@@ -9,6 +9,7 @@ namespace Vanrise.Rules
 {
     public class RuleTree : RuleNode
     {
+        public static Object s_lockObj = new object();
         List<BaseRuleStructureBehavior> _structureBehaviors;
         public RuleTree(IEnumerable<BaseRule> rules, IEnumerable<BaseRuleStructureBehavior> structureBehaviors)
         {
@@ -121,7 +122,21 @@ namespace Vanrise.Rules
 
         public BaseRule GetMatchRule(BaseRuleTarget target)
         {
-            return GetMatchRule(this, target);
+            BaseRule matchRule = GetMatchRule(this, target);
+            if (matchRule != null)
+            {
+                if (!matchRule.LastRefreshedTime.HasValue || (DateTime.Now - matchRule.LastRefreshedTime.Value) > matchRule.RefreshTimeSpan)
+                {
+                    lock (s_lockObj)
+                    {
+                        if (!matchRule.LastRefreshedTime.HasValue || (DateTime.Now - matchRule.LastRefreshedTime.Value) > matchRule.RefreshTimeSpan)
+                        {
+                            matchRule.RefreshRuleState(new RefreshRuleStateContext() { EffectiveDate = target.EffectiveOn.HasValue ? target.EffectiveOn.Value : DateTime.Now });
+                        }
+                    }
+                }
+            }
+            return matchRule;
         }
 
         BaseRule GetMatchRule(RuleNode parentNode, BaseRuleTarget target)

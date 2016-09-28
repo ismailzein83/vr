@@ -8,6 +8,11 @@ namespace Vanrise.Rules
 {
     public interface IRefreshRuleStateContext
     {
+        DateTime EffectiveDate { get; }
+    }
 
+    public class RefreshRuleStateContext : IRefreshRuleStateContext
+    {
+        public DateTime EffectiveDate { get; set; }
     }
 }
