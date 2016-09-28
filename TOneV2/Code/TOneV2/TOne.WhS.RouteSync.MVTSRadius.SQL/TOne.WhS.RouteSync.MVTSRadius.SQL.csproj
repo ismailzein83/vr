@@ -57,6 +57,10 @@
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.MVTSRadius\TOne.WhS.RouteSync.MVTSRadius.csproj">
+      <Project>{580b6401-8d74-475a-abbf-69d6b8504344}</Project>
+      <Name>TOne.WhS.RouteSync.MVTSRadius</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Radius\TOne.WhS.RouteSync.Radius.csproj">
       <Project>{0f005ef5-f26b-4f30-ae68-ce841d744e68}</Project>
       <Name>TOne.WhS.RouteSync.Radius</Name>

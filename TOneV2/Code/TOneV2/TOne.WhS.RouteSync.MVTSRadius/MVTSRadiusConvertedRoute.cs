@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.RouteSync.Radius;
 
-namespace TOne.WhS.RouteSync.Radius
+namespace TOne.WhS.RouteSync.MVTSRadius
 {
     public class MVTSRadiusConvertedRoute : RadiusConvertedRoute
     {

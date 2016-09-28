@@ -56,13 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\IRadiusDataManager.cs" />
-    <Compile Include="MVTS\MVTSRadiusConvertedRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiusConnectionString.cs" />
     <Compile Include="RadiusConvertedRoute.cs" />
     <Compile Include="RadiusDataManagerConfig.cs" />
     <Compile Include="RadiusDataManagersSettingManager.cs" />
-    <Compile Include="Teles\TelesRadiusConvertedRoute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
