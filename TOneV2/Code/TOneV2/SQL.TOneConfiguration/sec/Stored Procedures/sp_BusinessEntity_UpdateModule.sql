@@ -3,10 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE sec.sp_BusinessEntity_UpdateModule
+CREATE PROCEDURE [sec].[sp_BusinessEntity_UpdateModule]
 	-- Add the parameters for the stored procedure here
-@EntityId INT,
-@ModuleId int
+@EntityId uniqueidentifier,
+@ModuleId uniqueidentifier
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from

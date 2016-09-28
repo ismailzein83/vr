@@ -5,10 +5,10 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_BusinessEntity_Update]
 	-- Add the parameters for the stored procedure here
-	@Id INT ,
+	@Id uniqueidentifier ,
 	@Name NVARCHAR(255),
 	@Title  nvarchar(255),
-	@ModuleId INT,
+	@ModuleId uniqueidentifier,
 	@BreakInheritance bit,
 	@PermissionOptions varchar(255)
 AS

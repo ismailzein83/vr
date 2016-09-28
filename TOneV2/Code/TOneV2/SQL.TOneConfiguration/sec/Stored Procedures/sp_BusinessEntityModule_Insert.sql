@@ -5,10 +5,11 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_BusinessEntityModule_Insert]
 	-- Add the parameters for the stored procedure here
+	@Id uniqueidentifier,
 	@Name nvarchar(255),
-	@ParentId int,
-	@BreakInheritance bit,
-	@Id int out
+	@ParentId uniqueidentifier,
+	@BreakInheritance bit
+	
 	
 AS
 BEGIN
@@ -16,9 +17,9 @@ BEGIN
 	-- interfering with SELECT statements.
 IF NOT EXISTS(select 1 from sec.BusinessEntityModule where Name = @Name)
 	BEGIN	
-		INSERT INTO sec.[BusinessEntityModule](Name,ParentId,BreakInheritance) 
-		VALUES (@Name,@ParentId,@BreakInheritance)
+		INSERT INTO sec.[BusinessEntityModule](ID,Name,ParentId,BreakInheritance) 
+		VALUES (@Id,@Name,@ParentId,@BreakInheritance)
 	 -- Insert statements for procedure here
-		SET @Id = SCOPE_IDENTITY()
+
 	END
 END

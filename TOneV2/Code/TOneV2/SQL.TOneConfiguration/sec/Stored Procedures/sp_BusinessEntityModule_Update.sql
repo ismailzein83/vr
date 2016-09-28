@@ -3,11 +3,11 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [sec].[sp_BusinessEntityModule_Update]
+CREATE PROCEDURE [sec].[sp_BusinessEntityModule_Update]
 	-- Add the parameters for the stored procedure here
-	@Id INT ,
+	@Id uniqueidentifier ,
 	@Name NVARCHAR(255),
-	@ParentId INT,
+	@ParentId uniqueidentifier,
 	@BreakInheritance bit
 AS
 BEGIN

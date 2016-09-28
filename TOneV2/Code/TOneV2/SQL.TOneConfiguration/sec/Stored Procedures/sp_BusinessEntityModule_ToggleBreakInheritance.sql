@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE sec.sp_BusinessEntityModule_ToggleBreakInheritance 
-@EntityId int
+CREATE PROCEDURE [sec].[sp_BusinessEntityModule_ToggleBreakInheritance] 
+@EntityId uniqueidentifier
 AS
 BEGIN
 
