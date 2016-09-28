@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class DAProfCalcSettings : DataAnalysisDefinitionSettings 
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public override List<DataAnalysisItemDefinitionConfig> ItemsConfig
         {

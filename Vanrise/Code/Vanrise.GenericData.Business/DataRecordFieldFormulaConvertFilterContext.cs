@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Business
         string fieldName;
         Dictionary<string, DataRecordField> _recordTypeFieldsByName;
 
-        public DataRecordFieldFormulaConvertFilterContext(int dataRecordTypeId,string fieldName)
+        public DataRecordFieldFormulaConvertFilterContext(Guid dataRecordTypeId,string fieldName)
         {
             _recordTypeFieldsByName = (new DataRecordTypeManager()).GetDataRecordTypeFields(dataRecordTypeId);
             if (_recordTypeFieldsByName == null)

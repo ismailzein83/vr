@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public string Name { get; set; }
 
-        public IEnumerable<int> DataRecordTypeIds { get; set; }
+        public IEnumerable<Guid> DataRecordTypeIds { get; set; }
 
         public IEnumerable<int> DataStoreIds { get; set; }
     }

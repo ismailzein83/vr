@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Transformation.Entities
     {
         public string RecordName { get; set; }
 
-        public int? DataRecordTypeId { get; set; }
+        public Guid? DataRecordTypeId { get; set; }
 
         public string FullTypeName { get; set; }
 

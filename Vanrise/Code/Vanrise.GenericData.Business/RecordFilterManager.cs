@@ -150,7 +150,7 @@ namespace Vanrise.GenericData.Business
     {
         dynamic _dataRecord;
         Dictionary<string, DataRecordField> _recordTypeFieldsByName;
-        public DataRecordFilterGenericFieldMatchContext(dynamic dataRecord, int recordTypeId)
+        public DataRecordFilterGenericFieldMatchContext(dynamic dataRecord, Guid recordTypeId)
         {
             if (dataRecord == null)
                 throw new ArgumentNullException("dataRecord");

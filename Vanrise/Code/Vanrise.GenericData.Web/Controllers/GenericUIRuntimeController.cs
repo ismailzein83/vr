@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetExtensibleBEItemRuntime")]
-        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int dataRecordTypeId, int businessEntityDefinitionId)
+        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(Guid dataRecordTypeId, int businessEntityDefinitionId)
         {
             var manager = GetManager(businessEntityDefinitionId);
             return manager.GetExtensibleBEItemRuntime(dataRecordTypeId, businessEntityDefinitionId);
@@ -60,7 +60,7 @@ namespace Vanrise.GenericData.Web.Controllers
     }
     public class GenericEditorDefinitionSectionsInput
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
         public List<GenericEditorSection> Sections { get; set; }
     }
 }

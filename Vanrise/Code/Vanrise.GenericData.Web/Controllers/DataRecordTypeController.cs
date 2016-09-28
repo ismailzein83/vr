@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetDataRecordType")]
-        public DataRecordType GetDataRecordType(int dataRecordTypeId)
+        public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             return dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);

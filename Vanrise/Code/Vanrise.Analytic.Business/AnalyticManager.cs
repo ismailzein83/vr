@@ -33,7 +33,7 @@ namespace Vanrise.Analytic.Business
         }
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
-            int dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
+            Guid dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
             DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
             var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
             AnalyticItemConfigManager analyticItemConfigManager = new Business.AnalyticItemConfigManager();
@@ -79,12 +79,12 @@ namespace Vanrise.Analytic.Business
             }
             return recordFilterGroup;
         }
-        public int GetDataRecordTypeForReportBySourceName(int reportId, string sourceName)
+        public Guid GetDataRecordTypeForReportBySourceName(int reportId, string sourceName)
         {
             AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
             var analyticReport = analyticReportManager.GetAnalyticReportById(reportId);
             var analyticReportSettings = analyticReport.Settings as Entities.DataRecordSearchPageSettings;
-            int dataRecordTypeId = -1;
+            Guid dataRecordTypeId = Guid.Empty;
             foreach (var source in analyticReportSettings.Sources)
             {
                 if (source.Name == sourceName)

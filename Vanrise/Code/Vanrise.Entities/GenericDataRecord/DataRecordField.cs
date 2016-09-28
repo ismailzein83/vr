@@ -10,7 +10,7 @@ namespace Vanrise.Entities.GenericDataRecord
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public int DataRecordTypeID { get; set; }
+        public Guid DataRecordTypeID { get; set; }
         public DataRecordFieldType Type { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities.DataStorage.DataRecordStorage
 {
     public class DataRecordStorageFilter
     {
-        public int? DataRecordTypeId { get; set; }
+        public Guid? DataRecordTypeId { get; set; }
     }
 }

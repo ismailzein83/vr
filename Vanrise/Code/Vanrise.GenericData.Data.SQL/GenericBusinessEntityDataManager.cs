@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Data.SQL
     {
         IGenericBusinessEntityManager _genericBusinessEntityManager = BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
         IDataRecordTypeManager _recordTypeManager = BusinessManagerFactory.GetManager<IDataRecordTypeManager>();
-        int _dataRecordTypeId;
+        Guid _dataRecordTypeId;
 
         public GenericBusinessEntityDataManager()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
@@ -53,7 +53,7 @@ namespace Vanrise.GenericData.Data.SQL
         #region Private Methods
         string GetSerializedDetails(GenericBusinessEntity genericBusinessEntity)
         {
-            int dataRecordTypeId = _genericBusinessEntityManager.GetDataRecordTypeId(genericBusinessEntity.BusinessEntityDefinitionId);
+            Guid dataRecordTypeId = _genericBusinessEntityManager.GetDataRecordTypeId(genericBusinessEntity.BusinessEntityDefinitionId);
             return _recordTypeManager.SerializeRecord(genericBusinessEntity.Details, dataRecordTypeId);
         }
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -21,7 +22,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataRecordAttributes")]
-        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(int dataRecordTypeId)
+        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(Guid dataRecordTypeId)
         {
             DataRecordTypeManager manager = new DataRecordTypeManager();
             return manager.GetDataRecordAttributes(dataRecordTypeId);

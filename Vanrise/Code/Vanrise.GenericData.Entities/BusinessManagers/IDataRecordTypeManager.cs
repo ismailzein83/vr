@@ -8,12 +8,12 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IDataRecordTypeManager : IBusinessManager
     {
-        Type GetDataRecordRuntimeType(int dataRecordTypeId);
+        Type GetDataRecordRuntimeType(Guid dataRecordTypeId);
 
-        dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, int dataRecordTypeId);
+        dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, Guid dataRecordTypeId);
 
-        string SerializeRecord(dynamic record, int dataRecordTypeId);
+        string SerializeRecord(dynamic record, Guid dataRecordTypeId);
 
-        dynamic DeserializeRecord(string serializedRecord, int dataRecordTypeId);
+        dynamic DeserializeRecord(string serializedRecord, Guid dataRecordTypeId);
     }
 }

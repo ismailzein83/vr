@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordTypeInfo
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
         public string Name { get; set; }
     }
 }

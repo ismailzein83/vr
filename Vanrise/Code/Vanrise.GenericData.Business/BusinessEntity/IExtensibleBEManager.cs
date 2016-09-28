@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Business
     public interface IExtensibleBEManager
     {
         int GetBusinessEntityDefinitionId();
-        ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int dataRecordTypeId, int businessEntityId);
+        ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(Guid dataRecordTypeId, int businessEntityId);
         IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId);
     }
 }

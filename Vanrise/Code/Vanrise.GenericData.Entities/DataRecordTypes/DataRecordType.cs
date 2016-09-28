@@ -8,11 +8,11 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordType
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public string Name { get; set; }
 
-        public int? ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         public List<DataRecordField> Fields { get; set; }
 

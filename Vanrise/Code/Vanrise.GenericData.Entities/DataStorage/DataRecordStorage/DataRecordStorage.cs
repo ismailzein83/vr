@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Entities
 
         public string Name { get; set; }
 
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public int DataStoreId { get; set; }
 

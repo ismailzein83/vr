@@ -40,7 +40,7 @@ namespace Vanrise.Integration.Entities
 
     public class DataSourceMappingSettings
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public DataSourceParser Parser { get; set; }
 

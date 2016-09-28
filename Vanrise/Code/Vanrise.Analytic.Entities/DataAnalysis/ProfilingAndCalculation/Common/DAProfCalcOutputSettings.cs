@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class DAProfCalcOutputSettings : DataAnalysisItemDefinitionSettings
     {
-        public int RecordTypeId { get; set; }
+        public Guid RecordTypeId { get; set; }
 
         public abstract List<DataRecordField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context);
     }

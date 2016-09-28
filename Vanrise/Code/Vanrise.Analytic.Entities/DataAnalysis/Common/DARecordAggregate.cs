@@ -33,7 +33,7 @@ namespace Vanrise.Analytic.Entities
 
     public interface IDARecordAggregateEvaluationContext
     {
-        int DataRecordTypeId { get; }
+        Guid DataRecordTypeId { get; }
 
         dynamic Record { get; }
 

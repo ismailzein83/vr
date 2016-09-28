@@ -45,6 +45,6 @@ namespace Vanrise.Security.Entities
     {
         public List<int> AvailableBusinessEntityDefinitionIds { get; set; }
 
-        public List<int> AvailableDataRecordTypeIds { get; set; }
+        public List<Guid> AvailableDataRecordTypeIds { get; set; }
     }
 }

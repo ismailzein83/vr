@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Business
             BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
             return manager.GetBusinessEntityDefinitionId(this._businessEntityName);
         }
-        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int dataRecordTypeId, int businessEntityId)
+        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(Guid dataRecordTypeId, int businessEntityId)
         {
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetExtensibleBEItemRuntime(businessEntityId, dataRecordTypeId);

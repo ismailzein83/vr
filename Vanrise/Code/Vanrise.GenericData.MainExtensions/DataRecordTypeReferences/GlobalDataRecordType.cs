@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordTypeReferences
 {
     public class GlobalDataRecordType : DataRecordTypeReference
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public override DataRecordType GetDataRecordType(IDataRecordTypeReferenceContext context)
         {

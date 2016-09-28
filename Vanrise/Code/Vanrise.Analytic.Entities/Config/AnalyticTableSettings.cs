@@ -27,7 +27,7 @@ namespace Vanrise.Analytic.Entities
         public string MonthlyTableName { get; set; }
 
         public string TimeColumnName { get; set; }
-        public List<int> DataRecordTypeIds { get; set; }
+        public List<Guid> DataRecordTypeIds { get; set; }
 
         public RequiredPermissionSettings RequiredPermission { get; set; }
     }

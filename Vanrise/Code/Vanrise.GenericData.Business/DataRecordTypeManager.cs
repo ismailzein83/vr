@@ -22,13 +22,13 @@ namespace Vanrise.GenericData.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataRecordTypeDetailMapper));
         }
-        public DataRecordType GetDataRecordType(int dataRecordTypeId)
+        public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.GetRecord(dataRecordTypeId);
         }
 
-        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(int dataRecordTypeId)
+        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(Guid dataRecordTypeId)
         {
             List<DataRecordGridColumnAttribute> fields = new List<DataRecordGridColumnAttribute>();
             DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
@@ -39,7 +39,7 @@ namespace Vanrise.GenericData.Business
             }
             return fields;
         }
-        public Dictionary<string, DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
+        public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordTypeFields_{0}", dataRecordTypeId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -54,7 +54,7 @@ namespace Vanrise.GenericData.Business
                });          
         }        
 
-        public string GetDataRecordTypeName(int dataRecordTypeId)
+        public string GetDataRecordTypeName(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
             DataRecordType dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
@@ -85,17 +85,15 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int dataRecordTypeId = -1;
-
+            dataRecordType.DataRecordTypeId = Guid.NewGuid();
 
             IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
-            bool insertActionSucc = dataManager.AddDataRecordType(dataRecordType, out dataRecordTypeId);
+            bool insertActionSucc = dataManager.AddDataRecordType(dataRecordType);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                dataRecordType.DataRecordTypeId = dataRecordTypeId;
                 insertOperationOutput.InsertedObject = DataRecordTypeDetailMapper(dataRecordType);
             }
             else
@@ -134,7 +132,7 @@ namespace Vanrise.GenericData.Business
                 return Activator.CreateInstance(dataRecordRuntimeType);
             return null;
         }
-        public Type GetDataRecordRuntimeType(int dataRecordTypeId)
+        public Type GetDataRecordRuntimeType(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeById_{0}", dataRecordTypeId);
             var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -166,20 +164,20 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Name '{0}'", dataRecordTypeName));
             return runtimeType;
         }
-        public dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, int dataRecordTypeId)
+        public dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, Guid dataRecordTypeId)
         {
             return Serializer.Deserialize(SerializeRecord(dynamicObject, dataRecordTypeId), GetDataRecordRuntimeType(dataRecordTypeId));
         }
-        public string SerializeRecord(dynamic record, int dataRecordTypeId)
+        public string SerializeRecord(dynamic record, Guid dataRecordTypeId)
         {
             return Serializer.Serialize(record, true);
         }
-        public dynamic DeserializeRecord(string serializedRecord, int dataRecordTypeId)
+        public dynamic DeserializeRecord(string serializedRecord, Guid dataRecordTypeId)
         {
             return Serializer.Deserialize(serializedRecord, GetDataRecordRuntimeType(dataRecordTypeId));
         }
 
-        public IDataRecordFieldEvaluator GetFieldEvaluator(int dataRecordTypeId)
+        public IDataRecordFieldEvaluator GetFieldEvaluator(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetFieldEvaluator_{0}", dataRecordTypeId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -200,7 +198,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods
-        private Dictionary<int, DataRecordType> GetCachedDataRecordTypes()
+        private Dictionary<Guid, DataRecordType> GetCachedDataRecordTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypes",
                () =>
@@ -298,7 +296,7 @@ namespace Vanrise.GenericData.Business
             DataRecordTypeDetail dataRecordTypeDetail = new DataRecordTypeDetail();
             dataRecordTypeDetail.Entity = dataRecordTypeObject;
             if (dataRecordTypeObject.ParentId != null)
-                dataRecordTypeDetail.ParentName = GetDataRecordTypeName((int)dataRecordTypeObject.ParentId);
+                dataRecordTypeDetail.ParentName = GetDataRecordTypeName((Guid)dataRecordTypeObject.ParentId);
             return dataRecordTypeDetail;
         }
         private DataRecordTypeInfo DataRecordTypeInfoMapper(DataRecordType dataRecordTypeObject)

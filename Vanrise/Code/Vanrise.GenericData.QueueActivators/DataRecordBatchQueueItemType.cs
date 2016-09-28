@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.QueueActivators
 {
     public class DataRecordBatchQueueItemType : Vanrise.Queueing.Entities.QueueExecutionFlowStageItemType
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public string BatchDescription { get; set; }
 

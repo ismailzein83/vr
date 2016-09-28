@@ -168,9 +168,9 @@ namespace Vanrise.GenericData.Business
                 entityTitle.EntityName = GetFieldDescription(genericBusinessEntity, definitionSettings.FieldPath, definitionSettings.DataRecordTypeId);
             }
             return entityTitle;
-        }        
-       
-        public int GetDataRecordTypeId(int businessEntityDefinitionId)
+        }
+
+        public Guid GetDataRecordTypeId(int businessEntityDefinitionId)
         {
             BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
             if (beDefinition == null)
@@ -207,14 +207,14 @@ namespace Vanrise.GenericData.Business
 
             return definitionSettings;
         }
-        private Dictionary<string, DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
+        private Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             var fields = _recordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
             if (fields == null)
                 throw new NullReferenceException(String.Format("fields. dataRecordTypeId '{0}'", dataRecordTypeId));
             return fields;
         }
-        private string GetFieldDescription(GenericBusinessEntity genericBusinessEntity, string fieldPath, int dataRecordTypeId)
+        private string GetFieldDescription(GenericBusinessEntity genericBusinessEntity, string fieldPath, Guid dataRecordTypeId)
         {
             var recordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
             var columnValue = GetFieldPathValue(genericBusinessEntity, fieldPath);
@@ -225,7 +225,7 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
-        private string GetFieldDescription<T>(GenericUIField field, GenericBusinessEntity genericBusinessEntity, string fieldPath, int dataRecordTypeId) where T : GenericUIRuntimeField
+        private string GetFieldDescription<T>(GenericUIField field, GenericBusinessEntity genericBusinessEntity, string fieldPath, Guid dataRecordTypeId) where T : GenericUIRuntimeField
         {
             var recordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
             var columnValue = GetFieldPathValue(genericBusinessEntity, fieldPath);
@@ -307,7 +307,7 @@ namespace Vanrise.GenericData.Business
         {
             if (genericBusinessEntity == null || genericBusinessEntity.Details == null)
                 return;
-            int dataRecordTypeId = GetDataRecordTypeId(genericBusinessEntity.BusinessEntityDefinitionId);
+            Guid dataRecordTypeId = GetDataRecordTypeId(genericBusinessEntity.BusinessEntityDefinitionId);
             genericBusinessEntity.Details = _recordTypeManager.ConvertDynamicToDataRecord(genericBusinessEntity.Details, dataRecordTypeId);
         }
         #endregion

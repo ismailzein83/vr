@@ -1,7 +1,8 @@
-﻿namespace Vanrise.GenericData.Entities
+﻿using System;
+namespace Vanrise.GenericData.Entities
 {
     public class DataRecordFieldInfoFilter
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
     }
 }

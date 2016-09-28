@@ -29,7 +29,7 @@ namespace Vanrise.Analytic.Entities
     {
         public string Title { get; set; }
         public string Name { get; set; }
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
 
         public List<int> RecordStorageIds { get; set; }
 

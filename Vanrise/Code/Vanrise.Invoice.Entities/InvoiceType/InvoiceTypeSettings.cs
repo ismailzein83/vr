@@ -11,7 +11,7 @@ namespace Vanrise.Invoice.Entities
     {
         public InvoiceTypeUISettings UISettings { get; set; }
 
-        public int InvoiceDetailsRecordTypeId { get; set; }
+        public Guid InvoiceDetailsRecordTypeId { get; set; }
 
         public InvoiceGenerator InvoiceGenerator { get; set; }
         public List<SerialNumberPart> SerialNumberParts { get; set; }

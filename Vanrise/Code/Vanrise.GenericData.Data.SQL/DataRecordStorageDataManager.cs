@@ -75,7 +75,7 @@ namespace Vanrise.GenericData.Data.SQL
             return new DataRecordStorage() {
                 DataRecordStorageId = (int)reader["ID"],
                 Name = (string)reader["Name"],
-                DataRecordTypeId = (int)reader["DataRecordTypeID"],
+                DataRecordTypeId = GetReaderValue<Guid>(reader,"DataRecordTypeID"),
                 DataStoreId = (int)reader["DataStoreID"],
                 Settings = Vanrise.Common.Serializer.Deserialize<DataRecordStorageSettings>((string)reader["Settings"]),
                 State = (GetReaderValue<string>(reader, "State") != null) ? Vanrise.Common.Serializer.Deserialize<DataRecordStorageState>((string)reader["State"]) : null

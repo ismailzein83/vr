@@ -59,7 +59,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetBEDataRecordTypeIdIfGeneric")]
-        public int? GetBEDataRecordTypeIdIfGeneric(int businessEntityDefinitionId)
+        public Guid? GetBEDataRecordTypeIdIfGeneric(int businessEntityDefinitionId)
         {
             return _manager.GetBEDataRecordTypeIdIfGeneric(businessEntityDefinitionId);
         }

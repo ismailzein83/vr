@@ -37,16 +37,15 @@ namespace Vanrise.GenericData.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool AddDataRecordType(DataRecordType dataRecordType, out int dataRecordTypeId)
+        public bool AddDataRecordType(DataRecordType dataRecordType)
         {
-            object recordTypeID;
+
             string serializedObj = null;
             if (dataRecordType.Fields != null)
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(dataRecordType.Fields);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", out recordTypeID, dataRecordType.Name, dataRecordType.ParentId, serializedObj);
-            dataRecordTypeId = (recordesEffected > 0) ? (int)recordTypeID : -1;
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedObj);
 
             return (recordesEffected > 0);
         }
@@ -58,9 +57,9 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new DataRecordType
             {
-                DataRecordTypeId = Convert.ToInt32(reader["ID"]),
+                DataRecordTypeId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
-                ParentId = GetReaderValue<int?>(reader,"ParentID"),
+                ParentId = GetReaderValue<Guid?>(reader, "ParentID"),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader["Fields"] as string),
             };
         }

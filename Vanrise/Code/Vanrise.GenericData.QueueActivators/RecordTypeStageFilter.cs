@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.QueueActivators
 {
     public class RecordTypeStageFilter : IQueueExecutionFlowStageFilter
     {
-        public int RecordTypeId { get; set; }
+        public Guid RecordTypeId { get; set; }
 
         public bool IsMatch(IQueueExecutionFlowStageFilterContext context)
         {

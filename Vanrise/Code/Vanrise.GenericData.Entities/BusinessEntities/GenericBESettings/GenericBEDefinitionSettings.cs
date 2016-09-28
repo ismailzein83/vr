@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Entities
             get { return "System.Int64";}
         }
 
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
         public string FieldPath { get; set; }
         public GenericEditor EditorDesign { get; set; }
         public GenericManagement ManagementDesign { get; set; }

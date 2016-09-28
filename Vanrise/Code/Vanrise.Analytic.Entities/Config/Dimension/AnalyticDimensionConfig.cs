@@ -34,7 +34,7 @@ namespace Vanrise.Analytic.Entities
 
     public class DimensionFieldMapping
     {
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
         public string FieldName { get; set; }
     }
 

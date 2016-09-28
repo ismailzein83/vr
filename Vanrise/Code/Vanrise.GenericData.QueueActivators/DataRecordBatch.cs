@@ -12,13 +12,13 @@ namespace Vanrise.GenericData.QueueActivators
     {
         public byte[] SerializedRecordsList { get; set; }
 
-        public List<dynamic> GetBatchRecords(int recordTypeId)
+        public List<dynamic> GetBatchRecords(Guid recordTypeId)
         {
            List<dynamic> rsltAsDynamic = DeserializeDataRecordsList(this.SerializedRecordsList, recordTypeId);
             return rsltAsDynamic;
         }
 
-        internal static List<dynamic> DeserializeDataRecordsList(byte[] serializedRecordsList,  int recordTypeId)
+        internal static List<dynamic> DeserializeDataRecordsList(byte[] serializedRecordsList, Guid recordTypeId)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();            
             Type recordTypeRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordTypeId);

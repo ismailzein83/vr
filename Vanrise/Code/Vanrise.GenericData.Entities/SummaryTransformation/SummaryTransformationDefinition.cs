@@ -12,9 +12,9 @@ namespace Vanrise.GenericData.Entities
 
         public string Name { get; set; }
 
-        public int RawItemRecordTypeId { get; set; }
+        public Guid RawItemRecordTypeId { get; set; }
 
-        public int SummaryItemRecordTypeId { get; set; }
+        public Guid SummaryItemRecordTypeId { get; set; }
 
         public string RawTimeFieldName { get; set; }
 

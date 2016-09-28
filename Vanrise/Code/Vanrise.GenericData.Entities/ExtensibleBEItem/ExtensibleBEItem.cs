@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public int ExtensibleBEItemId { get; set; }
         public int BusinessEntityDefinitionId { get; set; }
-        public int DataRecordTypeId { get; set; }
+        public Guid DataRecordTypeId { get; set; }
         public List<GenericEditorSection> Sections { get; set; }
     }
 }
