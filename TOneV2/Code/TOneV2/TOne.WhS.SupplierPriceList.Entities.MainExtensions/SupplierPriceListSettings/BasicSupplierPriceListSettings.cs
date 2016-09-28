@@ -303,8 +303,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             if (obj.Fields.TryGetValue("Zone", out zoneField))
                             {
                                 string zoneName = zoneField.FieldValue != null && !String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()) ? zoneField.FieldValue.ToString() : null;
-                                if (zoneName == null || !priceListZoneServices.Any(x => zoneName.ToLower().Equals(x.ZoneName.ToLower()) && x.ZoneServiceConfigId == list.ZoneServiceConfigId))
-                                 {
+                                //if (zoneName == null || !priceListZoneServices.Any(x => zoneName.ToLower().Equals(x.ZoneName.ToLower()) && x.ZoneServiceConfigId == list.ZoneServiceConfigId))
+                                // {
                                      PriceListZoneService priceListZoneService = new PriceListZoneService
                                      {
                                          ZoneName =zoneName,
@@ -312,7 +312,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                          EffectiveDate = result
                                      };
                                      priceListZoneServices.Add(priceListZoneService);
-                                 }
+                               //  }
                                
                             }
                         }

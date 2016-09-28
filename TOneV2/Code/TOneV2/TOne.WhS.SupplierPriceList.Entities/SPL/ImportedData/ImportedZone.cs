@@ -22,7 +22,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             }
         }
 
-        public ImportedZoneService ImportedZoneService { get; set; }
+        public ImportedZoneServiceGroup ImportedZoneServiceGroup { get; set; }
 
         public NotImportedZoneService NotImportedZoneService { get; set; }
 

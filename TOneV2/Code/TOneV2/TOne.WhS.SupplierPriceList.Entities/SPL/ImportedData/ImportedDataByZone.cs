@@ -10,6 +10,10 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
     public class ImportedDataByZone : IRuleTarget
     {
+        public ImportedDataByZone()
+        {
+            ImportedZoneServices = new List<ImportedZoneService>();
+        }
         public string ZoneName { get; set; }
 
         private List<ImportedCode> _importedCodes = new List<ImportedCode>();
@@ -44,13 +48,10 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
 
-        private List<ImportedZoneService> _importedZonesServices = new List<ImportedZoneService>();
-        public List<ImportedZoneService> ImportedZonesServices
-        {
-            get
-            {
-                return this._importedZonesServices;
-            }
+        private List<ImportedZoneService> _importedZoneServices = new List<ImportedZoneService>();
+        public List<ImportedZoneService> ImportedZoneServices
+        { get; set;
+           
         }
 
         #region IRuleTarget Implementation

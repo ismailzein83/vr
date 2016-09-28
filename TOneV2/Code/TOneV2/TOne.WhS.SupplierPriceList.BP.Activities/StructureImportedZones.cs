@@ -19,29 +19,32 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            IEnumerable<ImportedDataByZone> importedDataByZone = ImportedDataByZone.Get(context);
-           
+            IEnumerable<ImportedDataByZone> importedDataByZones = ImportedDataByZone.Get(context);
+
             List<ImportedZone> importedZones = new List<ImportedZone>();
-            foreach (ImportedDataByZone item in importedDataByZone)
+            foreach (ImportedDataByZone importedDataByZone in importedDataByZones)
             {
                 ImportedZone importedZone = new ImportedZone();
-                importedZone.ZoneName = item.ZoneName;
-                
-                importedZone.ImportedCodes.AddRange(item.ImportedCodes);
-               
-                importedZone.ImportedNormalRate = item.ImportedNormalRates.First();
-                
-                foreach (KeyValuePair<int, List<ImportedRate>> kvp in item.ImportedOtherRates)
+                importedZone.ZoneName = importedDataByZone.ZoneName;
+
+                importedZone.ImportedCodes.AddRange(importedDataByZone.ImportedCodes);
+
+                importedZone.ImportedNormalRate = importedDataByZone.ImportedNormalRates.First();
+
+                foreach (KeyValuePair<int, List<ImportedRate>> kvp in importedDataByZone.ImportedOtherRates)
                 {
                     importedZone.ImportedOtherRates.Add(kvp.Key, kvp.Value.First());
                 }
+
+                ImportedZoneService firstImportedZoneService = importedDataByZone.ImportedZoneServices.First();
                
-                ImportedZoneService importedZoneService = item.ImportedZonesServices.FirstOrDefault(itm => itm.BED != DateTime.MinValue);
-                if (importedZoneService != null)
+                importedZone.ImportedZoneServiceGroup = new ImportedZoneServiceGroup()
                 {
-                    importedZoneService.ServiceIds = item.ImportedZonesServices.SelectMany(itm => itm.ServiceIds).ToList();
-                    importedZone.ImportedZoneService = importedZoneService;
-                }
+                    ServiceIds = importedDataByZone.ImportedZoneServices.Select(item => item.ServiceId).ToList(),
+                    ZoneName = importedDataByZone.ZoneName,
+                    BED = firstImportedZoneService.BED,
+                    EED = firstImportedZoneService.EED
+                };
 
                 importedZones.Add(importedZone);
             }

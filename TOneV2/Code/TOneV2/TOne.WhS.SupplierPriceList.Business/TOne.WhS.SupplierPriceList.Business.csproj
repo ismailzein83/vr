@@ -75,9 +75,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRules\Actions\GetServiceWithMinimumBEDAction.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneWithDifferentServicesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneServicesWithDifferentBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneHasNoCodesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\NumericCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\MissingCodesCondition.cs" />
@@ -126,9 +129,7 @@
       <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessRules\Actions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

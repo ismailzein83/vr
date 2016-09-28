@@ -61,19 +61,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         zoneRatePreview.SystemRateEED = importedNormalRate.SystemRate.EED;
                     }
 
-                    ImportedZoneService importedZoneService = importedZone.ImportedZoneService;
+                    ImportedZoneServiceGroup importedZoneServiceGroup = importedZone.ImportedZoneServiceGroup;
 
-                    if (importedZoneService != null)
+                    if (importedZoneServiceGroup != null)
                     {
-                        zoneRatePreview.ImportedServiceIds = importedZoneService.ServiceIds;
-                        zoneRatePreview.ImportedServicesBED = importedZoneService.BED;
-                        zoneRatePreview.ZoneServicesChangeType = importedZoneService.ChangeType;
+                        zoneRatePreview.ImportedServiceIds = importedZoneServiceGroup.ServiceIds;
+                        zoneRatePreview.ImportedServicesBED = importedZoneServiceGroup.BED;
+                        zoneRatePreview.ZoneServicesChangeType = importedZoneServiceGroup.ChangeType;
 
-                        if (importedZoneService.SystemZoneService != null)
+                        if (importedZoneServiceGroup.SystemZoneService != null)
                         {
-                            zoneRatePreview.SystemServiceIds = importedZoneService.SystemZoneService.ZoneServiceEntity.ReceivedServices.Select(item => item.ServiceId).ToList();
-                            zoneRatePreview.SystemServicesBED = importedZoneService.SystemZoneService.BED;
-                            zoneRatePreview.SystemServicesEED = importedZoneService.SystemZoneService.EED;
+                            zoneRatePreview.SystemServiceIds = importedZoneServiceGroup.SystemZoneService.ZoneServiceEntity.ReceivedServices.Select(item => item.ServiceId).ToList();
+                            zoneRatePreview.SystemServicesBED = importedZoneServiceGroup.SystemZoneService.BED;
+                            zoneRatePreview.SystemServicesEED = importedZoneServiceGroup.SystemZoneService.EED;
                         }
 
                     };

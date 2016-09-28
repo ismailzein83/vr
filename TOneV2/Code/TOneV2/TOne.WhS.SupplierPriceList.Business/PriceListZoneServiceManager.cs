@@ -16,7 +16,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones);
 
-            context.NewZonesServices = context.ImportedZones.FindAllRecords(item => item.ImportedZoneService != null).SelectMany(itm => itm.ImportedZoneService.NewZoneServices);
+            context.NewZonesServices = context.ImportedZones.FindAllRecords(item => item.ImportedZoneServiceGroup != null).SelectMany(itm => itm.ImportedZoneServiceGroup.NewZoneServices);
             context.ChangedZonesServices = context.ExistingZones.SelectMany(item => item.ExistingZonesServices.Where(itm => itm.ChangedZoneService != null).Select(x => x.ChangedZoneService));
         }
 
@@ -45,9 +45,9 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private void PrepareDataForPreview(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices)
         {
-            if (importedZone.ImportedZoneService != null)
+            if (importedZone.ImportedZoneServiceGroup != null)
                 FillSystemZoneServicesForImportedZone(importedZone, existingZoneServices);
-            if (importedZone.ImportedZoneService == null && existingZoneServices != null)
+            if (importedZone.ImportedZoneServiceGroup == null && existingZoneServices != null)
                 FillNotImportedZoneServicesWithClosedZoneServices(importedZone, existingZoneServices);
         }
 
@@ -78,7 +78,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (existingZoneServices == null)
                 return;
 
-            importedZone.ImportedZoneService.SystemZoneService = GetSystemZoneService(existingZoneServices);
+            importedZone.ImportedZoneServiceGroup.SystemZoneService = GetSystemZoneService(existingZoneServices);
         }
 
         private ExistingZoneService GetSystemZoneService(List<ExistingZoneService> existingZoneServices)
@@ -97,8 +97,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private void ProcessData(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName, DateTime pricelistDate)
         {
-            if (importedZone.ImportedZoneService != null)
-                ProcessCountryZoneServices(importedZone.ImportedZoneService, existingZoneServices, newAndExistingZones, existingZonesByName);
+            if (importedZone.ImportedZoneServiceGroup != null)
+                ProcessCountryZoneServices(importedZone.ImportedZoneServiceGroup, existingZoneServices, newAndExistingZones, existingZonesByName);
             else
                 CloseNotImportedZoneServices(existingZoneServices, pricelistDate);
         }
@@ -125,7 +125,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
 
-        private void ProcessCountryZoneServices(ImportedZoneService importedZoneService, List<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
+        private void ProcessCountryZoneServices(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
         {
             ProcessImportedZoneService(importedZoneService, existingZonesServices, newAndExistingZones, existingZonesByName);
         }
@@ -195,7 +195,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         #region Private Methods
 
-        private void ProcessImportedZoneService(ImportedZoneService importedZoneService, List<ExistingZoneService> matchExistingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
+        private void ProcessImportedZoneService(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> matchExistingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
         {
             if (matchExistingZoneServices != null && matchExistingZoneServices.Count() > 0)
             {
@@ -257,7 +257,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
 
-        private void CloseExistingOverlapedZoneServices(ImportedZoneService importedZoneService, List<ExistingZoneService> matchExistingServices, out bool shouldNotAddZoneService)
+        private void CloseExistingOverlapedZoneServices(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> matchExistingServices, out bool shouldNotAddZoneService)
         {
             shouldNotAddZoneService = false;
             foreach (var existingZoneService in matchExistingServices.OrderBy(itm => itm.ZoneServiceEntity.BED))
@@ -295,7 +295,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
 
-        private void AddImportedZoneService(ImportedZoneService importedZoneService, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
+        private void AddImportedZoneService(ImportedZoneServiceGroup importedZoneService, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
         {
             List<IZone> zones;
             if (!newAndExistingZones.TryGetValue(importedZoneService.ZoneName, out zones))
@@ -319,7 +319,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private void AddNewZoneService(ImportedZoneService importedZoneService, ref DateTime currentZoneServiceBED, IZone zone, out bool shouldAddMoreZoneServices)
+        private void AddNewZoneService(ImportedZoneServiceGroup importedZoneService, ref DateTime currentZoneServiceBED, IZone zone, out bool shouldAddMoreZoneServices)
         {
             shouldAddMoreZoneServices = false;
             List<ZoneService> zoneServices = new List<ZoneService>();
@@ -345,7 +345,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             importedZoneService.NewZoneServices.Add(newZoneService);
         }
 
-        private bool SameZoneServices(ImportedZoneService importedZoneService, ExistingZoneService existingZoneService)
+        private bool SameZoneServices(ImportedZoneServiceGroup importedZoneService, ExistingZoneService existingZoneService)
         {
             return importedZoneService.BED == existingZoneService.BED
                && sameServiceIds(existingZoneService.ZoneServiceEntity.ReceivedServices, importedZoneService.ServiceIds);

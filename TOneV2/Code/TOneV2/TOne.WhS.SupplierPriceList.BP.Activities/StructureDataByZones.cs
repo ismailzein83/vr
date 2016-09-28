@@ -81,7 +81,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedDataByZoneName.Add(service.ZoneName, importedDataByZone);
                 }
 
-                importedDataByZone.ImportedZonesServices.Add(service);
+                importedDataByZone.ImportedZoneServices.Add(service);
             }
 
             this.ImportedDataByZone.Set(context, importedDataByZoneName.Values);
