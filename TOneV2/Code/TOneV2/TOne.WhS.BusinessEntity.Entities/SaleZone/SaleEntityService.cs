@@ -41,4 +41,12 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ServiceId { get; set; }
     }
+
+    public class SaleEntityZoneServiceDetail
+    {
+        public SaleEntityService Entity { get; set; }
+        public string ZoneName { get; set; }
+        public List<int> Services { get; set; }
+        public bool IsServiceInherited { get; set; }
+    }
 }

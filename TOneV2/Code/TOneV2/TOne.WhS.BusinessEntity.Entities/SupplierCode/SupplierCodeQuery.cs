@@ -14,6 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<int> ZoneIds { get; set; }
 
-        public DateTime? EffectiveOn { get; set; }
+        public DateTime EffectiveOn { get; set; }
     }
 }

@@ -16,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<SaleEntityDefaultService> GetDefaultServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate);
         IEnumerable<SaleEntityZoneService> GetZoneServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate);
+        IEnumerable<SaleEntityZoneService> GetFilteredSaleEntityZoneService(SaleEntityZoneServiceQuery query);
+
         bool AreSaleEntityServicesUpdated(ref object updateHandle);
     }
 }

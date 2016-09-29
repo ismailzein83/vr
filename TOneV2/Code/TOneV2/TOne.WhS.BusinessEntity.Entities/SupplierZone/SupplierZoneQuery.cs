@@ -11,6 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SupplierId { get; set; }
         public List<int> Countries { get; set; }
         public string Name { get; set; }
-        public DateTime? EffectiveOn { get; set; }
+        public DateTime EffectiveOn { get; set; }
     }
 }

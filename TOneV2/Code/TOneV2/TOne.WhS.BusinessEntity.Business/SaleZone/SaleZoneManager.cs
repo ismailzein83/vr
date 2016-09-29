@@ -33,8 +33,8 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<SaleZone, bool> filterExpression = (prod) =>
                      (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     && (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
-                  && ((!input.Query.EffectiveOn.HasValue || (prod.BED <= input.Query.EffectiveOn)))
-                  && ((!input.Query.EffectiveOn.HasValue || !prod.EED.HasValue || (prod.EED > input.Query.EffectiveOn)));
+                  && ((prod.BED <= input.Query.EffectiveOn))
+                  && ((!prod.EED.HasValue || (prod.EED > input.Query.EffectiveOn)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZonesBySellingNumberPlan.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
         }
@@ -195,6 +195,23 @@ namespace TOne.WhS.BusinessEntity.Business
         public Type GetSaleZoneType()
         {
             return this.GetType();
+        }
+
+        public IEnumerable<SaleZone> GetSaleZonesByOwner(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            IEnumerable<SaleZone> saleZones = null;
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+
+               saleZones =  GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+            }
+            else
+            {
+                var customerZoneManager = new CustomerZoneManager();
+                saleZones = customerZoneManager.GetCustomerSaleZones(ownerId, effectiveOn, false);
+            }
+            return saleZones;
         }
 
         #endregion

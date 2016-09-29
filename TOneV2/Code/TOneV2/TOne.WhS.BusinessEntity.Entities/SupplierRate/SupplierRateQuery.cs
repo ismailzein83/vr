@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierRateQuery
     {
-        public DateTime? EffectiveOn { get; set; }
+        public DateTime EffectiveOn { get; set; }
 
         public int SupplierId { get; set; }
 

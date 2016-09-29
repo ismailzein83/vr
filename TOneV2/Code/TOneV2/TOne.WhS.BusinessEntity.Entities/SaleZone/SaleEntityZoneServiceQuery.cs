@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleRateQuery
+    public class SaleEntityZoneServiceQuery
     {
         public DateTime EffectiveOn { get; set; }
 
@@ -16,8 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int OwnerId { get; set; }
 
-        public int? SellingNumberPlanId { get; set; }
-
-        public int? CurrencyId { get; set; }
+        public int SellingNumberPlanId { get; set; }
     }
+
+  
 }

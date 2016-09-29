@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             string zonesids = null;
             if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
-                zonesids = string.Join<int>(",", query.ZonesIds);
+                zonesids = string.Join<long>(",", query.ZonesIds);
 
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", SaleRateMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
         }

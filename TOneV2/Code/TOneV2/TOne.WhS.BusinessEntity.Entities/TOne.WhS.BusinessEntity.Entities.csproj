@@ -144,6 +144,7 @@
     <Compile Include="SaleZone\CallSale.cs" />
     <Compile Include="SaleCode\SaleCodeDetail.cs" />
     <Compile Include="SalePriceList\SalePriceListQuery.cs" />
+    <Compile Include="SaleZone\SaleEntityZoneServiceQuery.cs" />
     <Compile Include="SaleZone\SaleEntityZoneRate.cs" />
     <Compile Include="SalePriceList\SalePriceListDetail.cs" />
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />

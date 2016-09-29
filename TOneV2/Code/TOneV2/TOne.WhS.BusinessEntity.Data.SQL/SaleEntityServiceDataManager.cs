@@ -28,7 +28,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetEffectiveZoneServices", SaleEntityZoneServiceMapper, ownerType, ownerId, effectiveOn);
         }
-
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DataTable saleEntityServicesOwners = BuildRoutingOwnerInfoTable(customerInfos);
@@ -81,6 +80,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool AreSaleEntityServicesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleEntityService", ref updateHandle);
+        }
+
+        public IEnumerable<SaleEntityZoneService> GetFilteredSaleEntityZoneService(SaleEntityZoneServiceQuery query)
+        {
+            string zonesids = null;
+            if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
+                zonesids = string.Join<long>(",", query.ZonesIds);
+            return GetItemsSP("[TOneWhS_BE].[sp_SaleEntityService_GetFiltered]", SaleEntityZoneServiceMapper,query.EffectiveOn,query.SellingNumberPlanId, zonesids,query.OwnerType,query.OwnerId );
         }
 
 
