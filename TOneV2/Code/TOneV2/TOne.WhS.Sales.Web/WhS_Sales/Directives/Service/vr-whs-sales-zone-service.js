@@ -32,6 +32,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
 
         var inheritedServiceViewerAPI;
         var inheritedServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+        var inheritedServiceIds;
 
         var selectorAPI;
         var selectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -94,22 +95,79 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                 zoneItem.onNewZoneServiceChanged();
             };
 
-            $scope.scopeModel.reset = function () {
+            $scope.scopeModel.reset = function ()
+            {
                 zoneItem.IsDirty = true;
                 $scope.scopeModel.isLoading = true;
-                loadInheritedServiceViewer().catch(function (error) {
+
+                var promises = [];
+
+                showLinks(false, true);
+                var saveDraftPromise = zoneItem.onNewZoneServiceChanged();
+                promises.push(saveDraftPromise);
+
+                var loadInheritedServicesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadInheritedServicesDeferred.promise);
+
+                var loadZoneServicesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadZoneServicesDeferred.promise);
+
+                saveDraftPromise.then(function () {
+                    loadInheritedServiceViewer().then(function () {
+                        loadInheritedServicesDeferred.resolve();
+                    }).catch(function (error) {
+                        loadInheritedServicesDeferred.reject(error);
+                    });
+                });
+
+                loadInheritedServicesDeferred.promise.then(function () {
+                    loadZoneServiceViewer(inheritedServiceIds).then(function () {
+                        loadZoneServicesDeferred.resolve();
+                    }).catch(function (error) {
+                        loadZoneServicesDeferred.reject(error);
+                    });
+                });
+
+                UtilsService.waitMultiplePromises(promises).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             };
 
-            $scope.scopeModel.undo = function () {
+            $scope.scopeModel.undo = function ()
+            {
+                var promises = [];
+                $scope.scopeModel.isLoading = true;
+
+                inheritedServiceIds = undefined;
                 $scope.scopeModel.showInheritedServiceViewer = false;
+
                 $scope.scopeModel.isSelectorDisabled = false;
                 $scope.scopeModel.areDatesDisabled = false;
                 setServiceDates(zoneItem.CurrentServiceBED, zoneItem.CurrentServiceEED);
+
                 showLinks(true, false);
+                var saveDraftPromise = zoneItem.onNewZoneServiceChanged();
+                promises.push(saveDraftPromise);
+
+                var loadZoneServicesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadZoneServicesDeferred.promise);
+
+                saveDraftPromise.then(function () {
+                    var currentServiceIds = zoneItem.CurrentServices != null ? UtilsService.getPropValuesFromArray(zoneItem.CurrentServices, 'ServiceId') : undefined;
+                    loadZoneServiceViewer(currentServiceIds).then(function () {
+                        loadZoneServicesDeferred.resolve();
+                    }).catch(function (error) {
+                        loadZoneServicesDeferred.reject(error);
+                    });
+                });
+
+                UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
             };
 
             $scope.scopeModel.onServiceEEDChanged = function () {
@@ -153,6 +211,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
 
                     if (zoneItem.ResetService != null) {
                         zoneItem.IsDirty = true;
+                        showLinks(false, true);
                         var loadInheritedServiceViewerPromise = loadInheritedServiceViewer();
                         promises.push(loadInheritedServiceViewerPromise);
                     }
@@ -196,13 +255,12 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
             promises.push(inheritedServicesViewerLoadDeferred.promise);
 
             var effectiveOn = UtilsService.getDateFromDateTime(new Date());
-            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetInheritedService(zoneItem.OwnerType, zoneItem.OwnerId, effectiveOn, zoneItem.ZoneId);
+            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetZoneInheritedService(zoneItem.OwnerType, zoneItem.OwnerId, zoneItem.ZoneId, effectiveOn);
             promises.push(getInheritedServicePromise);
 
             getInheritedServicePromise.then(function (response)
             {
                 $scope.scopeModel.showInheritedServiceViewer = true;
-                showLinks(false, true);
                 $scope.scopeModel.selectedValues.length = 0;
                 $scope.scopeModel.isSelectorDisabled = true;
                 
@@ -212,19 +270,22 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                     $scope.scopeModel.areDatesDisabled = true;
                     setServiceDates(response.BED, response.EED);
                 }
+                // Update inheritedServiceIds to loadZoneServiceViewer
+                if (selectedIds == undefined)
+                    inheritedServices = undefined;
+                else {
+                    inheritedServiceIds = [];
+                    for (var i = 0; i < selectedIds.length; i++)
+                        inheritedServiceIds.push(selectedIds[i]);
+                }
                 VRUIUtilsService.callDirectiveLoad(inheritedServiceViewerAPI, { selectedIds: selectedIds }, inheritedServicesViewerLoadDeferred);
             });
 
             return UtilsService.waitMultiplePromises(promises);
         }
         function loadZoneServiceViewer(serviceIds) {
-            zoneItem.isLoading = true;
-            var zoneServiceViewerPayload = {
-                selectedIds: serviceIds
-            };
-            zoneItem.serviceViewerAPI.load(zoneServiceViewerPayload).finally(function () {
-                zoneItem.isLoading = false;
-            });
+            var zoneServiceViewerPayload = { selectedIds: serviceIds };
+            return zoneItem.serviceViewerAPI.load(zoneServiceViewerPayload);
         }
 
         function setServiceDates(serviceBED, serviceEED) {

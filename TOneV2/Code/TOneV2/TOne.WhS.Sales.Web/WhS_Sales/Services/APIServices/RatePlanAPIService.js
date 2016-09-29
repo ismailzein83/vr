@@ -88,12 +88,19 @@
             });
         }
 
-        function GetInheritedService(ownerType, ownerId, effectiveOn, zoneId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetInheritedService"), {
+        function GetCustomerDefaultInheritedService(customerId, effectiveOn) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCustomerDefaultInheritedService"), {
+                customerId: customerId,
+                effectiveOn: effectiveOn
+            });
+        }
+
+        function GetZoneInheritedService(ownerType, ownerId, zoneId, effectiveOn) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneInheritedService"), {
                 ownerType: ownerType,
                 ownerId: ownerId,
-                effectiveOn: effectiveOn,
-                zoneId: zoneId
+                zoneId: zoneId,
+                effectiveOn: effectiveOn
             });
         }
 
@@ -113,7 +120,8 @@
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
             DeleteChangedRates: DeleteChangedRates,
-            GetInheritedService: GetInheritedService
+            GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
+            GetZoneInheritedService: GetZoneInheritedService
         };
 
     }

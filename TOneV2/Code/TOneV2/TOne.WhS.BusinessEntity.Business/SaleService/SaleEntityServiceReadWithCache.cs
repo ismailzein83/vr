@@ -36,7 +36,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SaleEntityDefaultServicesByOwner GetCachedSaleEntityDefaultServicesByOwner()
         {
-            string cacheName = String.Format("GetCachedSaleEntityDefaultServicesByOwner_{0}", _effectiveOn);
+            string cacheName = String.Format("GetCachedSaleEntityDefaultServicesByOwner_{0}", _effectiveOn.Date);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityServiceCacheManager>().GetOrCreateObject(cacheName, () =>
             {
                 var defaultServicesByOwner = new SaleEntityDefaultServicesByOwner();

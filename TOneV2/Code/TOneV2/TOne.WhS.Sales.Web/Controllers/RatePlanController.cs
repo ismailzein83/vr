@@ -137,11 +137,19 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetInheritedService")]
-        public SaleEntityService GetInheritedService(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, long? zoneId = null)
+        [Route("GetCustomerDefaultInheritedService")]
+        public SaleEntityService GetCustomerDefaultInheritedService(int customerId, DateTime effectiveOn)
         {
             var manager = new DefaultItemManager();
-            return manager.GetInheritedService(ownerType, ownerId, effectiveOn, zoneId);
+            return manager.GetCustomerDefaultInheritedService(customerId, effectiveOn);
+        }
+
+        [HttpGet]
+        [Route("GetZoneInheritedService")]
+        public SaleEntityService GetZoneInheritedService(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn)
+        {
+            var manager = new RatePlanZoneManager();
+            return manager.GetZoneInheritedService(ownerType, ownerId, zoneId, effectiveOn);
         }
     }
 }

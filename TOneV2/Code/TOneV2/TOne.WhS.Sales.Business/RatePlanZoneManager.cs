@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
@@ -35,6 +36,33 @@ namespace TOne.WhS.Sales.Business
             }
 
             return GetMatchedZones(zones, countryIds, zoneLetter, zoneNameFilterType, zoneNameFilter);
+        }
+
+        // This method is invoked when the user clicks the 'Reset to default' link to reset the ZONE services of an OWNER
+        public BusinessEntity.Entities.SaleEntityService GetZoneInheritedService(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn)
+        {
+            SaleEntityService inheritedService;
+            
+            var draftManager = new RatePlanDraftManager();
+            Changes draft = draftManager.GetDraft(ownerType, ownerId);
+
+            var effectiveServiceLocator = new SaleEntityServiceLocator(new EffectiveSaleEntityServiceReadWithCache(ownerType, ownerId, effectiveOn, draft));
+
+            // The owner's draft MUST have a DraftResetZoneService on zoneId for the below method to return a correct result
+            // This is assumed because the draft is saved before calling GetZoneInheritedService
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                inheritedService = effectiveServiceLocator.GetSellingProductZoneService(ownerId, zoneId);
+            }
+            else
+            {
+                var ratePlanManager = new RatePlanManager();
+                int sellingProductId = ratePlanManager.GetSellingProductId(ownerId, effectiveOn, false);
+                inheritedService = effectiveServiceLocator.GetCustomerZoneService(ownerId, sellingProductId, zoneId);
+            }
+
+            return inheritedService;
         }
 
         private IEnumerable<SaleZone> GetMatchedZones(IEnumerable<SaleZone> zones, IEnumerable<int> countryIds, char? zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter)

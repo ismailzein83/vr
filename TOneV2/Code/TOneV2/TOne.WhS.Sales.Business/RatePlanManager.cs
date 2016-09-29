@@ -90,7 +90,7 @@ namespace TOne.WhS.Sales.Business
             if (zones != null)
             {
                 zoneItems = new List<ZoneItem>();
-                Changes changes = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
+                Changes draft = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
 
                 int? sellingProductId = GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false);
 
@@ -101,13 +101,13 @@ namespace TOne.WhS.Sales.Business
                 if (input.Filter.OwnerType == SalePriceListOwnerType.Customer)
                     customerId = input.Filter.OwnerId;
 
-                ZoneRateManager rateSetter = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, changes, input.CurrencyId);
-                ZoneRoutingProductManager routingProductSetter = new ZoneRoutingProductManager((int)sellingProductId, customerId, DateTime.Now, changes);
-                var zoneServiceManager = new ZoneServiceManager(DateTime.Now);
+                var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId);
+                var routingProductManager = new ZoneRoutingProductManager((int)sellingProductId, customerId, DateTime.Now, draft);
+                var serviceManager = new ZoneServiceManager(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, draft);
 
                 DraftNewDefaultService newDefaultService = null;
-                if (changes != null && changes.DefaultChanges != null)
-                    newDefaultService = changes.DefaultChanges.NewService;
+                if (draft != null && draft.DefaultChanges != null)
+                    newDefaultService = draft.DefaultChanges.NewService;
 
                 foreach (SaleZone zone in zones.OrderBy(x => x.Name))
                 {
@@ -120,20 +120,20 @@ namespace TOne.WhS.Sales.Business
                     };
 
                     ZoneChanges zoneDraft = null;
-                    if (changes != null && changes.ZoneChanges != null)
-                        zoneDraft = changes.ZoneChanges.FindRecord(x => x.ZoneId == zone.SaleZoneId);
+                    if (draft != null && draft.ZoneChanges != null)
+                        zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneId == zone.SaleZoneId);
 
-                    rateSetter.SetZoneRate(zoneItem);
-                    routingProductSetter.SetZoneRoutingProduct(zoneItem);
+                    rateManager.SetZoneRate(zoneItem);
+                    routingProductManager.SetZoneRoutingProduct(zoneItem);
 
                     // TODO: Refactor the rateSetter and routingProductSetter to handle products and customers separately
                     if (input.Filter.OwnerType == SalePriceListOwnerType.SellingProduct)
                     {
-                        zoneServiceManager.SetSellingProductZoneService(zoneItem, input.Filter.OwnerId, zoneDraft, newDefaultService);
+                        serviceManager.SetSellingProductZoneService(zoneItem, input.Filter.OwnerId, zoneDraft);
                     }
                     else
                     {
-                        zoneServiceManager.SetCustomerZoneService(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft, newDefaultService);
+                        serviceManager.SetCustomerZoneService(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
                     }
 
                     zoneItems.Add(zoneItem);
@@ -225,6 +225,15 @@ namespace TOne.WhS.Sales.Business
             }
             else // If the owner is a selling product
                 return ownerId;
+        }
+
+        public int GetSellingProductId(int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
+        {
+            var customerSellingProductManager = new CustomerSellingProductManager();
+            int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, effectiveOn, isEffectiveInFuture);
+            if (!sellingProductId.HasValue)
+                throw new NullReferenceException(String.Format("Customer '{0}' is not assigned to a SellingProduct", customerId));
+            return sellingProductId.Value;
         }
 
         public SaleEntityZoneRate GetRate(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn)

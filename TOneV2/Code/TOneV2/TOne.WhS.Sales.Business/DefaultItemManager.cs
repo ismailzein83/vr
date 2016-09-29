@@ -50,26 +50,21 @@ namespace TOne.WhS.Sales.Business
 
             return defaultItem;
         }
-        public SaleEntityService GetInheritedService(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, long? zoneId)
+
+        // This method is invoked when the user clicks the 'Reset to default' link to reset the DEFAULT services of a CUSTOMER
+        public BusinessEntity.Entities.SaleEntityService GetCustomerDefaultInheritedService(int customerId, DateTime effectiveOn)
         {
-            var serviceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadWithCache(effectiveOn));
-            SaleEntityService service = null;
+            var draftManager = new RatePlanDraftManager();
+            Changes draft = draftManager.GetDraft(SalePriceListOwnerType.Customer, customerId);
+            
+            var effectiveServiceLocator = new SaleEntityServiceLocator(new EffectiveSaleEntityServiceReadWithCache(SalePriceListOwnerType.Customer, customerId, effectiveOn, draft));
 
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                if (zoneId.HasValue)
-                    service = serviceLocator.GetSellingProductDefaultService(ownerId);
-            }
-            else
-            {
-                int sellingProductId = GetSellingProductId(ownerId, effectiveOn, false);
+            var ratePlanManager = new RatePlanManager();
+            int sellingProductId = ratePlanManager.GetSellingProductId(customerId, effectiveOn, false);
 
-                service = (zoneId.HasValue) ?
-                    serviceLocator.GetCustomerInheritedZoneService(ownerId, sellingProductId, zoneId.Value) :
-                    serviceLocator.GetSellingProductDefaultService(sellingProductId);
-            }
-
-            return service;
+            // The customer's draft MUST have a DraftResetDefaultService for the below method to return a correct result
+            // This is assumed because the draft is saved before calling GetCustomerDefaultInheritedService
+            return effectiveServiceLocator.GetCustomerDefaultService(customerId, sellingProductId);
         }
 
         #region Private Methods

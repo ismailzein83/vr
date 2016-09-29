@@ -71,25 +71,56 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                 else {
                     setServiceDates(defaultItem.CurrentServiceBED, defaultItem.CurrentServiceEED);
                 }
-                defaultItem.onChange();
+
+                defaultItem.context.saveDraft(true);
             };
 
-            $scope.scopeModel.reset = function () {
+            $scope.scopeModel.reset = function ()
+            {
+                if (defaultItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+                    return;
+
                 defaultItem.IsDirty = true;
                 $scope.scopeModel.isLoading = true;
-                loadInheritedServiceViewer().catch(function (error) {
+
+                var promises = [];
+
+                showLinks(false, true);
+                var saveDraftPromise = defaultItem.context.saveDraft(false);
+                promises.push(saveDraftPromise);
+
+                var loadInheritedServicesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadInheritedServicesDeferred.promise);
+
+                saveDraftPromise.then(function () {
+                    loadInheritedServiceViewer().then(function () {
+                        loadInheritedServicesDeferred.resolve();
+                    }).catch(function (error) {
+                        loadInheritedServicesDeferred.reject(error, $scope);
+                    });
+                });
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
+                    defaultItem.context.loadGrid();
+                }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             };
 
-            $scope.scopeModel.undo = function () {
+            $scope.scopeModel.undo = function ()
+            {
                 $scope.scopeModel.showInheritedServiceViewer = false;
                 $scope.scopeModel.isSelectorDisabled = false;
                 $scope.scopeModel.areDatesDisabled = false;
                 setServiceDates(defaultItem.CurrentServiceBED, defaultItem.CurrentServiceEED);
                 showLinks(true, false);
+
+                $scope.scopeModel.isLoading = true;
+                defaultItem.context.saveDraft(true).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
             };
 
             $scope.scopeModel.onServiceEEDChanged = function () {
@@ -146,6 +177,7 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
 
                     if (defaultItem.ResetService != null) {
                         defaultItem.IsDirty = true;
+                        showLinks(false, true);
                         var loadInheritedServiceViewerPromise = loadInheritedServiceViewer();
                         promises.push(loadInheritedServiceViewerPromise);
                     }
@@ -188,12 +220,11 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
             promises.push(inheritedServicesViewerLoadDeferred.promise);
 
             var effectiveOn = UtilsService.getDateFromDateTime(new Date());
-            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetInheritedService(defaultItem.OwnerType, defaultItem.OwnerId, effectiveOn, defaultItem.ZoneId);
+            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetCustomerDefaultInheritedService(defaultItem.OwnerId, effectiveOn);
             promises.push(getInheritedServicePromise);
 
             getInheritedServicePromise.then(function (response) {
                 $scope.scopeModel.showInheritedServiceViewer = true;
-                showLinks(false, true);
                 $scope.scopeModel.selectedValues.length = 0;
                 $scope.scopeModel.isSelectorDisabled = true;
 

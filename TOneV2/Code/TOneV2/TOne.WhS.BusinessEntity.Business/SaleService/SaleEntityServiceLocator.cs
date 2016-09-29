@@ -40,21 +40,13 @@ namespace TOne.WhS.BusinessEntity.Business
         public SaleEntityService GetCustomerZoneService(int customerId, int sellingProductId, long zoneId)
         {
             SaleEntityService saleEntityService;
-
             if (!HasZoneService(SalePriceListOwnerType.Customer, customerId, zoneId, out saleEntityService))
-                saleEntityService = GetCustomerInheritedZoneService(customerId, sellingProductId, zoneId);
-
+                if (!HasDefaultService(SalePriceListOwnerType.Customer, customerId, out saleEntityService))
+                    if (!HasZoneService(SalePriceListOwnerType.SellingProduct, sellingProductId, zoneId, out saleEntityService))
+                        HasDefaultService(SalePriceListOwnerType.SellingProduct, sellingProductId, out saleEntityService);
             return saleEntityService;
         }
-        public SaleEntityService GetCustomerInheritedZoneService(int customerId, int sellingProductId, long zoneId)
-        {
-            SaleEntityService saleEntityService;
-            if (!HasDefaultService(SalePriceListOwnerType.Customer, customerId, out saleEntityService))
-                if (!HasZoneService(SalePriceListOwnerType.SellingProduct, sellingProductId, zoneId, out saleEntityService))
-                    HasDefaultService(SalePriceListOwnerType.SellingProduct, sellingProductId, out saleEntityService);
-            return saleEntityService;
-        }
-
+        
         public SaleEntityService GetRoutingCustomerZoneService(int customerId, int sellingProductId, long zoneId)
         {
             SaleEntityService saleEntityService = GetCustomerZoneService(customerId, sellingProductId, zoneId);

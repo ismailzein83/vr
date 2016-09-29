@@ -162,7 +162,7 @@
                     {
                         var promises = [];
 
-                        var saveChangesPromise = saveChanges(false);
+                        var saveChangesPromise = saveDraft(false);
                         promises.push(saveChangesPromise);
 
                         var deleteChangedRatesDeferred = UtilsService.createPromiseDeferred();
@@ -198,8 +198,11 @@
             $scope.defaultItemTabs = [{
                 title: "Default Services",
                 directive: "vr-whs-sales-default-service",
-                loadDirective: function (api) {
-                    defaultItem.onChange = onDefaultItemChange;
+                loadDirective: function (api)
+                {
+                    defaultItem.context = {};
+                    defaultItem.context.saveDraft = saveDraft;
+                    defaultItem.context.loadGrid = loadGrid;
 
                     var defaultServicePayload = {
                         defaultItem: defaultItem,
@@ -210,11 +213,12 @@
 
                     return api.load(defaultServicePayload);
                 }
-            }, {
+            },
+            {
                 title: "Default Routing Product",
                 directive: "vr-whs-sales-defaultroutingproduct",
                 loadDirective: function (api) {
-                    defaultItem.onChange = onDefaultItemChange;
+                    defaultItem.onChange = onDefaultItemChanged;
                     return api.load(defaultItem);
                 }
             }];
@@ -224,7 +228,7 @@
             $scope.connector.selectedZoneLetterIndex = 0;
 
             $scope.onZoneLetterSelectionChanged = function () {
-                return saveChanges(true);
+                return saveDraft(true);
             };
 
             $scope.onGridReady = function (api) {
@@ -261,18 +265,16 @@
                                 settings.costCalculationMethods.push(updatedSettings.costCalculationMethods[i]);
                             }
                         }
-                        $scope.showPricingButton = (settings.costCalculationMethods != undefined);
                     }
 
                     pricingSettings = null;
                     $scope.showApplyButton = false;
-                    $scope.showPricingButton = (settings != undefined);
 
                     VRNotificationService.showSuccess("Settings saved");
 
                     var promises = [];
 
-                    var saveChangesPromise = saveChanges(false);
+                    var saveChangesPromise = saveDraft(false);
                     promises.push(saveChangesPromise);
 
                     var loadGridDeferred = UtilsService.createPromiseDeferred();
@@ -301,7 +303,7 @@
 
                     var promises = [];
 
-                    var saveChangesPromise = saveChanges(false);
+                    var saveChangesPromise = saveDraft(false);
                     promises.push(saveChangesPromise);
 
                     var loadGridDeferred = UtilsService.createPromiseDeferred();
@@ -337,7 +339,7 @@
                 confirmPromise.then(function (confirmed) {
                     if (confirmed)
                     {
-                        saveChanges(false).then(function ()
+                        saveDraft(false).then(function ()
                         {
                             saveChangesDeferred.resolve();
                             var tryApplyInput = getTryApplyCalculatedRatesInput();
@@ -575,7 +577,7 @@
                 if ($scope.zoneLetters.length > 0) {
                     $scope.showSaveButton = true;
                     $scope.showSettingsButton = true;
-                    $scope.showPricingButton = (settings != undefined)
+                    $scope.showPricingButton = true;
 
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
@@ -679,14 +681,18 @@
                     RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                     PolicyConfigId: policySelectorAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
-                    CostCalculationMethods: settings ? settings.costCalculationMethods : null,
-                    CostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
-                    RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
+                    CostCalculationMethods: settings != undefined ? settings.costCalculationMethods : null,
                     Settings: ratePlanSettingsData,
                     CurrencyId: getCurrencyId(),
                     onNewZoneServiceChanged: onNewZoneServiceChanged,
                     CountryIds: countrySelectorAPI.getSelectedIds()
                 };
+
+                if (pricingSettings != undefined) {
+                    gridQuery.RateCalculationMethod = pricingSettings.selectedRateCalculationMethodData;
+                    if (pricingSettings.selectedCostColumn != null)
+                        gridQuery.CostCalculationMethodConfigId = pricingSettings.selectedCostColumn.ConfigId;
+                }
 
                 var textFilterData = textFilterAPI.getData();
                 if (textFilterData != undefined) {
@@ -719,7 +725,7 @@
             }
         }
         
-        function saveChanges(shouldLoadGrid)
+        function saveDraft(shouldLoadGrid)
         {
             var promises = [];
 
@@ -790,12 +796,16 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        function onDefaultItemChange() {
-            saveChanges(true);
+
+        // TODO: Remove
+        function onDefaultItemChanged()
+        {
+            return saveDraft(true);
         }
         function onNewZoneServiceChanged() {
-            saveChanges(false);
+            return saveDraft(false);
         }
+
         function onCustomerChanged(selectedCarrierAccountId) {
             var promises = [];
 
@@ -865,22 +875,21 @@
         function defineSaveButtonMenuActions() {
             $scope.saveButtonMenuActions = [{
                 name: "Draft",
-                clicked: saveDraft
+                clicked: function () {
+                    return saveDraft(false).then(function () {
+                        VRNotificationService.showSuccess("Draft saved");
+                    });
+                }
             }, {
-                name: "Apply Changes",
-                clicked: applyChanges
+                name: "Apply Draft",
+                clicked: applyDraft
             }];
         }
-        function saveDraft() {
-            return saveChanges(false).then(function () {
-                VRNotificationService.showSuccess("Draft saved");
-            });
-        }
-        function applyChanges()
+        function applyDraft()
         {
             var promises = [];
 
-            var saveChangesPromise = saveChanges(false);
+            var saveChangesPromise = saveDraft(false);
             promises.push(saveChangesPromise);
 
             var createProcessDeferred = UtilsService.createPromiseDeferred();
