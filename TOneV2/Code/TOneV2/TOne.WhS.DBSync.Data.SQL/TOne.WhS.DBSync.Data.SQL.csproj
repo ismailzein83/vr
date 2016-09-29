@@ -108,6 +108,7 @@
     <Compile Include="DBSyncDataManager\SwitchConnectivityDBSyncDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCommissionDataManager.cs" />
     <Compile Include="SourceDataManger\Rules\SourceRouteOverrideRuleDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />

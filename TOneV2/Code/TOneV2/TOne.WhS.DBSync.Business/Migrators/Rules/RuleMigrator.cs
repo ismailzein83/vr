@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Business
     public class RuleMigrator : Migrator<SourceRule, Rule>
     {
         readonly RulesDBSyncDataManager _dbSyncDataManager;
-        RouteRuleBaseMigrator _routeRuleBaseMigrator;
+        RuleBaseMigrator _routeRuleBaseMigrator;
 
         public RuleMigrator(MigrationContext context)
             : base(context)
@@ -49,10 +49,10 @@ namespace TOne.WhS.DBSync.Business
                         _routeRuleBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
                         break;
                 }
+                routeRules.AddRange(_routeRuleBaseMigrator.GetSourceRules());
+                _routeRuleBaseMigrator.WriteFaildRowsLog();
             }
-
-            routeRules.AddRange(_routeRuleBaseMigrator.GetRouteRules());
-            _routeRuleBaseMigrator.WriteFaildRowsLog();
+            
             return routeRules;
         }
 

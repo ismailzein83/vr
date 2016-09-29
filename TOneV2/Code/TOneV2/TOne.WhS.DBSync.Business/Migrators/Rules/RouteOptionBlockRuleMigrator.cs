@@ -17,7 +17,7 @@ using Vanrise.Rules.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class RouteOptionBlockRuleMigrator : RouteRuleBaseMigrator
+    public class RouteOptionBlockRuleMigrator : RuleBaseMigrator
     {
         public override string EntityName
         {
@@ -39,7 +39,7 @@ namespace TOne.WhS.DBSync.Business
             RouteOptionRuleManager manager = new RouteOptionRuleManager();
             _routeOptionRuleTypeId = manager.GetRuleTypeId();
         }
-        public override IEnumerable<SourceRule> GetRouteRules()
+        public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> routeRules = new List<SourceRule>();
 

@@ -3,10 +3,10 @@ using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public abstract class RouteRuleBaseMigrator
+    public abstract class RuleBaseMigrator
     {
         public RuleMigrationContext Context { get; set; }
-        public abstract IEnumerable<SourceRule> GetRouteRules();
+        public abstract IEnumerable<SourceRule> GetSourceRules();
         public int TotalRowsFailed { get; set; }
         public virtual string EntityName { get { return "RouteRuleBaseMigrator"; } }
         public virtual void WriteFaildRowsLog()
@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Business
                 Context.MigrationContext.WriteWarning(string.Format("Migrating table '" + EntityName + "' : {0} rows failed", TotalRowsFailed));
         }
 
-        protected RouteRuleBaseMigrator(RuleMigrationContext context)
+        protected RuleBaseMigrator(RuleMigrationContext context)
         {
             TotalRowsFailed = 0;
             Context = context;

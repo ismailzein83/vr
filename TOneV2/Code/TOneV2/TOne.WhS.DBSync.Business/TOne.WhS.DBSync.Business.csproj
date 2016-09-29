@@ -74,6 +74,9 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Pricing">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Transformation.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
     </Reference>
@@ -84,6 +87,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Pricing">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
@@ -91,6 +100,7 @@
   <ItemGroup>
     <Compile Include="Common\IMigrator.cs" />
     <Compile Include="Common\Migrator.cs" />
+    <Compile Include="Migrators\Rules\CommissionRuleMigrator.cs" />
     <Compile Include="Migrators\VRTimeZoneMigrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />
