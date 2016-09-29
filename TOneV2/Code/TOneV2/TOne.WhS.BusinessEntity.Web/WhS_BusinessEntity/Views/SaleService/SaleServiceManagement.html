@@ -1,0 +1,64 @@
+﻿<vr-panel ng-controller="WhS_BE_SaleServiceManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
+            <vr-row removeline>
+
+                <vr-whs-be-sellingnumberplan-selector normal-col-num="2" on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan"
+                                                      onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired="true"></vr-whs-be-sellingnumberplan-selector>
+
+                <span ng-show="selectedSellingNumberPlan" vr-loader="isLoadingSaleZonesSelector">
+                    <vr-whs-be-salezone-selector ismultipleselection normal-col-num="2" on-ready="onSaleZoneDirectiveReady">
+                    </vr-whs-be-salezone-selector>
+                </span>
+
+                <vr-columns width="normal">
+                    <vr-select label="Owner Type"
+                               datasource="ownerTypes"
+                               selectedvalues="selectedOwnerType"
+                               onselectionchanged="onOwnerTypeChanged"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Owner Type"
+                               hideremoveicon isrequired="true">
+                    </vr-select>
+                </vr-columns>
+                <span vr-loader="isLoadingOwnerSelector">
+                    <span ng-show="showSellingProductSelector">
+                        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
+                                                           selectedvalues="selectedSellingProduct"
+                                                           onselectionchanged="onSellingProductChanged"
+                                                           normal-col-num="2"
+                                                           hideremoveicon isrequired="showSellingProductSelector">
+                        </vr-whs-be-sellingproduct-selector>
+                    </span>
+                    <span ng-show="showCarrierAccountSelector">
+                        <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                           selectedvalues="selectedCustomer"
+                                                           onselectionchanged="onCarrierAccountChanged"
+                                                           getcustomers
+                                                           normal-col-num="2"
+                                                           hideremoveicon isrequired="showCarrierAccountSelector">
+
+                        </vr-whs-be-carrieraccount-selector>
+                    </span>
+                </span>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Effective On" value="effectiveOn" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+
+                <vr-whs-be-saleentityzoneservice-grid on-ready="onGridReady"></vr-whs-be-saleentityzoneservice-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

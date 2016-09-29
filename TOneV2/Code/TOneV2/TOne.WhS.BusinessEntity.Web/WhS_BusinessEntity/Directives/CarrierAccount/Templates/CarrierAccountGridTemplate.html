@@ -12,6 +12,9 @@
     <vr-datagridcolumn headertext="'Account Type'" field="'AccountTypeDescription'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Activation Status'" field="'ActivationStatusDescription'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlanName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Services'" field="'Services'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onServiceReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

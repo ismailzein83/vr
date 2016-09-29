@@ -23,6 +23,7 @@
 
                 var query = {
                     ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
+                    EffectiveOn: supplierZoneItem.EffectiveOn
                 };
                
                 return supplierZoneItem.supplierRateGridAPI.loadGrid(query);

@@ -1,18 +1,12 @@
-﻿<div ng-show="showGrid">
-    <vr-datagrid datasource="salerates"
+﻿<div >
+    <vr-datagrid datasource="saleOtherRates"
                  on-ready="onGridReady"
-                 dataretrievalfunction="dataRetrievalFunction"
-                 pagingtype="'PagingOnScroll'"
-                 menuactions="gridMenuActions"
-                 idfield="Entity.SaleRateId"
-                 showexpand="isExpandable">
+                 idfield="Entity.SaleRateId">
         <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rate'" field="'ConvertedRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="3"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rate Type'" field="'RateTypeName'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
-        <vr-datagridexpandablerow>
-            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-        </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>

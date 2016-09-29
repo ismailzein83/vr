@@ -8,6 +8,7 @@
         var editorUrl = '/Client/Modules/WhS_BusinessEntity/Views/Deal/DealAnalysisEditor.html';
         var outboundUrl = '/Client/Modules/WhS_BusinessEntity/Views/Deal/OutboundTrafficEditor.html';
         var inboundUrl = '/Client/Modules/WhS_BusinessEntity/Views/Deal/InboundTrafficEditor.html';
+
         function addDealAnalysis(onDealAnalysisAdded) {
             var settings = {};
 
@@ -17,6 +18,21 @@
 
             VRModalService.showModal(editorUrl, null, settings);
         }
+
+        function openDealAnalysis(dealDefinition) {
+            var parameters = {
+                dealDefinition: dealDefinition
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+             //   modalScope.onDealAnalyisUpdated = onDealAnalyisUpdated;
+            };
+
+            VRModalService.showModal(editorUrl, parameters, settings);
+        }
+
 
         function editDealAnalysis(dealId, onDealAnalyisUpdated) {
             var parameters = {
@@ -88,6 +104,7 @@
         return {
             addDealAnalysis: addDealAnalysis,
             editDealAnalysis: editDealAnalysis,
+            openDealAnalysis:openDealAnalysis,
             addOutbound: addOutbound,
             editOutbound: editOutbound,
             addInbound: addInbound,

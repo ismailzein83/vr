@@ -22,7 +22,8 @@
                 
                 var query = {
                     SupplierId: supplierZoneItem.Entity.SupplierId,
-                    ZoneIds: [supplierZoneItem.Entity.SupplierZoneId]
+                    ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
+                    EffectiveOn: supplierZoneItem.EffectiveOn
                 };
                
                 return supplierZoneItem.supplierCodeGridAPI.loadGrid(query);

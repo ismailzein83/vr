@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
+app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService","VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -30,9 +30,23 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
 
         function initializeController() {
             $scope.showGrid = false;
+            var gridDrillDownTabsObj;
             $scope.salerates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = [];
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Other Rates";
+                drillDownDefinition.directive = "vr-whs-be-saleotherrate-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, rateItem) {
+                    rateItem.otherRateGridAPI = directiveAPI;
+                    rateItem.otherRateGridAPI.loadGrid(rateItem.OtherRates);
+                };
+                drillDownDefinitions.push(drillDownDefinition);
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -47,9 +61,17 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService) {
                     return directiveAPI;
                 }
             };
+            $scope.isExpandable = function (dataItem) {
+                return (dataItem.OtherRates != null && dataItem.OtherRates.length > 0);
+            }
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SaleRateAPIService.GetFilteredSaleRate(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         $scope.showGrid = true;
                          onResponseReady(response);
                     })

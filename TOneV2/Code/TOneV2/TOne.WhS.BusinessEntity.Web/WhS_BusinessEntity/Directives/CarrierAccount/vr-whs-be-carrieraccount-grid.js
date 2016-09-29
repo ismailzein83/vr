@@ -94,6 +94,9 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                                 if (response.Data[i].Entity.AccountType != WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }
+                                if (response.Data[i].Entity.AccountType != WhS_BE_CarrierAccountTypeEnum.Customer.value)
+                                   addReadySericeApi(response.Data[i]);
+
                             }
                         }
                         onResponseReady(response);
@@ -157,6 +160,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             WhS_BE_CarrierAccountService.editCarrierAccount(carrierAccountItem, onCarrierAccountUpdated);
         }
 
+        var addReadySericeApi = function (dataItem) {
+            dataItem.onServiceReady = function (api) {
+                dataItem.ServieApi = api
+                dataItem.ServieApi.load({ selectedIds: dataItem.Services });
+            }
+        }
         function assignNew(dataItem) {
             if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
                 return;
