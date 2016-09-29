@@ -96,8 +96,8 @@
                 </li>
             </ul>
         </div>
-        <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-block'}">
-            <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="position: relative; top: calc(50% - 9px);">  {{ dataItem.actionType}}</span>
+        <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-block', 'position':'relative'}">
+            <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="top: 50%; position: absolute; transform: translate(0%,-50%);">  {{ dataItem.actionType}}</span>
         </div>
         <div ng-if="ctrl.showDeleteRowSection" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block', 'position':'relative'}">
             <span class="hand-cursor glyphicon glyphicon-remove" ng-click="ctrl.deleteRowClicked(dataItem)" style=" top: 50%; position: absolute; transform: translate(0%,-50%); }"></span>
