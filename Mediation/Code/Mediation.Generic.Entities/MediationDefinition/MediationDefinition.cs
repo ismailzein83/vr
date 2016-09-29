@@ -10,8 +10,8 @@ namespace Mediation.Generic.Entities
     {
         public int MediationDefinitionId { get; set; }
         public string Name { get; set; }
-        public int ParsedRecordTypeId { get; set; }
-        public int CookedRecordTypeId { get; set; }
+        public Guid ParsedRecordTypeId { get; set; }
+        public Guid CookedRecordTypeId { get; set; }
         public ParsedRecordIdentificationSetting ParsedRecordIdentificationSetting { get; set; }
         public UpdateCookedFromParsed CookedFromParsedSettings { get; set; }
         public CookedCDRDataStoreSetting CookedCDRDataStoreSetting { get; set; }

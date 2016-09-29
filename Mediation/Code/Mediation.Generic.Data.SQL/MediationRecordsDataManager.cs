@@ -17,7 +17,7 @@ namespace Mediation.Generic.Data.SQL
 
         readonly string[] columns = { "EventId", "SessionId", "EventTime", "EventStatus", "MediationDefinitionId", "EventDetails" };
         DataRecordTypeManager _dataRecordTypeManager = new DataRecordTypeManager();
-        int _dataRecordTypeId;
+        Guid _dataRecordTypeId;
 
         #region IBulkApplyDataManager MediationRecord
 
@@ -93,7 +93,7 @@ namespace Mediation.Generic.Data.SQL
             }) > 0;
         }
 
-        public int DataRecordTypeId
+        public Guid DataRecordTypeId
         {
             set { _dataRecordTypeId = value; }
         }

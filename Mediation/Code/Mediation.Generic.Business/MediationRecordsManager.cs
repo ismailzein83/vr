@@ -17,7 +17,7 @@ namespace Mediation.Generic.Business
             return dataManager.GetMediationRecords();
         }
 
-        public IEnumerable<MediationRecord> GetMediationRecordsByStatus(int mediationDefinitionId, EventStatus status, int dataRecordTypeId)
+        public IEnumerable<MediationRecord> GetMediationRecordsByStatus(int mediationDefinitionId, EventStatus status, Guid dataRecordTypeId)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             Type recordType = dataRecordTypeManager.GetDataRecordRuntimeType(dataRecordTypeId);
@@ -25,7 +25,7 @@ namespace Mediation.Generic.Business
             dataManager.DataRecordTypeId = dataRecordTypeId;
             return dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds, int dataRecordTypeId)
+        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds, Guid dataRecordTypeId)
         {
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.DataRecordTypeId = dataRecordTypeId;

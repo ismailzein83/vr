@@ -16,7 +16,7 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<EventStatus> Status { get; set; }
 
         [RequiredArgument]
-        public InArgument<int> DataRecordTypeId { get; set; }
+        public InArgument<Guid> DataRecordTypeId { get; set; }
 
         [RequiredArgument]
         public InArgument<int> MediationDefinitionId { get; set; }
