@@ -15,8 +15,8 @@ namespace TOne.WhS.Routing.Business
 
         public HashSet<int> CustomerServices { get; set; }
 
-        public bool FilterOption { get; set; }
+        public HashSet<int> SupplierServices { get; set; }
 
-        public HashSet<int> SupplierServices{ get; set; }
+        public bool FilterOption { get; set; }
     }
 }
