@@ -72,16 +72,29 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
             }
 
+            List<ImportedZoneService> importedZoneServices;
+
             foreach (ImportedZoneService service in importedZonesServices)
             {
                 if (!importedDataByZoneName.TryGetValue(service.ZoneName, out importedDataByZone))
                 {
                     importedDataByZone = new ImportedDataByZone();
-                    importedDataByZone.ZoneName = service.ZoneName;
+                    importedZoneServices = new List<ImportedZoneService>();
+                    importedZoneServices.Add(service);
+                    importedDataByZone.ImportedZoneServicesToValidate.Add(service.ServiceId, importedZoneServices);
                     importedDataByZoneName.Add(service.ZoneName, importedDataByZone);
                 }
-
-                importedDataByZone.ImportedZoneServices.Add(service);
+                else
+                {
+                    if (!importedDataByZone.ImportedZoneServicesToValidate.TryGetValue(service.ServiceId, out importedZoneServices))
+                    {
+                        importedZoneServices = new List<ImportedZoneService>();
+                        importedZoneServices.Add(service);
+                        importedDataByZone.ImportedZoneServicesToValidate.Add(service.ServiceId, importedZoneServices);
+                    }
+                    else
+                        importedZoneServices.Add(service);
+                }
             }
 
             this.ImportedDataByZone.Set(context, importedDataByZoneName.Values);

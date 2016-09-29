@@ -155,7 +155,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 loadDirective: function (saleCodeGridAPI, zoneItem) {
                     var query = {
                         SellingNumberPlanId: null,
-                        ZonesIds: [zoneItem.ZoneId]
+                        ZonesIds: [zoneItem.ZoneId],
+                        EffectiveOn : new Date()
                     };
                     return saleCodeGridAPI.loadGrid(query);
                 }

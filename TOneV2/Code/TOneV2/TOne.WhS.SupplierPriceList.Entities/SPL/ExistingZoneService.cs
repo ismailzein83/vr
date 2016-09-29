@@ -26,7 +26,14 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         {
             get { return ChangedZoneService != null ? ChangedZoneService.EED : ZoneServiceEntity.EED; }
         }
-        
+
+        public bool IsSameEntity(IExistingEntity nextEntity)
+        {
+            ExistingZoneService nextZoneService = nextEntity as ExistingZoneService;
+
+            return this.ParentZone.Name.Equals(nextZoneService.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
+                && this.ZoneServiceEntity.EffectiveServices == nextZoneService.ZoneServiceEntity.EffectiveServices;
+        }
     }
 
 }

@@ -96,6 +96,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         {
             get { return ChangedZone != null ? ChangedZone.EED : ZoneEntity.EED; }
         }
+
+        public bool IsSameEntity(IExistingEntity nextEntity)
+        {
+            ExistingZone nextExistingZone = nextEntity as ExistingZone;
+
+            return this.Name.Equals(nextExistingZone.Name, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 
     public class ExistingZonesByName

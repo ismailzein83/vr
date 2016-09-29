@@ -36,11 +36,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     importedZone.ImportedOtherRates.Add(kvp.Key, kvp.Value.First());
                 }
 
-                ImportedZoneService firstImportedZoneService = importedDataByZone.ImportedZoneServices.First();
                
+                List<int> serviceIds = new List<int>();
+                
+                foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
+                    serviceIds.Add(item.Value.First().ServiceId);
+
+                ImportedZoneService firstImportedZoneService = importedDataByZone.ImportedZoneServicesToValidate.Values.SelectMany(x => x).OrderBy(itm => itm.BED).First();
+
                 importedZone.ImportedZoneServiceGroup = new ImportedZoneServiceGroup()
                 {
-                    ServiceIds = importedDataByZone.ImportedZoneServices.Select(item => item.ServiceId).ToList(),
+                    ServiceIds = serviceIds,
                     ZoneName = importedDataByZone.ZoneName,
                     BED = firstImportedZoneService.BED,
                     EED = firstImportedZoneService.EED

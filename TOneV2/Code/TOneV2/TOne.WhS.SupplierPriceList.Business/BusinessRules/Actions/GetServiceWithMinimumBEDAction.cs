@@ -14,23 +14,17 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override void Execute(IBusinessRuleActionExecutionContext context)
         {
             ImportedDataByZone importedDataByZone = context.Target as ImportedDataByZone;
-            Dictionary<int, ImportedZoneService> importedZoneServicesByServiceId = new Dictionary<int, ImportedZoneService>();
-
-            if (importedDataByZone != null)
+            
+            
+            Dictionary<int, List<ImportedZoneService>> importedZoneServicesByServiceId = new Dictionary<int, List<ImportedZoneService>>();
+            foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
             {
-                foreach (ImportedZoneService importedZoneService in importedDataByZone.ImportedZoneServices)
-                {
-                    IEnumerable<ImportedZoneService> tmp = importedDataByZone.ImportedZoneServices.FindAllRecords(item => item.ServiceId == importedZoneService.ServiceId).OrderBy(itm => itm.BED);
-                    ImportedZoneService importedZoneServiceWithMinBED = importedDataByZone.ImportedZoneServices.FindAllRecords(item => item.ServiceId == importedZoneService.ServiceId).OrderBy(itm => itm.BED).FirstOrDefault();
-
-                    ImportedZoneService tmpImportedZoneService;
-
-                    if (!importedZoneServicesByServiceId.TryGetValue(importedZoneService.ServiceId, out tmpImportedZoneService))
-                        importedZoneServicesByServiceId.Add(importedZoneService.ServiceId, importedZoneServiceWithMinBED);
-                }
-
-                importedDataByZone.ImportedZoneServices = importedZoneServicesByServiceId.Values.ToList();
+                List<ImportedZoneService> importedZoneServices = new List<ImportedZoneService>();
+                importedZoneServices.Add(item.Value.OrderBy(itm => itm.BED).First());
+                importedZoneServicesByServiceId.Add(item.Key, importedZoneServices);
             }
+
+            importedDataByZone.ImportedZoneServicesToValidate = importedZoneServicesByServiceId;
         }
 
         public override ActionSeverity GetSeverity()

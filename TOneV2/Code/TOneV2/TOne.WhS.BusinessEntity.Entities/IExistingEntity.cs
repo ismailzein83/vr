@@ -9,5 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public interface IExistingEntity : Vanrise.Entities.IDateEffectiveSettings
     {
         IChangedEntity ChangedEntity { get; }
+
+        bool IsSameEntity(IExistingEntity nextEntity);
     }
 }

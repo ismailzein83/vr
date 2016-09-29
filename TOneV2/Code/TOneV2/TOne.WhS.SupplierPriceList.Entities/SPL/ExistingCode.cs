@@ -28,7 +28,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EED; }
         }
 
-       
+        public bool IsSameEntity(IExistingEntity nextEntity)
+        {
+            ExistingCode nextExistingCode = nextEntity as ExistingCode;
+
+            return this.ParentZone.Name.Equals(nextExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
+                && this.CodeEntity.Code == nextExistingCode.CodeEntity.Code;
+        }
     }
     public class ExistingCodesByCodeValue : Dictionary<string, List<ExistingCode>>
     {

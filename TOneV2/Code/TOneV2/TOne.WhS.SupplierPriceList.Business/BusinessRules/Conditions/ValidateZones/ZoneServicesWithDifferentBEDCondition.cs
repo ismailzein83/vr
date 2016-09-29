@@ -23,13 +23,31 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedDataByZone importedDataByZone = context.Target as ImportedDataByZone;
 
-            foreach (ImportedZoneService importedZoneService in importedDataByZone.ImportedZoneServices)
-            {
-                if (importedDataByZone.ImportedZoneServices.FindRecord(item => item.ServiceId == importedZoneService.ServiceId && item.BED != importedZoneService.BED) != null)
+            foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
+                if (item.Value.Any(itm => itm.BED != item.Value.First().BED))
                     return false;
+
+            List<ImportedZoneService> importedZoneServices = new List<ImportedZoneService>();
+
+            foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
+                importedZoneServices.Add(item.Value.First());
+
+            bool result;
+
+            if (result = importedZoneServices.All(item => item.BED != importedZoneServices.First().BED))
+            {
+                DateTime zoneServiceWithMinBED = importedZoneServices.Min(item => item.BED);
+
+                importedDataByZone.ImportedZoneServiceGroup = new ImportedZoneServiceGroup()
+                {
+                    ServiceIds = importedZoneServices.Select(item => item.ServiceId).ToList(),
+                    ZoneName = importedDataByZone.ZoneName,
+                    BED = zoneServiceWithMinBED,
+                    EED = importedZoneServices.First().EED
+                };
             }
 
-            return true;
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

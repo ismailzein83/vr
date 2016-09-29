@@ -27,7 +27,13 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EED; }
         }
 
-       
+        public bool IsSameEntity(IExistingEntity nextEntity)
+        {
+            ExistingRate nextExistingRate = nextEntity as ExistingRate;
+
+            return this.ParentZone.Name.Equals(nextExistingRate.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
+                && this.RateEntity.NormalRate == nextExistingRate.RateEntity.NormalRate;
+        }
     }
 
     public class ExistingRatesByZoneName

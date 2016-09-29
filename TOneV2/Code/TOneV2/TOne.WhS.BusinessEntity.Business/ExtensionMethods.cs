@@ -72,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return connectedEntities;
         }
 
-        private static List<T> GetConnectedEntitiesToTheRight<T>(List<T> entities) where T : IDateEffectiveSettings
+        private static List<T> GetConnectedEntitiesToTheRight<T>(List<T> entities) where T : IExistingEntity
         {
             List<T> connectedEntities = new List<T>();
 
@@ -81,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var currentElement = entities[i];
                 var nextElement = entities[i + 1];
 
-                if (currentElement.EED.HasValue && currentElement.EED == nextElement.BED)
+                if (currentElement.EED.HasValue && currentElement.EED == nextElement.BED && currentElement.IsSameEntity(nextElement))
                     connectedEntities.Add(nextElement);
                 else
                     break;
@@ -90,7 +90,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return connectedEntities;
         }
 
-        private static List<T> GetConnectedEntitiesToTheLeft<T>(List<T> entities) where T : IDateEffectiveSettings
+        private static List<T> GetConnectedEntitiesToTheLeft<T>(List<T> entities) where T : IExistingEntity
         {
             List<T> connectedEntities = new List<T>();
 
@@ -99,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var currentElement = entities[i];
                 var previousElement = entities[i - 1];
 
-                if (previousElement.EED.HasValue && currentElement.BED == previousElement.EED)
+                if (previousElement.EED.HasValue && currentElement.BED == previousElement.EED && currentElement.IsSameEntity(previousElement))
                     connectedEntities.Add(previousElement);
                 else
                     break;
