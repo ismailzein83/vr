@@ -60,48 +60,13 @@ END
 
 --[sec].[BusinessEntityModule]----------1501 to 1600------------------------------------------------
 BEGIN
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1501,'Deals',201,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
+set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('FD41836C-146A-404A-9D4D-124C42757F3D',1501,'Deals','D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 ----------------------------------------------------------------------------------------------------
 END
 
 --[sec].[BusinessEntity]----------------4501 to 4800------------------------------------------------
 BEGIN
-set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(4501,'WhS_BE_Deal','Deal',1501,0,'["View","Add","Edit"]'),
-(4502,'WhS_BE_Deal_Analysis','Deal Analysis',1501,0,'["View","Add","Edit"]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('F6B59F7B-280D-47B9-87B8-8E433DF407E1',4501,'WhS_BE_Deal','Deal','FD41836C-146A-404A-9D4D-124C42757F3D',1501,0,'["View","Add","Edit"]'),('F45F9A2A-3C91-42B5-84FE-E6C5329D38DC',4502,'WhS_BE_Deal_Analysis','Deal Analysis','FD41836C-146A-404A-9D4D-124C42757F3D',1501,0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 ----------------------------------------------------------------------------------------------------
 END
 

@@ -61,26 +61,7 @@ end
 
 --[sec].[BusinessEntityModule]-------------601 to 700---------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(601,'Business Process',2,0),
-(602,'WorkFlows',601,0),
-(603,'Business Process',-1,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
+set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B6B8F582-4759-43FB-9220-AA7662C366EA',601,'Business Process','61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,0),('04493174-83F0-44D6-BBE4-DBEB8B57875A',602,'WorkFlows','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0),('954705D8-ABC5-41AB-BDB2-FEC686C7BE09',603,'Business Process','7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 --------------------------------------------------------------------------------------------------------------
 
 end
@@ -88,29 +69,7 @@ end
 
 --[sec].[BusinessEntity]-------------------1501 to 1800---------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1501,'BusinessProcess_BP_BPDefinition','Management',601,0,'["View"]'),
-(1502,'BusinessProcess_BP_BPTask','BPTask',601,0,'["View"]'),
-(1503,'BusinessProcess_BP_BPInstance_Log','BPInstance Tracking',601,0,'["View","Monitor"]'),
-(1504,'BusinessProcess_BP_BusinessRuleSet','Business Rule Set',601,0,'["View", "Add", "Edit"]'),
-(1505,'BusinessProcess_BP_BPTechnicalDefinition','BP Technical Definition',603,0,'["View", "Edit"]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
-
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('E1A6D6CB-0433-4B82-9945-A25887700823',1501,'BusinessProcess_BP_BPDefinition','Management','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0,'["View"]'),('5658DA29-1AAC-4CC2-A621-BD96816E933E',1502,'BusinessProcess_BP_BPTask','BPTask','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0,'["View"]'),('6EAFABC4-BDB8-469E-B215-C1D82B1BEA47',1503,'BusinessProcess_BP_BPInstance_Log','BPInstance Tracking','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0,'["View","Monitor"]'),('F6A8698F-6056-4CD5-BE9F-EA34BF6B8716',1504,'BusinessProcess_BP_BusinessRuleSet','Business Rule Set','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0,'["View", "Add", "Edit"]'),('2BD8386C-5ADB-4E80-83A3-740C19F042F2',1505,'BusinessProcess_BP_BPTechnicalDefinition','BP Technical Definition','954705D8-ABC5-41AB-BDB2-FEC686C7BE09',603,0,'["View", "Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 end
 

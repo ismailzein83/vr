@@ -31,10 +31,6 @@ as (select * from (values
 
 ('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_System_Log: View'),
 
-('VRCommon/EmailTemplate/GetFilteredEmailTemplates','VRCommon_EmailTemplates:View'),
-('VRCommon/EmailTemplate/UpdateEmailTemplate','VRCommon_EmailTemplates:Edit'),
-('VRCommon/EmailTemplate/GetEmailTemplate',null),
-
 ('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings:View'),
 ('VRCommon/Settings/UpdateSetting','VRCommon_Settings:Edit'),
 ('VRCommon/Settings/GetSetting',null),
@@ -78,64 +74,13 @@ end
 
 --[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
 begin
-
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(201,'Business Entities',1,0),
-(202,'Lookups',201,0),
-(203,'System',2,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
+set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,'Business Entities','5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),('8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,'Lookups','5A9E78AE-229E-41B9-9DBF-492997B42B61',201,0),('0BA03544-A3D8-4570-8855-5162B42B50AB',203,'System','61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 --------------------------------------------------------------------------------------------------------------
 end
 
-
 --[sec].[BusinessEntity]------------------301 to 600----------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'VRCommon_Country','Country',202,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
-(305,'VRCommon_City','City',202,0,'["View","Add","Edit"]'),
-(306,'VRCommon_Currency','Currency',202,0,'["View"]'),
-(307,'VRCommon_CurrencyExchangeRate','Currency Exchange Rate',202,0,'["View"]'),
-(308,'VRCommon_RateType','Rate Type',202,0,'["View"]'),
-
-(302,'VRCommon_System_Log','Logs',203,0,'["View"]'),
-(303,'VRCommon_EmailTemplates','Email Templates',203,0,'["View", "Edit"]'),
-(304,'VRCommon_Settings','Settings',203,0,'["View", "Edit"]'),
-(330,'VRCommon_VRObjectTypeDefinition','Object Type Definition',203,0,'["View","Add","Edit"]'),
-(331,'VRCommon_VRMailMessageType','Mail Message Type',203,0,'["View","Add","Edit"]'),
-(332,'VRCommon_VRMailMessageTemplate','Mail Message Template',203,0,'["View","Add","Edit"]'),
-(350,'VRCommon_TimeZone','Time Zone',202,0,'["View","Add","Edit"]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
-
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('A91EFECE-00E1-4900-982F-68F01A7185D0',301,'VRCommon_Country','Country','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),('9A285D4E-D4A6-4ABA-A5DA-22E7E237E808',305,'VRCommon_City','City','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,0,'["View","Add","Edit"]'),('92EA996E-C5E9-4937-9157-7CD36EF0DA37',306,'VRCommon_Currency','Currency','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,0,'["View"]'),('99E37CF7-98B2-48F0-9050-28D473C23D43',307,'VRCommon_CurrencyExchangeRate','Currency Exchange Rate','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,0,'["View"]'),('8BE95D10-688E-40F3-99C1-86397A51AE9B',308,'VRCommon_RateType','Rate Type','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,0,'["View"]'),('A1DBA375-456A-4769-AD55-CC12C61C721F',350,'VRCommon_TimeZone','Time Zone','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',202,0,'["View","Add","Edit"]'),('70B312DC-AA2D-4565-A70C-407FBA3A7D78',302,'VRCommon_LogAttribute','Logs','0BA03544-A3D8-4570-8855-5162B42B50AB',203,0,'["View"]'),('A4FCC225-8614-43D7-8147-B474502C5D78',304,'VRCommon_Settings','Settings','0BA03544-A3D8-4570-8855-5162B42B50AB',203,0,'["View", "Edit"]'),	('62DBAA63-9427-42CD-81DA-BD5E422B0083',330,'VRCommon_VRObjectTypeDefinition','Object Type Definition','0BA03544-A3D8-4570-8855-5162B42B50AB',203,0,'["View","Add","Edit"]'),('8DA97941-F843-479E-A941-83647F57A0A0',331,'VRCommon_VRMailMessageType','Mail Message Type','0BA03544-A3D8-4570-8855-5162B42B50AB',203,0,'["View","Add","Edit"]'),('D884B97B-E179-4ED5-B09B-5EA69F274DA8',332,'VRCommon_VRMailMessageTemplate','Mail Message Template','0BA03544-A3D8-4570-8855-5162B42B50AB',203,0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 end
 

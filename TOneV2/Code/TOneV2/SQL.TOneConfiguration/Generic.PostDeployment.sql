@@ -85,56 +85,13 @@ end
 
 --[sec].[BusinessEntityModule]-------------301 to 400---------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'Generic Data',-1,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
+set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('311764A7-07D6-4615-801B-D83A6EBA7930',301,'Generic Data','7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 --------------------------------------------------------------------------------------------------------------
 end
 
 --[sec].[BusinessEntity]-------------------601 to 900--------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(601,'VR_GenericData_BusinessEntityDefinition','Business Entity Definitions',301,0,'["View","Add","Edit"]'),
-(602,'VR_GenericData_GenericRuleDefinition','Generic Rule Definition',301,0,'["View","Add","Edit"]'),
-(603,'VR_GenericData_DataTransformationDefinition','Data Transformation Definition',301,0,'["View","Add","Edit","Compile"]'),
-(604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item',301,0,'["Add","Edit"]'),
-(605,'VR_GenericData_DataRecordType','Data Record Type',301,0,'["View","Add","Edit"]'),
-(606,'VR_GenericData_DataStore','Data Store',301,0,'["View","Add","Edit"]'),
-(607,'VR_GenericData_DataRecordStorage','Data Record Storage',301,0,'["View","Add","Edit"]'),
-(608,'VR_GenericData_SummaryTransformationDefinition','Summary Transformation Definition',301,0,'["View","Add","Edit"]'),
-(609,'VR_GenericData_BELookupRuleDefinition','BE Lookup Rule Definition',301,0,'["View","Add","Edit"]'),
-(610,'VR_GenericData_DataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice',301,0,'["View","Add","Edit"]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('4F413B73-7FB2-45A9-8EE2-699B5E7DDD24',601,'VR_GenericData_BusinessEntityDefinition','Business Entity Definitions','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('3AD389CC-BED9-49A1-99D6-9666A3E30EC8',602,'VR_GenericData_GenericRuleDefinition','Generic Rule Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('5B3742FE-0CF7-46FC-B1DE-77753F0F28D7',603,'VR_GenericData_DataTransformationDefinition','Data Transformation Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit","Compile"]'),('22ADAE7B-3EE5-418E-A361-BEE72CDDC48A',604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["Add","Edit"]'),('ABEAD8FB-8301-45AE-AB09-01F4DC73F51D',605,'VR_GenericData_DataRecordType','Data Record Type','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('D915CBAE-F56F-41FE-84A5-40829361803A',606,'VR_GenericData_DataStore','Data Store','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('82D96F7A-C7B3-4D8E-B991-28F97EB959FC',607,'VR_GenericData_DataRecordStorage','Data Record Storage','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('D709A1DD-EEDF-47EE-B7D8-5E02253A99F6',608,'VR_GenericData_SummaryTransformationDefinition','Summary Transformation Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('CECB0A6C-1B05-410B-9C45-4651759C7A8C',609,'VR_GenericData_BELookupRuleDefinition','BE Lookup Rule Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('221708DC-4A56-431B-9C0B-A868118BA215',610,'VR_GenericData_DataRecordFieldChoice','DataRecord Field Choice','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 end
 

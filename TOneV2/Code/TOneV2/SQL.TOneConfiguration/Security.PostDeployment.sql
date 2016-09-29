@@ -140,56 +140,13 @@ end
 
 --[sec].[BusinessEntityModule]------------------------1 to 100----------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Root',null,0),
-(2,'Administration',1,0),
-(3,'Security',2,0),
-(-1,'System Configuration',1,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
+set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('5A9E78AE-229E-41B9-9DBF-492997B42B61',1,'Root',null,null,0),('7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,'System Configuration','5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),('61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,'Administration','5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),('5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,'Security','61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 ------------------------------------------------------------------------------------------------------------
 end
 
 --[sec].[BusinessEntity]------------------1 to 300----------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'VR_Sec_Users','Users',3,0,'["View", "Add", "Edit", "Reset Password"]'),
-(2,'VR_Sec_Group','Groups',3,0,'["View", "Add", "Edit"]'),
-(3,'VR_Sec_View','Ranking Page',3,0,'["View", "Add", "Edit"]'),
-(4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),
-(5,'VR_Sec_BusinessEntity','Business Entity',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]'),
-(6,'VR_Sec_Tenants','Tenants',3,0,'["View", "Add", "Edit"]')
-
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B4158657-230E-40BF-B88C-F2B2CA8835DE',1,'VR_Sec_Users','Users','5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit", "Reset Password"]'),('720069F9-753C-45E3-BF31-EC3C5AA1DD33',2,'VR_Sec_Group','Groups','5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit"]'),('102B6C02-7D5D-4768-B65B-87BB141EAADC',3,'VR_Sec_View','Ranking Page','5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit"]'),('0FC55A70-CA73-426C-AFB1-6F5A72004926',4,'VR_Sec_Permission','Permission','5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),('92E7AFD2-02F5-4C55-91A6-18D4051C4F6C',5,'VR_Sec_BusinessEntity','Business Entity','5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]'),('CBF75F7A-DD92-46C2-B4B2-422B309E4B68',6,'VR_Sec_Tenants','Tenants','7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0,'["View", "Add", "Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 ------------------------------------------------------------------------------------------------------------
 end
 
