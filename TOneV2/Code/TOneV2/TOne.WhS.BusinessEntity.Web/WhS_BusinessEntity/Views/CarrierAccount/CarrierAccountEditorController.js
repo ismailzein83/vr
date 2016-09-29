@@ -17,8 +17,17 @@
 
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var activationStatusSelectorAPI;
         var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+        var cusRoutingStatusSelectorAPI;
+        var cusRoutingStatusSelectorReadyPromiseDeferred ;//= UtilsService.createPromiseDeferred();
+
+
+        var supRoutingStatusSelectorAPI;
+        var supRoutingStatusSelectorReadyPromiseDeferred;//= UtilsService.createPromiseDeferred();
 
         var zoneServiceConfigSelectorAPI;
 
@@ -124,6 +133,23 @@
                 activationStatusSelectorReadyPromiseDeferred.resolve();
             }
 
+            $scope.scopeModel.onCustomerRoutingStatusDirectiveReady = function (api) {
+                cusRoutingStatusSelectorAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomer = value };
+                var payload = {
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != undefined ? carrierAccountEntity.CustomerSettings.RoutingStatus : null)
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, cusRoutingStatusSelectorAPI, payload, setLoader);
+            }
+            $scope.scopeModel.onSupplierRoutingStatusDirectiveReady = function (api) {
+
+                supRoutingStatusSelectorAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSupplier = value };
+                var payload = {
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.RoutingStatus : null)
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supRoutingStatusSelectorAPI, payload, setLoader);
+            }
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
@@ -214,7 +240,7 @@
                 loadAllControls();
         }
 
-        function loadAllControls() {//, loadCustomerTimeSelector, loadSupplierTimeSelector
+        function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -302,6 +328,9 @@
             })
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
+
+       
+      
         function loadBPBusinessRuleSetSelector() {
             var loadBPBusinessRuleSetSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             bpBusinessRuleSetReadyPromiseDeferred.promise.then(function () {
@@ -376,10 +405,13 @@
                 },
                 SupplierSettings: {
                     DefaultServices:($scope.scopeModel.showZoneServiceConfig == true) ? getSelectedDefaultServices() : null,
-                    TimeZoneId: ($scope.scopeModel.showZoneServiceConfig == true) ? supplierTimeDirectiveAPI.getSelectedIds() : undefined
+                    TimeZoneId: ($scope.scopeModel.showZoneServiceConfig == true) ? supplierTimeDirectiveAPI.getSelectedIds() : undefined,
+                    RoutingStatus:  customerTimeDirectiveAPI!=undefined ? customerTimeDirectiveAPI.getSelectedIds() : undefined
+
                 },
                 CustomerSettings: {
-                    TimeZoneId: ($scope.scopeModel.showSellingNumberPlan == true) ? customerTimeDirectiveAPI.getSelectedIds() : undefined
+                    TimeZoneId: ($scope.scopeModel.showSellingNumberPlan == true) ? customerTimeDirectiveAPI.getSelectedIds() : undefined,
+                    RoutingStatus: supplierTimeDirectiveAPI != undefined ? supplierTimeDirectiveAPI.getSelectedIds() : undefined
                 }
             };
 

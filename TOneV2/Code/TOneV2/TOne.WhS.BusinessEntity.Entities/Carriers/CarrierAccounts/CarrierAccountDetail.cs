@@ -14,5 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
        public string SellingNumberPlanName { get; set; }
        public string ActivationStatusDescription { get; set; }
        public CarrierAccount Entity { get; set; }
+       public List<int> Services { get; set; }
     }
 }

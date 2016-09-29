@@ -22,7 +22,7 @@
                                            selectedvalues="scopeModel.selectedCarrierAccountType" onselectionchanged="scopeModel.onCarrierTypeSelectionChanged" />
                             </vr-columns>
                         </span>
-                        
+
 
                         <vr-columns width="1/2row">
                             <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true"></vr-common-currency-selector>
@@ -65,6 +65,11 @@
                             <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModel.sellingNumberPlan" on-ready="scopeModel.onSellingNumberPlanDirectiveReady" isrequired="scopeModel.showSellingNumberPlan">
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
+                        <vr-columns width="1/2row">
+
+                            <vr-whs-be-routingstatus-selector  hideremoveicon="true" isrequired on-ready="scopeModel.onCustomerRoutingStatusDirectiveReady">
+                            </vr-whs-be-routingstatus-selector>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
@@ -80,6 +85,10 @@
                                                                     ismultipleselection="true">
                             </vr-whs-be-zone-service-config-selector>
                         </span>
+                        <vr-columns width="1/2row">
+                            <vr-whs-be-routingstatus-selector hideremoveicon="true" isrequired on-ready="scopeModel.onSupplierRoutingStatusDirectiveReady">
+                            </vr-whs-be-routingstatus-selector>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

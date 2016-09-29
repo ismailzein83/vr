@@ -12,6 +12,8 @@
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred;
 
+        var serviceDirectiveAPI;
+
         var activationStatusSelectorAPI;
         var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -38,6 +40,10 @@
                 sellingNumberPlanDirectiveAPI = api;
             }
 
+            $scope.onZoneServiceConfigSelectorReady = function (api) {
+                serviceDirectiveAPI = api;
+            }
+
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
@@ -47,6 +53,7 @@
                 if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
                     if (sellingNumberPlanDirectiveAPI != undefined) {
                         $scope.showSellingNumberPlan = true;
+                        
                         var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader);
                     }
@@ -56,6 +63,18 @@
                     $scope.selectedSellingNumberPlans.length = 0;
                 }
 
+                if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Supplier) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)){
+                    if (serviceDirectiveAPI != undefined) {
+                        $scope.showZoneService = true;
+
+                        var setLoader = function (value) { $scope.isLoadingService = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, serviceDirectiveAPI, undefined, setLoader);
+                    }
+                }
+                else {
+                    $scope.showZoneService = false;
+                    $scope.servicesValues.length = 0;
+                }
             }
 
             $scope.selectedCarrierAccountTypes = [];
@@ -72,7 +91,8 @@
                     CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
                     Name: $scope.name,
                     SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                    ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds()
+                    ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
+                    Services: serviceDirectiveAPI.getSelectedIds()
                 };
                 return data;
             }

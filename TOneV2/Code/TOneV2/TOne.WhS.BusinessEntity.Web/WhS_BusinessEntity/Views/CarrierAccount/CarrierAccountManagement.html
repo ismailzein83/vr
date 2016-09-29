@@ -23,6 +23,14 @@
                     </vr-whs-be-sellingnumberplan-selector>
                 </span>
 
+                <span  ng-show="showZoneService">
+                    <vr-whs-be-zone-service-config-selector on-ready="onZoneServiceConfigSelectorReady"
+                                                            selectedvalues="servicesValues"
+                                                            normal-col-num="2"
+                                                            ismultipleselection="true">
+                    </vr-whs-be-zone-service-config-selector>
+                </span>
+
 
             </vr-row>
         </div>

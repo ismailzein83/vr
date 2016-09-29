@@ -64,7 +64,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 &&
                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
                 &&
-                (input.Query.SellingNumberPlanIds == null || (item.AccountType == CarrierAccountType.Supplier || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId)));
+                (input.Query.SellingNumberPlanIds == null || (item.AccountType == CarrierAccountType.Supplier || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId)))
+                 &&
+                (input.Query.Services == null || (item.AccountType == CarrierAccountType.Customer || input.Query.Services.All(x=>  item.SupplierSettings.DefaultServices.Select(y=>y.ServiceId).Contains(x))));
+
 
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
@@ -601,6 +604,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (carrierAccount.CarrierAccountSettings != null)
                 carrierAccountDetail.ActivationStatusDescription = Vanrise.Common.Utilities.GetEnumDescription(carrierAccount.CarrierAccountSettings.ActivationStatus);
+            if ((carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && carrierAccount.SupplierSettings != null && carrierAccount.SupplierSettings.DefaultServices.Count > 0)
+                carrierAccountDetail.Services = carrierAccount.SupplierSettings.DefaultServices.Select(x => x.ServiceId).ToList();       
+
 
             return carrierAccountDetail;
         }
