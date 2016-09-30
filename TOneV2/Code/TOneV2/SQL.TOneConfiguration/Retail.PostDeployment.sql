@@ -177,58 +177,13 @@ END
 
 --[sec].[BusinessEntityModule]--------------------1701 to 1800--------------------------------------
 BEGIN
+set nocount on;;with cte_data([ID],[OldId],[Name],[OldParentId],[ParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('FC73B0DB-502B-4739-AB3B-AE680F0DAD58',1701,'Entities Definition',-1,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[OldParentId],[ParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[OldParentId] = s.[OldParentId],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[OldParentId],[ParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[OldParentId],s.[ParentId],s.[BreakInheritance]);
 ----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1701,'Entities Definition',-1,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
 END
 
 --[sec].[BusinessEntity]-------------------5401 to 5700-------------------------------------------------------
 BEGIN
-set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(5401,'BusinessProcess_BP_Account_Action','Account Action',602,0,'["View", "StartInstance", "ScheduleTask"]'),
-(5402,'BusinessProcess_BP_Source_BE_Sync','Source BE Sync',602,0,'["View", "StartInstance", "ScheduleTask"]'),
-(5403,'Retail_BE_Package','Retail_BE_Package',201,0,'["View","Add","Edit"]'),
-(5404,'Retail_BE_Account','Account',201,0,'["View","Add","Edit"]'),
-(5405,'Retail_BE_AccountPackage','Account Package',201,0,'["View","Add","Edit"]'),
-(5406,'Retail_BE_ChargingPolicy','Charging Policy',201,0,'["View","Add","Edit"]'),
-(5407,'Retail_BE_AccountType','Account Type',1701,0,'["View","Add","Edit"]'),
-(5408,'Retail_BE_ServiceType','Service Type',1701,0,'["View","Edit"]'),
-(5409,'Retail_BE_StatusDefinition','Status Definition',1701,0,'["View","Add","Edit"]'),
-(5410,'Retail_BE_AccountPartDefinition','Account Part Definition',1701,0,'["View","Add","Edit"]'),
-(5411,'Retail_BE_ActionDefinition','Action Definition',1701,0,'["View","Add","Edit"]'),
-(5412,'VRCommon_StyleDefinition','Style Definition',1701,0,'["View","Add","Edit"]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
+set nocount on;;with cte_data([ID],[OldId],[Name],[Title],[OleModuleId],[ModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('0B0572AC-ABFB-4267-8F51-D2480851D14A',5401,'BusinessProcess_BP_Account_Action','Account Action',602,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),('FDB996F9-9157-4778-897E-3F2DED954297',5402,'BusinessProcess_BP_Source_BE_Sync','Source BE Sync',602,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),('BE4E62AA-CCE6-48AD-94ED-87D54A605D35',5403,'Retail_BE_Package','Retail BE Package',201,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),('0B08F2E1-6518-46FF-B669-0256CF9BB7D4',5404,'Retail_BE_Account','Account',201,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package',201,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),('2045E39B-B9AA-4720-AD1E-7DEF11985335',5406,'Retail_BE_ChargingPolicy','Charging Policy',201,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),('45729623-D9B0-401C-8F23-7656ED03AB61',5407,'Retail_BE_AccountType','Account Type',1701,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),('1B380EE1-16E1-4A9B-9165-55252E333E9E',5408,'Retail_BE_ServiceType','Service Type',1701,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Edit"]'),('503E011C-3311-43C2-92D7-EA515D790479',5409,'Retail_BE_StatusDefinition','Status Definition',1701,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),('A8B32E85-079D-4376-BA28-67468B27BDC8',5410,'Retail_BE_AccountPartDefinition','Account Part Definition',1701,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),('5790CCC4-5B3F-4AD3-8EB5-BBC7EE977D25',5411,'Retail_BE_ActionDefinition','Action Definition',1701,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),('2E0AFB92-BC85-4159-82B3-663765B161B9',5412,'VRCommon_StyleDefinition','Style Definition',1701,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[Title],[OleModuleId],[ModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[OleModuleId] = s.[OleModuleId],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([ID],[OldId],[Name],[Title],[OleModuleId],[ModuleId],[BreakInheritance],[PermissionOptions])	values(s.[ID],s.[OldId],s.[Name],s.[Title],s.[OleModuleId],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 
 END
