@@ -38,7 +38,7 @@ namespace Vanrise.GenericData.Business
             return GetAllRules().GetRecord(ruleId);
         }
 
-        public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
+        public T GetMatchRule(Guid ruleDefinitionId, GenericRuleTarget target)
         {
             if (target == null)
                 throw new ArgumentNullException("target");
@@ -93,7 +93,7 @@ namespace Vanrise.GenericData.Business
             return fieldDefinition.FieldType;
         }
 
-        private static GenericRuleDefinition GetRuleDefinition(int ruleDefinitionId)
+        private static GenericRuleDefinition GetRuleDefinition(Guid ruleDefinitionId)
         {
             var ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(ruleDefinitionId);
 
@@ -156,7 +156,7 @@ namespace Vanrise.GenericData.Business
                 }
                 else
                     return false;
-            }
+            } 
 
             return true;
         }
@@ -166,7 +166,7 @@ namespace Vanrise.GenericData.Business
             return rule.AreSettingsMatched(ruleDefinition.SettingsDefinition, settingsFilterValue);
         }
 
-        private RuleTree GetRuleTree(int ruleDefinitionId)
+        private RuleTree GetRuleTree(Guid ruleDefinitionId)
         {
             String cacheName = String.Format("GenericRuleManager<T>_GetRuleTree_{0}", ruleDefinitionId);
             return GetCachedOrCreate(cacheName, () =>
@@ -201,8 +201,8 @@ namespace Vanrise.GenericData.Business
             behavior.FieldName = ruleDefinitionCriteriaField.FieldName;
             return behavior as BaseRuleStructureBehavior;
         }
-                
-        private void FillTargetEvaluatedCriterias(GenericRuleTarget target, int ruleDefinitionId)
+
+        private void FillTargetEvaluatedCriterias(GenericRuleTarget target, Guid ruleDefinitionId)
         {
             if (target.TargetFieldValues == null)
                 target.TargetFieldValues = new Dictionary<string, object>();
@@ -226,7 +226,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        private List<CriteriaEvaluationInfo> GetCachedCriteriaEvaluationInfos(int ruleDefinitionId)
+        private List<CriteriaEvaluationInfo> GetCachedCriteriaEvaluationInfos(Guid ruleDefinitionId)
         {
             string cacheName = String.Format("GetCachedCriteriaEvaluationInfos_{0}", ruleDefinitionId);
             return GetCachedOrCreate(cacheName, () =>
