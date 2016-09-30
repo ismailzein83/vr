@@ -68,7 +68,7 @@ namespace Retail.BusinessEntity.RingoExtensions
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
                 },
-                DefinitionId = 17,
+                DefinitionId = new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"),
                 Description = string.Format("{0} Identification Rule", accountName)
             };
             rule.Criteria.FieldsValues.Add("MSISDN", new StaticValues

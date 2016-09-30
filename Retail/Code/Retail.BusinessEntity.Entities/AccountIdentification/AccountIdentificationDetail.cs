@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public long GenericRuleId { get; set; }
 
-        public long GenericRuleDefinitionId { get; set; }
+        public Guid GenericRuleDefinitionId { get; set; }
 
         public string Description { get; set; }
 

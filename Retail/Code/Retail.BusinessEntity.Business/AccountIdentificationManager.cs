@@ -34,7 +34,7 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllAccountsMappingRulesByAccountId",
                 () =>
                 {
-                    HashSet<int> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds();
+                    HashSet<Guid> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds();
                     MappingRuleManager mappingRuleManager = new MappingRuleManager();
                     var allRules = mappingRuleManager.GetAllRules().FindAllRecords(itm => accountMappingRuleDefinitionIds.Contains(itm.DefinitionId));
                     if (allRules != null)
@@ -54,12 +54,12 @@ namespace Retail.BusinessEntity.Business
                 });
         }
 
-        HashSet<int> GetAccountMappingRuleDefinitionsIds()
+        HashSet<Guid> GetAccountMappingRuleDefinitionsIds()
         {
             var accountMappingRuleDefinitions = GetAccountMappingRuleDefinitions();
             if (accountMappingRuleDefinitions == null)
-                return new HashSet<int>();
-            return new HashSet<int>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
+                return new HashSet<Guid>();
+            return new HashSet<Guid>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
         }
 
         private static IEnumerable<GenericRuleDefinition> GetAccountMappingRuleDefinitions()

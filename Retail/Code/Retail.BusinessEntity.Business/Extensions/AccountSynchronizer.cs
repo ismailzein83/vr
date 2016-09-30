@@ -34,7 +34,7 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        IGenericRuleManager GetRuleManager(int ruleDefinitionId)
+        IGenericRuleManager GetRuleManager(Guid ruleDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
