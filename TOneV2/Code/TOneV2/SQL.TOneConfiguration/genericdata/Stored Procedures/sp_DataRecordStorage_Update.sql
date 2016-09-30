@@ -6,7 +6,7 @@
 CREATE PROCEDURE [genericdata].[sp_DataRecordStorage_Update]
 	@Id INT,
 	@Name NVARCHAR(1000),
-	@DataRecordTypeId INT,
+	@DataRecordTypeId uniqueidentifier,
 	@DataStoreId INT,
 	@Settings NVARCHAR(MAX)
 AS

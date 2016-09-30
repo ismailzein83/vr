@@ -4,16 +4,17 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_DataRecordType_Insert]
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
-	@ParentId INT,
-	@Fields VARCHAR(MAX),
-	@ID INT OUT
+	@ParentId uniqueidentifier,
+	@Fields VARCHAR(MAX)
+	
 AS
 BEGIN
 IF NOT EXISTS(SELECT 1 FROM genericdata.[DataRecordType] WHERE Name = @Name)
 	BEGIN
-		INSERT INTO genericdata.[DataRecordType](Name,ParentID,Fields)
-		VALUES (@Name,@ParentId,@Fields)
-		SET @ID = SCOPE_IDENTITY() 
+		INSERT INTO genericdata.[DataRecordType](ID,Name,ParentID,Fields)
+		VALUES (@ID,@Name,@ParentId,@Fields)
+
 	END
 END

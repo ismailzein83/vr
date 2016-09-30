@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_DataRecordStorage_Insert]
 	@Name NVARCHAR(1000),
-	@DataRecordTypeId INT,
+	@DataRecordTypeId uniqueidentifier,
 	@DataStoreId INT,
 	@Settings NVARCHAR(MAX),
 	@CreatedTime DATETIME = NULL,

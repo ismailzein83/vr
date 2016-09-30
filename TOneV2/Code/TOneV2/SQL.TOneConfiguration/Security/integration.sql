@@ -1,7 +1,5 @@
-﻿CREATE SCHEMA [queue]
+﻿CREATE SCHEMA [integration]
     AUTHORIZATION [dbo];
-
-
 
 
 

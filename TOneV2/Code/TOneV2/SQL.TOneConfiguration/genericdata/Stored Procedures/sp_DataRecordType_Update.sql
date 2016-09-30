@@ -3,10 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [genericdata].[sp_DataRecordType_Update]
-	@ID INT,
+CREATE PROCEDURE [genericdata].[sp_DataRecordType_Update]
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
-	@ParentId INT,
+	@ParentId uniqueidentifier,
 	@Fields VARCHAR(MAX)
 	
 AS
