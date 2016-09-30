@@ -9,10 +9,10 @@ namespace Vanrise.GenericData.Data
 {
     public interface IGenericBusinessEntityDataManager:IDataManager
     {
-        List<GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(int businessDefinitionId);
+        List<GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(Guid businessDefinitionId);
         bool AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity, out long genericBusinessEntityId);
         bool UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity);
-        bool DeleteGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId);
-        bool AreGenericBusinessEntityUpdated(int parameter, ref object updateHandle);
+        bool DeleteGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId);
+        bool AreGenericBusinessEntityUpdated(Guid parameter, ref object updateHandle);
     }
 }

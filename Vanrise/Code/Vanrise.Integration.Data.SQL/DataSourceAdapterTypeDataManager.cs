@@ -12,7 +12,7 @@ namespace Vanrise.Integration.Data.SQL
     public class DataSourceAdapterTypeDataManager : BaseSQLDataManager, IDataSourceAdapterTypeDataManager
     {
         public DataSourceAdapterTypeDataManager()
-            : base(GetConnectionStringName("IntegrationConnStringKey", "IntegrationDBConnString"))
+            : base(GetConnectionStringName("IntegrationConfigDBConnStringKey", "IntegrationConfigDBConnString"))
         {
 
         }

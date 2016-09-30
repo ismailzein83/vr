@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericBEViewSettings : Vanrise.Security.Entities.ViewSettings
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
 
         public override string GetURL(Security.Entities.View view)
         {

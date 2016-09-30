@@ -33,16 +33,15 @@ namespace Vanrise.GenericData.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition, out int insertedId)
+        public bool AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
         {
-            object businessEntityDefinitionId;
             string serializedObj = null;
             if (businessEntityDefinition != null && businessEntityDefinition.Settings != null)
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(businessEntityDefinition.Settings);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityDefinition_Insert", out businessEntityDefinitionId, businessEntityDefinition.Name, businessEntityDefinition.Title, serializedObj);
-            insertedId = (recordesEffected > 0) ? (int)businessEntityDefinitionId : -1;
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityDefinition_Insert", businessEntityDefinition.BusinessEntityDefinitionId, businessEntityDefinition.Name, businessEntityDefinition.Title, serializedObj);
+
 
             return (recordesEffected > 0);
         }
@@ -54,7 +53,7 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new BusinessEntityDefinition()
             {
-                BusinessEntityDefinitionId = (int)reader["ID"],
+                BusinessEntityDefinitionId = GetReaderValue<Guid>( reader,"ID"),
                 Name = (string)reader["Name"],
                 Title = (string)reader["Title"],
                 Settings = Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionSettings>((string)reader["Settings"])

@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Business
                 (input.Query.Name == null || dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return DataRetrievalManager.Instance.ProcessResult(input, cachedBEDefinitions.ToBigResult(input, filterExpression, BusinessEntityDefinitionDetailMapper));
         }
-        public int GetBusinessEntityDefinitionId(string businessEntityDefinitionName)
+        public Guid GetBusinessEntityDefinitionId(string businessEntityDefinitionName)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             var businessEntityDefinition = cachedBEDefinitions.FindRecord(x=>x.Name == businessEntityDefinitionName);
@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException(String.Format("businessEntityDefinition. businessEntityDefinitionName '{0}'", businessEntityDefinitionName));
             return businessEntityDefinition.BusinessEntityDefinitionId;
         }
-        public BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
+        public BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             return cachedBEDefinitions.GetRecord(businessEntityDefinitionId);
@@ -50,7 +50,7 @@ namespace Vanrise.GenericData.Business
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
-        public IBusinessEntityManager GetBusinessEntityManager(int businessEntityDefinitionId)
+        public IBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
         {
             string cacheName = String.Format("GetBusinessEntityManager_{0}", businessEntityDefinitionId);
             Type beManagerType = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -105,13 +105,13 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int businessEntityDefinitionId = -1;
+            businessEntityDefinition.BusinessEntityDefinitionId = Guid.NewGuid();
             IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
-            bool insertActionSucc = dataManager.AddBusinessEntityDefinition(businessEntityDefinition, out businessEntityDefinitionId);
+            bool insertActionSucc = dataManager.AddBusinessEntityDefinition(businessEntityDefinition);
             if (insertActionSucc)
             {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    businessEntityDefinition.BusinessEntityDefinitionId = businessEntityDefinitionId;
+                   
                     insertOperationOutput.InsertedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
 
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -124,18 +124,18 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(int businessEntityDefinitionId)
+        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(Guid businessEntityDefinitionId)
         {
             var viewManager = new Vanrise.Security.Business.ViewManager();
             var allViews = viewManager.GetViews();
             return allViews.FirstOrDefault(v => (v.Settings as GenericBEViewSettings) != null && (v.Settings as GenericBEViewSettings).BusinessEntityDefinitionId == businessEntityDefinitionId);
         }
-        public string GetBusinessEntityDefinitionName(int businessEntityDefinitionId)
+        public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
             return beDefinition != null ? beDefinition.Name : null;
         }
-        public Guid? GetBEDataRecordTypeIdIfGeneric(int businessEntityDefinitionId)
+        public Guid? GetBEDataRecordTypeIdIfGeneric(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
             if (beDefinition != null && beDefinition.Settings != null)
@@ -147,26 +147,26 @@ namespace Vanrise.GenericData.Business
             return null;
         }
 
-        public bool DoesUserHaveViewAccess(int genericBEDefinitionId)
+        public bool DoesUserHaveViewAccess(Guid genericBEDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return DoesUserHaveViewAccess(userId, genericBEDefinitionId);
         }
-        public bool DoesUserHaveViewAccess(int userId, int genericBEDefinitionId)
+        public bool DoesUserHaveViewAccess(int userId, Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
             if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.Security != null && beDefinition.Settings.Security.ViewRequiredPermission != null)
                 return DoesUserHaveAccess(userId, beDefinition.Settings.Security.ViewRequiredPermission);
             return true;
         }
-        public bool DoesUserHaveAddAccess(int genericBEDefinitionId)
+        public bool DoesUserHaveAddAccess(Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
             if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.Security != null && beDefinition.Settings.Security.AddRequiredPermission != null)
                 return DoesUserHaveAccess(beDefinition.Settings.Security.AddRequiredPermission);
             return true;
         }
-        public bool DoesUserHaveEditAccess(int genericBEDefinitionId)
+        public bool DoesUserHaveEditAccess(Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
             if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.Security != null && beDefinition.Settings.Security.EditRequiredPermission != null)
@@ -194,7 +194,7 @@ namespace Vanrise.GenericData.Business
             return true;
 
         }
-        private Dictionary<int, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
+        private Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBusinessEntityDefinitions",
                 () =>

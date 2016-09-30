@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     public class AccountBalanceConfig:SettingData
     {
         public static string AccountBalanceConfigType = "VR_AccountBalance_Configuration";
-        public int AccountBusinessEntityDefinitionId { get; set; }
+        public Guid AccountBusinessEntityDefinitionId { get; set; }
 
         public string AccountSelector { get; set; }
 

@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldBusinessEntityType : DataRecordFieldType
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
         public bool IsNullable { get; set; }
 
         public override DataRecordFieldOrderType OrderType

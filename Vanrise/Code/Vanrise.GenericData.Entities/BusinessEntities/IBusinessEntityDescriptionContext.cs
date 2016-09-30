@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Entities
     {
         dynamic EntityId { get; }
 
-        int EntityDefinitionId { get; }
+        Guid EntityDefinitionId { get; }
 
         BusinessEntityDefinition EntityDefinition { get; }
     }
@@ -28,32 +28,32 @@ namespace Vanrise.GenericData.Entities
 
         dynamic Entity { get; }
 
-        int EntityDefinitionId { get; }
+        Guid EntityDefinitionId { get; }
 
         BusinessEntityDefinition EntityDefinition { get; }
     }
 
     public interface IBusinessEntityGetAllContext
     {
-        int EntityDefinitionId { get; }
+        Guid EntityDefinitionId { get; }
 
         BusinessEntityDefinition EntityDefinition { get; }
     }
 
     public interface IBusinessEntityIsCacheExpiredContext
     {
-        int EntityDefinitionId { get; }
+        Guid EntityDefinitionId { get; }
 
         BusinessEntityDefinition EntityDefinition { get; }
     }
 
     public interface IBusinessEntityGetParentEntityIdContext
     {
-        int EntityDefinitionId { get; }
+        Guid EntityDefinitionId { get; }
         
         BusinessEntityDefinition EntityDefinition { get; }
 
-        int ParentEntityDefinitionId { get; }
+        Guid ParentEntityDefinitionId { get; }
 
         BusinessEntityDefinition ParentEntityDefinition { get; }
 
@@ -64,11 +64,11 @@ namespace Vanrise.GenericData.Entities
 
     public interface IBusinessEntityGetIdsByParentEntityIdContext
     {
-        int EntityDefinitionId { get; }
+        Guid EntityDefinitionId { get; }
 
         BusinessEntityDefinition EntityDefinition { get; }
 
-        int ParentEntityDefinitionId { get; }
+        Guid ParentEntityDefinitionId { get; }
 
         BusinessEntityDefinition ParentEntityDefinition { get; }
 

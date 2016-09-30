@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class ExtensibleBEItemQuery
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
     }
 }

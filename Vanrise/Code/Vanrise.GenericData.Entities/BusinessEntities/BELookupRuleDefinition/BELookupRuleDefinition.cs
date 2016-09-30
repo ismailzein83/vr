@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Entities
 
         public string Name { get; set; }
 
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
 
         public List<BELookupRuleDefinitionCriteriaField> CriteriaFields { get; set; }
     }

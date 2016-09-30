@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetBusinessEntityDefinition")]
-        public BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
+        public BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
         {
             return _manager.GetBusinessEntityDefinition(businessEntityDefinitionId);
         }
@@ -52,14 +52,14 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericBEDefinitionView")]
-        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(int businessEntityDefinitionId)
+        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(Guid businessEntityDefinitionId)
         {
             return _manager.GetGenericBEDefinitionView(businessEntityDefinitionId);
         }
 
         [HttpGet]
         [Route("GetBEDataRecordTypeIdIfGeneric")]
-        public Guid? GetBEDataRecordTypeIdIfGeneric(int businessEntityDefinitionId)
+        public Guid? GetBEDataRecordTypeIdIfGeneric(Guid businessEntityDefinitionId)
         {
             return _manager.GetBEDataRecordTypeIdIfGeneric(businessEntityDefinitionId);
         }

@@ -10,6 +10,6 @@ namespace Vanrise.GenericData.Entities
     {
         public string Name { get; set; }
 
-        public IEnumerable<int> BusinessEntityDefinitionIds { get; set; }
+        public IEnumerable<Guid> BusinessEntityDefinitionIds { get; set; }
     }
 }

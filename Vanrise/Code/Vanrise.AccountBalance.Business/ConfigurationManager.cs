@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Business
 {
     public class ConfigurationManager
     {
-        public int GetAccountBEDefinitionId()
+        public Guid GetAccountBEDefinitionId()
         {
             AccountBalanceConfig config = GetAccountBalanceConfig();
             if (config == null)

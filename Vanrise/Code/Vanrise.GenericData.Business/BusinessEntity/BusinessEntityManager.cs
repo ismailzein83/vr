@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Business
 {
     public class BusinessEntityManager
     {
-        public List<dynamic> GetAllEntities(int businessEntityDefinitionId)
+        public List<dynamic> GetAllEntities(Guid businessEntityDefinitionId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
 
@@ -16,19 +16,19 @@ namespace Vanrise.GenericData.Business
             return beManager.GetAllEntities(getAllEntitiesContext);
         }
 
-        public dynamic GetEntity(int businessEntityDefinitionId, dynamic entityId)
+        public dynamic GetEntity(Guid businessEntityDefinitionId, dynamic entityId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
             return GetEntity(businessEntityDefinitionId, entityId, beManager);
         }
 
-        private dynamic MapEntityToInfo(int businessEntityDefinitionId, string infoType, dynamic entity)
+        private dynamic MapEntityToInfo(Guid businessEntityDefinitionId, string infoType, dynamic entity)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
             return MapEntityToInfo(businessEntityDefinitionId, infoType, entity, beManager);
         }
 
-        public dynamic GetEntityInfo(int businessEntityDefinitionId, string infoType, dynamic entityId)
+        public dynamic GetEntityInfo(Guid businessEntityDefinitionId, string infoType, dynamic entityId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
             var entity = GetEntity(businessEntityDefinitionId, entityId, beManager);
@@ -37,14 +37,14 @@ namespace Vanrise.GenericData.Business
             return MapEntityToInfo(businessEntityDefinitionId, infoType, entity, beManager);
         }
 
-        public dynamic GetParentEntityId(int businessEntityDefinitionId, int parentBusinessEntityDefinitionId, dynamic entityId)
+        public dynamic GetParentEntityId(Guid businessEntityDefinitionId, Guid parentBusinessEntityDefinitionId, dynamic entityId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
             var context = new BusinessEntityGetParentEntityIdContext(businessEntityDefinitionId, parentBusinessEntityDefinitionId, entityId);
             return beManager.GetParentEntityId(context);
         }
-        
-        public IEnumerable<dynamic> GetChildEntitiesIds(int businessEntityDefinitionId, int childBusinessEntityDefinitionId, IEnumerable<dynamic> parentEntitiesIds)
+
+        public IEnumerable<dynamic> GetChildEntitiesIds(Guid businessEntityDefinitionId, Guid childBusinessEntityDefinitionId, IEnumerable<dynamic> parentEntitiesIds)
         {
             List<dynamic> childEntitiesIds = new List<dynamic>();
             var childBeManager = GetBEManager(childBusinessEntityDefinitionId);
@@ -60,7 +60,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        private Entities.IBusinessEntityManager GetBEManager(int businessEntityDefinitionId)
+        private Entities.IBusinessEntityManager GetBEManager(Guid businessEntityDefinitionId)
         {
             var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(businessEntityDefinitionId);
             if (beManager == null)
@@ -68,14 +68,14 @@ namespace Vanrise.GenericData.Business
             return beManager;
         }
 
-        private dynamic GetEntity(int businessEntityDefinitionId, dynamic entityId, Entities.IBusinessEntityManager beManager)
+        private dynamic GetEntity(Guid businessEntityDefinitionId, dynamic entityId, Entities.IBusinessEntityManager beManager)
         {
             var getByIdContext = new BusinessEntityGetByIdContext(businessEntityDefinitionId);
             getByIdContext.EntityId = entityId;
             return beManager.GetEntity(getByIdContext);
         }
 
-        private dynamic MapEntityToInfo(int businessEntityDefinitionId, string infoType, dynamic entity, Entities.IBusinessEntityManager beManager)
+        private dynamic MapEntityToInfo(Guid businessEntityDefinitionId, string infoType, dynamic entity, Entities.IBusinessEntityManager beManager)
         {
             var mapEntityToInfoContext = new BusinessEntityMapToInfoContext(businessEntityDefinitionId);
             mapEntityToInfoContext.InfoType = infoType;

@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericBusinessEntityQuery
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
         public Dictionary<string, object> FilterValuesByFieldPath { get; set; }
     }
 }

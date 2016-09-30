@@ -38,7 +38,7 @@ namespace Vanrise.GenericData.Business
             
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericBusinessEntities.ToBigResult(input, filterExpression, GenericBusinessEntityDetailMapper));
         }
-        public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
+        public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
             return cachedGenericBusinessEntities.GetRecord(genericBusinessEntityId);
@@ -99,7 +99,7 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
             var deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<object>()
             {
@@ -117,12 +117,12 @@ namespace Vanrise.GenericData.Business
 
             return deleteOperationOutput;
         }
-        public IEnumerable<GenericBusinessEntity> GetGenericBusinessEntities(int businessEntityDefinitionId)
+        public IEnumerable<GenericBusinessEntity> GetGenericBusinessEntities(Guid businessEntityDefinitionId)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
             return cachedGenericBusinessEntities.Values;
-        }       
-        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo( int businessEntityDefinitionId,GenericBusinessEntityFilter filter)
+        }
+        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityFilter filter)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
             if (filter != null)
@@ -149,8 +149,8 @@ namespace Vanrise.GenericData.Business
             //    return null;
             //return entityField.GetValue(entity.Details);
         }
-       
-        public GenericBusinessEntityTitle GetBusinessEntityTitle(int businessEntityDefinitionId,long? genericBussinessEntityId = null)
+
+        public GenericBusinessEntityTitle GetBusinessEntityTitle(Guid businessEntityDefinitionId, long? genericBussinessEntityId = null)
         {
            
             var businessEntityDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -170,7 +170,7 @@ namespace Vanrise.GenericData.Business
             return entityTitle;
         }
 
-        public Guid GetDataRecordTypeId(int businessEntityDefinitionId)
+        public Guid GetDataRecordTypeId(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
             if (beDefinition == null)
@@ -187,7 +187,7 @@ namespace Vanrise.GenericData.Business
         #endregion
         
         #region Private Methods
-        private BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
+        private BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
         {
              var businessEntityDefinition = _businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
 
@@ -195,7 +195,7 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException("businessEntityDefinition");
             return businessEntityDefinition;
         }
-        private GenericBEDefinitionSettings GetGenericBEDefinitionSettings(int businessEntityDefinitionId)
+        private GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
         {
 
             var businessEntityDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -237,7 +237,7 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
-        private Dictionary<long, GenericBusinessEntity> GetCachedGenericBusinessEntities(int businessDefinitionId)
+        private Dictionary<long, GenericBusinessEntity> GetCachedGenericBusinessEntities(Guid businessDefinitionId)
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetGenericBusinessEntities_{0}", businessDefinitionId), businessDefinitionId,
                () =>
@@ -246,8 +246,8 @@ namespace Vanrise.GenericData.Business
                    IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId);
                    return genericBusinessEntities.ToDictionary(kvp => kvp.GenericBusinessEntityId, kvp => kvp);
                });
-        }        
-        IEnumerable<GenericFilterRuntimeField> GetGenericFilterRuntimeFields(int businessEntityDefinitionId)
+        }
+        IEnumerable<GenericFilterRuntimeField> GetGenericFilterRuntimeFields(Guid businessEntityDefinitionId)
         {
             GenericManagementRuntime managementRuntime = new GenericUIRuntimeManager().GetManagementRuntime(businessEntityDefinitionId);
             if (managementRuntime == null)
@@ -313,13 +313,13 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Classes
-        
-        public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
+
+        public class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IGenericBusinessEntityDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-            ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();            
+            ConcurrentDictionary<Guid, Object> _updateHandlesByRuleType = new ConcurrentDictionary<Guid, Object>();
 
-            protected override bool ShouldSetCacheExpired(int parameter)
+            protected override bool ShouldSetCacheExpired(Guid parameter)
             {
                 Object updateHandle;
                 _updateHandlesByRuleType.TryGetValue(parameter, out updateHandle);

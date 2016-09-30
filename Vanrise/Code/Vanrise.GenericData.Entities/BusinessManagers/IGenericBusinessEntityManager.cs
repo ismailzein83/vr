@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IGenericBusinessEntityManager : IBusinessManager
     {
-        Guid GetDataRecordTypeId(int businessEntityDefinitionId);
+        Guid GetDataRecordTypeId(Guid businessEntityDefinitionId);
 
     }
 }

@@ -13,7 +13,7 @@ namespace Vanrise.Runtime.Data.SQL
     public class SchedulerTaskActionTypeDataManager : BaseSQLDataManager, ISchedulerTaskActionTypeDataManager 
     {
         public SchedulerTaskActionTypeDataManager()
-            : base(GetConnectionStringName("RuntimeConnStringKey", "RuntimeDBConnString"))
+            : base(GetConnectionStringName("RuntimeConfigDBConnStringKey", "RuntimeConfigDBConnString"))
         {
 
         }

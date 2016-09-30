@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.Business
             return null;
         }
 
-        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int businessEntityId, Guid dataRecordTypeId)
+        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(Guid businessEntityId, Guid dataRecordTypeId)
         {
             ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
             var extensibleBEItem = manager.GetExtensibleBEItem(businessEntityId, dataRecordTypeId);
@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.Business
             return extensibleBEItemRuntime;
         }
 
-        public GenericEditorRuntime GetGenericEditorRuntime(int businessEntityDefinitionId)
+        public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
             var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -58,7 +58,7 @@ namespace Vanrise.GenericData.Business
             return runtimeSections;
         }
 
-        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(Guid businessEntityId)
         {
             ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
             var allExtensibleBEItems = manager.GetAllExtensibleBEItems();
@@ -72,7 +72,7 @@ namespace Vanrise.GenericData.Business
              return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds }).OrderBy(x => x.Name);
         }
 
-        public GenericManagementRuntime GetManagementRuntime(int businessEntityDefinitionId)
+        public GenericManagementRuntime GetManagementRuntime(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
             var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);

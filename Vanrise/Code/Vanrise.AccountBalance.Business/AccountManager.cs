@@ -11,12 +11,12 @@ namespace Vanrise.AccountBalance.Business
     {
         public dynamic GetAccount(long accountId)
         {
-            int accountBEDefinitionId = new ConfigurationManager().GetAccountBEDefinitionId();
+            Guid accountBEDefinitionId = new ConfigurationManager().GetAccountBEDefinitionId();
             return new GenericData.Business.BusinessEntityManager().GetEntity(accountBEDefinitionId, accountId);
         }
         public AccountInfo GetAccountInfo(long accountId)
         {
-            int accountBEDefinitionId = new ConfigurationManager().GetAccountBEDefinitionId();
+            Guid accountBEDefinitionId = new ConfigurationManager().GetAccountBEDefinitionId();
             return new GenericData.Business.BusinessEntityManager().GetEntityInfo(accountBEDefinitionId,AccountInfo.BEInfoType, accountId);
         }
     }

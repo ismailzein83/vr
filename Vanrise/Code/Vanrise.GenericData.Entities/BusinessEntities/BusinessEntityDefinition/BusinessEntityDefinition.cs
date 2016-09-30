@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class BusinessEntityDefinition
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
 
         public string Name { get; set; }
 

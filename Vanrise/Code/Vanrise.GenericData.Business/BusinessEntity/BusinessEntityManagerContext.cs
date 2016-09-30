@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Business
 {
     public class BusinessEntityGetAllContext : BusinessEntityManagerContext, IBusinessEntityGetAllContext
     {
-        public BusinessEntityGetAllContext(int businessEntityDefinitionId)
+        public BusinessEntityGetAllContext(Guid businessEntityDefinitionId)
             : base(businessEntityDefinitionId)
         {
         }
@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.Business
 
     public class BusinessEntityIsCacheExpiredContext : BusinessEntityManagerContext, IBusinessEntityIsCacheExpiredContext
     {
-        public BusinessEntityIsCacheExpiredContext(int businessEntityDefinitionId)
+        public BusinessEntityIsCacheExpiredContext(Guid businessEntityDefinitionId)
             : base(businessEntityDefinitionId)
         {
         }
@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.Business
 
     public class BusinessEntityGetByIdContext : BusinessEntityManagerContext, IBusinessEntityGetByIdContext
     {
-        public BusinessEntityGetByIdContext(int businessEntityDefinitionId)
+        public BusinessEntityGetByIdContext(Guid businessEntityDefinitionId)
             : base(businessEntityDefinitionId)
         {
         }
@@ -51,7 +51,7 @@ namespace Vanrise.GenericData.Business
 
     public class BusinessEntityMapToInfoContext : BusinessEntityManagerContext, IBusinessEntityMapToInfoContext
     {
-        public BusinessEntityMapToInfoContext(int businessEntityDefinitionId)
+        public BusinessEntityMapToInfoContext(Guid businessEntityDefinitionId)
             : base(businessEntityDefinitionId)
         {
         }
@@ -71,16 +71,16 @@ namespace Vanrise.GenericData.Business
 
     public class BusinessEntityGetParentEntityIdContext : BusinessEntityManagerContext, IBusinessEntityGetParentEntityIdContext
     {
-        int _parentEntityDefinitionId;
+        Guid _parentEntityDefinitionId;
         dynamic _entityId;
-        public BusinessEntityGetParentEntityIdContext(int businessEntityDefinitionId, int parentEntityDefinitionId, dynamic entityId)
+        public BusinessEntityGetParentEntityIdContext(Guid businessEntityDefinitionId, Guid parentEntityDefinitionId, dynamic entityId)
             : base(businessEntityDefinitionId)
         {
             _parentEntityDefinitionId = parentEntityDefinitionId;
             _entityId = entityId;
         }
 
-        public int ParentEntityDefinitionId
+        public Guid ParentEntityDefinitionId
         {
             get { return _parentEntityDefinitionId; }
         }
@@ -127,16 +127,16 @@ namespace Vanrise.GenericData.Business
 
     public class BusinessEntityGetIdsByParentEntityIdContext : BusinessEntityManagerContext, IBusinessEntityGetIdsByParentEntityIdContext
     {
-        int _parentEntityDefinitionId;
+        Guid _parentEntityDefinitionId;
         dynamic _parentEntityId;
-        public BusinessEntityGetIdsByParentEntityIdContext(int businessEntityDefinitionId, int parentEntityDefinitionId, dynamic parentEntityId)
+        public BusinessEntityGetIdsByParentEntityIdContext(Guid businessEntityDefinitionId, Guid parentEntityDefinitionId, dynamic parentEntityId)
             : base(businessEntityDefinitionId)
         {
             _parentEntityDefinitionId = parentEntityDefinitionId;
             _parentEntityId = parentEntityId;
         }
 
-        public int ParentEntityDefinitionId
+        public Guid ParentEntityDefinitionId
         {
             get { return _parentEntityDefinitionId; }
         }
@@ -183,10 +183,10 @@ namespace Vanrise.GenericData.Business
 
     public abstract class BusinessEntityManagerContext
     {
-        int _businessEntityDefinitionId;
+        Guid _businessEntityDefinitionId;
         BusinessEntityDefinition _businessEntityDefinition;
 
-        public BusinessEntityManagerContext(int businessEntityDefinitionId)
+        public BusinessEntityManagerContext(Guid businessEntityDefinitionId)
         {
             _businessEntityDefinitionId = businessEntityDefinitionId;
         }
@@ -213,7 +213,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public int EntityDefinitionId
+        public Guid EntityDefinitionId
         {
             get { return _businessEntityDefinitionId; }
         }

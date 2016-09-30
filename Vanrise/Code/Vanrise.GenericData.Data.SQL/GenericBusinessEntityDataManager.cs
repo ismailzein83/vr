@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #region Public Methods
-        public List<Entities.GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(int businessDefinitionId)
+        public List<Entities.GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(Guid businessDefinitionId)
         {
             _dataRecordTypeId = _genericBusinessEntityManager.GetDataRecordTypeId(businessDefinitionId);
             return GetItemsSP("genericdata.sp_GenericBusinessEntity_GetByDefinition", GenericBusinessEntityMapper, businessDefinitionId);
@@ -39,12 +39,12 @@ namespace Vanrise.GenericData.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Update", genericBusinessEntity.GenericBusinessEntityId, genericBusinessEntity.BusinessEntityDefinitionId, GetSerializedDetails(genericBusinessEntity));
             return (recordesEffected > 0);
         }
-        public bool DeleteGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
+        public bool DeleteGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
             int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Delete", genericBusinessEntityId, businessEntityDefinitionId);
             return (affectedRows > 0);
         }
-        public bool AreGenericBusinessEntityUpdated(int parameter,ref object updateHandle)
+        public bool AreGenericBusinessEntityUpdated(Guid parameter, ref object updateHandle)
         {
             return base.IsDataUpdated("genericdata.GenericBusinessEntity","BusinessEntityDefinitionID",parameter, ref updateHandle);
         }
@@ -64,7 +64,7 @@ namespace Vanrise.GenericData.Data.SQL
             return new GenericBusinessEntity
             {
                 GenericBusinessEntityId = (long)reader["ID"],
-                BusinessEntityDefinitionId = GetReaderValue<int>(reader, "BusinessEntityDefinitionID"),
+                BusinessEntityDefinitionId = GetReaderValue<Guid>(reader, "BusinessEntityDefinitionID"),
                 Details = _recordTypeManager.DeserializeRecord(reader["Details"] as string, _dataRecordTypeId)
             };
         }

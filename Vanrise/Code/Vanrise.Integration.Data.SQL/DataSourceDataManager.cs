@@ -17,7 +17,7 @@ namespace Vanrise.Integration.Data.SQL
         }
 
         public DataSourceDataManager()
-            : base(GetConnectionStringName("IntegrationConnStringKey", "IntegrationDBConnString"))
+            : base(GetConnectionStringName("IntegrationConfigDBConnStringKey", "IntegrationConfigDBConnString"))
         {
 
         }

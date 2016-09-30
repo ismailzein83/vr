@@ -80,7 +80,7 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
-        public ExtensibleBEItem GetExtensibleBEItem(int businessEntityId, Guid dataRecordTypeId)
+        public ExtensibleBEItem GetExtensibleBEItem(Guid businessEntityId, Guid dataRecordTypeId)
         {
             var cachedExtensibleBEItems = GetCachedExtensibleBEItems();
             var extensibleBEItem = cachedExtensibleBEItems.FindRecord(x => x.BusinessEntityDefinitionId == businessEntityId && x.DataRecordTypeId == dataRecordTypeId);

@@ -15,21 +15,21 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetExtensibleBEItemRuntime")]
-        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(Guid dataRecordTypeId, int businessEntityDefinitionId)
+        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(Guid dataRecordTypeId, Guid businessEntityDefinitionId)
         {
             var manager = GetManager(businessEntityDefinitionId);
             return manager.GetExtensibleBEItemRuntime(dataRecordTypeId, businessEntityDefinitionId);
         }
         [HttpGet]
         [Route("GetGenericManagementRuntime")]
-        public GenericManagementRuntime GetGenericManagementRuntime(int businessEntityDefinitionId)
+        public GenericManagementRuntime GetGenericManagementRuntime(Guid businessEntityDefinitionId)
         {
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetManagementRuntime(businessEntityDefinitionId);
         }
         [HttpGet]
         [Route("GetGenericEditorRuntime")]
-        public GenericEditorRuntime GetGenericEditorRuntime(int businessEntityDefinitionId)
+        public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
         {
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetGenericEditorRuntime(businessEntityDefinitionId);
@@ -43,12 +43,12 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpGet]
         [Route("GetDataRecordTypesInfo")]
-        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityDefinitionId)
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(Guid businessEntityDefinitionId)
         {
             var manager = GetManager(businessEntityDefinitionId);
             return manager.GetDataRecordTypesInfo(businessEntityDefinitionId);
         }
-        IExtensibleBEManager GetManager(int businessEntityDefinitionId)
+        IExtensibleBEManager GetManager(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
             BusinessEntityDefinition businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);

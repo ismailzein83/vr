@@ -93,21 +93,21 @@ namespace Vanrise.GenericData.Business
 
         #region Private Classes
 
-        internal class CacheManager : Vanrise.Caching.BaseCacheManager<int>
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             DateTime? _beLookupRuleDefinitionCacheLastCheck;
             DateTime? _businessEntityDefinitionCacheLastCheck;
 
-            ConcurrentDictionary<int, BEDefinitionCacheItem> _beDefinitionCacheItems = new ConcurrentDictionary<int, BEDefinitionCacheItem>();
+            ConcurrentDictionary<Guid, BEDefinitionCacheItem> _beDefinitionCacheItems = new ConcurrentDictionary<Guid, BEDefinitionCacheItem>();
 
-            protected override bool ShouldSetCacheExpired(int businessEntityDefinitionId)
+            protected override bool ShouldSetCacheExpired(Guid businessEntityDefinitionId)
             {
                 return Vanrise.Caching.CacheManagerFactory.GetCacheManager<BELookupRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _beLookupRuleDefinitionCacheLastCheck)
                     | Vanrise.Caching.CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>().IsCacheExpired(ref _businessEntityDefinitionCacheLastCheck)
                     | AreBEsChanged(businessEntityDefinitionId);
             }
 
-            private bool AreBEsChanged(int businessEntityDefinitionId)
+            private bool AreBEsChanged(Guid businessEntityDefinitionId)
             {
                 BEDefinitionCacheItem beDefinitionCacheItem;
                 if (!_beDefinitionCacheItems.TryGetValue(businessEntityDefinitionId, out beDefinitionCacheItem))
