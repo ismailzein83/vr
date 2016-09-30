@@ -87,7 +87,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         private InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(176);
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(new Guid("E1ADF1F2-6BC3-4541-8DE4-E5F578A79372"));
 
             GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
             GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
@@ -159,7 +159,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 {
                     Value = carrierAccountId
                 },
-                DefinitionId = 176,
+                DefinitionId = new Guid("E1ADF1F2-6BC3-4541-8DE4-E5F578A79372"),
                 Criteria = new GenericRuleCriteria
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
