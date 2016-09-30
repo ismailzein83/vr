@@ -19,7 +19,7 @@ namespace Vanrise.Queueing.Data.SQL
         #region ctor
 
         public QueueItemTypeDataManager()
-            : base(GetConnectionStringName("QueueDBConnStringKey", "QueueDBConnString"))
+            : base(GetConnectionStringName("QueueingConfigDBConnStringKey", "QueueingConfigDBConnString"))
         {
         }
 

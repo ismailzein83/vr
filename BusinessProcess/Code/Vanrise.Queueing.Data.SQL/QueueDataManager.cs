@@ -13,7 +13,7 @@ namespace Vanrise.Queueing.Data.SQL
     public class QueueDataManager : BaseSQLDataManager, IQueueDataManager
     {
         public QueueDataManager()
-            : base(GetConnectionStringName("QueueDBConnStringKey", "QueueDBConnString"))
+            : base(GetConnectionStringName("QueueingConfigDBConnStringKey", "QueueingConfigDBConnString"))
         {
         }
 
