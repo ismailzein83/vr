@@ -129,7 +129,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
-            return GetSellingNumberPlan(context.EntityDefinitionId);
+            return GetSellingNumberPlan(context.EntityId);
         }
 
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)

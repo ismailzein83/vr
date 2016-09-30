@@ -71,6 +71,11 @@
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>
     <add key="TempPasswordValidity" value="24:00:00"/>
     <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    
   </appSettings>
   <system.web>
     <httpHandlers>
