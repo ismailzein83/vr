@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Business
             var chargingPolicyBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(ChargingPolicy.BUSINESSENTITY_DEFINITION_NAME);
             var packageBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Package.BUSINESSENTITY_DEFINITION_NAME);
 
-            List<int> neededCriteriaBEIds = new List<int> { serviceTypeBEDefinitionId, chargingPolicyBEDefinitionId, packageBEDefinitionId };
+            List<Guid> neededCriteriaBEIds = new List<Guid> { serviceTypeBEDefinitionId, chargingPolicyBEDefinitionId, packageBEDefinitionId };
             foreach (var criteriaField in context.RuleDefinition.CriteriaDefinition.Fields)
             {
                 var businessEntityFieldType = criteriaField.FieldType as Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType;
