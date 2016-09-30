@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_GenericBusinessEntity_Insert] 
-	@BusinessEntityDefinitionID INT,
+	@BusinessEntityDefinitionID uniqueidentifier,
 	@Details VARCHAR(MAX),
 	@ID BigInt out
 	

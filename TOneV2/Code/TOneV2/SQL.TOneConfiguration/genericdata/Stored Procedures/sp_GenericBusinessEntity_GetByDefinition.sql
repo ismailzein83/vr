@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_GenericBusinessEntity_GetByDefinition]
-		@BusinessEntityDefinitionID INT
+		@BusinessEntityDefinitionID uniqueidentifier
 AS
 BEGIN
 	SELECT	gbe.ID,gbe.BusinessEntityDefinitionID,gbe.Details 

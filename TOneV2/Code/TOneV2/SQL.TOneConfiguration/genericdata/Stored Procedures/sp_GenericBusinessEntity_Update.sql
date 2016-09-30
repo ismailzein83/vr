@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE genericdata.sp_GenericBusinessEntity_Update
+CREATE PROCEDURE [genericdata].[sp_GenericBusinessEntity_Update]
 	@ID BigInt,
-	@BusinessEntityDefinitionID INT,
+	@BusinessEntityDefinitionID uniqueidentifier,
 	@Details VARCHAR(MAX)
 AS
 BEGIN
