@@ -153,6 +153,12 @@
     <add key="Queue_NbOfMaxConcurrentActivators_UpdateSummaryQueueActivator" value="30" />
     <add key="Queue_ConsecutiveItemsToProcess" value="5"/>
     <add key="TOneWhS_Analytics_DBConnStringKey" value="TOneAnalyticsDBConnString"/>
+
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    
     <!--<add key="RoutingDBDataFileDirectory" value=""/>--><!--RoutingDBDataFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="RoutingDBLogFileDirectory" value=""/>--><!--RoutingDBLogFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="Routing_TOneV1" value="false"/>--><!--Routing_TOneV1 key if set to true will be used to build only current TOne route and route option tables-->
