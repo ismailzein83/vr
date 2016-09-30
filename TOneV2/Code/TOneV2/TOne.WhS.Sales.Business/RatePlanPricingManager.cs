@@ -88,11 +88,12 @@ namespace TOne.WhS.Sales.Business
                 customerId = input.OwnerId;
 
             var draftManager = new RatePlanDraftManager();
-            Changes changes = draftManager.GetDraft(input.OwnerType, input.OwnerId);
+            Changes draft = draftManager.GetDraft(input.OwnerType, input.OwnerId);
+            IEnumerable<ZoneChanges> zoneDrafts = draft != null ? draft.ZoneChanges : null;
 
-            var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, changes, input.CurrencyId);
-            var routingProductSetter = new ZoneRoutingProductManager(sellingProductId.Value, customerId, input.EffectiveOn, changes);
-
+            var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, draft, input.CurrencyId);
+            var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft);
+            
             foreach (SaleZone zone in zones)
             {
                 ZoneItem zoneItem = new ZoneItem()
@@ -101,8 +102,14 @@ namespace TOne.WhS.Sales.Business
                     ZoneName = zone.Name
                 };
 
+                ZoneChanges zoneDraft = zoneDrafts != null ? zoneDrafts.FindRecord(x => x.ZoneId == zone.SaleZoneId) : null;
+
                 zoneRateManager.SetZoneRate(zoneItem);
-                routingProductSetter.SetZoneRoutingProduct(zoneItem);
+
+                if (input.OwnerType == SalePriceListOwnerType.SellingProduct)
+                    rpManager.SetSellingProductZoneRP(zoneItem, input.OwnerId, zoneDraft);
+                else
+                    rpManager.SetCustomerZoneRP(zoneItem, input.OwnerId, sellingProductId.Value, zoneDraft);
 
                 zoneItems.Add(zoneItem);
             }

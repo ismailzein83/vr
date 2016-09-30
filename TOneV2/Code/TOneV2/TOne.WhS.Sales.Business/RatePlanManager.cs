@@ -79,6 +79,7 @@ namespace TOne.WhS.Sales.Business
 
         #region Get Zone Item(s)
 
+        // TODO: Divide GetZoneItem(s) into GetSellingProductZoneItem(s) and GetCustomerZoneItem(s) to get rid of unnecessary sellingProductId == null and ownerType checks
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemsInput input)
         {
             List<ZoneItem> zoneItems = null;
@@ -101,13 +102,12 @@ namespace TOne.WhS.Sales.Business
                 if (input.Filter.OwnerType == SalePriceListOwnerType.Customer)
                     customerId = input.Filter.OwnerId;
 
-                var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, DateTime.Now, draft, input.CurrencyId);
-                var routingProductManager = new ZoneRoutingProductManager((int)sellingProductId, customerId, DateTime.Now, draft);
-                var serviceManager = new ZoneServiceManager(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, draft);
+                // TODO: Add EffectiveOn to input.Filter
+                var effectiveOn = DateTime.Now.Date;
 
-                DraftNewDefaultService newDefaultService = null;
-                if (draft != null && draft.DefaultChanges != null)
-                    newDefaultService = draft.DefaultChanges.NewService;
+                var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId);
+                var rpManager = new ZoneRPManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
+                var serviceManager = new ZoneServiceManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
 
                 foreach (SaleZone zone in zones.OrderBy(x => x.Name))
                 {
@@ -124,24 +124,25 @@ namespace TOne.WhS.Sales.Business
                         zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneId == zone.SaleZoneId);
 
                     rateManager.SetZoneRate(zoneItem);
-                    routingProductManager.SetZoneRoutingProduct(zoneItem);
 
-                    // TODO: Refactor the rateSetter and routingProductSetter to handle products and customers separately
+                    // TODO: Refactor the rateSetter to handle products and customers separately
                     if (input.Filter.OwnerType == SalePriceListOwnerType.SellingProduct)
                     {
+                        rpManager.SetSellingProductZoneRP(zoneItem, input.Filter.OwnerId, zoneDraft);
                         serviceManager.SetSellingProductZoneService(zoneItem, input.Filter.OwnerId, zoneDraft);
                     }
                     else
                     {
+                        rpManager.SetCustomerZoneRP(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
                         serviceManager.SetCustomerZoneService(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
                     }
 
                     zoneItems.Add(zoneItem);
                 }
 
-                IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-                ZoneRouteOptionManager routeOptionSetter = new ZoneRouteOptionManager(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod, input.CurrencyId);
-                routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
+                IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { RoutingProductId = x.EffectiveRoutingProductId, SaleZoneId = x.ZoneId });
+                var routeOptionManager = new ZoneRouteOptionManager(input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod, input.CurrencyId);
+                routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
             }
 
             return zoneItems;
@@ -157,10 +158,13 @@ namespace TOne.WhS.Sales.Business
                 ZoneName = saleZoneManager.GetSaleZoneName(input.ZoneId)
             };
 
-            int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, DateTime.Now, false);
-            Changes changes = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+            // TODO: Add EffectiveOn to input
+            var effectiveOn = DateTime.Now.Date;
 
-            ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, DateTime.Now, changes, input.CurrencyId);
+            int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, effectiveOn, false);
+            Changes draft = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+
+            ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId);
             rateSetter.SetZoneRate(zoneItem);
 
             if (sellingProductId == null)
@@ -169,9 +173,17 @@ namespace TOne.WhS.Sales.Business
             int? customerId = null;
             if (input.OwnerType == SalePriceListOwnerType.Customer)
                 customerId = input.OwnerId;
+            
+            var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, effectiveOn, draft);
+            
+            ZoneChanges zoneDraft = null;
+            if (draft != null && draft.ZoneChanges != null)
+                zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneId == input.ZoneId);
 
-            ZoneRoutingProductManager routingProductSetter = new ZoneRoutingProductManager((int)sellingProductId, customerId, DateTime.Now, changes);
-            routingProductSetter.SetZoneRoutingProduct(zoneItem);
+            if (input.OwnerType == SalePriceListOwnerType.SellingProduct)
+                rpManager.SetSellingProductZoneRP(zoneItem, input.OwnerId, zoneDraft);
+            else
+                rpManager.SetCustomerZoneRP(zoneItem, input.OwnerId, sellingProductId.Value, zoneDraft);
 
             RPZone rpZone = new RPZone() { RoutingProductId = zoneItem.EffectiveRoutingProductId, SaleZoneId = zoneItem.ZoneId };
             ZoneRouteOptionManager routeOptionSetter = new ZoneRouteOptionManager(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, new List<RPZone>() { rpZone }, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId);
