@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Normalization
 {
     public class NormalizationRuleManager : GenericRuleManager<NormalizationRule>
     {
-        public void ApplyNormalizationRule(INormalizeRuleContext context, int ruleDefinitionId, GenericRuleTarget target)
+        public void ApplyNormalizationRule(INormalizeRuleContext context, Guid ruleDefinitionId, GenericRuleTarget target)
         {
             var normalizationPricingRule = GetMatchRule(ruleDefinitionId, target);
             if (normalizationPricingRule != null)

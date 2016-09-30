@@ -33,20 +33,16 @@ namespace Vanrise.GenericData.Data.SQL
             return base.IsDataUpdated("[genericdata].[BELookupRuleDefinition]", ref updateHandle);
         }
 
-        public bool InsertBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition, out int insertedId)
+        public bool InsertBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
         {
-            object beLookupRuleDefinitionId;
             string details = Vanrise.Common.Serializer.Serialize(beLookupRuleDefinition, true);
-
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_BELookupRuleDefinition_Insert", out beLookupRuleDefinitionId, beLookupRuleDefinition.Name, details);
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_BELookupRuleDefinition_Insert", beLookupRuleDefinition.BELookupRuleDefinitionId, beLookupRuleDefinition.Name, details);
 
             if (affectedRows > 0)
             {
-                insertedId = (int)beLookupRuleDefinitionId;
                 return true;
             }
 
-            insertedId = -1;
             return false;
         }
 
@@ -64,7 +60,7 @@ namespace Vanrise.GenericData.Data.SQL
         BELookupRuleDefinition BELookupRuleDefinitionMapper(IDataReader reader)
         {
             var beLookupRuleDefinition = Vanrise.Common.Serializer.Deserialize<BELookupRuleDefinition>(reader["Details"] as string);
-            beLookupRuleDefinition.BELookupRuleDefinitionId = (int)reader["ID"];
+            beLookupRuleDefinition.BELookupRuleDefinitionId =GetReaderValue<Guid>(reader,"ID");
             return beLookupRuleDefinition;
         }
         

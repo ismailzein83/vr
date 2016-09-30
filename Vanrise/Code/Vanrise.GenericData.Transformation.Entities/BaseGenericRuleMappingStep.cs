@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public abstract class BaseGenericRuleMappingStep : MappingStep
     {
-        public int RuleDefinitionId { get; set; }
+        public Guid RuleDefinitionId { get; set; }
 
         public string EffectiveTime { get; set; }
 

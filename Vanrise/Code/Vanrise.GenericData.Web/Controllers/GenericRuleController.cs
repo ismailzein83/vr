@@ -30,7 +30,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericRule")]
-        public GenericRule GetGenericRule(int ruleDefinitionId, int ruleId)
+        public GenericRule GetGenericRule(Guid ruleDefinitionId, int ruleId)
         {
             var manager = GetManager(ruleDefinitionId);
             return manager.GetGenericRule(ruleId);
@@ -49,7 +49,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]
-        public bool DoesUserHaveAddAccess(int ruleDefinitionId)
+        public bool DoesUserHaveAddAccess(Guid ruleDefinitionId)
         {
             return _manager.DoesUserHaveAddAccess(ruleDefinitionId);
         }
@@ -68,7 +68,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("DoesUserHaveEditAccess")]
-        public bool DoesUserHaveEditAccess(int ruleDefinitionId)
+        public bool DoesUserHaveEditAccess(Guid ruleDefinitionId)
         {
             return _manager.DoesUserHaveEditAccess(ruleDefinitionId);
         }
@@ -81,7 +81,7 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.DeleteGenericRule(rule.RuleId);
         }
 
-        IGenericRuleManager GetManager(int ruleDefinitionId)
+        IGenericRuleManager GetManager(Guid ruleDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);

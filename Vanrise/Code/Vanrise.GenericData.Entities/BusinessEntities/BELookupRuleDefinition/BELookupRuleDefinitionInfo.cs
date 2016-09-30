@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class BELookupRuleDefinitionInfo
     {
-        public int BELookupRuleDefinitionId { get; set; }
+        public Guid BELookupRuleDefinitionId { get; set; }
         public string Name { get; set; }
     }
 }

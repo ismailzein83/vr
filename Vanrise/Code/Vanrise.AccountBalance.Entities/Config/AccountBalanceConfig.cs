@@ -16,7 +16,7 @@ namespace Vanrise.AccountBalance.Entities
 
         public Guid UsageTransactionTypeId { get; set; }
 
-        public int BalanceAlertRuleDefinitionId { get; set; }
+        public Guid BalanceAlertRuleDefinitionId { get; set; }
 
         public Guid AlertMailMessageTypeId { get; set; }
         public BalancePeriodSettings BalancePeriod{ get; set; }

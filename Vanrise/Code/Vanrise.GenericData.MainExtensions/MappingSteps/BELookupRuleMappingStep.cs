@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 {
     public class BELookupRuleMappingStep : Vanrise.GenericData.Transformation.Entities.MappingStep
     {
-        public int BELookupRuleDefinitionId { get; set; }
+        public Guid BELookupRuleDefinitionId { get; set; }
 
         public string EffectiveTime { get; set; }
 

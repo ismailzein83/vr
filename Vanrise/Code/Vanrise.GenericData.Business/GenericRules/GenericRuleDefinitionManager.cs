@@ -24,8 +24,8 @@ namespace Vanrise.GenericData.Business
             Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) => (input.Query.Name == null || genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression));
         }
-        
-        public GenericRuleDefinition GetGenericRuleDefinition(int genericRuleDefinitionId)
+
+        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
             return cachedGenericRuleDefinitions.FindRecord((genericRuleDefinition) => genericRuleDefinition.GenericRuleDefinitionId == genericRuleDefinitionId);
@@ -42,15 +42,14 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int genericRuleDefinitionId = -1;
+             genericRuleDefinition.GenericRuleDefinitionId = Guid.NewGuid();
 
             IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
-            bool added = dataManager.AddGenericRuleDefinition(genericRuleDefinition, out genericRuleDefinitionId);
+            bool added = dataManager.AddGenericRuleDefinition(genericRuleDefinition);
 
             if (added)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                genericRuleDefinition.GenericRuleDefinitionId = genericRuleDefinitionId;
                 insertOperationOutput.InsertedObject = genericRuleDefinition;
 
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -117,33 +116,33 @@ namespace Vanrise.GenericData.Business
             return GetCachedGenericRuleDefinitions().FindAllRecords(filterExpression);
         }
 
-        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(int genericRuleDefinitionId)
+        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(Guid genericRuleDefinitionId)
         {
             var viewManager = new Vanrise.Security.Business.ViewManager();
             var allViews = viewManager.GetViews();
             return allViews.FirstOrDefault(v => (v.Settings as GenericRuleViewSettings) != null && (v.Settings as GenericRuleViewSettings).RuleDefinitionId == genericRuleDefinitionId);
         }
 
-        public bool DoesUserHaveViewAccess(int genericRuleDefinitionId)
+        public bool DoesUserHaveViewAccess(Guid genericRuleDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return DoesUserHaveViewAccess(userId, genericRuleDefinitionId);
         }
-        public bool DoesUserHaveViewAccess(int userId, int genericRuleDefinitionId)
+        public bool DoesUserHaveViewAccess(int userId, Guid genericRuleDefinitionId)
         {
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
             if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.ViewRequiredPermission != null)
                 return DoesUserHaveAccess(userId, genericRuleDefinition.Security.ViewRequiredPermission);
             return true;
         }
-        public bool DoesUserHaveAddAccess(int genericRuleDefinitionId)
+        public bool DoesUserHaveAddAccess(Guid genericRuleDefinitionId)
         {
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
             if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.AddRequiredPermission != null)
                 return DoesUserHaveAccess(genericRuleDefinition.Security.AddRequiredPermission);
             return true;
         }
-        public bool DoesUserHaveEditAccess(int genericRuleDefinitionId)
+        public bool DoesUserHaveEditAccess(Guid genericRuleDefinitionId)
         {
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
             if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.EditRequiredPermission != null)
@@ -155,7 +154,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        Dictionary<int, GenericRuleDefinition> GetCachedGenericRuleDefinitions()
+        Dictionary<Guid, GenericRuleDefinition> GetCachedGenericRuleDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGenericRuleDefinitions",
                 () =>

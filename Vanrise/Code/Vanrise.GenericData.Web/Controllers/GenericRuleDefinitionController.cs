@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericRuleDefinition")]
-        public GenericRuleDefinition GetGenericRuleDefinition(int genericRuleDefinitionId)
+        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
         {
             return _manager.GetGenericRuleDefinition(genericRuleDefinitionId);
         }
@@ -53,7 +53,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericRuleDefinitionView")]
-        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(int genericRuleDefinitionId)
+        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(Guid genericRuleDefinitionId)
         {
             return _manager.GetGenericRuleDefinitionView(genericRuleDefinitionId);
         }

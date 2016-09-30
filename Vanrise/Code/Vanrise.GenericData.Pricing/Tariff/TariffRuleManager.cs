@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Pricing
 {
     public class TariffRuleManager : Vanrise.GenericData.Business.GenericRuleManager<TariffRule>
     {
-        public void ApplyTariffRule(IPricingRuleTariffContext context, int ruleDefinitionId, GenericRuleTarget target)
+        public void ApplyTariffRule(IPricingRuleTariffContext context, Guid ruleDefinitionId, GenericRuleTarget target)
         {
             this.ApplyTariffRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
         }

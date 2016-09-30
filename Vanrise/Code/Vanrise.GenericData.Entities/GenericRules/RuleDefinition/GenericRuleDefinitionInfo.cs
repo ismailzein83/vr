@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericRuleDefinitionInfo
     {
-        public int GenericRuleDefinitionId { get; set; }
+        public Guid GenericRuleDefinitionId { get; set; }
 
         public string Name { get; set; }
     }

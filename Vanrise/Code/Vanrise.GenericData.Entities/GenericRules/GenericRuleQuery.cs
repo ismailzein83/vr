@@ -5,7 +5,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericRuleQuery
     {
-        public int RuleDefinitionId { get; set; }
+        public Guid RuleDefinitionId { get; set; }
 
         public string Description { get; set; }
 

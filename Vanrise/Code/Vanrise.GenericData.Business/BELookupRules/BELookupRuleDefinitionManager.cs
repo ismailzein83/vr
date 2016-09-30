@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<BELookupRuleDefinitionDetail> GetFilteredBELookupRuleDefinitions(DataRetrievalInput<BELookupRuleDefinitionQuery> input)
         {
-            Dictionary<int, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
+            Dictionary<Guid, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
 
             Func<BELookupRuleDefinition, bool> filterExpression = (itm) =>
                 (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
@@ -37,9 +37,9 @@ namespace Vanrise.GenericData.Business
             return this.GetCachedBELookupRuleDefinitions().MapRecords(BELookupRuleDefinitionInfoMapper).OrderBy(x => x.Name);
         }
 
-        public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupRuleDefinitionId)
+        public BELookupRuleDefinition GetBELookupRuleDefinition(Guid beLookupRuleDefinitionId)
         {
-            Dictionary<int, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
+            Dictionary<Guid, BELookupRuleDefinition> cachedEntities = this.GetCachedBELookupRuleDefinitions();
             return cachedEntities.GetRecord(beLookupRuleDefinitionId);
         }
 
@@ -51,12 +51,11 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.InsertedObject = null;
 
             IBELookupRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBELookupRuleDefinitionDataManager>();
-            int insertedId = -1;
+            beLookupRuleDefinition.BELookupRuleDefinitionId = Guid.NewGuid();
 
-            if (dataManager.InsertBELookupRuleDefinition(beLookupRuleDefinition, out insertedId))
+            if (dataManager.InsertBELookupRuleDefinition(beLookupRuleDefinition))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                beLookupRuleDefinition.BELookupRuleDefinitionId = insertedId;
                 insertOperationOutput.InsertedObject = BELookupRuleDefinitionDetailMapper(beLookupRuleDefinition);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
@@ -110,7 +109,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        Dictionary<int, BELookupRuleDefinition> GetCachedBELookupRuleDefinitions()
+        Dictionary<Guid, BELookupRuleDefinition> GetCachedBELookupRuleDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBELookupRuleDefinitions", () =>
             {

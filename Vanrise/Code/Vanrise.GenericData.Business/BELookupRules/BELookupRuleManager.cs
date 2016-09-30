@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Business
 {
     public class BELookupRuleManager
     {
-        public dynamic GetMatchBE(int beLookupRuleDefinitionId, GenericRuleTarget ruleTarget)
+        public dynamic GetMatchBE(Guid beLookupRuleDefinitionId, GenericRuleTarget ruleTarget)
         {
             RuleTree ruleTree = GetRuleTree(beLookupRuleDefinitionId);
             BELookupRule matchRule = ruleTree.GetMatchRule(ruleTarget) as BELookupRule;
@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Business
                 return null;
         }
 
-        private RuleTree GetRuleTree(int beLookupRuleDefinitionId)
+        private RuleTree GetRuleTree(Guid beLookupRuleDefinitionId)
         {
             BELookupRuleDefinition beLookupRuleDefinition = (new BELookupRuleDefinitionManager()).GetBELookupRuleDefinition(beLookupRuleDefinitionId);
             if(beLookupRuleDefinition == null)

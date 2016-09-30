@@ -11,12 +11,12 @@ namespace Vanrise.GenericData.Pricing
 {
     public class RateTypeRuleManager : Vanrise.GenericData.Business.GenericRuleManager<RateTypeRule>
     {
-        public void ApplyRateTypeRule(IPricingRuleRateTypeContext context, int ruleDefinitionId, GenericRuleTarget target)
+        public void ApplyRateTypeRule(IPricingRuleRateTypeContext context, Guid ruleDefinitionId, GenericRuleTarget target)
         {
             this.ApplyRateTypeRule(context, () => base.GetMatchRule(ruleDefinitionId, target), target);
         }
 
-        public IEnumerable<int> GetRateTypes(int ruleDefinitionId, GenericRuleTarget target)
+        public IEnumerable<int> GetRateTypes(Guid ruleDefinitionId, GenericRuleTarget target)
         {
             HashSet<int> distinctRateTypes = new HashSet<int>();
             var ruleMatch = base.GetMatchRule(ruleDefinitionId, target);

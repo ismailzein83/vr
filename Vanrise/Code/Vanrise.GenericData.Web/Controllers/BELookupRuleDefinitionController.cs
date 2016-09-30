@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetBELookupRuleDefinition")]
-        public BELookupRuleDefinition GetBELookupRuleDefinition(int beLookupRuleDefinitionId)
+        public BELookupRuleDefinition GetBELookupRuleDefinition(Guid beLookupRuleDefinitionId)
         {
             return _manager.GetBELookupRuleDefinition(beLookupRuleDefinitionId);
         }

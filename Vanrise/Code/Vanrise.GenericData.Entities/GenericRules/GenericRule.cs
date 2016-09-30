@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public abstract class GenericRule : Vanrise.Rules.BaseRule
     {
-        public int DefinitionId { get; set; }
+        public Guid DefinitionId { get; set; }
 
         public GenericRuleCriteria Criteria { get; set; }
 

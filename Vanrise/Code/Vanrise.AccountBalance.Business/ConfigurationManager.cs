@@ -24,7 +24,7 @@ namespace Vanrise.AccountBalance.Business
             return settingManager.GetSetting<AccountBalanceConfig>(AccountBalanceConfig.AccountBalanceConfigType);
         }
 
-        public int GetBalanceAlertRuleDefinitionId()
+        public Guid GetBalanceAlertRuleDefinitionId()
         {
             AccountBalanceConfig config = GetAccountBalanceConfig();
             if (config == null)

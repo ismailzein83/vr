@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Pricing
 {
     public class RateValueRuleManager : Vanrise.GenericData.Business.GenericRuleManager<RateValueRule>
     {
-        public void ApplyRateValueRule(IPricingRuleRateValueContext context, int ruleDefinitionId, GenericRuleTarget target)
+        public void ApplyRateValueRule(IPricingRuleRateValueContext context, Guid ruleDefinitionId, GenericRuleTarget target)
         {
             this.ApplyRateValueRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
         }

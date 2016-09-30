@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Pricing
 {
     public class ExtraChargeRuleManager : Vanrise.GenericData.Business.GenericRuleManager<ExtraChargeRule>
     {
-        public void ApplyExtraChargeRule(IPricingRuleExtraChargeContext context, int ruleDefinitionId, GenericRuleTarget target)
+        public void ApplyExtraChargeRule(IPricingRuleExtraChargeContext context, Guid ruleDefinitionId, GenericRuleTarget target)
         {
             var tariffPricingRule = GetMatchRule(ruleDefinitionId, target);
             if (tariffPricingRule != null)

@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Data
     {
         IEnumerable<GenericRuleDefinition> GetGenericRuleDefinitions();
         bool AreGenericRuleDefinitionsUpdated(ref object updateHandle);
-        bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition, out int insertedId);
+        bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition);
         bool UpdateGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition);
     }
 }

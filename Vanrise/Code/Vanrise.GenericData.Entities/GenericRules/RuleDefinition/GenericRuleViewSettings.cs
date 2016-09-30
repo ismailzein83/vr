@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericRuleViewSettings : Vanrise.Security.Entities.ViewSettings
     {
-        public int RuleDefinitionId { get; set; }
+        public Guid RuleDefinitionId { get; set; }
 
         public override string GetURL(Security.Entities.View view)
         {

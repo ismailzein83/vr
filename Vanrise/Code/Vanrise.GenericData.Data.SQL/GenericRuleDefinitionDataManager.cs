@@ -29,12 +29,10 @@ namespace Vanrise.GenericData.Data.SQL
             return base.IsDataUpdated("genericdata.GenericRuleDefinition", ref updateHandle);
         }
 
-        public bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition, out int insertedId)
+        public bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
         {
-            object genericRuleDefinitionId;
 
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Insert", out genericRuleDefinitionId, genericRuleDefinition.Name, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
-            insertedId = (affectedRows == 1) ? (int)genericRuleDefinitionId : -1;
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Insert", genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition.Name, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
 
             return (affectedRows == 1);
         }
@@ -55,7 +53,7 @@ namespace Vanrise.GenericData.Data.SQL
             GenericRuleDefinition details = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>((string)reader["Details"]);
             return new GenericRuleDefinition()
             {
-                GenericRuleDefinitionId = (int)reader["ID"],
+                GenericRuleDefinitionId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = (string)reader["Name"],
                 CriteriaDefinition = details.CriteriaDefinition,
                 SettingsDefinition = details.SettingsDefinition,
