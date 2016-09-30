@@ -57,14 +57,14 @@ namespace TOne.WhS.Sales.Business
             var draftManager = new RatePlanDraftManager();
             Changes draft = draftManager.GetDraft(SalePriceListOwnerType.Customer, customerId);
             
-            var effectiveServiceLocator = new SaleEntityServiceLocator(new EffectiveSaleEntityServiceReadWithCache(SalePriceListOwnerType.Customer, customerId, effectiveOn, draft));
+            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(SalePriceListOwnerType.Customer, customerId, effectiveOn, draft));
 
             var ratePlanManager = new RatePlanManager();
             int sellingProductId = ratePlanManager.GetSellingProductId(customerId, effectiveOn, false);
 
             // The customer's draft MUST have a DraftResetDefaultService for the below method to return a correct result
             // This is assumed because the draft is saved before calling GetCustomerDefaultInheritedService
-            return effectiveServiceLocator.GetCustomerDefaultService(customerId, sellingProductId);
+            return ratePlanServiceLocator.GetCustomerDefaultService(customerId, sellingProductId);
         }
 
         #region Private Methods

@@ -81,7 +81,7 @@
     <Compile Include="BusinessRules\Conditions\ServiceBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ServiceEEDGreaterThanZoneEED.cs" />
     <Compile Include="DefaultItemManager.cs" />
-    <Compile Include="EffectiveSaleEntityServiceReadWithCache.cs" />
+    <Compile Include="Reader\RatePlanServiceReadWithCache.cs" />
     <Compile Include="Preview\DefaultServicePreviewManager.cs" />
     <Compile Include="Preview\SaleZoneServicePreviewManager.cs" />
     <Compile Include="PriceListDefaultServiceManager.cs" />

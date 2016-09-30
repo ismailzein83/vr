@@ -46,20 +46,20 @@ namespace TOne.WhS.Sales.Business
             var draftManager = new RatePlanDraftManager();
             Changes draft = draftManager.GetDraft(ownerType, ownerId);
 
-            var effectiveServiceLocator = new SaleEntityServiceLocator(new EffectiveSaleEntityServiceReadWithCache(ownerType, ownerId, effectiveOn, draft));
+            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(ownerType, ownerId, effectiveOn, draft));
 
             // The owner's draft MUST have a DraftResetZoneService on zoneId for the below method to return a correct result
             // This is assumed because the draft is saved before calling GetZoneInheritedService
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-                inheritedService = effectiveServiceLocator.GetSellingProductZoneService(ownerId, zoneId);
+                inheritedService = ratePlanServiceLocator.GetSellingProductZoneService(ownerId, zoneId);
             }
             else
             {
                 var ratePlanManager = new RatePlanManager();
                 int sellingProductId = ratePlanManager.GetSellingProductId(ownerId, effectiveOn, false);
-                inheritedService = effectiveServiceLocator.GetCustomerZoneService(ownerId, sellingProductId, zoneId);
+                inheritedService = ratePlanServiceLocator.GetCustomerZoneService(ownerId, sellingProductId, zoneId);
             }
 
             return inheritedService;

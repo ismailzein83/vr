@@ -74,6 +74,7 @@ namespace TOne.WhS.Sales.Business
             {
                 _defaultRoutingProduct = new DefaultRoutingProduct()
                 {
+                    SaleEntityRoutingProductId = existingDefaultRP.SaleEntityRoutingProductId,
                     OwnerType = _ownerType,
                     OwnerId = _ownerId,
                     RoutingProductId = existingDefaultRP.RoutingProductId,

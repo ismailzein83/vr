@@ -12,14 +12,18 @@ namespace TOne.WhS.Sales.Business
 {
     public class ZoneServiceManager
     {
+        #region Fields / Constructors
+
         private SaleEntityServiceLocator _serviceLocator;
-        private SaleEntityServiceLocator _effectiveServiceLocator;
+        private SaleEntityServiceLocator _ratePlanServiceLocator;
 
         public ZoneServiceManager(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft)
         {
             _serviceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadWithCache(effectiveOn));
-            _effectiveServiceLocator = new SaleEntityServiceLocator(new EffectiveSaleEntityServiceReadWithCache(ownerType, ownerId, effectiveOn, draft));
+            _ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(ownerType, ownerId, effectiveOn, draft));
         }
+        
+        #endregion
 
         public void SetSellingProductZoneService(ZoneItem zoneItem, int sellingProductId, ZoneChanges zoneDraft)
         {
@@ -53,6 +57,8 @@ namespace TOne.WhS.Sales.Business
             SetCustomerEffectiveZoneService(zoneItem, customerId, sellingProductId);
         }
 
+        #region Private Methods
+
         private void SetDraftZoneService(ZoneItem zoneItem, ZoneChanges zoneDraft)
         {
             if (zoneDraft != null)
@@ -65,16 +71,18 @@ namespace TOne.WhS.Sales.Business
 
         private void SetSellingProductEffectiveZoneService(ZoneItem zoneItem, int sellingProductId)
         {
-            SaleEntityService effectiveService = _effectiveServiceLocator.GetSellingProductZoneService(sellingProductId, zoneItem.ZoneId);
-            if (effectiveService != null)
-                zoneItem.EffectiveServices = effectiveService.Services;
+            SaleEntityService ratePlanService = _ratePlanServiceLocator.GetSellingProductZoneService(sellingProductId, zoneItem.ZoneId);
+            if (ratePlanService != null)
+                zoneItem.EffectiveServices = ratePlanService.Services;
         }
 
         private void SetCustomerEffectiveZoneService(ZoneItem zoneItem, int customerId, int sellingProductId)
         {
-            SaleEntityService effectiveService = _effectiveServiceLocator.GetCustomerZoneService(customerId, sellingProductId, zoneItem.ZoneId);
-            if (effectiveService != null)
-                zoneItem.EffectiveServices = effectiveService.Services;
+            SaleEntityService ratePlanService = _ratePlanServiceLocator.GetCustomerZoneService(customerId, sellingProductId, zoneItem.ZoneId);
+            if (ratePlanService != null)
+                zoneItem.EffectiveServices = ratePlanService.Services;
         }
+        
+        #endregion
     }
 }
