@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 {
     public class LoadBEByIDMappingStep : Vanrise.GenericData.Transformation.Entities.MappingStep
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
 
         public string BusinessEntityId { get; set; }
 
