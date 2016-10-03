@@ -10,14 +10,15 @@ namespace Vanrise.Caching
     public abstract class BaseCacheManager : BaseCacheManager<Object>
     {
         object dummyParameter = new object();
-        ConcurrentDictionary<string, CachedObject> _cacheDictionary = new ConcurrentDictionary<string, CachedObject>();
+        CacheStore _cacheDictionary = new CacheStore();
+        CacheDictionaryInfo _cacheDictionaryInfo = new CacheDictionaryInfo();
 
-        public override T GetOrCreateObject<T>(string cacheName, object parameter, Func<T> createObject)
+        public override T GetOrCreateObject<T>(Object cacheName, object parameter, Func<T> createObject)
         {
             return base.GetOrCreateObject<T>(cacheName, dummyParameter, createObject);
         }
 
-        protected override ConcurrentDictionary<string, CachedObject> GetCacheDictionary(object parameter)
+        protected override CacheStore GetCacheDictionary(object parameter)
         {
             return _cacheDictionary;
         }
@@ -27,7 +28,7 @@ namespace Vanrise.Caching
             return _cacheDictionary.Values;
         }
 
-        public T GetOrCreateObject<T>(string cacheName, Func<T> createObject)
+        public T GetOrCreateObject<T>(Object cacheName, Func<T> createObject)
         {
             return base.GetOrCreateObject(cacheName, dummyParameter, createObject);
         }
@@ -39,8 +40,12 @@ namespace Vanrise.Caching
 
         public override void RemoveObjectFromCache(CachedObject cachedObject)
         {
-            CachedObject dummy;
-            _cacheDictionary.TryRemove(cachedObject.CacheName, out dummy);
+            _cacheDictionary.TryRemove(cachedObject.CacheName);
+        }
+
+        protected override CacheDictionaryInfo GetCacheDictionaryInfo(object parameter)
+        {
+            return _cacheDictionaryInfo;
         }
 
         protected override bool ShouldSetCacheExpired(object parameter)

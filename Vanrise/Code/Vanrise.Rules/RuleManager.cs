@@ -43,7 +43,7 @@ namespace Vanrise.Rules
                 {
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
                     rule.RuleId = ruleId;
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
+                    GetCacheManager().SetCacheExpired(ruleTypeId);
                     insertOperationOutput.InsertedObject = MapToDetails(rule);
                 }
             }
@@ -74,7 +74,7 @@ namespace Vanrise.Rules
                 if (ruleDataManager.UpdateRule(ruleEntity))
                 {
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
+                    GetCacheManager().SetCacheExpired(ruleTypeId);
                     updateOperationOutput.UpdatedObject = MapToDetails(rule);
                 }
             }
@@ -94,7 +94,7 @@ namespace Vanrise.Rules
             {
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 int ruleTypeId = GetRuleTypeId();
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
+                GetCacheManager().SetCacheExpired(ruleTypeId);
             }
 
             return deleteOperationOutput;
@@ -150,23 +150,34 @@ namespace Vanrise.Rules
                });
         }
 
-        protected R GetCachedOrCreate<R>(string cacheName, Func<R> createObject)
+        protected R GetCachedOrCreate<R>(Object cacheName, Func<R> createObject)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
+            return GetCacheManager().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
         }
 
         public bool IsCacheExpired(ref DateTime? lastCheckTime)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(GetRuleTypeId(), ref lastCheckTime);
+            return GetCacheManager().IsCacheExpired(GetRuleTypeId(), ref lastCheckTime);
+        }
+
+        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+        CacheManager GetCacheManager()
+        {
+            return s_cacheManager;
         }
 
         #region Private Methods
 
         static ConcurrentDictionary<string, int> s_ruleTypesIds = new ConcurrentDictionary<string, int>();
-
+        static ConcurrentDictionary<Type, string> s_ruleTypes = new ConcurrentDictionary<Type, string>();
         public int GetRuleTypeId()
         {
-            string ruleType = typeof(T).FullName;
+            string ruleType;
+            if(!s_ruleTypes.TryGetValue(typeof(T), out ruleType))
+            {
+                s_ruleTypes.TryAdd(typeof(T), typeof(T).FullName);
+                ruleType = s_ruleTypes[typeof(T)];
+            }
             int ruleTypeId;
             if (!s_ruleTypesIds.TryGetValue(ruleType, out ruleTypeId))
             {

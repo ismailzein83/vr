@@ -18,12 +18,16 @@ namespace Vanrise.Caching
         public static ICacheManager GetCacheManager(Type cacheManagerType, Guid? cacheManagerId = null)
         {
             CacheCleaner.CleanCacheIfNeeded();
-            if (cacheManagerId == null)
+            if (!cacheManagerId.HasValue)
             {
-                if (!s_defaultCacheManagers.ContainsKey(cacheManagerType))
+                ICacheManager cacheManager;
+                if (!s_defaultCacheManagers.TryGetValue(cacheManagerType, out cacheManager))
+                {
                     s_defaultCacheManagers.TryAdd(cacheManagerType, CreateCacheManagerObj(cacheManagerType));
+                    cacheManager = s_defaultCacheManagers[cacheManagerType];
+                }
 
-                return s_defaultCacheManagers[cacheManagerType];
+                return cacheManager;
             }
             else
             {

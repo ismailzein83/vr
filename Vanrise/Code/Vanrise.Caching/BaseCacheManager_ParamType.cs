@@ -5,11 +5,14 @@ using System.Text;
 using System.Collections.Concurrent;
 using System.Configuration;
 using System.Reflection;
+using System.Timers;
+using System.Collections;
+using Vanrise.Common;
 
 namespace Vanrise.Caching
 {
     public abstract class BaseCacheManager<ParamType> : ICacheManager<ParamType>
-    {
+    {        
         ConcurrentDictionary<ParamType, DateTime> _cacheExpirationTimes = new ConcurrentDictionary<ParamType, DateTime>();
 
         TimeSpan _timeExpirationInterval;
@@ -38,16 +41,17 @@ namespace Vanrise.Caching
 
         #region Local Variables
 
-        ConcurrentDictionary<string, object> _cacheNameLocks = new ConcurrentDictionary<string, object>();
-        ConcurrentDictionary<ParamType, ConcurrentDictionary<string, CachedObject>> _cacheDictionaries = new ConcurrentDictionary<ParamType, ConcurrentDictionary<string, CachedObject>>();
+        ConcurrentDictionary<Object, object> _cacheNameLocks = new ConcurrentDictionary<Object, object>();
+        ConcurrentDictionary<ParamType, CacheStore> _cacheDictionaries = new ConcurrentDictionary<ParamType, CacheStore>();
 
         #endregion
 
         #region Public Methods
 
-        public virtual T GetOrCreateObject<T>(string cacheName, ParamType parameter, Func<T> createObject)
+        public virtual T GetOrCreateObject<T>(Object cacheName, ParamType parameter, Func<T> createObject)
         {
             CachedObject cachedObject;
+            
             CheckCacheDictionaryExpiration(parameter);
             if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject) || IsCacheObjectExpired(cachedObject))
             {
@@ -67,7 +71,7 @@ namespace Vanrise.Caching
             }
             lock (cachedObject)
             {
-                cachedObject.LastAccessedTime = DateTime.Now;
+                cachedObject.LastAccessedTime = VRClock.Now;
             }
             return cachedObject.Object != null ? (T)cachedObject.Object : default(T);
         }
@@ -76,7 +80,7 @@ namespace Vanrise.Caching
         {
             if (this.IsTimeExpirable)
             {
-                if ((DateTime.Now - cachedObject.CreatedTime) > _timeExpirationInterval)
+                if ((VRClock.Now - cachedObject.CreatedTime) > _timeExpirationInterval)
                     return true;
             }
             return false;
@@ -84,9 +88,8 @@ namespace Vanrise.Caching
 
         public virtual void RemoveObjectFromCache(string cacheName, ParamType parameter)
         {
-            ConcurrentDictionary<string, CachedObject> objectTypeCaches = GetCacheDictionary(parameter);
-            CachedObject dummy;
-            objectTypeCaches.TryRemove(cacheName, out dummy);
+            CacheStore objectTypeCaches = GetCacheDictionary(parameter);
+           objectTypeCaches.TryRemove(cacheName);
         }
 
         public virtual void RemoveObjectFromCache(CachedObject cachedObject)
@@ -98,7 +101,7 @@ namespace Vanrise.Caching
                 {
                     if (matchObj == cachedObject)
                     {
-                        cacheDictionary.TryRemove(cachedObject.CacheName, out matchObj);
+                        cacheDictionary.TryRemove(cachedObject.CacheName);
                         break;
                     }
                 }
@@ -135,10 +138,10 @@ namespace Vanrise.Caching
         
         public virtual void SetCacheExpired(ParamType parameter)
         {
-            ConcurrentDictionary<string, CachedObject> cacheDictionary = GetCacheDictionary(parameter);
+            CacheStore cacheDictionary = GetCacheDictionary(parameter);
             if (cacheDictionary != null)
                 cacheDictionary.Clear();
-            _cacheExpirationTimes.AddOrUpdate(parameter, DateTime.Now, (prm, existingValue) => DateTime.Now);
+            _cacheExpirationTimes.AddOrUpdate(parameter, VRClock.Now, (prm, existingValue) => VRClock.Now);
         }
 
 
@@ -146,35 +149,59 @@ namespace Vanrise.Caching
 
         #region Overridable
 
-        protected virtual bool TryGetObjectFromCache(string cacheName, ParamType parameter, out CachedObject cachedObject)
+        protected virtual bool TryGetObjectFromCache(Object cacheName, ParamType parameter, out CachedObject cachedObject)
         {
-            ConcurrentDictionary<string, CachedObject> objectTypeCaches = GetCacheDictionary(parameter);
+            CacheStore objectTypeCaches = GetCacheDictionary(parameter);
             return objectTypeCaches.TryGetValue(cacheName, out cachedObject);
         }
 
-        protected virtual void AddObjectToCache(string cacheName, ParamType parameter, CachedObject cachedObject)
+        protected virtual void AddObjectToCache(Object cacheName, ParamType parameter, CachedObject cachedObject)
         {
-            ConcurrentDictionary<string, CachedObject> objectTypeCaches = GetCacheDictionary(parameter);
-            objectTypeCaches.TryAdd(cacheName, cachedObject);
+            CacheStore objectTypeCaches = GetCacheDictionary(parameter);
+            objectTypeCaches.Add(cacheName, cachedObject);
         }
 
-        protected virtual ConcurrentDictionary<string, CachedObject> GetCacheDictionary(ParamType parameter)
+        protected virtual CacheStore GetCacheDictionary(ParamType parameter)
         {
-            ConcurrentDictionary<string, CachedObject> objectTypeCaches;
-            if (!_cacheDictionaries.ContainsKey(parameter))
-                _cacheDictionaries.TryAdd(parameter, new ConcurrentDictionary<string, CachedObject>());
-
-            objectTypeCaches = _cacheDictionaries[parameter];
+            CacheStore objectTypeCaches;
+            if (!_cacheDictionaries.TryGetValue(parameter, out objectTypeCaches))
+            {
+                _cacheDictionaries.TryAdd(parameter, new CacheStore());
+                objectTypeCaches = _cacheDictionaries[parameter];
+            }
             return objectTypeCaches;
         }
 
-        protected virtual object GetCacheNameLockObject(string cacheName, ParamType parameter)
+        protected virtual object GetCacheNameLockObject(Object cacheName, ParamType parameter)
         {
-            string key = String.Format("{0}_{1}", cacheName, parameter);
-            if (!_cacheNameLocks.ContainsKey(key))
+            var key = new FullCacheName { CacheName = cacheName, Parameter = parameter };// String.Format("{0}_{1}", cacheName, parameter);
+            Object lockObj;
+            if (!_cacheNameLocks.TryGetValue(key, out lockObj))
+            {
                 _cacheNameLocks.TryAdd(key, new object());
+                lockObj = _cacheNameLocks[key];
+            }
 
-            return _cacheNameLocks[key];
+            return lockObj;
+        }
+
+        protected virtual CacheDictionaryInfo GetCacheDictionaryInfo(ParamType parameter)
+        {
+            CacheDictionaryInfo cacheDictionaryInfo;
+            if (!_cacheDictionariesInfo.TryGetValue(parameter, out cacheDictionaryInfo))
+            {
+                cacheDictionaryInfo = new CacheDictionaryInfo();
+                if (!_cacheDictionariesInfo.TryAdd(parameter, cacheDictionaryInfo))
+                    cacheDictionaryInfo = _cacheDictionariesInfo[parameter];
+            }
+            return cacheDictionaryInfo;
+        }
+
+        private struct FullCacheName
+        {
+            public Object CacheName { get; set; }
+
+            public ParamType Parameter { get; set; }
         }
 
         protected virtual bool ShouldSetCacheExpired(ParamType parameter)
@@ -190,16 +217,12 @@ namespace Vanrise.Caching
 
         private void CheckCacheDictionaryExpiration(ParamType parameter)
         {
-            CacheDictionaryInfo cacheDictionaryInfo;
-            if (!_cacheDictionariesInfo.TryGetValue(parameter, out cacheDictionaryInfo))
-            {
-                cacheDictionaryInfo = new CacheDictionaryInfo();
-                if (!_cacheDictionariesInfo.TryAdd(parameter, cacheDictionaryInfo))
-                    cacheDictionaryInfo = _cacheDictionariesInfo[parameter];
-            }
+            CacheDictionaryInfo cacheDictionaryInfo = GetCacheDictionaryInfo(parameter);
+            if ((VRClock.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 4)//dont check expiration if it is checked recently
+                return;
             lock (cacheDictionaryInfo)
             {
-                if ((DateTime.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 2)//dont check expiration if it is checked recently
+                if ((VRClock.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 4)
                     return;
                 bool isExpired;
                 if (!RuntimeCacheFactory.GetCacheExpirationChecker().TryCheckExpirationFromRuntimeService(this.GetType(), parameter, out isExpired))
@@ -209,15 +232,20 @@ namespace Vanrise.Caching
                     SetCacheExpired(parameter);
                 }
 
-                cacheDictionaryInfo.LastExpirationCheckTime = DateTime.Now;
+                cacheDictionaryInfo.LastExpirationCheckTime = VRClock.Now;
             }
         }
 
-        private class CacheDictionaryInfo
-        {
-            public DateTime LastExpirationCheckTime { get; set; }
-        }
+
+
+       
 
         #endregion
     }
+
+    public class CacheDictionaryInfo
+    {
+        public DateTime LastExpirationCheckTime { get; set; }
+    }
+    
 }

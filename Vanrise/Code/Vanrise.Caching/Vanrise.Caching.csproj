@@ -65,6 +65,7 @@
     <Compile Include="CacheManagerFactory.cs" />
     <Compile Include="BaseCacheManager.cs" />
     <Compile Include="CacheObjectSize.cs" />
+    <Compile Include="CacheStore.cs" />
     <Compile Include="ICacheExpirationChecker.cs" />
     <Compile Include="ICacheManager.cs" />
     <Compile Include="IDistributedCacher.cs" />

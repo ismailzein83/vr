@@ -156,7 +156,7 @@ namespace Vanrise.GenericData.Business
                 }
                 else
                     return false;
-            } 
+            }
 
             return true;
         }
@@ -166,9 +166,13 @@ namespace Vanrise.GenericData.Business
             return rule.AreSettingsMatched(ruleDefinition.SettingsDefinition, settingsFilterValue);
         }
 
+        private struct RuleTreeCacheName
+        {
+            public Guid RuleDefinitionId { get; set; }
+        }
         private RuleTree GetRuleTree(Guid ruleDefinitionId)
         {
-            String cacheName = String.Format("GenericRuleManager<T>_GetRuleTree_{0}", ruleDefinitionId);
+            var cacheName = new RuleTreeCacheName { RuleDefinitionId = ruleDefinitionId };// String.Concat("GenericRuleManager<T>_GetRuleTree_", ruleDefinitionId);
             return GetCachedOrCreate(cacheName, () =>
             {
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
@@ -207,9 +211,9 @@ namespace Vanrise.GenericData.Business
             if (target.TargetFieldValues == null)
                 target.TargetFieldValues = new Dictionary<string, object>();
             List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
-            if(ruleCriteriaEvaluationInfos != null)
+            if (ruleCriteriaEvaluationInfos != null)
             {
-                foreach(var criteriaEvaluationInfo in ruleCriteriaEvaluationInfos)
+                foreach (var criteriaEvaluationInfo in ruleCriteriaEvaluationInfos)
                 {
                     if (target.TargetFieldValues.ContainsKey(criteriaEvaluationInfo.CriteriaName))
                         continue;
@@ -226,42 +230,46 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        private struct CriteriaEvaluationInfosCacheName
+        {
+            public Guid RuleDefinitionId { get; set; }
+        }
         private List<CriteriaEvaluationInfo> GetCachedCriteriaEvaluationInfos(Guid ruleDefinitionId)
         {
-            string cacheName = String.Format("GetCachedCriteriaEvaluationInfos_{0}", ruleDefinitionId);
+            var cacheName = new CriteriaEvaluationInfosCacheName { RuleDefinitionId = ruleDefinitionId };// String.Concat("GetCachedCriteriaEvaluationInfos_", ruleDefinitionId);
             return GetCachedOrCreate(cacheName, () =>
+            {
+                List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = new List<CriteriaEvaluationInfo>();
+                var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
+                if (ruleDefinition.CriteriaDefinition != null && ruleDefinition.CriteriaDefinition.Fields != null)
                 {
-                    List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = new List<CriteriaEvaluationInfo>();
-                    var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
-                    if(ruleDefinition.CriteriaDefinition != null && ruleDefinition.CriteriaDefinition.Fields != null)
+                    foreach (var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
                     {
-                        foreach(var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
+                        if (criteriaField.ValueObjectName != null || criteriaField.ValueEvaluator != null)
                         {
-                            if(criteriaField.ValueObjectName != null || criteriaField.ValueEvaluator != null)
+                            if (criteriaField.ValueObjectName == null)
+                                throw new NullReferenceException("criteriaField.ValueObjectName");
+                            if (criteriaField.ValueEvaluator == null)
+                                throw new NullReferenceException("criteriaField.ValueEvaluator");
+                            if (ruleDefinition.Objects == null)
+                                throw new NullReferenceException("ruleDefinition.Objects");
+                            VRObjectVariable objectVariable;
+                            if (!ruleDefinition.Objects.TryGetValue(criteriaField.ValueObjectName, out objectVariable))
+                                throw new NullReferenceException(String.Format("objectVariable '{0}'", criteriaField.ValueObjectName));
+                            if (objectVariable.ObjectType == null)
+                                throw new NullReferenceException(String.Format("objectVariable.ObjectType '{0}'", criteriaField.ValueObjectName));
+                            ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
                             {
-                                if (criteriaField.ValueObjectName == null)
-                                    throw new NullReferenceException("criteriaField.ValueObjectName");
-                                if (criteriaField.ValueEvaluator == null)
-                                    throw new NullReferenceException("criteriaField.ValueEvaluator");
-                                if (ruleDefinition.Objects == null)
-                                    throw new NullReferenceException("ruleDefinition.Objects");
-                                VRObjectVariable objectVariable;
-                                if (!ruleDefinition.Objects.TryGetValue(criteriaField.ValueObjectName, out objectVariable))
-                                    throw new NullReferenceException(String.Format("objectVariable '{0}'", criteriaField.ValueObjectName));
-                                if(objectVariable.ObjectType == null)
-                                    throw new NullReferenceException(String.Format("objectVariable.ObjectType '{0}'", criteriaField.ValueObjectName));
-                                ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
-                                    {
-                                        CriteriaName = criteriaField.FieldName,
-                                        ObjectName = criteriaField.ValueObjectName,
-                                        ObjectType = objectVariable.ObjectType,
-                                        PropertyEvaluator = criteriaField.ValueEvaluator
-                                    });
-                            }
+                                CriteriaName = criteriaField.FieldName,
+                                ObjectName = criteriaField.ValueObjectName,
+                                ObjectType = objectVariable.ObjectType,
+                                PropertyEvaluator = criteriaField.ValueEvaluator
+                            });
                         }
                     }
-                    return ruleCriteriaEvaluationInfos;
-                });
+                }
+                return ruleCriteriaEvaluationInfos;
+            });
         }
 
 

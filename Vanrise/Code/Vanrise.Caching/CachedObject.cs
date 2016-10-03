@@ -15,7 +15,7 @@ namespace Vanrise.Caching
             this.CreatedTime = DateTime.Now;
         }
 
-        public string CacheName { get; set; }
+        public Object CacheName { get; set; }
 
         public Object Object { get; set; }
 
