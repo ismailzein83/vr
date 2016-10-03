@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Transformation.MappingRuleManager();", ruleManagerVariableName);
             var ruleVariableName = context.GenerateUniqueMemberName("rule");
-            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetMatchRule({2}, {3});",
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetMatchRule(new Guid(\"{2}\"), {3});",
                 ruleVariableName, ruleManagerVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");

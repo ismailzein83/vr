@@ -39,7 +39,7 @@ namespace Vanrise.GenericData.Pricing
 
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.TariffRuleManager();", ruleManagerVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyTariffRule({1}, {2}, {3});",
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyTariffRule({1}, new Guid(\"{2}\"), {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
 
             if (this.EffectiveRate != null)

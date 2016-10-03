@@ -34,7 +34,7 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Business.BELookupRuleManager();", ruleManagerVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.GetMatchBE({2}, {3});", this.BusinessEntity, ruleManagerVariableName, this.BELookupRuleDefinitionId, ruleTargetVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.GetMatchBE(new Guid(\"{2}\"), {3});", this.BusinessEntity, ruleManagerVariableName, this.BELookupRuleDefinitionId, ruleTargetVariableName);
         }
     }
 

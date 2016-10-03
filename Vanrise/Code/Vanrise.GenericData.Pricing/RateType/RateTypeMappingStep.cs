@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, base.EffectiveTime);
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateTypeRuleManager();", ruleManagerVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateTypeRule({1}, {2}, {3});",
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateTypeRule({1}, new Guid(\"{2}\"), {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
 
             if (this.RateTypeId != null)
