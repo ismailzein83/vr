@@ -1,5 +1,5 @@
 ﻿app.constant("WhS_SupPL_PreviewGroupedBy", {
-    Countries: { dwGrid: "vr-spl-countrypreview-grid", description: "Countries" },
-    Zones: { dwGrid: "vr-spl-zonepreview-grid", description: "Zones" },
-    Codes: { dwGrid: "vr-spl-codepreview-grid", description: "Codes" }
+    Countries: { dwGrid: "whs-spl-countrypreview-grid", description: "Countries" },
+    Zones: { dwGrid: "whs-spl-zonepreview-grid", description: "Zones" },
+    Codes: { dwGrid: "whs-spl-codepreview-grid", description: "Codes" }
 });

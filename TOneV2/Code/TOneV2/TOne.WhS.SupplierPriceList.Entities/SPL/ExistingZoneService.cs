@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
@@ -32,7 +34,21 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             ExistingZoneService nextZoneService = nextEntity as ExistingZoneService;
 
             return this.ParentZone.Name.Equals(nextZoneService.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
-                && this.ZoneServiceEntity.EffectiveServices == nextZoneService.ZoneServiceEntity.EffectiveServices;
+                && this.SameServiceIds(ZoneServiceEntity.EffectiveServices, nextZoneService.ZoneServiceEntity.EffectiveServices);
+        }
+
+        private bool SameServiceIds(List<ZoneService> zoneServices, List<ZoneService> serviceIds)
+        {
+            if (!(zoneServices.Count == serviceIds.Count))
+                return false;
+
+            foreach (ZoneService zoneService in zoneServices)
+            {
+                if (!serviceIds.Any(item => item.ServiceId == zoneService.ServiceId))
+                    return false;
+            }
+
+            return true;
         }
     }
 

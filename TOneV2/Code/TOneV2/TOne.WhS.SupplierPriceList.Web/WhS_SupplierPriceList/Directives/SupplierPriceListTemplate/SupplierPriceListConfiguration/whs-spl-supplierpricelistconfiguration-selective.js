@@ -157,6 +157,6 @@
         }
     }
 
-    app.directive('whsSupplSupplierpricelistconfigurationSelective', SupplierpricelistconfigurationSelective);
+    app.directive('whsSplSupplierpricelistconfigurationSelective', SupplierpricelistconfigurationSelective);
 
 })(app);

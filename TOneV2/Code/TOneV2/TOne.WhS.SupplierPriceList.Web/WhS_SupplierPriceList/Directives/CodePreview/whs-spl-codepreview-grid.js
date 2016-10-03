@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSplCodepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_CodeChangeTypeEnum", "VRNotificationService",
+app.directive("whsSplCodepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_CodeChangeTypeEnum", "VRNotificationService",
 function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeEnum, VRNotificationService) {
 
     var directiveDefinitionObject = {

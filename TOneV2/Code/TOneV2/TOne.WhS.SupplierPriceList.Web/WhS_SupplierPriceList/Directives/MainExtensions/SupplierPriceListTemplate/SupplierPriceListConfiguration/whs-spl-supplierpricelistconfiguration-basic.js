@@ -441,6 +441,6 @@
         }
     }
 
-    app.directive('whsSupplSupplierpricelistconfigurationBasic', SupplierpricelistconfigurationBasic);
+    app.directive('whsSplSupplierpricelistconfigurationBasic', SupplierpricelistconfigurationBasic);
 
 })(app);

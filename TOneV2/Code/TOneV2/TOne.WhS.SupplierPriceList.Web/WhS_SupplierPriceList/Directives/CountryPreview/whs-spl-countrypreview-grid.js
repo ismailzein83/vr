@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSplCountrypreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRUIUtilsService", "VRNotificationService",
+app.directive("whsSplCountrypreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "VRUIUtilsService", "VRNotificationService",
 function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
@@ -81,7 +81,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
 
             var directiveTab = {
                 title: "Zones",
-                directive: "vr-spl-zonepreview-grid",
+                directive: "whs-spl-zonepreview-grid",
                 loadDirective: function (directiveAPI, countryDataItem) {
                     countryDataItem.zoneRateGridAPI = directiveAPI;
 

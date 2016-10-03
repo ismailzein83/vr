@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSplZoneservicespreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneServiceChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
-function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChangeTypeEnum, VRUIUtilsService, VRNotificationService) {
+app.directive("whsSplOtherratespreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_RateChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
+function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_RateChangeTypeEnum, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -11,19 +11,19 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChan
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var zoneServicesPreviewGrid = new ZoneServicesPreviewGrid($scope, ctrl, $attrs);
-            zoneServicesPreviewGrid.initializeController();
+            var otherRatePreviewGrid = new OtherRatePreviewGrid($scope, ctrl, $attrs);
+            otherRatePreviewGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/ZoneServicesPreview/Templates/SupplierPriceListZoneServicesPreviewGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/OtherRatesPreview/Templates/SupplierPriceListOtherRatesPreviewGridTemplate.html"
 
     };
 
-    function ZoneServicesPreviewGrid($scope, ctrl, $attrs) {
+    function OtherRatePreviewGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         var onlyModified;
@@ -32,7 +32,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChan
 
         function initializeController() {
 
-            $scope.zoneServicesPreview = [];
+            $scope.otherRatesPreview = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
@@ -53,7 +53,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChan
 
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_SupPL_SupplierPriceListPreviewPIService.GetFilteredZoneServicesPreview(dataRetrievalInput)
+                return WhS_SupPL_SupplierPriceListPreviewPIService.GetFilteredOtherRatePreview(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
@@ -71,26 +71,27 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChan
 
         function mapDataNeeded(dataItem) {
 
-            dataItem.onSystemServicseReady = function (api) {
-                dataItem.SystemServicesApi = api
-                dataItem.SystemServicesApi.load({ selectedIds: dataItem.SystemServiceIds });
-            }
-
-            dataItem.onImportedServicesReady = function (api) {
-                dataItem.ImportedServicesApi = api
-                dataItem.ImportedServicesApi.load({ selectedIds: dataItem.ImportedServiceIds });
-            }
-
-            switch (dataItem.ZoneServicesChangeType) {
-                case WhS_SupPL_ZoneServiceChangeTypeEnum.New.value:
-                    dataItem.ZoneServicesStatusIconUrl = WhS_SupPL_ZoneServiceChangeTypeEnum.New.icon;
-                    dataItem.ZoneServicesStatusIconTooltip = WhS_SupPL_ZoneServiceChangeTypeEnum.New.description;
+            switch (dataItem.Entity.ChangeTypeRate) {
+                case WhS_SupPL_RateChangeTypeEnum.New.value:
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.New.icon;
+                    dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.New.description;
                     break;
 
-                case WhS_SupPL_ZoneServiceChangeTypeEnum.Deleted.value:
-                    dataItem.ZoneServicesStatusIconUrl = WhS_SupPL_ZoneServiceChangeTypeEnum.Deleted.icon;
-                    dataItem.ZoneServicesStatusIconTooltip = WhS_SupPL_ZoneServiceChangeTypeEnum.Deleted.description;
+                case WhS_SupPL_RateChangeTypeEnum.Deleted.value:
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Deleted.icon;
+                    dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Deleted.description;
                     break;
+
+                case WhS_SupPL_RateChangeTypeEnum.Increase.value:
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Increase.icon;
+                    dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Increase.description;
+                    break;
+
+                case WhS_SupPL_RateChangeTypeEnum.Decrease.value:
+                    dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Decrease.icon;
+                    dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Decrease.description;
+                    break;
+
             }
         }
 

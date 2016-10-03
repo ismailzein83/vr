@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrSplGroupedbySelector', ['WhS_SupPL_PreviewGroupedBy', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService) {
+app.directive('whsSplViewchangetypeSelector', ['WhS_SupPL_PreviewChangeTypeEnum', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_SupPL_PreviewChangeTypeEnum, UtilsService, VRUIUtilsService) {
 
     return {
         restrict: 'E',
@@ -12,7 +12,6 @@ app.directive('vrSplGroupedbySelector', ['WhS_SupPL_PreviewGroupedBy', 'UtilsSer
             onselectitem: '=',
             ondeselectitem: '=',
             isrequired: '=',
-            isdisabled: '=',
             hideremoveicon: '@',
             normalColNum: '@'
         },
@@ -23,8 +22,8 @@ app.directive('vrSplGroupedbySelector', ['WhS_SupPL_PreviewGroupedBy', 'UtilsSer
 
             ctrl.selectedvalues;
 
-            var groupBySelector = new GroupBySelector(ctrl, $scope, $attrs);
-            groupBySelector.initializeController();
+            var viewChangeTypeSelector = new ViewChangeTypeSelector(ctrl, $scope, $attrs);
+            viewChangeTypeSelector.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -34,7 +33,7 @@ app.directive('vrSplGroupedbySelector', ['WhS_SupPL_PreviewGroupedBy', 'UtilsSer
         }
     };
 
-    function GroupBySelector(ctrl, $scope, attrs) {
+    function ViewChangeTypeSelector(ctrl, $scope, attrs) {
 
         this.initializeController = initializeController;
 
@@ -59,15 +58,15 @@ app.directive('vrSplGroupedbySelector', ['WhS_SupPL_PreviewGroupedBy', 'UtilsSer
                     selectedIds = payload.selectedIds;
                 }
 
-                ctrl.datasource = UtilsService.getArrayEnum(WhS_SupPL_PreviewGroupedBy);
+                ctrl.datasource = UtilsService.getArrayEnum(WhS_SupPL_PreviewChangeTypeEnum);
 
                 if (selectedIds != undefined) {
-                    VRUIUtilsService.setSelectedValues(selectedIds, 'description', attrs, ctrl);
+                    VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                 }
             };
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('description', attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
             };
 
             if (ctrl.onReady != null)
@@ -78,9 +77,9 @@ app.directive('vrSplGroupedbySelector', ['WhS_SupPL_PreviewGroupedBy', 'UtilsSer
     function getUserTemplate(attrs) {
 
         
-        var label = "Grouped By";
+        var label = "View Change Type";
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select  datatextfield="description" datavaluefield="description" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select  datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>';
     }
 
 }]);

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneChangeTypeEnum", "WhS_SupPL_RateChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
+app.directive("whsSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneChangeTypeEnum", "WhS_SupPL_RateChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
 function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeEnum, WhS_SupPL_RateChangeTypeEnum, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
@@ -78,7 +78,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
             var codeTab = {
                 title: "Codes",
-                directive: "vr-spl-codepreview-grid",
+                directive: "whs-spl-codepreview-grid",
                 loadDirective: function (directiveAPI, zoneDataItem) {
                     zoneDataItem.codeGridAPI = directiveAPI;
 
@@ -94,7 +94,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
             var otherRatesTab = {
                 title: "Other Rates",
-                directive: "vr-spl-otherratespreview-grid",
+                directive: "whs-spl-otherratespreview-grid",
                 loadDirective: function (directiveAPI, zoneDataItem) {
                     zoneDataItem.otherRatesGridAPI = directiveAPI;
 
@@ -110,7 +110,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
 
             var zoneServicesTab = {
                 title: "Zone Services",
-                directive: "vr-spl-zoneservicespreview-grid",
+                directive: "whs-spl-zoneservicespreview-grid",
                 loadDirective: function (directiveAPI, zoneDataItem) {
                     zoneDataItem.zoneServicesGridAPI = directiveAPI;
 

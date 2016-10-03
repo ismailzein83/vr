@@ -32,27 +32,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
                 importedZoneServices.Add(item.Value.First());
 
-            bool result;
-
-            if (result = importedZoneServices.All(item => item.BED != importedZoneServices.First().BED))
-            {
-                DateTime zoneServiceWithMinBED = importedZoneServices.Min(item => item.BED);
-
-                importedDataByZone.ImportedZoneServiceGroup = new ImportedZoneServiceGroup()
-                {
-                    ServiceIds = importedZoneServices.Select(item => item.ServiceId).ToList(),
-                    ZoneName = importedDataByZone.ZoneName,
-                    BED = zoneServiceWithMinBED,
-                    EED = importedZoneServices.First().EED
-                };
-            }
-
-            return result;
+            return importedZoneServices.All(item => item.BED == importedZoneServices.First().BED);
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has services with different begin effective date, minimum begin effective date has been selected", (target as ImportedDataByZone).ZoneName);
+            return string.Format("Zone {0} has services with different BED, minimum BED has been selected", (target as ImportedDataByZone).ZoneName);
         }
 
     }

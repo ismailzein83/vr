@@ -111,6 +111,6 @@
         }
     }
 
-    app.directive('whsSupplSupplierpricelisttemplateSelector', SupplierpricelisttemplateSelector);
+    app.directive('whsSplSupplierpricelisttemplateSelector', SupplierpricelisttemplateSelector);
 
 })(app);

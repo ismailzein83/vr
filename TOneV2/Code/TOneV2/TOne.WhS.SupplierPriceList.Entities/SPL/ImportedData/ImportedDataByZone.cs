@@ -12,7 +12,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         public ImportedDataByZone()
         {
-            ImportedZoneServices = new List<ImportedZoneService>();
             ImportedZoneServicesToValidate = new Dictionary<int, List<ImportedZoneService>>();
         }
         public string ZoneName { get; set; }
@@ -56,14 +55,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         public ImportedZoneServiceGroup ImportedZoneServiceGroup { get; set; }
-
-        private List<ImportedZoneService> _importedZoneServices = new List<ImportedZoneService>();
-        public List<ImportedZoneService> ImportedZoneServices
-        {
-            get;
-            set;
-
-        }
 
         #region IRuleTarget Implementation
 

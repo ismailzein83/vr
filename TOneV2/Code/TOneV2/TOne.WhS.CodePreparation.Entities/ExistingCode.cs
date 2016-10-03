@@ -37,8 +37,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         {
             ExistingCode nextExistingCode = nextEntity as ExistingCode;
 
-            return this.ParentZone.Name.Equals(nextExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
-                && this.CodeEntity.Code == nextExistingCode.CodeEntity.Code;
+            return this.ParentZone.Name.Equals(nextExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 

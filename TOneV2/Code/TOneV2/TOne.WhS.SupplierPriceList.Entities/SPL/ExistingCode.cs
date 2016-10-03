@@ -32,8 +32,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         {
             ExistingCode nextExistingCode = nextEntity as ExistingCode;
 
-            return this.ParentZone.Name.Equals(nextExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
-                && this.CodeEntity.Code == nextExistingCode.CodeEntity.Code;
+            return this.ParentZone.Name.Equals(nextExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase);
         }
     }
     public class ExistingCodesByCodeValue : Dictionary<string, List<ExistingCode>>
