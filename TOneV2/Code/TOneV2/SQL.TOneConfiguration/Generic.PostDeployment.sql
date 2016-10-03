@@ -330,9 +330,7 @@ when matched then
 	[Name] = s.[Name],[Details] = s.[Details]
 when not matched by target then
 	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[DataRecordFieldTypeConfig] off;
 ----------------------------------------------------------------------------------------------------
 end
