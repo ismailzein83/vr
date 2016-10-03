@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE genericdata.sp_GenericRuleDefinition_Update
-	@Id INT,
+CREATE PROCEDURE [genericdata].[sp_GenericRuleDefinition_Update]
+	@Id uniqueidentifier,
 	@Name NVARCHAR(900),
 	@Details NVARCHAR(MAX)
 AS

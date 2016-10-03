@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_BELookupRuleDefinition_Update]
-	@ID INT,
+	@ID uniqueidentifier,
 	@Name NVARCHAR(450),
 	@Details NVARCHAR(MAX)
 AS
