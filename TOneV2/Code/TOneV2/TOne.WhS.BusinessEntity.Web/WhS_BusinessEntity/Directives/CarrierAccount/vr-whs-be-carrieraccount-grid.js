@@ -149,6 +149,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         function editCarrierAccount(carrierAccountObj) {
             var onCarrierAccountUpdated = function (carrierAccount) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccount);
+                addReadySericeApi(carrierAccount);
                 gridAPI.itemUpdated(carrierAccount);
             }
             var carrierAccountItem;
