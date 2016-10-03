@@ -9,7 +9,7 @@
                      getrowstyle="getRowStyle"
                      isdynamicrowstyle="true">
 
-            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" widthfactor="23" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" widthfactor="19" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Product'"
                                field="'EffectiveRoutingProductName'"
                                type="'Text'"
@@ -18,7 +18,7 @@
                                disablesorting="true">
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Route Options'" widthfactor="38.5" disablesorting="true">
+            <vr-datagridcolumn headertext="'Route Options'" widthfactor="34.5" disablesorting="true">
                 <div vr-loader="dataItem.isLoadingRouteOptions">
                     <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
                 </div>
@@ -89,14 +89,14 @@
                 </div>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'BED'" widthfactor="7" disablesorting="true">
+            <vr-datagridcolumn headertext="'BED'" widthfactor="11" disablesorting="true">
                 <span vr-disabled="true">
                     <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()"></vr-datetimepicker>
                 </span>
                 <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED"></vr-datetimepicker>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'EED'" widthfactor="7" disablesorting="true">
+            <vr-datagridcolumn headertext="'EED'" widthfactor="11" disablesorting="true">
                 <span vr-disabled="!dataItem.IsCurrentRateEditable">
                     <vr-datetimepicker type="date"
                                        value="dataItem.CurrentRateEED"
