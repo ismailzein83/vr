@@ -114,8 +114,8 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
-GO--delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts'
-delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D')
+GO--delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts', 'Alert Rule Types', 'Alert Rule'
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D','05234A49-DFA3-44C3-A552-80E6C793A67A', 'FF5E429A-CFF0-4095-8AD0-987FD3CAD502')
 
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
