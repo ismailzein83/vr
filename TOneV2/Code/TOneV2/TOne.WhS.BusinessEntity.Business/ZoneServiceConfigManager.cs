@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allZoneServiceConfigs.ToBigResult(input, filterExpression, ZoneServiceConfigDetailMapper));
         }
-        private Dictionary<int, ZoneServiceConfig> GetCachedZoneServiceConfigs()
+        public Dictionary<int, ZoneServiceConfig> GetCachedZoneServiceConfigs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetZoneServiceConfigs",
                () =>
