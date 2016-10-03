@@ -54,6 +54,7 @@ namespace Vanrise.GenericData.QueueActivators
         {
             var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
             var allSummaryBatches = new Dictionary<DateTime, Dictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
+            Dictionary<DateTime, List<StagingSummaryRecord>> data = new Dictionary<DateTime,List<StagingSummaryRecord>>();
             context.DoWhilePreviousRunning(() =>
             {
                 bool hasItem = false;
@@ -106,7 +107,7 @@ namespace Vanrise.GenericData.QueueActivators
                     BatchStart = summaryBatchEntry.Key,
                     StageName = context.CurrentStageName,
                 };
-
+                
 
                 dataManager.WriteRecordToStream(obj, dbApplyStream);
             }

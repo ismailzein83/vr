@@ -32,19 +32,22 @@ namespace Vanrise.Common.Business.SummaryTransformation
             foreach (var item in items)
             {
                 DateTime batchStart;
-                GetRawItemBatchTimeRange(item, out batchStart);
+                DateTime batchEnd;
+                GetRawItemBatchTimeRange(item, out batchStart, out batchEnd);
 
                 SummaryBatchInProcess<Q> batch;
                 if (!batches.TryGetValue(batchStart, out batch))
                 {
                     batch = new SummaryBatchInProcess<Q>();
                     batch.BatchStart = batchStart;
+                    batch.BatchEnd = batchEnd;
                     batch.ItemsBySummaryKey = new Dictionary<string, Q>();
                     batches.Add(batchStart, batch);
                 }
 
                 Q summaryItem = CreateSummaryItemFromRawItem(item);
                 summaryItem.BatchStart = batch.BatchStart;
+                summaryItem.BatchEnd = batch.BatchEnd;
                 string itemKey = GetSummaryItemKey(summaryItem);
                 Q existingSummaryItem;
                 if (batch.ItemsBySummaryKey.TryGetValue(itemKey, out existingSummaryItem))
@@ -123,7 +126,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         #region abstract Methods
 
-        protected abstract void GetRawItemBatchTimeRange(T rawItem, out DateTime batchStart);
+        protected abstract void GetRawItemBatchTimeRange(T rawItem, out DateTime batchStart, out DateTime batchEnd);
 
         public abstract string GetSummaryItemKey(Q summaryItem);
 
@@ -212,6 +215,8 @@ namespace Vanrise.Common.Business.SummaryTransformation
         private class SummaryBatchInProcess<T> where T : ISummaryItem
         {
             public DateTime BatchStart { get; set; }
+
+            public DateTime BatchEnd { get; set; }
 
             public Dictionary<string, T> ItemsBySummaryKey { get; set; }
         }

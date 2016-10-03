@@ -37,7 +37,7 @@ namespace Vanrise.GenericData.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart);
+        public abstract void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart, out DateTime batchEnd);
     }
 
     public class SummaryTransformationKeyFieldMapping

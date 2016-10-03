@@ -16,15 +16,21 @@ namespace Vanrise.GenericData.MainExtensions
 
         public int IntervalOffset { get; set; }
 
-        public override void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart)
+        public override void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart, out DateTime batchEnd)
         {
             switch (this.IntervalType)
             {
                 case SummaryBatchIntervalType.Minutes:
                     batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, rawItemTime.Hour, ((int)(rawItemTime.Minute / this.IntervalOffset)) * this.IntervalOffset, 0);
+                    batchEnd = batchStart.AddMinutes(this.IntervalOffset);
+                    break;
+                case SummaryBatchIntervalType.Hours:
+                    batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, ((int)(rawItemTime.Hour / this.IntervalOffset)) * this.IntervalOffset, 0, 0);
+                    batchEnd = batchStart.AddHours(this.IntervalOffset);
                     break;
                 case SummaryBatchIntervalType.Days:
                     batchStart = rawItemTime.Date;
+                    batchEnd = batchStart.AddDays(1);
                     break;
                 default:
                     throw new NotImplementedException();

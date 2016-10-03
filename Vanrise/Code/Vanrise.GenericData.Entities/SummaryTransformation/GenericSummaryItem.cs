@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.Entities
 
         public DateTime BatchStart { get; set; }
 
+        public DateTime BatchEnd { get; set; }
+
         public dynamic DataRecord { get; set; }
     }
 

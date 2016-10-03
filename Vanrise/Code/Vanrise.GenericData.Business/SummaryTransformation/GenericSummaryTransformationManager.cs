@@ -99,12 +99,12 @@ namespace Vanrise.GenericData.Business
             return GetSummaryItemsFromDataRecords(dataRecords);
         }
 
-        protected override void GetRawItemBatchTimeRange(dynamic rawItem, out DateTime batchStart)
+        protected override void GetRawItemBatchTimeRange(dynamic rawItem, out DateTime batchStart, out DateTime batchEnd)
         {
             var batchRangeRetrieval = this.SummaryTransformationDefinition.BatchRangeRetrieval;
             if (batchRangeRetrieval == null)
                 throw new NullReferenceException("batchRangeRetrieval");
-            batchRangeRetrieval.GetRawItemBatchTimeRange(rawItem, this.GenericSummaryTransformer.GetRawItemTime(rawItem), out batchStart);
+            batchRangeRetrieval.GetRawItemBatchTimeRange(rawItem, this.GenericSummaryTransformer.GetRawItemTime(rawItem), out batchStart, out batchEnd);
         }
 
         public override string GetSummaryItemKey(GenericSummaryItem summaryItem)
