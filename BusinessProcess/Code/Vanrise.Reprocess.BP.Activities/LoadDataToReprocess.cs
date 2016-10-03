@@ -100,6 +100,7 @@ namespace Vanrise.Reprocess.BP.Activities
                     inputArgument.StageManager.EnqueueBatch(stageName, batch);
                 }
             }
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", output.EventCount);
             return output;
         }
 
