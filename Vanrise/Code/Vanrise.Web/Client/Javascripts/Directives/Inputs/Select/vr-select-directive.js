@@ -403,7 +403,8 @@
                                 top = basetop - (heigth + (selfHeight * 2.7));
                             else
                                 top = selfOffset.top - $(window).scrollTop() + selfHeight;
-
+                            if (controller.hidefilterbox != undefined)
+                                top = top + 30;
                             $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
                         });
 
