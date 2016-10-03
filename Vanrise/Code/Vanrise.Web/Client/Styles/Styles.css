@@ -2394,13 +2394,18 @@ vr-listitem div[class^="col"] {
 
 /*start of vr-cellviewer*/
 .vr-cellviewer-watermark {
-    min-height: 28px;
     cursor: pointer;
     color: #616F77;
     font-size: 10px;
     opacity: 0.8;
-    top: -3px;
+    top: -2px;
     position: relative;
+    background-color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 21px);
+    display: inline-block;
 }
 
 /*override handsontable readonly class*/

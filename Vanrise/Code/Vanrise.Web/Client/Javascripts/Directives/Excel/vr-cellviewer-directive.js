@@ -129,7 +129,7 @@
                     rows = attrs.rows;
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
                         + '<vr-validator validate="ctrl.validate()">'
-                        + '<div     id="mainInput" ng-model="ctrl.value" style="border-radius: 4px; padding: 0px; width: 100%; border: 0px;">'
+                        + '<div     id="mainInput" ng-model="ctrl.value" style="border-radius: 4px; padding: 0px; width: 100%; border: 0px;position:relative">'
                         + '<span class="glyphicon glyphicon-circle-arrow-right" style="font-size: 21px;top: 3px;cursor: pointer; cursor: hand;" ng-click="updateRange()"   ng-show="ctrl.value == undefined"></span>'
                         + '<a ng-show="ctrl.value !=null && ctrl.value !=undefined " class="hand-cursor" style="display: inline-block; width: calc(100% - 45px); position: relative; top: -2px;" ng-click="selectCell()">'
                         + '<span ng-show="ctrl.type == \'cell\' || ctrl.type == undefined " >Row{{ctrl.value.row+1}};Col{{ctrl.value.col+1}}</span>'
@@ -138,7 +138,7 @@
                         + '<span ng-show="ctrl.value ==null && (ctrl.type == \'cell\' || ctrl.type == undefined)" ng-click="updateRange()" class="vr-cellviewer-watermark"> Select cell from excel and click here.</span>'
                         + '<span ng-show="ctrl.value ==null && (ctrl.type == \'row\')" ng-click="updateRange()" class="vr-cellviewer-watermark"> Select row from excel and click here.</span>'
 
-                        + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor" style="top: 0px;" aria-hidden="true" ng-click="ctrl.remove()"></span>'
+                        + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor" style="top: 0px; right: 1px;position:absolute" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                         + '</div>'
                         + '</vr-validator>'
                         + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
