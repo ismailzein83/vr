@@ -65,7 +65,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var zoneValue = analyticRecord.DimensionValues[3];
                     if (zoneValue != null)
                         customerFormatted.Destination = zoneValue.Name;
-                    var saleRateValue = analyticRecord.DimensionValues[6];
+                    var saleRateValue = analyticRecord.DimensionValues[4];
                     if (saleRateValue != null)
                         customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
 
