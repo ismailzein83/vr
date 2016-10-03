@@ -153,7 +153,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.24769in</Height>
+                  <Height>0.25278in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -303,7 +303,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.24769in</Height>
+                  <Height>0.25278in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -625,7 +625,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.24769in</Height>
+                  <Height>0.25278in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -943,7 +943,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.24769in</Height>
+                  <Height>0.25278in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1139,14 +1139,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="textbox24">
+                        <Textbox Name="Textbox25">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber((Sum(Fields!CostNet) / Sum(Fields!Duration)),Parameters!Digit.Value)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!CostNet.Value)/Sum(Fields!Duration.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1158,39 +1158,11 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <ZIndex>9</ZIndex>
+                          <rd:DefaultName>Textbox25</rd:DefaultName>
                           <Style>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox25">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=FormatNumber((Sum(Fields!SaleNet) / Sum(Fields!Duration)),Parameters!Digit.Value)</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <ZIndex>8</ZIndex>
-                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1198,6 +1170,37 @@
                           </Style>
                         </Textbox>
                         <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox46">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=FormatNumber(Sum(Fields!SaleNet.Value)/Sum(Fields!Duration.Value),Parameters!Digit.Value)</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox46</rd:DefaultName>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1265,7 +1268,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.24769in</Height>
+                  <Height>0.25278in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1562,7 +1565,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.24769in</Height>
+                  <Height>0.25278in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1889,7 +1892,7 @@
                       <GroupExpression>=Fields!SaleZone.Value</GroupExpression>
                     </GroupExpressions>
                     <PageBreak>
-                      <BreakLocation>Between</BreakLocation>
+                      <BreakLocation>StartAndEnd</BreakLocation>
                       <Disabled>=IIf(Parameters!PageBreak.Value="true", false, true)</Disabled>
                     </PageBreak>
                   </Group>
@@ -1905,36 +1908,15 @@
                       <KeepTogether>true</KeepTogether>
                     </TablixMember>
                     <TablixMember>
-                      <Group Name="table1_Group2">
-                        <GroupExpressions>
-                          <GroupExpression>=Fields!SaleZone.Value</GroupExpression>
-                        </GroupExpressions>
-                        <PageBreak>
-                          <BreakLocation>Between</BreakLocation>
-                        </PageBreak>
+                      <Group Name="table1_Details_Group">
+                        <DataElementName>Detail</DataElementName>
                       </Group>
-                      <SortExpressions>
-                        <SortExpression>
-                          <Value>=Fields!Duration.Value</Value>
-                          <Direction>Descending</Direction>
-                        </SortExpression>
-                      </SortExpressions>
                       <TablixMembers>
-                        <TablixMember>
-                          <Group Name="table1_Details_Group">
-                            <PageBreak>
-                              <BreakLocation>Between</BreakLocation>
-                            </PageBreak>
-                            <DataElementName>Detail</DataElementName>
-                          </Group>
-                          <TablixMembers>
-                            <TablixMember />
-                          </TablixMembers>
-                          <DataElementName>Detail_Collection</DataElementName>
-                          <DataElementOutput>Output</DataElementOutput>
-                          <KeepTogether>true</KeepTogether>
-                        </TablixMember>
+                        <TablixMember />
                       </TablixMembers>
+                      <DataElementName>Detail_Collection</DataElementName>
+                      <DataElementOutput>Output</DataElementOutput>
+                      <KeepTogether>true</KeepTogether>
                     </TablixMember>
                     <TablixMember>
                       <KeepWithGroup>Before</KeepWithGroup>
@@ -1953,19 +1935,19 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>RoutingAnalysis</DataSetName>
-            <Top>0.03528cm</Top>
-            <Height>1.48614in</Height>
+            <Top>0cm</Top>
+            <Height>1.51668in</Height>
             <Width>10.63503in</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>1.54167in</Height>
+        <Height>1.54169in</Height>
         <Style />
       </Body>
       <Width>10.65586in</Width>
       <Page>
         <PageHeader>
-          <Height>2.13542in</Height>
+          <Height>1.65277in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1986,8 +1968,8 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.1875in</Top>
-              <Left>0.05292cm</Left>
+              <Top>0.05208in</Top>
+              <Left>0cm</Left>
               <Height>0.25in</Height>
               <Width>1.37499in</Width>
               <Style>
@@ -2014,8 +1996,7 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.1875in</Top>
-              <Left>3.27083in</Left>
+              <Left>3.79583in</Left>
               <Height>0.25in</Height>
               <Width>0.99999in</Width>
               <ZIndex>1</ZIndex>
@@ -2045,9 +2026,9 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.48265in</Top>
-              <Left>1.73681in</Left>
-              <Height>0.375in</Height>
+              <Top>0.31944in</Top>
+              <Left>2.08951in</Left>
+              <Height>0.33333in</Height>
               <Width>4.62499in</Width>
               <ZIndex>2</ZIndex>
               <Style>
@@ -2074,10 +2055,10 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>1.73264in</Top>
-              <Left>0.05292cm</Left>
-              <Height>0.375in</Height>
-              <Width>0.93056in</Width>
+              <Top>1.32709in</Top>
+              <Left>0.00884cm</Left>
+              <Height>0.29444in</Height>
+              <Width>1.01042in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -2105,10 +2086,10 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>1.73264in</Top>
-              <Left>0.96527in</Left>
-              <Height>0.375in</Height>
-              <Width>3.49305in</Width>
+              <Top>1.32709in</Top>
+              <Left>1.04515in</Left>
+              <Height>0.29444in</Height>
+              <Width>3.84166in</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <Border>
@@ -2124,7 +2105,8 @@
               <Source>Database</Source>
               <Value>=Code.Base64ToImage(Parameters!LogoPath.Value)</Value>
               <MIMEType>image/jpeg</MIMEType>
-              <Left>6.52083in</Left>
+              <Top>0.05208in</Top>
+              <Left>8.44586in</Left>
               <Height>0.71in</Height>
               <Width>2.21in</Width>
               <ZIndex>5</ZIndex>
@@ -2149,8 +2131,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.125in</Top>
-              <Left>6.52083in</Left>
+              <Top>0.83152in</Top>
+              <Left>8.32948in</Left>
               <Height>0.25in</Height>
               <Width>0.74999in</Width>
               <ZIndex>6</ZIndex>
@@ -2180,8 +2162,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.375in</Top>
-              <Left>6.52083in</Left>
+              <Top>1.08152in</Top>
+              <Left>8.32948in</Left>
               <Height>0.25in</Height>
               <Width>0.74999in</Width>
               <ZIndex>7</ZIndex>
@@ -2210,8 +2192,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.125in</Top>
-              <Left>7.27083in</Left>
+              <Top>0.83152in</Top>
+              <Left>9.14892in</Left>
               <Height>0.25in</Height>
               <Width>1.5in</Width>
               <ZIndex>8</ZIndex>
@@ -2241,8 +2223,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>textbox2</rd:DefaultName>
-              <Top>1.375in</Top>
-              <Left>7.27083in</Left>
+              <Top>1.08152in</Top>
+              <Left>9.14892in</Left>
               <Height>0.25in</Height>
               <Width>1.5in</Width>
               <ZIndex>9</ZIndex>
@@ -2270,10 +2252,9 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.89931in</Top>
-              <Left>0.03125in</Left>
-              <Height>0.375in</Height>
-              <Width>1in</Width>
+              <Top>0.66666in</Top>
+              <Height>0.275in</Height>
+              <Width>1.01042in</Width>
               <ZIndex>10</ZIndex>
               <DataElementOutput>NoOutput</DataElementOutput>
               <Style>
@@ -2302,9 +2283,9 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.89931in</Top>
-              <Left>1.03125in</Left>
-              <Height>0.375in</Height>
+              <Top>0.66666in</Top>
+              <Left>1.04167in</Left>
+              <Height>0.275in</Height>
               <Width>3.84166in</Width>
               <ZIndex>11</ZIndex>
               <Style>
@@ -2334,10 +2315,10 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>1.30208in</Top>
-              <Left>0.03125in</Left>
-              <Height>0.375in</Height>
-              <Width>1in</Width>
+              <Top>0.98333in</Top>
+              <Left>0.00348in</Left>
+              <Height>0.30209in</Height>
+              <Width>1.01042in</Width>
               <ZIndex>12</ZIndex>
               <DataElementOutput>NoOutput</DataElementOutput>
               <Style>
@@ -2366,10 +2347,10 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>1.30208in</Top>
-              <Left>1.03125in</Left>
-              <Height>0.375in</Height>
-              <Width>3.84166in</Width>
+              <Top>0.98333in</Top>
+              <Left>1.04167in</Left>
+              <Height>0.30209in</Height>
+              <Width>3.84513in</Width>
               <ZIndex>13</ZIndex>
               <Style>
                 <Border>

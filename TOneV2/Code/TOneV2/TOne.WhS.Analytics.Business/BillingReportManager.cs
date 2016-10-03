@@ -264,7 +264,7 @@ namespace TOne.WhS.Analytics.Business
                 range.Merge();
 
                 TimeSpan span = (toDate.HasValue) ? ((DateTime)toDate).Subtract(fromDate) : DateTime.Now.Subtract(fromDate);
-                int numberOfMonths = (int)(span.TotalDays / 30);
+                int numberOfMonths = (int)(Math.Round(span.TotalDays / 30));
 
                 int headerIndex = 2;
                 int irow = 1;
