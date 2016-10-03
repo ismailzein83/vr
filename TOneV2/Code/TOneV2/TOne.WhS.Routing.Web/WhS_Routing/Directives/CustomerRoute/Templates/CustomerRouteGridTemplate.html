@@ -9,12 +9,19 @@
         <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" disablesorting widthfactor="5"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Sale Zone'" field="'ZoneName'" disablesorting widthfactor="5"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" widthfactor="5"></vr-datagridcolumn>
+
+        <vr-datagridcolumn headertext="'Services'" disablesorting="true">
+            <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+        </vr-datagridcolumn>
+
         <vr-datagridcolumn headertext="'Blocked'" field="'Entity.IsBlocked'" widthfactor="5"></vr-datagridcolumn>
+
         <vr-datagridcolumn headertext="'Route Options'" field="'RouteOptionsDescription'" disablesorting>
             <vr-label isvalue breakline>
                 {{dataItem.RouteOptionsDescription}}
             </vr-label>
         </vr-datagridcolumn>
+
         <vr-datagridexpandablerow>
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>

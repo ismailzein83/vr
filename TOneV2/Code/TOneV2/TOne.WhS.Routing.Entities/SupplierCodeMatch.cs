@@ -22,6 +22,8 @@ namespace TOne.WhS.Routing.Entities
         public Decimal RateValue { get; set; }
 
         public HashSet<int> SupplierServiceIds { get; set; }
+
+        public HashSet<int> ExactSupplierServiceIds { get; set; }
     }
 
     public class SupplierCodeMatches

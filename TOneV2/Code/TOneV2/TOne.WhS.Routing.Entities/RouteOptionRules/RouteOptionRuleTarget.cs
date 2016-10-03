@@ -29,6 +29,9 @@ namespace TOne.WhS.Routing.Entities
 
         public int? ExecutedRuleId { get; set; }
 
+        public HashSet<int> ExactSupplierServiceIds { get; set; }
+
+
         #region Interfaces
 
         string IRuleCodeTarget.Code

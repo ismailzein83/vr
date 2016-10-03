@@ -13,7 +13,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Local Variables
         ISupplierZoneServiceReader _reader;
         CarrierAccountManager _carrierAccountManager;
-        ZoneServiceConfigManager _zoneServiceConfigManager;
         #endregion
 
 
@@ -22,10 +21,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             _reader = reader;
             _carrierAccountManager = new CarrierAccountManager();
-            _zoneServiceConfigManager = new ZoneServiceConfigManager();
         }
 
-        public List<ZoneService> GetRoutingSupplierZoneServices(int supplierId, long supplierZoneId, bool withChildServices = false)
+        public List<ZoneService> GetSupplierZoneServices(int supplierId, long supplierZoneId)
         {
             SupplierZoneService supplierZoneService;
             Dictionary<int, ZoneService> servicesAndChildServices = new Dictionary<int, ZoneService>();
@@ -33,14 +31,12 @@ namespace TOne.WhS.BusinessEntity.Business
             if (HasSupplierZoneServices(supplierId, supplierZoneId, out supplierZoneService))
             {
                 // Supplier Zone has Services
-                GetAllRelatedZoneServices(supplierZoneService.EffectiveServices, servicesAndChildServices, withChildServices);
-                return servicesAndChildServices.Values.ToList();
+                return supplierZoneService.EffectiveServices;
             }
             else
             {
                 //Get default supplier services
-                GetAllRelatedZoneServices(GetDefaultSupplierServices(supplierId), servicesAndChildServices, withChildServices);
-                return servicesAndChildServices.Values.ToList();
+                return GetDefaultSupplierServices(supplierId);
             }
         }
         #endregion
@@ -71,31 +67,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new Exception(string.Format("supplierAccount.SupplierSettings.DefaultServices for Supplier Id: {0} count is 0.", supplierId));
 
             return supplierAccount.SupplierSettings.DefaultServices;
-        }
-
-        private void GetAllRelatedZoneServices(List<ZoneService> zoneServices, Dictionary<int, ZoneService> allZoneServices, bool withChildServices)
-        {
-            if (zoneServices == null || zoneServices.Count == 0)
-                return;
-
-            CheckIfDuplicateBeforeAdd(zoneServices, allZoneServices);
-
-            if (withChildServices)
-            {
-                List<ZoneService> childZoneServices = _zoneServiceConfigManager.GetChildServicesByZoneServices(zoneServices);
-                GetAllRelatedZoneServices(childZoneServices, allZoneServices, withChildServices);
-            }
-        }
-        private void CheckIfDuplicateBeforeAdd(List<ZoneService> zoneServices, Dictionary<int, ZoneService> allZoneServices)
-        {
-            foreach (ZoneService zoneService in zoneServices)
-            {
-                ZoneService duplicateZoneServices = allZoneServices.GetRecord(zoneService.ServiceId);
-                if (duplicateZoneServices == null)
-                {
-                    allZoneServices.Add(zoneService.ServiceId, zoneService);
-                }
-            }
         }
         #endregion
     }

@@ -146,25 +146,26 @@ namespace TOne.WhS.Routing.Business
             }
             return null;
         }
-
+         
         private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            var maxNumberOfOptions = configManager.GetRouteBuildNumberOfOptions();
+            var maxNumberOfOptions = configManager.GetRouteBuildNumberOfOptions(); 
             
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
-            routeRuleExecutionContext.SaleEntityServiceIds = customerZoneDetail.SaleEntityServiceIds;
-            routeRuleExecutionContext.CustomerServiceIds = customerZoneDetail.CustomerServiceIds;
+            routeRuleExecutionContext.CustomerServiceIdHashSet = customerZoneDetail.CustomerServiceIds;//used for service matching
+            routeRuleExecutionContext.CustomerServiceIds = customerZoneDetail.CustomerServiceIds != null ? string.Join(",", customerZoneDetail.CustomerServiceIds) : null;// used for market price
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
             route.SaleZoneId = saleCodeMatch.SaleZoneId;
             route.ExecutedRuleId = routeRule.RuleId;
             route.Rate = customerZoneDetail.EffectiveRateValue;
+            route.CustomerServiceIds = customerZoneDetail.CustomerServiceIds;
             route.IsBlocked = routeRuleTarget.BlockRoute;
 
             if (routeRule.Settings.UseOrderedExecution)

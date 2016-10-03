@@ -23,9 +23,7 @@ namespace TOne.WhS.Routing.Entities
 
         public SalePriceListOwnerType RateSource { get; set; }
 
-        public HashSet<int> SaleEntityServiceIds { get; set; }
-
-        public string  CustomerServiceIds { get; set; } 
+        public HashSet<int> CustomerServiceIds { get; set; } 
     }
      
     public class CustomerZoneDetailByZone : Dictionary<long, List<CustomerZoneDetail>>

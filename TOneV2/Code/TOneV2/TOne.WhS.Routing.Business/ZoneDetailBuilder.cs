@@ -67,10 +67,20 @@ namespace TOne.WhS.Routing.Business
                 foreach (var customerZone in customerSaleZones)
                 {
                     SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
-                    SaleEntityService customerService = customerServiceLocator.GetRoutingCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
+                        SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
+
+                        if (customerService == null)
+                            throw new NullReferenceException(string.Format("customerService. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+
+                        if (customerService.Services == null)
+                            throw new NullReferenceException(string.Format("customerService.Services. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+
+                        if (customerService.Services.Count == 0)
+                            throw new Exception(string.Format("customerService.Services count is 0. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+
                         var output = dataTransformer.ExecuteDataTransformation(customerTransformationId, (context) =>
                         {
                             context.SetRecordValue("CustomerId", customerInfo.CustomerId);
@@ -87,7 +97,6 @@ namespace TOne.WhS.Routing.Business
                         rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
                         var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
-                        HashSet<int> saleEntityServiceIds = customerService != null ? new HashSet<int>(customerService.Services.Select(itm => itm.ServiceId)) : null;
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
                             CustomerId = customerInfo.CustomerId,
@@ -97,8 +106,7 @@ namespace TOne.WhS.Routing.Business
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
-                            SaleEntityServiceIds = saleEntityServiceIds,
-                            CustomerServiceIds = saleEntityServiceIds != null ? string.Join<int>(", ", saleEntityServiceIds.OrderBy(itm => itm)) : null
+                            CustomerServiceIds = customerService != null ? new HashSet<int>(customerService.Services.Select(itm => itm.ServiceId)) : null
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
@@ -125,12 +133,13 @@ namespace TOne.WhS.Routing.Business
             TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
             int supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
 
-            DataTransformer dataTransformer = new DataTransformer();
-
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
             DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
+
+            ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+            DataTransformer dataTransformer = new DataTransformer();
 
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             foreach (RoutingSupplierInfo supplierInfo in supplierInfos)
@@ -142,10 +151,12 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierZone in supplierZones)
                 {
                     SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
-                    List<ZoneService> supplierZoneServices = supplierZoneServiceLocator.GetRoutingSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId, true);
-
+                    
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
+                        List<ZoneService> exactSupplierZoneServices = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                        List<ZoneService> supplierZoneServicesWithChildren = zoneServiceConfigManager.GetAllZoneServicesWithChildren(exactSupplierZoneServices);
+
                         var output = dataTransformer.ExecuteDataTransformation(supplierTransformationId, (context) =>
                         {
                             context.SetRecordValue("SupplierId", supplierInfo.SupplierId);
@@ -165,7 +176,8 @@ namespace TOne.WhS.Routing.Business
                             SupplierId = supplierInfo.SupplierId,
                             SupplierZoneId = supplierZone.SupplierZoneId,
                             EffectiveRateValue = rateValue,
-                            SupplierServiceIds = supplierZoneServices != null ? new HashSet<int>(supplierZoneServices.Select(itm => itm.ServiceId)) : null
+                            SupplierServiceIds = supplierZoneServicesWithChildren != null ? new HashSet<int>(supplierZoneServicesWithChildren.Select(itm => itm.ServiceId)) : null,
+                            ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null
                         };
 
                         onSupplierZoneDetailAvailable(supplierZoneDetail);

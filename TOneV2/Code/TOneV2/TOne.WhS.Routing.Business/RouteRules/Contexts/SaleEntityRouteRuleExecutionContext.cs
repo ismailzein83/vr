@@ -42,7 +42,7 @@ namespace TOne.WhS.Routing.Business
 
         public int? NumberOfOptions { get; internal set; }
 
-        public HashSet<int> SaleEntityServiceIds { get; internal set; }
+        public HashSet<int> CustomerServiceIdHashSet { get; internal set; }
 
         public string CustomerServiceIds { get; internal set; }
 
@@ -79,7 +79,8 @@ namespace TOne.WhS.Routing.Business
                 SupplierRate = targetOption.SupplierRate,
                 Percentage = targetOption.Percentage,
                 IsBlocked = targetOption.BlockOption,
-                ExecutedRuleId = targetOption.ExecutedRuleId
+                ExecutedRuleId = targetOption.ExecutedRuleId,
+                ExactSupplierServiceIds = targetOption.ExactSupplierServiceIds
             };
             targetOption.ExecutedRuleId = null;
             targetOption.BlockOption = false;

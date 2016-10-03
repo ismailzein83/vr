@@ -151,7 +151,7 @@
 
                 for (var index = 0 ; index < marketPrices.length; index++) {
                     marketPrice = marketPrices[index];
-                    _serviceIds = marketPrice.ServiceIds.sort().join(", ");
+                    _serviceIds = marketPrice.ServiceIds.sort().join(",");
                     marketPricesDictionary[_serviceIds] = marketPrice;
                 }
 

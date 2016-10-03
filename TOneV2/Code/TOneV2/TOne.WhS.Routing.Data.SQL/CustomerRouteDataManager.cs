@@ -22,13 +22,13 @@ namespace TOne.WhS.Routing.Data.SQL
             RouteOption dummy = new RouteOption();
         }
 
-        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
+        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "CustomerServices", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
             var streamInfo = preparedCustomerRoute as StreamBulkInsertInfo;
             DateTime start = DateTime.Now;
             InsertBulkToTable(streamInfo);
-            if(this.BPContext != null)
+            if (this.BPContext != null)
             {
                 this.BPContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Routes saved to database in {1}", streamInfo.Stream.RecordCount, (DateTime.Now - start));
             }
@@ -59,8 +59,10 @@ namespace TOne.WhS.Routing.Data.SQL
             string serializedOptions = record.Options != null ? SerializeOptions(record.Options) : null;// Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
             //string serializedOptions = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId,
-                record.Rate, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
+            string customerServices = (record.CustomerServiceIds != null && record.CustomerServiceIds.Count > 0) ? string.Join(",", record.CustomerServiceIds) : null;
+
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.Code, record.SaleZoneId,
+                record.Rate, customerServices, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
         }
 
         public Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
@@ -157,7 +159,9 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 if (str.Length > 0)
                     str.Append("|");
-                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}", op.SupplierId, op.SupplierCode, op.ExecutedRuleId, op.Percentage, op.SupplierRate, op.SupplierZoneId, op.IsBlocked);
+
+                string supplierServiceIds = op.ExactSupplierServiceIds != null ? string.Join(",", op.ExactSupplierServiceIds) : null;
+                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}~{7}", op.SupplierId, op.SupplierCode, op.ExecutedRuleId, op.Percentage, op.SupplierRate, op.SupplierZoneId, supplierServiceIds, op.IsBlocked);
             }
             return str.ToString();
         }
@@ -175,7 +179,8 @@ namespace TOne.WhS.Routing.Data.SQL
                     SupplierId = int.Parse(parts[0]),
                     SupplierCode = parts[1],
                     SupplierRate = Decimal.Parse(parts[4]),
-                    SupplierZoneId = long.Parse(parts[5])
+                    SupplierZoneId = long.Parse(parts[5]),
+                    ExactSupplierServiceIds = new HashSet<int>(parts[6].Split(',').Select(x => int.Parse(x)))
                 };
                 int ruleId;
                 if (int.TryParse(parts[2], out ruleId))
@@ -184,7 +189,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 if (decimal.TryParse(parts[3], out percentage))
                     option.Percentage = percentage;
                 bool isBlocked;
-                if (bool.TryParse(parts[6], out isBlocked))
+                if (bool.TryParse(parts[7], out isBlocked))
                     option.IsBlocked = isBlocked;
                 options.Add(option);
             }
@@ -194,12 +199,15 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private CustomerRoute CustomerRouteMapper(IDataReader reader)
         {
+            string customerServices = (reader["CustomerServices"] as string);
+
             return new CustomerRoute()
             {
                 CustomerId = (int)reader["CustomerID"],
                 Code = reader["Code"].ToString(),
                 SaleZoneId = (long)reader["SaleZoneID"],
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
+                CustomerServiceIds = !string.IsNullOrEmpty(customerServices) ? new HashSet<int>(customerServices.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
                 Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null
@@ -214,6 +222,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,[Code]
                                                                 ,[SaleZoneID]
                                                                 ,[Rate]
+                                                                ,[CustomerServices]
                                                                 ,[IsBlocked]
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]
@@ -226,6 +235,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,[Code]
                                                                 ,[SaleZoneID]
                                                                 ,[Rate]
+                                                                ,[CustomerServices]
                                                                 ,[IsBlocked]
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]

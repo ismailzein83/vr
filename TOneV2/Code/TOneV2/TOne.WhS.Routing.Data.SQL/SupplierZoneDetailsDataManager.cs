@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds" };
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds" };
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -34,10 +34,11 @@ namespace TOne.WhS.Routing.Data.SQL
         }
         public void WriteRecordToStream(SupplierZoneDetail record, object dbApplyStream)
         {
-            string serializedSupplierService = record.SupplierServiceIds != null ? Vanrise.Common.Serializer.Serialize(record.SupplierServiceIds) : null;
+            string supplierServiceIds = record.SupplierServiceIds != null ? string.Join(",", record.SupplierServiceIds) : null;
+            string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, serializedSupplierService);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds);
         }
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {
@@ -68,15 +69,19 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        #region Private Motheds
+        #region Private Methods
         SupplierZoneDetail SupplierZoneDetailMapper(IDataReader reader)
         {
+            string supplierServiceIds = reader["SupplierServiceIds"] as string;
+            string exactSupplierServiceIds = reader["ExactSupplierServiceIds"] as string;
+
             return new SupplierZoneDetail()
             {
                 SupplierId = (int)reader["SupplierId"],
                 SupplierZoneId = (long)reader["SupplierZoneId"],
                 EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
-                SupplierServiceIds = Vanrise.Common.Serializer.Deserialize<HashSet<int>>(reader["SupplierServiceIds"] as string) 
+                SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? new HashSet<int>(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
+                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null
             };
         }
 
@@ -95,6 +100,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return dtZoneInfo;
         }
         #endregion
+
         #region Queries
 
         const string query_GetSupplierZoneDetails = @"                                                       
@@ -102,6 +108,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SupplierZoneId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[SupplierServiceIds]
+                                                  ,zd.[ExactSupplierServiceIds]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
@@ -109,6 +116,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SupplierZoneId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[SupplierServiceIds]
+                                                  ,zd.[ExactSupplierServiceIds]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId
                                             ";

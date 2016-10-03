@@ -14,7 +14,9 @@ namespace TOne.WhS.Routing.Entities
 
         int? NumberOfOptions { get; }
 
-        HashSet<int> SaleEntityServiceIds { get; }
+        HashSet<int> CustomerServiceIdHashSet { get; }
+
+        string CustomerServiceIds { get;}
 
         bool TryAddOption(RouteOptionRuleTarget optionTarget);
 

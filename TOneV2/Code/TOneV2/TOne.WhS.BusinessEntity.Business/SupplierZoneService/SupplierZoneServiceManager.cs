@@ -13,7 +13,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierZoneServiceManager 
     {
-
         #region Public Methods
 
         public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -48,6 +47,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
 
+        #region Private Methods
         private SupplierZoneServiceDetail SupplierZoneServiceDetailMapper(SupplierZoneService supplierZoneService)
         {
             SupplierZoneServiceDetail detail = new SupplierZoneServiceDetail()
@@ -78,9 +78,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return dataManager.GetFilteredSupplierZoneServices(input.Query);
             }
         }
-
+        #endregion
     }
-
-   
-
 }

@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.Business
 
         public override bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)
         {
-            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleEntityServiceIds, target, option);
+            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option);
         }
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
@@ -56,7 +56,7 @@ namespace TOne.WhS.Routing.Business
                 int optionsAdded = 0;
                 foreach (RouteOptionRuleTarget option in options)
                 {
-                    if (!FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleEntityServiceIds, target, option))
+                    if (!FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option))
                     {
                         if (context.TryAddOption(option))
                         {
@@ -185,7 +185,8 @@ namespace TOne.WhS.Routing.Business
                 SupplierZoneId = supplierCodeMatch.SupplierZoneId,
                 SupplierRate = supplierCodeMatchWithRate.RateValue,
                 EffectiveOn = routeRuleTarget.EffectiveOn,
-                IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture
+                IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
+                ExactSupplierServiceIds = supplierCodeMatchWithRate.SupplierServiceIds
             };
             if (percentage.HasValue)
                 option.Percentage = percentage.Value;
