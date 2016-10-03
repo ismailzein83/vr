@@ -83,24 +83,9 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                 defaultItem.IsDirty = true;
                 $scope.scopeModel.isLoading = true;
 
-                var promises = [];
-
                 showLinks(false, true);
-                var saveDraftPromise = defaultItem.context.saveDraft(false);
-                promises.push(saveDraftPromise);
 
-                var loadInheritedServicesDeferred = UtilsService.createPromiseDeferred();
-                promises.push(loadInheritedServicesDeferred.promise);
-
-                saveDraftPromise.then(function () {
-                    loadInheritedServiceViewer().then(function () {
-                        loadInheritedServicesDeferred.resolve();
-                    }).catch(function (error) {
-                        loadInheritedServicesDeferred.reject(error, $scope);
-                    });
-                });
-
-                UtilsService.waitMultiplePromises(promises).then(function () {
+                loadInheritedServiceViewer().then(function () {
                     defaultItem.context.loadGrid();
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
@@ -213,17 +198,24 @@ app.directive('vrWhsSalesDefaultService', ['WhS_Sales_RatePlanAPIService', 'WhS_
                 ctrl.onReady(api);
         }
 
-        function loadInheritedServiceViewer() {
+        function loadInheritedServiceViewer()
+        {
             var promises = [];
+
+            var newDraft = defaultItem.context.getNewDraft();
+            var input = {
+                CustomerId: defaultItem.OwnerId,
+                EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                NewDraft: newDraft
+            };
+            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetCustomerDefaultInheritedService(input);
+            promises.push(getInheritedServicePromise);
 
             var inheritedServicesViewerLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(inheritedServicesViewerLoadDeferred.promise);
 
-            var effectiveOn = UtilsService.getDateFromDateTime(new Date());
-            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetCustomerDefaultInheritedService(defaultItem.OwnerId, effectiveOn);
-            promises.push(getInheritedServicePromise);
-
-            getInheritedServicePromise.then(function (response) {
+            getInheritedServicePromise.then(function (response)
+            {
                 $scope.scopeModel.showInheritedServiceViewer = true;
                 $scope.scopeModel.selectedValues.length = 0;
                 $scope.scopeModel.isSelectorDisabled = true;

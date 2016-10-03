@@ -201,6 +201,7 @@
                 loadDirective: function (api)
                 {
                     defaultItem.context = {};
+                    defaultItem.context.getNewDraft = getNewDraft;
                     defaultItem.context.saveDraft = saveDraft;
                     defaultItem.context.loadGrid = loadGrid;
 
@@ -213,8 +214,7 @@
 
                     return api.load(defaultServicePayload);
                 }
-            },
-            {
+            }, {
                 title: "Default Routing Product",
                 directive: "vr-whs-sales-defaultroutingproduct",
                 loadDirective: function (api) {
@@ -684,9 +684,12 @@
                     CostCalculationMethods: settings != undefined ? settings.costCalculationMethods : null,
                     Settings: ratePlanSettingsData,
                     CurrencyId: getCurrencyId(),
-                    onNewZoneServiceChanged: onNewZoneServiceChanged,
                     CountryIds: countrySelectorAPI.getSelectedIds()
                 };
+
+                gridQuery.context = {};
+                gridQuery.context.getNewDraft = getNewDraft;
+                gridQuery.context.saveDraft = saveDraft;
 
                 if (pricingSettings != undefined) {
                     gridQuery.RateCalculationMethod = pricingSettings.selectedRateCalculationMethodData;
@@ -729,72 +732,80 @@
         {
             var promises = [];
 
-            var input = getSaveChangesInput();
+            var saveDraftDeferred = UtilsService.createPromiseDeferred();
+            promises.push(saveDraftDeferred.promise);
 
-            if (input.NewChanges != null)
-            {
-                var saveChangesPromise = WhS_Sales_RatePlanAPIService.SaveChanges(input);
-                promises.push(saveChangesPromise);
+            var loadGridDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadGridDeferred.promise);
 
-                saveChangesPromise.then(function ()
-                {
-                    $scope.showCancelButton = true;
-                    loadGridOnChangesSaved();
-                });
-            }
+            var newDraft = getNewDraft();
+
+            if (newDraft == undefined)
+                saveDraftDeferred.resolve();
             else
-                loadGridOnChangesSaved();
-
-            function getSaveChangesInput()
             {
-                var defaultChanges = getDefaultChanges();
-                var zoneChanges = gridAPI.getZoneChanges();
-
-                var newChanges = null;
-                if (defaultChanges != null || zoneChanges != null) {
-                    newChanges = {
-                        CurrencyId: getCurrencyId(),
-                        DefaultChanges: defaultChanges,
-                        ZoneChanges: zoneChanges
-                    };
-                }
-                
-                return {
+                var parameters = {
                     OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
-                    NewChanges: newChanges
+                    NewChanges: newDraft
                 };
-
-                function getDefaultChanges() {
-                    var defaultChanges = null;
-
-                    if (defaultItem.IsDirty) {
-                        defaultChanges = {};
-
-                        for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-                            var item = $scope.defaultItemTabs[i];
-
-                            if (item.directiveAPI)
-                                item.directiveAPI.applyChanges(defaultChanges);
-                        }
-
-                        defaultChanges.NewService = defaultItem.NewService;
-                        defaultChanges.ClosedService = defaultItem.ClosedService;
-                        defaultChanges.ResetService = defaultItem.ResetService;
-                    }
-
-                    return defaultChanges;
-                }
+                WhS_Sales_RatePlanAPIService.SaveChanges(parameters).then(function () {
+                    $scope.showCancelButton = true;
+                    saveDraftDeferred.resolve();
+                }).catch(function (error) {
+                    saveDraftDeferred.reject(error);
+                });
             }
-            function loadGridOnChangesSaved() {
-                if (shouldLoadGrid) {
-                    loadGrid().catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
+
+            saveDraftDeferred.promise.then(function () {
+                if (!shouldLoadGrid)
+                    loadGridDeferred.resolve();
+                else
+                {
+                    loadGrid().then(function () {
+                        loadGridDeferred.resolve();
+                    }).catch(function (error) {
+                        loadGridDeferred.reject(error);
                     });
                 }
-            }
+            });
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+        function getNewDraft()
+        {
+            var newDraft;
+
+            var defaultDraft = getDefaultDraft();
+            var zoneDrafts = gridAPI.getZoneDrafts();
+
+            if (defaultDraft != undefined || zoneDrafts != undefined)
+            {
+                newDraft = {
+                    CurrencyId: getCurrencyId(),
+                    DefaultChanges: defaultDraft,
+                    ZoneChanges: zoneDrafts
+                };
+            }
+            return newDraft;
+        }
+        function getDefaultDraft()
+        {
+            var defaultDraft;
+
+            if (defaultItem.IsDirty)
+            {
+                defaultDraft = {};
+                for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+                    var defaultTab = $scope.defaultItemTabs[i];
+                    if (defaultTab.directiveAPI != undefined)
+                        defaultTab.directiveAPI.applyChanges(defaultDraft);
+                }
+                defaultDraft.NewService = defaultItem.NewService;
+                defaultDraft.ClosedService = defaultItem.ClosedService;
+                defaultDraft.ResetService = defaultItem.ResetService;
+            }
+            return defaultDraft;
         }
 
         // TODO: Remove
@@ -802,10 +813,6 @@
         {
             return saveDraft(true);
         }
-        function onNewZoneServiceChanged() {
-            return saveDraft(false);
-        }
-
         function onCustomerChanged(selectedCarrierAccountId) {
             var promises = [];
 

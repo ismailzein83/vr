@@ -136,20 +136,20 @@ namespace TOne.WhS.Sales.Web.Controllers
             manager.DeleteChangedRates(ownerType, ownerId, newCurrencyId);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetCustomerDefaultInheritedService")]
-        public SaleEntityService GetCustomerDefaultInheritedService(int customerId, DateTime effectiveOn)
+        public SaleEntityService GetCustomerDefaultInheritedService(GetCustomerDefaultInheritedServiceInput input)
         {
             var manager = new DefaultItemManager();
-            return manager.GetCustomerDefaultInheritedService(customerId, effectiveOn);
+            return manager.GetCustomerDefaultInheritedService(input);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetZoneInheritedService")]
-        public SaleEntityService GetZoneInheritedService(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn)
+        public SaleEntityService GetZoneInheritedService(GetZoneInheritedServiceInput input)
         {
             var manager = new RatePlanZoneManager();
-            return manager.GetZoneInheritedService(ownerType, ownerId, zoneId, effectiveOn);
+            return manager.GetZoneInheritedService(input);
         }
     }
 }

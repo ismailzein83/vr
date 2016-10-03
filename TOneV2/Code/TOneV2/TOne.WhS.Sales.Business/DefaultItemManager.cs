@@ -51,20 +51,17 @@ namespace TOne.WhS.Sales.Business
             return defaultItem;
         }
 
-        // This method is invoked when the user clicks the 'Reset to default' link to reset the DEFAULT services of a CUSTOMER
-        public BusinessEntity.Entities.SaleEntityService GetCustomerDefaultInheritedService(int customerId, DateTime effectiveOn)
+        public BusinessEntity.Entities.SaleEntityService GetCustomerDefaultInheritedService(GetCustomerDefaultInheritedServiceInput input)
         {
             var draftManager = new RatePlanDraftManager();
-            Changes draft = draftManager.GetDraft(SalePriceListOwnerType.Customer, customerId);
-            
-            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(SalePriceListOwnerType.Customer, customerId, effectiveOn, draft));
+            draftManager.SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, input.NewDraft);
+
+            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(SalePriceListOwnerType.Customer, input.CustomerId, input.EffectiveOn, input.NewDraft));
 
             var ratePlanManager = new RatePlanManager();
-            int sellingProductId = ratePlanManager.GetSellingProductId(customerId, effectiveOn, false);
+            int sellingProductId = ratePlanManager.GetSellingProductId(input.CustomerId, input.EffectiveOn, false);
 
-            // The customer's draft MUST have a DraftResetDefaultService for the below method to return a correct result
-            // This is assumed because the draft is saved before calling GetCustomerDefaultInheritedService
-            return ratePlanServiceLocator.GetCustomerDefaultService(customerId, sellingProductId);
+            return ratePlanServiceLocator.GetCustomerDefaultService(input.CustomerId, sellingProductId);
         }
 
         #region Private Methods

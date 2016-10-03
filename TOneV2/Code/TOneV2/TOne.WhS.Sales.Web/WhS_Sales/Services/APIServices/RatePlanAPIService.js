@@ -88,20 +88,12 @@
             });
         }
 
-        function GetCustomerDefaultInheritedService(customerId, effectiveOn) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCustomerDefaultInheritedService"), {
-                customerId: customerId,
-                effectiveOn: effectiveOn
-            });
+        function GetCustomerDefaultInheritedService(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCustomerDefaultInheritedService"), input);
         }
 
-        function GetZoneInheritedService(ownerType, ownerId, zoneId, effectiveOn) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneInheritedService"), {
-                ownerType: ownerType,
-                ownerId: ownerId,
-                zoneId: zoneId,
-                effectiveOn: effectiveOn
-            });
+        function GetZoneInheritedService(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneInheritedService"), input);
         }
 
         return {

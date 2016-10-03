@@ -92,7 +92,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                     return;
                 
                 oldIds = selectedIds;
-                zoneItem.onNewZoneServiceChanged();
+                zoneItem.context.saveDraft(false);
             };
 
             $scope.scopeModel.reset = function ()
@@ -100,27 +100,17 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                 zoneItem.IsDirty = true;
                 $scope.scopeModel.isLoading = true;
 
+                showLinks(false, true);
+
                 var promises = [];
 
-                showLinks(false, true);
-                var saveDraftPromise = zoneItem.onNewZoneServiceChanged();
-                promises.push(saveDraftPromise);
-
-                var loadInheritedServicesDeferred = UtilsService.createPromiseDeferred();
-                promises.push(loadInheritedServicesDeferred.promise);
+                var loadInheritedServicesPromise = loadInheritedServiceViewer();
+                promises.push(loadInheritedServicesPromise);
 
                 var loadZoneServicesDeferred = UtilsService.createPromiseDeferred();
                 promises.push(loadZoneServicesDeferred.promise);
 
-                saveDraftPromise.then(function () {
-                    loadInheritedServiceViewer().then(function () {
-                        loadInheritedServicesDeferred.resolve();
-                    }).catch(function (error) {
-                        loadInheritedServicesDeferred.reject(error);
-                    });
-                });
-
-                loadInheritedServicesDeferred.promise.then(function () {
+                loadInheritedServicesPromise.then(function () {
                     loadZoneServiceViewer(inheritedServiceIds).then(function () {
                         loadZoneServicesDeferred.resolve();
                     }).catch(function (error) {
@@ -148,7 +138,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                 setServiceDates(zoneItem.CurrentServiceBED, zoneItem.CurrentServiceEED);
 
                 showLinks(true, false);
-                var saveDraftPromise = zoneItem.onNewZoneServiceChanged();
+                var saveDraftPromise = zoneItem.context.saveDraft(false);
                 promises.push(saveDraftPromise);
 
                 var loadZoneServicesDeferred = UtilsService.createPromiseDeferred();
@@ -248,15 +238,23 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                 ctrl.onReady(api);
         }
 
-        function loadInheritedServiceViewer() {
+        function loadInheritedServiceViewer()
+        {
             var promises = [];
+
+            var newDraft = zoneItem.context.getNewDraft();
+            var input = {
+                OwnerType: zoneItem.OwnerType,
+                OwnerId: zoneItem.OwnerId,
+                ZoneId: zoneItem.ZoneId,
+                EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                NewDraft: newDraft
+            };
+            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetZoneInheritedService(input);
+            promises.push(getInheritedServicePromise);
 
             var inheritedServicesViewerLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(inheritedServicesViewerLoadDeferred.promise);
-
-            var effectiveOn = UtilsService.getDateFromDateTime(new Date());
-            var getInheritedServicePromise = WhS_Sales_RatePlanAPIService.GetZoneInheritedService(zoneItem.OwnerType, zoneItem.OwnerId, zoneItem.ZoneId, effectiveOn);
-            promises.push(getInheritedServicePromise);
 
             getInheritedServicePromise.then(function (response)
             {

@@ -38,28 +38,24 @@ namespace TOne.WhS.Sales.Business
             return GetMatchedZones(zones, countryIds, zoneLetter, zoneNameFilterType, zoneNameFilter);
         }
 
-        // This method is invoked when the user clicks the 'Reset to default' link to reset the ZONE services of an OWNER
-        public BusinessEntity.Entities.SaleEntityService GetZoneInheritedService(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn)
+        public BusinessEntity.Entities.SaleEntityService GetZoneInheritedService(GetZoneInheritedServiceInput input)
         {
             SaleEntityService inheritedService;
             
             var draftManager = new RatePlanDraftManager();
-            Changes draft = draftManager.GetDraft(ownerType, ownerId);
+            draftManager.SaveDraft(input.OwnerType, input.OwnerId, input.NewDraft);
 
-            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(ownerType, ownerId, effectiveOn, draft));
+            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(input.OwnerType, input.OwnerId, input.EffectiveOn, input.NewDraft));
 
-            // The owner's draft MUST have a DraftResetZoneService on zoneId for the below method to return a correct result
-            // This is assumed because the draft is saved before calling GetZoneInheritedService
-
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            if (input.OwnerType == SalePriceListOwnerType.SellingProduct)
             {
-                inheritedService = ratePlanServiceLocator.GetSellingProductZoneService(ownerId, zoneId);
+                inheritedService = ratePlanServiceLocator.GetSellingProductZoneService(input.OwnerId, input.ZoneId);
             }
             else
             {
                 var ratePlanManager = new RatePlanManager();
-                int sellingProductId = ratePlanManager.GetSellingProductId(ownerId, effectiveOn, false);
-                inheritedService = ratePlanServiceLocator.GetCustomerZoneService(ownerId, sellingProductId, zoneId);
+                int sellingProductId = ratePlanManager.GetSellingProductId(input.OwnerId, input.EffectiveOn, false);
+                inheritedService = ratePlanServiceLocator.GetCustomerZoneService(input.OwnerId, sellingProductId, input.ZoneId);
             }
 
             return inheritedService;

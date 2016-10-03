@@ -125,6 +125,8 @@
     <Compile Include="RatePlanning\Enums.cs" />
     <Compile Include="RatePlanning\Input\AddNormalRatesToDraftInput.cs" />
     <Compile Include="RatePlanning\Input\ApplyCalculatedRatesInput.cs" />
+    <Compile Include="RatePlanning\Input\GetCustomerDefaultInheritedServiceInput.cs" />
+    <Compile Include="RatePlanning\Input\GetZoneInheritedServiceInput.cs" />
     <Compile Include="RatePlanning\Input\TryApplyCalculatedRatesInput.cs" />
     <Compile Include="RatePlanning\Input\ZoneItemInput.cs" />
     <Compile Include="RatePlanning\Input\SaveChangesInput.cs" />

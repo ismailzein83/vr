@@ -109,7 +109,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 directive: "vr-whs-sales-zone-service",
                 loadDirective: function (zoneServiceAPI, zoneItem) {
                     zoneItem.OwnerId = gridQuery.OwnerId;
-                    zoneItem.onNewZoneServiceChanged = gridQuery.onNewZoneServiceChanged;
+                    zoneItem.context = gridQuery.context;
                     var zoneServicePayload = {
                         zoneItem: zoneItem,
                         settings: {
@@ -197,17 +197,17 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     newServiceDayOffset = Number(settings.NewServiceDayOffset);
             }
 
-            api.getZoneChanges = function () {
-                var zoneChanges = [];
+            api.getZoneDrafts = function () {
+                var zoneDrafts = [];
 
                 for (var i = 0; i < $scope.zoneItems.length; i++) {
                     var item = $scope.zoneItems[i];
 
                     if (item.IsDirty)
-                        applyChanges(zoneChanges, item);
+                        applyChanges(zoneDrafts, item);
                 }
 
-                return zoneChanges.length > 0 ? zoneChanges : null;
+                return zoneDrafts.length > 0 ? zoneDrafts : null;
             };
 
             if (ctrl.onReady != null)
