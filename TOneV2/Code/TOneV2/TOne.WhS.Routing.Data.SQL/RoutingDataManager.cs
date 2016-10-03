@@ -49,6 +49,14 @@ namespace TOne.WhS.Routing.Data.SQL
             return _databaseName;
 
         }
+
+
+        public void FinalizeCurstomerRoute(Action<string> trackStep)
+        {
+            CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
+            customerRouteDataManager.FinalizeCurstomerRoute(trackStep);
+        }
+
         /// <summary>
         /// Drop Routing Database if database already exists.
         /// </summary>
