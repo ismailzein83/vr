@@ -364,26 +364,7 @@ end
 
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 begin
-
-set nocount on;
-set identity_insert [genericdata].[BusinessEntityDefinition] on;
-;with cte_data([ID],[Name],[Title],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(16,'VR_Common_Country','Country','{"SelectorUIControl":"vr-common-country-selector","ManagerFQTN":"Vanrise.Common.Business.CountryManager,Vanrise.Common.Business", "IdType": "System.Int32"}'),
-(20,'VR_Integration_DataSource','Data Source','{"SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Int32"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Settings]))
-merge	[genericdata].[BusinessEntityDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Title],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
-set identity_insert [genericdata].[BusinessEntityDefinition] off;
+set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('DF5CDC08-DDF1-4D4E-B1F6-D17B3833452F',16,'VR_Common_Country','Country','{"SelectorUIControl":"vr-common-country-selector","ManagerFQTN":"Vanrise.Common.Business.CountryManager,Vanrise.Common.Business", "IdType": "System.Int32"}'),('E522907C-AEBD-48B6-82F4-FE55238942F2',20,'VR_Integration_DataSource','Data Source','{"SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Int32"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Settings])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 end
 
