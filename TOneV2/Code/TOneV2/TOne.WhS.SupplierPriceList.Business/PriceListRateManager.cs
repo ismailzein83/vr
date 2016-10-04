@@ -299,7 +299,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return new NotImportedRate()
             {
                 BED = lastElement.BED,
-                EED = lastElement.EED,
+                EED = lastElement.RateEntity.EED,
                 Rate = lastElement.RateEntity.NormalRate,
                 RateTypeId = lastElement.RateEntity.RateTypeId,
                 HasChanged = hasChanged

@@ -67,7 +67,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return new NotImportedZoneService()
             {
                 BED = lastElement.BED,
-                EED = lastElement.EED,
+                EED = lastElement.ZoneServiceEntity.EED,
                 ZoneServicesIds = lastElement.ZoneServiceEntity.ReceivedServices.Select(item => item.ServiceId).ToList(),
                 HasChanged = hasChanged
             };

@@ -14,13 +14,22 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override void Execute(IBusinessRuleActionExecutionContext context)
         {
             ImportedDataByZone importedDataByZone = context.Target as ImportedDataByZone;
-            
-            
+
+
             Dictionary<int, List<ImportedZoneService>> importedZoneServicesByServiceId = new Dictionary<int, List<ImportedZoneService>>();
+            DateTime minZoneServiceBED = importedDataByZone.ImportedZoneServicesToValidate.SelectMany(item => item.Value).Min(itm => itm.BED);
             foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
             {
                 List<ImportedZoneService> importedZoneServices = new List<ImportedZoneService>();
-                importedZoneServices.Add(item.Value.OrderBy(itm => itm.BED).First());
+                ImportedZoneService importedZoneService = item.Value.First();
+                importedZoneServices.Add(new ImportedZoneService()
+                {
+                    BED = minZoneServiceBED,
+                    ZoneName = importedZoneService.ZoneName,
+                    ServiceId = importedZoneService.ServiceId,
+                    EED = importedZoneService.EED
+                });
+
                 importedZoneServicesByServiceId.Add(item.Key, importedZoneServices);
             }
 
