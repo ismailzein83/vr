@@ -20,8 +20,8 @@
                                 </div>
                             </div>
 
-                            <div ng-if="ctrl.isRemoteLoad()" ng-show="!ctrl.showloading && ctrl.filtername.length < ctrl.limitcharactercount">Please type {{ctrl.limitcharactercount - ctrl.filtername.length}} character(s)..</div>
-                            <div ng-if="ctrl.isRemoteLoad()" ng-show="ctrl.showloading">Loading..</div>
+                            <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="!ctrl.showloading && ctrl.filtername.length < ctrl.limitcharactercount">Please type {{ctrl.limitcharactercount - ctrl.filtername.length}} character(s)..</div>
+                            <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="ctrl.showloading">Loading..</div>
 
                             <div ng-if="ctrl.isMultiple()" style="overflow: auto; margin-top: 5px; padding-left: 3px;" ng-class="ctrl.isEnFilter()? 'with-filter' : 'no-filter'">
                                 <a href="" class="mark-select " ng-click="ctrl.selectValue($event, c); " ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername"

@@ -399,12 +399,20 @@
                             var baseleft = selfOffset.left - $(window).scrollLeft();
                          
                             var heigth = $(this).parents('.vr-pager-container').length > 0 ? 245 : 200;
-                            if (innerHeight - basetop < heigth)
+                            if (innerHeight - basetop < heigth){
                                 top = basetop - (heigth + (selfHeight * 2.7));
+                                if (isRemoteLoad()) {
+                                    top = top - 35;
+                                }
+                                if (controller.hidefilterbox != undefined)
+                                    top = top + 30;
+                            }
                             else
                                 top = selfOffset.top - $(window).scrollTop() + selfHeight;
-                            if (controller.hidefilterbox != undefined)
-                                top = top + 30;
+                            
+
+                            
+
                             $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
                         });
 
