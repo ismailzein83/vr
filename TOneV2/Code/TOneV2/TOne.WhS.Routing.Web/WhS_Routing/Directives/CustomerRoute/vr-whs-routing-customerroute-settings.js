@@ -37,13 +37,17 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
 
                 if (payload != undefined) {
                     ctrl.numberOfOptions = payload.NumberOfOptions;
+                    ctrl.customerRouteAddBlockedOptions = payload.CustomerRouteAddBlockedOptions;
+                    ctrl.productRouteAddBlockedOptions = payload.ProductRouteAddBlockedOptions;
                 }
             }
 
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.Routing.Entities.RouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                    NumberOfOptions: ctrl.numberOfOptions
+                    NumberOfOptions: ctrl.numberOfOptions,
+                    CustomerRouteAddBlockedOptions: ctrl.customerRouteAddBlockedOptions,
+                    ProductRouteAddBlockedOptions: ctrl.productRouteAddBlockedOptions
                 }
                 return obj;
             }
