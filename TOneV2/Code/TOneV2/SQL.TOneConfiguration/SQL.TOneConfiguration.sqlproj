@@ -117,6 +117,7 @@
     <Folder Include="integration\Stored Procedures\" />
     <Folder Include="queue\User Defined Types\" />
     <Folder Include="runtime\User Defined Types\" />
+    <Folder Include="bp\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -466,6 +467,7 @@
     <Build Include="runtime\User Defined Types\IDIntType.sql" />
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\integration.sql" />
+    <Build Include="bp\Functions\ParseStringList.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
