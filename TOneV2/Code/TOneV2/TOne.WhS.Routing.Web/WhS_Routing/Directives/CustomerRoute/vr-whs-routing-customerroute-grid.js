@@ -54,20 +54,20 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Routing_CustomerRouteAPIService.GetFilteredCustomerRoutes(dataRetrievalInput)
                    .then(function (response) {
-                       var _promises = [];
+                       var _customerRouteServiceViewerPromises = [];
 
                        if (response && response.Data) {
                            for (var i = 0; i < response.Data.length; i++) {
                                var customerRoute = response.Data[i];
                                extendCutomerRouteObject(customerRoute);
-                               _promises.push(customerRoute.cutomerRouteLoadDeferred.promise);
+                               _customerRouteServiceViewerPromises.push(customerRoute.cutomerRouteLoadDeferred.promise);
                                gridDrillDownTabsObj.setDrillDownExtensionObject(customerRoute);
                            }
                        }
                        onResponseReady(response);
 
                        //showGrid
-                       UtilsService.waitMultiplePromises(_promises).then(function () {
+                       UtilsService.waitMultiplePromises(_customerRouteServiceViewerPromises).then(function () {
                            $scope.showGrid = true;
                        }).catch(function (error) {
                            VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -83,8 +83,6 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
 
         function extendCutomerRouteObject(customerRoute)
         {
-            console.log(customerRoute);
-
             customerRoute.cutomerRouteLoadDeferred = UtilsService.createPromiseDeferred();
             customerRoute.onServiceViewerReady = function (api) {
                 customerRoute.serviceViewerAPI = api;

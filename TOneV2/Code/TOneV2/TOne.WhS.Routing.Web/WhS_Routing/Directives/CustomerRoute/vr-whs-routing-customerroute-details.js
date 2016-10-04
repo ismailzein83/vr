@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -28,6 +28,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService',
         };
 
         function customerRouteDetailsCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.routeOptionDetails = [];
@@ -38,23 +39,51 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+
+                    console.log(payload.customerRoute);
+
                     var customerRoute;
+                    var _routeOptionDetailServiceViewerPromises = [];
+
                     if (payload != undefined)
                         customerRoute = payload.customerRoute;
-                     
-                    if (customerRoute != undefined && customerRoute.RouteOptionDetails != null)
-                    {
+
+                    if (customerRoute != undefined && customerRoute.RouteOptionDetails != null) {
                         for (var i = 0; i < customerRoute.RouteOptionDetails.length; i++) {
-                            $scope.routeOptionDetails.push(customerRoute.RouteOptionDetails[i]);
+                            var routeOptionDetail = customerRoute.RouteOptionDetails[i];
+                            extendRouteOptionDetailObject(routeOptionDetail);
+                            _routeOptionDetailServiceViewerPromises.push(routeOptionDetail.routeOptionDetailLoadDeferred.promise);
+                            $scope.routeOptionDetails.push(routeOptionDetail);
                         }
                     }
+
+                    return UtilsService.waitMultiplePromises(_routeOptionDetailServiceViewerPromises).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
-            this.initializeController = initializeController;
+            function extendRouteOptionDetailObject(routeOptionDetail) {
+                routeOptionDetail.routeOptionDetailLoadDeferred = UtilsService.createPromiseDeferred();
+                routeOptionDetail.onServiceViewerReady = function (api) {
+                    routeOptionDetail.serviceViewerAPI = api;
+
+                    var serviceViewerPayload = {
+                        selectedIds: routeOptionDetail.ExactSupplierServiceIds
+                    };
+                    if (routeOptionDetail.Entity != undefined) {
+                        serviceViewerPayload = {
+                            selectedIds: customerRoute.Entity.CustomerServiceIds
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(routeOptionDetail.serviceViewerAPI, serviceViewerPayload, routeOptionDetail.routeOptionDetailLoadDeferred);
+                };
+            }
         }
+
         return directiveDefinitionObject;
     }]);

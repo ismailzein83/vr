@@ -33,5 +33,7 @@ namespace TOne.WhS.Routing.Entities
         public Decimal? Percentage { get; set; }
 
         public bool IsBlocked { get; set; }
+
+        public List<int> ExactSupplierServiceIds { get; set; } 
     }
 }

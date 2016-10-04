@@ -82,7 +82,8 @@ namespace TOne.WhS.Routing.Business
                     SupplierCode = item.SupplierCode,
                     SupplierName = _carrierAccountManager.GetCarrierAccountName(item.SupplierId),
                     SupplierRate = item.SupplierRate,
-                    SupplierZoneName = _supplierZoneManager.GetSupplierZoneName(item.SupplierZoneId)
+                    SupplierZoneName = _supplierZoneManager.GetSupplierZoneName(item.SupplierZoneId),
+                    ExactSupplierServiceIds = item.ExactSupplierServiceIds.ToList()
                 });
             }
 
