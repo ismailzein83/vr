@@ -7,7 +7,6 @@
             <vr-datagridcolumn headertext="'Supplier Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Supplier Rate'" field="'SupplierRate'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percentage'">{{dataItem.Percentage}}<span ng-if="dataItem.Percentage">%</span></vr-datagridcolumn>
-
             <vr-datagridcolumn headertext="'Services'" disablesorting="true">
                 <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
             </vr-datagridcolumn>

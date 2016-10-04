@@ -40,8 +40,6 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService', 'VRUIUtilsSer
 
                 api.load = function (payload) {
 
-                    console.log(payload.customerRoute);
-
                     var customerRoute;
                     var _routeOptionDetailServiceViewerPromises = [];
 
