@@ -166,7 +166,7 @@ namespace TOne.WhS.Routing.Business
             route.ExecutedRuleId = routeRule.RuleId;
             route.Rate = customerZoneDetail.EffectiveRateValue;
             route.CustomerServiceIds = customerZoneDetail.CustomerServiceIds;
-            route.IsBlocked = routeRuleTarget.BlockRoute;
+            
 
             if (routeRule.Settings.UseOrderedExecution)
             {
@@ -219,6 +219,7 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
+            route.IsBlocked = routeRuleTarget.BlockRoute;
             return route;
         }
 
