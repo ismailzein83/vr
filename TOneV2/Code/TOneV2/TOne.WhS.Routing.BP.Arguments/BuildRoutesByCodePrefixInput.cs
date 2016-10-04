@@ -29,6 +29,8 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public bool BuildRouteSync { get; set; }
 
+        public bool StoreCodeMatches { get; set; }
+
         public override string GetTitle()
         {
             return string.Format("#BPDefinitionTitle#: {0}", CodePrefixGroupDescription);

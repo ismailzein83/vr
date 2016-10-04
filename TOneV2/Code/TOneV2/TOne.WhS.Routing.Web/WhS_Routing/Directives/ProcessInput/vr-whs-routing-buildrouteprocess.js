@@ -71,7 +71,8 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                             IsFuture: $scope.isFuture,
                             RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                             RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value,
-                            Switches: !$scope.isFuture ? switchSelectorAPI.getSelectedIds() : null
+                            Switches: !$scope.isFuture ? switchSelectorAPI.getSelectedIds() : null,
+                            StoreCodeMatches: $scope.storeCodeMatches
                         }
                     };
                 };

@@ -9,10 +9,16 @@ namespace TOne.WhS.Routing.BP.Arguments
         public DateTime? EffectiveTime { get; set; }
 
         public bool IsFuture { get; set; }
+
         public RoutingDatabaseType RoutingDatabaseType { get; set; }
+
         public RoutingProcessType RoutingProcessType { get; set; }
+
         public bool DivideProcessIntoSubProcesses { get; set; }
+
         public List<string> Switches { get; set; }
+
+        public bool StoreCodeMatches { get; set; }
 
         public override string GetTitle()
         {

@@ -234,8 +234,13 @@
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCustomerRoutes" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCustomerRoutesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCodeSaleZoneStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)" Name="queueCodeMatchesBatch">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">new MemoryQueue&lt;CodeMatchesBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
       </Parallel.Variables>
-      <twrba2:BuildCodeMatches OutputQueue_1="{x:Null}" OutputQueue_2="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatches_1" IsCustomerRoutesProcess="True">
+      <twrba2:BuildCodeMatches OutputQueue_2="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatches_1" IsCustomerRoutesProcess="True">
         <twrba2:BuildCodeMatches.CodePrefixGroup>
           <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">Input.CodePrefixGroup</mca:CSharpValue>
@@ -246,6 +251,11 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CodeMatches)">queueCodeMatchesBatch_ForCustomerRoutes</mca:CSharpReference>
           </InOutArgument>
         </twrba2:BuildCodeMatches.OutputQueueForCustomerRoutes>
+        <twrba2:BuildCodeMatches.OutputQueue_1>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch</mca:CSharpReference>
+          </InOutArgument>
+        </twrba2:BuildCodeMatches.OutputQueue_1>
         <twrba2:BuildCodeMatches.SaleCodes>
           <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twre:CodePrefixSaleCodes)">SaleCodes</mca:CSharpValue>
@@ -356,11 +366,61 @@
       <If sap2010:WorkflowViewState.IdRef="If_2">
         <If.Condition>
           <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.StoreCodeMatches</mca:CSharpValue>
+          </InArgument>
+        </If.Condition>
+        <If.Then>
+          <Parallel DisplayName="Parallel_PrepareCodeMatches" sap2010:WorkflowViewState.IdRef="Parallel_3">
+            <twrba2:PrepareCodeMatchesForApply sap2010:WorkflowViewState.IdRef="PrepareCodeMatchesForApply_1">
+              <twrba2:PrepareCodeMatchesForApply.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CodeMatchesBatch)">queueCodeMatchesBatch</mca:CSharpValue>
+                </InArgument>
+              </twrba2:PrepareCodeMatchesForApply.InputQueue>
+              <twrba2:PrepareCodeMatchesForApply.OutputQueue>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches</mca:CSharpReference>
+                </InOutArgument>
+              </twrba2:PrepareCodeMatchesForApply.OutputQueue>
+              <twrba2:PrepareCodeMatchesForApply.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCodeMatchesStatus</mca:CSharpValue>
+                </InArgument>
+              </twrba2:PrepareCodeMatchesForApply.PreviousActivityStatus>
+              <twrba2:PrepareCodeMatchesForApply.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareCodeMatchesStatus</mca:CSharpReference>
+                </OutArgument>
+              </twrba2:PrepareCodeMatchesForApply.Status>
+            </twrba2:PrepareCodeMatchesForApply>
+            <twrba2:ApplyCodeMatchesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCodeMatchesToDB_1">
+              <twrba2:ApplyCodeMatchesToDB.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatches</mca:CSharpValue>
+                </InArgument>
+              </twrba2:ApplyCodeMatchesToDB.InputQueue>
+              <twrba2:ApplyCodeMatchesToDB.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCodeMatchesStatus</mca:CSharpValue>
+                </InArgument>
+              </twrba2:ApplyCodeMatchesToDB.PreviousActivityStatus>
+              <twrba2:ApplyCodeMatchesToDB.RoutingDatabaseId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+                </InArgument>
+              </twrba2:ApplyCodeMatchesToDB.RoutingDatabaseId>
+            </twrba2:ApplyCodeMatchesToDB>
+          </Parallel>
+        </If.Then>
+      </If>
+      <If sap2010:WorkflowViewState.IdRef="If_3">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
             <mca:CSharpValue x:TypeArguments="x:Boolean">Input.BuildRouteSync</mca:CSharpValue>
           </InArgument>
         </If.Condition>
         <If.Then>
-          <twrbs:BuildRouteSyncByRange RouteRangeInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildRouteSyncByRange_1">
+          <twrbs:BuildRouteSyncByRange RouteRangeInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildRouteSyncByRange_2">
             <twrbs:BuildRouteSyncByRange.ReadRoutesStatus>
               <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                 <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCustomerRoutesStatus</mca:CSharpValue>
@@ -380,7 +440,7 @@
         </If.Then>
       </If>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbEROA4ADDgIBAVYFvQEQAwH6A74BBdwBCgMB1QPdAQX+AhACAQJXB38SAwHPBIABB7wBEgMB+wPBAQvBAV4DAdYDxQEJ2gEoAwHdA+UBDeUBhQECAQPuAQeNAiEDAe0CjgIHtwIkAwHkAbgCB9ICLgMBjgHTAgfjAigCAVrkAgf9AgwCARRYCW0fAwHmBG4JfikDAdAEhAEJigEpAwHGBIsBCaoBIwMBlQSrAQm7ASkDAfwD0gEP0gGmAQMB8wPNAQ/NAX4DAewDyAEPyAFlAwHlA9cBD9cBWwMB3gP7AQ37AXUDAcQD8QEN8QF4AwGzA4ACDYACdwMBogP2AQ32AZABAwGRA4UCDYUCfQMBgAPuAZ8B7gGlAQMB/wKKAg2KAnMDAe4CkQINkQJzAwHcAqoCDaoCbwMBywKbAg2bAogBAwG6ArQCDbQCdAMBqQKWAg2WAmoDAZgCrwINrwJ6AwGHAqUCDaUCiQEDAfYBoAINoAJaAwHlAcoCDcoCcgMB0wG7Ag27AoEBAwHCAcUCDcUCaAMBsQHPAg3PAnwDAaABwAINwAJ8AwGPAdsCDdsCdAIBfdYCDdYCdAIBbOACDeACYQIBW+cCDecCYAIBFesCC/sCKQIBJmUPZWwDAfwEYA9gfwMB9QRbD1t6AwHuBGoPalwDAecEcQ9xfQMB3wR7D3t3AwHYBHYPdmMDAdEEhwEPhwGIAQMBxwSTAQ+TAWwDAb4EjgEPjgF6AwG2BJ0BD50BkAEDAa4EpwEPpwGAAQMBpgSiAQ+iAYcBAwGeBJgBD5gBXAMBlgSuAQ+uAWMDAY0EswEPswF/AwGFBLgBD7gBfQMB/QP4AhH4AngCAUnzAhHzAoMBAgE47gIR7gJ2AgEn</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbFJOA7wDDgIBAVYFvQEQAwHNBb4BBdwBCgMBqAXdAQW6AxACAQJXB38SAwGiBoABB7wBEgMBzgXBAQvBAV4DAakFxQEJ2gEoAwGwBeUBDeUBhQECARXvAQ3vAY8BAgED8wEHlwIhAwGoBJgCB8ECJAMBlwPCAgfcAi4DAbwC3QIH7QIoAwGFAu4CB58DDAIBcaADB7kDDAIBJ1gJbR8DAbkGbgl+KQMBowaEAQmKASkDAZkGiwEJqgEjAwHoBasBCbsBKQMBzwXSAQ/SAaYBAwHGBc0BD80BfgMBvwXIAQ/IAWUDAbgF1wEP1wFbAwGxBYUCDYUCdQMBlgWAAg2AAoMBAwGEBfYBDfYBeAMB8gSKAg2KAncDAeAE+wEN+wGQAQMBzgSPAg2PAn0DAbwE8wGGAfMBjAEDAbsElAINlAJzAwGpBJsCDZsCcwMBlgS0Ag20Am8DAYQEpQINpQKIAQMB8gO+Ag2+AnQDAeADoAINoAJqAwHOA7kCDbkCegMBvAOvAg2vAokBAwGqA6oCDaoCWgMBmAPUAg3UAnIDAYUDxQINxQKBAQMB8wLPAg3PAmgDAeEC2QIN2QJ8AwHPAsoCDcoCfAMBvQLlAg3lAnQDAaoC4AIN4AJ0AwGYAuoCDeoCYQMBhgLxAg3xAmICAXL1AgudAxYDAYQBowMNowNgAgEopwMLtwMpAgE6ZQ9lbAMBzwZgD2B/AwHIBlsPW3oDAcEGag9qXAMBugZxD3F9AwGyBnsPe3cDAasGdg92YwMBpAaHAQ+HAYgBAwGaBpMBD5MBbAMBkQaOAQ+OAXoDAYkGnQEPnQGQAQMBgQanAQ+nAYABAwH5BaIBD6IBhwEDAfEFmAEPmAFcAwHpBa4BD64BYwMB4AWzAQ+zAX8DAdgFuAEPuAF9AwHQBfYCDYsDMQMBvAGMAw2cAysDAYUBtAMRtAN4AgFfrwMRrwODAQIBTaoDEaoDdgIBO4MDE4MDdQMB8wH5AhP5AoEBAwHhAYgDE4gDfwMBzwH+AhP+An8DAb0BlAMTlAN3AwGqAY8DE48DdwMBmAGZAxOZA2cDAYYB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -403,24 +463,28 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1538,316" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2257,316" />
       <sap2010:ViewStateData Id="LoadSwitchesInProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1538,210" />
-      <sap2010:ViewStateData Id="BuildCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,210" />
-      <sap2010:ViewStateData Id="BuildCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,210" />
-      <sap2010:ViewStateData Id="PrepareCustomerRoutesForApply_1" sap:VirtualizedContainerService.HintSize="200,210" />
-      <sap2010:ViewStateData Id="ApplyCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,210" />
-      <sap2010:ViewStateData Id="BuildRouteSyncByRange_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,210" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1538,256" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1560,986">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2257,210" />
+      <sap2010:ViewStateData Id="BuildCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,236" />
+      <sap2010:ViewStateData Id="BuildCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,236" />
+      <sap2010:ViewStateData Id="PrepareCustomerRoutesForApply_1" sap:VirtualizedContainerService.HintSize="200,236" />
+      <sap2010:ViewStateData Id="ApplyCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,236" />
+      <sap2010:ViewStateData Id="PrepareCodeMatchesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyCodeMatchesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="679,236" />
+      <sap2010:ViewStateData Id="BuildRouteSyncByRange_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="464,236" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="2257,282" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2279,1012">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="1600,1066" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="2104,1066" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
