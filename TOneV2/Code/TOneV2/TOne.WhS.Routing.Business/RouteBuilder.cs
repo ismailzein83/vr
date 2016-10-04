@@ -260,7 +260,8 @@ namespace TOne.WhS.Routing.Business
                         SupplierCode = routeOptionRuleTarget.SupplierCode,
                         SupplierRate = routeOptionRuleTarget.SupplierRate,
                         IsBlocked = routeOptionRuleTarget.BlockOption,
-                        ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId
+                        ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId,
+                        ExactSupplierServiceIds = routeOptionRuleTarget.ExactSupplierServiceIds
                     };
                     optionSupplierDetails.SupplierZones.Add(optionSupplierZone);
 
