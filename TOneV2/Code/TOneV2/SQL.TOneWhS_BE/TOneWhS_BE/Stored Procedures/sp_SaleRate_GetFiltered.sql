@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetFiltered]
-	@EffectiveOn dateTime = null,
+	@EffectiveOn dateTime,
 	@SellingNumberPlanID int ,
 	@ZonesIDs varchar(max),
 	@OwnerType int,
@@ -20,8 +20,8 @@ select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
 			inner join   [TOneWhS_BE].SalePriceList sp WITH(NOLOCK) on sr.PriceListID = sp.ID
 			inner join  [TOneWhS_BE].SaleZone sz WITH(NOLOCK) on  sr.ZoneID = sz.ID          
     WHERE	(sr.EED is null or sr.BED <> sr.EED) -- Don't select deleted rates
-			and (@EffectiveOn is null or sr.BED < = @EffectiveOn)
-			and (@EffectiveOn is null or sr.EED is null or sr.EED  > @EffectiveOn)
+			and (sr.BED < = @EffectiveOn)
+			and (sr.EED is null or sr.EED  > @EffectiveOn)
 			and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
 			and (@ZonesIDs  is null or sr.ZoneID in (select ZoneID from @ZonesIDsTable))
 			and (@OwnerID = sp.OwnerID)

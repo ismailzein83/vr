@@ -17,7 +17,7 @@ BEGIN
 		WHERE	zone.SupplierID = @SupplierID
 				AND (@Code IS NULL OR code.Code LIKE @Code + '%')
 				AND (@ZonesIDs IS NULL OR code.ZoneID in (SELECT ZoneID FROM @ZonesIDsTable))
-				AND (@EffectiveOn IS NULL OR (code.BED < = @EffectiveOn AND (code.EED IS NULL OR code.EED > @EffectiveOn)));
+				AND (code.BED < = @EffectiveOn AND (code.EED IS NULL OR code.EED > @EffectiveOn));
 			
 
 END

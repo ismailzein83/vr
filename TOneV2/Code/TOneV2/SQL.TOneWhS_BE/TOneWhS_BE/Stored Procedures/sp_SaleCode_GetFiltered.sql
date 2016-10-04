@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetFiltered]
-	@EffectiveOn dateTime = null,
+	@EffectiveOn dateTime ,
 	@Code varchar(20),
 	@SellingNumberPlanID int ,
 	@ZonesIDs varchar(max)
@@ -17,8 +17,8 @@ BEGIN
 			FROM [TOneWhS_BE].SaleCode sc WITH(NOLOCK) 
 			inner join  [TOneWhS_BE].SaleZone sz WITH(NOLOCK) on  sc.ZoneID = sz.ID   
             WHERE 
-                (@EffectiveOn is null or sc.BED < = @EffectiveOn)
-            and (@EffectiveOn is null or sc.EED is null or sc.EED  > @EffectiveOn)
+                (sc.BED < = @EffectiveOn)
+            and (sc.EED is null or sc.EED  > @EffectiveOn)
             and (@Code IS NULL OR sc.Code LIKE @Code + '%')
             and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
             and (@ZonesIDs  is null or sc.ZoneID in (select ZoneID from @ZonesIDsTable))

@@ -18,7 +18,7 @@
 
 		 WHERE	(@SupplierId =0 OR priceList.SupplierID = @SupplierId)
 				 and (@ZonesIDs  is null or rate.ZoneID in (select ZoneID from @ZonesIDsTable))
-				 AND   (@EffectiveOn is null or (rate.BED < = @EffectiveOn   and (rate.EED is null or rate.EED  > @EffectiveOn) ));			
+				 AND   (rate.BED < = @EffectiveOn   and (rate.EED is null or rate.EED  > @EffectiveOn) );			
 			
 		
 		SET NOCOUNT OFF
