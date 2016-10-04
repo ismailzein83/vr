@@ -13,7 +13,10 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<SaleCode> GetFilteredSaleCodes(SaleCodeQuery query);
 
+        IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query);
+
         List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate);
+
         List<SaleCode> GetSaleCodesByCodeGroups(List<int> codeGroupsIds);
 
         List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate);
@@ -27,13 +30,17 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes);
 
         IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture);
+
         IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture);
 
         List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate);
+
         bool AreZonesUpdated(ref object updateHandle);
+
         List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate);
 
         List<SaleCode> GetSaleCodesByZoneIDs(List<long> zoneIds, DateTime effectiveDate);
+
         bool AreSaleCodesUpdated(ref object updateHandle);
     }
 }

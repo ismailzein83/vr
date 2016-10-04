@@ -139,6 +139,8 @@
     <Compile Include="RoutingProduct\RoutingProductInfoFilter.cs" />
     <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
     <Compile Include="SaleAreaSettings\SaleAreaSettingsData.cs" />
+    <Compile Include="SaleCode\Query\SaleCodeQuery.cs" />
+    <Compile Include="SaleCode\Query\SaleCodeQueryByZone.cs" />
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
@@ -150,7 +152,7 @@
     <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZone\SaleZoneGroupConfig.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
-    <Compile Include="SaleCode\SaleCodeQuery.cs" />
+    <Compile Include="SaleCode\Query\BaseSaleCodeQueryHandler.cs" />
     <Compile Include="SaleZone\SaleZoneQuery.cs" />
     <Compile Include="SellingNumberPlan\SellingNumberPlanDetail.cs" />
     <Compile Include="SellingNumberPlan\SellingNumberPlanInfo.cs" />

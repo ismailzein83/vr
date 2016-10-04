@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
 
         #region Public Methods
-        public Vanrise.Entities.IDataRetrievalResult<SaleCodeDetail> GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SaleCodeDetail> GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<BaseSaleCodeQueryHandler> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new SaleCodeRequestHandler());
         }
@@ -129,7 +129,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Classes
 
-        private class SaleCodeRequestHandler : BigDataRequestHandler<SaleCodeQuery, SaleCode, SaleCodeDetail>
+        private class SaleCodeRequestHandler : BigDataRequestHandler<BaseSaleCodeQueryHandler, SaleCode, SaleCodeDetail>
         {
             public override SaleCodeDetail EntityDetailMapper(SaleCode entity)
             {
@@ -137,10 +137,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 return manager.SaleCodeDetailMapper(entity);
             }
 
-            public override IEnumerable<SaleCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
+            public override IEnumerable<SaleCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BaseSaleCodeQueryHandler> input)
             {
                 ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-                return dataManager.GetFilteredSaleCodes(input.Query);
+                return input.Query.GetFilteredSaleCodes();
             }
         }
 

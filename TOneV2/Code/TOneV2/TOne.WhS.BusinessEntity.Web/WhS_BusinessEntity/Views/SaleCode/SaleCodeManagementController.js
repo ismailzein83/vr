@@ -77,14 +77,16 @@
        
         function setFilterObject() {
             filter = {
+                $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business",
+            };
+            
+            filter.Query = {
                 SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
                 Code: $scope.code,
                 EffectiveOn: $scope.effectiveOn
             };
-           
         }
-
     }
 
     appControllers.controller('WhS_BE_SaleCodeManagementController', saleCodeManagementController);

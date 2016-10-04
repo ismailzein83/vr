@@ -11,12 +11,13 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "SaleCode")]
     public class WhSBE_SaleCodeController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredSaleCodes")]
-        public object GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<SaleCodeQuery> input)
+        public object GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<BaseSaleCodeQueryHandler> input)
         {
             SaleCodeManager manager = new SaleCodeManager();
             return GetWebResponse(input, manager.GetFilteredSaleCodes(input));
