@@ -36,43 +36,18 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<char> GetZoneLetters(ZoneLettersInput input)
         {
-            IEnumerable<SaleZone> zones = null;
-
-            if (input.OwnerType == SalePriceListOwnerType.SellingProduct)
-            {
-                zones = GetSellingProductZones(input.OwnerId, input.EffectiveOn);
-            }
-            else
-            {
-                var customerZoneManager = new CustomerZoneManager();
-                zones = customerZoneManager.GetCustomerSaleZones(input.OwnerId, input.EffectiveOn, false);
-            }
-
+            int sellingNumberPlanId = GetSellingNumberPlanId(input.OwnerType, input.OwnerId);
+            IEnumerable<SaleZone> zones = new SaleZoneManager().GetSaleZonesByOwner(input.OwnerType, input.OwnerId, sellingNumberPlanId, input.EffectiveOn, true);
+            
             zones = zones.FindAllRecords
             (
                 x => (input.CountryIds == null || input.CountryIds.Contains(x.CountryId))
                 && (!input.ZoneNameFilterType.HasValue || Vanrise.Common.Utilities.IsTextMatched(x.Name, input.ZoneNameFilter, input.ZoneNameFilterType.Value))
             );
-
-            if (zones == null)
-                return null;
-            return zones.MapRecords(x => char.ToUpper(x.Name[0]), x => x.Name != null && x.Name.Length > 0).Distinct().OrderBy(x => x);
-        }
-
-        private IEnumerable<SaleZone> GetSellingProductZones(int sellingProductId, DateTime effectiveOn)
-        {
-            IEnumerable<SaleZone> zones;
-
-            SellingProductManager sellingProductManager = new SellingProductManager();
-            int? sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(sellingProductId);
-
-            if (!sellingNumberPlanId.HasValue)
-                throw new NullReferenceException("sellingNumberPlanId");
-
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            zones = saleZoneManager.GetSaleZones(sellingNumberPlanId.Value, effectiveOn);
-
-            return zones;
+            
+            if (zones != null)
+                return zones.MapRecords(x => char.ToUpper(x.Name[0]), x => x.Name != null && x.Name.Length > 0).Distinct().OrderBy(x => x);
+            return null;
         }
 
         #endregion
@@ -83,7 +58,7 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<ZoneItem> GetZoneItems(ZoneItemsInput input)
         {
             List<ZoneItem> zoneItems = null;
-            int? sellingNumberPlanId = GetSellingNumberPlanId(input.Filter.OwnerType, input.Filter.OwnerId);
+            int sellingNumberPlanId = GetSellingNumberPlanId(input.Filter.OwnerType, input.Filter.OwnerId);
 
             RatePlanZoneManager manager = new RatePlanZoneManager();
             IEnumerable<SaleZone> zones = manager.GetRatePlanZones(input.Filter.OwnerType, input.Filter.OwnerId, sellingNumberPlanId, DateTime.Now, input.Filter.CountryIds, input.Filter.ZoneLetter, input.Filter.ZoneNameFilterType, input.Filter.ZoneNameFilter, input.FromRow, input.ToRow);
@@ -200,18 +175,14 @@ namespace TOne.WhS.Sales.Business
             return ratePlanDataManager.SyncImportedDataWithDB(processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
         }
 
-        public int? GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+        public int GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
         {
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                SellingProductManager sellingProductManager = new SellingProductManager();
-                return sellingProductManager.GetSellingNumberPlanId(ownerId);
-            }
-            else
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
-            }
+            int? sellingNumberPlanId = (ownerType == SalePriceListOwnerType.SellingProduct) ?
+                new SellingProductManager().GetSellingNumberPlanId(ownerId) :
+                new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
+            if (!sellingNumberPlanId.HasValue)
+                throw new NullReferenceException("sellingNumberPlanId");
+            return sellingNumberPlanId.Value;
         }
 
         public RatePlanSettingsData GetRatePlanSettingsData()

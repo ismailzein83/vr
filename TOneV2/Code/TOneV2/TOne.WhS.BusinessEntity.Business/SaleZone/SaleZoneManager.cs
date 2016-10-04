@@ -39,11 +39,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZonesBySellingNumberPlan.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
         }
 
-        public IEnumerable<SaleZone> GetSaleZones(int sellingNumberPlanId, DateTime effectiveDate)
-        {
-            return GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(item => item.IsEffective(effectiveDate));
-        }
-
         public IEnumerable<SaleZone> GetSaleZonesBySellingNumberPlan(int sellingNumberPlanId)
         {
             IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones().Values;
@@ -84,14 +79,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return manager.GetExtensionConfigurations<SaleZoneGroupConfig>(SaleZoneGroupConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds)
+        public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds, DateTime effectiveOn, bool withFutureZones)
         {
-            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
-
-            if (saleZonesBySellingNumberPlan != null)
-                saleZonesBySellingNumberPlan = saleZonesBySellingNumberPlan.FindAllRecords(z => countryIds.Contains((int)z.CountryId));
-
-            return saleZonesBySellingNumberPlan;
+            IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(x => countryIds.Contains(x.CountryId));
+            return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
         }
 
         public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
@@ -197,21 +188,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
-        public IEnumerable<SaleZone> GetSaleZonesByOwner(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn)
+        public IEnumerable<SaleZone> GetSaleZonesByOwner(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn, bool withFutureZones)
         {
-            IEnumerable<SaleZone> saleZones = null;
-
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-
-               saleZones =  GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+                IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+                return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
             }
             else
             {
-                var customerZoneManager = new CustomerZoneManager();
-                saleZones = customerZoneManager.GetCustomerSaleZones(ownerId, effectiveOn, false);
+                return new CustomerZoneManager().GetCustomerSaleZones(ownerId, sellingNumberPlanId, effectiveOn, withFutureZones);
             }
-            return saleZones;
         }
 
         #endregion

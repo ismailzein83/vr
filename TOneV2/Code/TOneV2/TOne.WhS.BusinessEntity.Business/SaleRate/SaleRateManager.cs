@@ -135,7 +135,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<SaleRateDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
             {
-                IEnumerable<SaleZone> saleZones = new SaleZoneManager().GetSaleZonesByOwner(input.Query.OwnerType, input.Query.OwnerId, input.Query.SellingNumberPlanId.Value, input.Query.EffectiveOn);
+                IEnumerable<SaleZone> saleZones = new SaleZoneManager().GetSaleZonesByOwner(input.Query.OwnerType, input.Query.OwnerId, input.Query.SellingNumberPlanId.Value, input.Query.EffectiveOn, false);
 
                 List<SaleRateDetail> ratesFormatted = new List<SaleRateDetail>();
                 DateTime? rateConversionEffectiveDate = null;

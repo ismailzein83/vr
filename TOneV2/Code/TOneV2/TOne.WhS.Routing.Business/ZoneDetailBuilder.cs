@@ -57,10 +57,12 @@ namespace TOne.WhS.Routing.Business
             int customerTransformationId = routingConfigManager.GetCustomerTransformationId();
 
             DataTransformer dataTransformer = new DataTransformer();
+            var carrierAccountManager = new CarrierAccountManager();
 
             foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
-                var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
+                int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerInfo.CustomerId, CarrierAccountType.Customer);
+                var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, sellingNumberPlanId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
                 if (customerSaleZones == null)
                     continue;
 

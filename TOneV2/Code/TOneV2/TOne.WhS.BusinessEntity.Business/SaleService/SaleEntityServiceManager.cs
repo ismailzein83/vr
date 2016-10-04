@@ -57,7 +57,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<SaleEntityZoneServiceDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleEntityZoneServiceQuery> input)
             {
-                IEnumerable<SaleZone> saleZones = new SaleZoneManager().GetSaleZonesByOwner(input.Query.OwnerType,input.Query.OwnerId , input.Query.SellingNumberPlanId,input.Query.EffectiveOn);
+                IEnumerable<SaleZone> saleZones = new SaleZoneManager().GetSaleZonesByOwner(input.Query.OwnerType,input.Query.OwnerId , input.Query.SellingNumberPlanId,input.Query.EffectiveOn, false);
                 List<SaleEntityZoneServiceDetail> saleServiceDetails = new List<SaleEntityZoneServiceDetail>();
 
                 var serviceLocator = new SaleEntityServiceLocator(new  SaleEntityServiceReadWithCache(input.Query.EffectiveOn));

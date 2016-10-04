@@ -57,20 +57,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return countriesToSell;
         }
-        public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime effectiveOn, bool futureEntities)
+        public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, int sellingNumberPlanId, DateTime effectiveOn, bool withFutureZones)
         {
-            IEnumerable<SaleZone> saleZones = null;
-            CustomerZones customerZones = GetCustomerZones(customerId, effectiveOn, futureEntities);
-
+            CustomerZones customerZones = GetCustomerZones(customerId, effectiveOn, withFutureZones);
             if (customerZones != null)
             {
-                int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
-                IEnumerable<int> countryIds = customerZones.Countries.MapRecords(item => item.CountryId);
-                saleZones = new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds);
-                saleZones = saleZones.FindAllRecords(itm => itm.IsEffective(effectiveOn));
+                IEnumerable<int> countryIds = customerZones.Countries.MapRecords(x => x.CountryId);
+                return new SaleZoneManager().GetSaleZonesByCountryIds(sellingNumberPlanId, countryIds, effectiveOn, withFutureZones);
             }
-
-            return saleZones;
+            return null;
         }
         public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
         {

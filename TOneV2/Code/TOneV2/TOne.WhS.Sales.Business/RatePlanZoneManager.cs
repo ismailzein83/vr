@@ -12,29 +12,15 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanZoneManager
     {
-        public IEnumerable<SaleZone> GetRatePlanZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn, IEnumerable<int> countryIds, char zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter, int fromRow, int toRow)
+        public IEnumerable<SaleZone> GetRatePlanZones(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn, IEnumerable<int> countryIds, char zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter, int fromRow, int toRow)
         {
             IEnumerable<SaleZone> zones = GetFilteredZones(ownerType, ownerId, sellingNumberPlanId, effectiveOn, countryIds, zoneLetter, zoneNameFilterType, zoneNameFilter);
             return GetPagedZones(zones, fromRow, toRow);
         }
 
-        public IEnumerable<SaleZone> GetFilteredZones(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, DateTime effectiveOn, IEnumerable<int> countryIds, char? zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter)
+        public IEnumerable<SaleZone> GetFilteredZones(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn, IEnumerable<int> countryIds, char? zoneLetter, Vanrise.Entities.TextFilterType? zoneNameFilterType, string zoneNameFilter)
         {
-            IEnumerable<SaleZone> zones = null;
-
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                if (!sellingNumberPlanId.HasValue)
-                    throw new ArgumentNullException("sellingNumberPlanId");
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                zones = saleZoneManager.GetSaleZones(sellingNumberPlanId.Value, effectiveOn);
-            }
-            else
-            {
-                CustomerZoneManager manager = new CustomerZoneManager();
-                zones = manager.GetCustomerSaleZones(ownerId, effectiveOn, false);
-            }
-
+            IEnumerable<SaleZone> zones = new SaleZoneManager().GetSaleZonesByOwner(ownerType, ownerId, sellingNumberPlanId, effectiveOn, true);
             return GetMatchedZones(zones, countryIds, zoneLetter, zoneNameFilterType, zoneNameFilter);
         }
 
