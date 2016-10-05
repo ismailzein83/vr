@@ -11,7 +11,6 @@ namespace Vanrise.Caching
     {
         object dummyParameter = new object();
         CacheStore _cacheDictionary = new CacheStore();
-        CacheDictionaryInfo _cacheDictionaryInfo = new CacheDictionaryInfo();
 
         public override T GetOrCreateObject<T>(Object cacheName, object parameter, Func<T> createObject)
         {
@@ -41,11 +40,6 @@ namespace Vanrise.Caching
         public override void RemoveObjectFromCache(CachedObject cachedObject)
         {
             _cacheDictionary.TryRemove(cachedObject.CacheName);
-        }
-
-        protected override CacheDictionaryInfo GetCacheDictionaryInfo(object parameter)
-        {
-            return _cacheDictionaryInfo;
         }
 
         protected override bool ShouldSetCacheExpired(object parameter)

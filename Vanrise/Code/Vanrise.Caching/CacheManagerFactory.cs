@@ -17,7 +17,7 @@ namespace Vanrise.Caching
 
         public static ICacheManager GetCacheManager(Type cacheManagerType, Guid? cacheManagerId = null)
         {
-            CacheCleaner.CleanCacheIfNeeded();
+            //CacheCleaner.CleanCacheIfNeeded();
             if (!cacheManagerId.HasValue)
             {
                 ICacheManager cacheManager;

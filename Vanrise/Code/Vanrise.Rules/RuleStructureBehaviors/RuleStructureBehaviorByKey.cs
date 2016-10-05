@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
 {
     public abstract class RuleStructureBehaviorByKey<T> : BaseRuleStructureBehavior
     {
-        Dictionary<T, RuleNode> _ruleNodesByKey = new Dictionary<T, RuleNode>();
+        ConcurrentDictionary<T, RuleNode> _ruleNodesByKey = new ConcurrentDictionary<T, RuleNode>();
         public override IEnumerable<RuleNode> StructureRules(IEnumerable<BaseRule> rules, out List<BaseRule> notMatchedRules)
         {
             notMatchedRules = new List<BaseRule>();

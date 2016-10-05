@@ -53,7 +53,7 @@ namespace Vanrise.GenericData.QueueActivators
         void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
-            var allSummaryBatches = new Dictionary<DateTime, Dictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
+            var allSummaryBatches = new ConcurrentDictionary<DateTime, ConcurrentDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
             Dictionary<DateTime, List<StagingSummaryRecord>> data = new Dictionary<DateTime,List<StagingSummaryRecord>>();
             context.DoWhilePreviousRunning(() =>
             {
@@ -71,11 +71,11 @@ namespace Vanrise.GenericData.QueueActivators
                         {
                             foreach (var summaryBatch in summaryRecordBatches)
                             {
-                                Dictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>> matchBatch;
+                                ConcurrentDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>> matchBatch;
                                 if (!allSummaryBatches.TryGetValue(summaryBatch.BatchStart, out matchBatch))
                                 {
-                                    matchBatch = new Dictionary<string, Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>();
-                                    allSummaryBatches.Add(summaryBatch.BatchStart, matchBatch);
+                                    matchBatch = new ConcurrentDictionary<string, Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>();
+                                    allSummaryBatches.TryAdd(summaryBatch.BatchStart, matchBatch);
                                 }
                                 transformationManager.UpdateExistingFromNew(matchBatch, summaryBatch);
                             }
@@ -229,7 +229,7 @@ namespace Vanrise.GenericData.QueueActivators
                         DateTime batchStart = genericSummaryRecordBatchList[0].BatchStart;
                         recordStorageDataManager.DeleteRecords(batchStart);
 
-                        Dictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new Dictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+                        ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
 
                         foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in genericSummaryRecordBatchList)
                             transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);

@@ -125,13 +125,14 @@ namespace Vanrise.Rules
             BaseRule matchRule = GetMatchRule(this, target);
             if (matchRule != null)
             {
-                if (!matchRule.LastRefreshedTime.HasValue || (DateTime.Now - matchRule.LastRefreshedTime.Value) > matchRule.RefreshTimeSpan)
+                DateTime now = VRClock.Now;
+                if (!matchRule.LastRefreshedTime.HasValue || (now - matchRule.LastRefreshedTime.Value) > matchRule.RefreshTimeSpan)
                 {
                     lock (s_lockObj)
                     {
-                        if (!matchRule.LastRefreshedTime.HasValue || (DateTime.Now - matchRule.LastRefreshedTime.Value) > matchRule.RefreshTimeSpan)
+                        if (!matchRule.LastRefreshedTime.HasValue || (now - matchRule.LastRefreshedTime.Value) > matchRule.RefreshTimeSpan)
                         {
-                            matchRule.RefreshRuleState(new RefreshRuleStateContext() { EffectiveDate = target.EffectiveOn.HasValue ? target.EffectiveOn.Value : DateTime.Now });
+                            matchRule.RefreshRuleState(new RefreshRuleStateContext() { EffectiveDate = target.EffectiveOn.HasValue ? target.EffectiveOn.Value : now });
                         }
                     }
                 }
@@ -184,7 +185,7 @@ namespace Vanrise.Rules
 
         bool IsRuleMatched(BaseRule rule, BaseRuleTarget target)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = VRClock.Now;
 
             if ((target.EffectiveOn.HasValue && (target.EffectiveOn.Value < rule.BeginEffectiveTime
                                                 || (rule.EndEffectiveTime.HasValue && target.EffectiveOn.Value >= rule.EndEffectiveTime.Value)))

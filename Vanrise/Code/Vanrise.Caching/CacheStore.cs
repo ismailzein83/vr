@@ -13,6 +13,9 @@ namespace Vanrise.Caching
         Object _firstItemKey;
         CachedObject _firstItemValue;
         ConcurrentDictionary<Object, CachedObject> _dictionary = new ConcurrentDictionary<object, CachedObject>();
+
+        public DateTime LastExpirationCheckTime { get; set; }
+
         public void Add(Object key, CachedObject cachedObject)
         {
             lock (this)

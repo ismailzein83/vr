@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
 {
     public abstract class RuleStructureBehaviorByPrefix : BaseRuleStructureBehavior
     {
-        Dictionary<string, RuleNode> _ruleNodesByPrefixes = new Dictionary<string, RuleNode>();
+        ConcurrentDictionary<string, RuleNode> _ruleNodesByPrefixes = new ConcurrentDictionary<string, RuleNode>();
         int _minPrefixLength = int.MaxValue;
         int _maxPrefixLength = 0;
         
@@ -42,17 +43,17 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                 else
                     notMatchRules.Add(rule);
             }
-            _ruleNodesByPrefixes = _ruleNodesByPrefixes.OrderByDescending(itm => itm.Key.Length).ToDictionary(key => key.Key, value => value.Value);
+            var orderedRuleNodesByPrefixes = _ruleNodesByPrefixes.OrderByDescending(itm => itm.Key.Length);
 
             //add rules having parent prefixes
-            foreach (var ruleNodesByPrefix in _ruleNodesByPrefixes)
+            foreach (var ruleNodesByPrefix in orderedRuleNodesByPrefixes)
             {
                 if (ruleNodesByPrefix.Key.Length != keyLength)
                     priority++;
 
                 keyLength = ruleNodesByPrefix.Key.Length;
 
-                foreach (var rule in _ruleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).SelectMany(itm => itm.Value.Rules))
+                foreach (var rule in orderedRuleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).SelectMany(itm => itm.Value.Rules))
                 {
                     if (!ruleNodesByPrefix.Value.Rules.Contains(rule))
                     {

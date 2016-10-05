@@ -50,9 +50,13 @@ namespace Vanrise.GenericData.Business
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        private struct GetBusinessEntityManagerCacheName
+        {
+            public Guid BusinessEntityDefinitionId { get; set; }
+        }
         public IBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
         {
-            string cacheName = String.Format("GetBusinessEntityManager_{0}", businessEntityDefinitionId);
+            var cacheName = new GetBusinessEntityManagerCacheName { BusinessEntityDefinitionId = businessEntityDefinitionId };// String.Format("GetBusinessEntityManager_{0}", businessEntityDefinitionId);
             Type beManagerType = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
