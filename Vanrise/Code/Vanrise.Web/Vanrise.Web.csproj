@@ -166,8 +166,10 @@
   <ItemGroup>
     <Content Include="Client\Images\01.png" />
     <Content Include="Client\Images\02.png" />
+    <Content Include="Client\Images\current.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
     <Content Include="Client\Images\false.png" />
+    <Content Include="Client\Images\inherited.png" />
     <Content Include="Client\Images\menu-icons\admin.png" />
     <Content Include="Client\Images\menu-icons\Administration.png" />
     <Content Include="Client\Images\menu-icons\busines intel.png" />
