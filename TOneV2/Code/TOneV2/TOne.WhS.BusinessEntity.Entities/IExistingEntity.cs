@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public interface IExistingEntity : Vanrise.Entities.IDateEffectiveSettings
     {
         IChangedEntity ChangedEntity { get; }
-
+        DateTime? OriginalEED { get; }
         bool IsSameEntity(IExistingEntity nextEntity);
     }
 }

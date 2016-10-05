@@ -13,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         public List<int> ServiceIds { get; set; }
         public string ZoneName { get; set; }
-        public ExistingZoneService SystemZoneService { get; set; }
+        public SystemZoneServiceGroup SystemZoneServiceGroup { get; set; }
         public ZoneServiceChangeType ChangeType { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }

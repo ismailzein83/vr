@@ -34,6 +34,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             return this.ParentZone.Name.Equals(nextExistingRate.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
                 && this.RateEntity.NormalRate == nextExistingRate.RateEntity.NormalRate;
         }
+
+
+        public DateTime? OriginalEED
+        {
+            get { return this.RateEntity.EED; }
+        }
     }
 
     public class ExistingRatesByZoneName

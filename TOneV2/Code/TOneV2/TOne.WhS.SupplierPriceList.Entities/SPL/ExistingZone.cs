@@ -103,6 +103,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
             return this.Name.Equals(nextExistingZone.Name, StringComparison.InvariantCultureIgnoreCase);
         }
+
+
+        public DateTime? OriginalEED
+        {
+            get { return this.ZoneEntity.EED; }
+        }
     }
 
     public class ExistingZonesByName

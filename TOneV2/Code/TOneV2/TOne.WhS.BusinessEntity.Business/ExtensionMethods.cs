@@ -81,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var currentElement = entities[i];
                 var nextElement = entities[i + 1];
 
-                if (currentElement.EED.HasValue && currentElement.EED == nextElement.BED && currentElement.IsSameEntity(nextElement))
+                if (currentElement.OriginalEED.HasValue && currentElement.OriginalEED == nextElement.BED && currentElement.IsSameEntity(nextElement))
                     connectedEntities.Add(nextElement);
                 else
                     break;
@@ -99,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var currentElement = entities[i];
                 var previousElement = entities[i - 1];
 
-                if (previousElement.EED.HasValue && currentElement.BED == previousElement.EED && currentElement.IsSameEntity(previousElement))
+                if (previousElement.OriginalEED.HasValue && currentElement.BED == previousElement.OriginalEED && currentElement.IsSameEntity(previousElement))
                     connectedEntities.Add(previousElement);
                 else
                     break;

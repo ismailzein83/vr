@@ -53,22 +53,22 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         private void FillNotImportedZoneServicesWithClosedZoneServices(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices)
         {
-            NotImportedZoneService notImportedZoneService = this.GetNotImportedZoneService(existingZoneServices, true);
+            NotImportedZoneServiceGroup notImportedZoneService = this.GetNotImportedZoneService(existingZoneServices, true);
             if (notImportedZoneService != null)
-                importedZone.NotImportedZoneService = notImportedZoneService;
+                importedZone.NotImportedZoneServiceGroup = notImportedZoneService;
         }
 
-        private NotImportedZoneService GetNotImportedZoneService(List<ExistingZoneService> existingZoneServices, bool hasChanged)
+        private NotImportedZoneServiceGroup GetNotImportedZoneService(List<ExistingZoneService> existingZoneServices, bool hasChanged)
         {
-            ExistingZoneService lastElement = GetLastExistingZoneServiceFromConnectedExistingZoneServices(existingZoneServices);
+            SystemZoneServiceGroup lastElement = GetLastExistingZoneServiceFromConnectedExistingZoneServices(existingZoneServices);
             if (lastElement == null)
                 return null;
 
-            return new NotImportedZoneService()
+            return new NotImportedZoneServiceGroup()
             {
                 BED = lastElement.BED,
-                EED = lastElement.ZoneServiceEntity.EED,
-                ZoneServicesIds = lastElement.ZoneServiceEntity.ReceivedServices.Select(item => item.ServiceId).ToList(),
+                EED = lastElement.EED,
+                ZoneServicesIds = lastElement.ZoneServicesIds,
                 HasChanged = hasChanged
             };
         }
@@ -78,21 +78,29 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (existingZoneServices == null)
                 return;
 
-            importedZone.ImportedZoneServiceGroup.SystemZoneService = GetSystemZoneService(existingZoneServices);
+            importedZone.ImportedZoneServiceGroup.SystemZoneServiceGroup = GetSystemZoneService(existingZoneServices);
         }
 
-        private ExistingZoneService GetSystemZoneService(List<ExistingZoneService> existingZoneServices)
+        private SystemZoneServiceGroup GetSystemZoneService(List<ExistingZoneService> existingZoneServices)
         {
             return GetLastExistingZoneServiceFromConnectedExistingZoneServices(existingZoneServices);
         }
 
-        private ExistingZoneService GetLastExistingZoneServiceFromConnectedExistingZoneServices(List<ExistingZoneService> existingZoneServices)
+        private SystemZoneServiceGroup GetLastExistingZoneServiceFromConnectedExistingZoneServices(List<ExistingZoneService> existingZoneServices)
         {
             List<ExistingZoneService> connectedExistingZonesServices = existingZoneServices.GetConnectedEntities(DateTime.Today);
             if (connectedExistingZonesServices == null)
                 return null;
 
-            return connectedExistingZonesServices.Last();
+            ExistingZoneService firstElementInTheList = connectedExistingZonesServices.First();
+            ExistingZoneService lastElementInTheList = connectedExistingZonesServices.Last();
+
+            return new SystemZoneServiceGroup()
+            {
+                ZoneServicesIds = firstElementInTheList.ZoneServiceEntity.EffectiveServices.Select(item => item.ServiceId).ToList(),
+                BED = firstElementInTheList.BED,
+                EED = lastElementInTheList.OriginalEED
+            };
         }
 
         private void ProcessData(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName, DateTime pricelistDate)
@@ -152,9 +160,9 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (existingZoneServices != null)
                     {
-                        NotImportedZoneService notImportedZoneService = this.GetNotImportedZoneService(existingZoneServices, false);
+                        NotImportedZoneServiceGroup notImportedZoneService = this.GetNotImportedZoneService(existingZoneServices, false);
                         if (notImportedZoneService != null)
-                            notImportedZone.NotImportedZoneService = notImportedZoneService;
+                            notImportedZone.NotImportedZoneServiceGroup = notImportedZoneService;
                     }
                 }
             }

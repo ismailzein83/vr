@@ -50,6 +50,12 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
             return true;
         }
+
+
+        public DateTime? OriginalEED
+        {
+            get { return this.ZoneServiceEntity.EED; }
+        }
     }
 
 }

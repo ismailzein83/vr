@@ -56,7 +56,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     if (importedNormalRate.SystemRate != null)
                     {
-                        zoneRatePreview.SystemRate = importedNormalRate.SystemRate.RateEntity.NormalRate;
+                        zoneRatePreview.SystemRate = importedNormalRate.SystemRate.Rate;
                         zoneRatePreview.SystemRateBED = importedNormalRate.SystemRate.BED;
                         zoneRatePreview.SystemRateEED = importedNormalRate.SystemRate.EED;
                     }
@@ -69,17 +69,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         zoneRatePreview.ImportedServicesBED = importedZoneServiceGroup.BED;
                         zoneRatePreview.ZoneServicesChangeType = importedZoneServiceGroup.ChangeType;
 
-                        if (importedZoneServiceGroup.SystemZoneService != null)
+                        if (importedZoneServiceGroup.SystemZoneServiceGroup != null)
                         {
-                            zoneRatePreview.SystemServiceIds = importedZoneServiceGroup.SystemZoneService.ZoneServiceEntity.ReceivedServices.Select(item => item.ServiceId).ToList();
-                            zoneRatePreview.SystemServicesBED = importedZoneServiceGroup.SystemZoneService.BED;
-                            zoneRatePreview.SystemServicesEED = importedZoneServiceGroup.SystemZoneService.EED;
+                            zoneRatePreview.SystemServiceIds = importedZoneServiceGroup.SystemZoneServiceGroup.ZoneServicesIds;
+                            zoneRatePreview.SystemServicesBED = importedZoneServiceGroup.SystemZoneServiceGroup.BED;
+                            zoneRatePreview.SystemServicesEED = importedZoneServiceGroup.SystemZoneServiceGroup.EED;
                         }
 
                     };
                    
                    
-                    NotImportedZoneService notImportedZoneService = importedZone.NotImportedZoneService;
+                    NotImportedZoneServiceGroup notImportedZoneService = importedZone.NotImportedZoneServiceGroup;
                     if (notImportedZoneService != null)
                     {
                         zoneRatePreview.SystemServiceIds = notImportedZoneService.ZoneServicesIds;
@@ -121,9 +121,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     }
 
 
-                    if(notImportedZone.NotImportedZoneService != null)
+                    if(notImportedZone.NotImportedZoneServiceGroup != null)
                     {
-                        NotImportedZoneService notImportedZoneService = notImportedZone.NotImportedZoneService;
+                        NotImportedZoneServiceGroup notImportedZoneService = notImportedZone.NotImportedZoneServiceGroup;
                         zoneRatePreview.ZoneServicesChangeType = notImportedZone.HasChanged ? ZoneServiceChangeType.Deleted : ZoneServiceChangeType.NotChanged;
                         zoneRatePreview.SystemServicesBED = notImportedZoneService.BED;
                         zoneRatePreview.SystemServicesEED = notImportedZoneService.EED;

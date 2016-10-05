@@ -282,37 +282,55 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingRatesGroupsByZoneName;
         }
 
-        private ExistingRate GetSystemRate(ImportedRate importedRate, List<ExistingRate> existingRates)
+        private SystemRate GetSystemRate(ImportedRate importedRate, List<ExistingRate> existingRates)
         {
             if (importedRate.ProcessInfo.RecentExistingRate != null)
-                return importedRate.ProcessInfo.RecentExistingRate;
+            {
+                ExistingRate recentExistingRate = importedRate.ProcessInfo.RecentExistingRate;
+                return new SystemRate()
+                {
+                    BED = recentExistingRate.BED,
+                    EED = recentExistingRate.OriginalEED,
+                    Rate = recentExistingRate.RateEntity.NormalRate,
+                    RateTypeId = recentExistingRate.RateEntity.RateTypeId,
+                };
+            }
 
             return GetLastExistingRateFromConnectedExistingRates(existingRates);
         }
 
         private NotImportedRate GetNotImportedRate(List<ExistingRate> existingRates, bool hasChanged)
         {
-            ExistingRate lastElement = GetLastExistingRateFromConnectedExistingRates(existingRates);
+            SystemRate lastElement = GetLastExistingRateFromConnectedExistingRates(existingRates);
             if (lastElement == null)
                 return null;
 
             return new NotImportedRate()
             {
                 BED = lastElement.BED,
-                EED = lastElement.RateEntity.EED,
-                Rate = lastElement.RateEntity.NormalRate,
-                RateTypeId = lastElement.RateEntity.RateTypeId,
+                EED = lastElement.EED,
+                Rate = lastElement.Rate,
+                RateTypeId = lastElement.RateTypeId,
                 HasChanged = hasChanged
             };
         }
 
-        private ExistingRate GetLastExistingRateFromConnectedExistingRates(List<ExistingRate> existingRates)
+        private SystemRate GetLastExistingRateFromConnectedExistingRates(List<ExistingRate> existingRates)
         {
             List<ExistingRate> connectedExistingRates = existingRates.GetConnectedEntities(DateTime.Today);
             if (connectedExistingRates == null)
                 return null;
 
-            return connectedExistingRates.Last();
+            ExistingRate firstElementInTheList = connectedExistingRates.First();
+            ExistingRate lastElementInTheList = connectedExistingRates.Last();
+
+            return new SystemRate()
+            {
+                BED = firstElementInTheList.BED,
+                EED = lastElementInTheList.OriginalEED,
+                Rate = firstElementInTheList.RateEntity.NormalRate,
+                RateTypeId = firstElementInTheList.RateEntity.RateTypeId
+            };
         }
 
         private void ProcessImportedRate(ImportedRate importedRate, List<ExistingRate> matchExistingRates, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)

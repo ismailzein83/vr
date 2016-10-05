@@ -39,6 +39,12 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
             return this.ParentZone.Name.Equals(nextExistingCode.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase);
         }
+
+
+        public DateTime? OriginalEED
+        {
+            get { return this.CodeEntity.EED; }
+        }
     }
 
     public class ExistingCodesByCodeValue : Dictionary<string, List<ExistingCode>>

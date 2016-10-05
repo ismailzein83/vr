@@ -92,9 +92,11 @@
     <Compile Include="SPL\ImportedData\ImportedZoneService.cs" />
     <Compile Include="SPL\IProcessCountryZonesServicesContext.cs" />
     <Compile Include="SPL\NewData\NewZoneService.cs" />
+    <Compile Include="SPL\SystemZoneServiceGroup.cs" />
+    <Compile Include="SPL\SystemRate.cs" />
     <Compile Include="SPL\NotImportedRate.cs" />
     <Compile Include="SPL\NotImportedCode.cs" />
-    <Compile Include="SPL\NotImportedZoneService.cs" />
+    <Compile Include="SPL\NotImportedZoneServiceGroup.cs" />
     <Compile Include="SPL\NotImportedZone.cs" />
     <Compile Include="SPL\ImportedData\ImportedCode.cs" />
     <Compile Include="SPL\ImportedData\ImportedCountry.cs" />

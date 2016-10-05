@@ -37,5 +37,11 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             return this.ParentZone.Name.Equals(nextExistingRate.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
                 && this.RateEntity.NormalRate == nextExistingRate.RateEntity.NormalRate;
         }
+
+
+        public DateTime? OriginalEED
+        {
+            get { return this.RateEntity.EED; }
+        }
     }
 }

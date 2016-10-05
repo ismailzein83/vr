@@ -52,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                         if (importedOtherRate.SystemRate != null)
                         {
-                            otherRatePreview.SystemRate = importedOtherRate.SystemRate.RateEntity.NormalRate;
+                            otherRatePreview.SystemRate = importedOtherRate.SystemRate.Rate;
                             otherRatePreview.SystemRateBED = importedOtherRate.SystemRate.BED;
                             otherRatePreview.SystemRateEED = importedOtherRate.SystemRate.EED;
                         }

@@ -7,7 +7,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class NotImportedZoneService
+    public class SystemZoneServiceGroup
     {
         public DateTime BED { get; set; }
 
