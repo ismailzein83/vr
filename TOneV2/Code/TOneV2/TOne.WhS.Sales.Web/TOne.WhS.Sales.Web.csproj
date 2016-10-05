@@ -223,6 +223,8 @@
     <Content Include="WhS_Sales\Views\SellNewCountriesController.js" />
     <Content Include="WhS_Sales\Views\RatePlan.html" />
     <Content Include="WhS_Sales\Views\RatePlanController.js" />
+    <Content Include="WhS_Sales\Views\ZoneInfo.html" />
+    <Content Include="WhS_Sales\Views\ZoneInfoController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

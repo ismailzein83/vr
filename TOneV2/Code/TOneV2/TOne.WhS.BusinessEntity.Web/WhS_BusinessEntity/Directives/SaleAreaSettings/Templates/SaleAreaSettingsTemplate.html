@@ -7,6 +7,18 @@
                     <vr-label>Default Rate</vr-label>
                     <vr-textbox value="ctrl.defaultRate" type="number" minvalue="0" decimalprecision="8" isrequired></vr-textbox>
                 </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-select label="Primary Sale Entity"
+                                 entityname="Primary Sale Entity"
+                                 on-ready="ctrl.onPrimarySaleEntitySelectorReady"
+                                 datasource="ctrl.primarySaleEntities"
+                                 datavaluefield="value"
+                                 datatextfield="description"
+                                 selectedvalues="ctrl.primarySaleEntity"
+                                 isrequired="true"
+                                 hideremoveicon="true">
+                    </vr-select>
+                </vr-columns>
         </vr-tab>
 
         <vr-tab header="'Keywords'">

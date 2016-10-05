@@ -200,6 +200,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\PrimarySaleEntityEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\DealAnalysisTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\DealAgreementTypeEnum.js" />

@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_ZoneInfoController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formZoneInfo">
+            
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-label>Zone BED:</vr-label>
+                    <vr-label isvalue="true">{{scopeModel.zoneBED}}</vr-label>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-label>Zone EED:</vr-label>
+                    <vr-label isvalue="true">{{scopeModel.zoneEED}}</vr-label>
+                </vr-columns>
+            </vr-row>
+
+            <vr-directivetabs tabitems="scopeModel.directiveTabs"></vr-directivetabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

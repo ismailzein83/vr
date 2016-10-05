@@ -94,6 +94,8 @@ namespace TOne.WhS.Sales.Business
                         ZoneEED = zone.EED
                     };
 
+                    zoneItem.IsFutureZone = (zoneItem.ZoneBED.Date > DateTime.Now.Date);
+
                     ZoneChanges zoneDraft = null;
                     if (draft != null && draft.ZoneChanges != null)
                         zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneId == zone.SaleZoneId);
@@ -187,16 +189,31 @@ namespace TOne.WhS.Sales.Business
 
         public RatePlanSettingsData GetRatePlanSettingsData()
         {
+            object ratePlanSettingData = GetSettingData(Sales.Business.Constants.RatePlanSettingsType);
+            var ratePlanSettings = ratePlanSettingData as RatePlanSettingsData;
+            if (ratePlanSettings == null)
+                throw new NullReferenceException("ratePlanSettings");
+            return ratePlanSettings;
+        }
+
+        public SaleAreaSettingsData GetSaleAreaSettingsData()
+        {
+            object saleAreaSettingData = GetSettingData(BusinessEntity.Business.Constants.SaleAreaSettings);
+            var saleAreaSettings = saleAreaSettingData as SaleAreaSettingsData;
+            if (saleAreaSettings == null)
+                throw new NullReferenceException("saleAreaSettings");
+            return saleAreaSettings;
+        }
+
+        private object GetSettingData(string settingType)
+        {
             var settingManager = new SettingManager();
-            Setting setting = settingManager.GetSettingByType(Constants.RatePlanSettingsType);
+            Setting setting = settingManager.GetSettingByType(settingType);
             if (setting == null)
                 throw new NullReferenceException("setting");
             if (setting.Data == null)
                 throw new NullReferenceException("setting.Data");
-            var ratePlanSettings = setting.Data as RatePlanSettingsData;
-            if (ratePlanSettings == null)
-                throw new NullReferenceException("ratePlanSettings");
-            return ratePlanSettings;
+            return setting.Data;
         }
 
         public int? GetSellingProductId(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)

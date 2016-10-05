@@ -121,6 +121,14 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetSaleAreaSettingsData")]
+        public SaleAreaSettingsData GetSaleAreaSettingsData()
+        {
+            var manager = new RatePlanManager();
+            return manager.GetSaleAreaSettingsData();
+        }
+
+        [HttpGet]
         [Route("GetDraftCurrencyId")]
         public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
         {

@@ -33,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query)
         {
-            throw new NotImplementedException();
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFilteredByZone", SaleCodeMapper, query.ZoneId, query.EffectiveOn);
         }
 
         public IEnumerable<SaleCode> GetAllSaleCodes()

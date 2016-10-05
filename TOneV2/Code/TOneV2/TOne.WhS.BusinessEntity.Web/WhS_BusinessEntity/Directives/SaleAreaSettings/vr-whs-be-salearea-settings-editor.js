@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'WhS_BE_PrimarySaleEntityEnum',
+    function (UtilsService, VRUIUtilsService, WhS_BE_PrimarySaleEntityEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -24,6 +24,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
         function settingEditorCtor(ctrl, $scope, $attrs) {
             ctrl.fixedKeywords = [];
             ctrl.mobileKeywords = [];
+            ctrl.primarySaleEntities = UtilsService.getArrayEnum(WhS_BE_PrimarySaleEntityEnum);
 
             function initializeController() {
                 ctrl.disabledAddFixedKeyword = true;
@@ -62,17 +63,20 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     return null;
                 };
 
-
-                defineAPI();
+                ctrl.onPrimarySaleEntitySelectorReady = function (api) {
+                    defineAPI();
+                };
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.data != undefined) {
-
+                    if (payload != undefined && payload.data != undefined)
+                    {
                         ctrl.defaultRate = payload.data.DefaultRate;
+
+                        ctrl.primarySaleEntity = UtilsService.getItemByVal(ctrl.primarySaleEntities, payload.data.PrimarySaleEntity, 'value');
 
                         angular.forEach(payload.data.FixedKeywords, function (val) {
                             ctrl.fixedKeywords.push({fixedKeyword: val});
@@ -89,7 +93,8 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         $type: "TOne.WhS.BusinessEntity.Entities.SaleAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
                         FixedKeywords: UtilsService.getPropValuesFromArray(ctrl.fixedKeywords, "fixedKeyword"),
                         MobileKeywords: UtilsService.getPropValuesFromArray(ctrl.mobileKeywords, "mobileKeyword"),
-                        DefaultRate: ctrl.defaultRate
+                        DefaultRate: ctrl.defaultRate,
+                        PrimarySaleEntity: ctrl.primarySaleEntity.value
                     };
                 }
 

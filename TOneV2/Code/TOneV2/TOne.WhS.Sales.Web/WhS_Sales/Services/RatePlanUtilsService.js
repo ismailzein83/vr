@@ -18,6 +18,7 @@
             setRateChangeTypeIcon(dataItem);
         }
         function onNewRateBlurred(dataItem, settings) {
+            formatNewRate(dataItem);
             setNewRateDates(dataItem, settings);
         }
 
@@ -41,6 +42,15 @@
         function getNowPlusDays(days) {
             return new Date(new Date().setDate(new Date().getDate() + days));
         }
+
+        function formatNewRate(dataItem) {
+            if (!isEmpty(dataItem.NewRate))
+                dataItem.NewRate = Number(dataItem.NewRate);
+        }
+        function isEmpty(value) {
+            return (value === undefined || value === null || value === '');
+        }
+
         function setRateChangeTypeIcon(dataItem) {
             if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
             {

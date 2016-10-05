@@ -96,7 +96,7 @@
 
         function buildCutomerZonesObjFromScope()
         {
-            var startEffectiveTime = new Date();
+            var startEffectiveTime = UtilsService.getDateFromDateTime(new Date());
 
             return {
                 CustomerId: customerId,

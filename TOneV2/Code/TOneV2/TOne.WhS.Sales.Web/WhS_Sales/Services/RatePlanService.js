@@ -10,7 +10,8 @@
             editSettings: editSettings,
             editPricingSettings: editPricingSettings,
             viewFutureRate: viewFutureRate,
-            viewInvalidRates: viewInvalidRates
+            viewInvalidRates: viewInvalidRates,
+            viewZoneInfo: viewZoneInfo
         };
 
         function sellNewCountries(customerId, onCountriesSold) {
@@ -81,6 +82,22 @@
             };
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/InvalidRate.html", parameters, settings);
+        }
+
+        function viewZoneInfo(ownerType, ownerId, zoneId, zoneName, zoneBED, zoneEED, currencyId) {
+            var parameters = {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                zoneId: zoneId,
+                zoneName: zoneName,
+                zoneBED: zoneBED,
+                zoneEED: zoneEED,
+                currencyId: currencyId
+            };
+
+            var settings;
+
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ZoneInfo.html", parameters, settings);
         }
     }
 

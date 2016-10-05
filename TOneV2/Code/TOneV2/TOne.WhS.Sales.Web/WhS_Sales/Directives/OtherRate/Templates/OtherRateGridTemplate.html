@@ -10,22 +10,10 @@
 
             <vr-datagridcolumn headertext="'Current Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10">
                 <div style="text-align: right">
-                    <span ng-if="dataItem.FutureRate != null">
-                        <a href="" ng-click="viewScope.onCurrentRateClicked(dataItem)" style="text-decoration: underline">
-                            <span style="color: blue" ng-if="!dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                            <span ng-if="dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                        </a>
-                        <vr-label ng-if="!dataItem.CurrentRate" ng-click="viewScope.onCurrentRateClicked(dataItem)" isvalue="true">
-                            <a href="" style="text-decoration: underline">
-                                <span ng-if="dataItem.FutureRate.IsRateEditable">Pending Rate</span>
-                                <span ng-if="!dataItem.FutureRate.IsRateEditable" style="color: blue; ">Pending Rate</span>
-                            </a>
-                        </vr-label><sup style="text-decoration: none">*</sup>
-                    </span>
-                    <span ng-if="dataItem.FutureRate == null">
-                        <span style="color: blue; " ng-if="!dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                        <span ng-if="dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                    </span>
+                    <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
+                    <span ng-if="dataItem.FutureRate != null"
+                          style="cursor: pointer; text-decoration: underline"
+                          ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
                 </div>
             </vr-datagridcolumn>
 

@@ -73,6 +73,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
         }
         
+        function GetSaleAreaSettingsData() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSaleAreaSettingsData"));
+        }
+
         function GetDraftCurrencyId(ownerType, ownerId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDraftCurrencyId"), {
                 ownerType: ownerType,
@@ -110,6 +114,7 @@
             CheckIfDraftExists: CheckIfDraftExists,
             DeleteDraft: DeleteDraft,
             GetRatePlanSettingsData: GetRatePlanSettingsData,
+            GetSaleAreaSettingsData: GetSaleAreaSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
             DeleteChangedRates: DeleteChangedRates,
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,

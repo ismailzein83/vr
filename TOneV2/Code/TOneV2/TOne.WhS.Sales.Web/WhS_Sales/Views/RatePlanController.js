@@ -41,6 +41,7 @@
         var settings;
         var pricingSettings;
         var ratePlanSettingsData;
+        var saleAreaSettingsData;
 
         defineScope();
         load();
@@ -463,7 +464,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, getSystemCurrencyId, loadCountrySelector, loadTextFilter]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, loadSaleAreaSettingsData, getSystemCurrencyId, loadCountrySelector, loadTextFilter]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterSection = false;
@@ -521,6 +522,11 @@
         function loadRatePlanSettingsData() {
             return WhS_Sales_RatePlanAPIService.GetRatePlanSettingsData().then(function (response) {
                 ratePlanSettingsData = response;
+            });
+        }
+        function loadSaleAreaSettingsData() {
+            return WhS_Sales_RatePlanAPIService.GetSaleAreaSettingsData().then(function (response) {
+                saleAreaSettingsData = response;
             });
         }
         function getSystemCurrencyId() {
@@ -666,47 +672,42 @@
                 return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerTypeValue, getOwnerId(), effectiveOn);
             }
         }
-        function loadGrid()
-        {
-            var gridLoadDeferred = UtilsService.createPromiseDeferred();
-            
+        function loadGrid() {
             var gridQuery = getGridQuery();
-            VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadDeferred);
+            return gridAPI.loadGrid(gridQuery);
+        }
+        function getGridQuery() {
+            var gridQuery = {
+                OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
+                OwnerId: getOwnerId(),
+                ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
+                RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
+                PolicyConfigId: policySelectorAPI.getSelectedIds(),
+                NumberOfOptions: $scope.numberOfOptions,
+                CostCalculationMethods: settings != undefined ? settings.costCalculationMethods : null,
+                Settings: ratePlanSettingsData,
+                SaleAreaSettings: saleAreaSettingsData,
+                CurrencyId: getCurrencyId(),
+                CountryIds: countrySelectorAPI.getSelectedIds()
+            };
 
-            function getGridQuery() {
-                var gridQuery = {
-                    OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
-                    OwnerId: getOwnerId(),
-                    ZoneLetter: $scope.zoneLetters[$scope.connector.selectedZoneLetterIndex],
-                    RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
-                    PolicyConfigId: policySelectorAPI.getSelectedIds(),
-                    NumberOfOptions: $scope.numberOfOptions,
-                    CostCalculationMethods: settings != undefined ? settings.costCalculationMethods : null,
-                    Settings: ratePlanSettingsData,
-                    CurrencyId: getCurrencyId(),
-                    CountryIds: countrySelectorAPI.getSelectedIds()
-                };
+            gridQuery.context = {};
+            gridQuery.context.getNewDraft = getNewDraft;
+            gridQuery.context.saveDraft = saveDraft;
 
-                gridQuery.context = {};
-                gridQuery.context.getNewDraft = getNewDraft;
-                gridQuery.context.saveDraft = saveDraft;
-
-                if (pricingSettings != undefined) {
-                    gridQuery.RateCalculationMethod = pricingSettings.selectedRateCalculationMethodData;
-                    if (pricingSettings.selectedCostColumn != null)
-                        gridQuery.CostCalculationMethodConfigId = pricingSettings.selectedCostColumn.ConfigId;
-                }
-
-                var textFilterData = textFilterAPI.getData();
-                if (textFilterData != undefined) {
-                    gridQuery.ZoneNameFilter = textFilterData.Text;
-                    gridQuery.ZoneNameFilterType = textFilterData.TextFilterType;
-                }
-
-                return gridQuery;
+            if (pricingSettings != undefined) {
+                gridQuery.RateCalculationMethod = pricingSettings.selectedRateCalculationMethodData;
+                if (pricingSettings.selectedCostColumn != null)
+                    gridQuery.CostCalculationMethodConfigId = pricingSettings.selectedCostColumn.ConfigId;
             }
 
-            return gridLoadDeferred.promise;
+            var textFilterData = textFilterAPI.getData();
+            if (textFilterData != undefined) {
+                gridQuery.ZoneNameFilter = textFilterData.Text;
+                gridQuery.ZoneNameFilterType = textFilterData.TextFilterType;
+            }
+
+            return gridQuery;
         }
         function getDraftCurrencyId()
         {

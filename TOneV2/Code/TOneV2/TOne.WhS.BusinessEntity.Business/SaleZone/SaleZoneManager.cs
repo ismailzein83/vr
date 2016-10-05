@@ -188,6 +188,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
+        public IEnumerable<SaleZone> GetSaleZonesByOwner(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool withFutureZones)
+        {
+            int? sellingNumberPlanId = (ownerType == SalePriceListOwnerType.SellingProduct) ?
+                    new SellingProductManager().GetSellingNumberPlanId(ownerId) :
+                    new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
+            if (!sellingNumberPlanId.HasValue)
+                throw new NullReferenceException("sellingNumberPlanId");
+            return GetSaleZonesByOwner(ownerType, ownerId, sellingNumberPlanId.Value, effectiveOn, withFutureZones);
+        }
+
         public IEnumerable<SaleZone> GetSaleZonesByOwner(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn, bool withFutureZones)
         {
             if (ownerType == SalePriceListOwnerType.SellingProduct)

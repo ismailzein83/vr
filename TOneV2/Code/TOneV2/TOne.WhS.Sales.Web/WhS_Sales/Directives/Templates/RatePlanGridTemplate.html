@@ -9,7 +9,9 @@
                      getrowstyle="getRowStyle"
                      isdynamicrowstyle="true">
 
-            <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" widthfactor="19" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
+                <vr-label isvalue="true"><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
+            </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Product'"
                                field="'EffectiveRoutingProductName'"
                                type="'Text'"
@@ -45,23 +47,15 @@
                                widthfactor="7"
                                disablesorting="true">
                 <div style="text-align: right">
-                    <span ng-if="dataItem.FutureNormalRate != null">
-                        <a href="" ng-click="viewScope.onCurrentRateClicked(dataItem)" style="text-decoration: underline">
-                            <span style="color: blue; " ng-if="!dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                            <span ng-if="dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                        </a>
-                        <vr-label ng-if="!dataItem.CurrentRate" ng-click="viewScope.onCurrentRateClicked(dataItem)" isvalue="true">
-                            <a href="" style="text-decoration: underline">
-                                <span ng-if="dataItem.FutureNormalRate.IsRateEditable">Pending Rate</span>
-                                <span ng-if="!dataItem.FutureNormalRate.IsRateEditable" style="color: blue; ">Pending Rate</span>
-                            </a>
-                        </vr-label><sup style="text-decoration: none">*</sup>
-                    </span>
-                    <span ng-if="dataItem.FutureNormalRate == null">
-                        <span style="color: blue; " ng-if="!dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                        <span ng-if="dataItem.IsCurrentRateEditable">{{dataItem.CurrentRate | number: 4}}</span>
-                    </span>
+                    <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
+                    <span ng-if="dataItem.FutureNormalRate != null"
+                          style="cursor: pointer; text-decoration: underline"
+                          ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
                 </div>
+            </vr-datagridcolumn>
+
+            <vr-datagridcolumn widthfactor="2.5">
+                <vr-icon icontype="dataItem.iconType"></vr-icon>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Calculated Rate'"

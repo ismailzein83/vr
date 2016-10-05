@@ -15,6 +15,7 @@ namespace TOne.WhS.Sales.Entities
         public string ZoneName { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
+        public bool IsFutureZone { get; set; }
 
         #region Rate
         public long? CurrentRateId { get; set; }
