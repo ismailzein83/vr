@@ -51,7 +51,7 @@ namespace Vanrise.Fzero.Bypass
             {
                 Email email = new Email() { EmailTemplateID = ID };
                 email.DestinationEmail = toEmail;
-                email.Subject = template.Subject.Replace("%ReportID%", ReportID);
+                email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
                 email.CC = CC;
                 email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
                 Email.SendMailWithAttachement(email, AttachedPath, profile_name);
@@ -66,7 +66,7 @@ namespace Vanrise.Fzero.Bypass
             {
                 Email email = new Email() { EmailTemplateID = ID };
                 email.DestinationEmail = toEmail;
-                email.Subject = template.Subject.Replace("%ReportID%", ReportID);
+                email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
                 email.CC = CC;
                 email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
                 Email.SendMailWithAttachement(email, AttachedPath, profile_name);
