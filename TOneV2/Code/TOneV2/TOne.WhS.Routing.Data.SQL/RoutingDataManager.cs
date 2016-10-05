@@ -53,7 +53,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void FinalizeCustomerRouteDatabase(Action<string> trackStep)
         {
-            CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
+            CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager() { RoutingDatabase = this.RoutingDatabase};
             customerRouteDataManager.FinalizeCurstomerRoute(trackStep);
         }
 
