@@ -18,7 +18,11 @@ namespace TOne.WhS.Routing.Entities
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
+            if (target == null)
+                throw new ArgumentNullException("target");
             IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
+            if (ruleCodeTarget == null)
+                throw new Exception(String.Format("target is not of type IRuleCodeTarget. it is of type '{0}'", target.GetType()));
             if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(ruleCodeTarget.Code))
                 return true;
             return false;
