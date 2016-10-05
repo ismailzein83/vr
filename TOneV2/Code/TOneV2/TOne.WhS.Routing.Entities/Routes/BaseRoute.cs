@@ -22,6 +22,6 @@ namespace TOne.WhS.Routing.Entities
 
         public List<RouteOption> Options { get; set; }
 
-        public CorrespondentType RouteRuleType { get; set; }
+        public CorrespondentType CorrespondentType { get; set; }
     }
 }

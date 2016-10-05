@@ -119,7 +119,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             int isOverrideAffected = 0;
             int isBlockAffected = 0;
 
-            switch (record.RouteRuleType)
+            switch (record.CorrespondentType)
             {
                 case CorrespondentType.Block: isBlockAffected = 1; break;
                 case CorrespondentType.Override: isOverrideAffected = 1; break;

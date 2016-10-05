@@ -167,7 +167,7 @@ namespace TOne.WhS.Routing.Business
             route.ExecutedRuleId = routeRule.RuleId;
             route.Rate = customerZoneDetail.EffectiveRateValue;
             route.CustomerServiceIds = customerZoneDetail.CustomerServiceIds;
-            
+            route.CorrespondentType = routeRule.CorrespondentType;
 
             if (routeRule.Settings.UseOrderedExecution)
             {
