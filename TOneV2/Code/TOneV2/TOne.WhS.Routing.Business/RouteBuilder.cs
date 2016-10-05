@@ -151,7 +151,8 @@ namespace TOne.WhS.Routing.Business
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            var maxNumberOfOptions = configManager.GetRouteBuildNumberOfOptions(); 
+            var maxNumberOfOptions = configManager.GetCustomerRouteBuildNumberOfOptions();
+            bool CustomerRouteAddBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
             
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
@@ -183,12 +184,26 @@ namespace TOne.WhS.Routing.Business
                         if (!routeRule.Settings.IsOptionFiltered(routeRuleExecutionContext, routeRuleTarget, targetOption))
                         {
                             RouteOption routeOption = routeRuleExecutionContext.CreateOptionFromTarget(targetOption);
-                            if (!routeOption.IsBlocked)
+
+                            if (CustomerRouteAddBlockedOptions) 
                             {
                                 route.Options.Add(routeOption);
-                                optionsAdded++;
-                                if (maxNumberOfOptions == optionsAdded)
-                                    break;
+                                if (!routeOption.IsBlocked)
+                                {
+                                    optionsAdded++;
+                                    if (maxNumberOfOptions == optionsAdded)
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                if (!routeOption.IsBlocked)
+                                {
+                                    route.Options.Add(routeOption);
+                                    optionsAdded++;
+                                    if (maxNumberOfOptions == optionsAdded)
+                                        break;
+                                }
                             }
                         }
                     }

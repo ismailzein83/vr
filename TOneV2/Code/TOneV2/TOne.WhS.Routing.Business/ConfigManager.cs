@@ -7,10 +7,22 @@ namespace TOne.WhS.Routing.Business
     public class ConfigManager
     {
         #region public methods
-        public int GetRouteBuildNumberOfOptions()
+        public int GetCustomerRouteBuildNumberOfOptions()  
         {
             RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
-            return routeBuildConfiguration.NumberOfOptions;
+            return routeBuildConfiguration.CustomerRoute.NumberOfOptions; 
+        } 
+
+        public bool GetCustomerRouteBuildAddBlockedOptions()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+            return routeBuildConfiguration.CustomerRoute.CustomerRouteAddBlockedOptions;
+        }
+
+        public bool GetProductRouteBuildAddBlockedOptions()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+            return routeBuildConfiguration.ProductRoute.ProductRouteAddBlockedOptions;
         }
 
         public SubProcessSettings GetSubProcessSettings()
