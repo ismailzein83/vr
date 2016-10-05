@@ -133,7 +133,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-        private Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
+        public Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
                () =>

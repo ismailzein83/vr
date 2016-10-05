@@ -12,6 +12,8 @@ namespace TOne.WhS.Routing.Business
     {
         public override Guid ConfigId { get { return new Guid("bbb0ca31-0fcd-4035-a8ed-5d4bad06c662"); } }
 
+        public override CorrespondentType CorrespondentType { get { return CorrespondentType.Block; } }
+
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             target.BlockRoute = true;

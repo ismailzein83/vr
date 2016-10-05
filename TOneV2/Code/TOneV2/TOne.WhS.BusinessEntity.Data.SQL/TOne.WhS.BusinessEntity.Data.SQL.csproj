@@ -85,7 +85,7 @@
     <Compile Include="SwitchConnectivityDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="VolumeCommitmentDataManager.cs" />
-    <Compile Include="ZoneServiceConfigManager.cs" />
+    <Compile Include="ZoneServiceConfigDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">

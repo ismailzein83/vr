@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business.RouteRules.Filters;
+using TOne.WhS.Routing.Business.RouteRules.Orders;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
@@ -20,6 +19,58 @@ namespace TOne.WhS.Routing.Business
             {
                 return true;
             }
+        }
+        private CorrespondentType? _correspondentType;
+
+        public override CorrespondentType CorrespondentType
+        {
+            get
+            {
+                if (!_correspondentType.HasValue)
+                {
+                    if (AreOptionsExist())
+                        _correspondentType = CorrespondentType.Override;
+
+                    else if (!AreOptionsExist() && AreOptionsOnlyOrderByType<OptionOrderByRate>() && AreOptionsFilteredByTypes<RateOptionFilter, ServiceOptionFilter>())
+                        _correspondentType = CorrespondentType.LCR;
+
+                    else _correspondentType = CorrespondentType.Other;
+                }
+                return _correspondentType.Value;
+            }
+        }
+
+        private bool AreOptionsExist()
+        {
+            if (OptionsSettingsGroup != null)
+                return true;
+            return false;
+        }
+
+        private bool AreOptionsOnlyOrderByType<T>()
+        {
+            if (OptionOrderSettings != null && OptionOrderSettings.Count == 1 && OptionOrderSettings.First() is T)
+                return true;
+            return false;
+        }
+
+        private bool AreOptionsFilteredByTypes<T, Q>()
+        {
+            bool isFilteredByT = false;
+            bool isFilteredByQ = false;
+            if (OptionFilters != null && OptionFilters.Count >= 2)
+            {
+                foreach (RouteOptionFilterSettings item in OptionFilters)
+                {
+                    if (item is T)
+                        isFilteredByT = true;
+                    if (item is Q)
+                        isFilteredByQ = true;
+                    if (isFilteredByT && isFilteredByQ)
+                        return true;
+                }
+            }
+            return false;
         }
 
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -45,7 +96,7 @@ namespace TOne.WhS.Routing.Business
 
         #region SaleEntity Execution
 
-        public const int ExtensionConfigId = 11;
+        //public const int ExtensionConfigId = 11;
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {

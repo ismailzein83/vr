@@ -17,11 +17,11 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            IRoutingDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(this.RoutingDatabaseId.Get(context));
 
-            dataManager.FinalizeCurstomerRoute((message) => 
+            dataManager.FinalizeCustomerRouteDatabase((message) => 
             {
                 context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
             });

@@ -9,6 +9,8 @@ using TOne.Data.SQL;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
@@ -42,6 +44,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             return _databaseName;
         }
 
+        public void FinalizeCustomerRouteDatabase(Action<string> trackStep)
+        {
+            CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
+            customerRouteDataManager.FinalizeCurstomerRoute(trackStep);          
+        }
 
         /// <summary>
         /// Drop Routing Database if database already exists.
@@ -49,6 +56,27 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         internal void DropDatabaseIfExists()
         {
 
+        }
+        protected Dictionary<string, int> _allZoneServiceConfigIds = new Dictionary<string, int>();
+        protected int GetServiceFlag(HashSet<int> serviceIds, Dictionary<int, ZoneServiceConfig> allZoneServiceConfigs)
+        {
+            int serviceflag = 0;
+            if (serviceIds != null)
+            {
+                HashSet<int> orderedServiceIds = serviceIds.OrderBy(itm => itm).ToHashSet();
+                string serviceIdsAsString = string.Join<int>(",", orderedServiceIds);
+
+                if (!_allZoneServiceConfigIds.TryGetValue(serviceIdsAsString, out serviceflag))
+                {
+                    foreach (int serviceId in serviceIds)
+                    {
+                        ZoneServiceConfig zoneServiceConfig = allZoneServiceConfigs.GetRecord(serviceId);
+                        serviceflag |= int.Parse(zoneServiceConfig.SourceId);
+                    }
+                    _allZoneServiceConfigIds.Add(serviceIdsAsString, serviceflag);
+                }
+            }
+            return serviceflag;
         }
 
         /// <summary>
@@ -68,6 +96,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_CustomerRouteTempTable);
             query.AppendLine(query_CustomerZoneDetailTable);
+            query.AppendLine(query_ZoneRateTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -78,6 +107,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_DropCodeSaleZoneTable);
             query.AppendLine(query_DropCustomerRouteTempTable);
             query.AppendLine(query_DropCustomerZoneDetailTable);
+            query.AppendLine(query_DropZoneRateTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -94,6 +124,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                       if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOption_Temp' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.RouteOption_Temp;";
 
+        protected const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                         drop table dbo.ZoneRate_Temp;";
 
         protected const string query_DropCustomerZoneDetailTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CustomerZoneDetail' AND TABLE_SCHEMA = 'dbo')
                                                            drop table dbo.CustomerZoneDetail;";
@@ -101,7 +133,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
 	                                                    [SupplierId] [int] NOT NULL,
 	                                                    [SupplierZoneId] [bigint] NOT NULL,
-	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL
+	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL,
+                                                        [SupplierServiceIds] [nvarchar](max) NULL,
+                                                        [ExactSupplierServiceIds] [nvarchar](max) NULL,
                                                         ) ON [PRIMARY];
                                                         
                                                         CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 
@@ -117,7 +151,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                    [RoutingProductSource] [tinyint] NULL,
 	                                                    [SellingProductId] [int] NULL,
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
-	                                                    [RateSource] [tinyint] NULL
+	                                                    [RateSource] [tinyint] NULL,
+                                                        [CustomerServiceIds] [nvarchar](max) NULL
                                                         ) ON [PRIMARY];
                                                         CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
                                                         (
@@ -135,6 +170,35 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL
                                                     ) ON [PRIMARY]";
+
+        const string query_ZoneRateTable = @"CREATE TABLE [dbo].[ZoneRate_Temp](
+	                                        [ZoneID] [int] NOT NULL,
+	                                        [SupplierID] [varchar](5) NOT NULL,
+	                                        [CustomerID] [varchar](5) NOT NULL,
+	                                        [NormalRate] [real] NULL,
+	                                        [OffPeakRate] [real] NULL,
+	                                        [WeekendRate] [real] NULL,
+	                                        [ServicesFlag] [smallint] NULL,
+	                                        [ProfileId] [int] NULL,
+	                                        [Blocked] [tinyint] NULL DEFAULT ((0))
+                                           ) ON [PRIMARY];
+
+                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_Customer] ON [dbo].[ZoneRate_Temp]
+                                           (
+	                                           [CustomerID] ASC
+                                           );
+                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_ServicesFlag] ON [dbo].[ZoneRate_Temp]
+                                           (
+	                                           [ServicesFlag] ASC
+                                           );
+                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_Supplier] ON [dbo].[ZoneRate_Temp]
+                                           (
+	                                           [SupplierID] ASC
+                                           );
+                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_Zone] ON [dbo].[ZoneRate_Temp]
+                                           (
+	                                           [ZoneID] ASC
+                                           );";
 
         const string query_CustomerRouteTempTable = @"  CREATE TABLE [dbo].[Route_Temp](
 	                                                [RouteID] [int] NOT NULL,

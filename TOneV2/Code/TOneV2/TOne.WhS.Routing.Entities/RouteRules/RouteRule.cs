@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
@@ -10,11 +7,13 @@ namespace TOne.WhS.Routing.Entities
     public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
     {
         public string SourceId { get; set; }
-        public RouteRuleCriteria Criteria { get; set; }        
+        public RouteRuleCriteria Criteria { get; set; }
 
         public RouteRuleSettings Settings { get; set; }
 
         public string Name { get; set; }
+
+        public CorrespondentType CorrespondentType { get { return Settings.CorrespondentType; } }
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
@@ -83,7 +82,7 @@ namespace TOne.WhS.Routing.Entities
                 }
             }
         }
-        
+
         IEnumerable<int> IRuleCustomerCriteria.CustomerIds
         {
             get
@@ -97,7 +96,7 @@ namespace TOne.WhS.Routing.Entities
 
         IEnumerable<int> IRuleRoutingProductCriteria.RoutingProductIds
         {
-            get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value} : null; }
+            get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
     }
 }

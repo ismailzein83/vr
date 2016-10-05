@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
+    public enum CorrespondentType { Other, SpecialRequest, Block, LCR, Override }
     public abstract class RouteRuleSettings
     {
         public abstract Guid ConfigId { get;}
@@ -38,5 +36,7 @@ namespace TOne.WhS.Routing.Entities
         public abstract void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target);
 
         public abstract void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options);
+
+        public virtual CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.Other; } }
     }
 }

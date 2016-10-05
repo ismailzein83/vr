@@ -89,10 +89,69 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
         SaleZoneManager _saleZoneManager = new SaleZoneManager();
         SupplierZoneManager _supplierZoneManager = new SupplierZoneManager();
+        ZoneServiceConfigManager _zoneServiceConfigManager = new ZoneServiceConfigManager();
+        CarrierProfileManager _carrierProfileManager = new CarrierProfileManager();
         Dictionary<int, CarrierAccount> _allCarriers;
         Dictionary<long, SaleZone> _allSaleZones;
         Dictionary<long, SupplierZone> _allSupplierZones;
+        Dictionary<int, ZoneServiceConfig> _allZoneServiceConfigs;
+        Dictionary<int, CarrierProfile> _allCarrierProfiles;
+
         public void WriteRecordToStream(TOne.WhS.Routing.Entities.CustomerRoute record, object dbApplyStream)
+        {
+            int routeId = SetRouteId();
+
+            InitializeData();
+
+            CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);
+            SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
+            CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
+
+            int customerServiceFlag = GetServiceFlag(record.CustomerServiceIds, _allZoneServiceConfigs);
+            DateTime now = DateTime.Now;
+            bool hasOptionBlock = false;
+
+            CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
+            int counter = 8;
+
+            int isToDAffected = 0;
+            int isSpecialRequestAffected = 0;
+            int isOverrideAffected = 0;
+            int isBlockAffected = 0;
+
+            switch (record.RouteRuleType)
+            {
+                case CorrespondentType.Block: isBlockAffected = 1; break;
+                case CorrespondentType.Override: isOverrideAffected = 1; break;
+                case CorrespondentType.SpecialRequest: isSpecialRequestAffected = 1; break;
+                case CorrespondentType.LCR:
+                case CorrespondentType.Other:
+                default: break;
+            }
+            foreach (RouteOption option in record.Options)
+            {
+                int priority;
+                if (option.IsBlocked)
+                {
+                    hasOptionBlock = true;
+                    priority = 0;
+                }
+                else
+                {
+                    priority = Math.Max(0, counter--);
+                }
+                CarrierAccount supplier = _allCarriers.GetRecord(option.SupplierId);
+                SupplierZone supplierZone = _allSupplierZones.GetRecord(option.SupplierZoneId);
+                int supplierServiceFlag = GetServiceFlag(option.ExactSupplierServiceIds, _allZoneServiceConfigs);
+                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
+                    supplierServiceFlag, priority, 0, option.IsBlocked ? 1 : 0, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
+            }
+
+            customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
+                 record.Rate, customerServiceFlag, record.IsBlocked ? 1 : 0, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0);
+        }
+
+        private int SetRouteId()
         {
             int routeId;
             if (_lastReservedRouteIds == null || _lastReservedRouteIds.EndId == _lastTakenId)
@@ -106,29 +165,22 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 _lastTakenId++;
                 routeId = _lastTakenId;
             }
+            return routeId;
+        }
+
+        private void InitializeData()
+        {
             if (_allCarriers == null)
                 _allCarriers = _carrierAccountManager.GetCachedCarrierAccounts();
             if (_allSaleZones == null)
                 _allSaleZones = _saleZoneManager.GetCachedSaleZones();
             if (_allSupplierZones == null)
                 _allSupplierZones = _supplierZoneManager.GetCachedSupplierZones();
-
-            CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);// _carrierAccountManager.GetCarrierAccount(record.CustomerId);//
-            SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);// _saleZoneManager.GetSaleZone(record.SaleZoneId);//
-
-            CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
-            customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, 0, record.Code, saleZone.SourceId,
-                record.Rate, 0, 0, GetDateTimeForBCP(DateTime.Now), 0, 0, 0, record.IsBlocked ? 1 : 0, 0, 0);
-
-            foreach (RouteOption option in record.Options)
-            {
-                CarrierAccount supplier = _allCarriers.GetRecord(option.SupplierId);// _carrierAccountManager.GetCarrierAccount(option.SupplierId);//
-                SupplierZone supplierZone =  _allSupplierZones.GetRecord(option.SupplierZoneId);// _supplierZoneManager.GetSupplierZone(option.SupplierZoneId);//
-                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate, 0, 0, 0, 0, GetDateTimeForBCP(DateTime.Now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
-            }
+            if (_allZoneServiceConfigs == null)
+                _allZoneServiceConfigs = _zoneServiceConfigManager.GetCachedZoneServiceConfigs();
+            if (_allCarrierProfiles == null)
+                _allCarrierProfiles = _carrierProfileManager.GetCachedCarrierProfiles();
         }
-
-
 
         public Vanrise.Entities.BigResult<TOne.WhS.Routing.Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<TOne.WhS.Routing.Entities.CustomerRouteQuery> input)
         {
@@ -148,8 +200,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_DropCodeSaleZoneTable);
             query.AppendLine(query_DropCustomerZoneDetailTable);
             query.AppendLine(query_DropCustomerRouteTable);
+            query.AppendLine(query_DropZoneRateTable);
             query.AppendLine("EXEC sp_rename 'Route_Temp','Route';");
             query.AppendLine("EXEC sp_rename 'RouteOption_Temp','RouteOption';");
+            query.AppendLine("EXEC sp_rename 'ZoneRate_Temp','ZoneRate';");
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -159,6 +213,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                       drop table dbo.Route;
                                                       if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOption' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.RouteOption;";
+
+        const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate' AND TABLE_SCHEMA = 'dbo')
+                                                      drop table dbo.ZoneRate;";
 
         #endregion
 
@@ -189,7 +246,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public override ReserveRouteIdsResponse Execute()
         {
             ReserveRouteIdsResponse response = new ReserveRouteIdsResponse();
-            lock(s_routingBPInstanceLastReservedRouteId)
+            lock (s_routingBPInstanceLastReservedRouteId)
             {
                 int lastTakenId = s_routingBPInstanceLastReservedRouteId.GetOrCreateItem(this.ParentBPInstanceId);
                 response.StartingId = lastTakenId + 1;

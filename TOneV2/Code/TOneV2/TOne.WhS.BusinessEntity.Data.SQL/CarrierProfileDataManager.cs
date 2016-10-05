@@ -59,7 +59,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 CarrierProfileId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string),
+                SourceId = reader["SourceId"] as string
             };
             return carrierProfile;
         }

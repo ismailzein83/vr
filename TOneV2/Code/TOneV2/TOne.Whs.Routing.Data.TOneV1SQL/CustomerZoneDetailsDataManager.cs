@@ -5,27 +5,41 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
     public class CustomerZoneDetailsDataManager : RoutingDataManager, ICustomerZoneDetailsDataManager
     {
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource" };
-        public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
-        {
-            Object dbApplyStream = InitialiazeStreamForDBApply();
-            foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
-                WriteRecordToStream(customerZoneDetail, dbApplyStream);
-            Object preparedCustomerZoneDetails = FinishDBApplyStream(dbApplyStream);
-            ApplyCustomerZoneDetailsToDB(preparedCustomerZoneDetails);
-        }
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "CustomerServiceIds" };
+
+        readonly string[] zoneRateColumns = { "ZoneID", "SupplierID", "CustomerID", "NormalRate", "OffPeakRate", "WeekendRate", "ServicesFlag", "ProfileId", "Blocked" };
+
+        Dictionary<int, CarrierAccount> _allCarriers;
+        Dictionary<int, CarrierProfile> _allCarrierProfiles;
+        Dictionary<long, SaleZone> _allSaleZones;
+        Dictionary<int, ZoneServiceConfig> _allZoneServiceConfigs;
+
+        CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+        CarrierProfileManager _carrierProfileManager = new CarrierProfileManager();
+        SaleZoneManager _saleZoneManager = new SaleZoneManager();
+        ZoneServiceConfigManager _zoneServiceConfigManager = new ZoneServiceConfigManager();
         public void ApplyCustomerZoneDetailsToDB(object preparedCustomerZoneDetails)
         {
-            InsertBulkToTable(preparedCustomerZoneDetails as BaseBulkInsertInfo);
+            CustomerZoneDetailBulkInsertInfo customerZoneDetailBulkInsertInfo = preparedCustomerZoneDetails as CustomerZoneDetailBulkInsertInfo;
+            Parallel.For(0, 2, (i) =>
+            {
+                switch (i)
+                {
+                    case 0: InsertBulkToTable(customerZoneDetailBulkInsertInfo.CustomerZoneDetailStreamForBulkInsertInfo); break;
+                    case 1: InsertBulkToTable(customerZoneDetailBulkInsertInfo.ZoneRateStreamForBulkInsertInfo); break;
+                }
+            });
         }
         public IEnumerable<TOne.WhS.Routing.Entities.CustomerZoneDetail> GetCustomerZoneDetails()
         {
@@ -33,26 +47,66 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         }
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
+            CustomerZoneDetailBulkInsert customerZoneDetailBulkInsert = dbApplyStream as CustomerZoneDetailBulkInsert;
+
+            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.Close();
+            customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.Close();
+
+            CustomerZoneDetailBulkInsertInfo customerZoneDetailBulkInsertInfo = new CustomerZoneDetailBulkInsertInfo();
+
+            customerZoneDetailBulkInsertInfo.CustomerZoneDetailStreamForBulkInsertInfo = new StreamBulkInsertInfo
             {
                 TableName = "[dbo].[CustomerZoneDetail]",
-                Stream = streamForBulkInsert,
+                Stream = customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert,
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
                 ColumnNames = columns
             };
+
+            customerZoneDetailBulkInsertInfo.ZoneRateStreamForBulkInsertInfo = new StreamBulkInsertInfo
+            {
+                TableName = "[dbo].[ZoneRate_Temp]",
+                Stream = customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert,
+                TabLock = true,
+                KeepIdentity = false,
+                FieldSeparator = '^',
+                ColumnNames = zoneRateColumns,
+            };
+
+            return customerZoneDetailBulkInsertInfo;
         }
         public object InitialiazeStreamForDBApply()
         {
-            return base.InitializeStreamForBulkInsert();
+            CustomerZoneDetailBulkInsert customerZoneDetailBulkInsert = new CustomerZoneDetailBulkInsert();
+            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert = base.InitializeStreamForBulkInsert();
+            customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert = base.InitializeStreamForBulkInsert();
+            return customerZoneDetailBulkInsert;
         }
         public void WriteRecordToStream(TOne.WhS.Routing.Entities.CustomerZoneDetail record, object dbApplyStream)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId, record.EffectiveRateValue, (int)record.RateSource);
+            if (_allCarriers == null)
+                _allCarriers = _carrierAccountManager.GetCachedCarrierAccounts();
+            if (_allSaleZones == null)
+                _allSaleZones = _saleZoneManager.GetCachedSaleZones();
+            if (_allCarrierProfiles == null)
+                _allCarrierProfiles = _carrierProfileManager.GetCachedCarrierProfiles();
+            if (_allZoneServiceConfigs == null)
+                _allZoneServiceConfigs = _zoneServiceConfigManager.GetCachedZoneServiceConfigs();
+
+            int serviceflag = GetServiceFlag(record.CustomerServiceIds, _allZoneServiceConfigs);
+
+            string customerServiceIds = record.CustomerServiceIds != null ? string.Join(",", record.CustomerServiceIds) : null;
+
+            CustomerZoneDetailBulkInsert customerZoneDetailBulkInsert = dbApplyStream as CustomerZoneDetailBulkInsert;
+            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId,
+                                                                               record.EffectiveRateValue, (int)record.RateSource, customerServiceIds);
+
+            CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);
+            CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
+            SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
+
+            customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, record.EffectiveRateValue, 0, 0, serviceflag, profile.SourceId, 0);
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {
@@ -64,7 +118,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
                 RoutingProductSource = GetReaderValue<SaleEntityZoneRoutingProductSource>(reader, "RoutingProductSource"),
                 SaleZoneId = (Int64)reader["SaleZoneId"],
-                SellingProductId = GetReaderValue<int>(reader, "SellingProductId")
+                SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
+                CustomerServiceIds = new HashSet<int>((reader["CustomerServiceIds"] as string).Split(',').Select(itm => int.Parse(itm)))
             };
         }
 
@@ -106,6 +161,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[SellingProductId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
+                                                  ,zd.[CustomerServiceIds]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredCustomerZoneDetailsByZone = @"                                                       
@@ -116,13 +172,22 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[SellingProductId]
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
+                                                  ,zd.[CustomerServiceIds]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 
         #endregion
+        private class CustomerZoneDetailBulkInsert
+        {
+            public StreamForBulkInsert CustomerZoneDetailStreamForBulkInsert { get; set; }
+            public StreamForBulkInsert ZoneRateStreamForBulkInsert { get; set; }
+        }
 
-
-
-
+        private class CustomerZoneDetailBulkInsertInfo
+        {
+            public StreamBulkInsertInfo CustomerZoneDetailStreamForBulkInsertInfo { get; set; }
+            public StreamBulkInsertInfo ZoneRateStreamForBulkInsertInfo { get; set; }
+        }
     }
+
 }

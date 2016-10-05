@@ -9,11 +9,11 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class ZoneServiceConfigManager: BaseSQLDataManager, IZoneServiceConfigDataManager
+    public class ZoneServiceConfigDataManager: BaseSQLDataManager, IZoneServiceConfigDataManager
     {
        
         #region ctor/Local Variables
-        public ZoneServiceConfigManager()
+        public ZoneServiceConfigDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         { }
 
@@ -58,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             zoneServiceConfig.ZoneServiceConfigId = (int)reader["ID"];
             zoneServiceConfig.Symbol = reader["Symbol"] as string;
             zoneServiceConfig.Settings = Vanrise.Common.Serializer.Deserialize<ServiceConfigSetting>((string)reader["Settings"]);
-
+            zoneServiceConfig.SourceId = reader["SourceId"] as string;
             return zoneServiceConfig;
         }
 

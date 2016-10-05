@@ -51,7 +51,7 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
 
-        public void FinalizeCurstomerRoute(Action<string> trackStep)
+        public void FinalizeCustomerRouteDatabase(Action<string> trackStep)
         {
             CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
             customerRouteDataManager.FinalizeCurstomerRoute(trackStep);
