@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching.Runtime;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -10,7 +12,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Fields / Constructors
 
         private DateTime _effectiveOn;
-        private SaleRatesByOwner _allSaleRatesByOwner;
 
         public SaleRateReadWithCache(DateTime effectiveOn)
         {
@@ -30,44 +31,52 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
+        private struct GetCachedSaleRatesCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+        }
         private SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>();
-            return cacheManager.GetOrCreateObject(String.Format("GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, _effectiveOn.Date), () =>
+            var cacheName = new GetCachedSaleRatesCacheName
             {
-                SaleRatesByZone saleRatesByZone = new SaleRatesByZone();
+                EffectiveOn = _effectiveOn.Date
+            };
+            var ratesByOwner = cacheManager.GetOrCreateObject(cacheName, () =>
+            {                
+                ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                List<SaleRate> saleRates = dataManager.GetEffectiveSaleRates(_effectiveOn);
 
-                DistributedCacher cacher = new DistributedCacher();
-                Func<SaleRateCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleRateCachedObjectCreationHandler(ownerType, ownerId, this._effectiveOn); };
-                List<SaleRate> saleRates = cacher.GetOrCreateObject<SaleRateCacheManager, List<SaleRate>>(String.Format("Distributed_GetSaleRates_{0}_{1}_{2:MM/dd/yy}", ownerType, ownerId, _effectiveOn.Date), objectCreationHandler);
-                
-                if (saleRates == null)
-                    return null;
-
+                SaleRatesByOwner result = new SaleRatesByOwner
+                {
+                    SaleRatesByCustomer = new Dictionary<int, SaleRatesByZone>(),
+                    SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>()
+                };
+                var priceLists = new SalePriceListManager().GetCachedSalePriceLists();
                 foreach (SaleRate saleRate in saleRates)
                 {
                     var cachedRate = cacheManager.CacheAndGetRate(saleRate);
+                    SalePriceList priceList = priceLists.GetRecord(cachedRate.PriceListId);
+                    if (priceList == null)
+                        throw new NullReferenceException(String.Format("priceList '{0}'", cachedRate.PriceListId));
+                   var saleRatesByOwner = priceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleRatesByCustomer : result.SaleRatesByProduct;
+                    var saleRateByZone = saleRatesByOwner.GetOrCreateItem(priceList.OwnerId);
 
-                    SaleRatePriceList saleRatePriceList;
-
-                    if (!saleRatesByZone.TryGetValue(cachedRate.ZoneId, out saleRatePriceList))
-                    {
-                        saleRatePriceList = new SaleRatePriceList();
-                        saleRatesByZone.Add(cachedRate.ZoneId, saleRatePriceList);
-                    }
+                    var zoneRates = saleRateByZone.GetOrCreateItem(cachedRate.ZoneId);
 
                     if (cachedRate.RateTypeId.HasValue)
                     {
-                        if (saleRatePriceList.RatesByRateType == null)
-                            saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
-                        saleRatePriceList.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
+                        if (zoneRates.RatesByRateType == null)
+                            zoneRates.RatesByRateType = new Dictionary<int, SaleRate>();
+                        zoneRates.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
                     }
                     else
-                        saleRatePriceList.Rate = cachedRate;
+                        zoneRates.Rate = cachedRate;
                 }
 
-                return saleRatesByZone;
+                return result;
             });
+            return (ownerType == SalePriceListOwnerType.Customer ? ratesByOwner.SaleRatesByCustomer : ratesByOwner.SaleRatesByProduct).GetRecord(ownerId);
         }
         #endregion
     }

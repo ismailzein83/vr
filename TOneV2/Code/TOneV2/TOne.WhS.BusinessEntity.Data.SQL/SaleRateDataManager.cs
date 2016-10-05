@@ -37,9 +37,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", SaleRateMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
         }
 
-        public List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+        public List<SaleRate> GetEffectiveSaleRates(DateTime effectiveOn)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByOwnerAndEffective", SaleRateMapper, ownerType, ownerId, effectiveOn);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByEffective", SaleRateMapper, effectiveOn);
         }
 
         public List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)

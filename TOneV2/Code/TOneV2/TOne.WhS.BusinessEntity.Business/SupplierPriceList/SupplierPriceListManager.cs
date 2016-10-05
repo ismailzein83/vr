@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.ArGetPriceListsUpdated(ref _updateHandle);
             }
         }
-        Dictionary<int, SupplierPriceList> GetCachedPriceLists()
+        public Dictionary<int, SupplierPriceList> GetCachedPriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetPriceLists"),
                () =>

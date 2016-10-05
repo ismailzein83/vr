@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate);
 
-        List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn);
+        List<SupplierCode> GetSupplierCodes(DateTime effectiveOn);
 
         List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo);
 

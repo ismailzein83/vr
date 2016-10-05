@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISaleRateDataManager : IDataManager
     {
         IEnumerable<SaleRate> GetFilteredSaleRates(SaleRateQuery query);
-        List<SaleRate> GetEffectiveSaleRates(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn);
+        List<SaleRate> GetEffectiveSaleRates(DateTime effectiveOn);
         List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate);
         IEnumerable<SaleRate> GetSaleRatesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate);
         List<SaleRate> GetSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime);

@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate);
 
-        List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn);
+        List<SaleCode> GetSaleCodes(DateTime effectiveOn);
 
         List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn);
 

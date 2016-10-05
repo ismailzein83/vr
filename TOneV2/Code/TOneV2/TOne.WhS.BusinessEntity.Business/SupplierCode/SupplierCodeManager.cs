@@ -20,10 +20,10 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetSupplierCodesEffectiveAfter(supplierId, minimumDate);
         }
-        public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn)
+        public List<SupplierCode> GetSupplierCodes(DateTime effectiveOn)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetSupplierCodes(supplierId, effectiveOn);
+            return dataManager.GetSupplierCodes(effectiveOn);
         }
         public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo)
         {

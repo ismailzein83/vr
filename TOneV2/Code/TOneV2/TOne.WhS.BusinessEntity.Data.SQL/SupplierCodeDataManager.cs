@@ -28,9 +28,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetByDate", SupplierCodeMapper, supplierId, minimumDate);
         }
-        public List<SupplierCode> GetSupplierCodes(int supplierId, DateTime effectiveOn)
+        public List<SupplierCode> GetSupplierCodes(DateTime effectiveOn)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetBySupplier", SupplierCodeMapper, supplierId, effectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetByEffective]", SupplierCodeMapper, effectiveOn);
         }
         public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo)
         {

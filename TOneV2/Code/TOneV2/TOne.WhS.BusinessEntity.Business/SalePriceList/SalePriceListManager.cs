@@ -53,7 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Private Members
-        Dictionary<int, SalePriceList> GetCachedSalePriceLists()
+        public Dictionary<int, SalePriceList> GetCachedSalePriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCashedSalePriceLists"),
                () =>

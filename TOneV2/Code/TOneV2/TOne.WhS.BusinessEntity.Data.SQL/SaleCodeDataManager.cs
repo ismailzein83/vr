@@ -60,9 +60,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetEffectiveByZoneId", SaleCodeMapper, zoneID, effectiveDate);
         }
 
-        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
+        public List<SaleCode> GetSaleCodes(DateTime effectiveOn)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetBySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SaleCode_GetByEffective]", SaleCodeMapper, effectiveOn);
         }
 
         public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)

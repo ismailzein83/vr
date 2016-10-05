@@ -195,23 +195,28 @@ namespace TOne.WhS.Routing.Business
 
         }
 
+        private struct GetSellingNumberPlanSaleCodeIteratorCacheName
+        {
+            public int SettingNumberPlanId { get; set; }
+
+            public DateTime EffectiveOn { get; set; }
+        }
+
         private SaleCodeIterator GetSellingNumberPlanSaleCodeIterator(int sellingNumberPlanId, DateTime effectiveOn)
         {
-            string cacheName = String.Format("GetSellingNumberPlanSaleCodeIterator_{0}_{1}", sellingNumberPlanId, effectiveOn.Date);
+            var cacheName = new GetSellingNumberPlanSaleCodeIteratorCacheName { SettingNumberPlanId = sellingNumberPlanId, EffectiveOn = effectiveOn.Date };// String.Concat("GetSellingNumberPlanSaleCodeIterator_", sellingNumberPlanId, "_", effectiveOn.Date);
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>();
             return cacheManager.GetOrCreateObject(cacheName,
                 () =>
                 {
-                    DistributedCacher cacher = new DistributedCacher();
-                    Func<SaleCodeCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleCodeCachedObjectCreationHandler(sellingNumberPlanId, effectiveOn); };
-                    List<SaleCode> customerSaleCodes = cacher.GetOrCreateObject<SaleCodeCacheManager, List<SaleCode>>(String.Format("Distributed_GetSellingNumberPlanSaleCodes_{0}_{1:MM/dd/yy}", sellingNumberPlanId, effectiveOn.Date), objectCreationHandler);
+                    var codesByNumberPlans = GetCachedSaleCodes(effectiveOn);
+                    var numberPlanSaleCodes = codesByNumberPlans.GetRecord(sellingNumberPlanId);
 
-                    if (customerSaleCodes != null)
+                    if (numberPlanSaleCodes != null)
                     {
-                        var cachedCodes = customerSaleCodes.Select(code => cacheManager.CacheAndGetCode(code));
                         return new SaleCodeIterator()
                         {
-                            CodeIterator = new CodeIterator<SaleCode>(cachedCodes),
+                            CodeIterator = new CodeIterator<SaleCode>(numberPlanSaleCodes),
                             SellingNumberPlanId = sellingNumberPlanId
                         };
                     }
@@ -220,23 +225,55 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
+        private struct GetCachedSaleCodesCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+        }
+
+        private Dictionary<int, List<SaleCode>> GetCachedSaleCodes(DateTime effectiveOn)
+        {
+            var cacheName = new GetCachedSaleCodesCacheName { EffectiveOn = effectiveOn.Date };
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName, () =>
+            {
+                var rslt = new Dictionary<int, List<SaleCode>>();
+                SaleCodeManager saleCodeManager = new SaleCodeManager();
+                List<SaleCode> allSaleCodes = saleCodeManager.GetSaleCodes(effectiveOn);
+                var zones = new SaleZoneManager().GetCachedSaleZones();
+                foreach (var code in allSaleCodes)
+                {
+                    var cachedCode = cacheManager.CacheAndGetCode(code);
+                    var zone = zones.GetRecord(cachedCode.ZoneId);
+                    rslt.GetOrCreateItem(zone.SellingNumberPlanId).Add(cachedCode);
+                }
+                return rslt;
+            });
+        }
+
+
+        private struct GetSupplierCodeIteratorCacheName
+        {
+            public int SupplierId { get; set; }
+
+            public DateTime EffectiveOn { get; set; }
+        }
+
         private SupplierCodeIterator GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
         {
-            string cacheName = String.Format("GetSupplierCodeIterator_{0}_{1}", supplierId, effectiveOn.Date);
+            var cacheName = new GetSupplierCodeIteratorCacheName { SupplierId = supplierId, EffectiveOn = effectiveOn.Date };// String.Concat("GetSupplierCodeIterator_", supplierId, "_", effectiveOn.Date);
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
+            
             return cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
-                   DistributedCacher cacher = new DistributedCacher();
-                   Func<SupplierCodeCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierCodeCachedObjectCreationHandler(supplierId, effectiveOn); };
-                   List<SupplierCode> supplierCodes = cacher.GetOrCreateObject<SupplierCodeCacheManager, List<SupplierCode>>(String.Format("Distributed_GetSupplierCodes_{0}_{1:MM/dd/yy}", supplierId, effectiveOn.Date), objectCreationHandler);
+                   Dictionary<int, List<SupplierCode>> codesBySupplier = GetCachedSupplierCodes(effectiveOn);
 
+                   var supplierCodes = codesBySupplier.GetRecord(supplierId);
                    if (supplierCodes != null)
                    {
-                       var cachedCodes = supplierCodes.Select(code => cacheManager.CacheAndGetCode(code));
                        return new SupplierCodeIterator()
                        {
-                           CodeIterator = new CodeIterator<SupplierCode>(cachedCodes),
+                           CodeIterator = new CodeIterator<SupplierCode>(supplierCodes),
                            SupplierId = supplierId
                        };
                    }
@@ -244,6 +281,34 @@ namespace TOne.WhS.Routing.Business
                        return null;
                });
         }
+
+
+        private struct GetCachedSupplierCodesCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+        }
+
+        private Dictionary<int, List<SupplierCode>> GetCachedSupplierCodes(DateTime effectiveOn)
+        {
+            var cacheName = new GetCachedSupplierCodesCacheName { EffectiveOn = effectiveOn.Date };
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName, () =>
+             {
+                 var rslt = new Dictionary<int, List<SupplierCode>>();
+                 SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
+                 List<SupplierCode> allSupplierCodes = supplierCodeManager.GetSupplierCodes(effectiveOn);
+                 var zones = new SupplierZoneManager().GetCachedSupplierZones();
+                 foreach (var code in allSupplierCodes)
+                 {
+                     var cachedCode = cacheManager.CacheAndGetCode(code);
+                     var zone = zones.GetRecord(cachedCode.ZoneId);
+                     rslt.GetOrCreateItem(zone.SupplierId).Add(cachedCode);
+                 }
+                 return rslt;
+             });
+        }
+
+        
         #endregion
     }
 }

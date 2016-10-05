@@ -99,9 +99,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return customerSellingProducts.GetRecord(customerSellingProductId);
         }
 
+        private struct EffectiveSellingProductCacheName
+        {
+            public int CustomerId { get; set; }
+
+            public DateTime EffectiveOn { get; set; }
+
+            public bool IsEffectiveInFuture { get; set; }
+        }
         public CustomerSellingProduct GetEffectiveSellingProduct(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            string cacheName = String.Format("GetEffectiveSellingProduct_{0}_{1}_{2}", customerId, effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), isEffectiveInFuture);
+            var cacheName = new EffectiveSellingProductCacheName { CustomerId = customerId, EffectiveOn = effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), IsEffectiveInFuture = isEffectiveInFuture };// String.Concat("GetEffectiveSellingProduct_", customerId, effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), isEffectiveInFuture);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
               () =>
               {

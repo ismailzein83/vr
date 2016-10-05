@@ -44,10 +44,10 @@ namespace TOne.WhS.BusinessEntity.Business
             IDManager.Instance.ReserveIDRange(GetSaleCodeType(), numberOfIDs, out startingId);
             return startingId;
         }
-        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
+        public List<SaleCode> GetSaleCodes(DateTime effectiveOn)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
+            return dataManager.GetSaleCodes(effectiveOn);
         }
 
         public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
