@@ -16,13 +16,26 @@
 
         defineScope();
         load();
-        var filter = {};
 
         function defineScope() {
             $scope.effectiveOn = Date.now();
             $scope.searchClicked = function () {
-                setFilterObject();
-                return gridAPI.loadGrid(filter);
+                var queryHandler = {
+                    $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business",
+                };
+
+                queryHandler.Query = {
+                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                    ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
+                    Code: $scope.code,
+                    EffectiveOn: $scope.effectiveOn
+                };
+
+                var payload = {
+                    queryHandler: queryHandler
+                }
+
+                return gridAPI.loadGrid(payload);
             };
 
             $scope.onGridReady = function (api) {
@@ -72,20 +85,6 @@
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;
-        }
-        
-       
-        function setFilterObject() {
-            filter = {
-                $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business",
-            };
-            
-            filter.Query = {
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
-                Code: $scope.code,
-                EffectiveOn: $scope.effectiveOn
-            };
         }
     }
 

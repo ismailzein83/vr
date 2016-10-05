@@ -44,10 +44,20 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
 
                 drillDownDefinition.loadDirective = function (directiveAPI, saleZoneItem) {
                     saleZoneItem.saleCodeGridAPI = directiveAPI;
-                    var payload = {
-                        query: { ZonesIds: [saleZoneItem.Entity.SaleZoneId], EffectiveOn: effectiveOn },
-                        hidesalezonecolumn:true
+                    var queryHandler = {
+                        $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business"
                     };
+
+                    queryHandler.Query = {
+                        ZonesIds: [saleZoneItem.Entity.SaleZoneId],
+                        EffectiveOn: effectiveOn
+                    };
+
+                    var payload = {
+                        queryHandler: queryHandler,
+                        hidesalezonecolumn: true
+                    };
+                    
                     return saleZoneItem.saleCodeGridAPI.loadGrid(payload);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
