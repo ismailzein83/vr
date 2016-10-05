@@ -35,19 +35,27 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
 
             api.load = function (payload) {
 
-                if (payload != undefined) {
-                    ctrl.numberOfOptions = payload.NumberOfOptions;
-                    ctrl.customerRouteAddBlockedOptions = payload.CustomerRouteAddBlockedOptions;
-                    ctrl.productRouteAddBlockedOptions = payload.ProductRouteAddBlockedOptions;
+                if (payload != undefined && payload.CustomerRoute != undefined) {
+                    ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
+                    ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.CustomerRouteAddBlockedOptions;
+                }
+                if (payload != undefined && payload.ProductRoute != undefined) {
+                    ctrl.productRouteAddBlockedOptions = payload.ProductRoute.ProductRouteAddBlockedOptions;
                 }
             }
 
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.Routing.Entities.RouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                    NumberOfOptions: ctrl.numberOfOptions,
-                    CustomerRouteAddBlockedOptions: ctrl.customerRouteAddBlockedOptions,
-                    ProductRouteAddBlockedOptions: ctrl.productRouteAddBlockedOptions
+                    CustomerRoute: {
+                        $type: "TOne.WhS.Routing.Entities.CustomerRouteBuildConfiguration, TOne.WhS.Routing.Entities",
+                        NumberOfOptions: ctrl.customerRouteNumberOfOptions,
+                        CustomerRouteAddBlockedOptions: ctrl.customerRouteAddBlockedOptions
+                    },
+                    ProductRoute: {
+                        $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
+                        ProductRouteAddBlockedOptions: ctrl.productRouteAddBlockedOptions
+                    }
                 }
                 return obj;
             }
