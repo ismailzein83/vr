@@ -107,31 +107,54 @@ namespace TOne.WhS.BusinessEntity.Business
             return zoneServiceConfig.Symbol;
         }
 
-        public List<ZoneService> GetAllZoneServicesWithChildren(List<ZoneService> zoneServices, bool getOnlyDirectChildren = false)
+        public IEnumerable<ZoneServiceConfig> GetDistinctZoneServiceConfigsWithChildren(IEnumerable<int> zoneServiceIds, bool getOnlyDirectChildren = false)
         {
-            Dictionary<int, ZoneService> allZoneServices = new Dictionary<int, ZoneService>();
-            CheckIfDuplicateBeforeAdd(zoneServices, allZoneServices);
-            BuildZoneServicesWithChildren(zoneServices, allZoneServices, getOnlyDirectChildren);
-            return allZoneServices != null ? allZoneServices.Values.ToList() : null;
+            if (zoneServiceIds == null || zoneServiceIds.Count() == 0)
+                return null;
+
+            Dictionary<int, Dictionary<int, ZoneServiceConfig>> result = GetAllZoneServiceConfigsWithChildren(getOnlyDirectChildren);
+            Dictionary<int, ZoneServiceConfig> zoneServiceConfigs = new Dictionary<int, ZoneServiceConfig>();
+            ZoneServiceConfig tempZoneServiceConfig;
+
+            foreach (int zoneServiceId in zoneServiceIds)
+            {
+                Dictionary<int, ZoneServiceConfig> zoneServiceChildren = result.GetRecord(zoneServiceId);
+                if (zoneServiceChildren == null || zoneServiceChildren.Count == 0)
+                    continue;
+                foreach (KeyValuePair<int, ZoneServiceConfig> zoneServiceChild in zoneServiceChildren)
+                {
+                    if (!zoneServiceConfigs.TryGetValue(zoneServiceChild.Key, out tempZoneServiceConfig))
+                    {
+                        zoneServiceConfigs.Add(zoneServiceChild.Key, zoneServiceChild.Value);
+                    }
+                }
+            }
+            return zoneServiceConfigs.Values;
         }
 
-        private void BuildZoneServicesWithChildren(List<ZoneService> zoneServices, Dictionary<int, ZoneService> allZoneServices, bool getOnlyDirectChildren)
+        public Dictionary<int, Dictionary<int, ZoneServiceConfig>> GetAllZoneServiceConfigsWithChildren(bool getOnlyDirectChildren = false)
         {
-            if (zoneServices == null || zoneServices.Count == 0)
-                return;
-
-            List<int> childZoneServices = new List<int>();
-            foreach (ZoneService zoneService in zoneServices)
-            {
-                GetChildServices(zoneService.ServiceId, childZoneServices);
-            }
-            List<ZoneService> supplierChildServices = childZoneServices.Select(itm => new ZoneService { ServiceId = itm }).ToList();
-            CheckIfDuplicateBeforeAdd(supplierChildServices, allZoneServices);
-
+            string cacheName;
             if (getOnlyDirectChildren)
-                return;
+                cacheName = "GetAllZoneServicesWithDirectChildren";
+            else
+                cacheName = "GetAllZoneServicesWithAllChildren";
 
-            BuildZoneServicesWithChildren(supplierChildServices, allZoneServices, getOnlyDirectChildren);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   Dictionary<int, Dictionary<int, ZoneServiceConfig>> result = new Dictionary<int, Dictionary<int, ZoneServiceConfig>>();
+                   IEnumerable<ZoneServiceConfig> allServices = GetAllServices();
+                   foreach (ZoneServiceConfig zoneServiceConfig in allServices)
+                   {
+                       Dictionary<int, ZoneServiceConfig> zoneServiceConfigs = new Dictionary<int, ZoneServiceConfig>();
+                       zoneServiceConfigs.Add(zoneServiceConfig.ZoneServiceConfigId, zoneServiceConfig);
+                       result.Add(zoneServiceConfig.ZoneServiceConfigId, zoneServiceConfigs);
+                       BuildZoneServicesWithChildren(new List<int>() { zoneServiceConfig.ZoneServiceConfigId }, zoneServiceConfigs, allServices, getOnlyDirectChildren);
+                   }
+
+                   return result;
+               });
         }
 
         public TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
@@ -196,16 +219,40 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Methods
-        private void CheckIfDuplicateBeforeAdd(List<ZoneService> zoneServices, Dictionary<int, ZoneService> allZoneServices)
+
+        private void BuildZoneServicesWithChildren(List<int> zoneServiceConfigIds, Dictionary<int, ZoneServiceConfig> zoneServiceConfigs, IEnumerable<ZoneServiceConfig> allServices, bool getOnlyDirectChildren)
         {
-            foreach (ZoneService zoneService in zoneServices)
+            if (zoneServiceConfigIds == null || zoneServiceConfigIds.Count == 0)
+                return;
+
+            List<int> childZoneServiceConfigIds = new List<int>();
+            foreach (int zoneServiceConfigId in zoneServiceConfigIds)
             {
-                ZoneService duplicateZoneServices = allZoneServices.GetRecord(zoneService.ServiceId);
-                if (duplicateZoneServices == null)
+                IEnumerable<ZoneServiceConfig> childServices = allServices.FindAllRecords(x => x.Settings.ParentId != null && x.Settings.ParentId == zoneServiceConfigId);
+                if (childServices != null && childServices.Count() > 0)
                 {
-                    allZoneServices.Add(zoneService.ServiceId, zoneService);
+                    childZoneServiceConfigIds.AddRange(GetAndAddNonDuplicateZoneServiceConfigIds(childServices, zoneServiceConfigs));
                 }
             }
+            if (getOnlyDirectChildren)
+                return;
+
+            BuildZoneServicesWithChildren(childZoneServiceConfigIds, zoneServiceConfigs, allServices, getOnlyDirectChildren);
+        }
+
+        private List<int> GetAndAddNonDuplicateZoneServiceConfigIds(IEnumerable<ZoneServiceConfig> zoneServiceConfigList, Dictionary<int, ZoneServiceConfig> zoneServiceConfigs)
+        {
+            List<int> newAddedServiceConfigIds = new List<int>();
+            foreach (ZoneServiceConfig zoneServiceConfig in zoneServiceConfigList)
+            {
+                ZoneServiceConfig duplicateZoneServices = zoneServiceConfigs.GetRecord(zoneServiceConfig.ZoneServiceConfigId);
+                if (duplicateZoneServices == null)
+                {
+                    newAddedServiceConfigIds.Add(zoneServiceConfig.ZoneServiceConfigId);
+                    zoneServiceConfigs.Add(zoneServiceConfig.ZoneServiceConfigId, zoneServiceConfig);
+                }
+            }
+            return newAddedServiceConfigIds;
         }
 
         private void GetChildServices(int serviceId, List<int> childrenServiceIds)
@@ -220,7 +267,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 GetChildServices(child.ZoneServiceConfigId, childrenServiceIds);
             }
         }
-
 
         private class CacheManager : BaseCacheManager
         {
