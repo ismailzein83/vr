@@ -15,7 +15,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
     public class LoadDataToReprocessInput
     {
-        public int RecordStorageId { get; set; }
+        public Guid RecordStorageId { get; set; }
 
         public DateTime FromTime { get; set; }
 
@@ -36,7 +36,7 @@ namespace Vanrise.Reprocess.BP.Activities
     public sealed class LoadDataToReprocess : BaseAsyncActivity<LoadDataToReprocessInput, LoadDataToReprocessOutput>
     {
         [RequiredArgument]
-        public InArgument<int> RecordStorageId { get; set; }
+        public InArgument<Guid> RecordStorageId { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> FromTime { get; set; }

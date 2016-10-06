@@ -35,8 +35,11 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
@@ -46,6 +49,7 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
@@ -119,8 +123,8 @@
             </InArgument>
           </vrba1:LoadDataToReprocess.OutputStageNames>
           <vrba1:LoadDataToReprocess.RecordStorageId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">reprocessDefinition.Settings.SourceRecordStorageId</mca:CSharpValue>
+            <InArgument x:TypeArguments="s:Guid">
+              <mca:CSharpValue x:TypeArguments="s:Guid">reprocessDefinition.Settings.SourceRecordStorageId</mca:CSharpValue>
             </InArgument>
           </vrba1:LoadDataToReprocess.RecordStorageId>
           <vrba1:LoadDataToReprocess.StageManager>
@@ -216,7 +220,7 @@
         </ActivityAction>
       </ParallelForEach>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJTsD3AEOAgEBQAVLDgMBmwFMBVckAwGQAVgFYw4DAYUBZAXaARACAQJIC0iEAQMBoQFDC0NwAwGcAVQLVGMDAZYBTwtPcwMBkQFgC2B4AwGLAVsLW2cDAYYBaAeaARICAUybAQfZARkCAQNpCY0BJQIBWo4BCZkBJgIBTZ4BDZ4BjAECAUalAQvXARYCAQR7D3t+AgF/bA9sZQIBeXYPdogBAgFzhQEPhQF8AgFtcQ9xXQIBZ4ABD4ABYwIBYYoBD4oBWwIBW5EBD5EBdAIBVJYBD5YBYwIBTqYBDcoBIgIBFMsBDdYBKgIBBccBE8cBXwIBP64BE64BcwIBOLMBE7MBYgIBMakBE6kBYQIBKr0BE70BggECASPCARPCAXMCARy4ARO4AWcCARXOARPOAXgCAQ3TARPTAWcCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJT8D4AEOAgEBRAVPDgMBmwFQBVskAwGQAVwFZw4DAYUBaAXeARACAQJMC0yEAQMBoQFHC0dwAwGcAVgLWGMDAZYBUwtTcwMBkQFkC2R4AwGLAV8LX2cDAYYBbAeeARICAUyfAQfdARkCAQNtCZEBJQIBWpIBCZ0BJgIBTaIBDaIBjAECAUapAQvbARYCAQR/D399AgF/cA9wZQIBeXoPeogBAgFziQEPiQF8AgFtdQ91XQIBZ4QBD4QBYwIBYY4BD44BWwIBW5UBD5UBdAIBVJoBD5oBYwIBTqoBDc4BIgIBFM8BDdoBKgIBBcsBE8sBXwIBP7IBE7IBcwIBOLcBE7cBYgIBMa0BE60BYQIBKsEBE8EBggECASPGARPGAXMCARy8ARO8AWcCARXSARPSAXgCAQ3XARPXAWcCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
