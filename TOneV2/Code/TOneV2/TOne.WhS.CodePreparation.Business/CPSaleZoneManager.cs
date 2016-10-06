@@ -149,10 +149,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             foreach (NewZone newZone in input.NewZones)
             {
-
                 if (allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
-                    output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
-                else if (input.NewZones.FindAllRecords(item => item.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)).Count() > 1)
                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
                 else
                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });

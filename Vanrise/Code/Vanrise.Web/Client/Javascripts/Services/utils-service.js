@@ -341,6 +341,17 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return -1;
     }
 
+    //This function depends that the attribute to compare with is a string, that is why i did not reuse getItemIndexByVal that we can pass for it any type
+    function getItemIndexByStringVal(array, value, attname, ignoreCase) {
+        for (var i = 0; i < array.length; i++) {
+            var valueFromArray = eval('array[' + i + '].' + attname);
+            if ((ignoreCase == true && valueFromArray.toUpperCase() == value.toUpperCase()) || valueFromArray == value) {
+                return i
+            }
+        }
+        return -1;
+    }
+
     function getItemByVal(array, value, attname) {
         for (var i = 0; i < array.length; i++) {
             if (eval('array[' + i + '].' + attname) == value) {
@@ -806,7 +817,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         getDateFromDateTime: getDateFromDateTime,
         round: round,
         diffDays: diffDays,
-        parseStringToJson: parseStringToJson
+        parseStringToJson: parseStringToJson,
+        getItemIndexByStringVal: getItemIndexByStringVal
     });
 
 }]);

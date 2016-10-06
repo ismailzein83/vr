@@ -49,7 +49,7 @@
             $scope.disabledZone = true;
 
             $scope.onZoneValueChange = function (value) {
-                $scope.disabledZone = (value == undefined) || UtilsService.getItemIndexByVal($scope.zones, value, "zone") != -1;
+                $scope.disabledZone = (value == undefined) || UtilsService.getItemIndexByStringVal($scope.zones, value, "zone", true) != -1;
             }
 
             $scope.addZoneValue = function () {
