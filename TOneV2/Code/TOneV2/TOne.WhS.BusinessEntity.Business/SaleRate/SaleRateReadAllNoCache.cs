@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
             result.SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>();
 
             IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetEffectiveSaleRateByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
-
+            SaleRate tempSaleRate;
             foreach (SaleRate saleRate in saleRates)
             {
                 SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
@@ -72,7 +72,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     if (saleRatePriceList.RatesByRateType == null)
                         saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
-                    saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+
+                    if (!saleRatePriceList.RatesByRateType.TryGetValue(saleRate.RateTypeId.Value, out tempSaleRate))
+                        saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
                 }
                 else
                     saleRatePriceList.Rate = saleRate;

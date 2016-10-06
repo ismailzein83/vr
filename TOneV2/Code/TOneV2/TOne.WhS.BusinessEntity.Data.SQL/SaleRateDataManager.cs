@@ -81,6 +81,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         internal static DataTable BuildRoutingOwnerInfoTable(IEnumerable<RoutingCustomerInfoDetails> customerInfos)
         {
+            HashSet<int> addedSellingProductIds = new HashSet<int>();
             DataTable dtRoutingInfos = GetRoutingOwnerInfoTable();
             dtRoutingInfos.BeginLoadData();
             foreach (var c in customerInfos)
@@ -90,10 +91,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 drCustomer["OwnerTpe"] = (int)SalePriceListOwnerType.Customer;
                 dtRoutingInfos.Rows.Add(drCustomer);
 
+                if (addedSellingProductIds.Contains(c.SellingProductId))
+                    continue;
+
                 DataRow drSP = dtRoutingInfos.NewRow();
                 drSP["OwnerId"] = c.SellingProductId;
                 drSP["OwnerTpe"] = (int)SalePriceListOwnerType.SellingProduct;
                 dtRoutingInfos.Rows.Add(drSP);
+                addedSellingProductIds.Add(c.SellingProductId);
             }
             dtRoutingInfos.EndLoadData();
             return dtRoutingInfos;
