@@ -440,20 +440,20 @@ namespace Vanrise.Analytic.Data.SQL
 
         string GetDimensionIdColumnAlias(AnalyticDimension dimension)
         {
-            return String.Format("Dimension_{0}_Id", dimension.AnalyticDimensionConfigId);
+            return String.Format("Dimension_{0}_Id", dimension.AnalyticDimensionConfigId.ToString().Replace("-", ""));
         }
 
         string GetDimensionNameColumnAlias(AnalyticDimension dimension)
         {
-            return String.Format("Dimension_{0}_Name", dimension.AnalyticDimensionConfigId);
+            return String.Format("Dimension_{0}_Name", dimension.AnalyticDimensionConfigId.ToString().Replace("-", ""));
         }
         string GetAggregateColumnAlias(AnalyticAggregate aggregateConfig)
         {
-            return String.Format("Aggregate_{0}", aggregateConfig.AnalyticAggregateConfigId);
+            return String.Format("Aggregate_{0}", aggregateConfig.AnalyticAggregateConfigId.ToString().Replace("-", ""));
         }
         string GetMeasureColumnAlias(AnalyticMeasure measure)
         {
-            return String.Format("Measure_{0}", measure.AnalyticMeasureConfigId);
+            return String.Format("Measure_{0}", measure.AnalyticMeasureConfigId.ToString().Replace("-", ""));
         }
 
         string GetDimensionColumnIdFromFieldName(string fieldName)
