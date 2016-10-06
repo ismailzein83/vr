@@ -13,7 +13,7 @@ CREATE PROCEDURE [sec].[sp_View_Insert]
 	@Audience nvarchar(255),
 	@Content nvarchar(max),
 	@Settings nvarchar(max),
-	@Type int
+	@Type uniqueidentifier
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from

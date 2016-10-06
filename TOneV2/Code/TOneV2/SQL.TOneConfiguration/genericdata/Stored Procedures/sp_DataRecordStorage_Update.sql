@@ -4,10 +4,10 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_DataRecordStorage_Update]
-	@Id INT,
+	@Id uniqueidentifier,
 	@Name NVARCHAR(1000),
 	@DataRecordTypeId uniqueidentifier,
-	@DataStoreId INT,
+	@DataStoreId uniqueidentifier,
 	@Settings NVARCHAR(MAX)
 AS
 BEGIN

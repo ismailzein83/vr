@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Analytic].[sp_AnalyticItemConfig_Update]
-	@ID int,
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
 	@Title nvarchar(255),
 	@TableId int,

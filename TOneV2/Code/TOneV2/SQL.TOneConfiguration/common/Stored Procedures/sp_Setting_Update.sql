@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [common].[sp_Setting_Update]
-	@ID int,
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
 	@Data nvarchar(max)
 AS

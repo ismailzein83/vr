@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [genericdata].[sp_DataTransformationDefinition_Update]
-	@ID INT,
+CREATE PROCEDURE [genericdata].[sp_DataTransformationDefinition_Update]
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
 	@Title nvarchar(255),
 	@Details VARCHAR(MAX)

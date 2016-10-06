@@ -118,6 +118,11 @@
     <Folder Include="queue\User Defined Types\" />
     <Folder Include="runtime\User Defined Types\" />
     <Folder Include="bp\Functions\" />
+    <Folder Include="VR_Invoice\" />
+    <Folder Include="VR_Invoice\Tables\" />
+    <Folder Include="VR_Invoice\Functions\" />
+    <Folder Include="VR_Invoice\Stored Procedures\" />
+    <Folder Include="VR_Invoice\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -468,6 +473,22 @@
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\integration.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceType.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceItem.sql" />
+    <Build Include="VR_Invoice\Tables\Invoice.sql" />
+    <Build Include="VR_Invoice\Functions\ParseStringList.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_Insert.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceType_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_Save.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_GetFiltered.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_GetByItemSetNames.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Save.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetInvoiceCount.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetFiltered.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Get.sql" />
+    <Build Include="VR_Invoice\User Defined Types\InvoiceItemType.sql" />
+    <Build Include="Security\VR_Invoice.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

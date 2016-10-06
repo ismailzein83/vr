@@ -7,8 +7,8 @@ CREATE PROCEDURE [runtime].[sp_SchedulerTask_Insert]
 	@Name Nvarchar(255),
 	@IsEnabled bit,
 	@TaskType int,
-	@TriggerTypeId int,
-	@ActionTypeId int,
+	@TriggerTypeId uniqueidentifier,
+	@ActionTypeId uniqueidentifier,
 	@TaskSettings varchar(MAX),
 	@OwnerId int,
 	@Id int out

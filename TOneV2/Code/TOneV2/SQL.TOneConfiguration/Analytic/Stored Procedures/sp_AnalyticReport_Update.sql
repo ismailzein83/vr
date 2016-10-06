@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Analytic].[sp_AnalyticReport_Update]
-	@ID int,
+	@ID uniqueidentifier,
 	@Name nvarchar(255), 
 	@UserID int,
 	@AccessType int,

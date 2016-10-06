@@ -7,8 +7,8 @@ CREATE PROCEDURE [runtime].[sp_SchedulerTask_UpdateInfo]
 	@ID int,
 	@Name Nvarchar(255),
 	@IsEnabled bit,
-	@TriggerTypeId int,
-	@ActionTypeId int,
+	@TriggerTypeId uniqueidentifier,
+	@ActionTypeId uniqueidentifier,
 	@TaskSettings varchar(MAX)
 AS
 BEGIN

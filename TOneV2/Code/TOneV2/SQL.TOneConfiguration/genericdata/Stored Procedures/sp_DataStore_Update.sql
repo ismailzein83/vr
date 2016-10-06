@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_DataStore_Update]
-	@Id INT,
+	@Id uniqueidentifier,
 	@Name VARCHAR(255),
 	@Setting NVARCHAR(MAX)
 AS

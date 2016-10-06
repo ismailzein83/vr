@@ -5,7 +5,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_SummaryTransformationDefinition_Update]
-	@ID INT,
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
 	@Details VARCHAR(MAX)
 AS

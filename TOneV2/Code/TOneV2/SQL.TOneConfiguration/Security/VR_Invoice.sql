@@ -1,7 +1,5 @@
-﻿CREATE SCHEMA [runtime]
+﻿CREATE SCHEMA [VR_Invoice]
     AUTHORIZATION [dbo];
-
-
 
 
 

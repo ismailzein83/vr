@@ -8,13 +8,15 @@
     [Audience]    NVARCHAR (255)   NULL,
     [Content]     NVARCHAR (MAX)   NULL,
     [Settings]    NVARCHAR (MAX)   NULL,
-    [Type]        INT              NOT NULL,
+    [Type]        UNIQUEIDENTIFIER NULL,
+    [OldType]     INT              NOT NULL,
     [Rank]        INT              NULL,
     [timestamp]   ROWVERSION       NULL,
     CONSTRAINT [PK_View] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_View_Module] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([ID]),
-    CONSTRAINT [FK_View_ViewType] FOREIGN KEY ([Type]) REFERENCES [sec].[ViewType] ([ID])
+    CONSTRAINT [FK_View_Module] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([ID])
 );
+
+
 
 
 

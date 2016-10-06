@@ -13,7 +13,7 @@ CREATE PROCEDURE [sec].[sp_View_Update]
 	@Audience NVARCHAR(255),
 	@Content NVARCHAR(max),
 	@Settings nvarchar(max),
-	@Type INT
+	@Type uniqueidentifier
 	
 AS
 BEGIN
