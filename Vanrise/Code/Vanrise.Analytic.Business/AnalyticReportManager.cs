@@ -43,7 +43,7 @@ namespace Vanrise.Analytic.Business
 
             return analyticReports.MapRecords(AnalyticReportInfoMapper, x => x.AccessType == AccessType.Public || x.UserID == _loggedInUserId);
         }
-        public AnalyticReport GetAnalyticReportById(int analyticReportId)
+        public AnalyticReport GetAnalyticReportById(Guid analyticReportId)
         {
             var analyticReports = GetCachedAnalyticReports();
             return analyticReports.GetRecord(analyticReportId);
@@ -54,17 +54,15 @@ namespace Vanrise.Analytic.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int analyticReportId = -1;
-
+            analyticReport.AnalyticReportId = Guid.NewGuid();
             IAnalyticReportDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticReportDataManager>();
             analyticReport.UserID = _loggedInUserId;
-            bool insertActionSucc = dataManager.AddAnalyticReport(analyticReport, out analyticReportId);
+            bool insertActionSucc = dataManager.AddAnalyticReport(analyticReport);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                analyticReport.AnalyticReportId = analyticReportId;
                 insertOperationOutput.InsertedObject = AnalyticReportDetailMapper(analyticReport);
             }
             else
@@ -113,7 +111,7 @@ namespace Vanrise.Analytic.Business
 
         #region Private Methods
 
-        Dictionary<int, AnalyticReport> GetCachedAnalyticReports()
+        Dictionary<Guid, AnalyticReport> GetCachedAnalyticReports()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAnalyticReports",
                 () =>

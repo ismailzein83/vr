@@ -8,7 +8,7 @@ namespace Vanrise.Runtime.Entities
 {
     public class SchedulerTaskTriggerType
     {
-        public int TriggerTypeId { get; set; }
+        public Guid TriggerTypeId { get; set; }
 
         public string Name { get; set; }
 

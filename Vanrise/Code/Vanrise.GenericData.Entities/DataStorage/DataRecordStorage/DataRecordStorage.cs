@@ -8,13 +8,13 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordStorage
     {
-        public int DataRecordStorageId { get; set; }
+        public Guid DataRecordStorageId { get; set; }
 
         public string Name { get; set; }
 
         public Guid DataRecordTypeId { get; set; }
 
-        public int DataStoreId { get; set; }
+        public Guid DataStoreId { get; set; }
 
         public DataRecordStorageSettings Settings { get; set; }
 

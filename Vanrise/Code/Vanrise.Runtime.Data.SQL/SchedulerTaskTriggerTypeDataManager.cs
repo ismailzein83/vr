@@ -29,7 +29,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return new SchedulerTaskTriggerType
             {
-                TriggerTypeId = (int)reader["ID"],
+                TriggerTypeId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Info = Serializer.Deserialize<TriggerTypeInfo>(reader["TriggerTypeInfo"] as string)
             };

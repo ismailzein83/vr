@@ -39,7 +39,7 @@ namespace Vanrise.Common.Data.SQL
             var data = reader["Data"] as string;
             return new Setting
             {
-                SettingId = (int)reader["ID"],
+                SettingId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Type = reader["Type"] as string,
                 Category = reader["Category"] as string,

@@ -56,7 +56,7 @@ namespace Vanrise.Analytic.Web.Controllers
         }
         [HttpGet]
         [Route("GetAnalyticItemConfigsById")]
-        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, int analyticItemConfigId)
+        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
         {
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId);

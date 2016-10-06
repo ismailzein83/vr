@@ -29,7 +29,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return new SchedulerTaskActionType
             {
-                ActionTypeId = (int)reader["ID"],
+                ActionTypeId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Info = Serializer.Deserialize<ActionTypeInfo>(reader["ActionTypeInfo"] as string)
             };

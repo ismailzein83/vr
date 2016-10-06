@@ -8,7 +8,7 @@ namespace Vanrise.Security.Entities
 {
     public class ViewType
     {
-        public int ViewTypeId { get; set; }
+        public Guid ViewTypeId { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Editor { get; set; }

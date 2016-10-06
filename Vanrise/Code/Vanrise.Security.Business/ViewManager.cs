@@ -44,7 +44,7 @@ namespace Vanrise.Security.Business
             if(view.ViewTypeName != null)
             {
                 ViewTypeManager viewTypeManager = new ViewTypeManager();
-                int viewTypeId = viewTypeManager.GetViewTypeIdByName(view.ViewTypeName);
+                Guid viewTypeId = viewTypeManager.GetViewTypeIdByName(view.ViewTypeName);
                 view.Type = viewTypeId;
             }
             bool insertActionSucc = dataManager.AddView(view);

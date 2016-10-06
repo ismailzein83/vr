@@ -25,7 +25,7 @@ namespace Vanrise.GenericData.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, SummaryTransformationDefinitionDetailMapper));
         }
-        public SummaryTransformationDefinition GetSummaryTransformationDefinition(int summaryTransformationDefinitionId)
+        public SummaryTransformationDefinition GetSummaryTransformationDefinition(Guid summaryTransformationDefinitionId)
         {
             var summaryTransformationDefinitions = GetCachedSummaryTransformationDefinitions();
             return summaryTransformationDefinitions.GetRecord(summaryTransformationDefinitionId);
@@ -54,17 +54,16 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int summaryTransformationDefinitionId = -1;
+            summaryTransformationDefinition.SummaryTransformationDefinitionId = Guid.NewGuid();
 
 
             ISummaryTransformationDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<ISummaryTransformationDefinitionDataManager>();
-            bool insertActionSucc = dataManager.AddSummaryTransformationDefinition(summaryTransformationDefinition, out summaryTransformationDefinitionId);
+            bool insertActionSucc = dataManager.AddSummaryTransformationDefinition(summaryTransformationDefinition);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                summaryTransformationDefinition.SummaryTransformationDefinitionId = summaryTransformationDefinitionId;
                 insertOperationOutput.InsertedObject = SummaryTransformationDefinitionDetailMapper(summaryTransformationDefinition);
             }
             else
@@ -104,7 +103,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods
-        private Dictionary<int, SummaryTransformationDefinition> GetCachedSummaryTransformationDefinitions()
+        private Dictionary<Guid, SummaryTransformationDefinition> GetCachedSummaryTransformationDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSummaryTransformationDefinitions",
                () =>

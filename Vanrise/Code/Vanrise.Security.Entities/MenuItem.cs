@@ -19,7 +19,7 @@ namespace Vanrise.Security.Entities
         public List<MenuItem> Childs { get; set; }
 
         public string Icon { get; set; }
-        public int Type { get; set; }
+        public Guid Type { get; set; }
         public bool AllowDynamic { get; set; }
         public int Rank { get; set; }
 

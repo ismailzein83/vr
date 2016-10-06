@@ -110,7 +110,7 @@ namespace Vanrise.GenericData.Business
 
 
 
-        public IDataRecordDataManager GetStorageDataManager(int recordStorageId)
+        public IDataRecordDataManager GetStorageDataManager(Guid recordStorageId)
         {
             var dataRecordStorage = GetDataRecordStorage(recordStorageId);
             if (dataRecordStorage == null)
@@ -143,7 +143,7 @@ namespace Vanrise.GenericData.Business
             return this.GetCachedDataRecordStorages().MapRecords(DataRecordStorageInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
-        public DataRecordStorage GetDataRecordStorage(int dataRecordStorageId)
+        public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)
         {
             var cachedDataRecordStorages = GetCachedDataRecordStorages();
             return cachedDataRecordStorages.FindRecord(dataRecordStorage => dataRecordStorage.DataRecordStorageId == dataRecordStorageId);
@@ -155,16 +155,14 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int dataRecordStorageId = -1;
-
+            dataRecordStorage.DataRecordStorageId = Guid.NewGuid();
             UpdateStorage(dataRecordStorage);
 
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 
-            if (dataManager.AddDataRecordStorage(dataRecordStorage, out dataRecordStorageId))
+            if (dataManager.AddDataRecordStorage(dataRecordStorage))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                dataRecordStorage.DataRecordStorageId = dataRecordStorageId;
                 insertOperationOutput.InsertedObject = DataRecordStorageMapper(dataRecordStorage);
 
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -201,7 +199,7 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public void GetDataRecords(int dataRecordStorageId, DateTime from, DateTime to, Action<dynamic> onItemReady)
+        public void GetDataRecords(Guid dataRecordStorageId, DateTime from, DateTime to, Action<dynamic> onItemReady)
         {
             DataRecordStorageManager manager = new DataRecordStorageManager();
             var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
@@ -217,10 +215,10 @@ namespace Vanrise.GenericData.Business
 
              dataManager.GetDataRecords(from, to, onItemReady);
         }
-        public List<int> CheckRecordStoragesAccess(List<int> dataRecordStorages)
+        public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
-            List<int> filterdRecrodsIds = new List<int>();
+            List<Guid> filterdRecrodsIds = new List<Guid>();
 
             foreach (var r in allRecordStorages)
             {
@@ -234,7 +232,7 @@ namespace Vanrise.GenericData.Business
 
             return this.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds);
         }
-        public bool DoesUserHaveAccess(int userId, List<int> dataRecordStorages)
+        public bool DoesUserHaveAccess(int userId, List<Guid> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
             foreach (var r in allRecordStorages)
@@ -255,7 +253,7 @@ namespace Vanrise.GenericData.Business
                     return false;
              return true;
         }
-        Dictionary<int, DataRecordStorage> GetCachedDataRecordStorages()
+        Dictionary<Guid, DataRecordStorage> GetCachedDataRecordStorages()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordStorages",
                 () =>
@@ -358,7 +356,7 @@ namespace Vanrise.GenericData.Business
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
                 List<DataRecord> records = new List<DataRecord>();
-                foreach (int dataRecordStorageId in input.Query.DataRecordStorageIds)
+                foreach (Guid dataRecordStorageId in input.Query.DataRecordStorageIds)
                 {
                     var result = GetDataRecords(input, dataRecordStorageId);
                     if (result != null)
@@ -416,7 +414,7 @@ namespace Vanrise.GenericData.Business
                 return orderedRecords;
             }
 
-            private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, int dataRecordStorageId)
+            private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, Guid dataRecordStorageId)
             {
                 DataRecordStorageManager manager = new DataRecordStorageManager();
                 var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);

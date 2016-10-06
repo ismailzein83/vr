@@ -48,14 +48,18 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
-      <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
     </sco:Collection>
@@ -103,7 +107,7 @@
         </Variable>
       </Parallel.Variables>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-        <local:DAProfCalcSubProcess FromTime="{x:Null}" ToTime="{x:Null}" sap2010:WorkflowViewState.IdRef="DAProfCalcSubProcess_1">
+        <local:DAProfCalcSubProcess FromTime="{x:Null}" OutputRecordProcessor="{x:Null}" ToTime="{x:Null}" sap2010:WorkflowViewState.IdRef="DAProfCalcSubProcess_1">
           <local:DAProfCalcSubProcess.DAProfCalcDefinitionId>
             <InArgument x:TypeArguments="s:Guid">
               <mca:CSharpValue x:TypeArguments="s:Guid">ruleTypeSettings.DataAnalysisDefinitionId</mca:CSharpValue>
@@ -120,8 +124,8 @@
             </InArgument>
           </local:DAProfCalcSubProcess.OutputRecordsQueue>
           <local:DAProfCalcSubProcess.RecordStorageIds>
-            <InArgument x:TypeArguments="scg:List(x:Int32)">
-              <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">ruleTypeSettings.SourceRecordStorages.Select(itm =&gt; itm.DataRecordStorageId).ToList()</mca:CSharpValue>
+            <InArgument x:TypeArguments="scg:List(s:Guid)">
+              <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">ruleTypeSettings.SourceRecordStorages.Select(itm =&gt; itm.DataRecordStorageId).ToList()</mca:CSharpValue>
             </InArgument>
           </local:DAProfCalcSubProcess.RecordStorageIds>
         </local:DAProfCalcSubProcess>
@@ -159,7 +163,7 @@
         </vabad:GenerateVRAlertEvents.PreviousActivityStatus>
       </vabad:GenerateVRAlertEvents>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0FsZXJ0UnVsZVN1YlByb2Nlc3MueGFtbBg/A6MBDgIBAUQFTyUCAWBQBVsgAgFVXAWhARACAQJMC0x8AgFmRwtHVwIBYVgLWI0BAgFbUwtTVwIBVmANYHICAQplDWWkAQIBA2kHigESAgEuiwEHoAElAgERagl/JgIBOIABCYkBEgIBL44BDY4BhwECASedAQ2dAXYCASCTAQ2TAYoBAgEZmAENmAGSAQIBEncPd4wBAgFObQ9tdAIBR3wPfK4BAgFAcg9ytwECATmHATWHATkCATeDAQ+DAX4CATA=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0FsZXJ0UnVsZVN1YlByb2Nlc3MueGFtbBhDA6cBDgIBAUgFUyUCAWBUBV8gAgFVYAWlARACAQJQC1B8AgFmSwtLVwIBYVwLXI0BAgFbVwtXVwIBVmQNZHICAQppDWmkAQIBA20HjgESAgEujwEHpAElAgERbgmDASYCATiEAQmNARICAS+SAQ2SAYcBAgEnoQENoQF2AgEglwENlwGKAQIBGZwBDZwBkgECARJ7D3uMAQIBTnEPcXQCAUeAAQ+AAa0BAgFAdg92twECATmLATWLATkCATeHAQ+HAX4CATA=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

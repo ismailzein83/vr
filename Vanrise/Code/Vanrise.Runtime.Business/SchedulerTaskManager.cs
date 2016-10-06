@@ -16,7 +16,7 @@ namespace Vanrise.Runtime.Business
 
             Func<SchedulerTask, bool> filterExpression = (itm) =>
                 {
-                    if (itm.ActionTypeId == 1)//1 is for Data Source Tasks
+                    if (itm.ActionTypeId == Guid.Parse("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68"))//1 is for Data Source Tasks
                         return false;
 
                     if (input.Query == null)
@@ -112,7 +112,7 @@ namespace Vanrise.Runtime.Business
             allScheduledTasks.TryGetValue(taskId, out task);
             return task;
         }
-        public List<SchedulerTask> GetTasksbyActionType(int actionType)
+        public List<SchedulerTask> GetTasksbyActionType(Guid actionType)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
             Func<SchedulerTask, bool> filterExpression = (itm) =>

@@ -31,7 +31,7 @@ namespace Vanrise.Analytic.Entities
         public string Name { get; set; }
         public Guid DataRecordTypeId { get; set; }
 
-        public List<int> RecordStorageIds { get; set; }
+        public List<Guid> RecordStorageIds { get; set; }
 
         public List<DRSearchPageGridColumn> GridColumns { get; set; }
 

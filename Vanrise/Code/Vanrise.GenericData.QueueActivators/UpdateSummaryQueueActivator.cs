@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.QueueActivators
 {
     public class UpdateSummaryQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Queueing.Entities.ISummaryBatchQueueActivator
     {
-        public int SummaryTransformationDefinitionId { get; set; }
+        public Guid SummaryTransformationDefinitionId { get; set; }
 
         GenericSummaryTransformationManager _summaryTransformationManager;
         GenericSummaryTransformationManager SummaryTransformationManager

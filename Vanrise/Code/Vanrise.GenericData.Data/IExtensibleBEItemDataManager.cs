@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Data
     {
         bool UpdateExtensibleBEItem(ExtensibleBEItem extensibleBEItem);
 
-        bool AddExtensibleBEItem(ExtensibleBEItem extensibleBEItem, out int extensibleBEItemId);
+        bool AddExtensibleBEItem(ExtensibleBEItem extensibleBEItem);
         List<ExtensibleBEItem> GetExtensibleBEItems();
         bool AreExtensibleBEItemUpdated(ref object updateHandle);
     }

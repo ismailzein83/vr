@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataRecordStorage")]
-        public DataRecordStorage GetDataRecordStorage(int dataRecordStorageId)
+        public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)
         {
             return _manager.GetDataRecordStorage(dataRecordStorageId);
         }
@@ -54,7 +54,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("CheckRecordStoragesAccess")]
-        public List<int> CheckRecordStoragesAccess(List<int> dataRecordStorages)
+        public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
         {
             return _manager.CheckRecordStoragesAccess(dataRecordStorages);
         }

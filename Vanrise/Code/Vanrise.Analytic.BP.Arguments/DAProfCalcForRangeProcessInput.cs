@@ -15,7 +15,7 @@ namespace Vanrise.Analytic.BP.Arguments
             throw new NotImplementedException();
         }
 
-        public List<int> RecordStorageIds { get; set; }
+        public List<Guid> RecordStorageIds { get; set; }
 
         public DateTime FromTime { get; set; }
 

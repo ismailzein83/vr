@@ -67,7 +67,7 @@ namespace Vanrise.Common.Business
             return allSettings.Select(itm => itm.Value.Category).Distinct().ToList();
         }
 
-        public Setting GetSetting(int settingId)
+        public Setting GetSetting(Guid settingId)
         {
             var allSettings = GetCachedSettings();
             return allSettings.GetRecord(settingId);
@@ -96,7 +96,7 @@ namespace Vanrise.Common.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, createObject);
         }
 
-        private Dictionary<int, Setting> GetCachedSettings()
+        private Dictionary<Guid, Setting> GetCachedSettings()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSettings",
                () =>

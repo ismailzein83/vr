@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public class DataTransformationDefinitionInfo
     {
-        public int DataTransformationDefinitionId { get; set; }
+        public Guid DataTransformationDefinitionId { get; set; }
         public string Name { get; set; }
 
     }

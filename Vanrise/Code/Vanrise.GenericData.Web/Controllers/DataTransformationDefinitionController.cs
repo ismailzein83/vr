@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetDataTransformationDefinition")]
-        public DataTransformationDefinition GetDataTransformationDefinition(int dataTransformationDefinitionId)
+        public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)
         {
             DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
             return dataRecordTypeManager.GetDataTransformationDefinition(dataTransformationDefinitionId);
@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataTransformationDefinitionRecords")]
-        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(int dataTransformationDefinitionId)
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(Guid dataTransformationDefinitionId)
         {
             DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
             return dataRecordTypeManager.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId);
@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataTransformationRecordsInfo")]
-        public IEnumerable<DataTransformationRecordType> GetDataTransformationRecordsInfo(int dataTransformationDefinitionId, string filter = null)
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationRecordsInfo(Guid dataTransformationDefinitionId, string filter = null)
         {
             DataTransformationRecordTypeInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<DataTransformationRecordTypeInfoFilter>(filter) : null;
             DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();

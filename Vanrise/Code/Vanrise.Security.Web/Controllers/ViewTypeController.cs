@@ -20,7 +20,7 @@ namespace Vanrise.Security.Web.Controllers
         }
         [HttpGet]
         [Route("GetViewTypeIdByName")]
-        public int GetViewTypeIdByName(string name)
+        public Guid GetViewTypeIdByName(string name)
         {
             return _manager.GetViewTypeIdByName(name);
         }

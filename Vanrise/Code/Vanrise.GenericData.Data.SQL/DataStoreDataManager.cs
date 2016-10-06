@@ -23,13 +23,10 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("genericdata.sp_DataStore_GetAll", DataStoreMapper);
         }
 
-        public bool AddDataStore(DataStore dataStore, out int insertedId) 
+        public bool AddDataStore(DataStore dataStore) 
         {
-            object dataStoreId;
 
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Insert", out dataStoreId, dataStore.Name, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
-            insertedId = (affectedRows == 1) ? (int)dataStoreId : -1;
-
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Insert", dataStore.DataStoreId, dataStore.Name, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
             return (affectedRows == 1);
         }
         public bool UpdateDataStore(DataStore dataStore)
@@ -50,7 +47,7 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new DataStore()
             {
-                DataStoreId = (int)reader["ID"],
+                DataStoreId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = (string)reader["Name"],
                 Settings = Vanrise.Common.Serializer.Deserialize<DataStoreSettings>((string)reader["Settings"])
             };

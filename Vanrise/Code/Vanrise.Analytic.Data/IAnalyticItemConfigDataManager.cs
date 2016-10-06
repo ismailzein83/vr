@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Data
     {
         List<AnalyticItemConfig<T>> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class;
         bool AreAnalyticItemConfigUpdated(ref object updateHandle);
-        bool AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig, out int analyticItemConfigId) where T : class;
+        bool AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class;
         bool UpdateAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class;
     }
 }

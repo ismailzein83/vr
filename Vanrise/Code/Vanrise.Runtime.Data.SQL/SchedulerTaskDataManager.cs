@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Runtime.Entities;
@@ -34,7 +35,7 @@ namespace Vanrise.Runtime.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool UpdateTaskInfo(int taskId, string name, bool isEnabled, int triggerTypeId, int actionTypeId, SchedulerTaskSettings taskSettings)
+        public bool UpdateTaskInfo(int taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings)
         {
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_UpdateInfo", taskId, name,
                 isEnabled, triggerTypeId, actionTypeId, Common.Serializer.Serialize(taskSettings));
@@ -56,8 +57,8 @@ namespace Vanrise.Runtime.Data.SQL
                 TaskId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 IsEnabled = bool.Parse(reader["IsEnabled"].ToString()),
-                TriggerTypeId = (int)reader["TriggerTypeId"],
-                ActionTypeId = (int)reader["ActionTypeId"],
+                TriggerTypeId = GetReaderValue<Guid>(reader,"TriggerTypeId"),
+                ActionTypeId = GetReaderValue<Guid>(reader,"ActionTypeId"),
                 TriggerInfo = Common.Serializer.Deserialize<TriggerTypeInfo>(reader["TriggerTypeInfo"] as string),
                 ActionInfo = Common.Serializer.Deserialize<ActionTypeInfo>(reader["ActionTypeInfo"] as string),
                 TaskSettings = Common.Serializer.Deserialize<SchedulerTaskSettings>(reader["TaskSettings"] as string),

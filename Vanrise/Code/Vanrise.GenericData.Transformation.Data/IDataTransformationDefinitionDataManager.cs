@@ -13,6 +13,6 @@ namespace Vanrise.GenericData.Transformation.Data
         bool AreDataTransformationDefinitionUpdated(ref object updateHandle);
         bool UpdateDataTransformationDefinition(DataTransformationDefinition dataTransformationDefinition);
 
-        bool AddDataTransformationDefinition(DataTransformationDefinition dataTransformationDefinition, out int dataTransformationDefinitionId);
+        bool AddDataTransformationDefinition(DataTransformationDefinition dataTransformationDefinition);
     }
 }

@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.QueueActivators
     {
         DataTransformer _dataTransformer = new DataTransformer();
 
-        public int DataTransformationDefinitionId { get; set; }
+        public Guid DataTransformationDefinitionId { get; set; }
 
         public string SourceRecordName { get; set; }
 

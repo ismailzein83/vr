@@ -31,7 +31,7 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("GetSetting")]
-        public Setting GetSetting(int settingId)
+        public Setting GetSetting(Guid settingId)
         {
             SettingManager manager = new SettingManager();
             return manager.GetSetting(settingId);

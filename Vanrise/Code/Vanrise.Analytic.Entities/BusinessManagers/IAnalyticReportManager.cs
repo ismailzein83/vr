@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public interface IAnalyticReportManager : IBEManager
     {
-        AnalyticReport GetAnalyticReportById(int analyticReportId);
+        AnalyticReport GetAnalyticReportById(Guid analyticReportId);
     }
 }

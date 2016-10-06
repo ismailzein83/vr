@@ -60,7 +60,7 @@ namespace Vanrise.Security.Data.SQL
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name,view.Title, view.Url, view.ModuleId,
-               serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
+               serialziedAudience, serialziedContent, serializedSettings,view.Type);
             return (recordesEffected > 0);
         }
         public bool DeleteView(Guid viewId)
@@ -97,7 +97,7 @@ namespace Vanrise.Security.Data.SQL
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
                 Settings = reader["Settings"] != DBNull.Value ? Common.Serializer.Deserialize(reader["Settings"] as string) as ViewSettings : null,
                 Rank = GetReaderValue<int>(reader, "Rank"),
-                Type = (int)reader["Type"],
+                Type = GetReaderValue<Guid>(reader,"Type"),
 
             };
 

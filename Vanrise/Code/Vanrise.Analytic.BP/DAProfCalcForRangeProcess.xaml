@@ -48,6 +48,7 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
@@ -90,8 +91,8 @@
           </InOutArgument>
         </vgba:LoadRecordsFromStorages.OutputQueue>
         <vgba:LoadRecordsFromStorages.RecordStorageIds>
-          <InArgument x:TypeArguments="scg:List(x:Int32)">
-            <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">Input.RecordStorageIds</mca:CSharpValue>
+          <InArgument x:TypeArguments="scg:List(s:Guid)">
+            <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">Input.RecordStorageIds</mca:CSharpValue>
           </InArgument>
         </vgba:LoadRecordsFromStorages.RecordStorageIds>
         <vgba:LoadRecordsFromStorages.Status>
@@ -143,7 +144,7 @@
         </vabad:ExecuteRecordProfiling.Status>
       </vabad:ExecuteRecordProfiling>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sEkADkwEOAgEBQQWRARACAQJIDUjBAQIBCk0NTb4BAgEDUQdrJgIBQ2wHkAEmAgERXg1eagIBYGMNY3ICAVlZDVl0AgFSVA1UWwIBS2gNaFkCAUSIAQ2IAWoCATx5DXlsAgE1bw1vZQIBLoMBDYMBggECASd+DX6VAQIBII0BDY0BfgIBGXQNdHwCARI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sEkEDlAEOAgEBQgWSARACAQJJDUnBAQIBCk4NTr4BAgEDUgdsJgIBQ20HkQEmAgERXw1faQIBYGQNZHICAVlaDVp0AgFSVQ1VWwIBS2kNaVkCAUSJAQ2JAWoCATx6DXpsAgE1cA1wZQIBLoQBDYQBggECASd/DX+VAQIBII4BDY4BfgIBGXUNdXwCARI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

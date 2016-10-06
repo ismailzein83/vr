@@ -42,9 +42,9 @@ namespace Vanrise.Runtime.Entities
 
         public SchedulerTaskType TaskType { get; set; }
 
-        public int TriggerTypeId { get; set; }
+        public Guid TriggerTypeId { get; set; }
 
-        public int ActionTypeId { get; set; }
+        public Guid ActionTypeId { get; set; }
 
         public TriggerTypeInfo TriggerInfo { get; set; }
 

@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Data
 
         bool UpdateSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition);
 
-        bool AddSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition, out int summaryTransformationDefinitionId);
+        bool AddSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition);
 
     }
 }

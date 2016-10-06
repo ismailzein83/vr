@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IDataRecordStorageManager : IBusinessManager
     {
-        bool DoesUserHaveAccess(int userId,List<int> dataRecordStorageIds );
+        bool DoesUserHaveAccess(int userId, List<Guid> dataRecordStorageIds);
     }
 }

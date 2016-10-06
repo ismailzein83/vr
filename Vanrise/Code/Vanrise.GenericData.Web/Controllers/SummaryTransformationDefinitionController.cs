@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetSummaryTransformationDefinition")]
-        public SummaryTransformationDefinition GetSummaryTransformationDefinition(int summaryTransformationDefinitionId)
+        public SummaryTransformationDefinition GetSummaryTransformationDefinition(Guid summaryTransformationDefinitionId)
         {
             SummaryTransformationDefinitionManager summaryTransformationDefinitionManager = new SummaryTransformationDefinitionManager();
             return summaryTransformationDefinitionManager.GetSummaryTransformationDefinition(summaryTransformationDefinitionId);

@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.BP.Activities
     public sealed class LoadRecordsFromStorages : BaseAsyncActivity<LoadRecordsFromStoragesInput, LoadRecordsFromStoragesOutput>
     {
         [RequiredArgument]
-        public InArgument<List<int>> RecordStorageIds { get; set; }
+        public InArgument<List<Guid>> RecordStorageIds { get; set; }
 
         public InArgument<DateTime> FromTime { get; set; }
 

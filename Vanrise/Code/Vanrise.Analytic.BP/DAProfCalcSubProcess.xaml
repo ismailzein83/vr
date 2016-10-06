@@ -16,7 +16,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="DAProfCalcDefinitionId" Type="InArgument(s:Guid)" />
-    <x:Property Name="RecordStorageIds" Type="InArgument(scg:List(x:Int32))" />
+    <x:Property Name="RecordStorageIds" Type="InArgument(scg:List(s:Guid))" />
     <x:Property Name="FromTime" Type="InArgument(s:DateTime)" />
     <x:Property Name="ToTime" Type="InArgument(s:DateTime)" />
     <x:Property Name="OutputRecordsQueue" Type="InArgument(vq:BaseQueue(vae:DAProfCalcOutputRecordBatch))" />

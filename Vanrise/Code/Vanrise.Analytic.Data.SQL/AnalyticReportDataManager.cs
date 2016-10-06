@@ -26,12 +26,9 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return GetItemsSP("[Analytic].[sp_AnalyticReport_GetAll]", AnalyticReportReader);
         }
-        public bool AddAnalyticReport(Entities.AnalyticReport analyticReport, out int analyticReportId)
+        public bool AddAnalyticReport(Entities.AnalyticReport analyticReport)
         {
-            object analyticReportID;
-
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Insert", out analyticReportID, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
-            analyticReportId = (recordesEffected > 0) ? (int)analyticReportID : -1;
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Insert", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
 
             return (recordesEffected > 0);
         }
@@ -47,7 +44,7 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return new AnalyticReport
             {
-                AnalyticReportId = (int)reader["ID"],
+                AnalyticReportId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 AccessType = (AccessType)reader["AccessType"],
                 UserID = (int)reader["UserID"],

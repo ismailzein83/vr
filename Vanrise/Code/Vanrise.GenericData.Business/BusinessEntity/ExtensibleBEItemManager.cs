@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Business
         {
             _dataRecordTypeManager = new DataRecordTypeManager();
         }
-        public ExtensibleBEItem GetExtensibleBEItem(int extensibleBEItemId)
+        public ExtensibleBEItem GetExtensibleBEItem(Guid extensibleBEItemId)
         {
             var cachedExtensibleBEItems = GetCachedExtensibleBEItems();
             return cachedExtensibleBEItems.GetRecord(extensibleBEItemId);
@@ -56,17 +56,16 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int extensibleBEItemId = -1;
+            extensibleBEItem.ExtensibleBEItemId = Guid.NewGuid();
             var cachedExtensibleBEItems = GetCachedExtensibleBEItems();
             if (!cachedExtensibleBEItems.Any(x => x.Value.BusinessEntityDefinitionId == extensibleBEItem.BusinessEntityDefinitionId && x.Value.DataRecordTypeId == extensibleBEItem.DataRecordTypeId))
             {
                 IExtensibleBEItemDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IExtensibleBEItemDataManager>();
-                bool insertActionSucc = dataManager.AddExtensibleBEItem(extensibleBEItem, out extensibleBEItemId);
+                bool insertActionSucc = dataManager.AddExtensibleBEItem(extensibleBEItem);
 
                 if (insertActionSucc)
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    extensibleBEItem.ExtensibleBEItemId = extensibleBEItemId;
                     insertOperationOutput.InsertedObject = ExtensibleBEItemDetailMapper(extensibleBEItem);
 
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -97,7 +96,7 @@ namespace Vanrise.GenericData.Business
      
         #region Private Methods
 
-        private Dictionary<int, ExtensibleBEItem> GetCachedExtensibleBEItems()
+        private Dictionary<Guid, ExtensibleBEItem> GetCachedExtensibleBEItems()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetExtensibleBEItems",
                () =>

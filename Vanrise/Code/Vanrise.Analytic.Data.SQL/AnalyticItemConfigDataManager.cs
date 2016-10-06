@@ -28,12 +28,9 @@ namespace Vanrise.Analytic.Data.SQL
         }
 
 
-        public bool AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig, out int analyticItemConfigId) where T:class
+        public bool AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T:class
         {
-            object analyticItemConfigID;
-
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticItemConfig_Insert", out analyticItemConfigID, analyticItemConfig.Name, analyticItemConfig.Title, analyticItemConfig.TableId, analyticItemConfig.ItemType, Vanrise.Common.Serializer.Serialize(analyticItemConfig.Config));
-            analyticItemConfigId = (recordesEffected > 0) ? (int)analyticItemConfigID : -1;
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticItemConfig_Insert", analyticItemConfig.AnalyticItemConfigId, analyticItemConfig.Name, analyticItemConfig.Title, analyticItemConfig.TableId, analyticItemConfig.ItemType, Vanrise.Common.Serializer.Serialize(analyticItemConfig.Config));
 
             return (recordesEffected > 0);
         }
@@ -54,7 +51,7 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return new AnalyticItemConfig<T>
             {
-                AnalyticItemConfigId = (int)reader["ID"],
+                AnalyticItemConfigId = GetReaderValue<Guid>(reader,"ID"),
                 Config = Vanrise.Common.Serializer.Deserialize<T>(reader["Config"] as string),
                 ItemType = (AnalyticItemType) reader["ItemType"],
                 Name = reader["Name"] as string,

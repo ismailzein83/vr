@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Data.SQL
     public interface IDataStoreDataManager : IDataManager
     {
         IEnumerable<DataStore> GetDataStores();
-        bool AddDataStore(DataStore dataStore, out int insertedId);
+        bool AddDataStore(DataStore dataStore);
         bool UpdateDataStore(DataStore dataStore);
         bool AreDataStoresUpdated(ref object updateHandle);
     }

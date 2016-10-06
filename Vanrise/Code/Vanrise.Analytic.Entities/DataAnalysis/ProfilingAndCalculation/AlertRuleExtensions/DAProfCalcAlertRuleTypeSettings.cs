@@ -52,6 +52,6 @@ namespace Vanrise.Analytic.Entities
 
     public class DAProfCalcAlertRuleRecordStorage
     {
-        public int DataRecordStorageId { get; set; }
+        public Guid DataRecordStorageId { get; set; }
     }
 }

@@ -36,16 +36,14 @@ namespace Vanrise.GenericData.Transformation.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Update", dataTransformationDefinition.DataTransformationDefinitionId, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
             return (recordesEffected > 0);
         }
-        public bool AddDataTransformationDefinition(Entities.DataTransformationDefinition dataTransformationDefinition, out int dataTransformationDefinitionId)
+        public bool AddDataTransformationDefinition(Entities.DataTransformationDefinition dataTransformationDefinition)
         {
-            object dataTransformationDefinitionID;
             string serializedObj = null;
             if (dataTransformationDefinition != null)
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(dataTransformationDefinition);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Insert", out dataTransformationDefinitionID, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
-            dataTransformationDefinitionId = (recordesEffected > 0) ? (int)dataTransformationDefinitionID : -1;
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Insert", dataTransformationDefinition.DataTransformationDefinitionId, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
 
             return (recordesEffected > 0);
         }
@@ -57,7 +55,7 @@ namespace Vanrise.GenericData.Transformation.Data.SQL
             DataTransformationDefinition dataTransformationDefinition =  Vanrise.Common.Serializer.Deserialize<DataTransformationDefinition>(reader["Details"] as string);
             if(dataTransformationDefinition != null)
             {
-                dataTransformationDefinition.DataTransformationDefinitionId = Convert.ToInt32(reader["ID"]);
+                dataTransformationDefinition.DataTransformationDefinitionId = GetReaderValue<Guid>(reader,"ID");
                 dataTransformationDefinition.Name = reader["Name"] as string;
                 dataTransformationDefinition.Title = reader["Title"] as string;
             }

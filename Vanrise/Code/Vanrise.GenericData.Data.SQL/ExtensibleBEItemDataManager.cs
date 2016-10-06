@@ -36,16 +36,14 @@ namespace Vanrise.GenericData.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("genericdata.sp_ExtensibleBEItem_Update", extensibleBEItem.ExtensibleBEItemId, serializedObj);
             return (recordesEffected > 0);
         }
-        public bool AddExtensibleBEItem(ExtensibleBEItem extensibleBEItem, out int extensibleBEItemId)
+        public bool AddExtensibleBEItem(ExtensibleBEItem extensibleBEItem)
         {
-            object extensibleBEItemID;
             string serializedObj = null;
             if (extensibleBEItem != null)
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(extensibleBEItem);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_ExtensibleBEItem_Insert", out extensibleBEItemID, serializedObj);
-            extensibleBEItemId = (recordesEffected > 0) ? (int)extensibleBEItemID : -1;
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_ExtensibleBEItem_Insert",extensibleBEItem.ExtensibleBEItemId, serializedObj);
 
             return (recordesEffected > 0);
         }
@@ -57,7 +55,7 @@ namespace Vanrise.GenericData.Data.SQL
             ExtensibleBEItem extensibleBEItem = Vanrise.Common.Serializer.Deserialize<ExtensibleBEItem>(reader["Details"] as string);
             if (extensibleBEItem != null)
             {
-                extensibleBEItem.ExtensibleBEItemId = Convert.ToInt32(reader["ID"]);
+                extensibleBEItem.ExtensibleBEItemId = GetReaderValue<Guid>(reader,"ID");
             }
             return extensibleBEItem;
         }

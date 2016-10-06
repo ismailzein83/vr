@@ -1,9 +1,10 @@
 ﻿
+using System;
 namespace TOne.WhS.Routing.Entities
 {
     public class RouteRuleDataTransformation
     {
-        public int CustomerTransformationId { get; set; }
-        public int SupplierTransformationId { get; set; }
+        public Guid CustomerTransformationId { get; set; }
+        public Guid SupplierTransformationId { get; set; }
     }
 }

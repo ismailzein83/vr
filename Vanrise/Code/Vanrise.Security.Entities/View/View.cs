@@ -24,7 +24,7 @@ namespace Vanrise.Security.Entities
 
         public AudienceWrapper Audience { get; set; }
 
-        public int Type { get; set; }
+        public Guid Type { get; set; }
 
         public ViewContent ViewContent { get; set; }
 

@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformer : IDataTransformer
     {
-        public DataTransformationExecutionOutput ExecuteDataTransformation(int dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady)
+        public DataTransformationExecutionOutput ExecuteDataTransformation(Guid dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady)
         {
             DataTransformationDefinitionManager definitionManager = new DataTransformationDefinitionManager();
             DataTransformationRuntimeType dataTransformationRuntimeType = definitionManager.GetTransformationRuntimeType(dataTransformationDefinitionId);

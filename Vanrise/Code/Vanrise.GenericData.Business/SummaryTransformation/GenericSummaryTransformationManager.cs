@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Business
     public class GenericSummaryTransformationManager<T> : Vanrise.Common.Business.SummaryTransformation.SummaryTransformationManager<dynamic, GenericSummaryItem, T>
         where T : class, ISummaryBatch<GenericSummaryItem>
     {
-        public int SummaryTransformationDefinitionId { get; set; }
+        public Guid SummaryTransformationDefinitionId { get; set; }
         
         #region Private Properties
 

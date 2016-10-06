@@ -30,13 +30,13 @@ namespace Vanrise.GenericData.Transformation
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataTransformationDefinitionDetailMapper));
         }
-        public DataTransformationDefinition GetDataTransformationDefinition(int dataTransformationDefinitionId)
+        public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)
         {
             var dataDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
             return dataDataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
         }
 
-        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(int dataTransformationDefinitionId)
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(Guid dataTransformationDefinitionId)
         {
             var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
             if (dataTransformationDefinition != null)
@@ -44,7 +44,7 @@ namespace Vanrise.GenericData.Transformation
             else
                 return null;
         }
-        public string GetDataTransformationDefinitionName(int dataTransformationDefinitionId)
+        public string GetDataTransformationDefinitionName(Guid dataTransformationDefinitionId)
         {
             var dataTransformationDefinitions = GetCachedDataTransformationDefinitions();
 
@@ -61,17 +61,15 @@ namespace Vanrise.GenericData.Transformation
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int dataTransformationDefinitionId = -1;
-
+            dataTransformationDefinition.DataTransformationDefinitionId = Guid.NewGuid();
 
             IDataTransformationDefinitionDataManager dataManager = DataTransformationDefinitionDataManagerFactory.GetDataManager<IDataTransformationDefinitionDataManager>();
-            bool insertActionSucc = dataManager.AddDataTransformationDefinition(dataTransformationDefinition, out dataTransformationDefinitionId);
+            bool insertActionSucc = dataManager.AddDataTransformationDefinition(dataTransformationDefinition);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                dataTransformationDefinition.DataTransformationDefinitionId = dataTransformationDefinitionId;
                 insertOperationOutput.InsertedObject = DataTransformationDefinitionDetailMapper(dataTransformationDefinition);
             }
             else
@@ -109,7 +107,7 @@ namespace Vanrise.GenericData.Transformation
             return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
         }
 
-        internal DataTransformationRuntimeType GetTransformationRuntimeType(int dataTransformationDefinitionId)
+        internal DataTransformationRuntimeType GetTransformationRuntimeType(Guid dataTransformationDefinitionId)
         {
             string cacheName = String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
             return CacheManagerFactory.GetCacheManager<RuntimeCacheManager>().GetOrCreateObject(cacheName,
@@ -145,7 +143,7 @@ namespace Vanrise.GenericData.Transformation
             return codeGenerationContext.TryBuildRuntimeType(out runtimeType, out errorMessages);
         }
 
-        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(int dataTransformationDefinitionId, DataTransformationRecordTypeInfoFilter filter)
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(Guid dataTransformationDefinitionId, DataTransformationRecordTypeInfoFilter filter)
         {
             var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
             if (dataTransformationDefinition != null)
@@ -167,7 +165,7 @@ namespace Vanrise.GenericData.Transformation
         #endregion
 
         #region Private Methods
-        private Dictionary<int, DataTransformationDefinition> GetCachedDataTransformationDefinitions()
+        private Dictionary<Guid, DataTransformationDefinition> GetCachedDataTransformationDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataTransformationDefinitions",
                () =>

@@ -23,13 +23,12 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("genericdata.sp_DataRecordStorage_GetALL", DataRecordStorageMapper);
         }
 
-        public bool AddDataRecordStorage(DataRecordStorage dataRecordStorage, out int insertedId)
+        public bool AddDataRecordStorage(DataRecordStorage dataRecordStorage)
         {
-            object dataRecordStorageId;
             int affectedRows = ExecuteNonQuerySP
                 (
                     "genericdata.sp_DataRecordStorage_Insert",
-                    out dataRecordStorageId,
+                    dataRecordStorage.DataRecordStorageId,
                     dataRecordStorage.Name,
                     dataRecordStorage.DataRecordTypeId,
                     dataRecordStorage.DataStoreId,
@@ -38,11 +37,9 @@ namespace Vanrise.GenericData.Data.SQL
                 );
             
             if (affectedRows == 1) {
-                insertedId = (int)dataRecordStorageId;
                 return true;
             }
             else {
-                insertedId = -1;
                 return false;
             }
         }
@@ -73,10 +70,10 @@ namespace Vanrise.GenericData.Data.SQL
         DataRecordStorage DataRecordStorageMapper(IDataReader reader)
         {
             return new DataRecordStorage() {
-                DataRecordStorageId = (int)reader["ID"],
+                DataRecordStorageId = GetReaderValue<Guid>(reader,"ID"),
                 Name = (string)reader["Name"],
                 DataRecordTypeId = GetReaderValue<Guid>(reader,"DataRecordTypeID"),
-                DataStoreId = (int)reader["DataStoreID"],
+                DataStoreId = GetReaderValue<Guid>(reader,"DataStoreID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<DataRecordStorageSettings>((string)reader["Settings"]),
                 State = (GetReaderValue<string>(reader, "State") != null) ? Vanrise.Common.Serializer.Deserialize<DataRecordStorageState>((string)reader["State"]) : null
             };

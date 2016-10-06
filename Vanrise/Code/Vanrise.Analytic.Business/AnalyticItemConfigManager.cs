@@ -192,7 +192,7 @@ namespace Vanrise.Analytic.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input, filterExpression));
         }
-        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, int analyticItemConfigId)
+        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
         {
             return GetCachedAnalyticItemConfigByItemType(tableId, itemType, analyticItemConfigId);
         }
@@ -202,17 +202,15 @@ namespace Vanrise.Analytic.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int analyticItemConfigId = -1;
-
+            analyticItemConfig.AnalyticItemConfigId = Guid.NewGuid();
             IAnalyticItemConfigDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
             bool insertActionSucc = false;
-            insertActionSucc = dataManager.AddAnalyticItemConfig(analyticItemConfig, out analyticItemConfigId);
+            insertActionSucc = dataManager.AddAnalyticItemConfig(analyticItemConfig);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                analyticItemConfig.AnalyticItemConfigId = analyticItemConfigId;
                 insertOperationOutput.InsertedObject = AnalyticConfigDetailMapper(analyticItemConfig);
             }
             else
@@ -275,7 +273,7 @@ namespace Vanrise.Analytic.Business
 
         #region Private Methods
 
-        private Object GetCachedAnalyticItemConfigByItemType(int tableId, AnalyticItemType itemType, int analyticItemConfigId)
+        private Object GetCachedAnalyticItemConfigByItemType(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
         {
             Object data = null;
             switch (itemType)

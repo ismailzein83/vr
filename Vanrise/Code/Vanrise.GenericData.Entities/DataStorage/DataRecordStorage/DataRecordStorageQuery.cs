@@ -12,6 +12,6 @@ namespace Vanrise.GenericData.Entities
 
         public IEnumerable<Guid> DataRecordTypeIds { get; set; }
 
-        public IEnumerable<int> DataStoreIds { get; set; }
+        public IEnumerable<Guid> DataStoreIds { get; set; }
     }
 }

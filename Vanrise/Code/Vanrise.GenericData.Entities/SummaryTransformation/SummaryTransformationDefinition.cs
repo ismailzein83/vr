@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class SummaryTransformationDefinition
     {
-        public int SummaryTransformationDefinitionId { get; set; }
+        public Guid SummaryTransformationDefinitionId { get; set; }
 
         public string Name { get; set; }
 
@@ -30,7 +30,7 @@ namespace Vanrise.GenericData.Entities
 
         public UpdateExistingSummaryFromNewSettings UpdateExistingSummaryFromNewSettings { get; set; }
 
-        public int DataRecordStorageId { get; set; }
+        public Guid DataRecordStorageId { get; set; }
     }
 
     public abstract class SummaryTransformationBatchRangeRetrieval
@@ -54,7 +54,7 @@ namespace Vanrise.GenericData.Entities
 
     public class UpdateSummaryFromRawSettings
     {
-        public int TransformationDefinitionId { get; set; }
+        public Guid TransformationDefinitionId { get; set; }
 
         public string RawRecordName { get; set; }
 
@@ -63,7 +63,7 @@ namespace Vanrise.GenericData.Entities
 
     public class UpdateExistingSummaryFromNewSettings
     {
-        public int TransformationDefinitionId { get; set; }
+        public Guid TransformationDefinitionId { get; set; }
 
         public string ExistingRecordName { get; set; }
 

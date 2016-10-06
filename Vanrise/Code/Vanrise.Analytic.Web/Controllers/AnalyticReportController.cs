@@ -24,7 +24,7 @@ namespace Vanrise.Analytic.Web.Controllers
         }
         [HttpGet]
         [Route("GetAnalyticReportById")]
-        public AnalyticReport GetAnalyticReportById(int analyticReportId)
+        public AnalyticReport GetAnalyticReportById(Guid analyticReportId)
         {
             AnalyticReportManager manager = new AnalyticReportManager();
             return manager.GetAnalyticReportById(analyticReportId);

@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Business
 {
     public class DynamicTypeGenerator
     {
-        public static IGenericSummaryTransformer GetSummaryTransformer(int summaryTransformationDefinitionId, out SummaryTransformationDefinition summaryTransformationDefinition)
+        public static IGenericSummaryTransformer GetSummaryTransformer(Guid summaryTransformationDefinitionId, out SummaryTransformationDefinition summaryTransformationDefinition)
         {
             var transformationDefManager = new SummaryTransformationDefinitionManager();
             summaryTransformationDefinition = transformationDefManager.GetSummaryTransformationDefinition(summaryTransformationDefinitionId);

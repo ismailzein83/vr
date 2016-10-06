@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataStoreInfo
     {
-        public int DataStoreId { get; set; }
+        public Guid DataStoreId { get; set; }
 
         public string Name { get; set; }
     }

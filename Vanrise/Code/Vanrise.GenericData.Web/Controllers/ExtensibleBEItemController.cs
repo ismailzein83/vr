@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetExtensibleBEItem")]
-        public ExtensibleBEItem GetExtensibleBEItem(int extensibleBEItemId)
+        public ExtensibleBEItem GetExtensibleBEItem(Guid extensibleBEItemId)
         {
             ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
             return manager.GetExtensibleBEItem(extensibleBEItemId);

@@ -28,7 +28,7 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataStore.ToBigResult(input, filterExpression, DataStoreDetailMapper));
         }
 
-        public DataStore GeDataStore(int dataStoreId)
+        public DataStore GeDataStore(Guid dataStoreId)
         {
             var cachedDataStore = GetCachedDataStores();
             return cachedDataStore.FindRecord((dataStore) => dataStore.DataStoreId == dataStoreId);
@@ -40,15 +40,14 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int dataStoreId = -1;
+            dataStore.DataStoreId = Guid.NewGuid();
 
             IDataStoreDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreDataManager>();
-            bool insertActionSucc = dataManager.AddDataStore(dataStore, out dataStoreId);
+            bool insertActionSucc = dataManager.AddDataStore(dataStore);
 
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                dataStore.DataStoreId = dataStoreId;
                 insertOperationOutput.InsertedObject = DataStoreDetailMapper(dataStore);
 
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -89,7 +88,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        Dictionary<int, DataStore> GetCachedDataStores()
+        Dictionary<Guid, DataStore> GetCachedDataStores()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataStores",
                 () =>

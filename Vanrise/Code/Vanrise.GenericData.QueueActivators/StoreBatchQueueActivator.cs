@@ -11,8 +11,8 @@ using Vanrise.GenericData.Entities;
 namespace Vanrise.GenericData.QueueActivators
 {
     public class StoreBatchQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
-    {        
-        public int DataRecordStorageId { get; set; }
+    {
+        public Guid DataRecordStorageId { get; set; }
 
         DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
         DataStoreManager _dataStoreManager = new DataStoreManager();

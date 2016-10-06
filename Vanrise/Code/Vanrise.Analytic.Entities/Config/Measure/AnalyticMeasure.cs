@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticMeasure
     {
-        public int AnalyticMeasureConfigId { get; set; }
+        public Guid AnalyticMeasureConfigId { get; set; }
 
         public AnalyticMeasureConfig Config { get; set; }
 

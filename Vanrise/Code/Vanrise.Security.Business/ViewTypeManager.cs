@@ -14,7 +14,7 @@ namespace Vanrise.Security.Business
         {
             return GetCachedViewTypes().Values;
         }
-        public int GetViewTypeIdByName(string name)
+        public Guid GetViewTypeIdByName(string name)
         {
             if (name == null)
                 throw new NullReferenceException("ViewTypeName");
@@ -37,7 +37,7 @@ namespace Vanrise.Security.Business
                 return _dataManager.AreViewTypesUpdated(ref _updateHandle);
             }
         }
-        private Dictionary<int, ViewType> GetCachedViewTypes()
+        private Dictionary<Guid, ViewType> GetCachedViewTypes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedViewTypes",
                () =>

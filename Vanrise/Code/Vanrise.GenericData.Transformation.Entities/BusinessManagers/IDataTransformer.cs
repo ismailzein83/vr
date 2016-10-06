@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public interface IDataTransformer : IBusinessManager
     {
-        DataTransformationExecutionOutput ExecuteDataTransformation(int dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady);
+        DataTransformationExecutionOutput ExecuteDataTransformation(Guid dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady);
     }
 }

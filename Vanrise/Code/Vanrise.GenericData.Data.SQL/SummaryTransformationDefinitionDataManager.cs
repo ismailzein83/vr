@@ -36,13 +36,11 @@ namespace Vanrise.GenericData.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool AddSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition, out int summaryTransformationDefinitionId)
+        public bool AddSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition)
         {
-            object summaryTransformationDefinitionID;
             string serializedObj = null;
             serializedObj = Vanrise.Common.Serializer.Serialize(summaryTransformationDefinition);
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Insert", out summaryTransformationDefinitionID, summaryTransformationDefinition.Name, serializedObj);
-            summaryTransformationDefinitionId = (recordesEffected > 0) ? (int)summaryTransformationDefinitionID : -1;
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Insert", summaryTransformationDefinition.SummaryTransformationDefinitionId, summaryTransformationDefinition.Name, serializedObj);
 
             return (recordesEffected > 0);
         }
@@ -58,7 +56,7 @@ namespace Vanrise.GenericData.Data.SQL
             if (details != null && details != string.Empty)
                 summaryTransformationDefinition = Vanrise.Common.Serializer.Deserialize<SummaryTransformationDefinition>(details);
 
-            summaryTransformationDefinition.SummaryTransformationDefinitionId = (int)reader["ID"];
+            summaryTransformationDefinition.SummaryTransformationDefinitionId = GetReaderValue<Guid>(reader,"ID");
 
             return summaryTransformationDefinition;
         }

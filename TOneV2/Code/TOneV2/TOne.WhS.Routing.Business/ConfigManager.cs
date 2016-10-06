@@ -7,11 +7,11 @@ namespace TOne.WhS.Routing.Business
     public class ConfigManager
     {
         #region public methods
-        public int GetCustomerRouteBuildNumberOfOptions()  
+        public int GetCustomerRouteBuildNumberOfOptions()
         {
             RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
-            return routeBuildConfiguration.CustomerRoute.NumberOfOptions; 
-        } 
+            return routeBuildConfiguration.CustomerRoute.NumberOfOptions;
+        }
 
         public bool GetCustomerRouteBuildAddBlockedOptions()
         {
@@ -35,13 +35,13 @@ namespace TOne.WhS.Routing.Business
             return routeSettingsData.SubProcessSettings;
         }
 
-        public int GetSupplierTransformationId()
+        public Guid GetSupplierTransformationId()
         {
             RouteRuleDataTransformation routeRuleDataTransformation = GetRouteRuleDataTransformation();
             return routeRuleDataTransformation.SupplierTransformationId;
         }
 
-        public int GetCustomerTransformationId()
+        public Guid GetCustomerTransformationId()
         {
             RouteRuleDataTransformation routeRuleDataTransformation = GetRouteRuleDataTransformation();
             return routeRuleDataTransformation.CustomerTransformationId;

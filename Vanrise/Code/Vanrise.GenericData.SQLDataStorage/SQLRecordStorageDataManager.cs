@@ -452,7 +452,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             var column = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == fieldName);
             if (column == null)
-                throw new NullReferenceException(String.Format("column. RecordStorageId '{0}'. FieldName '{1}'", -_dataRecordStorage.DataRecordStorageId, fieldName));
+                throw new NullReferenceException(String.Format("column. RecordStorageId '{0}'. FieldName '{1}'", _dataRecordStorage.DataRecordStorageId, fieldName));
             return column.ColumnName;
         }
 

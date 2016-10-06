@@ -9,7 +9,7 @@ namespace Vanrise.Security.Entities
     public class ViewQuery
     {
         public Guid? ModuleId { get; set; }
-        public List<int> ViewTypes { get; set; }
+        public List<Guid> ViewTypes { get; set; }
         public string Name { get; set; }
     }
 }

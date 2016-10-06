@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Data
     {
         List<AnalyticReport> GetAnalyticReports();
         bool AreAnalyticReportUpdated(ref object updateHandle);
-        bool AddAnalyticReport(Entities.AnalyticReport analyticReport, out int analyticReportId);
+        bool AddAnalyticReport(Entities.AnalyticReport analyticReport);
         bool UpdateAnalyticReport(Entities.AnalyticReport analyticReport);
     }
 }

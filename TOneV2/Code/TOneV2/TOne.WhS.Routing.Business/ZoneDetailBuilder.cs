@@ -54,7 +54,7 @@ namespace TOne.WhS.Routing.Business
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
 
             TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
-            int customerTransformationId = routingConfigManager.GetCustomerTransformationId();
+            Guid customerTransformationId = routingConfigManager.GetCustomerTransformationId();
 
             DataTransformer dataTransformer = new DataTransformer();
             var carrierAccountManager = new CarrierAccountManager();
@@ -133,7 +133,7 @@ namespace TOne.WhS.Routing.Business
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
 
             TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
-            int supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
+            Guid supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
 
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();

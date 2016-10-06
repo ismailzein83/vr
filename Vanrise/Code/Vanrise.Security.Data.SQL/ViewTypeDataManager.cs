@@ -36,7 +36,7 @@ namespace Vanrise.Security.Data.SQL
         private ViewType ViewTypeMapper(IDataReader reader)
         {
             ViewType instance = Vanrise.Common.Serializer.Deserialize<ViewType>(reader["Details"] as string);
-            instance.ViewTypeId = (int)reader["ID"];
+            instance.ViewTypeId =GetReaderValue<Guid>(reader,"ID");
             instance.Name = reader["Name"] as string;
             instance.Title = reader["Title"] as string;
             return instance;

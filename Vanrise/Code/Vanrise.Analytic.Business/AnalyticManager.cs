@@ -79,7 +79,7 @@ namespace Vanrise.Analytic.Business
             }
             return recordFilterGroup;
         }
-        public Guid GetDataRecordTypeForReportBySourceName(int reportId, string sourceName)
+        public Guid GetDataRecordTypeForReportBySourceName(Guid reportId, string sourceName)
         {
             AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
             var analyticReport = analyticReportManager.GetAnalyticReportById(reportId);
