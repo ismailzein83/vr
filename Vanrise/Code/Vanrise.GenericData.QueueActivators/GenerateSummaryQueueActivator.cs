@@ -16,8 +16,8 @@ namespace Vanrise.GenericData.QueueActivators
 {
     public class GenerateSummaryQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
-        public int SummaryTransformationDefinitionId { get; set; }
-
+        public Guid SummaryTransformationDefinitionId { get; set; }
+         
         public string NextStageName { get; set; }
 
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
