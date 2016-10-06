@@ -12,8 +12,6 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 
-        List<SupplierRate> GetAllSupplierRates(DateTime? effectiveOn, bool isEffectiveInFuture);
-
         List<SupplierRate> GetEffectiveSupplierRatesBySuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos);
 
         List<SupplierRate> GetSupplierRatesInBetweenPeriod(DateTime froDateTime, DateTime tillDateTime);
