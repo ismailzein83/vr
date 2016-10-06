@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,24 +7,66 @@ using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.Common;
+using Vanrise.Queueing;
+using Vanrise.Runtime;
 
-namespace TOne.WhS.Runtime.Tasks 
+namespace TOne.WhS.Runtime.Tasks
 {
     public class AliAtouiTask : ITask
-    {   
-        #region Public Methods 
+    {
+        #region Public Methods
         public void Execute()
         {
-            PrepareCodePrefixesTask prepareCodePrefixesTask = new PrepareCodePrefixesTask();
-            IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixes_Main();
-            DisplayList(codePrefixesResult);
+            #region PrepareCodePrefixesTask
+            //PrepareCodePrefixesTask prepareCodePrefixesTask = new PrepareCodePrefixesTask();
+            //IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixes_Main();
+            //DisplayList(codePrefixesResult);
+            #endregion
 
-            VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
-            vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
-        }   
+            #region VRMailMessageTemplateTask
+            //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
+            //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
+            #endregion
+
+            #region Runtime
+            var runtimeServices = new List<RuntimeService>();
+
+
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
+
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
+
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
+
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(schedulerService);
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
+
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+            Console.ReadKey();
+            #endregion
+        }
         #endregion
 
         #region Private Methods
@@ -37,20 +78,6 @@ namespace TOne.WhS.Runtime.Tasks
             Console.WriteLine("\n");
         }
         #endregion
-    }
-
-
-    public class Carrier
-    {
-        public int Id {get; set;}
-
-        public int CustomerId { get; set; }
-    }
-
-    public class User 
-    {
-        public string Email { get; set; }
-        public string Name { get; set; }
     }
 
 
@@ -76,9 +103,22 @@ namespace TOne.WhS.Runtime.Tasks
         }
         #endregion
 
-
         #region Private Methods
 
+        #endregion
+
+        #region Private Classes
+        private class Carrier
+        {
+            public int Id { get; set; }
+
+            public int CustomerId { get; set; }
+        }
+        private class User
+        {
+            public string Email { get; set; }
+            public string Name { get; set; }
+        }
         #endregion
     }
 
@@ -143,7 +183,6 @@ namespace TOne.WhS.Runtime.Tasks
             return codePrefixes.Values.OrderByDescending(x => x.Count);
         }
         #endregion
-
 
         #region Private Methods
 
