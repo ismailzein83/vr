@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountType")]
-        public AccountType GetAccountType(int accountTypeId)
+        public AccountType GetAccountType(Guid accountTypeId)
         {
             return _manager.GetAccountType(accountTypeId);
         }

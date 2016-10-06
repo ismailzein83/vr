@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_ServiceType";
 
-        public int ServiceTypeId { get; set; }
+        public Guid ServiceTypeId { get; set; }
 
         public string Name { get; set; }
 

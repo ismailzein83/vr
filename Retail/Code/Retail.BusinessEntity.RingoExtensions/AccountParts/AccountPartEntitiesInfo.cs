@@ -9,7 +9,11 @@ namespace Retail.BusinessEntity.RingoExtensions.AccountParts
 {
     public class AccountPartEntitiesInfo : AccountPartSettings
     {
-        public const int ExtensionConfigId = 28;
+        public static Guid _ConfigId = Guid.Parse("A153EA40-E2B8-4D50-A569-B117F64BB2EC");
+        public override Guid ConfigId { get { return _ConfigId; } }
+
+
+      //  public const int ExtensionConfigId = 28;
         public long AgentId { get; set; }
         public long PosId { get; set; }
         public long DistributorId { get; set; }

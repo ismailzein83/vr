@@ -28,20 +28,17 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail_BE.sp_AccountType_GetAll", AccountTypeMapper);
         }
 
-        public bool Insert(AccountType accountType, out int insertedId)
+        public bool Insert(AccountType accountType)
         {
-            object accountTypeId;
             string serializedSettings = accountType.Settings != null ? Vanrise.Common.Serializer.Serialize(accountType.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountType_Insert", out accountTypeId, accountType.Name, accountType.Title, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountType_Insert", accountType.AccountTypeId, accountType.Name, accountType.Title, serializedSettings);
 
             if (affectedRecords > 0)
             {
-                insertedId = (int)accountTypeId;
                 return true;
             }
 
-            insertedId = -1;
             return false;
         }
 
@@ -65,7 +62,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return new AccountType()
             {
-                AccountTypeId = (int)reader["ID"],
+                AccountTypeId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountTypeSettings>(reader["Settings"] as string)

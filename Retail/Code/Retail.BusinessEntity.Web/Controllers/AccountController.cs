@@ -52,7 +52,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountEditorRuntime")]
-        public AccountEditorRuntime GetAccountEditorRuntime(int accountTypeId, int? parentAccountId = null)
+        public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId = null)
         {
             return _manager.GetAccountEditorRuntime(accountTypeId, parentAccountId);
         }

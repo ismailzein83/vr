@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class OperatorDeclaredInfoItem
     {
-        public int ServiceTypeId { get; set; }
+        public Guid ServiceTypeId { get; set; }
 
         public OperatorDeclaredInfoTrafficDirection?  TrafficDirection { get; set; }
 

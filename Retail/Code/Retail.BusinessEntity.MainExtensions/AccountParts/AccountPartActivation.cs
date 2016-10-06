@@ -9,8 +9,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartActivation : AccountPartSettings
     {
-        public const int ExtensionConfigId = 20;
+        public static Guid _ConfigId = new Guid("5BB10B38-0167-43C1-A849-369652108E1B");
+        public override Guid ConfigId { get { return _ConfigId; }}
+      //  public const int ExtensionConfigId = 20;
         public AccountStatus Status { get; set; }
         public DateTime ActivationDate { get; set; }
+
+
     }
 }

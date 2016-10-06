@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public string Description { get; set; }
 
-        public int IdentificationRuleDefinitionId { get; set; }
+        public Guid IdentificationRuleDefinitionId { get; set; }
 
         public ChargingPolicyDefinitionSettings ChargingPolicyDefinitionSettings { get; set; }
 

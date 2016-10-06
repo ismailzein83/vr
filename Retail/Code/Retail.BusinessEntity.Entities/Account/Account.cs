@@ -12,7 +12,7 @@ namespace Retail.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public int TypeId { get; set; }
+        public Guid TypeId { get; set; }
 
         public AccountSettings Settings { get; set; }
     }

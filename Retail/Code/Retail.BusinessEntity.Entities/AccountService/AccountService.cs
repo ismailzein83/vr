@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.Entities
         public long AccountServiceId { get; set; }
         public long AccountId { get; set; }
         public Guid StatusId { get; set; }
-        public int ServiceTypeId { get; set; }
+        public Guid ServiceTypeId { get; set; }
 
         public int ServiceChargingPolicyId { get; set; }
 

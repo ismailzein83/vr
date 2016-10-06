@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public string Name { get; set; }
 
-        public IEnumerable<int> AccountTypeIds { get; set; }
+        public IEnumerable<Guid> AccountTypeIds { get; set; }
 
         public long? ParentAccountId { get; set; }
     }

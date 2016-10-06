@@ -85,7 +85,7 @@ namespace Retail.BusinessEntity.Business
             return extensionConfiguration.GetExtensionConfigurations<ProvisionerDefinitionConfig>(ProvisionerDefinitionConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType, Guid statusId,int? serviceTypeId = null)
+        public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType, Guid statusId, Guid? serviceTypeId = null)
         {
             Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();
             Func<ActionDefinition, bool> filterExpression = (item) =>

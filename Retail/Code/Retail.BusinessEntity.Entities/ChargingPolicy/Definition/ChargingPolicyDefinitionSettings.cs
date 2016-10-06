@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public string Title { get; set; }
 
-        public int RuleDefinitionId { get; set; }
+        public Guid RuleDefinitionId { get; set; }
     }
 
     public class ChargingPolicyDefinitionPart

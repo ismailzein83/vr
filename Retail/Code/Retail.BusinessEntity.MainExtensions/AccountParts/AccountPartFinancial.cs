@@ -9,7 +9,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartFinancial : AccountPartSettings, IAccountPayment
     {
-        public const int ExtensionConfigId = 14;
+        public override Guid ConfigId { get { return _ConfigId; } }
+        public static Guid _ConfigId = new Guid("82228BE2-E633-4EF8-B383-9894F28C8CB0");
+        //public const int ExtensionConfigId = 14;
         public PaymentMethod PaymentMethod { get; set; }
 
         public int CurrencyId { get; set; }

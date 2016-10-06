@@ -37,7 +37,7 @@ namespace Retail.BusinessEntity.RingoExtensions
                         string accountName = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
                         SourceAccountData accountData = new SourceAccountData
                         {
-                            Account = new Account { TypeId = 19 },
+                            Account = new Account { TypeId =  Guid.Parse("19A97F72-8C56-441E-A74D-AA185961B242") },
                             IdentificationRulesToInsert = new List<MappingRule>
                             {
                                 GetMappingRule(accountRecords[22], accountName)
@@ -127,7 +127,7 @@ namespace Retail.BusinessEntity.RingoExtensions
         {
             bool isTheft = false;
             bool.TryParse(accountRecords[28], out isTheft);
-            accountData.Account.Settings.Parts.Add(AccountPartOtherInfo.ExtensionConfigId, new AccountPart
+            accountData.Account.Settings.Parts.Add(AccountPartOtherInfo._ConfigId, new AccountPart
             {
                 Settings = new AccountPartOtherInfo
                 {
@@ -142,7 +142,7 @@ namespace Retail.BusinessEntity.RingoExtensions
         {
             DateTime activationDate;
             DateTime.TryParseExact(accountRecords[16], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out activationDate);
-            accountData.Account.Settings.Parts.Add(AccountPartActivation.ExtensionConfigId, new AccountPart
+            accountData.Account.Settings.Parts.Add(AccountPartActivation._ConfigId, new AccountPart
             {
                 Settings = new AccountPartActivation
                 {
@@ -162,7 +162,7 @@ namespace Retail.BusinessEntity.RingoExtensions
             DistributorManager distributorManager = new DistributorManager();
             Distributor distributor = distributorManager.GetDistributorBySourceId(accountRecords[36]);
 
-            accountData.Account.Settings.Parts.Add(AccountPartEntitiesInfo.ExtensionConfigId, new AccountPart
+            accountData.Account.Settings.Parts.Add(AccountPartEntitiesInfo._ConfigId, new AccountPart
             {
                 Settings = new AccountPartEntitiesInfo
                 {
@@ -179,7 +179,7 @@ namespace Retail.BusinessEntity.RingoExtensions
             Country country = countryManager.GetCountry(accountRecords[5]);
             DateTime birthDate;
             DateTime.TryParseExact(accountRecords[16], "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out birthDate);
-            accountData.Account.Settings.Parts.Add(AccountPartPersonalInfo.ExtensionConfigId, new AccountPart
+            accountData.Account.Settings.Parts.Add(AccountPartPersonalInfo._ConfigId, new AccountPart
             {
                 Settings = new AccountPartPersonalInfo
                 {
@@ -197,7 +197,7 @@ namespace Retail.BusinessEntity.RingoExtensions
         {
             CountryManager countryManager = new CountryManager();
             Country country = countryManager.GetCountry(accountRecords[8]);
-            accountData.Account.Settings.Parts.Add(AccountPartResidentialProfile.ExtensionConfigId, new AccountPart
+            accountData.Account.Settings.Parts.Add(AccountPartResidentialProfile._ConfigId, new AccountPart
             {
                 Settings = new AccountPartResidentialProfile
                 {
@@ -213,8 +213,8 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         void UpdatePersonalInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartPersonalInfo personalInfo = newBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
-            AccountPartPersonalInfo newPersonalInfo = finalBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings as AccountPartPersonalInfo;
+            AccountPartPersonalInfo personalInfo = newBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings as AccountPartPersonalInfo;
+            AccountPartPersonalInfo newPersonalInfo = finalBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings as AccountPartPersonalInfo;
 
             newPersonalInfo.CityId = personalInfo.CityId;
             newPersonalInfo.CountryId = personalInfo.CountryId;
@@ -223,13 +223,13 @@ namespace Retail.BusinessEntity.RingoExtensions
             newPersonalInfo.Gender = personalInfo.Gender;
             newPersonalInfo.LastName = personalInfo.LastName;
             finalBe.Account.Name = string.Format("{0} {1}", newPersonalInfo.FirstName, newPersonalInfo.LastName);
-            finalBe.Account.Settings.Parts[AccountPartPersonalInfo.ExtensionConfigId].Settings = newPersonalInfo;
+            finalBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings = newPersonalInfo;
         }
 
         void UpdateResidentialInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartResidentialProfile residentialProfile = newBe.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings as AccountPartResidentialProfile;
-            AccountPartResidentialProfile newResidentialProfile = finalBe.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings as AccountPartResidentialProfile;
+            AccountPartResidentialProfile residentialProfile = newBe.Account.Settings.Parts[AccountPartResidentialProfile._ConfigId].Settings as AccountPartResidentialProfile;
+            AccountPartResidentialProfile newResidentialProfile = finalBe.Account.Settings.Parts[AccountPartResidentialProfile._ConfigId].Settings as AccountPartResidentialProfile;
 
             newResidentialProfile.CityId = residentialProfile.CityId;
             newResidentialProfile.CountryId = residentialProfile.CountryId;
@@ -241,23 +241,23 @@ namespace Retail.BusinessEntity.RingoExtensions
             newResidentialProfile.Town = residentialProfile.Town;
             newResidentialProfile.ZipCode = residentialProfile.ZipCode;
 
-            finalBe.Account.Settings.Parts[AccountPartResidentialProfile.ExtensionConfigId].Settings = newResidentialProfile;
+            finalBe.Account.Settings.Parts[AccountPartResidentialProfile._ConfigId].Settings = newResidentialProfile;
         }
 
         private void UpdateActivationInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartActivation activationPart = newBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings as AccountPartActivation;
-            AccountPartActivation newActivationPart = finalBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings as AccountPartActivation;
+            AccountPartActivation activationPart = newBe.Account.Settings.Parts[AccountPartActivation._ConfigId].Settings as AccountPartActivation;
+            AccountPartActivation newActivationPart = finalBe.Account.Settings.Parts[AccountPartActivation._ConfigId].Settings as AccountPartActivation;
 
             newActivationPart.ActivationDate = activationPart.ActivationDate;
             newActivationPart.Status = activationPart.Status;
-            finalBe.Account.Settings.Parts[AccountPartActivation.ExtensionConfigId].Settings = newActivationPart;
+            finalBe.Account.Settings.Parts[AccountPartActivation._ConfigId].Settings = newActivationPart;
         }
 
         void UpdateEntitiesPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartEntitiesInfo oldPart = newBe.Account.Settings.Parts[AccountPartEntitiesInfo.ExtensionConfigId].Settings as AccountPartEntitiesInfo;
-            AccountPartEntitiesInfo newPart = finalBe.Account.Settings.Parts[AccountPartEntitiesInfo.ExtensionConfigId].Settings as AccountPartEntitiesInfo;
+            AccountPartEntitiesInfo oldPart = newBe.Account.Settings.Parts[AccountPartEntitiesInfo._ConfigId].Settings as AccountPartEntitiesInfo;
+            AccountPartEntitiesInfo newPart = finalBe.Account.Settings.Parts[AccountPartEntitiesInfo._ConfigId].Settings as AccountPartEntitiesInfo;
 
             newPart.PosId = oldPart.PosId;
             newPart.AgentId = oldPart.AgentId;

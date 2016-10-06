@@ -199,7 +199,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Get Account Editor Runtime
 
-        public AccountEditorRuntime GetAccountEditorRuntime(int accountTypeId, int? parentAccountId)
+        public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId)
         {
             var accountEditorRuntime = new AccountEditorRuntime();
 
@@ -240,7 +240,7 @@ namespace Retail.BusinessEntity.Business
             return accountEditorRuntime;
         }
 
-        private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(int accountTypeId)
+        private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(Guid accountTypeId)
         {
             var accountTypeManager = new AccountTypeManager();
             AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
@@ -253,7 +253,7 @@ namespace Retail.BusinessEntity.Business
             return accountType.Settings.PartDefinitionSettings;
         }
 
-        private bool IsPartFoundOrInherited(long? accountId, int partDefinitionId)
+        private bool IsPartFoundOrInherited(long? accountId, Guid partDefinitionId)
         {
             if (!accountId.HasValue)
                 return false;

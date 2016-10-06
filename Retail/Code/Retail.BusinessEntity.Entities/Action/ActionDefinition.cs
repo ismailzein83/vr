@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Entities
         /// <summary>
         /// = ServiceTypeId in case EntityType = EntityType.AccountService
         /// </summary>
-        public int? EntityTypeId { get; set; }
+        public Guid? EntityTypeId { get; set; }
 
         public List<ActionStatusDefinition> SupportedOnStatuses { get; set; }
 

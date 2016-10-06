@@ -49,7 +49,7 @@ namespace Retail.BusinessEntity.Business
                         Func<AnalyticRecord, bool> filterExpression = (recordObj) =>
                           (recordObj.DimensionValues[0] != null  && recordObj.DimensionValues[0].Value != null  && (OperatorDeclaredInfoTrafficDirection)recordObj.DimensionValues[0].Value == item.TrafficDirection)
                           &&
-                          (recordObj.DimensionValues[1] != null && recordObj.DimensionValues[1].Value != null  && Convert.ToInt32(recordObj.DimensionValues[1].Value) == item.ServiceTypeId);
+                          (recordObj.DimensionValues[1] != null && recordObj.DimensionValues[1].Value != null && Guid.Parse(recordObj.DimensionValues[1].Value.ToString()) == item.ServiceTypeId);
 
                         var eventData = eventsInfo.Data.FirstOrDefault(filterExpression);
                         if (eventData != null)

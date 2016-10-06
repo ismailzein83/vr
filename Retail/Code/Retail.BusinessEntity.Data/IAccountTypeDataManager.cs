@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.Data
     {
         IEnumerable<AccountType> GetAccountTypes();
 
-        bool Insert(AccountType accountType, out int insertedId);
+        bool Insert(AccountType accountType);
 
         bool Update(AccountTypeToEdit accountType);
 

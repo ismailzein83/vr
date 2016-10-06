@@ -17,6 +17,6 @@ namespace Retail.BusinessEntity.Entities
         public decimal DeclaredAmount { get; set; }
         public decimal DifferenceAmount { get; set; }
         public OperatorDeclaredInfoTrafficDirection? EventDirection { get; set; }
-        public int ServiceTypeID { get; set; }
+        public Guid ServiceTypeID { get; set; }
     }
 }

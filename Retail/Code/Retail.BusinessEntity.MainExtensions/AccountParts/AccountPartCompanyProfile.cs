@@ -9,6 +9,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartCompanyProfile : AccountPartSettings
     {
+        public override Guid ConfigId { get { return _ConfigId; } }
+        public static Guid _ConfigId = new Guid("B0717C4F-E409-4AE2-8C00-5ADD4CA828C5");
+
+
         public const int ExtensionConfigId = 21;
         public int? CountryId { get; set; }
 

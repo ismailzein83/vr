@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountPartDefinition")]
-        public AccountPartDefinition GetAccountPartDefinition(int accountPartDefinitionId)
+        public AccountPartDefinition GetAccountPartDefinition(Guid accountPartDefinitionId)
         {
             return _manager.GetAccountPartDefinition(accountPartDefinitionId);
         }

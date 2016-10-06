@@ -9,7 +9,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartResidentialProfile : AccountPartSettings
     {
-        public const int ExtensionConfigId = 22;
+        public static Guid _ConfigId = new Guid("05FECF19-6413-402F-BD65-64B0EEF1FB52");
+        public override Guid ConfigId { get { return _ConfigId; } }
+
+       // public const int ExtensionConfigId = 22;
         public int? CountryId { get; set; }
         public int? CityId { get; set; }
         public string Town { get; set; }

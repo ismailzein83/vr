@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AccountPartDefinitionDetail> GetFilteredAccountPartDefinitions(Vanrise.Entities.DataRetrievalInput<AccountPartDefinitionQuery> input)
         {
-            Dictionary<int, AccountPartDefinition> cachedAccountPartDefinitions = this.GetCachedAccountPartDefinitions();
+            Dictionary<Guid, AccountPartDefinition> cachedAccountPartDefinitions = this.GetCachedAccountPartDefinitions();
 
             Func<AccountPartDefinition, bool> filterExpression = (accountPartDefinition) =>
                 (input.Query.Name == null || accountPartDefinition.Name.ToLower().Contains(input.Query.Name.ToLower()));
@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPartDefinitions.ToBigResult(input, filterExpression, AccountPartDefinitionDetailMapper));
         }
 
-        public AccountPartDefinition GetAccountPartDefinition(int accountPartDefinitionId)
+        public AccountPartDefinition GetAccountPartDefinition(Guid accountPartDefinitionId)
         {
             return this.GetCachedAccountPartDefinitions().GetRecord(accountPartDefinitionId);
         }
@@ -51,13 +51,12 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
 
             IAccountPartDefinitionDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPartDefinitionDataManager>();
-            int accountPartDefinitionId = -1;
+            accountPartDefinition.AccountPartDefinitionId = Guid.NewGuid();
 
-            if (dataManager.Insert(accountPartDefinition, out accountPartDefinitionId))
+            if (dataManager.Insert(accountPartDefinition))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                accountPartDefinition.AccountPartDefinitionId = accountPartDefinitionId;
                 insertOperationOutput.InsertedObject = AccountPartDefinitionDetailMapper(accountPartDefinition);
             }
             else
@@ -147,7 +146,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, AccountPartDefinition> GetCachedAccountPartDefinitions()
+        Dictionary<Guid, AccountPartDefinition> GetCachedAccountPartDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountPartDefinitions", () =>
             {

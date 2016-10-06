@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class BaseAccountType
     {
-        public int AccountTypeId { get; set; }
+        public Guid AccountTypeId { get; set; }
 
         public string Name { get; set; }
 
@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public bool CanBeRootAccount { get; set; }
 
-        public List<int> SupportedParentAccountTypeIds { get; set; }
+        public List<Guid> SupportedParentAccountTypeIds { get; set; }
 
         public List<AccountTypePartSettings> PartDefinitionSettings { get; set; }
 
@@ -41,7 +41,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }
         public AccountPartRequiredOptions RequiredSettings { get; set; }
-        public int PartDefinitionId { get; set; }
+        public Guid PartDefinitionId { get; set; }
     }
 
     public class ActionTypeStatusSettings

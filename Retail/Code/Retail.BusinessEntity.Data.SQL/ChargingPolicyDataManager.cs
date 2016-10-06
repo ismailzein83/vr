@@ -67,7 +67,7 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 ChargingPolicyId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                ServiceTypeId = (int)reader["ServiceTypeId"],
+                ServiceTypeId = GetReaderValue<Guid>(reader,"ServiceTypeId"),
                 Settings = Vanrise.Common.Serializer.Deserialize<ChargingPolicySettings>(reader["Settings"] as string)
             };
         }

@@ -10,6 +10,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public string Name { get; set; }
 
-        public IEnumerable<int> ServiceTypeIds { get; set; }
+        public IEnumerable<Guid> ServiceTypeIds { get; set; }
     }
 }

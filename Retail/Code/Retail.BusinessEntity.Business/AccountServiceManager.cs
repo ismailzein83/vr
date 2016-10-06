@@ -35,7 +35,7 @@ namespace Retail.BusinessEntity.Business
             var AccountServices = GetCachedAccountServices();
             return AccountServices.GetRecord(AccountServiceId);
         }
-        public AccountService GetAccountService(long accountId, int serviceTypeId)
+        public AccountService GetAccountService(long accountId, Guid serviceTypeId)
         {
             var accountServices = GetCachedAccountServices();
             if (accountServices != null)

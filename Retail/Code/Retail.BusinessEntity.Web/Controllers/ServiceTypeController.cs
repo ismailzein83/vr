@@ -31,14 +31,14 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetServiceType")]
-        public ServiceType GetServiceType(int serviceTypeId)
+        public ServiceType GetServiceType(Guid serviceTypeId)
         {
             return _manager.GetServiceType(serviceTypeId);
         }
 
         [HttpGet]
         [Route("GetServiceTypeChargingPolicyDefinitionSettings")]
-        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(int serviceTypeId)
+        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
         {
             return _manager.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId);
         }

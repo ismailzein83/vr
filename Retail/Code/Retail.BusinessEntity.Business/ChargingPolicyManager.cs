@@ -144,7 +144,7 @@ namespace Retail.BusinessEntity.Business
             ValidateChargingPolicy(chargingPolicy.Name, chargingPolicyEntity.ServiceTypeId, chargingPolicy.Settings);
         }
 
-        private void ValidateChargingPolicy(string name, int serviceTypeId, ChargingPolicySettings settings)
+        private void ValidateChargingPolicy(string name, Guid serviceTypeId, ChargingPolicySettings settings)
         {
             if (String.IsNullOrWhiteSpace(name))
                 throw new MissingArgumentValidationException("ChargingPolicy.Name");
@@ -210,7 +210,7 @@ namespace Retail.BusinessEntity.Business
                 Name = chargingPolicy.Name
             };
         }
-        private IEnumerable<ChargingPolicyRuleDefinition> GetChargingPolicyRuleDefinitions(int serviceTypeId)
+        private IEnumerable<ChargingPolicyRuleDefinition> GetChargingPolicyRuleDefinitions(Guid serviceTypeId)
         {
             ServiceType serviceType = _serviceTypeManager.GetServiceType(serviceTypeId);
             if (serviceType == null)

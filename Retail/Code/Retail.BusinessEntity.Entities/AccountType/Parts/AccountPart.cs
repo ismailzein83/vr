@@ -15,10 +15,11 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class AccountPartSettings
     {
-       
+        public abstract Guid ConfigId {get;}
+
     }
 
-    public class AccountPartCollection : Dictionary<int, AccountPart>
+    public class AccountPartCollection : Dictionary<Guid, AccountPart>
     {
         //public AccountPart TryGet(string partUniqueName)
         //{

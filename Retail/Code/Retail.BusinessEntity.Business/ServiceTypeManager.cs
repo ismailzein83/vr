@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<ServiceTypeDetail> GetFilteredServiceTypes(Vanrise.Entities.DataRetrievalInput<ServiceTypeQuery> input)
         {
-            Dictionary<int, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
+            Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
 
             Func<ServiceType, bool> filterExpression = (serviceType) =>
                 (input.Query.Name == null || serviceType.Name.ToLower().Contains(input.Query.Name.ToLower()));
@@ -31,19 +31,19 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Title);
         }
 
-        public ServiceType GetServiceType(int serviceTypeId)
+        public ServiceType GetServiceType(Guid serviceTypeId)
         {
-            Dictionary<int, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
+            Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
             return cachedServiceTypes.GetRecord(serviceTypeId);
         }
 
-        public string GetServiceTypeName(int serviceTypeId)
+        public string GetServiceTypeName(Guid serviceTypeId)
         {
             ServiceType serviceType = this.GetServiceType(serviceTypeId);
             return (serviceType != null) ? serviceType.Title : null;
         }
 
-        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(int serviceTypeId)
+        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
         {
             ServiceType serviceType = this.GetServiceType(serviceTypeId);
             return (serviceType != null && serviceType.Settings != null) ? serviceType.Settings.ChargingPolicyDefinitionSettings : null;
@@ -129,7 +129,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, ServiceType> GetCachedServiceTypes()
+        Dictionary<Guid, ServiceType> GetCachedServiceTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypes", () =>
             {
@@ -175,7 +175,7 @@ namespace Retail.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetServiceTypeName(Convert.ToInt32(context.EntityId));
+            return GetServiceTypeName(new Guid(context.EntityId.ToString()));
         }
 
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)

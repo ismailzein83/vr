@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AccountTypeDetail> GetFilteredAccountTypes(Vanrise.Entities.DataRetrievalInput<AccountTypeQuery> input)
         {
-            Dictionary<int, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
+            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
 
             Func<AccountType, bool> filterExpression = (accountType) =>
                 (input.Query.Name == null || accountType.Name.ToLower().Contains(input.Query.Name.ToLower()));
@@ -26,12 +26,12 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccountTypes.ToBigResult(input, filterExpression, AccountTypeDetailMapper));
         }
 
-        public AccountType GetAccountType(int accountTypeId)
+        public AccountType GetAccountType(Guid accountTypeId)
         {
             return this.GetCachedAccountTypes().GetRecord(accountTypeId);
         }
 
-        public string GetAccountTypeName(int accountTypeId)
+        public string GetAccountTypeName(Guid accountTypeId)
         {
             AccountType accountType = this.GetAccountType(accountTypeId);
             return (accountType != null) ? accountType.Title : null;
@@ -68,7 +68,7 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
-        public IEnumerable<int> GetSupportedParentAccountTypeIds(long parentAccountId)
+        public IEnumerable<Guid> GetSupportedParentAccountTypeIds(long parentAccountId)
         {
             var accountManager = new AccountManager();
             Account parentAccount = accountManager.GetAccount(parentAccountId);
@@ -98,13 +98,11 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
 
             IAccountTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
-            int accountTypeId = -1;
-
-            if (dataManager.Insert(accountType, out accountTypeId))
+            accountType.AccountTypeId = Guid.NewGuid();
+            if (dataManager.Insert(accountType))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                accountType.AccountTypeId = accountTypeId;
                 insertOperationOutput.InsertedObject = AccountTypeDetailMapper(accountType);
             }
             else
@@ -185,7 +183,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, AccountType> GetCachedAccountTypes()
+        Dictionary<Guid, AccountType> GetCachedAccountTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
             {

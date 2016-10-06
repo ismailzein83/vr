@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Data
     public interface IAccountPartDefinitionDataManager:IDataManager
     {
         IEnumerable<AccountPartDefinition> GetAccountPartDefinitions();
-        bool Insert(AccountPartDefinition accountPartDefinition, out int insertedId);
+        bool Insert(AccountPartDefinition accountPartDefinition);
         bool Update(AccountPartDefinition accountPartDefinition);
         bool AreAccountPartDefinitionsUpdated(ref object updateHandle);
 

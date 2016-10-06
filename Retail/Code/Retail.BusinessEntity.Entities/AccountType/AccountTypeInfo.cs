@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountTypeInfo
     {
-        public int AccountTypeId { get; set; }
+        public Guid AccountTypeId { get; set; }
 
         public string Title { get; set; }
     }

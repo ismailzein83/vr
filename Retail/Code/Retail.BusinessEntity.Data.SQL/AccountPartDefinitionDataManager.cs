@@ -29,20 +29,17 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail_BE.sp_AccountPartDefinition_GetAll", AccountPartDefinitionMapper);
         }
 
-        public bool Insert(AccountPartDefinition accountPartDefinition, out int insertedId)
+        public bool Insert(AccountPartDefinition accountPartDefinition)
         {
-            object accountTypeId;
             string serializedSettings = accountPartDefinition != null ? Vanrise.Common.Serializer.Serialize(accountPartDefinition) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountPartDefinition_Insert", out accountTypeId, accountPartDefinition.Name,accountPartDefinition.Title, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountPartDefinition_Insert", accountPartDefinition.AccountPartDefinitionId, accountPartDefinition.Name,accountPartDefinition.Title, serializedSettings);
 
             if (affectedRecords > 0)
             {
-                insertedId = (int)accountTypeId;
                 return true;
             }
 
-            insertedId = -1;
             return false;
         }
 
@@ -67,7 +64,7 @@ namespace Retail.BusinessEntity.Data.SQL
             AccountPartDefinition accountPartDefinition = Vanrise.Common.Serializer.Deserialize<AccountPartDefinition>(reader["Details"] as string);
             accountPartDefinition.Name = reader["Name"] as string;
             accountPartDefinition.Title = reader["Title"] as string;
-            accountPartDefinition.AccountPartDefinitionId = (int)reader["ID"];
+            accountPartDefinition.AccountPartDefinitionId = GetReaderValue<Guid>(reader,"ID");
             return accountPartDefinition;
         }
 

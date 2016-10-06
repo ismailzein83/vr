@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class ChargingPolicy : BaseChargingPolicy
     {
-        public int ServiceTypeId { get; set; }
+        public Guid ServiceTypeId { get; set; }
     }
 
     public class ChargingPolicyToEdit : BaseChargingPolicy

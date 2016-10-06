@@ -8,6 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ChargingPolicyInfoFilter
     {
-        public int? ServiceTypeId { get; set; }
+        public Guid? ServiceTypeId { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.Entities
         /// <summary>
         /// this value should be unique within the list of parts of the Account type
         /// </summary>
-        public int AccountPartDefinitionId { get; set; }
+        public Guid AccountPartDefinitionId { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public AccountPartDefinitionSettings Settings { get; set; }
@@ -29,7 +29,6 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class AccountPartDefinitionSettings
     {
-
         public abstract Guid ConfigId { get;}
     }
 }

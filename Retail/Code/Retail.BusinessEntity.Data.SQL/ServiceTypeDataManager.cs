@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail.sp_ServiceType_GetAll", ServiceTypeMapper);
         }
 
-        public bool Update(int serviceTypeId, string title, ServiceTypeSettings serviceTypeSettings)
+        public bool Update(Guid serviceTypeId, string title, ServiceTypeSettings serviceTypeSettings)
         {
             string serializedSettings = serviceTypeSettings != null ? Vanrise.Common.Serializer.Serialize(serviceTypeSettings) : null;
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_ServiceType_Update", serviceTypeId, title, serializedSettings);
@@ -49,7 +49,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return new ServiceType()
             {
-                ServiceTypeId = (int)reader["ID"],
+                ServiceTypeId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<ServiceTypeSettings>(reader["Settings"] as string),
