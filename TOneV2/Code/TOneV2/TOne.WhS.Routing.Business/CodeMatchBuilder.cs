@@ -86,7 +86,7 @@ namespace TOne.WhS.Routing.Business
                 return null;
         }
 
-        #endregion
+        #endregion 
 
         #region Private Methods
 
@@ -169,7 +169,8 @@ namespace TOne.WhS.Routing.Business
                             {
                                 CodeMatch = supplierCodeMatch,
                                 RateValue = supplierZoneDetail.EffectiveRateValue,
-                                SupplierServiceIds = supplierZoneDetail.SupplierServiceIds
+                                SupplierServiceIds = supplierZoneDetail.SupplierServiceIds,
+                                ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds
                             };
                             supplierCodeMatches.Add(supplierCodeMatchWithRate);
                             supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, supplierCodeMatchWithRate);

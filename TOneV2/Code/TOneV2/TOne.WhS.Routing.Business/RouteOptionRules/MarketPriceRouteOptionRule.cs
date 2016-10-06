@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.Business
             if (MarketPrices.TryGetValue(context.CustomerServiceIds, out tempMarketPrice))
             {
                 if(target.SupplierRate < tempMarketPrice.ConvertedMinimum || target.SupplierRate > tempMarketPrice.ConvertedMaximum)
-                    target.BlockOption = true;
+                    target.FilterOption = true;
             }
         }
 

@@ -36,12 +36,12 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
             api.load = function (payload) {
 
                 if (payload != undefined && payload.CustomerRoute != undefined) {
-                    ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
-                    ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.CustomerRouteAddBlockedOptions;
+                    ctrl.customerRouteNumberOfUnblockedOptions = payload.CustomerRoute.NumberOfUnblockedOptions;
+                    ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
                 }
-                if (payload != undefined && payload.ProductRoute != undefined) {
-                    ctrl.productRouteAddBlockedOptions = payload.ProductRoute.ProductRouteAddBlockedOptions;
-                }
+                //if (payload != undefined && payload.ProductRoute != undefined) {
+                //    ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
+                //}
             }
 
             api.getData = function () {
@@ -49,13 +49,13 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     $type: "TOne.WhS.Routing.Entities.RouteBuildConfiguration, TOne.WhS.Routing.Entities",
                     CustomerRoute: {
                         $type: "TOne.WhS.Routing.Entities.CustomerRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                        NumberOfOptions: ctrl.customerRouteNumberOfOptions,
-                        CustomerRouteAddBlockedOptions: ctrl.customerRouteAddBlockedOptions
+                        NumberOfUnblockedOptions: ctrl.customerRouteNumberOfUnblockedOptions,
+                        AddBlockedOptions: ctrl.customerRouteAddBlockedOptions
                     },
-                    ProductRoute: {
-                        $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                        ProductRouteAddBlockedOptions: ctrl.productRouteAddBlockedOptions
-                    }
+                    //ProductRoute: {
+                    //    $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
+                    //    AddBlockedOptions: ctrl.productRouteAddBlockedOptions
+                    //}
                 }
                 return obj;
             }

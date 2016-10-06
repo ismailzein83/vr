@@ -4,25 +4,22 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {
-    public class ConfigManager
+    public class ConfigManager 
     {
         #region public methods
-        public int GetCustomerRouteBuildNumberOfOptions()
+        public int GetCustomerRouteBuildNumberOfUnblockedOptions()
         {
-            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
-            return routeBuildConfiguration.CustomerRoute.NumberOfOptions;
+            return GetCustomerRouteBuildConfiguration().NumberOfUnblockedOptions;
         }
 
         public bool GetCustomerRouteBuildAddBlockedOptions()
         {
-            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
-            return routeBuildConfiguration.CustomerRoute.CustomerRouteAddBlockedOptions;
+            return GetCustomerRouteBuildConfiguration().AddBlockedOptions;
         }
 
         public bool GetProductRouteBuildAddBlockedOptions()
         {
-            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
-            return routeBuildConfiguration.ProductRoute.ProductRouteAddBlockedOptions;
+            return GetProductRouteBuildConfiguration().AddBlockedOptions;
         }
 
         public SubProcessSettings GetSubProcessSettings()
@@ -123,6 +120,28 @@ namespace TOne.WhS.Routing.Business
 
             return routeSettingsData;
         }
+
+        private CustomerRouteBuildConfiguration GetCustomerRouteBuildConfiguration()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+
+            if (routeBuildConfiguration.CustomerRoute == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.CustomerRoute");
+
+            return routeBuildConfiguration.CustomerRoute;
+        }
+
+        private ProductRouteBuildConfiguration GetProductRouteBuildConfiguration()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+
+            if (routeBuildConfiguration.ProductRoute == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.ProductRoute");
+
+            return routeBuildConfiguration.ProductRoute;
+        }
+
+
         #endregion
     }
 }

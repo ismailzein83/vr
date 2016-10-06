@@ -146,15 +146,15 @@ namespace TOne.WhS.Routing.Business
             }
             return null;
         }
-         
+
         private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            var maxNumberOfOptions = configManager.GetCustomerRouteBuildNumberOfOptions();
-            bool CustomerRouteAddBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
-            
-            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
+            var maxNumberOfOptions = configManager.GetCustomerRouteBuildNumberOfUnblockedOptions();
+            bool addBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
+
+            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions, addBlockedOptions);
             routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
@@ -181,35 +181,32 @@ namespace TOne.WhS.Routing.Business
                     route.Options = new List<RouteOption>();
                     foreach (RouteOptionRuleTarget targetOption in routeOptionRuleTargets)
                     {
+                        targetOption.RouteTarget = routeRuleTarget;
                         if (!routeRule.Settings.IsOptionFiltered(routeRuleExecutionContext, routeRuleTarget, targetOption))
                         {
                             RouteOption routeOption = routeRuleExecutionContext.CreateOptionFromTarget(targetOption);
 
-                            if (CustomerRouteAddBlockedOptions) 
+                            if (routeOption.IsFiltered)
+                                continue;
+
+                            if (!routeOption.IsBlocked)
                             {
                                 route.Options.Add(routeOption);
-                                if (!routeOption.IsBlocked)
-                                {
-                                    optionsAdded++;
-                                    if (maxNumberOfOptions == optionsAdded)
-                                        break;
-                                }
+                                optionsAdded++;
                             }
-                            else
+                            else if (addBlockedOptions)
                             {
-                                if (!routeOption.IsBlocked)
-                                {
-                                    route.Options.Add(routeOption);
-                                    optionsAdded++;
-                                    if (maxNumberOfOptions == optionsAdded)
-                                        break;
-                                }
+                                route.Options.Add(routeOption);
+                                continue;
                             }
+
+                            if (maxNumberOfOptions == optionsAdded)
+                                break;
                         }
                     }
                 }
 
-               routeRule.Settings.ApplyOptionsPercentage(route.Options);
+                routeRule.Settings.ApplyOptionsPercentage(route.Options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered));
             }
             else
             {

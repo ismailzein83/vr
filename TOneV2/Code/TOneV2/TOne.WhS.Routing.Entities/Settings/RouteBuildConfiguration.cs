@@ -11,13 +11,14 @@ namespace TOne.WhS.Routing.Entities
 
     public class CustomerRouteBuildConfiguration
     {
-        public int NumberOfOptions { get; set; }
+        public bool AddBlockedOptions { get; set; }
 
-        public bool CustomerRouteAddBlockedOptions { get; set; }
+        public int NumberOfUnblockedOptions { get; set; }
     }
 
     public class ProductRouteBuildConfiguration
     {
-        public bool ProductRouteAddBlockedOptions { get; set; }
+        public bool AddBlockedOptions { get; set; }
     }
 }
+ 

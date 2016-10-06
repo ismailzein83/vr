@@ -61,7 +61,6 @@ namespace TOne.WhS.Routing.Business
                 Entity = customerRoute,
                 CustomerName = _carrierAccountManager.GetCarrierAccountName(customerRoute.CustomerId),
                 ZoneName = _saleZoneManager.GetSaleZoneName(customerRoute.SaleZoneId),
-                RouteOptionsDescription = GetRouteOptionsDescription(optionDetails),
                 RouteOptionDetails = optionDetails
             };
         }
@@ -88,23 +87,6 @@ namespace TOne.WhS.Routing.Business
             }
 
             return optionDetails;
-        }
-
-        private string GetRouteOptionsDescription(List<CustomerRouteOptionDetail> optionDetails)
-        {
-            StringBuilder builder = new StringBuilder();
-            if (optionDetails != null)
-            {
-                foreach (CustomerRouteOptionDetail item in optionDetails)
-                {
-                    builder.AppendFormat(" {0} {1}{2},", item.SupplierName, item.Percentage, item.Percentage.HasValue ? "%" : string.Empty);
-                }
-            }
-
-            string routeOptions = builder.ToString();
-            routeOptions.TrimEnd(',');
-
-            return routeOptions;
         }
 
         internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)

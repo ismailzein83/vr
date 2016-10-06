@@ -14,8 +14,6 @@ namespace TOne.WhS.Routing.Entities
 
         public string ZoneName { get; set; }
 
-        public string RouteOptionsDescription { get; set; }
-
         public List<CustomerRouteOptionDetail> RouteOptionDetails { get; set; }
         
     }

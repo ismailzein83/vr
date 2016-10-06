@@ -13,15 +13,17 @@
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" field="'Entity.IsBlocked'" widthfactor="1"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Route Options'" field="'RouteOptionsDescription'" widthfactor="2" disablesorting>
-            <vr-label isvalue breakline>
-                {{dataItem.RouteOptionsDescription}}
-            </vr-label>
+        <vr-datagridcolumn headertext="'Route Options'" widthfactor="2" disablesorting>
+            <div class="responsive-container" style="white-space: normal;">
+                <span ng-repeat="details in dataItem.RouteOptionDetails" ng-class="{'text-danger bold-label':details.IsBlocked}"
+                      style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;">
+                    {{details.SupplierName}} <span ng-if="details.Percentage!=null">{{details.Percentage}}%</span>
+                </span>
+            </div>
         </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>
     </vr-datagrid>
-
 </div>

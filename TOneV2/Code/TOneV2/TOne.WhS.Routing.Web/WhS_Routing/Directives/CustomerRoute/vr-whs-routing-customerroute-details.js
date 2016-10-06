@@ -32,6 +32,19 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService', 'VRUIUtilsSer
 
             function initializeController() {
                 $scope.routeOptionDetails = [];
+
+                $scope.getRowStyle = function (dataItem) {
+
+                    console.log(dataItem);
+
+                    var rowStyle;
+
+                    if (dataItem.IsBlocked)
+                        rowStyle = { CssClass: "bg-danger" }
+
+                    return rowStyle
+                };
+
                 defineAPI();
             }
 

@@ -96,29 +96,31 @@ namespace TOne.WhS.Routing.Business
 
         #region SaleEntity Execution
 
-        //public const int ExtensionConfigId = 11;
-
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
-            var options = CreateOptions(context, target);
-            if (options != null)
-            {
-                options = ApplyOptionsOrder(options);
-                int optionsAdded = 0;
-                foreach (RouteOptionRuleTarget option in options)
-                {
-                    if (!FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option))
-                    {
-                        if (context.TryAddOption(option))
-                        {
-                            optionsAdded++;
-                            if (context.NumberOfOptions.HasValue && context.NumberOfOptions.Value == optionsAdded)
-                                break;
-                        }
-                    }
-                }
-                ApplyOptionsPercentage(context.GetOptions());
-            }
+            throw new NotSupportedException("ExecuteForSaleEntity is not supported for RegularRouteRule.");
+            //ConfigManager configManager = new ConfigManager();
+            //bool customerRouteAddBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
+
+            //var options = CreateOptions(context, target);
+            //if (options != null)
+            //{
+            //    options = ApplyOptionsOrder(options);
+            //    int optionsAdded = 0;
+            //    foreach (RouteOptionRuleTarget option in options)
+            //    {
+            //        if (!FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option))
+            //        {
+            //            if (context.TryAddOption(option))
+            //            {
+            //                optionsAdded++;
+            //                if (context.NumberOfOptions.HasValue && context.NumberOfOptions.Value == optionsAdded)
+            //                    break;
+            //            }
+            //        }
+            //    }
+            //    ApplyOptionsPercentage(context.GetOptions().FindAllRecords(itm => !itm.BlockOption && !itm.FilterOption));
+            //}
         }
 
         private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -237,7 +239,7 @@ namespace TOne.WhS.Routing.Business
                 SupplierRate = supplierCodeMatchWithRate.RateValue,
                 EffectiveOn = routeRuleTarget.EffectiveOn,
                 IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
-                ExactSupplierServiceIds = supplierCodeMatchWithRate.SupplierServiceIds
+                ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds
             };
             if (percentage.HasValue)
                 option.Percentage = percentage.Value;
