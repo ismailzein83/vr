@@ -82,7 +82,10 @@ namespace TOne.WhS.Routing.Entities
                 {
                     var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
-                        return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : new List<long>());
+                    {
+                        ISupplierZoneManager supplierZoneManager = BEManagerFactory.GetManager<ISupplierZoneManager>();
+                        return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : supplierZoneManager.GetSupplierZoneIdsByDates(itm.SupplierId, BeginEffectiveTime, EndEffectiveTime));
+                    }
                 }
                 return null;
             }

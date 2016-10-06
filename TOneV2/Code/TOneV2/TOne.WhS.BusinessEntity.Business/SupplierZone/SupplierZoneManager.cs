@@ -13,7 +13,7 @@ using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SupplierZoneManager : IBusinessEntityManager
+    public class SupplierZoneManager : IBusinessEntityManager, ISupplierZoneManager
     {
         #region Public Methods
 
@@ -26,6 +26,31 @@ namespace TOne.WhS.BusinessEntity.Business
                    Func<SupplierZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierZoneCachedObjectCreationHandler(); };
                    return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SupplierZone>>("Distributed_GetSupplierZones", objectCreationHandler);
                });
+        }
+
+        public List<long> GetSupplierZoneIdsByDates(int supplierId, DateTime fromDate, DateTime? toDate)
+        {
+            List<long> matchingSupplierZoneIds = new List<long>();
+            var allsupplierZones = GetCachedSupplierZones();
+            Func<SupplierZone, bool> filterExpression = (item) =>
+                {
+                    if (item.SupplierId != supplierId)
+                        return false;
+
+                    if (toDate.HasValue && toDate < item.BED)
+                        return false;
+
+                    if (item.EED.HasValue && fromDate > item.EED)
+                        return false;
+
+                    return true;
+
+                };
+            var matchingSupplierZones = allsupplierZones.FindAllRecords(filterExpression);
+            if (matchingSupplierZones != null)
+                matchingSupplierZoneIds = matchingSupplierZones.Select(itm => itm.SupplierZoneId).ToList();
+
+            return matchingSupplierZoneIds;
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SupplierZoneDetails> GetFilteredSupplierZones(Vanrise.Entities.DataRetrievalInput<SupplierZoneQuery> input)
