@@ -386,11 +386,15 @@
                         PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
                         NumberOfOptions: $scope.numberOfOptions,
                         CostCalculationMethods: settings ? settings.costCalculationMethods : null,
-                        SelectedCostCalculationMethodConfigId: pricingSettings ? pricingSettings.selectedCostColumn.ConfigId : null,
-                        RateCalculationMethod: pricingSettings ? pricingSettings.selectedRateCalculationMethodData : null,
                         CurrencyId: getCurrencyId(),
                         CountryIds: countrySelectorAPI.getSelectedIds()
                     };
+
+                    if (pricingSettings != undefined) {
+                        input.RateCalculationMethod = pricingSettings.selectedRateCalculationMethodData;
+                        if (pricingSettings.selectedCostColumn != undefined)
+                            input.SelectedCostCalculationMethodConfigId = pricingSettings.selectedCostColumn.ConfigId;
+                    }
 
                     var textFilterData = textFilterAPI.getData();
                     if (textFilterData != undefined) {

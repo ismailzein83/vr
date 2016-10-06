@@ -11,7 +11,8 @@
             validateNewRate: validateNewRate,
             validateNewRateDates: validateNewRateDates,
             getNowPlusDays: getNowPlusDays,
-            isSameNewService: isSameNewService
+            isSameNewService: isSameNewService,
+            isStringEmpty: isStringEmpty
         };
 
         function onNewRateChanged(dataItem) {
@@ -44,11 +45,8 @@
         }
 
         function formatNewRate(dataItem) {
-            if (!isEmpty(dataItem.NewRate))
+            if (dataItem.NewRate)
                 dataItem.NewRate = Number(dataItem.NewRate);
-        }
-        function isEmpty(value) {
-            return (value === undefined || value === null || value === '');
         }
 
         function setRateChangeTypeIcon(dataItem) {
@@ -119,6 +117,9 @@
                 return true;
             }
             return false;
+        }
+        function isStringEmpty(string) {
+            return (string === undefined || string === null || string === '');
         }
     }
 

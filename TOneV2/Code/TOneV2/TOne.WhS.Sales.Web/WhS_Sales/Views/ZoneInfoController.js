@@ -51,7 +51,7 @@
                     var rateGridPayload = {
                         OwnerType: ownerType,
                         OwnerId: ownerId,
-                        ZoneIds: [zoneId],
+                        ZonesIds: [zoneId],
                         EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
                         CurrencyId: currencyId
                     };
@@ -83,23 +83,6 @@
         }
         function load() {
             
-        }
-
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadGrid]).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
-        }
-        function loadGrid() {
-            gridReadyDeferred.promise.then(function () {
-                if (calculatedRates != undefined && calculatedRates.InvalidCalculatedRates != null) {
-                    for (var i = 0; i < calculatedRates.InvalidCalculatedRates.length; i++) {
-                        var dataItem = calculatedRates.InvalidCalculatedRates[i];
-                        dataItem.isExcluded = false;
-                        $scope.scopeModel.invalidRates.push(dataItem);
-                    }
-                }
-            });
         }
     }
 

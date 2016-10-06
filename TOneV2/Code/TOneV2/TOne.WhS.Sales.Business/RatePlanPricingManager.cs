@@ -124,7 +124,7 @@ namespace TOne.WhS.Sales.Business
 
         public void ApplyCalculatedRates(ApplyCalculatedRatesInput input)
         {
-            Changes newDraft = GetNewDraft(input.CalculatedRates, input.EffectiveOn, input.CurrencyId);
+            Changes newDraft = GetNewDraft(input.OwnerType, input.OwnerId, input.CalculatedRates, input.EffectiveOn, input.CurrencyId);
 
             if (newDraft != null)
             {
@@ -132,14 +132,15 @@ namespace TOne.WhS.Sales.Business
                 draftManager.SaveDraft(input.OwnerType, input.OwnerId, newDraft);
             }
         }
-        private Changes GetNewDraft(IEnumerable<CalculatedZoneRate> calculatedRates, DateTime effectiveOn, int currencyId)
+        private Changes GetNewDraft(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<CalculatedZoneRate> calculatedRates, DateTime effectiveOn, int currencyId)
         {
-            Changes newDraft = null;
-
             if (calculatedRates == null)
-                return newDraft;
+                return null;
 
-            newDraft = new Changes()
+            Changes existingDraft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
+            IEnumerable<ZoneChanges> existingZoneDrafts = (existingDraft != null) ? existingDraft.ZoneChanges : new List<ZoneChanges>();
+
+            var newDraft = new Changes()
             {
                 CurrencyId = currencyId,
                 ZoneChanges = new List<ZoneChanges>()
@@ -163,12 +164,28 @@ namespace TOne.WhS.Sales.Business
                     BED = newRateBED
                 };
 
-                var zoneDraft = new ZoneChanges()
+                ZoneChanges zoneDraft = existingZoneDrafts.FindRecord(x => x.ZoneId == calculatedRate.ZoneId);
+                var newRates = new List<DraftRateToChange>();
+
+                if (zoneDraft != null)
                 {
-                    ZoneId = calculatedRate.ZoneId,
-                    ZoneName = calculatedRate.ZoneName,
-                    NewRates = new List<DraftRateToChange>() { newRate }
-                };
+                    if (zoneDraft.NewRates != null)
+                    {
+                        IEnumerable<DraftRateToChange> newOtherRates = zoneDraft.NewRates.FindAllRecords(x => x.RateTypeId.HasValue);
+                        newRates = new List<DraftRateToChange>(newOtherRates);
+                    }
+                }
+                else
+                {
+                    zoneDraft = new ZoneChanges()
+                    {
+                        ZoneId = calculatedRate.ZoneId,
+                        ZoneName = calculatedRate.ZoneName
+                    };
+                }
+
+                newRates.Add(newRate);
+                zoneDraft.NewRates = newRates;
 
                 newDraft.ZoneChanges.Add(zoneDraft);
             }

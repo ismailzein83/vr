@@ -63,16 +63,26 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
             };
 
-            $scope.getRowStyle = function (dataItem) {
-                
+            $scope.getRowStyle = function (dataItem)
+            {
                 var rowStyle;
+                var rate; // The rate to validate
 
-                if (dataItem.NewRate) {
+                if (!WhS_Sales_RatePlanUtilsService.isStringEmpty(dataItem.NewRate))
+                    rate = Number(dataItem.NewRate);
+                else if (dataItem.CurrentRate != null)
+                    rate = dataItem.CurrentRate;
+
+                if (rate == undefined) {
+                    setColorOfRouteOptions(dataItem.RouteOptions, null);
+                    rowStyle = { CssClass: 'bg-success' };
+                }
+                else { // Validate the rate
                     if (dataItem.RouteOptions != null) {
-                        var array = []; // Stores the indexes of route options greater than the new rate
+                        var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
                         for (var i = 0; i < dataItem.RouteOptions.length; i++) {
-                            if (dataItem.RouteOptions[i].ConvertedSupplierRate > dataItem.NewRate)
+                            if (dataItem.RouteOptions[i].ConvertedSupplierRate > rate)
                                 array.push(i);
                         }
 
@@ -84,13 +94,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             for (var i = 0; i < dataItem.RouteOptions.length; i++)
                                 dataItem.RouteOptions[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
                         }
+                        else {
+                            setColorOfRouteOptions(dataItem.RouteOptions, null);
+                        }
                     }
-                }
-                else {
-                    setColorOfRouteOptions(dataItem.RouteOptions, null);
-
-                    if (dataItem.CurrentRate == null)
-                        rowStyle = { CssClass: "bg-success" };
                 }
 
                 // Reload the route options directive to refresh the colors
