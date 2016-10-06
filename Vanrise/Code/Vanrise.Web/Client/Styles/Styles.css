@@ -1,7 +1,9 @@
 ﻿body {
     background: #FFF;
 }
-
+.bold-label{
+    font-weight:bold;
+}
 .datepicker-custom button {
     border: 0px !important;
 }
