@@ -249,14 +249,14 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(true, false, null, null);
 
-            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.CustomerSettings != null && item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.CustomerSettings.RoutingStatus == RoutingStatus.Enabled);
+            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.CustomerSettings != null && (item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active || item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Testing) && item.CustomerSettings.RoutingStatus == RoutingStatus.Enabled);
             return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
         }
         
         public IEnumerable<RoutingSupplierInfo> GetRoutingActiveSuppliers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);
-            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.SupplierSettings != null && item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
+            Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.SupplierSettings != null && (item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active || item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Testing) && item.SupplierSettings.RoutingStatus == RoutingStatus.Enabled);
             return carrierAccounts.MapRecords(RoutingSupplierInfolMapper, filterExpression);
 
         }
