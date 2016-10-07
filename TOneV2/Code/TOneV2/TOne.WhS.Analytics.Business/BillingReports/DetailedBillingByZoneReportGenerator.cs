@@ -149,7 +149,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
                     else
                         analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
-                    detailedBillingByZone.Rate = (rate == null) ? 0.0 : Convert.ToInt32(rate.Value ?? 0.0);
+                    detailedBillingByZone.Rate = (rate == null) ? 0.0 : Convert.ToDouble(rate.Value ?? 0.0);
                     detailedBillingByZone.RateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.Rate);
 
                     MeasureValue net;
