@@ -118,7 +118,8 @@ namespace Vanrise.Integration.Business
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
+            taskObject.ActionTypeId = new Guid("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68");
+            taskObject.TriggerTypeId = new Guid("295B4FAC-DBF9-456F-855E-60D0B176F86B");
             Vanrise.Runtime.Business.SchedulerTaskManager schedulerManager = new Runtime.Business.SchedulerTaskManager();
             Vanrise.Entities.UpdateOperationOutput<Vanrise.Runtime.Entities.SchedulerTask> taskUpdated = schedulerManager.UpdateTask(taskObject);
 
