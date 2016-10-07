@@ -7,6 +7,8 @@ BEGIN
 	SELECT	cp.ID,
 			cp.Name,
 			cp.Settings,
-			cp.SourceID
+			cp.SourceID,
+			cp.IsDeleted
 	FROM	[TOneWhS_BE].CarrierProfile  as cp WITH(NOLOCK) 
+	WHERE ISNULL(cp.IsDeleted, 0) = 0
 END

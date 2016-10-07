@@ -1,9 +1,4 @@
-﻿-- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetExistingByZoneIDs]
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetExistingByZoneIDs]
 	@OwnerType INT,
 	@OwnerID INT,
 	@ZoneIDs VARCHAR(MAX),
@@ -17,7 +12,7 @@ BEGIN
 	END;
 	
 	WITH PriceListIDsCTE (PriceListID) AS (SELECT ID FROM [TOneWhS_BE].SalePriceList WITH(NOLOCK) WHERE OwnerType = @OwnerType AND OwnerID = @OwnerID)
-	SELECT ID,PriceListID,ZoneID,CurrencyID,RateTypeID,Rate,OtherRates,BED,EED,Change,CurrencyID
+	SELECT ID,PriceListID,ZoneID,CurrencyID,RateTypeID,Rate,OtherRates,BED,EED,Change
 	FROM [TOneWhS_BE].SaleRate WITH(NOLOCK) 
 	WHERE PriceListID IN (SELECT PriceListID FROM PriceListIDsCTE)
 		AND ZoneID IN (SELECT ZoneID FROM @ZoneIDsTable)

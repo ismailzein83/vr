@@ -13,17 +13,6 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData]
 AS
 BEGIN
 	SET NOCOUNT ON;
- 
-IF NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierZone_New Where ProcessInstanceID = @ProcessInstanceId) 
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierZone_Changed Where ProcessInstanceID = @ProcessInstanceId)
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierCode_New Where ProcessInstanceID = @ProcessInstanceId)
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierCode_Changed Where ProcessInstanceID = @ProcessInstanceId)
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierRate_New Where ProcessInstanceID = @ProcessInstanceId)
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierRate_Changed Where ProcessInstanceID = @ProcessInstanceId)
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierZoneService_New Where ProcessInstanceID = @ProcessInstanceId)
-AND NOT Exists (Select 1 from TOneWhS_BE.SPL_SupplierZoneService_Changed Where ProcessInstanceID = @ProcessInstanceId)
-	RAISERROR ('Price list has no changes', 12, 1);
-ELSE
 	Begin 
 	Begin Try
 	BEGIN TRAN

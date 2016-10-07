@@ -12,7 +12,9 @@ BEGIN
 		ca.SupplierSettings,
 		ca.SellingNumberPlanID,
 		ca.CarrierAccountSettings,
-		ca.sourceid
+		ca.sourceid,
+		ca.IsDeleted
 	FROM TOneWhS_BE.CarrierAccount ca
+	WHERE ISNULL(ca.IsDeleted, 0) = 0
 	SET NOCOUNT OFF
 END

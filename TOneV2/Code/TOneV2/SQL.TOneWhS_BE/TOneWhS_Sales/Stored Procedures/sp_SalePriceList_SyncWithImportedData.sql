@@ -22,8 +22,8 @@ BEGIN
 				insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn)
 				values (@ReservedSalePriceListId, @OwnerType, @OwnerID, @CurrencyID, @EffectiveOn)
 				
-				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, OtherRates, BED, EED)
-				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, NormalRate, OtherRates, BED, EED
+				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, OtherRates, Change, BED, EED)
+				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, NormalRate, OtherRates, 1, BED, EED
 				from TOneWhS_Sales.RP_SaleRate_New newRate WITH(NOLOCK) 
 				where newRate.ProcessInstanceID = @ProcessInstanceId
 				

@@ -21,5 +21,5 @@ from	TOneWhS_BE.SaleEntityService ses with(nolock)
 		JOIN @SaleEntityServicesOwners seso on seso.OwnerId = spl.OwnerId and seso.OwnerTpe = spl.OwnerType
 Where	((@IsFuture = 0 AND ses.BED <= @EffectiveTime AND (ses.EED > @EffectiveTime OR ses.EED IS NULL))
 		OR (@IsFuture = 1 AND (ses.BED > GETDATE() OR ses.EED IS NULL)))
-		group by ses.[ID], ses.[PriceListID], ses.[ZoneID], ses.[Services], ses.[BED], ses.[EED]
+		--group by ses.[ID], ses.[PriceListID], ses.[ZoneID], ses.[Services], ses.[BED], ses.[EED]
 END

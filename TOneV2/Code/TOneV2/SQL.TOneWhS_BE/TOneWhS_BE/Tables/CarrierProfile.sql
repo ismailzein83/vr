@@ -4,8 +4,11 @@
     [Settings]  NVARCHAR (MAX) NULL,
     [timestamp] ROWVERSION     NULL,
     [SourceID]  VARCHAR (50)   NULL,
+    [IsDeleted] BIT            NULL,
     CONSTRAINT [PK_CarrierProfile] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

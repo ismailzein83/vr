@@ -21,7 +21,7 @@ BEGIN
 	,SUM(Case When C.ChangeType = 1 Then 1 else 0 END) as NewCodes
 	,SUM(Case When C.ChangeType = 2 Then 1 else 0 END) as DeletedCodes
 	,SUM(Case When C.ChangeType = 3 AND Z.ZoneChangeType != 2 AND z.ZoneChangeType != 5 AND C.ZoneName = Z.ZoneName Then 1 else 0 END) as CodesMovedTo
-	,SUM(Case When C.ChangeType = 3 AND Z.ZoneChangeType != 2 AND z.ZoneChangeType != 5 AND C.RecentZoneName = Z.ZoneName Then 1 else 0 END) as CodesMovedFrom
+	,SUM(Case When C.ChangeType = 3   AND z.ZoneChangeType != 5 AND C.RecentZoneName = Z.ZoneName Then 1 else 0 END) as CodesMovedFrom
 	
 	from TOneWhS_CP.SaleZone_Preview as Z WITH(NOLOCK) 
 	join TOneWhs_CP.SaleCode_Preview as C  WITH(NOLOCK) on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
