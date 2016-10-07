@@ -77,7 +77,7 @@ namespace TOne.WhS.CodePreparation.Business
         private string GetOwnerName(RatePreview ratePreview)
         {
             return ratePreview.OnwerType == BusinessEntity.Entities.SalePriceListOwnerType.SellingProduct ? _sellingProductManager.GetSellingProduct(ratePreview.OwnerId).Name
-                : _carrierAccountManager.GetCarrierAccount(ratePreview.OwnerId).NameSuffix;
+                : _carrierAccountManager.GetCarrierAccountName(ratePreview.OwnerId);
         }
 
         #endregion

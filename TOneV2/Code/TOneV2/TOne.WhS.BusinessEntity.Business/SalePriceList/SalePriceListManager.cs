@@ -82,13 +82,11 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         private string GetCurrencyName(int? currencyId)
         {
-            if (currencyId != null)
+            if (currencyId.HasValue)
             {
                 CurrencyManager manager = new CurrencyManager();
-                Currency currency = manager.GetCurrency(currencyId.Value);
+                return manager.GetCurrencySymbol(currencyId.Value);
 
-                if (currency != null)
-                    return currency.Name;
             }
 
             return "Currency Not Found";

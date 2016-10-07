@@ -21,6 +21,8 @@
 
         function defineScope() {
 
+            $scope.hasHeader = true;
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -33,6 +35,7 @@
                     SellingNumberPlanId: sellingNumberPlanId,
                     FileId: $scope.zoneList.fileId,
                     EffectiveDate: $scope.effectiveDate,
+                    HasHeader: $scope.hasHeader,
                     IsFromExcel: true
                 };
                 var input = {

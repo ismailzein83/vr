@@ -12,6 +12,7 @@ namespace TOne.WhS.CodePreparation.BP.Arguments
         public int SellingNumberPlanId { get; set; }
         public int FileId { get; set; }
         public DateTime EffectiveDate { get; set; }
+        public bool HasHeader { get; set; }
         public override string GetTitle()
         {
             return String.Format("#BPDefinitionTitle# Process Started for Package: {0}", SellingNumberPlanId);

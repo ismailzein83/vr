@@ -26,12 +26,18 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
+        public InArgument<bool> HasHeader { get; set; }
+
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
 
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
+            bool hasHeader = HasHeader.Get(context);
+
             DateTime startReading = DateTime.Now;
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(FileId.Get(context));
@@ -43,6 +49,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             Worksheet worksheet = objExcel.Worksheets[0];
 
             int count = 1;
+            if (!hasHeader)
+                count = 0;
+
+            int rowsCount = worksheet.Cells.Rows.Count;
+            if (string.IsNullOrEmpty(worksheet.Cells[0, 0].StringValue.Trim()) && string.IsNullOrEmpty(worksheet.Cells[0, 1].StringValue.Trim())
+                && string.IsNullOrEmpty(worksheet.Cells[0, 2].StringValue.Trim()))
+                rowsCount++;
+
+           
 
             DateTime minimumDate = EffectiveDate.Get(context);
 
@@ -50,7 +65,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             List<ImportedCode> importedCodes = new List<ImportedCode>();
 
 
-            while (count < worksheet.Cells.Rows.Count)
+            while (count < rowsCount)
             {
 
                 string zoneName = worksheet.Cells[count, 0].StringValue.Trim();
