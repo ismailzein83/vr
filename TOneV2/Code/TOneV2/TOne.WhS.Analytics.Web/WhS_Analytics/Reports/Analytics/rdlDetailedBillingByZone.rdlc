@@ -9,13 +9,13 @@
               <Width>0.03567in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.13576in</Width>
+              <Width>3in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.35833in</Width>
+              <Width>2.5in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.40676in</Width>
+              <Width>2.5in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.99669in</Width>
@@ -3222,14 +3222,14 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
         <DataSetName>ZoneSummaryDetailed</DataSetName>
         <Left>0.01389in</Left>
         <Height>1.5in</Height>
-        <Width>19.22343in</Width>
+        <Width>22.32258in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1.5in</Height>
     <Style />
   </Body>
-  <Width>19.46892in</Width>
+  <Width>22.33647in</Width>
   <Page>
     <PageHeader>
       <Height>2.25in</Height>

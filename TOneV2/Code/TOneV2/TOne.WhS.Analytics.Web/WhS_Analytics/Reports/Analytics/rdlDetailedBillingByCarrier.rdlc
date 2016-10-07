@@ -9,16 +9,16 @@
               <Width>0.03125in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5in</Width>
+              <Width>2.5in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.75in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1in</Width>
+              <Width>3in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.74834in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.27249in</Width>
@@ -30,10 +30,10 @@
               <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.1875in</Width>
+              <Width>2.5in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.635in</Width>
+              <Width>3in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -275,12 +275,15 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Left</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox37</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1896,7 +1899,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2372,14 +2374,14 @@
         <DataSetName>DetailedCarrier</DataSetName>
         <Top>0.125in</Top>
         <Height>1in</Height>
-        <Width>18.7929in</Width>
+        <Width>23.46874in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1.125in</Height>
     <Style />
   </Body>
-  <Width>19.26166in</Width>
+  <Width>23.7204in</Width>
   <Page>
     <PageHeader>
       <Height>2.25in</Height>
