@@ -24,7 +24,8 @@ namespace TOne.WhS.Routing.Business
                 {
                     SaleCode = matchSaleCode.Code,
                     SaleZoneId = matchSaleCode.ZoneId,
-                    SellingNumberPlanId = this.SellingNumberPlanId
+                    SellingNumberPlanId = this.SellingNumberPlanId,
+                    SaleCodeSourceId = matchSaleCode.SourceId
                 };
             return saleCodeMatch;
         }

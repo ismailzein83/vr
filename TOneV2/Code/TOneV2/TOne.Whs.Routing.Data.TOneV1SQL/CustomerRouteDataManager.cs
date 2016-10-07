@@ -196,14 +196,17 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public void FinalizeCurstomerRoute(Action<string> trackStep)
         {
             StringBuilder query = new StringBuilder();
+            query.AppendLine(query_CreatingIndexes);
             query.AppendLine(query_DropSupplierZoneDetailsTable);
             query.AppendLine(query_DropCodeSaleZoneTable);
             query.AppendLine(query_DropCustomerZoneDetailTable);
             query.AppendLine(query_DropCustomerRouteTable);
             query.AppendLine(query_DropZoneRateTable);
+            query.AppendLine(query_DropCodeMatchTable);
             query.AppendLine("EXEC sp_rename 'Route_Temp','Route';");
             query.AppendLine("EXEC sp_rename 'RouteOption_Temp','RouteOption';");
             query.AppendLine("EXEC sp_rename 'ZoneRate_Temp','ZoneRate';");
+            query.AppendLine("EXEC sp_rename 'CodeMatch_Temp','CodeMatch';");
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -216,6 +219,39 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
         const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.ZoneRate;";
+
+        const string query_DropCodeMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch' AND TABLE_SCHEMA = 'dbo')
+                                                      drop table dbo.CodeMatch;";
+
+        const string query_CreatingIndexes = @"CREATE NONCLUSTERED INDEX [IX_ZoneRate_Customer] ON [dbo].[ZoneRate_Temp]
+                                                      (
+	                                                      [CustomerID] ASC
+                                                      );
+                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_ServicesFlag] ON [dbo].[ZoneRate_Temp]
+                                                      (
+	                                                      [ServicesFlag] ASC
+                                                      );
+                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Supplier] ON [dbo].[ZoneRate_Temp]
+                                                      (
+	                                                      [SupplierID] ASC
+                                                      );
+                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Zone] ON [dbo].[ZoneRate_Temp]
+                                                      (
+	                                                      [ZoneID] ASC
+                                                      );
+
+                                                      CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Code] ON [dbo].[CodeMatch_Temp] 
+                                                      (
+	                                                      [Code] ASC
+                                                      );
+                                                      CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Supplier] ON [dbo].[CodeMatch_Temp] 
+                                                      (
+	                                                      [SupplierID] ASC
+                                                      );
+                                                      CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Zone] ON [dbo].[CodeMatch_Temp] 
+                                                      (
+	                                                      [SupplierZoneID] ASC
+                                                      );";
 
         #endregion
 

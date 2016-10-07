@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.Entities
         public long SupplierZoneId { get; set; }
 
         public string SupplierCode { get; set; }
+
+        public string SupplierCodeSourceId { get; set; }
     }
 
     public class SupplierCodeMatchWithRate

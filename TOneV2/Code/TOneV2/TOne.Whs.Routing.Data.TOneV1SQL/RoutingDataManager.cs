@@ -47,7 +47,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public void FinalizeCustomerRouteDatabase(Action<string> trackStep)
         {
             CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
-            customerRouteDataManager.FinalizeCurstomerRoute(trackStep);          
+            customerRouteDataManager.FinalizeCurstomerRoute(trackStep);
         }
 
         /// <summary>
@@ -96,7 +96,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_CustomerRouteTempTable);
             query.AppendLine(query_CustomerZoneDetailTable);
-            query.AppendLine(query_ZoneRateTable);
+            query.AppendLine(query_ZoneRateTempTable);
+            query.AppendLine(query_CodeMatchTempTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -107,28 +108,44 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_DropCodeSaleZoneTable);
             query.AppendLine(query_DropCustomerRouteTempTable);
             query.AppendLine(query_DropCustomerZoneDetailTable);
-            query.AppendLine(query_DropZoneRateTable);
+            query.AppendLine(query_DropZoneRateTempTable);
+            query.AppendLine(query_DropCodeMatchTempTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
 
         #region Constants
         protected const string query_DropSupplierZoneDetailsTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'SupplierZoneDetail' AND TABLE_SCHEMA = 'dbo')
-                                                            drop table dbo.SupplierZoneDetail;";
+                                                                    drop table dbo.SupplierZoneDetail;";
 
         protected const string query_DropCodeSaleZoneTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeSaleZone' AND TABLE_SCHEMA = 'dbo')
-                                                     drop table dbo.CodeSaleZone;";
+                                                                drop table dbo.CodeSaleZone;";
 
         protected const string query_DropCustomerRouteTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'Route_Temp' AND TABLE_SCHEMA = 'dbo')
-                                                      drop table dbo.Route_Temp;
-                                                      if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOption_Temp' AND TABLE_SCHEMA = 'dbo')
-                                                      drop table dbo.RouteOption_Temp;";
+                                                                  drop table dbo.Route_Temp;
+                                                                  if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOption_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                                  drop table dbo.RouteOption_Temp;";
 
-        protected const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate_Temp' AND TABLE_SCHEMA = 'dbo')
+        protected const string query_DropZoneRateTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate_Temp' AND TABLE_SCHEMA = 'dbo')
                                                          drop table dbo.ZoneRate_Temp;";
 
+        protected const string query_DropCodeMatchTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                         drop table dbo.CodeMatch_Temp;";
+
+        
+
         protected const string query_DropCustomerZoneDetailTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CustomerZoneDetail' AND TABLE_SCHEMA = 'dbo')
-                                                           drop table dbo.CustomerZoneDetail;";
+                                                                    drop table dbo.CustomerZoneDetail;";
+
+        const string query_CodeMatchTempTable = @"CREATE TABLE [dbo].[CodeMatch_Temp](
+	                                              [Code] [varchar](30) NOT NULL,
+	                                              [SupplierCodeID] [bigint] NOT NULL,
+	                                              [SupplierZoneID] [int] NOT NULL,
+	                                              [SupplierID] [varchar](5) NULL
+                                                  ) ON [PRIMARY];";
+
+
+
 
         const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
 	                                                    [SupplierId] [int] NOT NULL,
@@ -160,18 +177,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                         );";
 
 
-        const string query_CodeMatchTable = @"    CREATE TABLE [dbo].[CodeMatch](
-	                                                    [CodePrefix] [varchar](20) NOT NULL,
-	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [Content] [nvarchar](max) NOT NULL
-                                                    ) ON [PRIMARY]";
-
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL
                                                     ) ON [PRIMARY]";
 
-        const string query_ZoneRateTable = @"CREATE TABLE [dbo].[ZoneRate_Temp](
+        const string query_ZoneRateTempTable = @"CREATE TABLE [dbo].[ZoneRate_Temp](
 	                                        [ZoneID] [int] NOT NULL,
 	                                        [SupplierID] [varchar](5) NOT NULL,
 	                                        [CustomerID] [varchar](5) NOT NULL,
@@ -181,24 +192,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                        [ServicesFlag] [smallint] NULL,
 	                                        [ProfileId] [int] NULL,
 	                                        [Blocked] [tinyint] NULL DEFAULT ((0))
-                                           ) ON [PRIMARY];
-
-                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_Customer] ON [dbo].[ZoneRate_Temp]
-                                           (
-	                                           [CustomerID] ASC
-                                           );
-                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_ServicesFlag] ON [dbo].[ZoneRate_Temp]
-                                           (
-	                                           [ServicesFlag] ASC
-                                           );
-                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_Supplier] ON [dbo].[ZoneRate_Temp]
-                                           (
-	                                           [SupplierID] ASC
-                                           );
-                                           CREATE NONCLUSTERED INDEX [IX_ZoneRate_Zone] ON [dbo].[ZoneRate_Temp]
-                                           (
-	                                           [ZoneID] ASC
-                                           );";
+                                           ) ON [PRIMARY];";
 
         const string query_CustomerRouteTempTable = @"  CREATE TABLE [dbo].[Route_Temp](
 	                                                [RouteID] [int] NOT NULL,

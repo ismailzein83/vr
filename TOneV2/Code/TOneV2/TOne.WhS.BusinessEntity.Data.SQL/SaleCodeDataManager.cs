@@ -133,7 +133,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 Code = reader["Code"] as string,
                 ZoneId = GetReaderValue<long>(reader, "ZoneID"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED")
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CodeGroupId = GetReaderValue<int>(reader, "CodeGroupId"),
+                SourceId = reader["SourceId"] as string
             };
             return saleCode;
         }

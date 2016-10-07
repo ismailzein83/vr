@@ -5,15 +5,32 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
     public class CodeMatchesDataManager : RoutingDataManager, ICodeMatchesDataManager
     {
-        readonly string[] columns = { "CodePrefix", "Code", "Content" };
+        readonly string[] columns = { "Code", "SupplierCodeID", "SupplierZoneID", "SupplierID" };
+
+        CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+        SaleZoneManager _saleZoneManager = new SaleZoneManager();
+        SupplierZoneManager _supplierZoneManager = new SupplierZoneManager();
+        Dictionary<int, CarrierAccount> _allCarriers;
+        Dictionary<long, SaleZone> _allSaleZones;
+        Dictionary<long, SupplierZone> _allSupplierZones;
+
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
         public void ApplyCodeMatchesForDB(object preparedCodeMatches)
         {
             InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
@@ -25,7 +42,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[CodeMatch]",
+                TableName = "[dbo].[CodeMatch_Temp]",
                 Stream = streamForBulkInsert,
                 TabLock = true,
                 KeepIdentity = false,
@@ -34,52 +51,41 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             };
         }
 
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
         public void WriteRecordToStream(TOne.WhS.Routing.Entities.CodeMatches record, object dbApplyStream)
         {
+            InitializeData();
+
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.CodePrefix, record.Code, Vanrise.Common.Serializer.Serialize(record.SupplierCodeMatches, true));
+            SaleCodeMatch saleCodeMatch = record.SaleCodeMatches.First();
+            SaleZone saleZone = _allSaleZones.GetRecord(saleCodeMatch.SaleZoneId);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.Code, saleCodeMatch.SaleCodeSourceId, saleZone.SourceId, "SYS");
+
+            foreach (SupplierCodeMatchWithRate supplierCodeMatchWithRate in record.SupplierCodeMatches)
+            {
+                if (supplierCodeMatchWithRate.CodeMatch == null)
+                    throw new NullReferenceException("supplierCodeMatchWithRate.CodeMatch");
+
+                CarrierAccount supplier = _allCarriers.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierId);
+                SupplierZone supplierZone = _allSupplierZones.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierZoneId);
+
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatchWithRate.CodeMatch.SupplierCodeSourceId, supplierZone.SourceId, supplier.SourceId);
+            }
         }
-
-        #region Queries
-
-        const string query_GetCodeMatchesByZone = @"                                                       
-                                          SELECT  cm.Code, 
-                                                  cm.Content, 
-                                                  sz.SaleZoneID
-                                          FROM    [dbo].[CodeMatch] cm with(nolock)
-                                          join    CodeSaleZone sz on sz.code = cm.code 
-                                          where   sz.SaleZoneId between @FromZoneId and @ToZoneId";
-
-        #endregion
-
 
         public IEnumerable<RPCodeMatches> GetCodeMatches(long fromZoneId, long toZoneId)
         {
-            return GetItemsText(query_GetCodeMatchesByZone, RPCodeMatchesMapper, (cmd) =>
-            {
-
-                var dtPrm = new SqlParameter("@FromZoneId", SqlDbType.BigInt);
-                dtPrm.Value = fromZoneId;
-                cmd.Parameters.Add(dtPrm);
-                dtPrm = new SqlParameter("@ToZoneId", SqlDbType.BigInt);
-                dtPrm.Value = toZoneId;
-                cmd.Parameters.Add(dtPrm);
-            });
+            throw new NotImplementedException();
         }
-        RPCodeMatches RPCodeMatchesMapper(IDataReader reader)
+
+
+        private void InitializeData()
         {
-            return new RPCodeMatches()
-            {
-                Code = reader["Code"] as string,
-                SupplierCodeMatches = reader["Content"] != null ? Vanrise.Common.Serializer.Deserialize<List<SupplierCodeMatchWithRate>>(reader["Content"].ToString()) : null,
-                SaleZoneId = (long)reader["SaleZoneId"]
-            };
+            if (_allCarriers == null)
+                _allCarriers = _carrierAccountManager.GetCachedCarrierAccounts();
+            if (_allSaleZones == null)
+                _allSaleZones = _saleZoneManager.GetCachedSaleZones();
+            if (_allSupplierZones == null)
+                _allSupplierZones = _supplierZoneManager.GetCachedSupplierZones();
         }
-
     }
 }

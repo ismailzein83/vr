@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.Entities
         public long SaleZoneId { get; set; }
 
         public int SellingNumberPlanId { get; set; }
+
+        public string SaleCodeSourceId { get; set; }
     }
 
     public class SaleCodeMatchWithMaster

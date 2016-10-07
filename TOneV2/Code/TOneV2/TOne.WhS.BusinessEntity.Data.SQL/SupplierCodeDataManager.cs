@@ -92,6 +92,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ZoneId = (long)reader["ZoneID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CodeGroupId = GetReaderValue<int>(reader, "CodeGroupId"),
+                SourceId = reader["SourceId"] as string
 
             };
             return supplierCode;

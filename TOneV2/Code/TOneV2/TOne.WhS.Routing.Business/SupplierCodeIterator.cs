@@ -25,7 +25,8 @@ namespace TOne.WhS.Routing.Business
                 {
                     SupplierId = this.SupplierId,
                     SupplierCode = matchSupplierCode.Code,
-                    SupplierZoneId = matchSupplierCode.ZoneId
+                    SupplierZoneId = matchSupplierCode.ZoneId,
+                    SupplierCodeSourceId = matchSupplierCode.SourceId
                 };
             }
             return supplierCodeMatch;
