@@ -17,6 +17,7 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, SaleZone> allSaleZones;
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
         Dictionary<string, SalePriceList> allSalePriceLists;
+        bool _onlyEffective;
         public SaleZoneServicesMigrator(MigrationContext context)
             : base(context)
         {
@@ -32,6 +33,8 @@ namespace TOne.WhS.DBSync.Business
             
             var dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
             allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
+
+            _onlyEffective = context.OnlyEffective;
 
         }
 
@@ -51,7 +54,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceZoneServices(true);
+            return dataManager.GetSourceZoneServices(true, _onlyEffective);
         }
 
         public override SaleEntityZoneService BuildItemFromSource(SourceRate sourceItem)
@@ -102,7 +105,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourceRate> onItemLoaded)
         {
-            dataManager.LoadSourceItems(true, onItemLoaded);
+            dataManager.LoadSourceItems(true, _onlyEffective, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

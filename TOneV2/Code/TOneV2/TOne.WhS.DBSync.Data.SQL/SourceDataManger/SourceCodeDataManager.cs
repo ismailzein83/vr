@@ -13,9 +13,10 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
         }
 
-        public List<SourceCode> GetSourceCodes(bool isSaleCode)
+        public List<SourceCode> GetSourceCodes(bool isSaleCode, bool onlyEffective)
         {
-            return GetItemsText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), SourceCodeMapper, null);
+            string queryOnlyEffective =  onlyEffective ? "and Code.IsEffective ='Y'" : string.Empty;
+            return GetItemsText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'") + queryOnlyEffective, SourceCodeMapper, null);
         }
 
         private SourceCode SourceCodeMapper(IDataReader arg)

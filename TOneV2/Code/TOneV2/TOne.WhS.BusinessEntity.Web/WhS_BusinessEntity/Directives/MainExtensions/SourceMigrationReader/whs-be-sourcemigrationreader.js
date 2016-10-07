@@ -21,7 +21,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                } 
             },
             templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceMigrationReader/Templates/SourceMigrationReader.html"
         };
@@ -45,6 +45,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
             function initializeController() {
                 $scope.useTempTables = true;
+                $scope.onlyEffective = false;
                 $scope.migrationTables = [];
                 angular.forEach(UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum), function (dbTable) {
                     if (dbTable.defaultMigrate)
@@ -118,6 +119,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.OffPeakRateTypeId = offPeakRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.WeekendRateTypeId = weekendRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.MigratePriceListData = $scope.migratePriceListData;
+                    schedulerTaskAction.OnlyEffective = $scope.onlyEffective;
                     var selectedTables = [];
 
                     $scope.migrationTablesSelectedValues;
@@ -144,6 +146,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         offPeakRateTypeId = payload.data.OffPeakRateTypeId;
                         weekendRateTypeId = payload.data.WeekendRateTypeId;
                         $scope.migratePriceListData = payload.data.MigratePriceListData;
+                        $scope.onlyEffective = payload.data.OnlyEffective;
                         $scope.migrationTablesSelectedValues = [];
 
 

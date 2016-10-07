@@ -15,6 +15,7 @@ namespace TOne.WhS.DBSync.Business
         SourceCodeDataManager dataManager;
         Dictionary<string, SupplierZone> allSupplierZones;
         TOne.WhS.BusinessEntity.Business.CodeIterator<CodeGroup> _codeGroupIterator;
+        bool _onlyEffective;
 
         public SupplierCodeMigrator(MigrationContext context)
             : base(context)
@@ -26,6 +27,7 @@ namespace TOne.WhS.DBSync.Business
             allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
             var codeGroups = (Dictionary<string, CodeGroup>)context.DBTables[DBTableName.CodeGroup].Records;
             _codeGroupIterator = new CodeIterator<CodeGroup>(codeGroups.Values);
+            _onlyEffective = context.OnlyEffective;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -44,7 +46,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceCode> GetSourceItems()
         {
-            return dataManager.GetSourceCodes(false);
+            return dataManager.GetSourceCodes(false, _onlyEffective);
         }
 
         public override SupplierCode BuildItemFromSource(SourceCode sourceItem)

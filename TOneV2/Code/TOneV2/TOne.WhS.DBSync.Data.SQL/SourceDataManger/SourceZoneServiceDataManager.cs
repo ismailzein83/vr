@@ -16,15 +16,17 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
         }
 
-        public List<SourceRate> GetSourceZoneServices(bool isSaleZoneService)
+        public List<SourceRate> GetSourceZoneServices(bool isSaleZoneService, bool onlyEffective)
         {
-            return GetItemsText(query_getSourceZonesServices + (isSaleZoneService ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), SourceRateMapper, null);
+            string queryOnlyEffective = onlyEffective ? "and Rate.IsEffective = 'Y'" : string.Empty;
+            return GetItemsText(query_getSourceZonesServices + (isSaleZoneService ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'") + queryOnlyEffective, SourceRateMapper, null);
         }
 
 
-        public void LoadSourceItems(bool isSaleZoneService, Action<SourceRate> itemToAdd)
+        public void LoadSourceItems(bool isSaleZoneService, bool onlyEffective, Action<SourceRate> itemToAdd)
         {
-            ExecuteReaderText(query_getSourceZonesServices + (isSaleZoneService ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), (reader) =>
+            string queryOnlyEffective = onlyEffective ? "and Rate.IsEffective = 'Y'" : string.Empty;
+            ExecuteReaderText(query_getSourceZonesServices + (isSaleZoneService ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'") + queryOnlyEffective, (reader) =>
             {
                 while (reader.Read())
                     itemToAdd(SourceRateMapper(reader));

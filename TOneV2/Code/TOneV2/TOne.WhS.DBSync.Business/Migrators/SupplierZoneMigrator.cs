@@ -15,6 +15,7 @@ namespace TOne.WhS.DBSync.Business
         SourceZoneDataManager dataManager;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
         Dictionary<string, CodeGroup> allCodeGroups;
+        bool _onlyEffective;
 
         public SupplierZoneMigrator(MigrationContext context)
             : base(context)
@@ -26,6 +27,7 @@ namespace TOne.WhS.DBSync.Business
             var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
             allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
             allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
+            _onlyEffective = context.OnlyEffective;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -44,7 +46,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceZone> GetSourceItems()
         {
-            return dataManager.GetSourceZones(false);
+            return dataManager.GetSourceZones(false, _onlyEffective);
         }
 
         public override SupplierZone BuildItemFromSource(SourceZone sourceItem)
