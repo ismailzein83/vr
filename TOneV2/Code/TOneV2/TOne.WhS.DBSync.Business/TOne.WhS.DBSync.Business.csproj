@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="Common\IMigrator.cs" />
     <Compile Include="Common\Migrator.cs" />
+    <Compile Include="Migrators\Rules\MarketPriceRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\CommissionRuleMigrator.cs" />
     <Compile Include="Migrators\VRTimeZoneMigrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
@@ -107,7 +108,7 @@
     <Compile Include="Migrators\FlaggedServiceMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOptionBlockRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOverrideRuleMigrator.cs" />
-    <Compile Include="Migrators\Rules\RouteRuleBaseMigrator.cs" />
+    <Compile Include="Migrators\Rules\RuleBaseMigrator.cs" />
     <Compile Include="Migrators\Rules\RuleMigrator.cs" />
     <Compile Include="Migrators\SupplierPriceListMigrator.cs" />
     <Compile Include="Migrators\SaleZoneServicesMigrator.cs" />

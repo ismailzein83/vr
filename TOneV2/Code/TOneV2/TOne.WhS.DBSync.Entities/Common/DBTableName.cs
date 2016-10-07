@@ -43,7 +43,7 @@ namespace TOne.WhS.DBSync.Entities
 
         [Description("SupplierCode")]
         SupplierCode,
-       
+
 
         [Description("SalePriceList")]
         SalePriceList,
@@ -76,8 +76,7 @@ namespace TOne.WhS.DBSync.Entities
         SaleEntityService,
 
         [Description("Rule")]
-        Rule,
+        Rule
 
-       
     }
 }

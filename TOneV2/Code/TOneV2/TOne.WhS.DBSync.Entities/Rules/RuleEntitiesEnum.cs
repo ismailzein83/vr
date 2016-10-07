@@ -9,6 +9,8 @@ namespace TOne.WhS.DBSync.Entities
     public enum RuleEntitiesEnum
     {
         RouteOverride,
-        RouteOptionBlock
+        RouteOptionBlock,
+        Commission,
+        SaleMarketPrice
     }
 }

@@ -47,7 +47,6 @@ namespace TOne.WhS.DBSync.Business
             var blockRules = dataManager.GetRouteOptionBlockRules();
 
             routeRules.AddRange(GetRulesWithZone(blockRules.Where(o => o.SupplierZoneId.HasValue)));
-            WriteFaildRowsLog();
             return routeRules;
         }
         IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOptionBlockRule> blockRules)

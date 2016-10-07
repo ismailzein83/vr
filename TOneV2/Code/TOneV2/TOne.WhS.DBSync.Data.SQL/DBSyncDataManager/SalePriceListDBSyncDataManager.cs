@@ -48,8 +48,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SalePriceList> GetSalePriceLists(bool useTempTables)
         {
-            return GetItemsText("SELECT ID,  OwnerType, OwnerID, CurrencyID, EffectiveOn, SourceID FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SalePriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT ID,  OwnerType, OwnerID, CurrencyID, EffectiveOn, SourceID FROM {0} {1}"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), "where sourceid is not null"), SalePriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public SalePriceList SalePriceListMapper(IDataReader reader)

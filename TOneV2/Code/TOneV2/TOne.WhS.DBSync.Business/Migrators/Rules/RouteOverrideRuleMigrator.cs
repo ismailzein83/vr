@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups;
 using TOne.WhS.DBSync.Data.SQL.SourceDataManger;
 using TOne.WhS.DBSync.Entities;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Business.RouteRules.Filters;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
 using TOne.WhS.Routing.Business.RouteRules.Percentages;
 using TOne.WhS.Routing.Entities;
@@ -194,15 +195,27 @@ namespace TOne.WhS.DBSync.Business
 
         RegularRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
         {
-            return new RegularRouteRule
+            var rule = new RegularRouteRule
             {
 
                 OptionsSettingsGroup = new SelectiveOptions
                 {
-                    Options = GetOptions(sourceRule),
+                    Options = GetOptions(sourceRule)
                 },
-                OptionPercentageSettings = GetOptionPercentageSettings(sourceRule),
-            };
+                OptionPercentageSettings = GetOptionPercentageSettings(sourceRule)
+            };              
+            //if (!sourceRule.SupplierOptions.Any(r => r.IsLoss))
+            //{
+            //    rule.OptionFilters = new List<RouteOptionFilterSettings> { 
+            //    new RateOptionFilter
+            //        {
+            //            RateOption = RateOption.MaximumLoss,
+            //            RateOptionType = RateOptionType.Fixed,
+            //            RateOptionValue = 0
+            //        }
+            //    };
+            //}
+            return rule;
         }
         RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)
         {

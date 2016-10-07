@@ -1,5 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.DBSync.Entities;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Business.RouteRules.Filters;
+using TOne.WhS.Routing.Business.RouteRules.Orders;
+using Vanrise.Rules.Entities;
+using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -12,7 +19,7 @@ namespace TOne.WhS.DBSync.Business
         public virtual void WriteFaildRowsLog()
         {
             if (TotalRowsFailed > 0)
-                Context.MigrationContext.WriteWarning(string.Format("Migrating table '" + EntityName + "' : {0} rows failed", TotalRowsFailed));
+                Context.MigrationContext.WriteWarning(string.Format("Migrating entity '" + EntityName + "' : {0} rows failed", TotalRowsFailed));
         }
 
         protected RuleBaseMigrator(RuleMigrationContext context)

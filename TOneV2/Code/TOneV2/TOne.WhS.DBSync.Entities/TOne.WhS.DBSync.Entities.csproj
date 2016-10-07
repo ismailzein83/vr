@@ -92,6 +92,8 @@
     <Compile Include="Rules\SourceRouteOverrideRule.cs" />
     <Compile Include="Rules\SupplierOption.cs" />
     <Compile Include="SourceCarrierSwitchConnectivity.cs" />
+    <Compile Include="SourceMarketPrice.cs" />
+    <Compile Include="SourceTOD.cs" />
     <Compile Include="SourceCommission.cs" />
     <Compile Include="SourceCustomTimeZoneInfo.cs" />
     <Compile Include="SourceCustomerSellingProduct.cs" />

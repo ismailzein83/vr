@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan;
+using TOne.WhS.BusinessEntity.MainExtensions.SupplierZoneGroups;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common;
@@ -28,8 +29,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SupplierZone> _allSupplierZones;
         readonly Dictionary<string, SaleZone> _allSaleZones;
-
         readonly int _ruleTypeId;
+
         public CommissionRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
@@ -56,8 +57,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             sourceRules = GetRules(commissionRules);
             return sourceRules;
         }
-
-        private List<SourceRule> GetRules(IEnumerable<SourceCommission> commissions)
+        List<SourceRule> GetRules(IEnumerable<SourceCommission> commissions)
         {
             List<SourceRule> result = new List<SourceRule>();
 
@@ -79,25 +79,54 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 result.Add(GetPurchaseSourceRule(commissionRules));
             }
 
-
-            SourceRule rule = new SourceRule
+            return result;
+        }
+        SourceRule GetPurchaseSourceRule(List<SourceCommission> commissionRules)
+        {
+            List<long> zoneIds = new List<long>();
+            SourceCommission defaultCommission = commissionRules.FirstOrDefault();
+            foreach (SourceCommission sourceCommission in commissionRules)
             {
-                Rule = new Rule
+                if (!_allSupplierZones.ContainsKey(sourceCommission.ZoneId.ToString()))
+                    this.TotalRowsFailed++;
+                else
+                    zoneIds.Add(_allSupplierZones[sourceCommission.ZoneId.ToString()].SupplierZoneId);
+            }
+
+            ExtraChargeRule extraChargeRule = new ExtraChargeRule
+            {
+                Settings = new PricingRuleExtraChargeSettings
                 {
+                    Actions = GetActions(defaultCommission)
+                },
+                Criteria = new GenericRuleCriteria
+                {
+                    FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
 
                 }
             };
-            return new List<SourceRule>();
-        }
 
-        private SourceRule GetPurchaseSourceRule(List<SourceCommission> commissionRules)
-        {
-            throw new NotImplementedException();
-        }
+            extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues
+            {
+                BusinessEntityGroup = new SelectiveSupplierZoneGroup()
+                {
+                    SuppliersWithZones = new List<SupplierWithZones>
+                    {
+                        new SupplierWithZones
+                        {
+                            SupplierId = _allCarrierAccounts[defaultCommission.SupplierId].CarrierAccountId,
+                            SupplierZoneIds = zoneIds
+                        }
+                    }
+                }
+            });
 
-        private SourceRule GetSellingSourceRule(List<SourceCommission> commissionRules)
+            return GetSourceRule(extraChargeRule, defaultCommission);
+        }
+        SourceRule GetSellingSourceRule(List<SourceCommission> commissionRules)
         {
             List<long> zoneIds = new List<long>();
+            SourceCommission defaultCommission = commissionRules.FirstOrDefault();
             foreach (SourceCommission sourceCommission in commissionRules)
             {
                 if (!_allSaleZones.ContainsKey(sourceCommission.ZoneId.ToString()))
@@ -110,12 +139,11 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 Settings = new PricingRuleExtraChargeSettings
                 {
-                    Actions = new List<PricingRuleExtraChargeActionSettings>()
+                    Actions = GetActions(defaultCommission)
                 },
                 Criteria = new GenericRuleCriteria
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
-
                 }
             };
 
@@ -123,7 +151,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 BusinessEntityGroup = new SelectiveCustomerGroup
                 {
-                    CustomerIds = new List<int>() { _allCarrierAccounts[commissionRules.First().CustomerId].CarrierAccountId },
+                    CustomerIds = new List<int>() { _allCarrierAccounts[defaultCommission.CustomerId].CarrierAccountId },
                 }
             });
             extraChargeRule.Criteria.FieldsValues.Add("Zones", new BusinessEntityValues
@@ -135,16 +163,41 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 }
             });
 
+            return GetSourceRule(extraChargeRule, defaultCommission);
+        }
+        List<PricingRuleExtraChargeActionSettings> GetActions(SourceCommission commission)
+        {
+            List<PricingRuleExtraChargeActionSettings> actions = new List<PricingRuleExtraChargeActionSettings>();
+            if (commission.Percentage.HasValue)
+                actions.Add(new PercentageExtraChargeSettings
+                {
+                    FromRate = commission.FromRate,
+                    ToRate = commission.ToRate,
+                    ExtraPercentage = commission.Percentage.Value
+                });
+            else if (commission.Amount.HasValue)
+                actions.Add(new FixedExtraChargeSettings
+                {
+                    FromRate = commission.FromRate,
+                    ToRate = commission.ToRate,
+                    ExtraAmount = commission.Amount.Value
+                });
+            return actions;
+        }
+        SourceRule GetSourceRule(ExtraChargeRule extraChargeRule, SourceCommission defaultCommission)
+        {
             return new SourceRule
             {
                 Rule = new Rule
                 {
-                    RuleDetails = Serializer.Serialize(extraChargeRule)
+                    RuleDetails = Serializer.Serialize(extraChargeRule),
+                    TypeId = _ruleTypeId,
+                    BED = defaultCommission.BED,
+                    EED = defaultCommission.EED
                 }
             };
         }
-
-        private Dictionary<string, List<SourceCommission>> GroupCommissionRules(IEnumerable<SourceCommission> sellingRules, string keyType)
+        Dictionary<string, List<SourceCommission>> GroupCommissionRules(IEnumerable<SourceCommission> sellingRules, string keyType)
         {
             Dictionary<string, List<SourceCommission>> commissions = new Dictionary<string, List<SourceCommission>>();
             List<SourceCommission> sourceCommissions;
@@ -153,6 +206,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 string key = GetCommissionKey(commission, keyType);
                 if (!commissions.TryGetValue(key, out sourceCommissions))
                 {
+                    sourceCommissions = new List<SourceCommission>();
                     commissions.Add(key, sourceCommissions);
                 }
                 sourceCommissions.Add(commission);
@@ -160,8 +214,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             return commissions;
         }
-
-        private string GetCommissionKey(SourceCommission commission, string type)
+        string GetCommissionKey(SourceCommission commission, string type)
         {
             switch (type)
             {
