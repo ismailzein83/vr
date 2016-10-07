@@ -258,8 +258,6 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
             Name: 'Data Source Task',
             IsEnabled: $scope.scopeModel.isEnabled,
             TaskType: 0,
-            TriggerTypeId: 1,
-            ActionTypeId: 1,
             TaskSettings:
                 {
                     TaskTriggerArgument: taskTriggerDirectiveAPI.getData(),
