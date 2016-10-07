@@ -24,6 +24,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CarrierProfileId { get; set; }
         public int? SellingNumberPlanId { get; set; }
         public CarrierAccountType AccountType { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 
     public class CarrierAccountToEdit : BaseCarrierAccount

@@ -32,14 +32,15 @@ namespace TOne.WhS.DBSync.Data.SQL
                 AccountType = (SourceAccountType)reader["AccountType"],
                 CurrencyId = reader["CurrencyID"] as string,
                 CarrierMask = reader["CarrierMask"] as string,
+                IsDeleted = (reader["IsDeleted"] as string) != "N"
             };
             return sourceCarrierAccount;
         }
 
         const string query_getSourceCarrierAccounts = @"SELECT  ca.CarrierAccountID CarrierAccountID, ca.ProfileID ProfileID, ca.ActivationStatus ActivationStatus, ca.RoutingStatus RoutingStatus,  
                                                                 ca.AccountType AccountType, ca.NameSuffix NameSuffix, ca.ServicesFlag ServicesFlag, ca.GMTTime GMTTime, ca.CustomerGMTTime CustomerGMTTime,
-                                                                cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask 
+                                                                cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask , ca.IsDeleted IsDeleted
                                                                 FROM  CarrierAccount ca WITH (NOLOCK) INNER JOIN CarrierProfile cp 
-                                                                ON ca.ProfileID = cp.ProfileID WHERE (ca.IsDeleted = 'N')";
+                                                                ON ca.ProfileID = cp.ProfileID";
     }
 }

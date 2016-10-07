@@ -48,6 +48,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 TechnicalEmail = arg["TechnicalEmail"].ToString(),
                 Telephone = arg["Telephone"] as string,
                 Website = arg["Website"] as string,
+                IsDeleted = (arg["IsDeleted"] as string) != "N"
             };
             return sourceCarrierProfile;
         }
@@ -58,7 +59,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [SupportContact]   ,[SupportEmail] ,[CurrencyID]  ,[RegistrationNumber]   , 
                                                                [AccountManagerEmail]   ,[SMSPhoneNumber] ,[Website]  ,[BillingDisputeEmail]  , 
                                                                [TechnicalContact] ,[TechnicalEmail]   ,[CommercialContact]   ,[CommercialEmail] , 
-                                                               [AccountManagerContact] FROM [dbo].[CarrierProfile]  
-                                                        WITH (NOLOCK) WHERE  (IsDeleted = 'N')";
+                                                               [AccountManagerContact], [IsDeleted] FROM [dbo].[CarrierProfile]  
+                                                        WITH (NOLOCK)";
     }
 }

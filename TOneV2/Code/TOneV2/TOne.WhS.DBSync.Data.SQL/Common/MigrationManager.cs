@@ -96,10 +96,15 @@ namespace TOne.WhS.DBSync.Data.SQL
                 if (useTempTables)
                 {
                     DropFKs();
+                    _Context.WriteInformation("Foreign Keys dropped from original tables");
                     DropOriginalTables();
+                    _Context.WriteInformation("Original tables dropped");
                     RenameTempTables();
+                    _Context.WriteInformation("Temp tables swapped");
                     CreateIndexes();
+                    _Context.WriteInformation("Started creating Foreign Keys");
                     CreateFKs();
+                    _Context.WriteInformation("Foreign Keys created");
                 }
                 _ServerConnection.CommitTransaction();
                 Executed = true;
@@ -325,6 +330,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                  {
                      if (requestedDbTable.ScriptedIndexes != "")
                     _Server.Databases[requestedDbTable.Database].ExecuteNonQuery(requestedDbTable.ScriptedIndexes);
+                     _Context.WriteInformation(String.Format("Indexes on table '{0}' created", requestedDbTable.Name));
                  }
              }
         }

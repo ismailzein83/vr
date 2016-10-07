@@ -50,6 +50,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CarrierProfile : BaseCarrierProfile
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "WHS_BE_CarrierProfile";
+
+        public bool IsDeleted { get; set; }
     }
 
     public class CarrierProfileToEdit : BaseCarrierProfile

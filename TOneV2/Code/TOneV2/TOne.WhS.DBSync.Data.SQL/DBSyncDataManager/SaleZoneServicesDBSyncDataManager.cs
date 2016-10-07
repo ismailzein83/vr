@@ -19,33 +19,51 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
+        static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "Services", "BED", "EED", "SourceID" };
+
         public void ApplySaleZoneServicesToTemp(List<SaleEntityZoneService> saleZoneServices, long startingId)
         {
-            DataTable dt = new DataTable();
-            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
-            dt.Columns.Add("PriceListID", typeof(int));
-            dt.Columns.Add("ZoneID", typeof(long));
-            dt.Columns.Add("Services", typeof(string));
-            dt.Columns.Add("BED", typeof(DateTime));
-            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
-            dt.Columns.Add("SourceID", typeof(string));
-            dt.Columns.Add("ID", typeof(long));
-
-            dt.BeginLoadData();
+            var stream = base.InitializeStreamForBulkInsert();
             foreach (var item in saleZoneServices)
             {
-                DataRow row = dt.NewRow();
-                row["PriceListID"] = item.PriceListId;
-                row["ZoneID"] = item.ZoneId;
-                row["Services"] = Vanrise.Common.Serializer.Serialize(item.Services);
-                row["BED"] = item.BED;
-                row["EED"] = item.EED.HasValue ? item.EED : (object)DBNull.Value;
-                row["SourceID"] = item.SourceId;
-                row["ID"] = startingId++;
-                dt.Rows.Add(row);
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", startingId++, item.PriceListId, item.ZoneId, Vanrise.Common.Serializer.Serialize(item.Services, true), GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", item.SourceId);
             }
-            dt.EndLoadData();
-            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
+            stream.Close();
+            StreamBulkInsertInfo streamBulkInsert = new StreamBulkInsertInfo
+            {
+                Stream = stream,
+                ColumnNames = s_columns,
+                FieldSeparator = '^',
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
+                TabLock = true
+            };
+            base.InsertBulkToTable(streamBulkInsert);
+
+            //DataTable dt = new DataTable();
+            //dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            //dt.Columns.Add("PriceListID", typeof(int));
+            //dt.Columns.Add("ZoneID", typeof(long));
+            //dt.Columns.Add("Services", typeof(string));
+            //dt.Columns.Add("BED", typeof(DateTime));
+            //dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            //dt.Columns.Add("SourceID", typeof(string));
+            //dt.Columns.Add("ID", typeof(long));
+
+            //dt.BeginLoadData();
+            //foreach (var item in saleZoneServices)
+            //{
+            //    DataRow row = dt.NewRow();
+            //    row["PriceListID"] = item.PriceListId;
+            //    row["ZoneID"] = item.ZoneId;
+            //    row["Services"] = Vanrise.Common.Serializer.Serialize(item.Services, true);
+            //    row["BED"] = item.BED;
+            //    row["EED"] = item.EED.HasValue ? item.EED : (object)DBNull.Value;
+            //    row["SourceID"] = item.SourceId;
+            //    row["ID"] = startingId++;
+            //    dt.Rows.Add(row);
+            //}
+            //dt.EndLoadData();
+            //WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
         public Dictionary<string, SaleEntityZoneService> GetSSaleZoneServices(bool useTempTables)

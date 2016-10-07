@@ -115,7 +115,8 @@ namespace TOne.WhS.DBSync.Business
             {
                 Name = sourceItem.Name,
                 SourceId = sourceItem.SourceId,
-                Settings = settings
+                Settings = settings,
+                IsDeleted = sourceItem.IsDeleted
             };
 
 

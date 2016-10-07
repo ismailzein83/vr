@@ -139,7 +139,8 @@ namespace TOne.WhS.DBSync.Business
                     NameSuffix = sourceItem.NameSuffix,
                     SellingNumberPlanId = accountType == CarrierAccountType.Supplier ? null : (int?)Context.DefaultSellingNumberPlanId,
                     SupplierSettings = carrierAccountSupplierSettings,
-                    SourceId = sourceItem.SourceId
+                    SourceId = sourceItem.SourceId,
+                    IsDeleted = sourceItem.IsDeleted
                 };
             }
 

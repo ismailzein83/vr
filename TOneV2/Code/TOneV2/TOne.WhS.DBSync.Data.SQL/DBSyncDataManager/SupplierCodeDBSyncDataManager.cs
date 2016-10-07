@@ -19,41 +19,59 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
+        static string[] s_columns = new string[] { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID", "ID" };
+
         public void ApplySupplierCodesToTemp(List<SupplierCode> supplierCodes, long startingId)
         {
-            DataTable dt = new DataTable();
-            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
-            dt.Columns.Add("Code", typeof(string));
-            dt.Columns.Add("ZoneID", typeof(long));
-            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "CodeGroupID", DataType = typeof(int) });
-            dt.Columns.Add("BED", typeof(DateTime));
-            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
-            dt.Columns.Add("SourceID", typeof(string));
-            dt.Columns.Add("ID", typeof(long));
-           
-            dt.BeginLoadData();
+            //DataTable dt = new DataTable();
+            //dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            
+            var stream = base.InitializeStreamForBulkInsert();
             foreach (var item in supplierCodes)
             {
-                DataRow row = dt.NewRow();
-                int index = 0;
-                row[index++] = item.Code;
-                row[index++] = item.ZoneId;
-                if (item.CodeGroupId == null)
-                    row[index++] = DBNull.Value;
-                else
-                    row[index++] = item.CodeGroupId;
-                row[index++] = item.BED;
-                if (item.EED == null)
-                    row[index++] = DBNull.Value;
-                else
-                    row[index++] = item.EED; 
-                row[index++] = item.SourceId;
-                row[index++] = startingId++;
-
-                dt.Rows.Add(row);
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", item.Code, item.ZoneId, item.CodeGroupId, GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", item.SourceId, startingId++);
             }
-            dt.EndLoadData();
-            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
+            stream.Close();
+            StreamBulkInsertInfo streamBulkInsert = new StreamBulkInsertInfo
+            {
+                Stream = stream,
+                ColumnNames = s_columns,
+                FieldSeparator = '^',
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
+                TabLock = true
+            };
+            base.InsertBulkToTable(streamBulkInsert);
+            //dt.Columns.Add("Code", typeof(string));
+            //dt.Columns.Add("ZoneID", typeof(long));
+            //dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "CodeGroupID", DataType = typeof(int) });
+            //dt.Columns.Add("BED", typeof(DateTime));
+            //dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
+            //dt.Columns.Add("SourceID", typeof(string));
+            //dt.Columns.Add("ID", typeof(long));
+           
+            //dt.BeginLoadData();
+            //foreach (var item in supplierCodes)
+            //{
+            //    DataRow row = dt.NewRow();
+            //    int index = 0;
+            //    row[index++] = item.Code;
+            //    row[index++] = item.ZoneId;
+            //    if (item.CodeGroupId == null)
+            //        row[index++] = DBNull.Value;
+            //    else
+            //        row[index++] = item.CodeGroupId;
+            //    row[index++] = item.BED;
+            //    if (item.EED == null)
+            //        row[index++] = DBNull.Value;
+            //    else
+            //        row[index++] = item.EED; 
+            //    row[index++] = item.SourceId;
+            //    row[index++] = startingId++;
+
+            //    dt.Rows.Add(row);
+            //}
+            //dt.EndLoadData();
+            //WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
 

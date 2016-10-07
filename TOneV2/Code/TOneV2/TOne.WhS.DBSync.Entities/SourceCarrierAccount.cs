@@ -35,5 +35,7 @@ namespace TOne.WhS.DBSync.Entities
 
         public string CarrierMask { get; set; }
 
+        public bool IsDeleted { get; set; }
+
     }
 }

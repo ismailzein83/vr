@@ -27,7 +27,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("Settings", typeof(string));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
-           
+            dt.Columns.Add("IsDeleted", typeof(bool));
             dt.BeginLoadData();
             foreach (var item in carrierProfiles)
             {
@@ -36,6 +36,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = Vanrise.Common.Serializer.Serialize(item.Settings);
                 row[index++] = item.Name;
                 row[index++] = item.SourceId;
+                row[index++] = item.IsDeleted;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
