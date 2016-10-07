@@ -28,7 +28,7 @@ namespace Mediation.Generic.Entities
 
     public class UpdateCookedFromParsed
     {
-        public int TransformationDefinitionId { get; set; }
+        public Guid TransformationDefinitionId { get; set; }
 
         public string ParsedRecordName { get; set; }
 
@@ -37,6 +37,6 @@ namespace Mediation.Generic.Entities
 
     public class CookedCDRDataStoreSetting
     {
-        public int DataRecordStorageId { get; set; }
+        public Guid DataRecordStorageId { get; set; }
     }
 }

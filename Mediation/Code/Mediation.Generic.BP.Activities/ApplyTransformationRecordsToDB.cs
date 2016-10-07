@@ -13,14 +13,14 @@ namespace Mediation.Generic.BP.Activities
     public class ApplyTransformationRecordsToDBInput
     {
         public BaseQueue<Object> InputQueue { get; set; }
-        public int DataRecordStorageId { get; set; }
+        public Guid DataRecordStorageId { get; set; }
     }
     public sealed class ApplyTransformationRecordsToDB : DependentAsyncActivity<ApplyTransformationRecordsToDBInput>
     {
         [RequiredArgument]
         public InArgument<BaseQueue<Object>> InputQueue { get; set; }
         [RequiredArgument]
-        public InArgument<int> DataRecordStorageId { get; set; }
+        public InArgument<Guid> DataRecordStorageId { get; set; }
 
         protected override void DoWork(ApplyTransformationRecordsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {

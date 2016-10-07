@@ -111,8 +111,8 @@
         </InOutArgument>
       </mgba1:GetDataTransormationDefinition.DataTransformationDefinition>
       <mgba1:GetDataTransormationDefinition.TransformationDefinitionId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.CookedFromParsedSettings.TransformationDefinitionId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.CookedFromParsedSettings.TransformationDefinitionId</mca:CSharpValue>
         </InArgument>
       </mgba1:GetDataTransormationDefinition.TransformationDefinitionId>
     </mgba1:GetDataTransormationDefinition>
@@ -234,8 +234,8 @@
       </mgba1:ProcessMediationRecordsBatch>
       <mgba1:PrepareTransormationRecordsForDBApply sap2010:WorkflowViewState.IdRef="PrepareTransormationRecordsForDBApply_1">
         <mgba1:PrepareTransormationRecordsForDBApply.DataRecordStorageId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.CookedCDRDataStoreSetting.DataRecordStorageId</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.CookedCDRDataStoreSetting.DataRecordStorageId</mca:CSharpValue>
           </InArgument>
         </mgba1:PrepareTransormationRecordsForDBApply.DataRecordStorageId>
         <mgba1:PrepareTransormationRecordsForDBApply.OutputQueue>
@@ -261,8 +261,8 @@
       </mgba1:PrepareTransormationRecordsForDBApply>
       <mgba1:ApplyTransformationRecordsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyTransformationRecordsToDB_1">
         <mgba1:ApplyTransformationRecordsToDB.DataRecordStorageId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.CookedCDRDataStoreSetting.DataRecordStorageId</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.CookedCDRDataStoreSetting.DataRecordStorageId</mca:CSharpValue>
           </InArgument>
         </mgba1:ApplyTransformationRecordsToDB.DataRecordStorageId>
         <mgba1:ApplyTransformationRecordsToDB.InputQueue>
@@ -302,7 +302,7 @@
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Mediation Process is finished." />
-    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sOUcDsgIOAgEBTQtNhgECAQlSC1JyAgECVwVXkgEDAaADWAVjJAMBkQNkBWogAwGJA2sFdiwDAfoCdwWMASoDAd0CjQEFkwEgAwHVApQBBZ8BIgMBxgKgAQWXAhACATCYAgWoAi0CARqpAgWvAiACARKwAgWwApcBAgEQV3RXjwEDAaEDYAtgYwMBmQNbC1tzAwGSA2cLZ5cBAwGKA3MLc48BAwGCA24LboYBAwH7AnoLem0DAfMChAELhAF9AwHsAn8Lf3EDAeUCiQELiQFgAwHeApABC5ABnAEDAdYCnAELnAF1AwHOApcBC5cBagMBxwKlAQ2lAZYBAgFLqwENqwGOAQIBPrEBDbEBeAIBMbUBB8oBKQMBkQLLAQfqASwDAcIB6wEHhQI1AwGAAYYCB5YCLgIBWKUCC6UCcQIBKaACC6ACXwIBIpsCC5sCYgIBG6wCC6wCqQECAROwAnSwApQBAgERwgENwgGLAQMBuQLHAQ3HAXsDAawCvQENvQFtAwGfArgBDbgBZAMBkgLYAQ3YAYMBAwGEAs4BDc4BgAEDAfcB4gEN4gFzAwHqAecBDecBfgMB3QHTAQ3TAW0DAdAB3QEN3QGCAQMBwwH9AQ39AXYDAbUBggINggKCAQMBqAHzAQ3zAYMBAwGbAfgBDfgBegMBjgHuAQ3uAYsBAwGBAZMCDZMCegIBc44CDY4CewIBZokCDYkCiwECAVk=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sOUcDsgIOAgEBTQtNhgECAQlSC1JyAgECVwVXkgEDAaADWAVjJAMBkQNkBWogAwGJA2sFdiwDAfoCdwWMASoDAd0CjQEFkwEgAwHVApQBBZ8BIgMBxgKgAQWXAhACATCYAgWoAi0CARqpAgWvAiACARKwAgWwApcBAgEQV3RXjwEDAaEDYAtgYwMBmQNbC1tzAwGSA2cLZ5cBAwGKA3MLc44BAwGCA24LboYBAwH7AnoLem0DAfMChAELhAF9AwHsAn8Lf3EDAeUCiQELiQFgAwHeApABC5ABnAEDAdYCnAELnAF1AwHOApcBC5cBagMBxwKlAQ2lAZYBAgFLqwENqwGOAQIBPrEBDbEBeAIBMbUBB8oBKQMBkQLLAQfqASwDAcIB6wEHhQI1AwGAAYYCB5YCLgIBWKUCC6UCcQIBKaACC6ACXwIBIpsCC5sCYgIBG6wCC6wCqQECAROwAnSwApQBAgERwgENwgGLAQMBuQLHAQ3HAXsDAawCvQENvQFtAwGfArgBDbgBZAMBkgLYAQ3YAYMBAwGEAs4BDc4BgAEDAfcB4gEN4gFzAwHqAecBDecBfgMB3QHTAQ3TAW0DAdAB3QEN3QGCAQMBwwH9AQ39AXYDAbUBggINggKCAQMBqAHzAQ3zAYMBAwGbAfgBDfgBegMBjgHuAQ3uAYoBAwGBAZMCDZMCegIBc44CDY4CewIBZokCDYkCigECAVk=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

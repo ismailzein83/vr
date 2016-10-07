@@ -11,12 +11,12 @@ namespace Mediation.Generic.BP.Activities
     public sealed class GetDataTransormationDefinition : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int> TransformationDefinitionId { get; set; }
+        public InArgument<Guid> TransformationDefinitionId { get; set; }
         [RequiredArgument]
         public InOutArgument<DataTransformationDefinition> DataTransformationDefinition { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
-            int trasformationDefinitionId = TransformationDefinitionId.Get(context);
+            Guid trasformationDefinitionId = TransformationDefinitionId.Get(context);
             DataTransformationDefinitionManager dataTransformationManager = new DataTransformationDefinitionManager();
             DataTransformationDefinition transformationDefinition = dataTransformationManager.GetDataTransformationDefinition(trasformationDefinitionId);
             if (transformationDefinition == null)

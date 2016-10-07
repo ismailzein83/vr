@@ -13,14 +13,14 @@ namespace Mediation.Generic.BP.Activities
 {
     public class PrepareTransormationRecordsForDBApplyInput
     {
-        public int DataRecordStorageId { get; set; }
+        public Guid DataRecordStorageId { get; set; }
         public BaseQueue<PreparedCdrBatch> PreparedCdrBatch { get; set; }
         public BaseQueue<Object> OutputQueue { get; set; }
     }
     public sealed class PrepareTransormationRecordsForDBApply : DependentAsyncActivity<PrepareTransormationRecordsForDBApplyInput>
     {
         [RequiredArgument]
-        public InArgument<int> DataRecordStorageId { get; set; }
+        public InArgument<Guid> DataRecordStorageId { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<PreparedCdrBatch>> PreparedCdrBatch { get; set; }
