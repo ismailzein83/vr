@@ -53,6 +53,13 @@
                     currencySelectorReadyDeferred.resolve();
                 }
 
+                ctrl.onValidateMarketPrice = function () {
+                    if (ctrl.marketPrices.length == 0) {
+                        return 'No Market Price are added';
+                    }
+                    return null;
+                };
+
                 ctrl.onAddMarketPrice = function () {
                     var onMarketPriceAdded = function (addedMarketPrice) {
                         ctrl.marketPrices.push(addedMarketPrice);
@@ -108,9 +115,14 @@
                     //Loading Currency Selector
                     var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    var currencySelectorPayload = {
-                        selectedIds: currency
-                    };
+                    var currencySelectorPayload = {};
+                    if(currency){
+                        currencySelectorPayload.selectedIds = currency;
+                    }
+                    else {
+                        currencySelectorPayload.selectSystemCurrency = true;
+                    }
+
                     VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
 
                     return currencySelectorLoadDeferred.promise;

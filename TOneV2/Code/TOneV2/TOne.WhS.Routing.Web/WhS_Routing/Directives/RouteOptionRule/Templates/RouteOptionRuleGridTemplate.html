@@ -1,9 +1,11 @@
-﻿<vr-datagrid datasource="routeOptionRules"
+﻿<vr-datagrid on-ready="onGridReady"
+             datasource="routeOptionRules"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             on-ready="onGridReady"
              menuactions="gridMenuActions"
-             idfield="Entity.RuleId">
+             idfield="Entity.RuleId"
+             getrowstyle="getRowStyle">
+
     <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="hideIncludedCodesColumn"></vr-datagridcolumn>

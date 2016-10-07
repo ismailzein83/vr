@@ -71,6 +71,15 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                    });
             };
 
+            $scope.getRowStyle = function (dataItem) {
+                var rowStyle;
+
+                if (dataItem.Entity != undefined && dataItem.Entity.Settings != undefined && dataItem.Entity.Settings.ConfigId == 'bbb0ca31-0fcd-4035-a8ed-5d4bad06c662')
+                    rowStyle = { CssClass: "bg-danger" }
+
+                return rowStyle
+            };
+
             defineMenuActions();
         }
 

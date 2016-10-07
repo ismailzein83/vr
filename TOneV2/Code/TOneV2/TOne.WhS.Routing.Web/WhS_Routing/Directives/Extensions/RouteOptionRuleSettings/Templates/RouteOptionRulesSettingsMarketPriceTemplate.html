@@ -18,16 +18,21 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-datagrid on-ready="ctrl.onGridReady"
-                             datasource="ctrl.marketPrices"
-                             menuactions="ctrl.menuActions"
-                             ondeleterow="ctrl.onDeleteMarketPrice"
-                             enabledraggablerow="true"
-                             hidegridmenu>
-                    <vr-datagridcolumn headertext="'Services'" type="'Text'" field="'ServiceNames'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Minimum'" type="'Text'" field="'Minimum'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Maximum'" type="'Text'" field="'Maximum'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                </vr-datagrid>
+
+                <vr-validator validate="ctrl.onValidateMarketPrice()">
+                    <vr-datagrid on-ready="ctrl.onGridReady"
+                                 datasource="ctrl.marketPrices"
+                                 menuactions="ctrl.menuActions"
+                                 ondeleterow="ctrl.onDeleteMarketPrice"
+                                 enabledraggablerow="true"
+                                 hidegridmenu>
+
+                        <vr-datagridcolumn headertext="'Services'" type="'Text'" field="'ServiceNames'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'From Price'" type="'Text'" field="'Minimum'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'To Price'" type="'Text'" field="'Maximum'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+
             </vr-columns>
         </vr-row>
     </div>
