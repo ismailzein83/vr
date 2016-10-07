@@ -196,7 +196,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public void FinalizeCurstomerRoute(Action<string> trackStep)
         {
             StringBuilder query = new StringBuilder();
-            query.AppendLine(query_CreatingIndexes);
+            //query.AppendLine(query_CreatingIndexes);
             query.AppendLine(query_DropSupplierZoneDetailsTable);
             query.AppendLine(query_DropCodeSaleZoneTable);
             query.AppendLine(query_DropCustomerZoneDetailTable);
