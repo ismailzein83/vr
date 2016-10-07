@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [genericdata].[sp_ExtensibleBEItem_Update]
-	@ID INT,
+	@ID uniqueidentifier,
 	@Details VARCHAR(MAX)
 	
 AS
