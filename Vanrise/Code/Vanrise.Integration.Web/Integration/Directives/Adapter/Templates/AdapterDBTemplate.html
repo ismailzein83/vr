@@ -3,7 +3,7 @@
         <vr-textbox value="connectionString" label="Connection String" isrequired />
     </vr-columns>
     <vr-columns width="fullrow">
-        <vr-textarea value="query" label="Query" hint="Ex: select  #TopRows# *  from [SourceData]
+        <vr-textarea value="query" rows="10" label="Query" hint="Ex: select  #TopRows# *  from [SourceData]
 Where (ID > ISNULL(@RangeStart, 0))
 AND (ID <= ISNULL(@RangeEnd, 9999999999999999))
 ORDER BY ID" isrequired />

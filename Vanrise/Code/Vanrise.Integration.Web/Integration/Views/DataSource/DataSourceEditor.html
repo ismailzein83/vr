@@ -4,7 +4,7 @@
             <vr-tabs>
                 <vr-tab header="'Task Definition'">
                     <vr-row>
-                        <vr-columns colnum="6">
+                        <vr-columns width="fullrow">
                             <vr-textbox value="scopeModel.dataSourceName" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
@@ -58,7 +58,7 @@
                 </vr-tab>
                 <vr-tab header="'Execution Flow'">
                     <vr-row>
-                        <vr-columns colnum="6">
+                        <vr-columns width="fullrow">
                             <vr-select datasource="scopeModel.executionFlows" datatextfield="Name" onaddclicked="scopeModel.addExecutionFlow" datavaluefield="ExecutionFlowId" label="Associated Flow" selectedvalues="scopeModel.selectedExecutionFlow" isrequired></vr-select>
                         </vr-columns>
                     </vr-row>
