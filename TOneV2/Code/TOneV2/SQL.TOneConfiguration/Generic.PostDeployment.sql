@@ -32,54 +32,26 @@ end
 
 --[sec].[viewtype]-----------------------101 to 200-------------------------------------------------
 begin
-set nocount on;
-;with cte_data([ID],[Name],[Title],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'VR_GenericData_GenericRule','Generic Rule','{"ViewTypeId":101,"Name":"VR_GenericData_GenericRule","Title":"Generic Rule","Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),
-(102,'VR_GenericData_GenericBusinessEntity','Business Entity','{"ViewTypeId":102,"Name":"VR_GenericData_GenericBusinessEntity","Title":"BusinessEntity","Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}'),
-(103,'VR_GenericData_RecordSearch','Record Search','{"ViewTypeId":103,"Name":"VR_GenericData_RecordSearch","Title":"Record Search","Editor":"/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageSettingsEditor.html","EnableAdd":true}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Details]))
-merge	[sec].[viewtype] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Title],[Details])
-	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Details])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('A3AD3B1D-B56A-49D0-BC25-0F1EF7DFB03D',101,'VR_GenericData_GenericRule','Generic Rule','{"ViewTypeId":"f9c3490e-3f94-4403-98cd-d2e9fb3dfac5","Name":"VR_GenericData_GenericRule","Title":"Generic Rule","Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),('DFA58374-4249-4526-AB1A-7786AAC6B91B',102,'VR_GenericData_GenericBusinessEntity','Business Entity','{"ViewTypeId":"9f205b26-8002-4c75-97e5-30c35ed7fb2d","Name":"VR_GenericData_GenericBusinessEntity","Title":"BusinessEntity","Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}'),('3090A9AD-CAA3-410B-9AA0-867F4B74CCD2',103,'VR_GenericData_RecordSearch','Record Search','{"ViewTypeId":"4025bed7-7453-4f3d-b808-d54730bea12a","Name":"VR_GenericData_RecordSearch","Title":"Record Search","Editor":"/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageSettingsEditor.html","EnableAdd":true}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Details]))merge	[sec].[ViewType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Details])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Details]);
 ----------------------------------------------------------------------------------------------------
 end
 
 --[sec].[View]-----------------------------3001 to 4000-------------------------------------------------------
 begin
-
 set nocount on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('1E9577A9-EF49-475B-B32C-585A26063B04','Data Record Types','Data Record Type','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordType/GetFilteredDataRecordTypes',null,null,null,0,2),
-('A3219A0D-87BA-4CA9-A9A1-BB1FB2BD732F','Generic Rule Definitions','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions',null,null,null,0,3),
-('F9137B44-C362-4823-B2A3-6EF9E5C40430','Data Transformation Definitions','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions',null,null,null,0,4),
-('651DD50E-9CBB-49F5-8CA4-F3FDDBCB9C24','Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,0,5),
-('47318833-AFE8-414F-A61D-F3A81727FD5B','Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages',null,null,null,0,6),
-('0CDB7EDF-3907-4EEC-B781-CF1E19A44C92','Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,7),
-('CA6F551E-8275-49EF-98EB-11DF3EA6BE98','Summary Transformation Definition','Summary Transformation Definition','#/view/VR_GenericData/Views/SummaryTransformationDefinition/SummaryTransformationDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions',null,null,null,0,8),
-('4564B29F-FCBB-4E49-BB2E-C84076BE8EF1','BE Lookup Rule Definition','BE Lookup Rule Definition Management','#/view/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions',null,null,null,0,9),
-('044F280C-F049-4A4E-A8FC-530AA313FDFF','Data Record Field Choice','Data Record Field Choice','#/view/VR_GenericData/Views/DataRecordFieldChoice/DataRecordFieldChoiceManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices',null,null,null,0,10)
+('1E9577A9-EF49-475B-B32C-585A26063B04','Data Record Types','Data Record Type','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordType/GetFilteredDataRecordTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2),
+('A3219A0D-87BA-4CA9-A9A1-BB1FB2BD732F','Generic Rule Definitions','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,3),
+('F9137B44-C362-4823-B2A3-6EF9E5C40430','Data Transformation Definitions','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4),
+('651DD50E-9CBB-49F5-8CA4-F3FDDBCB9C24','Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5),
+('47318833-AFE8-414F-A61D-F3A81727FD5B','Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,6),
+('0CDB7EDF-3907-4EEC-B781-CF1E19A44C92','Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,7),
+('CA6F551E-8275-49EF-98EB-11DF3EA6BE98','Summary Transformation Definition','Summary Transformation Definition','#/view/VR_GenericData/Views/SummaryTransformationDefinition/SummaryTransformationDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,8),
+('4564B29F-FCBB-4E49-BB2E-C84076BE8EF1','BE Lookup Rule Definition','BE Lookup Rule Definition Management','#/view/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,9),
+('044F280C-F049-4A4E-A8FC-530AA313FDFF','Data Record Field Choice','Data Record Field Choice','#/view/VR_GenericData/Views/DataRecordFieldChoice/DataRecordFieldChoiceManagement','4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank]);
 --------------------------------------------------------------------------------------------------------------
 end
 

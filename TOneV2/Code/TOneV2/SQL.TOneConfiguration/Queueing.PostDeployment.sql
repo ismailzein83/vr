@@ -33,24 +33,14 @@ end
 --[sec].[View]-----------------------------7001 to 8000--------------------------------------------------------
 begin
 set nocount on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('8D33039E-FD2D-476B-A122-C7BBB238D201','Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions',null,null,'0',0,2),
-('3EE0BB0A-C14A-4325-8449-AD7A148CF088','Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows',null,null,'0',0,3),
-('844DA1DD-E5CF-42F2-A14D-39219237EF4B','Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/QueueInstance/GetFilteredQueueInstances',null,null,'0',0,4),
-('F6D44233-74BD-4103-B4A6-39B8AC300185','Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader',null,null,'0',0,5)
+('8D33039E-FD2D-476B-A122-C7BBB238D201','Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions',null,null,'0','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2),
+('3EE0BB0A-C14A-4325-8449-AD7A148CF088','Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows',null,null,'0','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,3),
+('844DA1DD-E5CF-42F2-A14D-39219237EF4B','Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/QueueInstance/GetFilteredQueueInstances',null,null,'0','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4),
+('F6D44233-74BD-4103-B4A6-39B8AC300185','Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement','2F940ED6-799C-4411-8FE3-339600964FE1','VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader',null,null,'0','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank]);
 ---------------------------------------------------------------------------------------------------------------
 end
 

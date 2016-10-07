@@ -33,28 +33,18 @@ END
 --[sec].[View]-----------------------------18001 to 19000---------------------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('1437E823-0D44-4176-82F2-5E1D2F4D83EA','Deals Analysis','Deals Analysis Management','#/view/WhS_BusinessEntity/Views/Deal/DealAnalysisManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,2),
-('6177DE52-9D79-438D-8B33-ED820FD7D5C5','Deals Management','Deals Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,3),
-('E207E8D2-EF62-484C-A103-97758DBA5FC3','Bilateral Agreement','Bilateral Agreement','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,4),
-('95F31CAF-F3F0-4617-B253-031A8FD69866','Volume Commitment','Volume Commitment','#/view/WhS_BusinessEntity/Views/Deal/VolumeCommitmentManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,5),
-('AE14C61E-F568-4592-BE3E-0BF678AD3A42','Progress Report','Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealProgressManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,6),
-('B16DFE22-64A3-4AB2-AC57-004BA6EA4C69','Over All Progress Report','Over All Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,7),
-('82D7BD5F-4867-43EC-A5AD-3B5CF0612B04','Alerts Management','Alerts Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,8),
-('94CED066-2F04-4397-9AF8-3E91C167B8F5','Alerts History','Alerts History','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,0,9)
+('1437E823-0D44-4176-82F2-5E1D2F4D83EA','Deals Analysis','Deals Analysis Management','#/view/WhS_BusinessEntity/Views/Deal/DealAnalysisManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2),
+('6177DE52-9D79-438D-8B33-ED820FD7D5C5','Deals Management','Deals Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,3),
+('E207E8D2-EF62-484C-A103-97758DBA5FC3','Bilateral Agreement','Bilateral Agreement','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4),
+('95F31CAF-F3F0-4617-B253-031A8FD69866','Volume Commitment','Volume Commitment','#/view/WhS_BusinessEntity/Views/Deal/VolumeCommitmentManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5),
+('AE14C61E-F568-4592-BE3E-0BF678AD3A42','Progress Report','Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealProgressManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,6),
+('B16DFE22-64A3-4AB2-AC57-004BA6EA4C69','Over All Progress Report','Over All Progress Report','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,7),
+('82D7BD5F-4867-43EC-A5AD-3B5CF0612B04','Alerts Management','Alerts Management','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,8),
+('94CED066-2F04-4397-9AF8-3E91C167B8F5','Alerts History','Alerts History','#/view/WhS_BusinessEntity/Views/Deal/DealManagement','670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_BE/Deal/GetFilteredDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,9)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank]);
 -------------------------------------------------------------------------------------------------------------
 END
 

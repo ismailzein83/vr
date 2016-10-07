@@ -61,46 +61,20 @@ end
 
 --[sec].[viewtype]---------------------------301 to 400---------------------------------------------
 begin
-set nocount on;
-;with cte_data([ID],[Name],[Title],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'VR_Sec_BI','BI','{"ViewTypeId":301,"Name":"VR_Sec_BI","Title":"Business Intelligence","Editor":"/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html","EnableAdd":true}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Details]))
-merge	[sec].[viewtype] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Title],[Details])
-	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Details])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('82B4CD55-3500-4158-ACCD-E5D244390746',301,'VR_Sec_BI','BI','{"ViewTypeId":"82b4cd55-3500-4158-accd-e5d244390746","Name":"VR_Sec_BI","Title":"Business Intelligence","Editor":"/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html","EnableAdd":true}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Details]))merge	[sec].[ViewType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Details])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Details]);
 ----------------------------------------------------------------------------------------------------
 
 end
 
 --[sec].[View]-----------------------------13001 to 14000------------------------------------------------------
 begin
-
 set nocount on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('1A2C8311-F0CE-40EC-A864-D815EF65301C','Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement','42BE0E81-EAEE-490D-A342-028FB111DE19','VR_Sec/Widget/GetFilteredWidgets',null,null,null,0,2),
-('21F5BF24-36A9-4CFF-B027-FC61AC57A838','Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement','42BE0E81-EAEE-490D-A342-028FB111DE19','VR_Sec/View/GetFilteredViews & VR_Sec/View/GetFilteredDynamicViews',null,null,null,0,3)
+('1A2C8311-F0CE-40EC-A864-D815EF65301C','Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement','42BE0E81-EAEE-490D-A342-028FB111DE19','VR_Sec/Widget/GetFilteredWidgets',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2),
+('21F5BF24-36A9-4CFF-B027-FC61AC57A838','Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement','42BE0E81-EAEE-490D-A342-028FB111DE19','VR_Sec/View/GetFilteredViews & VR_Sec/View/GetFilteredDynamicViews',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank]);
 ---------------------------------------------------------------------------------------------------------------
 end
 
