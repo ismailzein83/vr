@@ -30,8 +30,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             listMeasures.Add("CostRate");
             listMeasures.Add("SaleDuration");
             listMeasures.Add("CostDuration");
-            listMeasures.Add("SaleNet");
-            listMeasures.Add("CostNet");
+            listMeasures.Add("TotalSaleNet");
+            listMeasures.Add("TotalCostNet");
             listMeasures.Add("PercentageLoss");
 
 
@@ -112,14 +112,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
                     rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostDuration);
 
-                  //  MeasureValue saleNet;
-                  //  analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
-                    rateLossFromatted.SaleNet = rateLossFromatted.SaleRate *rateLossFromatted.SaleDuration;
+                    MeasureValue saleNet;
+                    analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out saleNet);
+                    rateLossFromatted.SaleNet =Convert.ToDecimal(saleNet.Value ?? 0.0); 
                     rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleNet);
 
-                    //MeasureValue costNet;
-                   // analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                    rateLossFromatted.CostNet = rateLossFromatted.CostRate * rateLossFromatted.CostDuration;
+                    MeasureValue costNet;
+                    analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out costNet);
+                    rateLossFromatted.CostNet = Convert.ToDecimal(costNet.Value ?? 0.0);
                     rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostNet);
 
                     var loss = rateLossFromatted.CostNet - rateLossFromatted.SaleNet;
@@ -144,6 +144,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
 
 
+                    rateLossFromatted.Loss =(decimal) (rateLossFromatted.CostNet - rateLossFromatted.SaleNet);
 
                     rateLossFromatted.LossFormatted = ReportHelpers.FormatLongNumberDigit(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)));
         
