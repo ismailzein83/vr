@@ -17,7 +17,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED
+	SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED,sc.CodeGroupID,sc.SourceID
 	  FROM [TOneWhS_BE].SupplierCode sc with(nolock) 
 	  JOIN [TOneWhS_BE].SupplierZone sz with(nolock) ON sc.ZoneID=sz.ID 
 	  JOIN @ActiveSuppliersInfo s on s.SupplierId = sz.SupplierId

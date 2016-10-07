@@ -13,7 +13,7 @@ DECLARE @CodeGroupIDsTable TABLE (CodeGroupID INT)
 	INSERT INTO @CodeGroupIDsTable (CodeGroupID)
 	SELECT CONVERT(INT, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@CodeGroupIds)
 	
-SELECT  [ID],[Code],[ZoneID],[BED],[EED]
+SELECT  [ID],[Code],[ZoneID],[BED],[EED],[CodeGroupID],[SourceID]
 FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 
 WHERE	[CodeGroupID] in (SELECT CodeGroupID FROM @CodeGroupIDsTable)
 End

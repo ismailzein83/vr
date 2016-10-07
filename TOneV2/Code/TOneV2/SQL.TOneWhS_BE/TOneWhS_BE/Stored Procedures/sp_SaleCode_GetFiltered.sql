@@ -13,7 +13,7 @@ BEGIN
 	    DECLARE @ZonesIDsTable TABLE (ZoneID int)
 		INSERT INTO @ZonesIDsTable (ZoneID)
 		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
-			SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[CodeGroupID],sc.[BED],sc.[EED]
+			SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[CodeGroupID],sc.[BED],sc.[EED],sc.[SourceID]
 			FROM [TOneWhS_BE].SaleCode sc WITH(NOLOCK) 
 			inner join  [TOneWhS_BE].SaleZone sz WITH(NOLOCK) on  sc.ZoneID = sz.ID   
             WHERE 

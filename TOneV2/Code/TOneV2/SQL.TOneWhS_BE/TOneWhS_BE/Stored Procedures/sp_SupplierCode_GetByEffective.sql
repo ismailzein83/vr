@@ -11,7 +11,7 @@ BEGIN
 	SELECT @When = @When_FromOut
 	SET NOCOUNT ON;
 
-	SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED
+	SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED,sc.CodeGroupID,sc.SourceID
 	FROM	[TOneWhS_BE].SupplierCode sc WITH(NOLOCK) 
 	Where	(sc.BED<=@When and (sc.EED is null or sc.EED > @when))
 END

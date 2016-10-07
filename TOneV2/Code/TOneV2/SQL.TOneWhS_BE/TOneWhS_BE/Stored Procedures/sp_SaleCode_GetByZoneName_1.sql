@@ -14,7 +14,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 /****** Script for SelectTopNRows command from SSMS  ******/
-SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[BED],sc.[EED]
+SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[BED],sc.[EED],sc.[CodeGroupID],sc.[SourceID]
 FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 
 		inner join [TOneWhS_BE].[SaleZone] sz WITH(NOLOCK) on sz.Id = sc.[ZoneID]
 WHERE	sz.SellingNumberPlanID = @SellingNumberPlanID and sz.Name = @ZoneName 

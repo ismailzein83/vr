@@ -15,7 +15,7 @@ BEGIN
 
 
 	/****** Script for SelectTopNRows command from SSMS  ******/
-	SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[BED],sc.[EED]
+	SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[BED],sc.[EED],sc.[CodeGroupID],sc.[SourceID]
 	FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 			
 	WHERE	((sc.BED <= @when ) and (sc.EED is null or sc.EED > @when))        
 END
