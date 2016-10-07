@@ -37,7 +37,7 @@ begin
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('1D10975D-5B1D-4DDC-BBF2-F8F9BA89FF5A','Management','Management','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B',null,null,null,'{"$type":"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities"}',0,2),
+('1D10975D-5B1D-4DDC-BBF2-F8F9BA89FF5A','Management','Management','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B',null,null,null,'{"$type":"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2),
 ('AA0B6783-ED68-41E8-B7C9-99BE96672476','Monitor','Monitor','#/view/BusinessProcess/Views/BPInstance/BPInstanceMonitor','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPInstance/GetUpdated',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,3),
 ('79E759A9-3324-4B82-87E3-2065CD86C3F7','Log','Log History','#/view/BusinessProcess/Views/BPInstance/BPInstanceHistory','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPInstance/GetFilteredBPInstances',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4),
 ('B23B61C1-D5AE-44A9-BD6E-F3009166395B','My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5),
