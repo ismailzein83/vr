@@ -52,12 +52,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private DefaultRoutingProductsByOwner GetCachedDefaultRoutingProducts()
         {
-            string cacheName = String.Format("GetCachedDefaultRoutingProducts_{0}", _effectiveOn);
+            string cacheName = String.Format("GetCachedDefaultRoutingProducts_{0}", _effectiveOn.Date);
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>();
             return cacheManager.GetOrCreateObject(cacheName,
                 () =>
                 {
-                    
+
                     DefaultRoutingProductsByOwner defaultRoutingProductsByOwner = new DefaultRoutingProductsByOwner();
                     defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
                     defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();

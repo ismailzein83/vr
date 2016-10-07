@@ -24,7 +24,7 @@ namespace TOne.WhS.Sales.Entities
         public Guid PolicyConfigId { get; set; }
         public int NumberOfOptions { get; set; }
         public List<CostCalculationMethod> CostCalculationMethods { get; set; }
-        public Guid CostCalculationMethodConfigId { get; set; }
+        public Guid? CostCalculationMethodConfigId { get; set; }
         public RateCalculationMethod RateCalculationMethod { get; set; }
         public IEnumerable<int> CountryIds { get; set; }
         public string ZoneNameFilter { get; set; }

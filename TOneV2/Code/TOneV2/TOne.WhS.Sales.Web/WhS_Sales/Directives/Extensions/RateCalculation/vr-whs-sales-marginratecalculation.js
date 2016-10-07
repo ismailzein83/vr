@@ -42,6 +42,10 @@ app.directive("vrWhsSalesMarginratecalculation", [function () {
                 };
             };
 
+            api.isCostColumnRequired = function () {
+                return true;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

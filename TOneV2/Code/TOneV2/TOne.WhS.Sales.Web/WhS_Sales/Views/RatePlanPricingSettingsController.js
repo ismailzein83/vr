@@ -49,6 +49,10 @@
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectiveDeferred);
             };
 
+            $scope.isCostColumnRequired = function () {
+                return (directiveAPI != undefined && directiveAPI.isCostColumnRequired());
+            };
+
             $scope.save = function () {
                 pricingSettings = {};
 
@@ -59,7 +63,7 @@
 
                 if ($scope.onPricingSettingsUpdated && typeof ($scope.onPricingSettingsUpdated) == "function")
                     $scope.onPricingSettingsUpdated(pricingSettings);
-                
+
                 $scope.modalContext.closeModal();
             };
 

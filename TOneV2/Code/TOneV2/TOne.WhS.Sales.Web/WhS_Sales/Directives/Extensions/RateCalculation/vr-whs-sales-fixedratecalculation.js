@@ -42,6 +42,10 @@ app.directive("vrWhsSalesFixedratecalculation", [function () {
                 };
             };
 
+            api.isCostColumnRequired = function () {
+                return false;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

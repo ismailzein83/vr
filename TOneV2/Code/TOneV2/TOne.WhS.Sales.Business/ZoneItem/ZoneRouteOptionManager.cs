@@ -32,66 +32,66 @@ namespace TOne.WhS.Sales.Business
         {
             if (zoneItems == null)
                 return;
-
             foreach (ZoneItem zoneItem in zoneItems)
             {
-                var route = _routes.FindRecord(itm => itm.SaleZoneId == zoneItem.ZoneId);
-
+                var route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
                 if (route != null)
                 {
                     zoneItem.RouteOptions = route.RouteOptionsDetails;
-                    SetZoneCostsAndCalculatedRate(zoneItem, route);
+                    SetCosts(zoneItem, route);
                 }
                 else if (_costCalculationMethods != null)
                 {
                     zoneItem.Costs = new List<decimal?>();
-
                     foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
-                    {
                         zoneItem.Costs.Add(null);
-                    }
                 }
+                SetCalculatedRate(zoneItem);
             }
         }
 
-        void SetZoneCostsAndCalculatedRate(ZoneItem zoneItem, RPRouteDetail route)
+        void SetCosts(ZoneItem zoneItem, RPRouteDetail route)
         {
-            if (_costCalculationMethods != null)
+            if (_costCalculationMethods == null)
+                return;
+
+            zoneItem.Costs = new List<decimal?>();
+
+            foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
             {
-                zoneItem.Costs = new List<decimal?>();
-
-                foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
-                {
-                    CostCalculationMethodContext context = new CostCalculationMethodContext() { Route = route };
-                    costCalculationMethod.CalculateCost(context);
-                    zoneItem.Costs.Add(context.Cost);
-                }
-
-                SetCalculatedRate(zoneItem);
+                var context = new CostCalculationMethodContext() { Route = route };
+                costCalculationMethod.CalculateCost(context);
+                zoneItem.Costs.Add(context.Cost);
             }
         }
 
         void SetCalculatedRate(ZoneItem zoneItem)
         {
-            if (_rateCalculationMethod != null && zoneItem.Costs.Count > 0)
+            if (_rateCalculationMethod == null)
+                return;
+
+            decimal? cost = null;
+
+            if (_rateCalculationCostColumnConfigId.HasValue)
             {
-                CostCalculationMethod costCalculationMethod = null;
+                if (_costCalculationMethods == null)
+                    throw new NullReferenceException("costCalculationMethods");
 
-                if (_rateCalculationCostColumnConfigId != null)
-                    costCalculationMethod = _costCalculationMethods.FindRecord(itm => itm.ConfigId == (Guid)_rateCalculationCostColumnConfigId);
+                CostCalculationMethod costCalculationMethod = _costCalculationMethods.FindRecord(x => x.ConfigId == _rateCalculationCostColumnConfigId.Value);
+                if (costCalculationMethod == null)
+                    throw new NullReferenceException("costCalculationMethod");
 
-                if (costCalculationMethod != null)
-                {
-                    int index = _costCalculationMethods.IndexOf(costCalculationMethod);
-                    RateCalculationMethodContext context = new RateCalculationMethodContext() { Cost = zoneItem.Costs[index] };
+                int costIndex = _costCalculationMethods.IndexOf(costCalculationMethod);
+                cost = zoneItem.Costs[costIndex];
+            }
 
-                    _rateCalculationMethod.CalculateRate(context);
-                    if (context.Rate.HasValue)
-                    {
-                        if (!zoneItem.CurrentRate.HasValue || zoneItem.CurrentRate.Value != context.Rate.Value)
-                            zoneItem.CalculatedRate = Decimal.Round(context.Rate.Value, GenericParameterManager.Current.GetLongPrecision());
-                    }
-                }
+            RateCalculationMethodContext context = new RateCalculationMethodContext() { Cost = cost };
+            _rateCalculationMethod.CalculateRate(context);
+
+            if (context.Rate.HasValue)
+            {
+                if (!zoneItem.CurrentRate.HasValue || zoneItem.CurrentRate.Value != context.Rate.Value)
+                    zoneItem.CalculatedRate = Decimal.Round(context.Rate.Value, GenericParameterManager.Current.GetLongPrecision());
             }
         }
     }
