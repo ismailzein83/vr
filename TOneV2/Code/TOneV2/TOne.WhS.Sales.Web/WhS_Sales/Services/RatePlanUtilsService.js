@@ -24,13 +24,13 @@
         }
 
         function setNewRateDates(dataItem, settings) {
-            if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
+            if (!isStringEmpty(dataItem.NewRate))
             {
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
-                dataItem.NewRateBED = (dataItem.CurrentRate == null || Number(dataItem.NewRate) > dataItem.CurrentRate) ?
-                    getNowPlusDays(settings.increasedRateDayOffset) :
-                    getNowPlusDays(settings.decreasedRateDayOffset);
+                var zoneBED = new Date(dataItem.ZoneBED);
+                var newRateBED = (dataItem.CurrentRate == null || Number(dataItem.NewRate) > dataItem.CurrentRate) ? getNowPlusDays(settings.increasedRateDayOffset) : getNowPlusDays(settings.decreasedRateDayOffset);
+                dataItem.NewRateBED = (newRateBED > zoneBED) ? newRateBED : zoneBED;
             }
             else {
                 dataItem.NewRateBED = null;
