@@ -24,6 +24,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         var gridQuery;
         var gridDrillDownTabs;
 
+        var servicesTab;
+        var routingProductTab;
+        var otherRatesTab;
+
         var increasedRateDayOffset = 0;
         var decreasedRateDayOffset = 0;
         var newServiceDayOffset = 0;
@@ -61,6 +65,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     decreasedRateDayOffset: decreasedRateDayOffset
                 };
                 WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
+            };
+
+            $scope.onEffectiveServiceClicked = function (dataItem) {
+                if (dataItem.EffectiveServices != null && servicesTab.setTabSelected != undefined)
+                    servicesTab.setTabSelected(dataItem);
+            };
+
+            $scope.onEffectiveRPClicked = function (dataItem) {
+                if (dataItem.EffectiveRoutingProductName != null && routingProductTab.setTabSelected != undefined)
+                    routingProductTab.setTabSelected(dataItem);
             };
 
             $scope.getRowStyle = function (dataItem)
@@ -116,7 +130,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         }
 
         function getGridDrillDownDefinitions() {
-            return [{
+            servicesTab = {
                 title: "Services",
                 directive: "vr-whs-sales-zone-service",
                 loadDirective: function (zoneServiceAPI, zoneItem) {
@@ -130,13 +144,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                     return zoneServiceAPI.load(zoneServicePayload);
                 }
-            }, {
+            };
+            routingProductTab = {
                 title: "Routing Product",
                 directive: "vr-whs-sales-zoneroutingproduct",
                 loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
                     return zoneRoutingProductDirectiveAPI.load(zoneItem);
                 }
-            }, {
+            };
+            otherRatesTab = {
                 title: "Other Rates",
                 directive: "vr-whs-sales-otherrate-grid",
                 loadDirective: function (rateTypeGridAPI, zoneItem) {
@@ -149,7 +165,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                     return rateTypeGridAPI.loadGrid(query);
                 }
-            }];
+            };
+            return [servicesTab, routingProductTab, otherRatesTab];
         }
 
         function defineAPI() {

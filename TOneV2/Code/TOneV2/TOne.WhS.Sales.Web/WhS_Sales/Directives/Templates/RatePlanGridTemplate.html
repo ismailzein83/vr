@@ -13,11 +13,13 @@
                 <vr-label isvalue="true"><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Product'"
-                               field="'EffectiveRoutingProductName'"
                                type="'Text'"
                                isfielddynamic="true"
                                widthfactor="8"
                                disablesorting="true">
+                <span ng-click="viewScope.onEffectiveRPClicked(dataItem)">
+                    <vr-label isvalue="true">{{dataItem.EffectiveRoutingProductName}}</vr-label>
+                </span>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Route Options'" widthfactor="34.5" disablesorting="true">
@@ -27,7 +29,7 @@
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Services'" disablesorting="true">
-                <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                <span ng-click="viewScope.onEffectiveServiceClicked(dataItem)"><vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer></span>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn ng-repeat="method in costCalculationMethods"
