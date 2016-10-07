@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class ExecuteTransformationStep : MappingStep
     {
-        public int DataTransformationId { get; set; }
+        public Guid DataTransformationId { get; set; }
         public List<RecordMapping> RecordsMapping { get; set; }
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
