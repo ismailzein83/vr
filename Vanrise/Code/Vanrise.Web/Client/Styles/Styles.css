@@ -2521,7 +2521,7 @@ div[validationcontainer]{
     display:inline-block;
     width:5px;
     height: 100%;
-    margin: 0px 3px;
+    margin: 0px 1px;
 }
 
 .vr-multiple  .glyphicon-plus-sign{
