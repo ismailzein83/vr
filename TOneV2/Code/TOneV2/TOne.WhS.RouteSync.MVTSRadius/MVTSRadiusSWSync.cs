@@ -68,7 +68,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
         private List<MVTSRadiusOption> BuildOptions(Route route, List<string> invalidRoutes)
         {
-            if (route == null || route.Options == null)
+            if (route == null || route.Options == null || route.Options.Count == 0)
                 return null;
 
             int priority = NumberOfOptions;

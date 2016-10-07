@@ -178,6 +178,9 @@ namespace TOne.WhS.Routing.BP.Activities
                     route.Options = new List<RouteSync.Entities.RouteOption>();
                     foreach (Routing.Entities.RouteOption option in customerRoute.Options)
                     {
+                        if (option.IsBlocked)
+                            continue;
+
                         route.Options.Add(new RouteSync.Entities.RouteOption()
                         {
                             Percentage = option.Percentage,

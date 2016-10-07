@@ -57,6 +57,9 @@ namespace TOne.WhS.Routing.Business.Extensions
                     route.Options = new List<RouteSync.Entities.RouteOption>();
                     foreach (var customerRouteOption in customerRoute.Options)
                     {
+                        if (customerRouteOption.IsBlocked)
+                            continue;
+
                         route.Options.Add(new RouteSync.Entities.RouteOption
                         {
                             SupplierId = customerRouteOption.SupplierId.ToString(),
