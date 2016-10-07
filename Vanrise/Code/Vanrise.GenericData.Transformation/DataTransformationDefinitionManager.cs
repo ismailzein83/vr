@@ -107,9 +107,14 @@ namespace Vanrise.GenericData.Transformation
             return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
         }
 
+        private struct GetTransformationRuntimeTypeCacheName
+        {
+            public Guid DataTransformationDefinitionId { get; set; }
+        }
+
         internal DataTransformationRuntimeType GetTransformationRuntimeType(Guid dataTransformationDefinitionId)
         {
-            string cacheName = String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
+            var cacheName = new GetTransformationRuntimeTypeCacheName { DataTransformationDefinitionId = dataTransformationDefinitionId };// String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
             return CacheManagerFactory.GetCacheManager<RuntimeCacheManager>().GetOrCreateObject(cacheName,
               () =>
               {
