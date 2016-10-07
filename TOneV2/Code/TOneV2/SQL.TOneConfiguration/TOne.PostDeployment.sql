@@ -1044,25 +1044,7 @@ end
 
 --[reprocess].[ReprocessDefinition]---------------------- 1 to 100----------------------------------
 begin
-set nocount on;
-set identity_insert [reprocess].[ReprocessDefinition] on;
-;with cte_data([ID],[Name],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'CDR Reprocessing','{"$type":"Vanrise.Reprocess.Entities.ReprocessDefinitionSettings, Vanrise.Reprocess.Entities","SourceRecordStorageId":44,"ExecutionFlowDefinitionId":-100,"StageNames":["CDR Billing Stage","Main CDR Storage Stage","Invalid CDR Storage Stage","Failed CDR Storage Stage","Billing Stats Daily Generation Stage","Traffic Stats XMin Generation Stage","Traffic Stats Daily Generation Stage"],"InitiationStageNames":["CDR Billing Stage"]}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
-merge	[reprocess].[ReprocessDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
-set identity_insert [reprocess].[ReprocessDefinition] off;
-
+set nocount on;set identity_insert [reprocess].[ReprocessDefinition] on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(1,'CDR Reprocessing','{"$type":"Vanrise.Reprocess.Entities.ReprocessDefinitionSettings, Vanrise.Reprocess.Entities","SourceRecordStorageId":"C038F94B-70D8-4243-A5F1-CA949BDBD62A","ExecutionFlowDefinitionId":-100,"StageNames":["CDR Billing Stage","Main CDR Storage Stage","Invalid CDR Storage Stage","Failed CDR Storage Stage","Billing Stats Daily Generation Stage","Traffic Stats XMin Generation Stage","Traffic Stats Daily Generation Stage"],"InitiationStageNames":["CDR Billing Stage"]}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[reprocess].[ReprocessDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);set identity_insert [reprocess].[ReprocessDefinition] off;
 ----------------------------------------------------------------------------------------------------
 end
 
