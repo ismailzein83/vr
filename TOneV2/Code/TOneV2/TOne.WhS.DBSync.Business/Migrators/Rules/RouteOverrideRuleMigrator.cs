@@ -60,7 +60,15 @@ namespace TOne.WhS.DBSync.Business
                 SourceRouteOverrideRule sourceRule = rules.First();
                 if (sourceRule == null)
                     continue;
-                routeRules.Add(GetSourceRuleFromZones(rules));
+                var rule = GetSourceRuleFromZones(rules);
+                if (rule == null)
+                {
+                    this.TotalRowsFailed++;
+                }
+                else
+                {
+                    routeRules.Add(rule);
+                }
             }
             return routeRules;
 
@@ -92,7 +100,11 @@ namespace TOne.WhS.DBSync.Business
                 SourceRouteOverrideRule sourceRule = rules.First();
                 if (sourceRule == null)
                     continue;
-                routeRules.Add(GetSourceRuleFromCodes(rules));
+                var rule = GetSourceRuleFromCodes(rules);
+                if (rule == null)
+                    this.TotalRowsFailed++;
+                else
+                    routeRules.Add(rule);                
             }
             return routeRules;
         }
@@ -100,30 +112,43 @@ namespace TOne.WhS.DBSync.Business
         {
             SourceRouteOverrideRule sourceRule = rules.First();
             var details = GetRuleDetailsFromCode(rules, sourceRule);
-            return new SourceRule
+            if (details == null)
             {
-                Rule = new Rule
+                return null;
+            }
+            else
+            {
+                return new SourceRule
                 {
-                    BED = rules.Min(r => r.BED),
-                    EED = null,
-                    RuleDetails = Serializer.Serialize(details),
-                    TypeId = _routeRuleTypeId
-                }
-            };
+                    Rule = new Rule
+                    {
+                        BED = rules.Min(r => r.BED),
+                        EED = null,
+                        RuleDetails = Serializer.Serialize(details),
+                        TypeId = _routeRuleTypeId
+                    }
+                };
+            }
         }
 
         RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
         {
-            RouteRule details = new RouteRule
+            var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule);
+            if (criteria == null)
+                return null;
+            else
             {
-                BeginEffectiveTime = rules.Min(r => r.BED),
-                EndEffectiveTime = null,
-                Description = sourceRule.Reason,
-                Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
-                Criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule),
-                Settings = GetRuleSettings(sourceRule)
-            };
-            return details;
+                RouteRule details = new RouteRule
+                {
+                    BeginEffectiveTime = rules.Min(r => r.BED),
+                    EndEffectiveTime = null,
+                    Description = sourceRule.Reason,
+                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                    Criteria = criteria,
+                    Settings = GetRuleSettings(sourceRule)
+                };
+                return details;
+            }
         }
 
         List<CodeCriteria> GetRuleCodeCriterias(IEnumerable<SourceRouteOverrideRule> rules)
@@ -143,17 +168,25 @@ namespace TOne.WhS.DBSync.Business
         }
         RouteRuleCriteria GetRuleCodeCriteria(List<CodeCriteria> codeCriterias, SourceRouteOverrideRule sourceRule)
         {
-            return new RouteRuleCriteria
+            CarrierAccount customer;
+            if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
-                CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
+                return null;
+            }
+            else
+            {
+                return new RouteRuleCriteria
                 {
-                    Codes = codeCriterias,
-                },
-                CustomerGroupSettings = new SelectiveCustomerGroup
-                {
-                    CustomerIds = new List<int>() { _allCarrierAccounts[sourceRule.CustomerId].CarrierAccountId },
-                }
-            };
+                    CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
+                    {
+                        Codes = codeCriterias,
+                    },
+                    CustomerGroupSettings = new SelectiveCustomerGroup
+                    {
+                        CustomerIds = new List<int>() { customer.CarrierAccountId },
+                    }
+                };
+            }
         }
         SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOverrideRule> rules)
         {
@@ -167,30 +200,42 @@ namespace TOne.WhS.DBSync.Business
                 else
                     lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
 
-            return new SourceRule
+            var ruleDetails = GetRuleDetailsFromZone(rules, sourceRule, lstZoneIds);
+            if (ruleDetails == null)
+                return null;
+            else
             {
-                Rule = new Rule
+                return new SourceRule
                 {
-                    BED = rules.Min(r => r.BED),
-                    EED = null,
-                    TypeId = _routeRuleTypeId,
-                    RuleDetails = Serializer.Serialize(GetRuleDetailsFromZone(rules, sourceRule, lstZoneIds))
-                }
-            };
+                    Rule = new Rule
+                    {
+                        BED = rules.Min(r => r.BED),
+                        EED = null,
+                        TypeId = _routeRuleTypeId,
+                        RuleDetails = Serializer.Serialize(ruleDetails)
+                    }
+                };
+            }
         }
 
         private RouteRule GetRuleDetailsFromZone(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, List<long> lstZoneIds)
         {
-            RouteRule details = new RouteRule
+            var criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule);
+            if (criteria == null)
+                return null;
+            else
             {
-                BeginEffectiveTime = rules.Min(r => r.BED),
-                EndEffectiveTime = null,
-                Description = sourceRule.Reason,
-                Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
-                Criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule),
-                Settings = GetRuleSettings(sourceRule)
-            };
-            return details;
+                RouteRule details = new RouteRule
+                {
+                    BeginEffectiveTime = rules.Min(r => r.BED),
+                    EndEffectiveTime = null,
+                    Description = sourceRule.Reason,
+                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                    Criteria = criteria,
+                    Settings = GetRuleSettings(sourceRule)
+                };
+                return details;
+            }
         }
 
         RegularRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
@@ -219,14 +264,22 @@ namespace TOne.WhS.DBSync.Business
         }
         RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)
         {
-            return new RouteRuleCriteria
+            CarrierAccount customer;
+            if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
-                SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
-                CustomerGroupSettings = new SelectiveCustomerGroup
+                return null;
+            }
+            else
+            {
+                return new RouteRuleCriteria
                 {
-                    CustomerIds = new List<int>() { _allCarrierAccounts[sourceRule.CustomerId].CarrierAccountId },
-                }
-            };
+                    SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
+                    CustomerGroupSettings = new SelectiveCustomerGroup
+                    {
+                        CustomerIds = new List<int>() { customer.CarrierAccountId },
+                    }
+                };
+            }
         }
         FixedOptionPercentage GetOptionPercentageSettings(SourceRouteOverrideRule sourceRule)
         {

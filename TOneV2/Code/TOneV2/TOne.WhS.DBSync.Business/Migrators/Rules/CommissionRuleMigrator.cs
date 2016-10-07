@@ -69,14 +69,18 @@ namespace TOne.WhS.DBSync.Business.Migrators
             foreach (var key in rulesDictionary.Keys)
             {
                 var commissionRules = rulesDictionary[key];
-                result.Add(GetSellingSourceRule(commissionRules));
+                var rule = GetSellingSourceRule(commissionRules);
+                if (rule != null)
+                    result.Add(rule);
             }
 
             rulesDictionary = GroupCommissionRules(purchaseRules, "Purchase");
             foreach (var key in rulesDictionary.Keys)
             {
                 var commissionRules = rulesDictionary[key];
-                result.Add(GetPurchaseSourceRule(commissionRules));
+                var rule = GetPurchaseSourceRule(commissionRules);
+                if (rule != null)
+                    result.Add(rule);
             }
 
             return result;
@@ -85,6 +89,12 @@ namespace TOne.WhS.DBSync.Business.Migrators
         {
             List<long> zoneIds = new List<long>();
             SourceCommission defaultCommission = commissionRules.FirstOrDefault();
+            CarrierAccount supplier;
+            if(!_allCarrierAccounts.TryGetValue(defaultCommission.SupplierId, out supplier))
+            {
+                this.TotalRowsFailed += commissionRules.Count;
+                return null;
+            }
             foreach (SourceCommission sourceCommission in commissionRules)
             {
                 if (!_allSupplierZones.ContainsKey(sourceCommission.ZoneId.ToString()))
@@ -114,7 +124,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     {
                         new SupplierWithZones
                         {
-                            SupplierId = _allCarrierAccounts[defaultCommission.SupplierId].CarrierAccountId,
+                            SupplierId = supplier.CarrierAccountId,
                             SupplierZoneIds = zoneIds
                         }
                     }
@@ -127,6 +137,12 @@ namespace TOne.WhS.DBSync.Business.Migrators
         {
             List<long> zoneIds = new List<long>();
             SourceCommission defaultCommission = commissionRules.FirstOrDefault();
+            CarrierAccount customer;
+            if(!_allCarrierAccounts.TryGetValue(defaultCommission.CustomerId, out customer))
+            {
+                this.TotalRowsFailed += commissionRules.Count;
+                return null;
+            }
             foreach (SourceCommission sourceCommission in commissionRules)
             {
                 if (!_allSaleZones.ContainsKey(sourceCommission.ZoneId.ToString()))
@@ -151,7 +167,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 BusinessEntityGroup = new SelectiveCustomerGroup
                 {
-                    CustomerIds = new List<int>() { _allCarrierAccounts[defaultCommission.CustomerId].CarrierAccountId },
+                    CustomerIds = new List<int>() { customer.CarrierAccountId },
                 }
             });
             extraChargeRule.Criteria.FieldsValues.Add("Zones", new BusinessEntityValues
