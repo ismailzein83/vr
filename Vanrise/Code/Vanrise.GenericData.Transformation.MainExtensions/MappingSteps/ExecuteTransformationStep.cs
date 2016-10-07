@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             context.AddCodeToCurrentInstanceExecutionBlock("var dataTransformer = new Vanrise.GenericData.Transformation.DataTransformer();");
-            context.AddCodeToCurrentInstanceExecutionBlock("var executionOutput =dataTransformer.ExecuteDataTransformation({0},(context)=>",this.DataTransformationId);
+            context.AddCodeToCurrentInstanceExecutionBlock("var executionOutput =dataTransformer.ExecuteDataTransformation(new Guid(\"{0}\"),(context)=>",this.DataTransformationId);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
 
             foreach (var recordMapping in this.RecordsMapping)
