@@ -45,7 +45,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 WHERE BS.BatchStart BETWEEN @FromDate AND @ToDate AND {1} = @CustomerId 
                 And ERC.CurrencyID = BS.CostCurrencyId AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED) 
                 And ERS.CurrencyID = BS.SaleCurrencyId AND BS.BatchStart >= ERS.BED AND (ERS.EED IS NULL OR BS.BatchStart < ERS.EED)
-                GROUP BY {3} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY (cast( (SUM({0} )/60 ) as decimal(13,4) )) ",
+                GROUP BY {3} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY (cast( (SUM({0} )/60 ) as decimal(13,4) )) desc",
                 amountDuration,
                 carrierId,
                 GetExchangeRatesTable(currencyId),

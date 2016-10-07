@@ -132,7 +132,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 SaleAmountSummary s = new SaleAmountSummary()
                 {
-                    SaleAmount = cs.SaleNet != null ? Math.Truncate(((double)cs.SaleNet * 100)) / 100 : 0,
+                    SaleAmount = (double)cs.SaleNet,
                     FormattedSaleAmount = ReportHelpers.FormatNormalNumberDigit(cs.SaleNet != null ? (double)cs.SaleNet : 0),
                     Customer = cs.Customer
                 };

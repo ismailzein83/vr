@@ -12,7 +12,7 @@
               <Width>2.2in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.2in</Width>
+              <Width>3in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.52603in</Width>
@@ -136,6 +136,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1689,7 +1690,7 @@
         </TablixRowHierarchy>
         <DataSetName>CustomerRouting</DataSetName>
         <Height>1in</Height>
-        <Width>15.1229in</Width>
+        <Width>15.9229in</Width>
         <Style />
       </Tablix>
     </ReportItems>

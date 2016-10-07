@@ -1,6 +1,6 @@
-﻿<vr-panel ng-controller="WhS_Analytics_BillingReportsController">
+﻿<vr-panel ng-controller="WhS_Analytics_BillingReportsController" vr-loader="isLoading">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+        <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="3">
                     <vr-select datatextfield="Name" datavaluefield="ReportDefinitionId"

@@ -2431,7 +2431,6 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
-                  <Format>#,0,.00</Format>
                 </Style>
                 <ChartAxisTitle>
                   <Caption />
@@ -2567,8 +2566,8 @@
         </ChartNoDataMessage>
         <DataSetName>SaleAmount</DataSetName>
         <Top>2.375in</Top>
-        <Height>3in</Height>
-        <Width>8.625in</Width>
+        <Height>3.01667in</Height>
+        <Width>9.90833in</Width>
         <ZIndex>1</ZIndex>
         <CustomProperties>
           <CustomProperty>
@@ -2741,7 +2740,6 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
-                  <Format>#,0,.00</Format>
                 </Style>
                 <ChartAxisTitle>
                   <Caption />
@@ -2882,7 +2880,7 @@
         <Top>6in</Top>
         <Left>0.0425in</Left>
         <Height>3in</Height>
-        <Width>8.625in</Width>
+        <Width>9.86583in</Width>
         <ZIndex>2</ZIndex>
         <CustomProperties>
           <CustomProperty>

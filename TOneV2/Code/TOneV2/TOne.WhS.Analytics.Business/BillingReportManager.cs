@@ -61,7 +61,7 @@ namespace TOne.WhS.Analytics.Business
                     FilterValues = listCustomers
                 };
                 analyticQuery.Query.Filters.Add(dimensionFilter);
-                analyticQuery.Query.MeasureFields.Add("SaleNet");
+                analyticQuery.Query.MeasureFields.Add("TotalSaleNet");
                 analyticQuery.Query.MeasureFields.Add("SaleDuration");
             }
             else
@@ -72,7 +72,7 @@ namespace TOne.WhS.Analytics.Business
                     FilterValues = listCustomers
                 };
                 analyticQuery.Query.Filters.Add(dimensionFilter);
-                analyticQuery.Query.MeasureFields.Add("CostNet");
+                analyticQuery.Query.MeasureFields.Add("TotalCostNet");
                 analyticQuery.Query.MeasureFields.Add("CostDuration");
             }
 
@@ -87,6 +87,7 @@ namespace TOne.WhS.Analytics.Business
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             int monthCount = 0;
             if (result != null)
+            {
                 foreach (var analyticRecord in result.Data)
                 {
                     BusinessCaseStatus businessCaseStatus = new BusinessCaseStatus();
@@ -109,9 +110,9 @@ namespace TOne.WhS.Analytics.Business
                         businessCaseStatus.MonthYear = monthValue.Name;
                         MeasureValue net;
                         if (isSale)
-                            analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                            analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out net);
                         else
-                            analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                            analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out net);
                         businessCaseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
 
 
@@ -125,6 +126,22 @@ namespace TOne.WhS.Analytics.Business
                         monthCount = monthCount + 1;
                     }
                 }
+                if (result.Data.Count() > 0)
+                {
+                    while (monthCount < arrayOfDate.Count )
+                    {
+                        BusinessCaseStatus businessCaseStatus = new BusinessCaseStatus();
+                        businessCaseStatus.MonthYear = arrayOfDate[monthCount];
+                        businessCaseStatus.Amount = 0;
+                        businessCaseStatus.Durations = 0;
+                        listBusinessCaseStatus.Add(businessCaseStatus);
+                        monthCount = monthCount + 1;
+                    }
+                }
+                
+
+            }
+                
             return listBusinessCaseStatus;
         }
         private List<BusinessCaseStatus> GetBusinessCaseStatus(BusinessCaseStatusQuery query, bool isSale, bool isAmount)
@@ -171,16 +188,20 @@ namespace TOne.WhS.Analytics.Business
             style.Font.Color = Color.FromArgb(255, 0, 0);
             style.Font.Size = 14;
             style.Font.IsBold = true;
+            string carrierName = _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId);
             string currency = String.Format("Currency: [{0}] {1}", businessCaseStatusQuery.currencySymbol, businessCaseStatusQuery.currencyName);
-            string chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Customer " + currency;
-            CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Customer", listBusinessCaseStatusDurationAmountSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency);
-            CreateWorkSheet(wbk, "Traf Top Dest Amt  Cus", listBusinessCaseStatusSaleAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Customer", style, currency);
-            CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", listBusinessCaseStatusSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration Customer", style, currency);
 
-            chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Supplier " + currency;
-            CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Supplier", listBusinessCaseStatusDurationAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency);
-            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", listBusinessCaseStatusAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount Supplier", style, currency);
-            CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", listBusinessCaseStatus, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration  Supplier", style, currency);
+            string duration = String.Format("Duration: [{0}] {1}", "Min", "Minutes");
+
+            string chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Customer ";
+            CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Customer", listBusinessCaseStatusDurationAmountSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency, carrierName);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt  Cus", listBusinessCaseStatusSaleAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount For Customer", style, currency, carrierName);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Cus", listBusinessCaseStatusSale, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration For Customer", style, duration, carrierName);
+
+            chartTitle = "Monthly Traffic " + _carrierAccountManager.GetCarrierAccountName(businessCaseStatusQuery.customerId) + " As Supplier ";
+            CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Supplier", listBusinessCaseStatusDurationAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency, carrierName);
+            CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", listBusinessCaseStatusAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount For Supplier", style, currency, carrierName);
+            CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", listBusinessCaseStatus, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration For Supplier", style, duration, carrierName);
 
             ExcelResult excelResult = new ExcelResult
             {
@@ -189,7 +210,7 @@ namespace TOne.WhS.Analytics.Business
             return excelResult;
         }
 
-        private void CreateWorkSheetDurationAmount(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime? toDate, int topDestination, string chartTitle, Style style, string currency)
+        private void CreateWorkSheetDurationAmount(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime? toDate, int topDestination, string chartTitle, Style style, string currency, string carrierName)
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count();
@@ -202,6 +223,7 @@ namespace TOne.WhS.Analytics.Business
 
                 int HeaderIndex = 2;
                 worksheet.Cells[2, 1].PutValue("Amount");
+
                 worksheet.Cells[3, 1].PutValue("Duration");
                 Range range = worksheet.Cells.CreateRange("B1:D1");
                 Style s = workbook.Styles[workbook.Styles.Add()];
@@ -210,6 +232,33 @@ namespace TOne.WhS.Analytics.Business
                 s.Font.IsBold = true;
                 range.SetStyle(s);
                 range.PutValue(currency, false, true);
+
+
+                Style value = workbook.Styles[workbook.Styles.Add()];
+                value.Font.Name = "Times New Roman";
+                value.Font.Size = 12;
+
+
+
+                Style label = workbook.Styles[workbook.Styles.Add()];
+                label.Font.Name = "Times New Roman";
+                label.Font.Size = 12;
+                label.Font.IsBold = true;
+
+                worksheet.Cells[0, 4].SetStyle(label);
+                worksheet.Cells[0, 4].PutValue("From Date");
+
+                worksheet.Cells[0, 5].SetStyle(value);
+                worksheet.Cells[0, 5].PutValue(fromDate.ToString("dd-MM-yyyy"));
+
+
+                worksheet.Cells[0, 6].SetStyle(label);
+                worksheet.Cells[0, 6].PutValue("To Date");
+
+                worksheet.Cells[0, 7].SetStyle(value);
+                worksheet.Cells[0, 7].PutValue(toDate.Value.ToString("dd-MM-yyyy"));
+
+
                 //Merge range into a single cell
                 range.Merge();
                 for (int i = 0; i < lstCarrierProfileCount; i++)
@@ -247,7 +296,7 @@ namespace TOne.WhS.Analytics.Business
             }
         }
 
-        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime? toDate, int topDestination, string chartTitle, Style style, string currency)
+        private void CreateWorkSheet(Workbook workbook, string workSheetName, List<BusinessCaseStatus> listBusinessCaseStatus, DateTime fromDate, DateTime? toDate, int topDestination, string chartTitle, Style style, string currency, string carrierName)
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count;
@@ -263,9 +312,34 @@ namespace TOne.WhS.Analytics.Business
                 //Merge range into a single cell
                 range.Merge();
 
+                Style value = workbook.Styles[workbook.Styles.Add()];
+                value.Font.Name = "Times New Roman";
+                value.Font.Size = 12;
+
+
+
+                Style label = workbook.Styles[workbook.Styles.Add()];
+                label.Font.Name = "Times New Roman";
+                label.Font.Size = 12;
+                label.Font.IsBold = true;
+
+                worksheet.Cells[0, 4].SetStyle(label);
+                worksheet.Cells[0, 4].PutValue("From Date");
+
+                worksheet.Cells[0, 5].SetStyle(value);
+                worksheet.Cells[0, 5].PutValue(fromDate.ToString("dd-MM-yyyy"));
+
+
+                worksheet.Cells[0, 6].SetStyle(label);
+                worksheet.Cells[0, 6].PutValue("To Date");
+
+                worksheet.Cells[0, 7].SetStyle(value);
+                worksheet.Cells[0, 7].PutValue(toDate.Value.ToString("dd-MM-yyyy"));
+
                 TimeSpan span = (toDate.HasValue) ? ((DateTime)toDate).Subtract(fromDate) : DateTime.Now.Subtract(fromDate);
                 int numberOfMonths = (int)(Math.Round(span.TotalDays / 30));
-
+                if (toDate.HasValue && toDate.Value.Day < 12)
+                    numberOfMonths++;
                 int headerIndex = 2;
                 int irow = 1;
 
@@ -337,7 +411,7 @@ namespace TOne.WhS.Analytics.Business
                 chart.ValueAxis.TickLabelPosition = Aspose.Cells.Charts.TickLabelPositionType.Low;
                 chart.Legend.Position = Aspose.Cells.Charts.LegendPositionType.Left;
                 chart.Title.Font.IsBold = true;
-                chart.Title.Text = chartTitle;
+                chart.Title.Text = chartTitle + " " +carrierName;
                 chart.Title.TextHorizontalAlignment = TextAlignmentType.Right;
                 chart.Title.X = 2000;
                 chart.Title.Y = 100;
@@ -347,6 +421,9 @@ namespace TOne.WhS.Analytics.Business
                     chart.ChartObject.Height = 200;
             }
         }
+     
+        
+        
         private string GetExcelColumnName(int columnNumber)
         {
             int dividend = columnNumber;

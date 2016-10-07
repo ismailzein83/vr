@@ -1142,7 +1142,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalCostDuration.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!CostDuration.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1174,7 +1174,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalSaleDuration.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!SaleDuration.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1206,7 +1206,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalCostNet.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!CostNet.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1238,7 +1238,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalSaleNet.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!SaleNet.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1270,7 +1270,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalProfit.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!Profit.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1302,7 +1302,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalProfitPerc.Value</Value>
+                                  <Value>=FormatPercent(Sum(Fields!Profit.Value)/Sum(Fields!SaleNet.Value))</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1334,7 +1334,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalAvgMinutes.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!Profit.Value)/Sum(Fields!SaleDuration.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1355,6 +1355,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1366,7 +1367,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalCostExtraCharge.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!CostExtraChargeValue.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1401,7 +1402,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalSaleExtraCharge.Value</Value>
+                                  <Value>=FormatNumber(Sum(Fields!SaleExtraChargeValue.Value),Parameters!Digit.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2320,7 +2321,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!TotalProfitPerc.Value</Value>
+                                  <Value>=FormatPercent(Parameters!TotalProfitPerc.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>

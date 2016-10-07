@@ -883,7 +883,7 @@
         <DataSetName>ExchangeChart</DataSetName>
         <Top>1.375in</Top>
         <Height>4.75in</Height>
-        <Width>8.625in</Width>
+        <Width>11.2in</Width>
         <ZIndex>1</ZIndex>
         <CustomProperties>
           <CustomProperty>
@@ -899,7 +899,7 @@
     <Height>6.125in</Height>
     <Style />
   </Body>
-  <Width>8.75in</Width>
+  <Width>11.625in</Width>
   <Page>
     <PageHeader>
       <Height>2.625in</Height>

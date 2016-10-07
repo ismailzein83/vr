@@ -27,7 +27,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = listCustomerDimensions,
-                    MeasureFields = new List<string> { "SaleNet", "CostNet", "Profit" },
+                    MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -57,7 +57,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = listSupplierDimensions,
-                    MeasureFields = new List<string> { "SaleNet", "CostNet", "Profit" },
+                    MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -90,7 +90,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         profitByCarrier.Customer = customerValue.Name;
 
                     MeasureValue profit;
-                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                    analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
                     profitByCarrier.CustomerProfit = Convert.ToDouble(profit.Value ?? 0.0);
                     profitByCarrier.FormattedCustomerProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.CustomerProfit);
 
@@ -111,7 +111,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         profitByCarrier.Customer = customerValue.Name;
 
                     MeasureValue profit;
-                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                    analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
                     profitByCarrier.SupplierProfit = Convert.ToDouble(profit.Value ?? 0.0);
                     profitByCarrier.FormattedSupplierProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.SupplierProfit);
                     if (dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))

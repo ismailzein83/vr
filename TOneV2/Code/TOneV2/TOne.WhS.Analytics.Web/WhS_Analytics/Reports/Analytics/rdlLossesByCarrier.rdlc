@@ -101,13 +101,13 @@
                   <Width>0.03125in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.375in</Width>
+                  <Width>2.97525in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.48387in</Width>
+                  <Width>2.63462in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.48387in</Width>
+                  <Width>1.95758in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.1129in</Width>
@@ -1191,7 +1191,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1393,14 +1392,14 @@
             </TablixRowHierarchy>
             <DataSetName>CarrierLost</DataSetName>
             <Height>1.25in</Height>
-            <Width>8.7116in</Width>
+            <Width>11.93631in</Width>
             <Style />
           </Tablix>
         </ReportItems>
         <Height>1.25in</Height>
         <Style />
       </Body>
-      <Width>8.7116in</Width>
+      <Width>11.94647in</Width>
       <Page>
         <PageHeader>
           <Height>2.25in</Height>

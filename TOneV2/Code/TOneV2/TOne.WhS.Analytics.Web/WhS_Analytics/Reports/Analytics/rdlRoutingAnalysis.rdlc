@@ -1169,7 +1169,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1896,6 +1895,12 @@
                       <Disabled>=IIf(Parameters!PageBreak.Value="true", false, true)</Disabled>
                     </PageBreak>
                   </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!Duration.Value</Value>
+                      <Direction>Descending</Direction>
+                    </SortExpression>
+                  </SortExpressions>
                   <TablixMembers>
                     <TablixMember>
                       <KeepWithGroup>After</KeepWithGroup>
@@ -1911,6 +1916,12 @@
                       <Group Name="table1_Details_Group">
                         <DataElementName>Detail</DataElementName>
                       </Group>
+                      <SortExpressions>
+                        <SortExpression>
+                          <Value>=Fields!Duration.Value</Value>
+                          <Direction>Descending</Direction>
+                        </SortExpression>
+                      </SortExpressions>
                       <TablixMembers>
                         <TablixMember />
                       </TablixMembers>
@@ -1935,6 +1946,12 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>RoutingAnalysis</DataSetName>
+            <SortExpressions>
+              <SortExpression>
+                <Value>=Fields!Duration.Value</Value>
+                <Direction>Descending</Direction>
+              </SortExpression>
+            </SortExpressions>
             <Top>0cm</Top>
             <Height>1.51668in</Height>
             <Width>10.63503in</Width>

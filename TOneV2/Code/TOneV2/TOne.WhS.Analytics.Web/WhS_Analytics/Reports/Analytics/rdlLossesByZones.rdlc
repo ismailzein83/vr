@@ -12,7 +12,7 @@
               <Width>0.03125in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.30208in</Width>
+              <Width>3in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.875in</Width>
@@ -24,7 +24,7 @@
               <Width>1.58721in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.30208in</Width>
+              <Width>3in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -1834,6 +1834,12 @@
               <Group Name="table1_Details_Group">
                 <DataElementName>Detail</DataElementName>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!Loss.Value</Value>
+                  <Direction>Descending</Direction>
+                </SortExpression>
+              </SortExpressions>
               <TablixMembers>
                 <TablixMember />
               </TablixMembers>
@@ -1853,7 +1859,7 @@
         </TablixRowHierarchy>
         <DataSetName>RateLoss</DataSetName>
         <Height>1in</Height>
-        <Width>14.35415in</Width>
+        <Width>15.74999in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1864,7 +1870,7 @@
     <Height>1in</Height>
     <Style />
   </Body>
-  <Width>14.45in</Width>
+  <Width>15.74999in</Width>
   <Page>
     <PageHeader>
       <Height>3.125in</Height>
