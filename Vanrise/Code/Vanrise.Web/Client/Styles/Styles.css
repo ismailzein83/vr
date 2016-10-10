@@ -604,11 +604,11 @@ add padding .left-addon input {
     right : -15px ;
 }*/
 .modal-body .panel-vr .panel-body {
-    padding: 15px;
+    padding: 5px 15px;
 }
 
 .modal-body .fieldset-vr .panel-body {
-    padding: 15px;
+    padding: 5px 15px;
 }
 
 .modal-dialog .action-bar {
@@ -688,7 +688,7 @@ vr-modalcontent .action-bar {
 }
 
 .style-row {
-    padding: 10px;
+    padding: 5px 10px;
     /*border-bottom: 1px solid #F0F0F0;*/
 }
 
