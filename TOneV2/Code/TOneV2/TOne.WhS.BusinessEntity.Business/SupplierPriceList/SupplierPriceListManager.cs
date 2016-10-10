@@ -95,7 +95,7 @@ namespace TOne.WhS.BusinessEntity.Business
             supplierPriceListDetail.Entity = priceList;
             CurrencyManager currencyManager = new CurrencyManager();
             Currency currency = currencyManager.GetCurrency(priceList.CurrencyId);
-            supplierPriceListDetail.Currency = currency != null ? currency.Name : null;
+            supplierPriceListDetail.Currency = currency != null ? currency.Symbol : null;
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             supplierPriceListDetail.SupplierName = carrierAccountManager.GetCarrierAccountName(priceList.SupplierId);
 

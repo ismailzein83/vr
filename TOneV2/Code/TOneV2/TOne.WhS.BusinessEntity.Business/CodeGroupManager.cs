@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var allCodeGroups = GetCachedCodeGroups();
 
             Func<CodeGroup, bool> filterExpression = (prod) =>
-                 (input.Query.Code == null || prod.Code.ToLower().Contains(input.Query.Code.ToLower()))
+                 (input.Query.Code == null || prod.Code.ToLower().StartsWith(input.Query.Code.ToLower()))
                   &&
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId));
 
