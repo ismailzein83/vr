@@ -86,6 +86,13 @@ namespace TOne.WhS.Routing.Business
             return manager.GetExtensionConfigurations<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
         }
 
+        public Dictionary<Guid, RouteRuleSettingsConfig> GetRouteRuleTypesTemplatesDict()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurationsByType<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
+        }
+
+
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
             List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
@@ -107,15 +114,24 @@ namespace TOne.WhS.Routing.Business
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
                  && (!input.Query.EffectiveOn.HasValue || routeRule.BeginEffectiveTime <= input.Query.EffectiveOn)
                  && (!input.Query.EffectiveOn.HasValue || !routeRule.EndEffectiveTime.HasValue || routeRule.EndEffectiveTime > input.Query.EffectiveOn);
-                
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
         public override RouteRuleDetail MapToDetails(RouteRule rule)
         {
+            string _cssClass = null;
+            Dictionary<Guid, RouteRuleSettingsConfig> routeRuleSettingsConfigDic = GetRouteRuleTypesTemplatesDict();
+
+            if (rule != null && rule.Settings != null && rule.Settings.ConfigId != null)
+            {
+                _cssClass = routeRuleSettingsConfigDic.GetRecord(rule.Settings.ConfigId).CssClass;
+            }
+
             return new RouteRuleDetail()
             {
-                Entity = rule
+                Entity = rule,
+                CssClass = _cssClass
             };
         }
 

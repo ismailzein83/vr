@@ -36,7 +36,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
             api.load = function (payload) {
 
                 if (payload != undefined && payload.CustomerRoute != undefined) {
-                    ctrl.customerRouteNumberOfUnblockedOptions = payload.CustomerRoute.NumberOfUnblockedOptions;
+                    ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
                     ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
                 }
                 //if (payload != undefined && payload.ProductRoute != undefined) {
@@ -49,7 +49,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     $type: "TOne.WhS.Routing.Entities.RouteBuildConfiguration, TOne.WhS.Routing.Entities",
                     CustomerRoute: {
                         $type: "TOne.WhS.Routing.Entities.CustomerRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                        NumberOfUnblockedOptions: ctrl.customerRouteNumberOfUnblockedOptions,
+                        NumberOfOptions: ctrl.customerRouteNumberOfOptions,
                         AddBlockedOptions: ctrl.customerRouteAddBlockedOptions
                     },
                     //ProductRoute: {

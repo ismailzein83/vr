@@ -7,9 +7,9 @@ namespace TOne.WhS.Routing.Business
     public class ConfigManager 
     {
         #region public methods
-        public int GetCustomerRouteBuildNumberOfUnblockedOptions()
+        public int GetCustomerRouteBuildNumberOfOptions()
         {
-            return GetCustomerRouteBuildConfiguration().NumberOfUnblockedOptions;
+            return GetCustomerRouteBuildConfiguration().NumberOfOptions;
         }
 
         public bool GetCustomerRouteBuildAddBlockedOptions()
@@ -130,7 +130,7 @@ namespace TOne.WhS.Routing.Business
 
             return routeBuildConfiguration.CustomerRoute;
         }
-
+         
         private ProductRouteBuildConfiguration GetProductRouteBuildConfiguration()
         {
             RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();

@@ -151,7 +151,7 @@ namespace TOne.WhS.Routing.Business
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            var maxNumberOfOptions = configManager.GetCustomerRouteBuildNumberOfUnblockedOptions();
+            var maxNumberOfOptions = configManager.GetCustomerRouteBuildNumberOfOptions();
             bool addBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
 
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions, addBlockedOptions);

@@ -86,6 +86,12 @@ namespace TOne.WhS.Routing.Business
             return manager.GetExtensionConfigurations<RouteOptionRuleConfig>(RouteOptionRuleConfig.EXTENSION_TYPE);
         }
 
+        public Dictionary<Guid, RouteOptionRuleConfig> GetRouteOptionRuleTypesTemplatesDict()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurationsByType<RouteOptionRuleConfig>(RouteOptionRuleConfig.EXTENSION_TYPE);
+        }
+
         IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
             List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
@@ -124,17 +130,25 @@ namespace TOne.WhS.Routing.Business
             if (routeOptionRuleEditorRuntime.Entity.Settings == null)
                 throw new NullReferenceException(string.Format("routeOptionRuleEditorRuntime.Entity.Settings for Rule ID: {0} is null", ruleId));
 
-           routeOptionRuleEditorRuntime.SettingsEditorRuntime = routeOptionRuleEditorRuntime.Entity.Settings.GetEditorRuntime();
+            routeOptionRuleEditorRuntime.SettingsEditorRuntime = routeOptionRuleEditorRuntime.Entity.Settings.GetEditorRuntime();
 
             return routeOptionRuleEditorRuntime;
         }
 
         public override RouteOptionRuleDetail MapToDetails(RouteOptionRule rule)
         {
+            string _cssClass = null;
+            Dictionary<Guid, RouteOptionRuleConfig> routeOptionRuleConfigDic = GetRouteOptionRuleTypesTemplatesDict();
+
+            if (rule != null && rule.Settings != null && rule.Settings.ConfigId != null)
+            {
+                _cssClass = routeOptionRuleConfigDic.GetRecord(rule.Settings.ConfigId).CssClass;
+            }
+
             return new RouteOptionRuleDetail
             {
-                Entity = rule
-
+                Entity = rule,
+                CssClass = _cssClass
             };
         }
 

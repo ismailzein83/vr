@@ -10,6 +10,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public RouteRule Entity { get; set; }
 
+        public string CssClass { get; set; }
+
         public string IncludedCodes 
         {
             get

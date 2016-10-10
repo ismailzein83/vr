@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public RouteOptionRule Entity { get; set; }
 
+        public string CssClass { get; set; }
+
         public string IncludedCodes
         {
             get
@@ -54,6 +56,5 @@ namespace TOne.WhS.Routing.Entities
                 return string.Empty;
             }
         }
-
     }
 }
