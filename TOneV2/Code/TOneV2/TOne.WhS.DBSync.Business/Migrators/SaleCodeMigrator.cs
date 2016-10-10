@@ -83,7 +83,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourceCode> onItemLoaded)
         {
-            dataManager.LoadSourceItems(true, onItemLoaded);
+            dataManager.LoadSourceItems(true, _onlyEffective, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

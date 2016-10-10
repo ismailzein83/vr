@@ -33,9 +33,10 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-        public void LoadSourceItems(bool isSaleCode, Action<SourceCode> itemToAdd)
+        public void LoadSourceItems(bool isSaleCode, bool onlyEffective, Action<SourceCode> itemToAdd)
         {
-            ExecuteReaderText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'"), (reader) =>
+            string queryOnlyEffective = onlyEffective ? "and Code.IsEffective ='Y'" : string.Empty;
+            ExecuteReaderText(query_getSourceCodes + (isSaleCode ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'") + queryOnlyEffective, (reader) =>
                 {
                     while (reader.Read())
                     {
