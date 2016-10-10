@@ -125,6 +125,7 @@
     <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ProcessCountryZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadSPLContext.cs" />
     <Compile Include="ReserveIdForPriceList.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="SetImportSPLContext.cs" />

@@ -36,9 +36,34 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     public class ImportSPLContext : IImportSPLContext
     {
+        private object _obj = new object();
+
+        private volatile bool _processHasChanges = false;
+
+        public const string CustomDataKey = "ImportSPLContext";
+
+        public bool ProcessHasChanges
+        {
+            get
+            {
+                return this._processHasChanges;
+            }
+        }
+
         public TimeSpan CodeCloseDateOffset
         {
             get { return new TimeSpan(7, 0, 0,0); }
         }
+
+        public void SetToTureProcessHasChangesWithLock()
+        {
+            if(!_processHasChanges)
+            {
+                lock(_obj)
+                {
+                    this._processHasChanges = true;
+                }
+            }
+        }      
     }
 }

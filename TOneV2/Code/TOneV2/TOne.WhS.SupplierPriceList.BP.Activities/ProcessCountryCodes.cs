@@ -97,17 +97,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         
         #endregion
 
-        const string ImportSPLContext_CustomeDataKey = "ImportSPLContext";
-
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            handle.CustomData.Add(ImportSPLContext_CustomeDataKey, context.GetSPLParameterContext());
+            handle.CustomData.Add(ImportSPLContext.CustomDataKey, context.GetSPLParameterContext());
             base.OnBeforeExecute(context, handle);
         }
 
         protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
         {
-            IImportSPLContext splContext = handle.CustomData[ImportSPLContext_CustomeDataKey] as IImportSPLContext;
+            IImportSPLContext splContext = handle.CustomData[ImportSPLContext.CustomDataKey] as IImportSPLContext;
             IEnumerable<ExistingZone> existingZones = null;
 
             if (inputArgument.ExistingZonesByZoneId != null)
@@ -127,6 +125,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
             plCodeManager.ProcessCountryCodes(processCountryCodesContext);
+
+            if((processCountryCodesContext.NewCodes != null && processCountryCodesContext.NewCodes.Count() > 0)
+                || (processCountryCodesContext.ChangedCodes != null && processCountryCodesContext.ChangedCodes.Count() > 0)
+                || (processCountryCodesContext.NewZones != null && processCountryCodesContext.NewZones.Count() > 0)
+                || (processCountryCodesContext.ChangedZones != null && processCountryCodesContext.ChangedZones.Count() > 0))
+            {
+                splContext.SetToTureProcessHasChangesWithLock();
+            }
 
             return new ProcessCountryCodesOutput()
             {

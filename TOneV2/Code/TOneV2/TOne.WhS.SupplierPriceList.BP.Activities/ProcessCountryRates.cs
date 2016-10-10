@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.BusinessProcess;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -65,6 +66,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            handle.CustomData.Add(ImportSPLContext.CustomDataKey, context.GetSPLParameterContext());
+            base.OnBeforeExecute(context, handle);
+        }
 
         protected override ProcessCountryRatesOutput DoWorkWithResult(ProcessCountryRatesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -85,6 +91,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             PriceListRateManager manager = new PriceListRateManager();
             manager.ProcessCountryRates(processCountryRateContext, inputArgument.ImportedRateTypeIds);
+
+            if((processCountryRateContext.NewRates != null && processCountryRateContext.NewRates.Count() > 0)
+                || (processCountryRateContext.ChangedRates != null && processCountryRateContext.ChangedRates.Count() > 0))
+            {
+                IImportSPLContext splContext = handle.CustomData[ImportSPLContext.CustomDataKey] as IImportSPLContext;
+                splContext.SetToTureProcessHasChangesWithLock();
+            }
 
             return new ProcessCountryRatesOutput()
             {

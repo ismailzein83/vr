@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.BusinessProcess;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -61,6 +62,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public OutArgument<IEnumerable<ChangedZoneService>> ChangedZonesServices { get; set; }
 
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            handle.CustomData.Add(ImportSPLContext.CustomDataKey, context.GetSPLParameterContext());
+            base.OnBeforeExecute(context, handle);
+        }
+
         protected override ProcessCountryZonesServicesOutput DoWorkWithResult(ProcessCountryZonesServicesInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<ExistingZone> existingZones = null;
@@ -80,6 +87,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             PriceListZoneServiceManager manager = new PriceListZoneServiceManager();
             manager.ProcessCountryZonesServices(processCountryZonesServicesContext);
+
+            if ((processCountryZonesServicesContext.NewZonesServices != null && processCountryZonesServicesContext.NewZonesServices.Count() > 0)
+                || (processCountryZonesServicesContext.ChangedZonesServices != null && processCountryZonesServicesContext.ChangedZonesServices.Count() > 0))
+            {
+                IImportSPLContext splContext = handle.CustomData[ImportSPLContext.CustomDataKey] as IImportSPLContext;
+                splContext.SetToTureProcessHasChangesWithLock();
+            }
 
             return new ProcessCountryZonesServicesOutput()
             {
