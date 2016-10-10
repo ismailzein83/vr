@@ -13,6 +13,14 @@ namespace Vanrise.Common.Business
     public class ExtensionConfigurationManager
     {
         #region Private Methods
+        public Dictionary<Guid, T> GetExtensionConfigurationsByType<T>(string type) where T : ExtensionConfiguration
+        {
+            var extensionConfigurations = GetCachedExtensionConfigurations<T>(type);
+            if (extensionConfigurations == null)
+                throw new NullReferenceException(string.Format("ExtensionConfigurations for {0}", type));
+            return extensionConfigurations;
+        }
+
         public IEnumerable<T> GetExtensionConfigurations<T>(string type) where T : ExtensionConfiguration
         {
             var extensionConfigurations = GetCachedExtensionConfigurations<T>(type);
