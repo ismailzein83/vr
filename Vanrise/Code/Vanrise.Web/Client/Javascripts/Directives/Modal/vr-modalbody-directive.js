@@ -8,9 +8,13 @@ app.directive('vrModalbody', [function () {
         compile: function (tElement, tAttrs) {
             var maxHeightPart = "";
             var draggablemodal = "draggablemodal";
-            if (tAttrs.maxheight != undefined)
-                maxHeightPart = '\'max-height\': ' + tAttrs.maxheight + ', \'overflow\': \'auto\', \'padding\': \'15px\'';
 
+            var maxHeigth = window.innerHeight - 130 ;
+
+            //if (tAttrs.maxheight != undefined)
+            //    maxHeigth = tAttrs.maxheight;
+
+            maxHeightPart = '\'max-height\': ' + maxHeigth + ', \'overflow\': \'auto\', \'padding\': \'15px\'';
             if (tAttrs.stopdrag != undefined)
                 draggablemodal = '';
 
