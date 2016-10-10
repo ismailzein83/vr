@@ -1,5 +1,4 @@
 ﻿<vr-row>
-
     <vr-columns width="1/2row" ng-show="false">
         <vr-switch value="useTempTables" label="Use Temporary Tables"></vr-switch>
     </vr-columns>
@@ -10,8 +9,6 @@
         <span vr-loader="ctrl.isLoadingSellingProduct">
             <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" normal-col-num="6" isrequired="true"></vr-whs-be-sellingproduct-selector>
         </span>
-  </vr-row>
-<vr-row>
     <vr-columns colnum="6">
         <vr-common-ratetype-selector on-ready="onOffPeakRateTypeSelectorReady" customvalidate="validateOffPeakAndWeekendRate()" customlabel="OffPeak Rate" isrequired></vr-common-ratetype-selector>
     </vr-columns>
