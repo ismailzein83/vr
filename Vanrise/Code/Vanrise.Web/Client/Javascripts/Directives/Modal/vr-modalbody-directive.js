@@ -9,7 +9,7 @@ app.directive('vrModalbody', [function () {
             var maxHeightPart = "";
             var draggablemodal = "draggablemodal";
 
-            var maxHeigth = window.innerHeight - 130 ;
+            var maxHeigth = window.innerHeight - 122 ;
 
             //if (tAttrs.maxheight != undefined)
             //    maxHeigth = tAttrs.maxheight;
