@@ -48,9 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             Vanrise.Common.Utilities.ActivateAspose();
             Worksheet worksheet = objExcel.Worksheets[0];
 
-            int count = 1;
-            if (!hasHeader)
-                count = 0;
+            int count = (hasHeader) ? 1 : 0;
 
             int rowsCount = worksheet.Cells.Rows.Count;
             if (string.IsNullOrEmpty(worksheet.Cells[0, 0].StringValue.Trim()) && string.IsNullOrEmpty(worksheet.Cells[0, 1].StringValue.Trim())
