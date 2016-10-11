@@ -751,7 +751,7 @@
                         // to rigth padding in old data loading methode in bi
                         var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
 
-                        if (ctrl.datasource.length <= 11) {
+                        if (ctrl.datasource.length <= 13) {
                             $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
                             ctrl.headerStyle = {
                                 "padding-right": "0px"
