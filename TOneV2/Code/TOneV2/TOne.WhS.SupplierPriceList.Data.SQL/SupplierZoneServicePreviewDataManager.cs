@@ -55,10 +55,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
                 _processInstanceID,
                 record.ZoneName,
-                Vanrise.Common.Serializer.Serialize(record.SystemServiceIds),
+                Vanrise.Common.Serializer.Serialize(record.SystemServiceIds, true),
                 record.SystemServicesBED,
                 record.SystemServicesEED,
-                Vanrise.Common.Serializer.Serialize(record.ImportedServiceIds),
+                Vanrise.Common.Serializer.Serialize(record.ImportedServiceIds, true),
                 record.ImportedServicesBED,
                 (int)record.ZoneServicesChangeType);
         }

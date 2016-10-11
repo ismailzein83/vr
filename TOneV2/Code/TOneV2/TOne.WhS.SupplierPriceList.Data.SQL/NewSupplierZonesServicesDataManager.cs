@@ -60,7 +60,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.ZoneServiceId,
                        _processInstanceID,
                        record.Zone.ZoneId,
-                       Vanrise.Common.Serializer.Serialize(record.ZoneServices),
+                       Vanrise.Common.Serializer.Serialize(record.ZoneServices, true),
                        record.BED,
                        record.EED);
         }
