@@ -301,11 +301,11 @@
                     template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
                     template = template.replace("#TEXTALIGN#", "left");
                     if (colDef.type == "LongDatetime")
-                        template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm:ss'");
+                        template = UtilsService.replaceAll(template, "#CELLFILTER#", " | timeNoTimeZone | date:'yyyy-MM-dd HH:mm:ss'");
                     else if (colDef.type == "Datetime")
-                        template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
+                        template = UtilsService.replaceAll(template, "#CELLFILTER#", " | timeNoTimeZone | date:'yyyy-MM-dd HH:mm'");
                     else if (colDef.type == "Date")
-                        template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
+                        template = UtilsService.replaceAll(template, "#CELLFILTER#", " | timeNoTimeZone | date:'yyyy-MM-dd'");
                     else
                         template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
 

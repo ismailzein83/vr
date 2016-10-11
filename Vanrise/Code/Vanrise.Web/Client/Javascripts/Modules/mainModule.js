@@ -367,6 +367,18 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
     };
 });
 
+app.filter('timeNoTimeZone', function () {
+
+    return function (val, offset) {
+        
+        if (val != null && val.length > 19) {            
+            return val.slice(0, -6);
+        }
+        
+        return val;
+    };
+});
+
 angular.module('mainModule')
 .config(function ($popoverProvider) {
     angular.extend($popoverProvider.defaults, {
