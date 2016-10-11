@@ -1,64 +1,68 @@
-﻿<div vr-modalcontent ng-controller="WhS_Routing_RouteOptionRuleEditorController" vr-loader="scopeModal.isLoading" width="'55%'">
+﻿<div vr-modalcontent ng-controller="WhS_Routing_RouteOptionRuleEditorController" vr-loader="scopeModel.isLoading" width="'55%'">
     <vr-modalbody>
         <vr-form name="formRouteOptionRuleEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/4row">
-                            <vr-textbox value="scopeModal.routeOptionRuleName" label="Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.routeOptionRuleName" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                    </vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-select datatextfield="Title" datavaluefield="TemplateConfigID" label="Option Rule Type" datasource="scopeModel.routeOptionRuleSettingsTemplates"
+                                       selectedvalues="scopeModel.selectedrouteOptionRuleSettingsTemplate" onselectionchanged="scopeModel.onRouteOptionRuleSettingsSelectionChanged" isrequired>
+                            </vr-select>
+                        </vr-columns>
+                    </vr-row> 
                 </vr-tab>
-                <vr-tab header="'Criteria'">
+
+                <vr-tab header="'Criteria'" ng-show="scopeModel.showCriteriaSection">
                     <vr-row>
-
-                        <vr-whs-be-purchasepricingrulecriteria on-ready="scopeModal.onSuppliersWithZonesGroupSettingsDirectiveReady" normal-col-num="12"></vr-whs-be-purchasepricingrulecriteria>
-
+                        <vr-whs-be-purchasepricingrulecriteria on-ready="scopeModel.onSuppliersWithZonesGroupSettingsDirectiveReady" normal-col-num="12"></vr-whs-be-purchasepricingrulecriteria>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/2row" ng-show="scopeModal.showRouteOptionRuleTypeFilterSection">
-                            <vr-select datatextfield="description" datavaluefield="value" label="Filter By" datasource="scopeModal.routeOptionRuleCriteriaTypes"
-                                       selectedvalues="scopeModal.selectedRouteOptionRuleCriteriaType" onselectionchanged="scopeModal.onRouteOptionRuleCriteriaTypeSelectionChanged" hideremoveicon />
+                        <vr-columns width="1/2row" ng-show="scopeModel.showRouteOptionRuleTypeFilterSection">
+                            <vr-select datatextfield="description" datavaluefield="value" label="Filter By" datasource="scopeModel.routeOptionRuleCriteriaTypes"
+                                       selectedvalues="scopeModel.selectedRouteOptionRuleCriteriaType" onselectionchanged="scopeModel.onRouteOptionRuleCriteriaTypeSelectionChanged" hideremoveicon />
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-if="scopeModal.showSaleZoneSection">
+                    <vr-row ng-if="scopeModel.showSaleZoneSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Sale Zone">
-                                <vr-whs-be-salezonegroup on-ready="scopeModal.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
+                                <vr-whs-be-salezonegroup on-ready="scopeModel.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-if="scopeModal.showIncludedCodeSection">
+                    <vr-row ng-if="scopeModel.showIncludedCodeSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Included Codes">
                                 <vr-columns width="1/4row">
-                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="scopeModal.codeCriteriaGroupTemplates" text="None"
-                                               selectedvalues="scopeModal.selectedCodeCriteriaGroupTemplate">
+                                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Filter Type" datasource="scopeModel.codeCriteriaGroupTemplates" text="None"
+                                               selectedvalues="scopeModel.selectedCodeCriteriaGroupTemplate">
                                     </vr-select>
                                 </vr-columns>
-                                <vr-columns width="3/4row" ng-if="scopeModal.selectedCodeCriteriaGroupTemplate" vr-loader="scopeModal.isLoadingCodeCriteriaSection">
-                                    <vr-directivewrapper directive="scopeModal.selectedCodeCriteriaGroupTemplate.Editor" on-ready="scopeModal.onCodeCriteriaGroupSettingsDirectiveReady"></vr-directivewrapper>
+                                <vr-columns width="3/4row" ng-if="scopeModel.selectedCodeCriteriaGroupTemplate" vr-loader="scopeModel.isLoadingCodeCriteriaSection">
+                                    <vr-directivewrapper directive="scopeModel.selectedCodeCriteriaGroupTemplate.Editor" on-ready="scopeModel.onCodeCriteriaGroupSettingsDirectiveReady"></vr-directivewrapper>
                                 </vr-columns>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-show="scopeModal.showCustomerSection">
+                    <vr-row ng-show="scopeModel.showCustomerSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Customers">
-                                <vr-whs-be-customergroup on-ready="scopeModal.onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
+                                <vr-whs-be-customergroup on-ready="scopeModel.onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-show="scopeModal.showExcludedCodeSection">
+                    <vr-row ng-show="scopeModel.showExcludedCodeSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Excluded Codes">
                                 <vr-row haschildcolumns>
                                     <vr-columns colnum="3">
-                                        <vr-textbox value="scopeModal.excludedCode" type="number" onvaluechanged="ctrl.onvaluechanged" label="Enter code to exclude" minvalue="0" decimalprecision="0"></vr-textbox>
+                                        <vr-textbox value="scopeModel.excludedCode" type="number" onvaluechanged="ctrl.onvaluechanged" label="Enter code to exclude" minvalue="0" decimalprecision="0"></vr-textbox>
                                     </vr-columns>
                                     <vr-columns colnum="1" withemptyline>
                                         <div>
-                                            <vr-button type="Add" vr-disabled="ctrl.disableButton" data-onclick="scopeModal.addExcludedCode" standalone></vr-button>
+                                            <vr-button type="Add" vr-disabled="ctrl.disableButton" data-onclick="scopeModel.addExcludedCode" standalone></vr-button>
                                         </div>
                                     </vr-columns>
                                 </vr-row>
@@ -68,7 +72,7 @@
                                             <vr-label>Excluded Codes</vr-label>
                                         </div>
 
-                                        <vr-datalist maxitemsperrow="6" datasource="scopeModal.excludedCodes" autoremoveitem="true">
+                                        <vr-datalist maxitemsperrow="6" datasource="scopeModel.excludedCodes" autoremoveitem="true">
                                             {{dataItem}}
                                         </vr-datalist>
                                     </vr-columns>
@@ -78,17 +82,10 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Settings'">
+                <vr-tab header="'Settings'" ng-show="scopeModel.showSettingsSection">
                     <vr-row>
-                        <vr-columns width="1/4row">
-                            <vr-select datatextfield="Title" datavaluefield="TemplateConfigID" label="Option Rule Type" datasource="scopeModal.routeOptionRuleSettingsTemplates"
-                                       selectedvalues="scopeModal.selectedrouteOptionRuleSettingsTemplate" isrequired>
-                            </vr-select>
-                        </vr-columns>
-                    </vr-row> 
-                    <vr-row>
-                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingRouteOptionRuleSettings">
-                            <vr-directivewrapper directive="scopeModal.selectedrouteOptionRuleSettingsTemplate.Editor" on-ready="scopeModal.onRouteOptionRuleSettingsDirectiveReady" />
+                        <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingRouteOptionRuleSettings">
+                            <vr-directivewrapper directive="scopeModel.selectedrouteOptionRuleSettingsTemplate.Editor" on-ready="scopeModel.onRouteOptionRuleSettingsDirectiveReady" />
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -96,23 +93,21 @@
                 <vr-tab header="'Scheduler'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-datetimepicker value="scopeModal.beginEffectiveDate" type="date" label="Begin Effective Date" isrequired></vr-datetimepicker>
+                            <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="date" label="Begin Effective Date" isrequired></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-datetimepicker value="scopeModal.endEffectiveDate" type="date" label="End Effective Date"></vr-datetimepicker>
+                            <vr-datetimepicker value="scopeModel.endEffectiveDate" type="date" label="End Effective Date"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-
-
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteOptionRuleEditor" data-onclick="scopeModal.SaveRouteOptionRule" haspermission="hasSaveRulePermission"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+                <vr-button type="Save" formname="formRouteOptionRuleEditor" data-onclick="scopeModel.SaveRouteOptionRule" haspermission="hasSaveRulePermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
 

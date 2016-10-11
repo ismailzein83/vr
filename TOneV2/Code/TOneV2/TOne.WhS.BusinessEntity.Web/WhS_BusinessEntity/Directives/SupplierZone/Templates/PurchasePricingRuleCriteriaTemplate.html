@@ -4,7 +4,7 @@
             <vr-row>
                 <vr-columns width="1/4row">
                     <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Selective Type" datasource="suppliersWithZonesStettingsTemplates" text="None"
-                               selectedvalues="selectedSuppliersWithZonesStettingsTemplate">
+                               selectedvalues="selectedSuppliersWithZonesStettingsTemplate" on-ready="onSupplierSelectorReady">
                     </vr-select>
                 </vr-columns>
                 <span vr-loader="isLoadingDirective">

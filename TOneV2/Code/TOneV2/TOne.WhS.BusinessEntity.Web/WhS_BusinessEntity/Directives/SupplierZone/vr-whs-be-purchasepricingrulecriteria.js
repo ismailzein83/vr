@@ -19,24 +19,33 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
 
         },
         templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SupplierZone/Templates/PurchasePricingRuleCriteriaTemplate.html"
-
     };
 
 
     function bePurchasePricingRuleCriteria(ctrl, $scope, $attrs) {
+
+        var supplierSelectorAPI;
         var directiveReadyAPI;
         var directiveReadyPromiseDeferred;
+
         function initializeController() {
+            $scope.suppliersWithZonesStettingsTemplates = [];
+
+            $scope.onSupplierSelectorReady = function (api) {
+                supplierSelectorAPI = api;
+                defineAPI();
+            }
+
             $scope.onDirectiveReady = function (api) {
                 directiveReadyAPI = api;
                 var setLoader = function (value) { $scope.isLoadingDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
             }
+
             $scope.onSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined)
                     $scope.suppliers = carrierAccountDirectiveAPI.getData();
             };
-            defineAPI();
         }
         function defineAPI() {
             var api = {};
@@ -53,12 +62,12 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
                 return obj;
             }
 
-
-
             api.load = function (payload) {
-                $scope.suppliersWithZonesStettingsTemplates = [];
+                supplierSelectorAPI.clearDataSource();
+
                 var suppliersWithZones;
                 var configId;
+
                 if (payload != undefined && payload.SuppliersWithZonesGroupSettings != null) {
                     suppliersWithZones = payload.SuppliersWithZonesGroupSettings.SuppliersWithZones;
                     configId = payload.SuppliersWithZonesGroupSettings.ConfigId;
@@ -91,7 +100,6 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
 
         this.initializeController = initializeController;
     }

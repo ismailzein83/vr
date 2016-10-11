@@ -24,17 +24,25 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
 
 
     function beCustomerGroup(ctrl, $scope, $attrs) {
+
+        var customerSelectorAPI;
         var customerGroupDirectiveAPI;
         var customerGroupDirectiveReadyPromiseDeferred;
 
         function initializeController() {
+            $scope.customerGroupTemplates = [];
+
+            $scope.onCustomerSelectorReady = function (api) {
+                customerSelectorAPI = api;
+                defineAPI();
+            };
+
             $scope.onCustomerGroupDirectiveReady = function (api) {
                 customerGroupDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingCustomerGroupDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerGroupDirectiveAPI, undefined, setLoader, customerGroupDirectiveReadyPromiseDeferred);
 
             }
-            defineAPI();
         }
 
         function defineAPI() {
@@ -53,7 +61,8 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
             }
 
             api.load = function (payload) {
-                $scope.customerGroupTemplates = [];
+                customerSelectorAPI.clearDataSource();
+
                 var customerConfigId;
                 var customerGroupSettings;
 

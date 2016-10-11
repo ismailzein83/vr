@@ -29,7 +29,6 @@
         var routeOptionRuleSettingsAPI;
         var routeOptionRuleSettingsReadyPromiseDeferred;
 
-
         var suppliersWithZonesGroupSettingsAPI;
         var suppliersWithZonesGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -50,45 +49,44 @@
         }
         function defineScope() {
 
-            $scope.hasSaveRulePermission = function () {
-                if (isEditMode)
-                    return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
-                else
-                    return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
-            }
+            $scope.scopeModel = {}
+            $scope.scopeModel.showCriteriaSection = false;
+            $scope.scopeModel.showSettingsSection = false;
+            $scope.scopeModel.beginEffectiveDate = new Date();
+            $scope.scopeModel.endEffectiveDate = undefined;
 
-            $scope.scopeModal = {}
+            $scope.scopeModel.saleZoneGroupTemplates = [];
+            $scope.scopeModel.codeCriteriaGroupTemplates = [];
+            $scope.scopeModel.customerGroupTemplates = [];
+            $scope.scopeModel.excludedCodes = [];
+            $scope.scopeModel.routeOptionRuleSettingsTemplates = [];
 
-            $scope.scopeModal.onSuppliersWithZonesGroupSettingsDirectiveReady = function (api) {
+
+            $scope.scopeModel.onSuppliersWithZonesGroupSettingsDirectiveReady = function (api) {
                 suppliersWithZonesGroupSettingsAPI = api;
                 suppliersWithZonesGroupSettingsReadyPromiseDeferred.resolve();
             }
-
-
-            $scope.scopeModal.onSaleZoneGroupSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
                 var saleZoneGroupPayload = {
                     sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
                     saleZoneFilterSettings: { RoutingProductId: routingProductId },
                 };
-                var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
-
-            $scope.scopeModal.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
                 codeCriteriaGroupSettingsAPI = api;
-                var setLoader = function (value) { $scope.scopeModal.isLoadingCustomersSection = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomersSection = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, codeCriteriaGroupSettingsAPI, undefined, setLoader, codeCriteriaGroupSettingsReadyPromiseDeferred);
             }
-
-            $scope.scopeModal.onCustomerGroupSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsAPI = api;
                 customerGroupSettingsReadyPromiseDeferred.resolve();
             }
-
-            $scope.scopeModal.onRouteOptionRuleSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onRouteOptionRuleSettingsDirectiveReady = function (api) {
                 routeOptionRuleSettingsAPI = api;
-                var setLoader = function (value) { $scope.scopeModal.isLoadingRouteOptionRuleSettings = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingRouteOptionRuleSettings = value };
 
                 var routeOptionRuleSettingsPayload = {
                     SupplierFilterSettings: { RoutingProductId: routingProductId }
@@ -97,7 +95,110 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionRuleSettingsAPI, routeOptionRuleSettingsPayload, setLoader, routeOptionRuleSettingsReadyPromiseDeferred);
             }
 
-            $scope.scopeModal.SaveRouteOptionRule = function () {
+            $scope.scopeModel.onRouteOptionRuleCriteriaTypeSelectionChanged = function () {
+
+                if ($scope.scopeModel.selectedRouteOptionRuleCriteriaType == undefined)
+                    return;
+
+                if ($scope.scopeModel.selectedRouteOptionRuleCriteriaType == WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone) {
+                    $scope.scopeModel.showSaleZoneSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
+                    $scope.scopeModel.showIncludedCodeSection = false;
+                }
+                else {
+                    $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
+                    $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
+                    $scope.scopeModel.showSaleZoneSection = false;
+                }
+            }
+            $scope.scopeModel.onRouteOptionRuleSettingsSelectionChanged = function () {
+
+                var _selectedItem = $scope.scopeModel.selectedrouteOptionRuleSettingsTemplate;
+                if (_selectedItem != undefined) {
+
+                    $scope.scopeModel.showCriteriaSection = $scope.scopeModel.showSettingsSection = true;
+                    $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
+                    $scope.scopeModel.excludedCodes = [];
+                    reloadSuppliersWithZonesGroupSection()
+                    reloadFilterBySection();
+                    reloadSaleZoneGroupSection();
+                    reloadCustomerGroupSection();
+                }
+
+                function reloadSuppliersWithZonesGroupSection() {
+                    if (suppliersWithZonesGroupSettingsAPI == undefined)
+                        return;
+
+                    var suppliersWithZonesGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var payload = {
+                        sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
+                        saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                    };
+                    VRUIUtilsService.callDirectiveLoad(suppliersWithZonesGroupSettingsAPI, payload, suppliersWithZonesGroupSettingsLoadPromiseDeferred);
+
+                    return suppliersWithZonesGroupSettingsLoadPromiseDeferred.promise;
+                }
+                function reloadFilterBySection() {
+                    if (!$scope.scopeModel.showRouteOptionRuleTypeFilterSection)
+                        return;
+
+                    $scope.scopeModel.routeOptionRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
+                    if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CodeCriteriaGroupSettings != undefined)
+                        $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
+                    else
+                        $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
+                }
+                function reloadSaleZoneGroupSection() {
+                    if (saleZoneGroupSettingsAPI == undefined)
+                        return;
+
+                    var saleZoneGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var saleZoneGroupPayload = {
+                        sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
+                        saleZoneFilterSettings: { RoutingProductId: routingProductId }
+                    }
+                    VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
+
+                    return saleZoneGroupSettingsLoadPromiseDeferred.promise;
+                }
+                function reloadCustomerGroupSection() {
+                    if (customerGroupSettingsAPI == undefined)
+                        return;
+
+                    var customerGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var customerGroupPayload;
+                    VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);
+
+                    return customerGroupSettingsLoadPromiseDeferred.promise;
+                }
+            }
+
+
+            //TODO: make the validation below a custom validation
+            $scope.scopeModel.addExcludedCode = function () {
+                var codeIsValid = true;
+
+                if ($scope.scopeModel.excludedCode == undefined || $scope.scopeModel.excludedCode.length == 0) {
+                    codeIsValid = false;
+                }
+                else {
+                    angular.forEach($scope.scopeModel.excludedCodes, function (item) {
+                        if ($scope.scopeModel.excludedCode === item) {
+                            codeIsValid = false;
+                        }
+                    });
+                }
+
+                if (codeIsValid)
+                    $scope.scopeModel.excludedCodes.push($scope.scopeModel.excludedCode);
+            }
+            $scope.scopeModel.removeExcludedCode = function (codeToRemove) {
+                $scope.scopeModel.excludedCodes.splice($scope.scopeModel.excludedCodes.indexOf(codeToRemove), 1);
+            }
+
+            $scope.scopeModel.SaveRouteOptionRule = function () {
                 if (isEditMode) {
                     return updateRouteOptionRule();
                 }
@@ -106,61 +207,19 @@
                 }
             };
 
-            //TODO: make the validation below a custom validation
-            $scope.scopeModal.addExcludedCode = function () {
-                var codeIsValid = true;
-
-                if ($scope.scopeModal.excludedCode == undefined || $scope.scopeModal.excludedCode.length == 0) {
-                    codeIsValid = false;
-                }
-                else {
-                    angular.forEach($scope.scopeModal.excludedCodes, function (item) {
-                        if ($scope.scopeModal.excludedCode === item) {
-                            codeIsValid = false;
-                        }
-                    });
-                }
-
-                if (codeIsValid)
-                    $scope.scopeModal.excludedCodes.push($scope.scopeModal.excludedCode);
+            $scope.hasSaveRulePermission = function () {
+                if (isEditMode)
+                    return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
+                else
+                    return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
             }
 
-            $scope.scopeModal.removeExcludedCode = function (codeToRemove) {
-                $scope.scopeModal.excludedCodes.splice($scope.scopeModal.excludedCodes.indexOf(codeToRemove), 1);
-            }
-
-            $scope.scopeModal.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            $scope.scopeModal.onRouteOptionRuleCriteriaTypeSelectionChanged = function () {
-
-                if ($scope.scopeModal.selectedRouteOptionRuleCriteriaType == undefined)
-                    return;
-
-                if ($scope.scopeModal.selectedRouteOptionRuleCriteriaType == WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone) {
-                    $scope.scopeModal.showSaleZoneSection = $scope.scopeModal.showCustomerSection = $scope.scopeModal.showExcludedCodeSection = true;
-                    $scope.scopeModal.showIncludedCodeSection = false;
-                }
-                else {
-                    $scope.scopeModal.showIncludedCodeSection = $scope.scopeModal.showCustomerSection = $scope.scopeModal.showExcludedCodeSection = true;
-                    $scope.scopeModal.selectedCodeCriteriaGroupTemplate = undefined;
-                    $scope.scopeModal.showSaleZoneSection = false;
-                }
-            }
-
-            $scope.scopeModal.saleZoneGroupTemplates = [];
-            $scope.scopeModal.customerGroupTemplates = [];
-            $scope.scopeModal.codeCriteriaGroupTemplates = [];
-            $scope.scopeModal.routeOptionRuleSettingsTemplates = [];
-
-            $scope.scopeModal.excludedCodes = [];
-
-            $scope.scopeModal.beginEffectiveDate = new Date();
-            $scope.scopeModal.endEffectiveDate = undefined;
         }
         function load() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 $scope.title = "Edit Route Option Rule";
@@ -171,7 +230,7 @@
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModal.isLoading = false;
+                    $scope.scopeModel.isLoading = false;
                 });
             }
             else {
@@ -185,25 +244,75 @@
                 routeOptionRuleEntity = routeOptionRule.Entity;
                 settingsEditorRuntime = routeOptionRule.SettingsEditorRuntime
 
-                $scope.scopeModal.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
+                $scope.scopeModel.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
                 routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([displaySectionsBasedOnParameters, editScopeTitle, loadFilterBySection, loadSaleZoneGroupSection, loadCustomerGroupSection, loadSuppliersWithZonesGroupSection,
-                loadCodeCriteriaGroupSection, loadRouteOptionRuleSettingsSection, loadStaticSection])
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-               .finally(function () {
-                   $scope.scopeModal.isLoading = false;
-               });
+            var loadAllControlsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var loadRouteOptionRuleSettingsSectionPromise = loadRouteOptionRuleSettingsSection();
+            loadRouteOptionRuleSettingsSectionPromise.then(function () {
+
+                UtilsService.waitMultipleAsyncOperations([displaySectionsBasedOnParameters, editScopeTitle, loadFilterBySection, loadSaleZoneGroupSection, loadCustomerGroupSection, loadSuppliersWithZonesGroupSection,
+                    loadCodeCriteriaGroupSection, loadStaticSection])
+                    .catch(function (error) {
+                        loadAllControlsPromiseDeferred.reject(error);
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        loadAllControlsPromiseDeferred.resolve();
+                        $scope.scopeModel.isLoading = false;
+                    });
+            }).catch(function (error) {
+                loadAllControlsPromiseDeferred.reject(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
+
+            return loadAllControlsPromiseDeferred.promise;
         }
 
+        function loadRouteOptionRuleSettingsSection() {
+            var promises = [];
+            var routeOptionRuleSettingsPayload;
+
+            if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Settings != null) {
+                routeOptionRuleSettingsPayload = {
+                    SupplierFilterSettings: { RoutingProductId: routingProductId },
+                    RouteOptionRuleSettings: routeOptionRuleEntity.Settings,
+                    SettingsEditorRuntime: settingsEditorRuntime
+                }
+            }
+
+            var loadRouteOptionRuleSettingsTemplatesPromise = WhS_Routing_RouteOptionRuleAPIService.GetRouteOptionRuleSettingsTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.scopeModel.routeOptionRuleSettingsTemplates.push(item);
+                });
+
+                if (routeOptionRuleSettingsPayload != undefined)
+                    $scope.scopeModel.selectedrouteOptionRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.routeOptionRuleSettingsTemplates, routeOptionRuleSettingsPayload.RouteOptionRuleSettings.ConfigId, "ExtensionConfigurationId");
+            });
+
+            promises.push(loadRouteOptionRuleSettingsTemplatesPromise);
+
+            if (routeOptionRuleSettingsPayload != undefined) {
+                routeOptionRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                var routeOptionRuleSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(routeOptionRuleSettingsLoadPromiseDeferred.promise);
+
+                routeOptionRuleSettingsReadyPromiseDeferred.promise.then(function () {
+                    routeOptionRuleSettingsReadyPromiseDeferred = undefined;
+                    VRUIUtilsService.callDirectiveLoad(routeOptionRuleSettingsAPI, routeOptionRuleSettingsPayload, routeOptionRuleSettingsLoadPromiseDeferred);
+                });
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
+        }
         function displaySectionsBasedOnParameters() {
-            $scope.scopeModal.showSaleZoneSection = routingProductId != undefined;
-            $scope.scopeModal.showRouteOptionRuleTypeFilterSection = $scope.scopeModal.showCustomerSection = $scope.scopeModal.showExcludedCodeSection = $scope.scopeModal.showIncludedCodeSection = !$scope.scopeModal.showSaleZoneSection;
+            $scope.scopeModel.showSaleZoneSection = routingProductId != undefined;
+            $scope.scopeModel.showRouteOptionRuleTypeFilterSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = $scope.scopeModel.showIncludedCodeSection = !$scope.scopeModel.showSaleZoneSection;
         }
         function editScopeTitle() {
             if (routingProductId == undefined)
@@ -214,15 +323,15 @@
             });
         }
         function loadFilterBySection() {
-            if (!$scope.scopeModal.showRouteOptionRuleTypeFilterSection)
+            if (!$scope.scopeModel.showRouteOptionRuleTypeFilterSection)
                 return;
 
-            $scope.scopeModal.routeOptionRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
+            $scope.scopeModel.routeOptionRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
 
             if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CodeCriteriaGroupSettings != undefined)
-                $scope.scopeModal.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
+                $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
             else
-                $scope.scopeModal.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
+                $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
         }
         function loadSaleZoneGroupSection() {
             if (routeOptionRuleEntity == undefined || routeOptionRuleEntity.Criteria == undefined || routeOptionRuleEntity.Criteria.SaleZoneGroupSettings == undefined) {
@@ -310,11 +419,11 @@
 
             var loadCodeCriteriaGroupTemplatesPromise = WhS_Routing_RouteRuleAPIService.GetCodeCriteriaGroupTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
-                    $scope.scopeModal.codeCriteriaGroupTemplates.push(item);
+                    $scope.scopeModel.codeCriteriaGroupTemplates.push(item);
                 });
 
                 if (codeCriteriaGroupPayload != undefined)
-                    $scope.scopeModal.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.scopeModal.codeCriteriaGroupTemplates, codeCriteriaGroupPayload.ConfigId, "ExtensionConfigurationId");
+                    $scope.scopeModel.selectedCodeCriteriaGroupTemplate = UtilsService.getItemByVal($scope.scopeModel.codeCriteriaGroupTemplates, codeCriteriaGroupPayload.ConfigId, "ExtensionConfigurationId");
             });
 
             promises.push(loadCodeCriteriaGroupTemplatesPromise);
@@ -333,54 +442,17 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        function loadRouteOptionRuleSettingsSection() {
-            var promises = [];
-            var routeOptionRuleSettingsPayload;
-
-            if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Settings != null) {
-                routeOptionRuleSettingsPayload = {
-                    SupplierFilterSettings: { RoutingProductId: routingProductId },
-                    RouteOptionRuleSettings: routeOptionRuleEntity.Settings,
-                    SettingsEditorRuntime: settingsEditorRuntime
-                }
-            }
-
-            var loadRouteOptionRuleSettingsTemplatesPromise = WhS_Routing_RouteOptionRuleAPIService.GetRouteOptionRuleSettingsTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.scopeModal.routeOptionRuleSettingsTemplates.push(item);
-                });
-
-                if (routeOptionRuleSettingsPayload != undefined)
-                    $scope.scopeModal.selectedrouteOptionRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModal.routeOptionRuleSettingsTemplates, routeOptionRuleSettingsPayload.RouteOptionRuleSettings.ConfigId, "ExtensionConfigurationId");
-            });
-
-            promises.push(loadRouteOptionRuleSettingsTemplatesPromise);
-
-            if (routeOptionRuleSettingsPayload != undefined) {
-                routeOptionRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                var routeOptionRuleSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                promises.push(routeOptionRuleSettingsLoadPromiseDeferred.promise);
-
-                routeOptionRuleSettingsReadyPromiseDeferred.promise.then(function () {
-                    routeOptionRuleSettingsReadyPromiseDeferred = undefined;
-                    VRUIUtilsService.callDirectiveLoad(routeOptionRuleSettingsAPI, routeOptionRuleSettingsPayload, routeOptionRuleSettingsLoadPromiseDeferred);
-                });
-            }
-
-            return UtilsService.waitMultiplePromises(promises);
-        }
         function loadStaticSection() {
             if (routeOptionRuleEntity == undefined)
                 return;
 
-            $scope.scopeModal.beginEffectiveDate = routeOptionRuleEntity.BeginEffectiveTime;
-            $scope.scopeModal.endEffectiveDate = routeOptionRuleEntity.EndEffectiveTime;
+            $scope.scopeModel.beginEffectiveDate = routeOptionRuleEntity.BeginEffectiveTime;
+            $scope.scopeModel.endEffectiveDate = routeOptionRuleEntity.EndEffectiveTime;
 
             if (routeOptionRuleEntity.Criteria != null) {
 
                 angular.forEach(routeOptionRuleEntity.Criteria.ExcludedCodes, function (item) {
-                    $scope.scopeModal.excludedCodes.push(item);
+                    $scope.scopeModel.excludedCodes.push(item);
                 });
             }
         }
@@ -417,18 +489,18 @@
 
             var routeOptionRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
-                Name: $scope.scopeModal.routeOptionRuleName,
+                Name: $scope.scopeModel.routeOptionRuleName,
                 Criteria: {
                     RoutingProductId: routingProductId,
-                    ExcludedCodes: $scope.scopeModal.excludedCodes,
-                    SaleZoneGroupSettings: $scope.scopeModal.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined,//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
+                    ExcludedCodes: $scope.scopeModel.excludedCodes,
+                    SaleZoneGroupSettings: $scope.scopeModel.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined,//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData(),
-                    CodeCriteriaGroupSettings: $scope.scopeModal.showIncludedCodeSection ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate') : undefined,
+                    CodeCriteriaGroupSettings: $scope.scopeModel.showIncludedCodeSection ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate') : undefined,
                     SuppliersWithZonesGroupSettings: suppliersWithZonesGroupSettingsAPI.getData()
                 },
-                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, routeOptionRuleSettingsAPI, 'selectedrouteOptionRuleSettingsTemplate'),
-                BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
-                EndEffectiveTime: $scope.scopeModal.endEffectiveDate
+                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, routeOptionRuleSettingsAPI, 'selectedrouteOptionRuleSettingsTemplate'),
+                BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
+                EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
             return routeOptionRule;
         }

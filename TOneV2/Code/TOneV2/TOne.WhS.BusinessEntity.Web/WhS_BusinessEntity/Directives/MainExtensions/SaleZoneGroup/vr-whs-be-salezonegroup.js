@@ -26,26 +26,35 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
     function beSaleZoneGroup(ctrl, $scope, $attrs) {
 
         var payloadFilter;
+
+        var saleZoneSelectorAPI;
         var saleZoneGroupDirectiveAPI;
         var saleZoneGroupDirectiveReadyPromiseDeferred;
+
         function initializeController() {
+            $scope.saleZoneGroupTemplates = [];
+
+            $scope.onSaleZoneSelectorReady = function (api) {
+                saleZoneSelectorAPI = api;
+                defineAPI();
+            }
+
             $scope.onSaleZoneGroupDirectiveReady = function (api) {
                 saleZoneGroupDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSaleZoneGroupDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupDirectiveAPI, payloadFilter, setLoader, saleZoneGroupDirectiveReadyPromiseDeferred);
             }
-
-            defineAPI();
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+                saleZoneSelectorAPI.clearDataSource();
 
-                $scope.saleZoneGroupTemplates = [];
                 var saleZoneConfigId;
                 var saleZoneGroupPayload;
+
                 if (payload != undefined) {
                     payloadFilter = {
                         saleZoneFilterSettings: payload.saleZoneFilterSettings,

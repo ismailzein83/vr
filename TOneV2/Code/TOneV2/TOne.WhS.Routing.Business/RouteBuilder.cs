@@ -28,10 +28,13 @@ namespace TOne.WhS.Routing.Business
         Vanrise.Rules.RuleTree[] _ruleTreesForCustomerRoutes;
         Dictionary<int, Vanrise.Rules.RuleTree[]> _ruleTreesForRoutingProducts = new Dictionary<int, Vanrise.Rules.RuleTree[]>();
         Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriority();
-
+        private Dictionary<int, CarrierAccount> _carrierAccounts;
 
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<SellingProductRoute> sellingProductRoutes)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            _carrierAccounts = carrierAccountManager.GetCachedCarrierAccounts();
+
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
             Dictionary<int, SellingProductRoute> sellingProductRoutesDic = new Dictionary<int, SellingProductRoute>();
 
@@ -181,6 +184,9 @@ namespace TOne.WhS.Routing.Business
                     route.Options = new List<RouteOption>();
                     foreach (RouteOptionRuleTarget targetOption in routeOptionRuleTargets)
                     {
+                        if (HasSameCarrierProfile(targetOption.SupplierId, customerZoneDetail.CustomerId))
+                            continue;
+
                         targetOption.RouteTarget = routeRuleTarget;
                         if (!routeRule.Settings.IsOptionFiltered(routeRuleExecutionContext, routeRuleTarget, targetOption))
                         {
@@ -233,6 +239,16 @@ namespace TOne.WhS.Routing.Business
             }
             route.IsBlocked = routeRuleTarget.BlockRoute;
             return route;
+        }
+        private bool HasSameCarrierProfile(int supplierId, int customerId)
+        {
+            CarrierAccount supplierCarrierAccount = _carrierAccounts.GetRecord(supplierId);
+            CarrierAccount customerCarrierAccount = _carrierAccounts.GetRecord(customerId);
+
+            if (supplierCarrierAccount.CarrierProfileId == supplierCarrierAccount.CarrierProfileId)
+                return true;
+
+            return false;
         }
 
         private RPRoute ExecuteRule(int routingProductId, long saleZoneId, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
