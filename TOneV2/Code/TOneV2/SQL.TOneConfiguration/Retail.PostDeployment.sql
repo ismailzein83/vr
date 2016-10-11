@@ -654,4 +654,4 @@ when not matched by target then
 	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
 	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
 set identity_insert [integration].[DataSource] off;
-----------------------------------------------------------------------------------------------------END
+----------------------------------------------------------------------------------------------------ENDGODelete from [runtime].[SchedulerTaskActionType] where Id='0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9' --Exchange Rate
