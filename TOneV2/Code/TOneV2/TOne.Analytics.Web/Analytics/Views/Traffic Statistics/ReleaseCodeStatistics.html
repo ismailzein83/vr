@@ -4,7 +4,7 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
 
             <vr-row removeline>
-                <vr-columns colnum="fullrow">
+                <vr-columns width="fullrow">
                     <vr-choices-filter selectedindex="selectedFilternIndex">
                         <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
                         <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
@@ -14,7 +14,7 @@
             </vr-row>
 
             <vr-row removeline>
-                <vr-columns colnum="fullrow" ng-if="basicSelected">
+                <vr-columns width="fullrow" ng-if="basicSelected">
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-select label="Group By" datasource="groupKeys"
@@ -35,7 +35,7 @@
 
                     </vr-row>
                 </vr-columns>
-                <vr-columns colnum="fullrow" ng-show="advancedSelected">
+                <vr-columns width="fullrow" ng-show="advancedSelected">
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-select label="Group By" datasource="groupKeys"

@@ -1,6 +1,6 @@
 ﻿<div ng-hide="filterSectionCollapsed">
     <vr-row removeline>
-        <vr-columns colnum="fullrow">
+        <vr-columns width="fullrow">
             <vr-choices-filter selectedindex="selectedFilternIndex">
                 <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
                 <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
@@ -9,7 +9,7 @@
         </vr-columns>
     </vr-row>
     <vr-row removeline>
-        <vr-columns colnum="fullrow">
+        <vr-columns width="fullrow">
            
                 <vr-row removeline>
                     <vr-columns colnum="2" ng-if="ctrl.periods.length>0">

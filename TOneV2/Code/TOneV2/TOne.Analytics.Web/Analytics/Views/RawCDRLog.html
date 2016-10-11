@@ -2,7 +2,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
-                <vr-columns colnum="fullrow">
+                <vr-columns width="fullrow">
                     <vr-choices-filter selectedindex="selectedFilternIndex">
                         <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
                         <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
@@ -11,7 +11,7 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns colnum="fullrow" ng-show="basicSelected">
+                <vr-columns width="fullrow" ng-show="basicSelected">
                     <vr-row>
 
                         <vr-columns width="normal">
