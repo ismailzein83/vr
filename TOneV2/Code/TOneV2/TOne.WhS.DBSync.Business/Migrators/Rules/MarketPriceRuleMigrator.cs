@@ -30,7 +30,6 @@ namespace TOne.WhS.DBSync.Business
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SupplierZone> _allSupplierZones;
         readonly Dictionary<string, ZoneServiceConfig> _allSaleEntityServiceFlags;
-        CurrencySettingData _currencySettingData;
         readonly short[] _olsFlaggedServiceIds;
         readonly int _routeOptionRuleTypeId;
         public MarketPriceRuleMigrator(RuleMigrationContext context)
@@ -45,9 +44,6 @@ namespace TOne.WhS.DBSync.Business
             var dtTableZoneServiceConfig = Context.MigrationContext.DBTables[DBTableName.ZoneServiceConfig];
             _allSaleEntityServiceFlags = (Dictionary<string, ZoneServiceConfig>)dtTableZoneServiceConfig.Records;
 
-            SettingManager settingManager = new SettingManager();
-            var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
-            _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
 
             _olsFlaggedServiceIds = _allSaleEntityServiceFlags.Select(f => short.Parse(f.Key)).ToArray();
 
@@ -108,7 +104,7 @@ namespace TOne.WhS.DBSync.Business
                 Settings = new MarketPriceRouteOptionRule
                 {
                     MarketPrices = GetMarketPrices(rules),
-                    CurrencyId = _currencySettingData.CurrencyId
+                    CurrencyId = Context.CurrencyId
                 },
                 Criteria = new RouteOptionRuleCriteria
                 {

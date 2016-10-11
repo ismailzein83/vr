@@ -90,7 +90,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             List<long> zoneIds = new List<long>();
             SourceCommission defaultCommission = commissionRules.FirstOrDefault();
             CarrierAccount supplier;
-            if(!_allCarrierAccounts.TryGetValue(defaultCommission.SupplierId, out supplier))
+            if (!_allCarrierAccounts.TryGetValue(defaultCommission.SupplierId, out supplier))
             {
                 this.TotalRowsFailed += commissionRules.Count;
                 return null;
@@ -113,7 +113,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
 
-                }
+                },
+                DefinitionId = new Guid("ADED2932-BB9F-49B7-A561-CB7C1413084F")
             };
 
             extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues
@@ -138,7 +139,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             List<long> zoneIds = new List<long>();
             SourceCommission defaultCommission = commissionRules.FirstOrDefault();
             CarrierAccount customer;
-            if(!_allCarrierAccounts.TryGetValue(defaultCommission.CustomerId, out customer))
+            if (!_allCarrierAccounts.TryGetValue(defaultCommission.CustomerId, out customer))
             {
                 this.TotalRowsFailed += commissionRules.Count;
                 return null;
@@ -160,7 +161,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 Criteria = new GenericRuleCriteria
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
-                }
+                },
+                DefinitionId = new Guid("90A47A0A-3EF9-4941-BC21-CA0BE44FC5A4")
             };
 
             extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues

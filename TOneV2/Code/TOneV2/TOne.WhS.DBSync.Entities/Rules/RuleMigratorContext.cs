@@ -9,6 +9,7 @@ namespace TOne.WhS.DBSync.Entities
     public class RuleMigrationContext
     {
         public bool GetEffectiveOnly { get; set; }
+        public int CurrencyId { get; set; }
         public MigrationContext MigrationContext { get; set; }
     }
 }

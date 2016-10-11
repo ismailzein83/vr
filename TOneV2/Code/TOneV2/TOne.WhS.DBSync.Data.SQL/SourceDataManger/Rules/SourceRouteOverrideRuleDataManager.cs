@@ -38,7 +38,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 BED = (DateTime)reader["BeginEffectiveDate"],
                 EED = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 ExcludedCodes = reader["ExcludedCodes"] as string,
-                IncludeSubCode = ((string)reader["IncludeSubCodes"]).Equals("Y"),
+                IncludeSubCode = string.IsNullOrEmpty((reader["IncludeSubCodes"] as string)) ? false : (reader["IncludeSubCodes"] as string).Equals("Y"),
                 Reason = reader["Reason"] as string,
                 ExcludedCodesList = GetExcludedCodes(reader["ExcludedCodes"] as string)
             };
@@ -86,6 +86,6 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                        ro.Reason
 	                                                    FROM    RouteOverride ro 
 	                                                    WHERE   ro.RouteOptions != 'BLK' AND ro.RouteOptions IS NOT NULL
-		                                                        and (@GetEffectiveOnly is null or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+		                                                        and ((@GetEffectiveOnly = 0 and rb.BeginEffectiveDate > getdate()) or (@GetEffectiveOnly = 1 and rb.IsEffective = 'Y'))";
     }
 }

@@ -8,8 +8,12 @@ using TOne.WhS.Routing.Business.RouteRules.Filters;
 using TOne.WhS.Routing.Business.RouteRules.Orders;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.GenericData.Pricing;
 using Vanrise.Rules;
 using Vanrise.Rules.Entities;
+using Vanrise.Rules.Pricing;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -17,11 +21,16 @@ namespace TOne.WhS.DBSync.Business
     {
         readonly RulesDBSyncDataManager _dbSyncDataManager;
         RuleBaseMigrator _routeRuleBaseMigrator;
+        CurrencySettingData _currencySettingData;
         public RuleMigrator(MigrationContext context)
             : base(context)
         {
 
             _dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
+
+            SettingManager settingManager = new SettingManager();
+            var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
+            _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
         }
         public override void FillTableInfo(bool useTempTables)
         {
@@ -40,7 +49,10 @@ namespace TOne.WhS.DBSync.Business
                     DBTables = Context.DBTables,
                     UseTempTables = Context.UseTempTables,
                     DefaultSellingNumberPlanId = Context.DefaultSellingNumberPlanId
-                }
+
+                },
+                CurrencyId = _currencySettingData.CurrencyId
+
             };
 
             foreach (RuleEntitiesEnum ruleEntitiesEnum in Enum.GetValues(typeof(RuleEntitiesEnum)))
@@ -59,9 +71,15 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.SaleMarketPrice:
                         _routeRuleBaseMigrator = new MarketPriceRuleMigrator(ruleContext);
                         break;
+                    default:
+                        _routeRuleBaseMigrator = null;
+                        break;
                 }
-                routeRules.AddRange(_routeRuleBaseMigrator.GetSourceRules());
-                _routeRuleBaseMigrator.WriteFaildRowsLog();
+                if (_routeRuleBaseMigrator != null)
+                {
+                    routeRules.AddRange(_routeRuleBaseMigrator.GetSourceRules());
+                    _routeRuleBaseMigrator.WriteFaildRowsLog();
+                }
             }
 
             return routeRules;
@@ -69,7 +87,9 @@ namespace TOne.WhS.DBSync.Business
         IEnumerable<SourceRule> GetDefaultRules()
         {
             List<SourceRule> defaultRules = new List<SourceRule>();
+
             RouteRuleManager manager = new RouteRuleManager();
+
             RouteRule rule = new RouteRule
             {
                 Criteria = new RouteRuleCriteria
@@ -98,6 +118,47 @@ namespace TOne.WhS.DBSync.Business
             };
 
             defaultRules.Add(GetSourceRule(manager.GetRuleTypeId(), Serializer.Serialize(rule)));
+
+            TariffRuleManager tariffManager = new TariffRuleManager();
+
+            TariffRule saleTariffRule = new TariffRule
+            {
+                BeginEffectiveTime = DateTime.Now,
+                EndEffectiveTime = null,
+                Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
+                {
+                    CallFee = 0.5M,
+                    FirstPeriod = 60,
+                    FirstPeriodRate = 0.5M,
+                    FractionUnit = 60,
+                    PricingUnit = 60,
+                    CurrencyId = _currencySettingData.CurrencyId
+                },
+                DefinitionId = new Guid("F24CB510-0B65-48C8-A723-1F6EBFEEA9E8"),
+                Description = "Default Sale Tariff Rule"
+            };
+
+
+            defaultRules.Add(GetSourceRule(tariffManager.GetRuleTypeId(), Serializer.Serialize(saleTariffRule)));
+
+            TariffRule supplierTariffRule = new TariffRule
+            {
+                BeginEffectiveTime = DateTime.Now,
+                EndEffectiveTime = null,
+                Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
+                {
+                    CallFee = 0.5M,
+                    FirstPeriod = 60,
+                    FirstPeriodRate = 0.5M,
+                    FractionUnit = 60,
+                    PricingUnit = 60,
+                    CurrencyId = _currencySettingData.CurrencyId
+                },
+                DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
+                Description = "Default Supplier Tariff Rule"
+            };
+
+            defaultRules.Add(GetSourceRule(tariffManager.GetRuleTypeId(), Serializer.Serialize(supplierTariffRule)));
 
             return defaultRules;
         }
