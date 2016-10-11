@@ -10,7 +10,7 @@
 <vr-tabs>
     <vr-tab header="'Field Mapping'">
         <vr-row>
-            <vr-columns colnum="fullrow">
+            <vr-columns width="fullrow">
                 <vr-datagrid datasource="listMappingCtrl.fieldMappings" norowhighlightonclick="true"
                              on-ready="onGridReady" hidegridmenu>
                     <vr-datagridcolumn headertext="'Field Name'" field="'FieldTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
@@ -26,7 +26,7 @@
             <vr-columns width="1/3row">
                 <vr-button type="Add" data-onclick="listMappingCtrl.addField" standalone></vr-button>
             </vr-columns>  
-            <vr-columns colnum="fullrow">
+            <vr-columns width="fullrow">
                 <vr-datagrid datasource="listMappingCtrl.filterFieldsMappings" norowhighlightonclick="true"
                              on-ready="onGridReady" hidegridmenu ondeleterow="    listMappingCtrl.removeFilter" maxheight="250px">
                     <vr-datagridcolumn headertext="'Field Name'" field="'FieldTitle'" widthfactor="10" disablesorting="true">
