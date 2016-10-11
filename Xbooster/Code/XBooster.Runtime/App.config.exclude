@@ -44,7 +44,6 @@
   </vanriseLogging>
   <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= "/>
-    <add name="XBoosterDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= " />
     <add name="CDRComparisonOutputDBConnString" connectionString="Server=localhost;Database=XBooster_CDRComparisonOutput;User ID=sa;Password= " />
 
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=XBooster_Transaction;User ID=sa;Password= "/>
@@ -61,12 +60,15 @@
     <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString" />
 
-    <add key="CDRComparisonDBConnStringKey" value="XBoosterDBConnString"/>
+    <add key="CDRComparisonDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="CDRComparisonOutputDBConnStringKey" value="CDRComparisonOutputDBConnString"/>
     <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
     
     <add key="IsRuntimeService" value="true"/>
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
 
   <startup>

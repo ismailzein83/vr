@@ -23,7 +23,6 @@
   </vanriseLogging>
   <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= "/>
-    <add name="XBoosterDBConnString" connectionString="Server=localhost;Database=XBooster_Configuration;User ID=sa;Password= " />
     <add name="CDRComparisonOutputDBConnString" connectionString="Server=localhost;Database=XBooster_CDRComparisonOutput;User ID=sa;Password= " />
 
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=XBooster_Transaction;User ID=sa;Password= "/>
@@ -47,11 +46,14 @@
     <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString" />
 
-    <add key="CDRComparisonDBConnStringKey" value="XBoosterDBConnString" />
+    <add key="CDRComparisonDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="CDRComparisonOutputDBConnStringKey" value="CDRComparisonOutputDBConnString" />
     <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString" />
 
     <add key="VRFile_Max_Uncompressed_MB_Size" value="5" />
+    
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
   
   <system.web>
