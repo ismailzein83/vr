@@ -25,6 +25,8 @@
     <x:Property Name="PreviewCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:CodePreview)))" />
     <x:Property Name="NewRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:AddedRate)))" />
     <x:Property Name="PreviewRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:RatePreview)))" />
+    <x:Property Name="ChangedZonesServicesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneServices)))" />
+    <x:Property Name="ChangedZonesRoutingProductsQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneRoutingProducts)))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -91,6 +93,10 @@
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedNewRatesStatus" />
       <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedPreviewRatesQueue" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedPreviewRatesStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedZonesServicesQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedZonesServicesStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedZonesRoutingProductsQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedZonesRoutingProductsStatus" />
     </Parallel.Variables>
     <twcba:PrepareNewZonesForApply sap2010:WorkflowViewState.IdRef="PrepareNewZonesForApply_1">
       <twcba:PrepareNewZonesForApply.InputQueue>
@@ -306,6 +312,74 @@
         </InArgument>
       </twcba:ApplyChangedRatesToDB.PreviousActivityStatus>
     </twcba:ApplyChangedRatesToDB>
+    <twcba:PrepareChangedZonesServicesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedZonesServicesForApply_1">
+      <twcba:PrepareChangedZonesServicesForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneServices))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneServices))">ChangedZonesServicesQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:PrepareChangedZonesServicesForApply.InputQueue>
+      <twcba:PrepareChangedZonesServicesForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedZonesServicesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twcba:PrepareChangedZonesServicesForApply.OutputQueue>
+      <twcba:PrepareChangedZonesServicesForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:PrepareChangedZonesServicesForApply.PreviousActivityStatus>
+      <twcba:PrepareChangedZonesServicesForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedZonesServicesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twcba:PrepareChangedZonesServicesForApply.Status>
+    </twcba:PrepareChangedZonesServicesForApply>
+    <twcba:ApplyChangedZonesServicesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedZonesServicesToDB_1">
+      <twcba:ApplyChangedZonesServicesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedZonesServicesQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyChangedZonesServicesToDB.InputQueue>
+      <twcba:ApplyChangedZonesServicesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedZonesServicesStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyChangedZonesServicesToDB.PreviousActivityStatus>
+    </twcba:ApplyChangedZonesServicesToDB>
+    <twcba:PrepareChangedZonesRoutingProductsForApply sap2010:WorkflowViewState.IdRef="PrepareChangedZonesRoutingProductsForApply_1">
+      <twcba:PrepareChangedZonesRoutingProductsForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneRoutingProducts))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneRoutingProducts))">ChangedZonesRoutingProductsQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:PrepareChangedZonesRoutingProductsForApply.InputQueue>
+      <twcba:PrepareChangedZonesRoutingProductsForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedZonesRoutingProductsQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twcba:PrepareChangedZonesRoutingProductsForApply.OutputQueue>
+      <twcba:PrepareChangedZonesRoutingProductsForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:PrepareChangedZonesRoutingProductsForApply.PreviousActivityStatus>
+      <twcba:PrepareChangedZonesRoutingProductsForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedZonesRoutingProductsStatus</mca:CSharpReference>
+        </OutArgument>
+      </twcba:PrepareChangedZonesRoutingProductsForApply.Status>
+    </twcba:PrepareChangedZonesRoutingProductsForApply>
+    <twcba:ApplyChangedZonesRoutingProductsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedZonesRoutingProductsToDB_1">
+      <twcba:ApplyChangedZonesRoutingProductsToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedZonesRoutingProductsQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyChangedZonesRoutingProductsToDB.InputQueue>
+      <twcba:ApplyChangedZonesRoutingProductsToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedChangedZonesRoutingProductsStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyChangedZonesRoutingProductsToDB.PreviousActivityStatus>
+    </twcba:ApplyChangedZonesRoutingProductsToDB>
     <twcba:PreparePreviewZonesForDBApply sap2010:WorkflowViewState.IdRef="PreparePreviewZonesForDBApply_1">
       <twcba:PreparePreviewZonesForDBApply.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twce:ZonePreview))">
@@ -408,7 +482,7 @@
         </InArgument>
       </twcba:ApplyPreviewRatesToDB.PreviousActivityStatus>
     </twcba:ApplyPreviewRatesToDB>
-    <sads:DebugSymbol.Symbol>d15DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sS0oDnAMOAgEBXwV5JQMBjQx6BYoBHwMBsguLAQWgASUDAbkKoQEFrAEfAwH8Ca0BBcIBJQMBgwnDAQXOAR8DAcYIzwEF5AEpAwHNB+UBBfABIwMBkAfxAQWGAikDAZcGhwIFkgIjAwHaBZMCBagCKQMB4QSpAgW0AiMDAaQEtQIFygIrAwGrA8sCBdYCIwMB7gLXAgXsAisDAfUB7QIF+AIjAwG4AfkCBY4DKwIBP48DBZoDIwIBAmwLbHcDAYYNYgtifAMB6AxxC3FbAwHKDHYLdnQDAawMZwtndAMBjgyCAQuCAWwDAe8LfQt9bAMB0QuHAQuHAVsDAbMLmAELmAF3AwGUC44BC44BfAMB9gqdAQudAXQDAdgKkwELkwF0AwG6CqkBC6kBbAMBmwqkAQukAWwDAf0JugELugF3AwHeCbABC7ABewMBwAm/AQu/AXUDAaIJtQELtQF0AwGECcsBC8sBbQMB5QjGAQvGAWwDAccI3AEL3AF3AwGoCNIBC9IBggEDAYoI4QEL4QF4AwHsB9cBC9cBeAMBzgftAQvtAXADAa8H6AEL6AFwAwGRB/4BC/4BdwMB8gb0AQv0AYIBAwHUBoMCC4MCeAMBtgb5AQv5AXgDAZgGjwILjwJwAwH5BYoCC4oCcAMB2wWgAgugAncDAbwFlgILlgKCAQMBngWlAgulAnkDAYAFmwILmwJ4AwHiBLECC7ECcQMBwwSsAgusAnADAaUEwgILwgJ3AwGGBLgCC7gCgQEDAegDxwILxwJ5AwHKA70CC70CeAMBrAPTAgvTAnEDAY0DzgILzgJwAwHvAuQCC+QCdwMB0ALaAgvaAoEBAwGyAukCC+kCeQMBlALfAgvfAngDAfYB9QIL9QJxAwHXAfACC/ACcAMBuQGGAwuGA3cDAZoB/AIL/AKBAQIBfIsDC4sDeQIBXoEDC4EDeAIBQJcDC5cDcQIBIZIDC5IDcAIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d15DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sW0wD5gMOAgEBZQV/JQMB8xGAAQWQAR8DAYYRkQEFpgElAwH1D6cBBbIBHwMBrA+zAQXIASUDAZsOyQEF1AEfAwHSDdUBBeoBKQMBwQzrAQX2ASMDAfgL9wEFjAIpAwHnCo0CBZgCIwMBngqZAgWuAikDAY0JrwIFugIjAwHECLsCBdACMQMBswfRAgXcAisDAeoG3QIF8gI4AwHZBfMCBf4CMgMBkAX/AgWUAysDAf8DlQMFoAMjAwG2A6EDBbYDKwMBpQK3AwXCAyMDAdwBwwMF2AMrAgFL2QMF5AMjAgECcgtydwMBhBNoC2h8AwHgEncLd1sDAbwSfAt8dAMBmBJtC210AwH0EYgBC4gBbAMBzxGDAQuDAWwDAasRjQELjQFbAwGHEZ4BC54BdwMB4hCUAQuUAXwDAb4QowELowF0AwGaEJkBC5kBdAMB9g+vAQuvAWwDAdEPqgELqgFsAwGtD8ABC8ABdwMBiA+2AQu2AXsDAeQOxQELxQF1AwHADrsBC7sBdAMBnA7RAQvRAW0DAfcNzAELzAFsAwHTDeIBC+IBdwMBrg3YAQvYAYIBAwGKDecBC+cBeAMB5gzdAQvdAXgDAcIM8wEL8wFwAwGdDO4BC+4BcAMB+QuEAguEAncDAdQL+gEL+gGCAQMBsAuJAguJAngDAYwL/wEL/wF4AwHoCpUCC5UCcAMBwwqQAguQAnADAZ8KpgILpgJ3AwH6CZwCC5wCggEDAdYJqwILqwJ5AwGyCaECC6ECeAMBjgm3Agu3AnEDAekIsgILsgJwAwHFCMgCC8gCdwMBoAi+Agu+ApIBAwH8B80CC80CgQEDAdgHwwILwwKAAQMBtAfZAgvZAnkDAY8H1AIL1AJ4AwHrBuoCC+oCdwMBxgbgAgvgAqABAwGiBu8CC+8CiAEDAf4F5QIL5QKHAQMB2gX7Agv7AoABAwG1BfYCC/YCfwMBkQWMAwuMA3cDAewEggMLggOBAQMByASRAwuRA3kDAaQEhwMLhwN4AwGABJ0DC50DcQMB2wOYAwuYA3ADAbcDrgMLrgN3AwGSA6QDC6QDgQEDAe4CswMLswN5AwHKAqkDC6kDeAMBpgK/Awu/A3EDAYECugMLugNwAwHdAdADC9ADdwMBuAHGAwvGA4EBAwGUAdUDC9UDeQIBcMsDC8sDeAIBTOEDC+EDcQIBJ9wDC9wDcAIBAw==</sads:DebugSymbol.Symbol>
   </Parallel>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -424,14 +498,18 @@
       <sap2010:ViewStateData Id="ApplyChangedCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareChangedRatesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyChangedRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedZonesServicesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedZonesServicesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedZonesRoutingProductsForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedZonesRoutingProductsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PreparePreviewZonesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyPreviewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PreparePreviewCodesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyPreviewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PreparePreviewRatesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyPreviewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="4394,86" />
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="4434,166" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="5354,86" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="5394,166" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

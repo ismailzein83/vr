@@ -29,6 +29,21 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new SaleEntityZoneServiceRequestHandler());
         }
+
+        public IEnumerable<SaleEntityZoneService> GetSaleZonesServicesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+
+            ISaleEntityServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
+            return dataManager.GetSaleZonesServicesEffectiveAfter(sellingNumberPlanId, effectiveOn);
+        }
+
+        public IEnumerable<SaleZoneRoutingProduct> GetSaleZonesRoutingProductsEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+
+            ISaleEntityServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
+            return dataManager.GetSaleZoneRoutingProductsEffectiveAfter(sellingNumberPlanId, effectiveOn);
+        }
+
         public long ReserveIdRange(int numberOfIds)
         {
             long startingId;

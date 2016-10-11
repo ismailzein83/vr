@@ -23,6 +23,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityService_GetEffectiveDefaultServices", SaleEntityDefaultServiceMapper, effectiveOn);
         }
 
+        public IEnumerable<SaleEntityZoneService> GetSaleZonesServicesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityZoneServices_GetEffectiveBySellingNumberPlan", SaleEntityZoneServiceMapper, sellingNumberPlanId, effectiveOn);
+        }
+
+        public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityZoneRoutingProducts_GetEffectiveBySellingNumberPlan", SalezoneRoutingProductMapper, sellingNumberPlanId, effectiveOn);
+        }
 
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServices(Entities.SalePriceListOwnerType ownerType, int ownerId, DateTime? effectiveOn)
         {
@@ -92,7 +101,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             string zonesids = null;
             if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
                 zonesids = string.Join<long>(",", query.ZonesIds);
-            return GetItemsSP("[TOneWhS_BE].[sp_SaleEntityService_GetFiltered]", SaleEntityZoneServiceMapper,query.EffectiveOn,query.SellingNumberPlanId, zonesids,query.OwnerType,query.OwnerId );
+            return GetItemsSP("[TOneWhS_BE].[sp_SaleEntityService_GetFiltered]", SaleEntityZoneServiceMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
         }
 
 
@@ -118,6 +127,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 PriceListId = (int)reader["PriceListID"],
                 ZoneId = GetReaderValue<long>(reader, "ZoneID"),
                 Services = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["Services"] as string),
+                BED = (DateTime)reader["BED"],
+                EED = GetReaderValue<DateTime?>(reader, "EED")
+            };
+        }
+
+        private SaleZoneRoutingProduct SalezoneRoutingProductMapper(IDataReader reader)
+        {
+            return new SaleZoneRoutingProduct()
+            {
+                SaleEntityRoutingProductId = (long)reader["ID"],
+                RoutingProductId = (int)reader["RoutingProductID"],
+                OwnerId = (int)reader["OwnerID"],
+                OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
+                SaleZoneId = (long)reader["ZoneID"],
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED")
             };

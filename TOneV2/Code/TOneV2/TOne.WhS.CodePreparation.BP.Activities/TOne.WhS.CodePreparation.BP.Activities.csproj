@@ -85,6 +85,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyChangedZonesRoutingProductsToDB.cs" />
+    <Compile Include="ApplyChangedZonesServicesToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />
     <Compile Include="ApplyChangedCodesToDB.cs" />
     <Compile Include="ApplyChangedZonesToDB.cs" />
@@ -99,13 +101,21 @@
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="GenerateZonesPreview.cs" />
     <Compile Include="GetExisitngRates.cs" />
+    <Compile Include="GetExistingZonesRoutingProducts.cs" />
+    <Compile Include="GetExistingZonesServices.cs" />
+    <Compile Include="PrepareChangedZonesRoutingProductsForApply.cs" />
+    <Compile Include="PrepareChangedZonesServicesForApply.cs" />
     <Compile Include="PrepareChangedRatesForApply.cs" />
+    <Compile Include="PrepareExistingZonesRoutingProducts.cs" />
+    <Compile Include="PrepareExistingZonesServices.cs" />
     <Compile Include="PrepareExistingRates.cs" />
     <Compile Include="PrepareNewRatesForApply.cs" />
     <Compile Include="PreparePreviewRatesForDBApply.cs" />
     <Compile Include="PreparePreviewCodesForDBApply.cs" />
     <Compile Include="PreparePreviewZonesForDBApply.cs" />
     <Compile Include="PrepareZonesInfo.cs" />
+    <Compile Include="ProcessCountryZonesRoutingProducts.cs" />
+    <Compile Include="ProcessCountryZonesServices.cs" />
     <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ReadFromSource.cs" />
     <Compile Include="GetDataFromImportedCodes.cs" />

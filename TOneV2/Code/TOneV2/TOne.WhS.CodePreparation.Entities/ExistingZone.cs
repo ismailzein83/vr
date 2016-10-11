@@ -62,6 +62,24 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             }
         }
 
+        List<ExistingZoneServices> _existingZonesServices = new List<ExistingZoneServices>();
+        public List<ExistingZoneServices> ExistingZonesServices
+        {
+            get
+            {
+                return _existingZonesServices;
+            }
+        }
+
+        List<ExistingZoneRoutingProducts> _existingZonesRoutingProducts = new List<ExistingZoneRoutingProducts>();
+        public List<ExistingZoneRoutingProducts> ExistingZonesRoutingProducts
+        {
+            get
+            {
+                return _existingZonesRoutingProducts;
+            }
+        }
+
         List<AddedCode> _addedCodes = new List<AddedCode>();
         public List<AddedCode> AddedCodes
         {

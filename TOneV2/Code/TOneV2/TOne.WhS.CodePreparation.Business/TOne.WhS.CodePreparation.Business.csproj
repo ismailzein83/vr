@@ -93,6 +93,10 @@
     <Compile Include="FixedZoneRateLocator.cs" />
     <Compile Include="MobileZoneRateLocator.cs" />
     <Compile Include="NewZoneRateLocator.cs" />
+    <Compile Include="PriceListZoneRoutingProductsManager.cs" />
+    <Compile Include="PriceListZoneServicesManager.cs" />
+    <Compile Include="ProcessCountryZonesRoutingProductsContext.cs" />
+    <Compile Include="ProcessCountryZonesServicesContext.cs" />
     <Compile Include="RatePreviewManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CPSaleCodeManager.cs" />
