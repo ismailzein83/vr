@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.Entities
 
         public string CssClass { get; set; }
 
+        public string RouteOptionRuleSettingsTypeName { get; set; }
+
         public string IncludedCodes
         {
             get

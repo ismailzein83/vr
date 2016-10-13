@@ -112,6 +112,7 @@ namespace TOne.WhS.Routing.Business
                  && (string.IsNullOrEmpty(input.Query.Code) || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
+                 && (input.Query.RouteRuleSettingsConfigId == Guid.Empty || this.CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigId))
                  && (!input.Query.EffectiveOn.HasValue || routeRule.BeginEffectiveTime <= input.Query.EffectiveOn)
                  && (!input.Query.EffectiveOn.HasValue || !routeRule.EndEffectiveTime.HasValue || routeRule.EndEffectiveTime > input.Query.EffectiveOn);
 
@@ -121,17 +122,21 @@ namespace TOne.WhS.Routing.Business
         public override RouteRuleDetail MapToDetails(RouteRule rule)
         {
             string _cssClass = null;
+            string _routeRuleSettingsTypeName = null;
             Dictionary<Guid, RouteRuleSettingsConfig> routeRuleSettingsConfigDic = GetRouteRuleTypesTemplatesDict();
 
             if (rule != null && rule.Settings != null && rule.Settings.ConfigId != null)
             {
-                _cssClass = routeRuleSettingsConfigDic.GetRecord(rule.Settings.ConfigId).CssClass;
+                RouteRuleSettingsConfig routeRuleSettingsConfig = routeRuleSettingsConfigDic.GetRecord(rule.Settings.ConfigId);
+                _cssClass = routeRuleSettingsConfig.CssClass;
+                _routeRuleSettingsTypeName = routeRuleSettingsConfig.Title;
             }
 
             return new RouteRuleDetail()
             {
                 Entity = rule,
-                CssClass = _cssClass
+                CssClass = _cssClass,
+                RouteRuleSettingsTypeName = _routeRuleSettingsTypeName
             };
         }
 
@@ -157,7 +162,6 @@ namespace TOne.WhS.Routing.Business
 
             return false;
         }
-
         private bool CheckIfSaleZoneSettingsContains(RouteRule routeRule, IEnumerable<long> saleZoneIds)
         {
             if (routeRule.Criteria.SaleZoneGroupSettings != null)
@@ -166,6 +170,13 @@ namespace TOne.WhS.Routing.Business
                 if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
                     return true;
             }
+
+            return false;
+        }
+        private bool CheckIfSameRouteRuleSettingsConfigId(RouteRule routeRule, Guid RouteRuleSettingsConfigId)
+        {
+            if (routeRule.Settings.ConfigId == RouteRuleSettingsConfigId)
+                return true;
 
             return false;
         }

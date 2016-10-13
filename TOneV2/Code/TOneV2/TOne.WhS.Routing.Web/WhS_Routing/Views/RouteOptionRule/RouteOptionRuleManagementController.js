@@ -16,13 +16,15 @@
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var routeOptionRuleTypeSelectorAPI;
+        var routeOptionRuleTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
         function defineScope() {
-            $scope.hasAddRulePermission = function () {
-                return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
-            }
+            $scope.routeOptionRuleTypeTemplates = [];
+            $scope.selectedRouteOptionRuleTypeTemplate = undefined;
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
@@ -50,6 +52,11 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
 
+            $scope.onRouteOptionRuleTypeSelectorReady = function (api) {
+                routeOptionRuleTypeSelectorAPI = api;
+                routeOptionRuleTypeReadyPromiseDeferred.resolve();
+            }
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(getFilterObject());
@@ -62,22 +69,29 @@
 
             $scope.AddNewRouteOptionRule = AddNewRouteOptionRule;
 
+            $scope.hasAddRulePermission = function () {
+                return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
+            }
+
             function getFilterObject() {
+
+                var routeOptionRuleSettingsConfigId = $scope.selectedRouteOptionRuleTypeTemplate != undefined ? $scope.selectedRouteOptionRuleTypeTemplate.ExtensionConfigurationId : undefined;
+
                 var query = {
                     Code: $scope.code,
                     Name: $scope.name,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
-                    EffectiveOn: $scope.effectiveOn
+                    EffectiveOn: $scope.effectiveOn,
+                    RouteOptionRuleSettingsConfigId: routeOptionRuleSettingsConfigId
                 };
                 return query;
             }
         }
-
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.effectiveOn = new Date();
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteOptionRuleTypeSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -93,7 +107,6 @@
 
             return loadCarrierAccountPromiseDeferred.promise;
         }
-
         function loadSellingNumberPlanSection() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -102,6 +115,14 @@
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;
+        }
+        function loadRouteOptionRuleTypeSection() {
+
+            return WhS_Routing_RouteOptionRuleAPIService.GetRouteOptionRuleSettingsTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.routeOptionRuleTypeTemplates.push(item);
+                });
+            });
         }
 
         function AddNewRouteOptionRule() {

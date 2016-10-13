@@ -113,6 +113,7 @@ namespace TOne.WhS.Routing.Business
                  && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeOptionRule.Name) && routeOptionRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeOptionRule, input.Query.CustomerIds))
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeOptionRule, input.Query.SaleZoneIds))
+                 && (input.Query.RouteOptionRuleSettingsConfigId == Guid.Empty || this.CheckIfSameRouteOptionRuleSettingsConfigId(routeOptionRule, input.Query.RouteOptionRuleSettingsConfigId))
                  && (!input.Query.EffectiveOn.HasValue || routeOptionRule.BeginEffectiveTime <= input.Query.EffectiveOn)
                  && (!input.Query.EffectiveOn.HasValue || !routeOptionRule.EndEffectiveTime.HasValue || routeOptionRule.EndEffectiveTime > input.Query.EffectiveOn);
 
@@ -138,17 +139,22 @@ namespace TOne.WhS.Routing.Business
         public override RouteOptionRuleDetail MapToDetails(RouteOptionRule rule)
         {
             string _cssClass = null;
+            string _routeoptionRuleSettingsTypeName = null;
             Dictionary<Guid, RouteOptionRuleConfig> routeOptionRuleConfigDic = GetRouteOptionRuleTypesTemplatesDict();
+
 
             if (rule != null && rule.Settings != null && rule.Settings.ConfigId != null)
             {
-                _cssClass = routeOptionRuleConfigDic.GetRecord(rule.Settings.ConfigId).CssClass;
+                RouteOptionRuleConfig routeRuleSettingsConfig = routeOptionRuleConfigDic.GetRecord(rule.Settings.ConfigId);
+                _cssClass = routeRuleSettingsConfig.CssClass;
+                _routeoptionRuleSettingsTypeName = routeRuleSettingsConfig.Title;
             }
 
             return new RouteOptionRuleDetail
             {
                 Entity = rule,
-                CssClass = _cssClass
+                CssClass = _cssClass,
+                RouteOptionRuleSettingsTypeName = _routeoptionRuleSettingsTypeName
             };
         }
 
@@ -184,6 +190,14 @@ namespace TOne.WhS.Routing.Business
                 if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
                     return true;
             }
+
+            return false;
+        }
+
+        private bool CheckIfSameRouteOptionRuleSettingsConfigId(RouteOptionRule routeOptionRule, Guid RouteRuleSettingsConfigId)
+        {
+            if (routeOptionRule.Settings.ConfigId == RouteRuleSettingsConfigId)
+                return true;
 
             return false;
         }

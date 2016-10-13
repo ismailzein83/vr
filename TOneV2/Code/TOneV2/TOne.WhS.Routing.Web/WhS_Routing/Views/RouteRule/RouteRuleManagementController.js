@@ -16,13 +16,15 @@
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var routeRuleTypeSelectorAPI;
+        var routeRuleTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
         function defineScope() {
-            $scope.hasAddRulePermission = function () {
-                return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
-            }
+            $scope.routeRuleTypeTemplates = [];
+            $scope.selectedRouteRuleTypeTemplate = undefined;
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
@@ -37,8 +39,6 @@
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-                //  var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
-                // VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, undefined, setLoader);
             }
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
@@ -50,6 +50,11 @@
 
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
+            }
+
+            $scope.onRouteRuleTypeSelectorReady = function (api) {
+                routeRuleTypeSelectorAPI = api;
+                routeRuleTypeReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -64,13 +69,21 @@
 
             $scope.AddNewRouteRule = AddNewRouteRule;
 
+            $scope.hasAddRulePermission = function () {
+                return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
+            }
+
             function getFilterObject() {
+
+                var routeRuleSettingsConfigId = $scope.selectedRouteRuleTypeTemplate != undefined ? $scope.selectedRouteRuleTypeTemplate.ExtensionConfigurationId : undefined;
+
                 var query = {
                     Name: $scope.name,
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
-                    EffectiveOn: $scope.effectiveOn
+                    EffectiveOn: $scope.effectiveOn,
+                    RouteRuleSettingsConfigId: routeRuleSettingsConfigId
                 };
                 return query;
             }
@@ -80,7 +93,8 @@
             $scope.isLoadingFilterData = true;
             $scope.effectiveOn = new Date();
             
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteRuleTypeSection])
+                    .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -96,7 +110,6 @@
 
             return loadCarrierAccountPromiseDeferred.promise;
         }
-
         function loadSellingNumberPlanSection() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -111,6 +124,14 @@
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;
+        }
+        function loadRouteRuleTypeSection() {
+
+            return WhS_Routing_RouteRuleAPIService.GetRouteRuleSettingsTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.routeRuleTypeTemplates.push(item);
+                });
+            });
         }
 
         function AddNewRouteRule() {
