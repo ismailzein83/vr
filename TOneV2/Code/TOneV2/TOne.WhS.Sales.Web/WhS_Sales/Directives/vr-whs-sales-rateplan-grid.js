@@ -469,11 +469,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 if (gridQuery.SaleAreaSettings == undefined || gridQuery.SaleAreaSettings.PrimarySaleEntity == null)
                     return;
                 if (gridQuery.SaleAreaSettings.PrimarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
-                    if (dataItem.IsCurrentRateEditable === true)
-                        dataItem.iconType = 'current';
+                    if (dataItem.IsCurrentRateEditable === true) {
+                        dataItem.iconType = 'explicit';
+                        dataItem.iconTooltip = 'Explicit';
+                    }
                 }
                 else if (dataItem.IsCurrentRateEditable === false) {
                     dataItem.iconType = 'inherited';
+                    dataItem.iconTooltip = 'Inherited';
                 }
             }
         }
