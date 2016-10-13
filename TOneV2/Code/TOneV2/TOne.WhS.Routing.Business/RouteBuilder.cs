@@ -245,7 +245,7 @@ namespace TOne.WhS.Routing.Business
             CarrierAccount supplierCarrierAccount = _carrierAccounts.GetRecord(supplierId);
             CarrierAccount customerCarrierAccount = _carrierAccounts.GetRecord(customerId);
 
-            if (supplierCarrierAccount.CarrierProfileId == supplierCarrierAccount.CarrierProfileId)
+            if (supplierCarrierAccount.CarrierProfileId == customerCarrierAccount.CarrierProfileId)
                 return true;
 
             return false;
