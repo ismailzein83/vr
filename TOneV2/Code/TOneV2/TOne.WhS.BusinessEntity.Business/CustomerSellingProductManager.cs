@@ -282,18 +282,28 @@ namespace TOne.WhS.BusinessEntity.Business
                {
                    ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
                    IEnumerable<CustomerSellingProduct> customerSellingProducts = dataManager.GetCustomerSellingProducts();
-                   return customerSellingProducts.ToDictionary(kvp => kvp.CustomerSellingProductId, kvp => kvp);
+                   Dictionary<int, CustomerSellingProduct> dic = new Dictionary<int, CustomerSellingProduct>();
+                   CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                   foreach (CustomerSellingProduct item in customerSellingProducts)
+                   {
+                       if (!carrierAccountManager.IsCarrierAccountDeleted(item.CustomerId))
+                           dic.Add(item.CustomerSellingProductId, item);
+                   }
+                   return dic;
                });
         }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _carrierAccountLastCheck;
+
             ICustomerSellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCustomerSellingProductsUpdated(ref _updateHandle);
+                return _dataManager.AreCustomerSellingProductsUpdated(ref _updateHandle)
+                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierAccountManager.CacheManager>().IsCacheExpired(ref _carrierAccountLastCheck);
             }
         }
 

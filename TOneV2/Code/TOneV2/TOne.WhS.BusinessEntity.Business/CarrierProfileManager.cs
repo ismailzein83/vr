@@ -17,6 +17,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
+        
         public Vanrise.Entities.IDataRetrievalResult<CarrierProfileDetail> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();
@@ -35,20 +36,24 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
         }
+        
         public CarrierProfile GetCarrierProfile(int carrierProfileId)
         {
             var carrierProfiles = GetCachedCarrierProfiles();
             return carrierProfiles.GetRecord(carrierProfileId);
         }
+        
         public string GetCarrierProfileName(int carrierProfileId)
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
             return carrierProfile != null ? carrierProfile.Name : null;
         }
+        
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
             return GetCachedCarrierProfiles().MapRecords(CarrierProfileInfoMapper).OrderBy(x => x.Name);
         }
+        
         public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             ValidateCarrierProfileToAdd(carrierProfile);
@@ -74,6 +79,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+        
         public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfile)
         {
             ValidateCarrierProfileToEdit(carrierProfile);
@@ -96,14 +102,28 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+        
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
+        
         public IEnumerable<CarrierProfile> GetCarrierProfiles()
         {
             return GetCachedCarrierProfiles().Values;
         }
+
+        public bool IsCarrierProfileDeleted(int carrierProfileId)
+        {
+            var carrierProfiles = this.GetCachedCarrierProfilesWithDeleted();
+            CarrierProfile carrierProfile = carrierProfiles.GetRecord(carrierProfileId);
+            
+            if (carrierProfile == null)
+                throw new DataIntegrityValidationException(string.Format("Carrier Profile with Id {0} is not found", carrierProfileId));
+
+            return carrierProfile.IsDeleted;
+        }
+
         #endregion
 
         #region Validation Methods
@@ -133,9 +153,28 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
+        
         public Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
+               () =>
+               {
+                   Dictionary<int, CarrierProfile> allCarrierProfile = this.GetCachedCarrierProfilesWithDeleted();
+                   Dictionary<int, CarrierProfile> carrierProfiles = new Dictionary<int, CarrierProfile>();
+                   
+                   foreach (CarrierProfile item in allCarrierProfile.Values)
+                   {
+                       if (!item.IsDeleted)
+                           carrierProfiles.Add(item.CarrierProfileId, item);
+                   }
+
+                   return carrierProfiles;
+               });
+        }
+
+        private Dictionary<int, CarrierProfile> GetCachedCarrierProfilesWithDeleted()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("AllarrierProfiles",
                () =>
                {
                    ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
@@ -143,7 +182,9 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierProfiles.ToDictionary(cn => cn.CarrierProfileId, cn => cn);
                });
         }
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+
+        
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICarrierProfileDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
             object _updateHandle;

@@ -32,9 +32,38 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
                () =>
                {
+                   Dictionary<int, CarrierAccount> allCarrierAccounts = this.GetCachedCarrierAccountsWithDeleted();
+                   Dictionary<int, CarrierAccount> carrierAccounts = new Dictionary<int, CarrierAccount>();
+                   foreach (CarrierAccount item in allCarrierAccounts.Values)
+                   {
+                       if (!item.IsDeleted)
+                           carrierAccounts.Add(item.CarrierAccountId, item);
+                   }
+
+                   return carrierAccounts;
+               });
+        }
+
+        private Dictionary<int, CarrierAccount> GetCachedCarrierAccountsWithDeleted()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("AllCarrierAccounts",
+               () =>
+               {
                    ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
                    IEnumerable<CarrierAccount> carrierAccounts = dataManager.GetCarrierAccounts();
-                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
+
+                   Dictionary<int, CarrierAccount> dic = new Dictionary<int, CarrierAccount>();
+                   CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
+                   foreach (CarrierAccount item in carrierAccounts)
+                   {
+                       if (carrierProfileManager.IsCarrierProfileDeleted(item.CarrierProfileId))
+                           item.IsDeleted = true;
+
+                       dic.Add(item.CarrierAccountId, item);
+                   }
+
+                   return dic;
                });
         }
         
@@ -303,6 +332,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccount.CarrierAccountSettings.CurrencyId;
         }
 
+        public bool IsCarrierAccountDeleted(int carrierAccountId)
+        {
+            var carrierAccounts = GetCachedCarrierAccountsWithDeleted();
+            CarrierAccount carrierAccount = carrierAccounts.GetRecord(carrierAccountId);
+            
+            if (carrierAccount == null)
+                throw new DataIntegrityValidationException(string.Format("carrierAccount with Id {0} is not found", carrierAccountId));
+
+            return carrierAccount.IsDeleted;
+        }
+
         #endregion
 
         #region ICarrierAccountManager Memebers
@@ -396,14 +436,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _carrierProfileLastCheck;
+ 
             ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
+                return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle)
+                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierProfileManager.CacheManager>().IsCacheExpired(ref _carrierProfileLastCheck);
             }
         }
         
