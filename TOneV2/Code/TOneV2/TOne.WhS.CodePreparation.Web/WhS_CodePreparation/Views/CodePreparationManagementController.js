@@ -327,14 +327,20 @@
         }
 
         function onCodesClosed(closedCodes) {
-            if (closedCodes != undefined) {
-                hideShowStateAndClearSelection(true);
-                for (var i = 0; i < closedCodes.length; i++)
+        	if (closedCodes != undefined)
+        	{
+            	hideShowStateAndClearSelection(true);
+
+            	for (var i = 0; i < closedCodes.length; i++)
                     codesGridAPI.onCodeClosed(closedCodes[i]);
 
                 if ($scope.currentNode != undefined) {
                     if ($scope.currentNode.type == 'Zone') {
-                        return codesGridAPI.loadGrid(getCodesFilterObject());
+                    	return codesGridAPI.loadGrid(getCodesFilterObject()).then(function ()
+                    	{
+                    		if (codesGridAPI.isZoneClosed())
+                    			$scope.showRenameZone = false;
+                    	});
                     }
                 }
             }
@@ -430,6 +436,7 @@
         }
 
         function hideShowRenameZone(draftStatus, status) {
+        	console.log('hideShowRenameZone');
             if (status != null)
                 $scope.showRenameZone = false;
             else
