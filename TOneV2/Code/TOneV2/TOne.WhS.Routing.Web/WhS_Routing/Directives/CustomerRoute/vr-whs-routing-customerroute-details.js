@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService',
+    function (WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -35,19 +35,37 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['UtilsService', 'VRUIUtilsSer
 
                 $scope.getRowStyle = function (dataItem) {
 
-                    console.log(dataItem);
-
                     var rowStyle;
 
-                    if (dataItem.IsBlocked)
-                        rowStyle = { CssClass: "bg-danger" }
+                    if (dataItem.IsBlocked) {
+                        rowStyle = { CssClass: "bg-danger" };
+                    }
+                    else if (dataItem.ExecutedRuleId) {
+                        rowStyle = { CssClass: "bg-success" };
+                    }
 
                     return rowStyle
                 };
 
+                $scope.getMenuActions = function (dataItem) {
+                    var menuActions = [];
+
+                    if (dataItem.ExecutedRuleId) {
+                        menuActions.push({
+                            name: "Option Rule",
+                            clicked: openRouteOptionRuleEditor,
+                        })
+                    }
+
+                    function openRouteOptionRuleEditor(dataItem) {
+                        WhS_Routing_RouteOptionRuleService.editRouteOptionRule(dataItem.ExecutedRuleId);
+                    }
+
+                    return menuActions;
+                };
+
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 

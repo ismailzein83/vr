@@ -32,6 +32,8 @@ namespace TOne.WhS.Routing.Entities
 
         public bool IsBlocked { get; set; }
 
-        public List<int> ExactSupplierServiceIds { get; set; } 
+        public List<int> ExactSupplierServiceIds { get; set; }
+
+        public int? ExecutedRuleId { get; set; }
     }
 }

@@ -66,6 +66,8 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                        }
                        onResponseReady(response);
 
+                       console.log(response);
+
                        //showGrid
                        UtilsService.waitMultiplePromises(_customerRouteServiceViewerPromises).then(function () {
                            $scope.showGrid = true;
@@ -76,6 +78,16 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    });
+            };
+
+            $scope.getRowStyle = function (dataItem) {
+
+                var rowStyle;
+
+                if (dataItem.Entity.IsBlocked)
+                    rowStyle = { CssClass: "bg-danger" }
+
+                return rowStyle
             };
 
             defineMenuActions();
