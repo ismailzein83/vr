@@ -84,7 +84,7 @@ namespace TOne.WhS.Sales.Business
                 var rpManager = new ZoneRPManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
                 var serviceManager = new ZoneServiceManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
 
-                foreach (SaleZone zone in zones.OrderBy(x => x.Name))
+                foreach (SaleZone zone in zones)
                 {
                     ZoneItem zoneItem = new ZoneItem()
                     {

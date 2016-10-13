@@ -71,6 +71,8 @@ namespace TOne.WhS.Sales.Business
                 return zones;
 
             List<SaleZone> pagedZones = null;
+
+            zones = zones.OrderBy(x => x.Name);
             int count = zones.Count();
 
             if (count >= fromRow)
