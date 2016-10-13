@@ -38,6 +38,7 @@ app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtils
                         $scope.host = payload.data.Host;
                         $scope.port = payload.data.Port;
                         $scope.timeout = payload.data.Timeout;
+                        $scope.ssl = payload.data.EnabelSsl;
                     }
                 }
 
@@ -48,7 +49,8 @@ app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtils
                         SenderPassword: $scope.senderPassword,
                         Host: $scope.host,
                         Port: $scope.port,
-                        Timeout: $scope.timeout
+                        Timeout: $scope.timeout,
+                        EnabelSsl: $scope.ssl
                     };
                 }
 

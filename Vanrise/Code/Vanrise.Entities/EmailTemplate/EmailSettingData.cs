@@ -7,5 +7,6 @@
         public string Host { get; set; }
         public int Port { get; set; }
         public int Timeout { get; set; }
+        public bool EnabelSsl { get; set; }
     }
 }

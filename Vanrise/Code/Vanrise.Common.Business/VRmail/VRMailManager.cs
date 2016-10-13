@@ -70,7 +70,7 @@ namespace Vanrise.Common.Business
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
             client.Credentials = new System.Net.NetworkCredential(emailSettingData.SenderEmail, emailSettingData.SenderPassword);
-            client.EnableSsl = true;
+            client.EnableSsl = emailSettingData.EnabelSsl;
 
             client.Send(mailMessage);
         }
