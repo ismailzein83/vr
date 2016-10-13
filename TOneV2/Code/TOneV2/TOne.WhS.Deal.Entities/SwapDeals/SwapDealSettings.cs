@@ -14,9 +14,9 @@ namespace TOne.WhS.Deal.Entities
         }
 
         public int CarrierAccountId { get; set; }
-        
-        public List<SwapDealSellingItem> SellingItems { get; set; }
 
-        public List<SwapDealBuyingItem> BuyingItems { get; set; }
+        public List<SwapDealInbound> Inbounds { get; set; }
+
+        public List<SwapDealOutbound> Outbounds { get; set; }
     }
 }

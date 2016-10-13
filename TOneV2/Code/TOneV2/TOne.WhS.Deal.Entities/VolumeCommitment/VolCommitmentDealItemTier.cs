@@ -10,7 +10,7 @@ namespace TOne.WhS.Deal.Entities
     {
         public int StartingVolume { get; set; }
 
-        public int? RetroActivePricingVolume { get; set; }
+        public int? RetroActiveFromTierNumber { get; set; }
 
         public Decimal? DefaultRate { get; set; }
 
