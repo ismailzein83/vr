@@ -231,12 +231,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _carrierAccountLastCheck;
+
             ISwitchConnectivityDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISwitchConnectivityDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreSwitchConnectivitiesUpdated(ref _updateHandle);
+                return _dataManager.AreSwitchConnectivitiesUpdated(ref _updateHandle)
+                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierAccountManager.CacheManager>().IsCacheExpired(ref _carrierAccountLastCheck);
             }
         }
 
@@ -250,7 +253,16 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ISwitchConnectivityDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchConnectivityDataManager>();
                 IEnumerable<SwitchConnectivity> switchConnectivities = dataManager.GetSwitchConnectivities();
-                return switchConnectivities.ToDictionary(kvp => kvp.SwitchConnectivityId, kvp => kvp);
+                Dictionary<int, SwitchConnectivity> dic = new Dictionary<int, SwitchConnectivity>();
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+                foreach (SwitchConnectivity item in switchConnectivities)
+                {
+                    if (!carrierAccountManager.IsCarrierAccountDeleted(item.CarrierAccountId))
+                        dic.Add(item.SwitchConnectivityId, item);
+                }
+
+                return dic;
             });
         }
 
