@@ -165,6 +165,10 @@ namespace TOne.WhS.DBSync.Business
                         iDBSyncDataManager = new VRTimeZoneDBSyncDataManager(context.UseTempTables);
                         break;
 
+                    case DBTableName.SupplierPriceListTemplate:
+                        iDBSyncDataManager = new SupplierPriceListTemplateDBSyncDataManager(context.UseTempTables);
+                        break;  
+
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
 
@@ -342,10 +346,15 @@ namespace TOne.WhS.DBSync.Business
             foreach (var dbTableNameValue in Enum.GetValues(typeof(DBTableName)))
             {
                 MigrationInfoContext migrationContext = new MigrationInfoContext();
-                CallMigrator(context, GetDBTableFromName(context, (DBTableName)dbTableNameValue), migrationContext);
-                if (migrationContext.GeneratedIdsInfoContext != null)
+
+                DBTable dbTable = GetDBTableFromName(context, (DBTableName)dbTableNameValue);
+                if (dbTable.MigrationRequested)
                 {
-                    _idManagerEntities.Add(new IDManagerEntity() { LastTakenId = migrationContext.GeneratedIdsInfoContext.LastTakenId, TypeId = migrationContext.GeneratedIdsInfoContext.TypeId });
+                    CallMigrator(context, dbTable, migrationContext);
+                    if (migrationContext.GeneratedIdsInfoContext != null)
+                    {
+                        _idManagerEntities.Add(new IDManagerEntity() { LastTakenId = migrationContext.GeneratedIdsInfoContext.LastTakenId, TypeId = migrationContext.GeneratedIdsInfoContext.TypeId });
+                    }
                 }
             }
         }

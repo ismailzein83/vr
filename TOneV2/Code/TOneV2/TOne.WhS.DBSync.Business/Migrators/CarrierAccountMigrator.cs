@@ -5,6 +5,7 @@ using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using System.Data.SqlClient;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -16,6 +17,7 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, Currency> allCurrencies;
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
         Dictionary<string, VRTimeZone> allTimeZones;
+        MigrationContext _context;
         public CarrierAccountMigrator(MigrationContext context)
             : base(context)
         {
@@ -30,11 +32,13 @@ namespace TOne.WhS.DBSync.Business
             allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
             var dbTableVRTimeZone = context.DBTables[DBTableName.VRTimeZone];
             allTimeZones = (Dictionary<String, VRTimeZone>)dbTableVRTimeZone.Records;
+            _context = context;
         }
 
         public override void Migrate(MigrationInfoContext context)
         {
             base.Migrate(context);
+            FinalizeRelatedEntities();
         }
 
         public override void AddItems(List<CarrierAccount> itemsToAdd)
@@ -151,6 +155,15 @@ namespace TOne.WhS.DBSync.Business
             }
 
 
+        }
+
+        public override void FinalizeRelatedEntities()
+        {
+            if (_context.MigrationRequestedTables.Contains(DBTableName.CarrierAccount))
+            {
+                SupplierPriceListTemplateDBSyncDataManager supplierPriceListTemplateDataManager = new SupplierPriceListTemplateDBSyncDataManager(_context.UseTempTables);
+                supplierPriceListTemplateDataManager.ClearSupplierPriceListTemplateTable();
+            }
         }
 
         private void FillTimeZoneAndDefaultServicesForCarrierAccount(SourceCarrierAccount sourceItem, CarrierAccountCustomerSettings carrierAccountCustomerSettings, CarrierAccountSupplierSettings carrierAccountSupplierSettings)

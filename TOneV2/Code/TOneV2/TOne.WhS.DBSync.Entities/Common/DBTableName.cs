@@ -76,7 +76,10 @@ namespace TOne.WhS.DBSync.Entities
         SaleEntityService,
 
         [Description("Rule")]
-        Rule
+        Rule,
+
+        [Description("SupplierPriceListTemplate")]
+        SupplierPriceListTemplate
 
     }
 }

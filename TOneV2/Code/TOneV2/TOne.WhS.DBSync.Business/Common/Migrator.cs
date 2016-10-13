@@ -152,5 +152,10 @@ namespace TOne.WhS.DBSync.Business
             return null;
         }
 
+        public virtual void FinalizeRelatedEntities()
+        {
+
+        }
+
     }
 }
