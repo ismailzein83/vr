@@ -18,7 +18,7 @@ namespace QM.CLITester.iTestIntegration
 {
     public class CLITesterConnector : CLITesterConnectorBase
     {
-        public override Guid ConfigId { get { return new Guid("9f336216-bf7a-4e5a-a327-cc19de2362d5"); } }
+        public override Guid ConfigId { get { return new Guid("37cf73dd-ddf8-4ab5-bd4d-bb13ded9fe7f"); } }
 
         public override InitiateTestOutput InitiateTest(IInitiateTestContext context)
         {
