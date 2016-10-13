@@ -62,7 +62,6 @@
     <Compile Include="ExistingRate.cs" />
     <Compile Include="ExistingRateGroup.cs" />
     <Compile Include="ExistingZoneRoutingProducts.cs" />
-    <Compile Include="ExistingZonesServicesZoneName.cs" />
     <Compile Include="ExistingRateGroupByZoneName.cs" />
     <Compile Include="ExistingZoneServices.cs" />
     <Compile Include="ExistingZoneInfo.cs" />
