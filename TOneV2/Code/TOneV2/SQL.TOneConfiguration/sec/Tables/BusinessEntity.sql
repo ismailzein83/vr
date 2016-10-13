@@ -3,7 +3,7 @@
     [OldId]             INT              NULL,
     [Name]              NVARCHAR (255)   NOT NULL,
     [Title]             NVARCHAR (255)   NOT NULL,
-    [ModuleId]          UNIQUEIDENTIFIER NULL,
+    [ModuleId]          UNIQUEIDENTIFIER NOT NULL,
     [OleModuleId]       INT              NULL,
     [BreakInheritance]  BIT              NOT NULL,
     [PermissionOptions] NVARCHAR (255)   NOT NULL,
@@ -11,6 +11,8 @@
     CONSTRAINT [PK_BusinessEntity_1] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [IX_BusinessEntity_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
