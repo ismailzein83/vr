@@ -21,9 +21,7 @@
       <exceptionLogger name="DefaultExceptionLogger" type="Vanrise.Common.DefaultExceptionLogger, Vanrise.Common"></exceptionLogger>
     </exceptionLoggers>
   </vanriseLogging>
-  <connectionStrings>    
-    <add name="ProtalConnectionString" connectionString="Server=localhost;Database=CarrierPortal_Configuration;User ID=sa;Password= " />
-    
+  <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=CarrierPortal_Configuration;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=CarrierPortal_Transaction;User ID=sa;Password= "/>
     <add name="LogDBConnString" connectionString="Server=localhost;Database=CarrierPortal_Logging;User ID=sa;Password= "/>
@@ -39,10 +37,13 @@
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="CP.SupplierPricelist.Business.CustomerManager+SupplierCacheManager_TimeExpirationInterval" value="00:00:15" />
 
-    <add key="CP_DBConnStringKey" value="PortalConnectionString" />
+    <add key="CP_DBConnStringKey" value="ConfigurationDBConnString" />
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="RuntimeConnStringKey" value="TransactionDBConnString" />
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
