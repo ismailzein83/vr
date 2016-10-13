@@ -84,7 +84,10 @@
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <!--<add key="FraudAnalysis_CDRDBDataFileDirectory" value="true"/>--><!--FraudAnalysis_CDRDBDataFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="FraudAnalysis_CDRDBLogFileDirectory" value="true"/>--><!--FraudAnalysis_CDRDBLogFileDirectory key will override the SQL default directory if needed-->
-    
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>    
   </appSettings>
 
   <vanriseLogging maxLogLevel="Information">
