@@ -16,7 +16,7 @@ app.directive('vrIcon', [function ($compile) {
         'below': { value: "glyphicon-arrow-down arrow-below", isimage: false },//#ff1111
         'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false },
         'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false }, //#37c737
-        'current': { value: 'Client/Images/current.png', isimage: true },
+        'explicit': { value: 'glyphicon-lock', isimage: false },
         'inherited': { value: 'Client/Images/inherited.png', isimage: true }
     }
    
