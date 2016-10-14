@@ -51,5 +51,7 @@ namespace Vanrise.Entities
         public ExcelCellType? CellType { get; set; }
 
         public DateTimeType? DateTimeType { get; set; }
+
+        public int? Width { get; set; }
     }
 }

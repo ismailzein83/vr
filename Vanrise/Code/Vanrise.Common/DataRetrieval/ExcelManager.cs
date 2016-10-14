@@ -144,12 +144,17 @@ namespace Vanrise.Common
             //filling header
             foreach (var headerCell in excelSheet.Header.Cells)
             {
-                RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                if (headerCell.Width.HasValue)
+                    RateWorkSheet.Cells.SetColumnWidth(colIndex, headerCell.Width.Value);
+                else
+                    RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+
                 RateWorkSheet.Cells[rowIndex, colIndex].PutValue(headerCell.Title);
                 Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
                 Style style = cell.GetStyle();
                 style.Font.Name = "Times New Roman";
-                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Color = Color.FromArgb(255, 0, 0);
+               
                 style.Font.Size = 14;
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
