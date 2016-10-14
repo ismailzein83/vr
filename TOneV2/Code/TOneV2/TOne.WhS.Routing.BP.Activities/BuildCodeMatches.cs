@@ -81,7 +81,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 builder.BuildCodeMatches(codeMatchContext, saleCodes, supplierCodes, codeMatch =>
                 {
                     codeMatch.CodePrefix = code.Code;
-                    if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null)
+                    if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null && codeMatch.SaleCodeMatches!=null && codeMatch.SaleCodeMatches.Count > 0)
                     {
                         inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
                     }
@@ -108,6 +108,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         inputArgument.OutputQueue_1.Enqueue(codeMatchesBatch);
                     if (inputArgument.OutputQueue_2 != null)
                         inputArgument.OutputQueue_2.Enqueue(codeMatchesBatch);
+                    codeMatchesBatch = new CodeMatchesBatch();
                 }
             }
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Code Matches is done", null);

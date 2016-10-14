@@ -126,8 +126,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                                   if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOption_Temp' AND TABLE_SCHEMA = 'dbo')
                                                                   drop table dbo.RouteOption_Temp;";
 
-        protected const string query_DropZoneRateTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate_Temp' AND TABLE_SCHEMA = 'dbo')
-                                                         drop table dbo.ZoneRate_Temp;";
+        protected const string query_DropZoneRateTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRates_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                         drop table dbo.ZoneRates_Temp;";
 
         protected const string query_DropCodeMatchTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch_Temp' AND TABLE_SCHEMA = 'dbo')
                                                          drop table dbo.CodeMatch_Temp;";
@@ -182,17 +182,17 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                    [SaleZoneId] [bigint] NOT NULL
                                                     ) ON [PRIMARY]";
 
-        const string query_ZoneRateTempTable = @"CREATE TABLE [dbo].[ZoneRate_Temp](
-	                                        [ZoneID] [int] NOT NULL,
-	                                        [SupplierID] [varchar](5) NOT NULL,
-	                                        [CustomerID] [varchar](5) NOT NULL,
-	                                        [NormalRate] [real] NULL,
-	                                        [OffPeakRate] [real] NULL,
-	                                        [WeekendRate] [real] NULL,
-	                                        [ServicesFlag] [smallint] NULL,
-	                                        [ProfileId] [int] NULL,
-	                                        [Blocked] [tinyint] NULL DEFAULT ((0))
-                                           ) ON [PRIMARY];";
+        const string query_ZoneRateTempTable = @"CREATE TABLE [dbo].[ZoneRates_Temp](
+	                                            [ZoneID] [int] NOT NULL,
+	                                            [SupplierID] [varchar](5) NOT NULL,
+	                                            [CustomerID] [varchar](5) NOT NULL,
+	                                            [ServicesFlag] [smallint] NULL,
+	                                            [ProfileId] [int] NULL,
+	                                            [ActiveRate] [real] NULL,
+	                                            [IsTOD] [bit] NULL,
+	                                            [IsBlock] [bit] NULL,
+	                                            [CodeGroup] [varchar](20) NULL
+                                            ) ON [PRIMARY]";
 
         const string query_CustomerRouteTempTable = @"  CREATE TABLE [dbo].[Route_Temp](
 	                                                [RouteID] [int] NOT NULL,

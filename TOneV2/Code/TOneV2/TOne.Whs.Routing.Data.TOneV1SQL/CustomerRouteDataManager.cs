@@ -112,7 +112,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             bool hasOptionBlock = false;
 
             CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
-            int counter = 8;
+            int counter = 0;
 
             int isToDAffected = 0;
             int isSpecialRequestAffected = 0;
@@ -122,7 +122,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             switch (record.CorrespondentType)
             {
                 case CorrespondentType.Block: isBlockAffected = 1; break;
-                case CorrespondentType.Override: isOverrideAffected = 1; break;
+                case CorrespondentType.Override: isOverrideAffected = 1; counter = 10; break;
                 case CorrespondentType.SpecialRequest: isSpecialRequestAffected = 1; break;
                 case CorrespondentType.LCR:
                 case CorrespondentType.Other:
@@ -144,7 +144,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 SupplierZone supplierZone = _allSupplierZones.GetRecord(option.SupplierZoneId);
                 int supplierServiceFlag = GetServiceFlag(option.ExactSupplierServiceIds, _allZoneServiceConfigs);
                 customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
-                    supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : default(decimal?));
+                    supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
             }
 
             customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
@@ -205,7 +205,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_DropCodeMatchTable);
             query.AppendLine("EXEC sp_rename 'Route_Temp','Route';");
             query.AppendLine("EXEC sp_rename 'RouteOption_Temp','RouteOption';");
-            query.AppendLine("EXEC sp_rename 'ZoneRate_Temp','ZoneRate';");
+            query.AppendLine("EXEC sp_rename 'ZoneRates_Temp','ZoneRates';");
             query.AppendLine("EXEC sp_rename 'CodeMatch_Temp','CodeMatch';");
             ExecuteNonQueryText(query.ToString(), null);
         }
@@ -217,8 +217,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                       if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOption' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.RouteOption;";
 
-        const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRate' AND TABLE_SCHEMA = 'dbo')
-                                                      drop table dbo.ZoneRate;";
+        const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRates' AND TABLE_SCHEMA = 'dbo')
+                                                      drop table dbo.ZoneRates;";
 
         const string query_DropCodeMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.CodeMatch;";

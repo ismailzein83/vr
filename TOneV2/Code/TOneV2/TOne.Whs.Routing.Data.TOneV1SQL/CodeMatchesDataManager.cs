@@ -56,10 +56,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             InitializeData();
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            SaleCodeMatch saleCodeMatch = record.SaleCodeMatches.First();
-            SaleZone saleZone = _allSaleZones.GetRecord(saleCodeMatch.SaleZoneId);
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.Code, saleCodeMatch.SaleCodeSourceId, saleZone.SourceId, "SYS");
-
+            if (record.SaleCodeMatches != null && record.SaleCodeMatches.Count > 0)
+            {
+                SaleCodeMatch saleCodeMatch = record.SaleCodeMatches.First();
+                SaleZone saleZone = _allSaleZones.GetRecord(saleCodeMatch.SaleZoneId);
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.Code, saleCodeMatch.SaleCodeSourceId, saleZone.SourceId, "SYS");
+            }
             foreach (SupplierCodeMatchWithRate supplierCodeMatchWithRate in record.SupplierCodeMatches)
             {
                 if (supplierCodeMatchWithRate.CodeMatch == null)

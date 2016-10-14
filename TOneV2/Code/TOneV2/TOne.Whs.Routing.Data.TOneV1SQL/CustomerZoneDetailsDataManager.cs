@@ -18,7 +18,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
     {
         readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "CustomerServiceIds" };
 
-        readonly string[] zoneRateColumns = { "ZoneID", "SupplierID", "CustomerID", "NormalRate", "OffPeakRate", "WeekendRate", "ServicesFlag", "ProfileId", "Blocked" };
+        readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
 
         Dictionary<int, CarrierAccount> _allCarriers;
         Dictionary<int, CarrierProfile> _allCarrierProfiles;
@@ -66,12 +66,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
             customerZoneDetailBulkInsertInfo.ZoneRateStreamForBulkInsertInfo = new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[ZoneRate_Temp]",
+                TableName = "[dbo].[ZoneRates_Temp]",
                 Stream = customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert,
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
-                ColumnNames = zoneRateColumns,
+                ColumnNames = zoneRatesColumns,
             };
 
             return customerZoneDetailBulkInsertInfo;
@@ -106,7 +106,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
             SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
 
-            customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, record.EffectiveRateValue, 0, 0, serviceflag, profile.SourceId, 0);
+            customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {

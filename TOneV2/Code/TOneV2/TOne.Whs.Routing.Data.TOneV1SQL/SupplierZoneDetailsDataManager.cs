@@ -18,7 +18,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
         readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds" };
-        readonly string[] zoneRateColumns = { "ZoneID", "SupplierID", "CustomerID", "NormalRate", "OffPeakRate", "WeekendRate", "ServicesFlag", "ProfileId", "Blocked" };
+readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
 
         Dictionary<int, CarrierAccount> _allCarriers;
         Dictionary<int, CarrierProfile> _allCarrierProfiles;
@@ -51,12 +51,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
             supplierZoneDetailBulkInsertInfo.ZoneRateStreamForBulkInsertInfo = new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[ZoneRate_Temp]",
+                TableName = "[dbo].[ZoneRates_Temp]",
                 Stream = supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert,
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
-                ColumnNames = zoneRateColumns,
+                ColumnNames = zoneRatesColumns,
             };
 
             return supplierZoneDetailBulkInsertInfo;
@@ -91,8 +91,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             CarrierProfile profile = _allCarrierProfiles.GetRecord(supplier.CarrierProfileId);
             SupplierZone supplierZone = _allSupplierZones.GetRecord(record.SupplierZoneId);
 
-            supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", supplierZone.SourceId, supplier.SourceId, "SYS", record.EffectiveRateValue, 0, 0, serviceflag, profile.SourceId, 0);
-
+            supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", supplierZone.SourceId, supplier.SourceId, "SYS", serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
         }
 
         public void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails)

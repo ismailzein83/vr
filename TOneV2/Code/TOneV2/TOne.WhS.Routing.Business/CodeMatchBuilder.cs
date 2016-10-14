@@ -147,7 +147,8 @@ namespace TOne.WhS.Routing.Business
                 if (saleCodeMatch != null)
                     saleCodeMatches.Add(saleCodeMatch);
             }
-            if (saleCodeMatches.Count > 0)
+
+            if (saleCodeMatches.Count > 0 || !isDistinctFromSaleCodes)
             {
                 List<SupplierCodeMatchWithRate> supplierCodeMatches = new List<SupplierCodeMatchWithRate>();
                 SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier = new SupplierCodeMatchWithRateBySupplier();
