@@ -8,7 +8,7 @@ namespace TOne.WhS.Deal.Entities
 {
     public class VolCommitmentDealItemTier
     {
-        public int StartingVolume { get; set; }
+        public int? UpToVolume { get; set; }
 
         public int? RetroActiveFromTierNumber { get; set; }
 
