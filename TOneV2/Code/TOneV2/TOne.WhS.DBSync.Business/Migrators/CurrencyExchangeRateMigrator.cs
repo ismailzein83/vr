@@ -49,7 +49,7 @@ namespace TOne.WhS.DBSync.Business
                 {
                     CurrencyId = currency.CurrencyId,
                     ExchangeDate = (sourceItem.ExchangeDate.HasValue ? sourceItem.ExchangeDate.Value : DateTime.Now),
-                    Rate = (sourceItem.Rate.HasValue ? sourceItem.Rate.Value : Decimal.MinValue),
+                    Rate = sourceItem.Rate.HasValue ? sourceItem.Rate.Value : default(decimal),
                     SourceId = sourceItem.SourceId
                 };
             else
@@ -60,7 +60,7 @@ namespace TOne.WhS.DBSync.Business
         }
         public override void FillTableInfo(bool useTempTables)
         {
-           
+
         }
     }
 }

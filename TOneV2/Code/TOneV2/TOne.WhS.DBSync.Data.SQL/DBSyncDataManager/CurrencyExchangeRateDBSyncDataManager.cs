@@ -27,14 +27,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("Rate", typeof(decimal));
             dt.Columns.Add("ExchangeDate", typeof(DateTime));
             dt.Columns.Add("SourceID", typeof(string));
-           
+
             dt.BeginLoadData();
             foreach (var item in currencyExchangeRates)
             {
                 DataRow row = dt.NewRow();
                 int index = 0;
                 row[index++] = item.CurrencyId;
-                row[index++] = item.Rate;
+                row[index++] = decimal.Round(item.Rate, 10, MidpointRounding.AwayFromZero);
                 row[index++] = item.ExchangeDate;
                 row[index++] = item.SourceId;
                 dt.Rows.Add(row);
