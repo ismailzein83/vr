@@ -1,6 +1,4 @@
 ﻿-- =============================================
--- Author:		Mostafa Jawhari
--- Create date: '05-18-2016'
 -- Description:	Get all sale codes effective and pending effective by sellingNumberPlanId
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan]

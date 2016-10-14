@@ -1,6 +1,4 @@
 ﻿-- =============================================
--- Author:		Mostafa Jawhari
--- Create date: 05-05-2016
 -- Description:	Get Effective Sale Rates by Selling Number Plan
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetBySellingNumberPlanAndEffective]

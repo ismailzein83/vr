@@ -411,5 +411,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetByEffective.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetFilteredByZone.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByEffective.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleZoneServices_Changed.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleZoneRoutingProducts_Changed.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityZoneServices_GetEffectiveBySellingNumberPlan.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityZoneRoutingProducts_GetEffectiveBySellingNumberPlan.sql" />
   </ItemGroup>
 </Project>

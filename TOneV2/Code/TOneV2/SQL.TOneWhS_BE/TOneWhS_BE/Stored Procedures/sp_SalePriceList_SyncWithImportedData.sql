@@ -1,6 +1,4 @@
 ﻿-- =============================================
--- Author:		Mostafa Jawhari
--- Modify date: 04-13-2016
 -- Description:	Adding try catch will rollback.
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData]
@@ -25,8 +23,8 @@ Begin Try
 	Select scnew.ID, scnew.Code, scnew.ZoneID, scnew.CodeGroupID, scnew.BED, scnew.EED
 	from TOneWhS_BE.CP_SaleCode_New scnew WITH(NOLOCK) Where scnew.ProcessInstanceID = @ProcessInstanceID
 
-	Insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, Rate, BED, EED)
-	select newRate.ID, newRate.PriceListID, newRate.ZoneID, newRate.CurrencyId, newRate.NormalRate, newRate.BED, newRate.EED
+	Insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, Rate, Change, BED, EED)
+	select newRate.ID, newRate.PriceListID, newRate.ZoneID, newRate.CurrencyId, newRate.NormalRate, 1, newRate.BED, newRate.EED
 	from TOneWhS_BE.CP_SaleRate_New newRate WITH(NOLOCK) where newRate.ProcessInstanceID = @ProcessInstanceId
 	
 	Update ToneWhs_be.SaleZone
@@ -45,6 +43,16 @@ Begin Try
 	on sr.ID = srchanged.ID Where srchanged.ProcessInstanceID = @ProcessInstanceId
 	
 	
+	Update TOneWhs_BE.SaleEntityService
+	Set EED = zschanged.EED
+	from TOneWhs_BE.SaleEntityService zs join TOneWhS_BE.CP_SaleZoneServices_Changed zschanged
+	on zs.ID = zschanged.ID Where zschanged.ProcessInstanceID = @ProcessInstanceId
+
+	Update TOneWhs_BE.SaleEntityRoutingProduct
+	Set EED = rpchanged.EED
+	from TOneWhs_BE.SaleEntityRoutingProduct rp join TOneWhS_BE.CP_SaleZoneRoutingProducts_Changed rpchanged
+	on rp.ID = rpchanged.ID Where rpchanged.ProcessInstanceID = @ProcessInstanceId
+
 	COMMIT TRAN
 	End Try
 	

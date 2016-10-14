@@ -1,6 +1,4 @@
 ﻿-- =============================================
--- Author:		Mostafa Jawhari
--- Create date: 05-18-2016
 -- Description:	Get Effective and Pending effective Sale Rates by Selling Number Plan
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetEffectiveAfter]

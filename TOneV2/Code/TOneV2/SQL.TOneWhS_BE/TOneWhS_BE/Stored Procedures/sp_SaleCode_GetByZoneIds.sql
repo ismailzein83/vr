@@ -1,6 +1,4 @@
 ﻿-- =============================================
--- Author:		Mostafa Jawhari
--- Create date: 04-22-2016
 -- Description:	SP to get all SaleCodes by ZoneIds
 
 -- =============================================
