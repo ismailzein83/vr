@@ -36,7 +36,7 @@ namespace TOne.WhS.Sales.Business
         }
         private CalculatedRates GetCalculatedRates(TryApplyCalculatedRatesInput input)
         {
-            CalculatedRates rates = new CalculatedRates()
+            var rates = new CalculatedRates()
             {
                 ValidCalculatedRates = new List<CalculatedZoneRate>(),
                 InvalidCalculatedRates = new List<CalculatedZoneRate>()
@@ -50,6 +50,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     ZoneId = zoneItem.ZoneId,
                     ZoneName = zoneItem.ZoneName,
+					ZoneBED = zoneItem.ZoneBED,
                     CurrentRate = zoneItem.CurrentRate,
                     CalculatedRate = zoneItem.CalculatedRate.Value
                 };
@@ -99,7 +100,8 @@ namespace TOne.WhS.Sales.Business
                 ZoneItem zoneItem = new ZoneItem()
                 {
                     ZoneId = zone.SaleZoneId,
-                    ZoneName = zone.Name
+                    ZoneName = zone.Name,
+					ZoneBED = zone.BED
                 };
 
                 ZoneChanges zoneDraft = zoneDrafts != null ? zoneDrafts.FindRecord(x => x.ZoneId == zone.SaleZoneId) : null;
@@ -153,7 +155,7 @@ namespace TOne.WhS.Sales.Business
 
             foreach (CalculatedZoneRate calculatedRate in calculatedRates)
             {
-                newRateBED = (!calculatedRate.CurrentRate.HasValue || calculatedRate.CalculatedRate > calculatedRate.CurrentRate.Value) ?
+				newRateBED = (!calculatedRate.CurrentRate.HasValue || calculatedRate.CalculatedRate > calculatedRate.CurrentRate.Value) ?
                     effectiveOn.AddDays(ratePlanSettings.IncreasedRateDayOffset) :
                     effectiveOn.AddDays(ratePlanSettings.DecreasedRateDayOffset);
 
@@ -161,8 +163,9 @@ namespace TOne.WhS.Sales.Business
                 {
                     ZoneId = calculatedRate.ZoneId,
                     NormalRate = calculatedRate.CalculatedRate,
-                    BED = newRateBED
                 };
+
+				newRate.BED = new List<DateTime>() { newRateBED, calculatedRate.ZoneBED }.Max();
 
                 ZoneChanges zoneDraft = existingZoneDrafts.FindRecord(x => x.ZoneId == calculatedRate.ZoneId);
                 var newRates = new List<DraftRateToChange>();
