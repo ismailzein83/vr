@@ -104,7 +104,7 @@ namespace TOne.WhS.DBSync.Business
                 if (rule == null)
                     this.TotalRowsFailed++;
                 else
-                    routeRules.Add(rule);                
+                    routeRules.Add(rule);
             }
             return routeRules;
         }
@@ -245,22 +245,42 @@ namespace TOne.WhS.DBSync.Business
 
                 OptionsSettingsGroup = new SelectiveOptions
                 {
-                    Options = GetOptions(sourceRule)
+                    Options = GetOptions(sourceRule),
+                    Filters = GetSuppliersFilters(sourceRule)
+
                 },
                 OptionPercentageSettings = GetOptionPercentageSettings(sourceRule)
-            };              
-            //if (!sourceRule.SupplierOptions.Any(r => r.IsLoss))
-            //{
-            //    rule.OptionFilters = new List<RouteOptionFilterSettings> { 
-            //    new RateOptionFilter
-            //        {
-            //            RateOption = RateOption.MaximumLoss,
-            //            RateOptionType = RateOptionType.Fixed,
-            //            RateOptionValue = 0
-            //        }
-            //    };
-            //}
+            };
             return rule;
+        }
+
+        private Dictionary<int, List<RouteOptionFilterSettings>> GetSuppliersFilters(SourceRouteOverrideRule sourceRule)
+        {
+            Dictionary<int, List<RouteOptionFilterSettings>> filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
+            List<RouteOptionFilterSettings> supplierFilters;
+            foreach (var option in sourceRule.SupplierOptions)
+            {
+                var supplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId;
+                if (!option.IsLoss)
+                {
+                    if (!filters.TryGetValue(supplierId, out supplierFilters))
+                    {
+                        supplierFilters = new List<RouteOptionFilterSettings>();
+                        filters.Add(supplierId, supplierFilters);
+                    }
+                    supplierFilters.Add(new RateOptionFilter
+                    {
+                        RateOption = RateOption.MaximumLoss,
+                        RateOptionType = RateOptionType.Fixed,
+                        RateOptionValue = 0
+                    });
+                }
+            }
+
+            if (filters.Count == 0)
+                return null;
+            return filters;
+
         }
         RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)
         {
