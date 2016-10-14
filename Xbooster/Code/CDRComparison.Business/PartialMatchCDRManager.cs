@@ -88,11 +88,11 @@ namespace CDRComparison.Business
                 sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System CDPN" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System CGPN" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "System Duration (SEC)" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner CDPN" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner CGPN" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Partner Duration (SEC)" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Duration Difference (SEC)" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Duration Difference % Of Partner" });

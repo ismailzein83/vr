@@ -68,7 +68,7 @@ namespace CDRComparison.Business
                 sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CDPN" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CGPN" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Duration (SEC)" });
 
                 sheet.Rows = new List<ExportExcelRow>();
