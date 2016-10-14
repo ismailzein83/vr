@@ -91,6 +91,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZoneServiceConfigs.Values;
         }
 
+        public string GeZoneServicesNames(List<int> services)
+        {
+            var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x=>services.Contains(x.Key));
+            if (allZoneServiceConfigs == null)
+                return null;
+            return String.Join(",", allZoneServiceConfigs.Select(x => x.Value.Symbol).ToList());
+        }
+
         public ZoneServiceConfig GetZoneServiceConfig(int ZoneServiceConfigId)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();

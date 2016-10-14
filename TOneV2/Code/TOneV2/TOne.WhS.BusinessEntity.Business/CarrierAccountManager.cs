@@ -97,9 +97,12 @@ namespace TOne.WhS.BusinessEntity.Business
                  &&
                 (input.Query.Services == null || (item.AccountType == CarrierAccountType.Customer || input.Query.Services.All(x=>  item.SupplierSettings.DefaultServices.Select(y=>y.ServiceId).Contains(x))));
 
+                var resultProcessingHandler = new ResultProcessingHandler<CarrierAccountDetail>()
+                {
+                    ExportExcelHandler = new CarrierAccountDetailExportExcelHandler()
+                };
 
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper), resultProcessingHandler);
         }
 
         public IEnumerable<CarrierAccount> GetAllCarriers()
@@ -626,6 +629,7 @@ namespace TOne.WhS.BusinessEntity.Business
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {
             CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
+            ZoneServiceConfigManager ZoneServiceConfigManager = new ZoneServiceConfigManager();
             carrierAccountDetail.Entity = carrierAccount;
 
             var carrierProfile = _carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
@@ -648,12 +652,54 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierAccount.CarrierAccountSettings != null)
                 carrierAccountDetail.ActivationStatusDescription = Vanrise.Common.Utilities.GetEnumDescription(carrierAccount.CarrierAccountSettings.ActivationStatus);
             if ((carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && carrierAccount.SupplierSettings != null && carrierAccount.SupplierSettings.DefaultServices.Count > 0)
-                carrierAccountDetail.Services = carrierAccount.SupplierSettings.DefaultServices.Select(x => x.ServiceId).ToList();       
+            {
+                carrierAccountDetail.Services = carrierAccount.SupplierSettings.DefaultServices.Select(x => x.ServiceId).ToList();
+                carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GeZoneServicesNames(carrierAccountDetail.Services);
+            }
 
 
             return carrierAccountDetail;
         }
-        
+
+
+        private class CarrierAccountDetailExportExcelHandler : ExcelExportHandler<CarrierAccountDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CarrierAccountDetail> context)
+            {
+                if (context.BigResult == null || context.BigResult.Data == null)
+                    return;
+
+                var sheet = new ExportExcelSheet();
+                sheet.SheetName = "Carrier Accounts";
+
+                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Activation Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Services" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CarrierAccountId });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.CarrierAccountName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.CarrierProfileName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.AccountTypeDescription });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.ActivationStatusDescription });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.SellingNumberPlanName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.ServicesNames });
+
+                    sheet.Rows.Add(row);
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
         #endregion
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

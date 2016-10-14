@@ -1,10 +1,10 @@
 ﻿<vr-datagrid datasource="carrierAccounts"
-                on-ready="onGridReady"
-                dataretrievalfunction="dataRetrievalFunction"
-                pagingtype="'PagingOnScroll'"
-                menuactions="gridMenuActions"
-                idfield="Entity.CarrierAccountId"
-                showexpand="isExpandable">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.CarrierAccountId"
+             showexpand="isExpandable" enableautoexport="true">
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CarrierAccountId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>

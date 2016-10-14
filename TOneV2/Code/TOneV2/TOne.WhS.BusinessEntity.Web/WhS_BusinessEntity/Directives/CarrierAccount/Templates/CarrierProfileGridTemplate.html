@@ -1,9 +1,9 @@
 ﻿<vr-datagrid datasource="carrierProfiles"
-                on-ready="onGridReady"
-                dataretrievalfunction="dataRetrievalFunction"
-                pagingtype="'PagingOnScroll'"
-                menuactions="gridMenuActions"
-                idfield="Entity.CarrierProfileId">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.CarrierProfileId" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CarrierProfileId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Carrier Profile Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
