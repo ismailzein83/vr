@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
-        
+
         [RequiredArgument]
         public OutArgument<IEnumerable<CodeToMove>> CodesToMove { get; set; }
 
@@ -75,47 +75,47 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
                 DeletedCode deletedCode = importedData.DeletedCodes.FirstOrDefault(x => x.Code == code.Code);
-                if(deletedCode != null)
+                if (deletedCode != null)
                 {
-                     codesToMove.Add(new CodeToMove
-                            {
-                                Code = code.Code,
-                                CodeGroup = codeGroup,
-                                BED = code.BED,
-                                EED = code.EED,
-                                ZoneName = code.Zone,
-                                OldZoneName = deletedCode.Zone
-                            });
+                    codesToMove.Add(new CodeToMove
+                           {
+                               Code = code.Code,
+                               CodeGroup = codeGroup,
+                               BED = code.BED,
+                               EED = code.EED,
+                               ZoneName = code.Zone,
+                               OldZoneName = deletedCode.Zone
+                           });
                 }
                 else
                 {
-                     codesToAdd.Add(new CodeToAdd
-                            {
-                                Code = code.Code,
-                                CodeGroup = codeGroup,
-                                BED = code.BED,
-                                EED = code.EED,
-                                ZoneName = code.Zone,
-                            });
+                    codesToAdd.Add(new CodeToAdd
+                           {
+                               Code = code.Code,
+                               CodeGroup = codeGroup,
+                               BED = code.BED,
+                               EED = code.EED,
+                               ZoneName = code.Zone,
+                           });
                 }
 
             }
             foreach (DeletedCode code in importedData.DeletedCodes)
             {
+                if (codesToMove.Any(x => x.Code == code.Code) && importedData.DeletedCodes.FindAllRecords(item => item.Code == code.Code).Count() == 1)
+                    continue;
 
-                if(!codesToMove.Any(x=>x.Code==code.Code))
-                {    TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code.Trim());
-                     codesToClose.Add(new CodeToClose
-                            {
-                                Code = code.Code,
-                                CloseEffectiveDate = code.BED,
-                                ZoneName = code.Zone,
-                                CodeGroup = codeGroup
-                            });
-                }
+                TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code.Trim());
+                codesToClose.Add(new CodeToClose
+                       {
+                           Code = code.Code,
+                           CloseEffectiveDate = code.BED,
+                           ZoneName = code.Zone,
+                           CodeGroup = codeGroup
+                       });
             }
-               
-           
+
+
             CodesToAdd.Set(context, codesToAdd);
             CodesToMove.Set(context, codesToMove);
             CodesToClose.Set(context, codesToClose);
