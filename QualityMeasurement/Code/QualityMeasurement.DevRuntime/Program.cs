@@ -16,15 +16,15 @@ namespace QM.Runtime
             if (ConfigurationManager.AppSettings["IsRuntimeService"] == "true")
             {
                 
-                SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-                Vanrise.Caching.Runtime.CachingDistributorRuntimeService cachingDistributorRuntimeService = new Vanrise.Caching.Runtime.CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+                //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+                //Vanrise.Caching.Runtime.CachingDistributorRuntimeService cachingDistributorRuntimeService = new Vanrise.Caching.Runtime.CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
                 
-                var runtimeServices = new List<RuntimeService>();
+                //var runtimeServices = new List<RuntimeService>();
 
-                runtimeServices.Add(schedulerService);
-                runtimeServices.Add(cachingDistributorRuntimeService);
+                //runtimeServices.Add(schedulerService);
+                //runtimeServices.Add(cachingDistributorRuntimeService);
 
-                RuntimeHost host = new RuntimeHost(runtimeServices);
+                RuntimeHost host = new RuntimeHost(args);
                 host.Start();
                 Console.ReadKey();
             }
