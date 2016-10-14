@@ -25,8 +25,9 @@ namespace TOne.WhS.CodePreparation.Business
             SalePriceListsByOwner salePriceListsByOwner, IEnumerable<NotImportedZone> notImportedZones, DateTime effectiveDate, int sellingNumberPlanId)
         {
             ExistingRateGroupByZoneName existingRateGroupByZoneName = StructureExistingRatesByZoneName(existingRates);
-            ProcessImportedData(zonesToProcess, existingZones, existingRateGroupByZoneName, salePriceListsByOwner, effectiveDate, sellingNumberPlanId);
             ProcessNotImportedData(notImportedZones, existingZones, existingRateGroupByZoneName);
+            ProcessImportedData(zonesToProcess, existingZones, existingRateGroupByZoneName, salePriceListsByOwner, effectiveDate, sellingNumberPlanId);
+           
         }
 
         private void ProcessImportedData(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, 
