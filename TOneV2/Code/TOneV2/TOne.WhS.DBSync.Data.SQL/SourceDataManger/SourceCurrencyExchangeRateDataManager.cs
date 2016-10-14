@@ -20,11 +20,12 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private SourceCurrencyExchangeRate SourceCurrencyExchangeRateMapper(IDataReader arg)
         {
+            double? rate = GetReaderValue<double?>(arg, "Rate");
             return new SourceCurrencyExchangeRate()
              {
                  SourceId = arg["CurrencyExchangeRateID"].ToString(),
                  ExchangeDate = GetReaderValue<DateTime?>(arg, "ExchangeDate"),
-                 Rate = GetReaderValue<decimal?>(arg, "Rate"),
+                 Rate = rate.HasValue ? Convert.ToDecimal(rate.Value) : default(decimal?),
                  CurrencyId = arg["CurrencyId"].ToString(),
              };
 
