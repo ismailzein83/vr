@@ -11,25 +11,7 @@ Post-Deployment Script Template
 */
 --[sec].[Module]---------------------------1401 to 1500-------------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[Module] on;
-;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('e73c4aba-fd03-4137-b047-f3fb4f7eed03','CDR Tools',null,null,'/images/menu-icons/CDR Compare Tool.png',4,0),
-('e73c4aba-fd03-4137-b047-f3fb4f7eed03','Supplier Rate Management',null,null,'/images/menu-icons/Supplier Rate Managment.png',5,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
-merge	[sec].[Module] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
-when not matched by target then
-	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
-set identity_insert [sec].[Module] off;
+set nocount on;;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('A6C324AE-E0DD-4DDC-BB61-10B560F5C3B5','CDR Tools',null,null,'/images/menu-icons/CDR Compare Tool.png',4,0),('BB288557-717B-476D-BFC0-1C87D5AF9D93','Supplier Rate Management',null,null,'/images/menu-icons/Supplier Rate Managment.png',5,1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))merge	[sec].[Module] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]when not matched by target then	insert([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])	values(s.[ID],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 --------------------------------------------------------------------------------------------------------------
 end
 
@@ -38,32 +20,13 @@ delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','
 GO
 --[sec].[View]-----------------------------14001 to 15000-----------------------------------------------------
 begin
-set nocount on;
-set identity_insert [sec].[View] on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('9a6e34b4-138c-407c-90c1-40bff59b767c','CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison','a6c324ae-e0dd-4ddc-bb61-10b560f5c3b5','CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,0,1),
-('de48546c-84c0-45b1-9ba2-cffd67b2cc57','Input Template Conversion','Input Template Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion','bb288557-717b-476d-bfc0-1c87d5af9d93','XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,0,1),
-('0a1c68fa-b4e3-492b-9f32-b9fb4bd6926f','Output Template','Output Template','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement','bb288557-717b-476d-bfc0-1c87d5af9d93','XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,0,2)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
-set identity_insert [sec].[View] off;
+set nocount on;;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('9A6E34B4-138C-407C-90C1-40BFF59B767C','CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison','A6C324AE-E0DD-4DDC-BB61-10B560F5C3B5','CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,'2FE19A27-4B06-4885-ABE2-7EFBF65C98E3',0,1),('0A1C68FA-B4E3-492B-9F32-B9FB4BD6926F','Output Template','Output Template','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement','BB288557-717B-476D-BFC0-1C87D5AF9D93','XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,'2FE19A27-4B06-4885-ABE2-7EFBF65C98E3',0,3),('DE48546C-84C0-45B1-9BA2-CFFD67B2CC57','Input Template Conversion','Input Template Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion','BB288557-717B-476D-BFC0-1C87D5AF9D93','XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,'2FE19A27-4B06-4885-ABE2-7EFBF65C98E3',0,2)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank]);
 --------------------------------------------------------------------------------------------------------------
 end
 
 --[sec].[BusinessEntity]-------------------3901 to 4200-------------------------------------------------------
 begin
-set nocount on;;with cte_data([ID],[OldId],[Name],[Title],[OldModuleId],[ModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('40A08CDE-12B5-43CD-A905-6FD56B8A17CD',3901,'CDRComparison_CompareCDRs','Compare CDRs',1,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View"]'),('D58CDA0E-F25F-472A-A527-8C7B03F17B6F',3903,'BusinessProcess_BP_CDR_Comparison','CDR Comparison',602,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),('4FFE2153-3813-4239-9332-B6F82C52F315',3902,'XBooster_PriceListConversion','Pricelist Conversion',1,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View","Add","Edit","Convert"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[Title],[OldModuleId],[ModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[OldModuleId] = s.[OldModuleId],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([ID],[OldId],[Name],[Title],[OldModuleId],[ModuleId],[BreakInheritance],[PermissionOptions])	values(s.[ID],s.[OldId],s.[Name],s.[Title],s.[OldModuleId],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;;with cte_data([ID],[OldId],[Name],[Title],[OleModuleId],[ModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('40A08CDE-12B5-43CD-A905-6FD56B8A17CD',3901,'CDRComparison_CompareCDRs','Compare CDRs',1,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View"]'),('D58CDA0E-F25F-472A-A527-8C7B03F17B6F',3903,'BusinessProcess_BP_CDR_Comparison','CDR Comparison',602,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),('4FFE2153-3813-4239-9332-B6F82C52F315',3902,'XBooster_PriceListConversion','Pricelist Conversion',1,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View","Add","Edit","Convert"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[Title],[OleModuleId],[ModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[OleModuleId] = s.[OleModuleId],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([ID],[OldId],[Name],[Title],[OleModuleId],[ModuleId],[BreakInheritance],[PermissionOptions])	values(s.[ID],s.[OldId],s.[Name],s.[Title],s.[OleModuleId],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 end
 
