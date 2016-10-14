@@ -68,7 +68,7 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceRouteOptionBlockRule>> dicRules = new Dictionary<string, List<SourceRouteOptionBlockRule>>();
             foreach (var routeRule in blockedRules)
             {
-                string key = routeRule.SupplierId;
+                string key = string.Format("{0}_{1}_{2}", routeRule.SupplierId, routeRule.BED, routeRule.EED);
 
                 List<SourceRouteOptionBlockRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
@@ -99,8 +99,8 @@ namespace TOne.WhS.DBSync.Business
             {
                 Rule = new Rule
                 {
-                    BED = rules.Min(r => r.BED),
-                    EED = null,
+                    BED = sourceRule.BED,
+                    EED = sourceRule.EED,
                     TypeId = _routeOptionRuleTypeId,
                     RuleDetails = Serializer.Serialize(settings)
                 }
@@ -112,8 +112,8 @@ namespace TOne.WhS.DBSync.Business
         {
             RouteOptionRule settings = new RouteOptionRule()
             {
-                BeginEffectiveTime = rules.Min(r => r.BED),
-                EndEffectiveTime = null,
+                BeginEffectiveTime = sourceRule.BED,
+                EndEffectiveTime = sourceRule.EED,
                 Description = sourceRule.Reason,
                 Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
                 Settings = new BlockRouteOptionRule

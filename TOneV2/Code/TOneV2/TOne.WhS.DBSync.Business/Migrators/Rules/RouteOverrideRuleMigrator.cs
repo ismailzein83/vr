@@ -78,8 +78,8 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
             foreach (var routeRule in overrideRules)
             {
-                string key = string.Format("{0},{1}", routeRule.CustomerId,
-                    routeRule.SupplierOptions.Select(s => s.ToString()).Aggregate((i, j) => i + j));
+                string key = string.Format("{0},{1},{2},{3}", routeRule.CustomerId,
+                    routeRule.SupplierOptions.Select(s => s.ToString()).Aggregate((i, j) => i + j), routeRule.BED, routeRule.EED);
 
                 List<SourceRouteOverrideRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
@@ -122,8 +122,8 @@ namespace TOne.WhS.DBSync.Business
                 {
                     Rule = new Rule
                     {
-                        BED = rules.Min(r => r.BED),
-                        EED = null,
+                        BED = sourceRule.BED,
+                        EED = sourceRule.EED,
                         RuleDetails = Serializer.Serialize(details),
                         TypeId = _routeRuleTypeId
                     }
@@ -140,8 +140,8 @@ namespace TOne.WhS.DBSync.Business
             {
                 RouteRule details = new RouteRule
                 {
-                    BeginEffectiveTime = rules.Min(r => r.BED),
-                    EndEffectiveTime = null,
+                    BeginEffectiveTime = sourceRule.BED,
+                    EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
                     Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
                     Criteria = criteria,
@@ -209,8 +209,8 @@ namespace TOne.WhS.DBSync.Business
                 {
                     Rule = new Rule
                     {
-                        BED = rules.Min(r => r.BED),
-                        EED = null,
+                        BED = sourceRule.BED,
+                        EED = sourceRule.EED,
                         TypeId = _routeRuleTypeId,
                         RuleDetails = Serializer.Serialize(ruleDetails)
                     }
@@ -227,8 +227,8 @@ namespace TOne.WhS.DBSync.Business
             {
                 RouteRule details = new RouteRule
                 {
-                    BeginEffectiveTime = rules.Min(r => r.BED),
-                    EndEffectiveTime = null,
+                    BeginEffectiveTime = sourceRule.BED,
+                    EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
                     Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
                     Criteria = criteria,

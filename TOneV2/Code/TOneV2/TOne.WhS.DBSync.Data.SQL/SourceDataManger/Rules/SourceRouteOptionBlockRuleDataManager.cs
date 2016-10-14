@@ -58,6 +58,6 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                    rb.Reason
 	                                                    FROM
 		                                                    RouteBlock rb 
-	                                                        where ((@GetEffectiveOnly = 0 and rb.BeginEffectiveDate > getdate())or (@GetEffectiveOnly = 1 and rb.IsEffective = 'Y'))";
+	                                                        where ((@GetEffectiveOnly = 0 and rb.BeginEffectiveDate <= getdate())or (@GetEffectiveOnly = 1 and rb.IsEffective = 'Y'))";
     }
 }

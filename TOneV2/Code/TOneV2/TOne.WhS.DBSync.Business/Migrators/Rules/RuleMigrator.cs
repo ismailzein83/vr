@@ -22,6 +22,7 @@ namespace TOne.WhS.DBSync.Business
         readonly RulesDBSyncDataManager _dbSyncDataManager;
         RuleBaseMigrator _routeRuleBaseMigrator;
         CurrencySettingData _currencySettingData;
+        internal static DateTime s_defaultRuleBED = DateTime.Parse("2000-01-01");
         public RuleMigrator(MigrationContext context)
             : base(context)
         {
@@ -112,7 +113,7 @@ namespace TOne.WhS.DBSync.Business
                     }
                     }
                 },
-                BeginEffectiveTime = DateTime.Now,
+                BeginEffectiveTime = s_defaultRuleBED,
                 Description = "Default Routing Rule",
                 Name = "Default Routing Rule"
             };
@@ -123,7 +124,7 @@ namespace TOne.WhS.DBSync.Business
 
             TariffRule saleTariffRule = new TariffRule
             {
-                BeginEffectiveTime = DateTime.Now,
+                BeginEffectiveTime = s_defaultRuleBED,
                 EndEffectiveTime = null,
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
@@ -143,7 +144,7 @@ namespace TOne.WhS.DBSync.Business
 
             TariffRule supplierTariffRule = new TariffRule
             {
-                BeginEffectiveTime = DateTime.Now,
+                BeginEffectiveTime = s_defaultRuleBED,
                 EndEffectiveTime = null,
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
@@ -168,7 +169,7 @@ namespace TOne.WhS.DBSync.Business
             {
                 Rule = new Rule
                 {
-                    BED = DateTime.Now,
+                    BED = s_defaultRuleBED,
                     EED = null,
                     TypeId = ruleTypeId,
                     RuleDetails = ruleSerialized

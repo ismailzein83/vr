@@ -28,7 +28,7 @@ namespace TOne.WhS.DBSync.Business
         }
 
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
-        readonly Dictionary<string, SupplierZone> _allSupplierZones;
+        readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly Dictionary<string, ZoneServiceConfig> _allSaleEntityServiceFlags;
         readonly short[] _olsFlaggedServiceIds;
         readonly int _routeOptionRuleTypeId;
@@ -38,8 +38,8 @@ namespace TOne.WhS.DBSync.Business
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
-            var dtTableSupplierZones = Context.MigrationContext.DBTables[DBTableName.SupplierZone];
-            _allSupplierZones = (Dictionary<string, SupplierZone>)dtTableSupplierZones.Records;
+            var dtTableSaleZones = Context.MigrationContext.DBTables[DBTableName.SaleZone];
+            _allSaleZones = (Dictionary<string, SaleZone>)dtTableSaleZones.Records;
 
             var dtTableZoneServiceConfig = Context.MigrationContext.DBTables[DBTableName.ZoneServiceConfig];
             _allSaleEntityServiceFlags = (Dictionary<string, ZoneServiceConfig>)dtTableZoneServiceConfig.Records;
@@ -58,7 +58,11 @@ namespace TOne.WhS.DBSync.Business
             var rules = dataManager.GetSourceMarketPrices();
             var dicRules = GroupRulesDictionary(rules);
             foreach (var rule in dicRules.Values)
-                routeRules.Add(GetSourceRuleFromZones(rule));
+            {
+                var marketRule = GetSourceRuleFromZones(rule);
+                if (marketRule != null)
+                    routeRules.Add(marketRule);
+            }
             return routeRules;
         }
 
@@ -80,42 +84,58 @@ namespace TOne.WhS.DBSync.Business
         SourceRule GetSourceRuleFromZones(IEnumerable<SourceMarketPrice> rules)
         {
             var settings = GetMarketPriceRuleSettings(rules);
-
-            return new SourceRule
+            if (settings != null)
             {
-                Rule = new Rule
+                return new SourceRule
                 {
-                    BED = DateTime.Now,
-                    EED = null,
-                    TypeId = _routeOptionRuleTypeId,
-                    RuleDetails = Serializer.Serialize(settings)
-                }
-            };
+                    Rule = new Rule
+                    {
+                        BED = RuleMigrator.s_defaultRuleBED,
+                        EED = null,
+                        TypeId = _routeOptionRuleTypeId,
+                        RuleDetails = Serializer.Serialize(settings)
+                    }
+                };
+            }
+            else
+                return null;
         }
 
         RouteOptionRule GetMarketPriceRuleSettings(IEnumerable<SourceMarketPrice> rules)
         {
-            RouteOptionRule settings = new RouteOptionRule()
+            List<long> lstZoneIds = new List<long>();
+
+            foreach (var rule in rules)
+                if (!_allSaleZones.ContainsKey(rule.SaleZoneID.ToString()))
+                    this.TotalRowsFailed++;
+                else
+                    lstZoneIds.Add(_allSaleZones[rule.SaleZoneID.ToString()].SaleZoneId);
+            if (lstZoneIds.Count > 0)
             {
-                BeginEffectiveTime = DateTime.Now,
-                EndEffectiveTime = null,
-                Description = "Market Price Rule",
-                Name = "Market Price Rule",
-                Settings = new MarketPriceRouteOptionRule
+                RouteOptionRule settings = new RouteOptionRule()
                 {
-                    MarketPrices = GetMarketPrices(rules),
-                    CurrencyId = Context.CurrencyId
-                },
-                Criteria = new RouteOptionRuleCriteria
-                {
-                    SaleZoneGroupSettings = new SelectiveSaleZoneGroup
+                    BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
+                    EndEffectiveTime = null,
+                    Description = "Market Price Rule",
+                    Name = "Market Price Rule",
+                    Settings = new MarketPriceRouteOptionRule
                     {
-                        SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
-                        ZoneIds = new HashSet<long>(rules.Select(r => Convert.ToInt64(r.SaleZoneID))).ToList()
+                        MarketPrices = GetMarketPrices(rules),
+                        CurrencyId = Context.CurrencyId
+                    },
+                    Criteria = new RouteOptionRuleCriteria
+                    {
+                        SaleZoneGroupSettings = new SelectiveSaleZoneGroup
+                        {
+                            SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
+                            ZoneIds = new HashSet<long>(lstZoneIds).ToList()
+                        }
                     }
-                }
-            };
-            return settings;
+                };
+                return settings;
+            }
+            else
+                return null;
         }
 
         Dictionary<string, MarketPrice> GetMarketPrices(IEnumerable<SourceMarketPrice> rules)

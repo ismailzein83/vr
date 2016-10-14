@@ -6,6 +6,7 @@ using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -50,7 +51,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceCarrierAccount> GetSourceItems()
         {
-            return dataManager.GetSourceCarrierAccounts();
+            return dataManager.GetSourceCarrierAccounts().OrderBy(itm => itm.SourceId);
         }
 
         public override CarrierAccount BuildItemFromSource(SourceCarrierAccount sourceItem)

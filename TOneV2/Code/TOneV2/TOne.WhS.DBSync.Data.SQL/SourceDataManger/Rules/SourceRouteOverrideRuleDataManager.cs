@@ -86,6 +86,6 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                        ro.Reason
 	                                                    FROM    RouteOverride ro 
 	                                                    WHERE   ro.RouteOptions != 'BLK' AND ro.RouteOptions IS NOT NULL
-		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate > getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
     }
 }
