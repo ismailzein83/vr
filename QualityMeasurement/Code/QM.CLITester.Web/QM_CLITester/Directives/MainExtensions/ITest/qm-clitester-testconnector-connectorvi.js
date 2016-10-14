@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("qmClitesterTestconnectorTestprogressItest", [function () {
+app.directive("qmClitesterTestconnectorConnectorvi", [function () {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -22,7 +22,7 @@ app.directive("qmClitesterTestconnectorTestprogressItest", [function () {
                 }
             }
         },
-        templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestConnector-TestProgress-ITest.html"
+        templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestConnector-ConnectorVI.html"
     };
 
     function DirectiveConstructor($scope, ctrl) {

@@ -66,7 +66,7 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
                 }
                     
 
-                return Qm_CliTester_TestCallAPIService.GetTestProgressTemplates().then(function (response) {
+                return Qm_CliTester_TestCallAPIService.GetTestTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
                         var sourceConfigId = payload.data.CLITestConnector.ConfigId;
                     angular.forEach(response, function (item) {

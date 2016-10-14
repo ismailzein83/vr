@@ -52,8 +52,7 @@
     <Compile Include="AddTestCallOutput.cs" />
     <Compile Include="CallTestStatus.cs" />
     <Compile Include="CLITesterConnectorBase.cs" />
-    <Compile Include="CliTesterConnectorInitiateTestConfig.cs" />
-    <Compile Include="CliTesterConnectorTestProgressConfig.cs" />
+    <Compile Include="CliTesterConnectorVIConfig.cs" />
     <Compile Include="GetBeforeIdInput.cs" />
     <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="LastCallUpdateOutput.cs" />

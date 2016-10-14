@@ -200,15 +200,13 @@
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\CountryReader\qm-clitester-sourcecountryreader-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\CountryReader\Templates\SourceCountryReaderItest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-initiatetest.js" />
-    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-initiatetest-itest.js" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-connectorvi.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testcall.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testprogress.js" />
-    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-testconnector-testprogress-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestCallTemplate.html" />
+    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-ConnectorVI.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestProgressTemplate.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\InitiateTestTemplate.html" />
-    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-InitiateTest-ITest.html" />
-    <Content Include="QM_CLITester\Directives\MainExtensions\ITest\Templates\TestConnector-TestProgress-ITest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\ZoneReader\qm-clitester-sourcezonereader-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\ZoneReader\Templates\SourceZoneReaderItest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\SourceProfileReader\qm-clitester-sourceprofilereader-itest.js" />

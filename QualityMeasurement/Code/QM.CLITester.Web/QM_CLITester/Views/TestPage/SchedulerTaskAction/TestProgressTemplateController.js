@@ -44,7 +44,7 @@ function TestProgressTemplateController($scope, UtilsService, VRUIUtilsService, 
          });
     }
     function loadSourceType() {
-        return Qm_CliTester_TestCallAPIService.GetTestProgressTemplates().then(function (response) {
+        return Qm_CliTester_TestCallAPIService.GetTestTemplates().then(function (response) {
             if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.CLITestConnector != undefined)
                 sourceConfigId = $scope.schedulerTaskAction.data.CLITestConnector.ConfigId;
             angular.forEach(response, function (item) {

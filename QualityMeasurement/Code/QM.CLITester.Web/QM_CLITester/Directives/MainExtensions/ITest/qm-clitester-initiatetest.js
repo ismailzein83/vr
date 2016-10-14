@@ -62,7 +62,7 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
                 if (payload != undefined && payload.data != undefined ) 
                     $scope.maximumRetryCount = payload.data.MaximumRetryCount;
                 
-               return Qm_CliTester_TestCallAPIService.GetInitiateTestTemplates().then(function (response) {
+                return Qm_CliTester_TestCallAPIService.GetTestTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
                      var  sourceConfigId = payload.data.CLITestConnector.ConfigId;
                     angular.forEach(response, function (item) {

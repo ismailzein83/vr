@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace QM.CLITester.Entities
 {
-    public class CliTesterConnectorInitiateTestConfig : ExtensionConfiguration
+    public class CliTesterConnectorVIConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "QM_CLITester_ConnectorInitiateTest";
+        public const string EXTENSION_TYPE = "QM_CLITester_ConnectorVI";
         public string Editor { get; set; }
     }
 }

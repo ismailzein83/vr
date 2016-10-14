@@ -27,12 +27,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetFilteredTestCalls"), input);
         }
 
-        function GetInitiateTestTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetInitiateTestTemplates"));
-        }
-
-        function GetTestProgressTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetTestProgressTemplates"));
+        function GetTestTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetTestTemplates"));
         }
 
         function HasAddTestCallPermission() {
@@ -49,8 +45,7 @@
             HasAddTestCallPermission: HasAddTestCallPermission,
             GetFilteredTestCalls: GetFilteredTestCalls,
             GetTotalCallsByUserId: GetTotalCallsByUserId,
-            GetInitiateTestTemplates: GetInitiateTestTemplates,
-            GetTestProgressTemplates: GetTestProgressTemplates,
+            GetTestTemplates: GetTestTemplates,
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
             SendMail: SendMail
