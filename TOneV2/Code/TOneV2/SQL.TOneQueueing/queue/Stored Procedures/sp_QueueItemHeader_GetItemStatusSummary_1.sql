@@ -1,7 +1,5 @@
 ﻿
 -- =============================================
--- Author:		<Mostafa Jawhari>
--- Create date: <02-02-2016>
 -- Description:	<Get Count of Queue Intances per Status>
 -- =============================================
 CREATE PROCEDURE [queue].[sp_QueueItemHeader_GetItemStatusSummary]
