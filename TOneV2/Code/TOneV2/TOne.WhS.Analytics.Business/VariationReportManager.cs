@@ -20,6 +20,8 @@ namespace TOne.WhS.Analytics.Business
         public IDataRetrievalResult<VariationReportRecord> GetFilteredVariationReportRecords(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
         {
             ValidateVariationReportQuery(input.Query);
+
+           
             return BigDataManager.Instance.RetrieveData(input, new VariationReportRequestHandler(input.Query));
         }
 
@@ -72,6 +74,15 @@ namespace TOne.WhS.Analytics.Business
             {
                 IVariationReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IVariationReportDataManager>();
                 return dataManager.GetFilteredVariationReportRecords(input, _timePeriods);
+            }
+
+            protected override ResultProcessingHandler<VariationReportRecord> GetResultProcessingHandler(DataRetrievalInput<VariationReportQuery> input, BigResult<VariationReportRecord> bigResult)
+            {
+                var resultProcessingHandler = new ResultProcessingHandler<VariationReportRecord>()
+                {
+                    ExportExcelHandler = new VariationReportRecordExportExcelHandler()
+                };
+                return resultProcessingHandler;
             }
 
             public override VariationReportRecord EntityDetailMapper(VariationReportRecord entity)
@@ -298,6 +309,51 @@ namespace TOne.WhS.Analytics.Business
             if (query.NumberOfPeriods < 1)
                 throw new ArgumentException(String.Format("query.NumberOfPeriods '{0}' is < 1"));
         }
+
+        private class VariationReportRecordExportExcelHandler : ExcelExportHandler<VariationReportRecord>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VariationReportRecord> context)
+            {
+                if (context.BigResult == null || context.BigResult.Data == null)
+                    return;
+
+                var sheet = new ExportExcelSheet();
+                sheet.SheetName = "Variation Report";
+
+                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+            
+                var result = context.BigResult  as VariationReportBigResult;
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = result.DimensionTitle });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Periods AVG" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Periods %" });
+
+                foreach (var period in result.TimePeriods)
+                {
+
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = period.PeriodDescription, Width = 40 });
+                }
+                   
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                    row.Cells.Add(new ExportExcelCell() { Value = record.DimensionName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Average});
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Percentage});
+                    foreach (var v in record.TimePeriodValues)
+                    {
+
+                        row.Cells.Add(new ExportExcelCell() { Value = v });
+                    }
+
+                    sheet.Rows.Add(row);
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
 
         #endregion
     }
