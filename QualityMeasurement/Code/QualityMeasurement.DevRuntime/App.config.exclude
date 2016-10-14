@@ -2,6 +2,7 @@
 <configuration>
   <configSections>
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
+    <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime" />
   </configSections>
   <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
   <vanriseRuntime>
