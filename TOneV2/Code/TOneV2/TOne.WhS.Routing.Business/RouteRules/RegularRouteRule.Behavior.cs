@@ -29,7 +29,7 @@ namespace TOne.WhS.Routing.Business
             {
                 if (!_correspondentType.HasValue)
                 {
-                    if (AreOptionsExist())
+                    if (AreOptionsExist() && !AreOptionsOrdered())
                         _correspondentType = CorrespondentType.Override;
 
                     else if (!AreOptionsExist() && AreOptionsOnlyOrderByType<OptionOrderByRate>() && AreOptionsFilteredByTypes<RateOptionFilter, ServiceOptionFilter>())
@@ -44,6 +44,13 @@ namespace TOne.WhS.Routing.Business
         private bool AreOptionsExist()
         {
             if (OptionsSettingsGroup != null)
+                return true;
+            return false;
+        }
+
+        private bool AreOptionsOrdered()
+        {
+            if (OptionOrderSettings != null && OptionOrderSettings.Count > 0)
                 return true;
             return false;
         }
@@ -252,8 +259,8 @@ namespace TOne.WhS.Routing.Business
                     var optionOrderContext = ExecuteOptionOrderSettings<T>(options, optionOrderSettings);
                     switch (optionOrderContext.OrderDitection)
                     {
-                        case OrderDirection.Ascending: options = optionOrderContext.Options.OrderBy(itm => itm.OptionWeight).VRCast<T>(); break;
-                        case OrderDirection.Descending: options = optionOrderContext.Options.OrderByDescending(itm => itm.OptionWeight).VRCast<T>(); break;
+                        case OrderDirection.Ascending: options = optionOrderContext.Options.OrderBy(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
+                        case OrderDirection.Descending: options = optionOrderContext.Options.OrderByDescending(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
                     }
                 }
                 else
@@ -291,7 +298,7 @@ namespace TOne.WhS.Routing.Business
                     if (orderValues.Count > 0)
                     {
                         List<T> list = new List<T>();
-                        var resultOrdered = orderValues.OrderBy(itm => itm.Value.Result);
+                        var resultOrdered = orderValues.OrderBy(itm => itm.Value.Result).ThenBy(itm => itm.Key);
                         foreach (KeyValuePair<int, WeightResult> item in resultOrdered)
                         {
                             list.Add(options.First(itm => itm.SupplierId == item.Key));
@@ -324,13 +331,30 @@ namespace TOne.WhS.Routing.Business
                         Option = option,
                         SaleRate = target.SaleRate,
                         CustomerServices = customerServiceIds,
-                        SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null
+                        SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null, 
+                        SupplierId= option.SupplierId
                     };
                     optionFilter.Execute(routeOptionFilterExecutionContext);
                     if (routeOptionFilterExecutionContext.FilterOption)
                         return true;
                 }
             }
+
+            if (this.OptionsSettingsGroup != null)
+            {
+                var routeOptionFilterExecutionContext = new RouteOptionFilterExecutionContext()
+                    {
+                        Option = option,
+                        SaleRate = target.SaleRate,
+                        CustomerServices = customerServiceIds,
+                        SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null, 
+                        SupplierId= option.SupplierId
+                    };
+
+                    if (this.OptionsSettingsGroup.IsOptionFiltered(routeOptionFilterExecutionContext))
+                        return true;
+            }
+
             return false;
         }
 

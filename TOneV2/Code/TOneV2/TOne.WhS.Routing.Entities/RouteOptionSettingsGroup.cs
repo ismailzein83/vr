@@ -11,5 +11,10 @@ namespace TOne.WhS.Routing.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context);
+
+        public virtual bool IsOptionFiltered(IRouteOptionFilterExecutionContext context)
+        {
+            return false;
+        }
     }
 }

@@ -22,5 +22,7 @@ namespace TOne.WhS.Routing.Entities
         HashSet<int> CustomerServices { get; set; }
 
         bool FilterOption { get; set; }
+
+        int SupplierId { get; set; }
     }
 }
