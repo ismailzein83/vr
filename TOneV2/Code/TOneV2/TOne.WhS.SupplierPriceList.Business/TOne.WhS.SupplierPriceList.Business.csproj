@@ -79,6 +79,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\BEDBeforeRetroActiveMinDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneServicesWithDifferentBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneHasNoCodesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\NumericCodeCondition.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDCondition.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Context\SupplierPriceListExecutionContext.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />

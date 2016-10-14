@@ -299,6 +299,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleEntityZoneService\Templates\SaleEntityZoneServiceGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleEntityZoneService\vr-whs-be-saleentityzoneservice-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierPriceListSettings\Templates\SupplierPriceListSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierPriceListSettings\vr-whs-be-supplierpricelist-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\Templates\SupplierZoneServiceGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\vr-whs-be-supplierzoneservice-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\PurchasePricingRuleCriteriaTemplate.html" />
