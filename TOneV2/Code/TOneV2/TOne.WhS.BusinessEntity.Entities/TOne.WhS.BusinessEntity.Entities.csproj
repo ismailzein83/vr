@@ -194,6 +194,9 @@
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
     <Compile Include="SupplierCode\SupplierCodeQuery.cs" />
     <Compile Include="SupplierCode\SupplierCodeDetail.cs" />
+    <Compile Include="SupplierOtherRate\SupplierOtherRate.cs" />
+    <Compile Include="SupplierOtherRate\SupplierOtherRateDetail.cs" />
+    <Compile Include="SupplierOtherRate\SupplierOtherRateQuery.cs" />
     <Compile Include="SupplierPriceListSettings\SupplierPriceListSettingsData.cs" />
     <Compile Include="SupplierRate\SupplierRateDetail.cs" />
     <Compile Include="SupplierRate\SupplierRateQuery.cs" />

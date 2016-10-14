@@ -20,7 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if(importedZone.ChangeType == ZoneChangeType.New || importedZone.ChangeType == ZoneChangeType.Renamed)
             {
                 IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-                return (importedZone.BED > DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
+                return !(importedZone.BED > DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
             }
 
             return true;

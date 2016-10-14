@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierRateAPIService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VRUIUtilsService) {
+app.directive("vrWhsBeSupplierotherrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierOtherRateAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SupplierOtherRateAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -19,15 +19,13 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SupplierRate/Templates/SupplierRateGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SupplierRate/Templates/SupplierOtherRateGridTemplate.html"
 
     };
 
     function SupplierRateGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
-        var drillDownManager;
-        var effectiveOn;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -35,7 +33,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
             $scope.supplierrates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(getDirectiveTabs(), gridAPI);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -43,7 +40,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                        effectiveOn = query.EffectiveOn;
+                       
                         return gridAPI.retrieveData(query);
                     }
                    
@@ -51,13 +48,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SupplierRateAPIService.GetFilteredSupplierRates(dataRetrievalInput)
+                return WhS_BE_SupplierOtherRateAPIService.GetFilteredSupplierOtherRates(dataRetrievalInput)
                     .then(function (response) {
-                        if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++)
-                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
-
-                        }
                          onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -65,30 +57,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                     });
             };
         }
-
-        function getDirectiveTabs() {
-            var directiveTabs = [];
-
-            var otherRatesTab = {
-                title: "Other Rates",
-                directive: "vr-whs-be-supplierotherrate-grid",
-                loadDirective: function (directiveAPI, rateDataItem) {
-                    rateDataItem.otherRateGridAPI = directiveAPI;
-
-                    var otherRateGridPayload = {
-                        ZoneId: rateDataItem.Entity.ZoneId,
-                        EffectiveOn: effectiveOn
-                    };
-
-                    return rateDataItem.otherRateGridAPI.loadGrid(otherRateGridPayload);
-                }
-            };
-
-            directiveTabs.push(otherRatesTab);
-
-            return directiveTabs;
-        }
-
 
     }
 

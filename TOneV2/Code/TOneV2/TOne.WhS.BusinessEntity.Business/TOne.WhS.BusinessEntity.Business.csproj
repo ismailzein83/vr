@@ -148,6 +148,7 @@
     <Compile Include="SaleService\SaleEntityServiceManager.cs" />
     <Compile Include="SaleService\SaleEntityServiceReadWithCache.cs" />
     <Compile Include="SupplierCode\SupplierCodeCachedObjectCreationHandler.cs" />
+    <Compile Include="SupplierOtherRate\SupplierOtherRateManager.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierCode\SupplierCodeManager.cs" />

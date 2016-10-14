@@ -19,7 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved)
             {
                 IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-                return (importedCode.BED > DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
+                return !(importedCode.BED > DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
             }
 
             return true;

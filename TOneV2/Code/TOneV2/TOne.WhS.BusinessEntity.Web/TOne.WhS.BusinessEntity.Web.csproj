@@ -161,6 +161,7 @@
     <Compile Include="Controllers\SellingNumberPlanController.cs" />
     <Compile Include="Controllers\SupplierCodeController.cs" />
     <Compile Include="Controllers\SupplierPricelistController.cs" />
+    <Compile Include="Controllers\SupplierOtherRateController.cs" />
     <Compile Include="Controllers\SupplierZoneServiceController.cs" />
     <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\SupplierZoneController.cs" />
@@ -301,6 +302,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleEntityZoneService\vr-whs-be-saleentityzoneservice-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierPriceListSettings\Templates\SupplierPriceListSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierPriceListSettings\vr-whs-be-supplierpricelist-settings-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierRate\Templates\SupplierOtherRateGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierRate\vr-whs-be-supplierotherrate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\Templates\SupplierZoneServiceGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\vr-whs-be-supplierzoneservice-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\PurchasePricingRuleCriteriaTemplate.html" />
@@ -343,6 +346,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealProgressAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierOtherRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneServiceAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\VolumeCommitmentAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealAnalysisService.js" />
