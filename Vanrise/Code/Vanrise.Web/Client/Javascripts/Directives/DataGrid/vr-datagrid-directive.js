@@ -750,8 +750,7 @@
                     if (pagingOnScrollEnabled) {
                         // to rigth padding in old data loading methode in bi
                         var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                        var haveScroll = ctrl.datasource.length * 25 > div.style.maxHeight;
-                        if (haveScroll==false) {
+                        if (ctrl.datasource.length < 24) {
                             $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
                             ctrl.headerStyle = {
                                 "padding-right": "0px"
