@@ -52,8 +52,12 @@ function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
             multipleselection = "ismultipleselection";
         }
 
+        var hideselectedvaluessection = "";
+        if (attrs.hideselectedvaluessection != undefined)
+            hideselectedvaluessection = "hideselectedvaluessection";
+
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" ' + hideselectedvaluessection + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled" ></vr-select>'
            + '</vr-columns>';
     }
 

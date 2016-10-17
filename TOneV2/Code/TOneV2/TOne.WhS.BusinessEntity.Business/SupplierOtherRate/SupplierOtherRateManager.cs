@@ -36,10 +36,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 currencyId = priceList.CurrencyId;
             }
 
+            RateTypeManager rateTypeManager = new RateTypeManager();
+            string rateTypeDescription = rateTypeManager.GetRateTypeName(supplierOtherRate.RateTypeId.Value);
+
             return new SupplierOtherRateDetail()
             {
                 Entity = supplierOtherRate,
-                CurrencyName = currencyManager.GetCurrencySymbol(currencyId)
+                CurrencyName = currencyManager.GetCurrencySymbol(currencyId),
+                RateTypeDescription = rateTypeDescription
             };
         }
         #endregion
