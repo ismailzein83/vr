@@ -436,7 +436,6 @@
         }
 
         function hideShowRenameZone(draftStatus, status) {
-        	console.log('hideShowRenameZone');
             if (status != null)
                 $scope.showRenameZone = false;
             else

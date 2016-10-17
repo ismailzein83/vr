@@ -37,7 +37,7 @@
             $scope.saveCode = function () {
                 return insertCode();
             };
-             
+
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -45,7 +45,13 @@
             $scope.disabledCode = true;
 
             $scope.onCodeValueChange = function (value) {
-                $scope.disabledCode = (value == undefined && $scope.codeValue.length - 1 < 1) || UtilsService.getItemIndexByVal($scope.codes, value, "code") != -1;
+                if (value == undefined && $scope.codeValue.length > 0) {
+                    var code = $scope.codeValue.substring(0, $scope.codeValue.length - 1);
+                    $scope.disabledCode = UtilsService.getItemIndexByVal($scope.codes, code.trim(), "code") != -1;
+                }
+
+                if (value != undefined)
+                    $scope.disabledCode = UtilsService.getItemIndexByVal($scope.codes, value, "code") != -1;
             }
 
             $scope.addCodeValue = function () {
