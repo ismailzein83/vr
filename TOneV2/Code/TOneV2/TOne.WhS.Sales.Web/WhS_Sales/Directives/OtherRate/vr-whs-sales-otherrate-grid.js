@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService", 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_RatePlanService', function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService) {
+app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_RatePlanService', function (UtilsService, VRNotificationService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService) {
     return {
         restrict: "E",
         scope: {
@@ -69,64 +69,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             $scope.validateNewRateDates = function (otherRate) {
                 return WhS_Sales_RatePlanUtilsService.validateNewRateDates(otherRate);
             };
-
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady)
-            {
-                return VRCommon_RateTypeAPIService.GetFilteredRateTypes(dataRetrievalInput).then(function (response)
-                {
-                    if (response != null && response.Data != null)
-                    {
-                        for (var i = 0; i < response.Data.length; i++)
-                        {
-                            var otherRate = response.Data[i];
-
-                            otherRate.ZoneBED = zoneItem.ZoneBED;
-                            otherRate.ZoneEED = zoneItem.ZoneEED;
-
-                            if (zoneItem.CurrentOtherRates != null)
-                            {
-                                var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.Entity.RateTypeId];
-
-                                if (currentOtherRate != undefined)
-                                {
-                                    otherRate.CurrentRate = currentOtherRate.Rate;
-                                    otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
-                                    otherRate.CurrentRateBED = currentOtherRate.BED;
-                                    otherRate.CurrentRateEED = currentOtherRate.EED;
-                                    otherRate.CurrentRateNewEED = currentOtherRate.EED;
-                                }
-                            }
-                            
-                            var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.Entity.RateTypeId, 'RateTypeId');
-                            if (newOtherRate != null)
-                            {
-                                zoneItem.IsDirty = true;
-                                otherRate.NewRate = newOtherRate.NormalRate;
-                                otherRate.NewRateBED = newOtherRate.BED;
-                                otherRate.NewRateEED = newOtherRate.EED;
-                            }
-                            else
-                            {
-                            	var closedOtherRate = UtilsService.getItemByVal(zoneItem.ClosedRates, otherRate.Entity.RateTypeId, 'RateTypeId');
-                            	if (closedOtherRate != null) {
-                            		zoneItem.IsDirty = true;
-                            		otherRate.CurrentRateNewEED = closedOtherRate.EED;
-                            	}
-                            }
-
-                            if (zoneItem.FutureOtherRates != null) {
-                                otherRate.FutureRate = zoneItem.FutureOtherRates[otherRate.Entity.RateTypeId];
-                            }
-
-                            WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate);
-                        }
-                    }
-
-                    onResponseReady(response);
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-            };
         }
 
         function defineAPI() {
@@ -135,17 +77,67 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             api.loadGrid = function (query)
             {
-                zoneItem = query.zoneItem;
-                settings = query.settings;
+            	zoneItem = query.zoneItem;
+            	settings = query.settings;
 
-                if (zoneItem.NewRates == null)
-                	zoneItem.NewRates = [];
-                if (zoneItem.ClosedRates == null)
-                	zoneItem.ClosedRates = [];
+            	if (zoneItem.NewRates == null)
+            		zoneItem.NewRates = [];
+            	if (zoneItem.ClosedRates == null)
+            		zoneItem.ClosedRates = [];
 
-                return gridAPI.retrieveData(query);
+            	return loadGrid();
             };
             
+            function loadGrid()
+            {
+            	if (zoneItem.RateTypes == null)
+            		return;
+
+            	for (var i = 0; i < zoneItem.RateTypes.length; i++)
+            	{
+            		var otherRate = {};
+
+            		otherRate.RateTypeId = zoneItem.RateTypes[i].RateTypeId;
+            		otherRate.Name = zoneItem.RateTypes[i].Name;
+
+            		otherRate.ZoneBED = zoneItem.ZoneBED;
+            		otherRate.ZoneEED = zoneItem.ZoneEED;
+
+            		if (zoneItem.CurrentOtherRates != null) {
+            			var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.RateTypeId];
+            			if (currentOtherRate != undefined) {
+            				otherRate.CurrentRate = currentOtherRate.Rate;
+            				otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
+            				otherRate.CurrentRateBED = currentOtherRate.BED;
+            				otherRate.CurrentRateEED = currentOtherRate.EED;
+            				otherRate.CurrentRateNewEED = currentOtherRate.EED;
+            			}
+            		}
+
+            		var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.RateTypeId, 'RateTypeId');
+            		if (newOtherRate != null) {
+            			zoneItem.IsDirty = true;
+            			otherRate.NewRate = newOtherRate.NormalRate;
+            			otherRate.NewRateBED = newOtherRate.BED;
+            			otherRate.NewRateEED = newOtherRate.EED;
+            		}
+            		else {
+            			var closedOtherRate = UtilsService.getItemByVal(zoneItem.ClosedRates, otherRate.RateTypeId, 'RateTypeId');
+            			if (closedOtherRate != null) {
+            				zoneItem.IsDirty = true;
+            				otherRate.CurrentRateNewEED = closedOtherRate.EED;
+            			}
+            		}
+
+            		if (zoneItem.FutureOtherRates != null) {
+            			otherRate.FutureRate = zoneItem.FutureOtherRates[otherRate.RateTypeId];
+            		}
+
+            		WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate);
+            		$scope.otherRates.push(otherRate);
+            	}
+            }
+
             api.applyChanges = function ()
             {
                 if (!$scope.areOtherRatesEditable())
@@ -154,13 +146,13 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 for (var i = 0; i < $scope.otherRates.length; i++)
                 {
                     var otherRate = $scope.otherRates[i];
-                    clearOtherRateDrafts(otherRate.Entity.RateTypeId);
+                    clearOtherRateDrafts(otherRate.RateTypeId);
 
                     if (otherRate.NewRate != null)
                     {
                         zoneItem.NewRates.push({
                             ZoneId: zoneItem.ZoneId,
-                            RateTypeId: otherRate.Entity.RateTypeId,
+                            RateTypeId: otherRate.RateTypeId,
                             NormalRate: otherRate.NewRate,
                             BED: otherRate.NewRateBED,
                             EED: otherRate.NewRateEED
@@ -170,7 +162,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                     {
                         zoneItem.ClosedRates.push({
                             ZoneId: zoneItem.ZoneId,
-                            RateTypeId: otherRate.Entity.RateTypeId,
+                            RateTypeId: otherRate.RateTypeId,
                             EED: otherRate.CurrentRateNewEED
                         });
                     }

@@ -24,6 +24,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? CurrentRateEED { get; set; }
         public DateTime? CurrentRateNewEED { get; set; }
         public bool? IsCurrentRateEditable { get; set; }
+		public List<RateType> RateTypes { get; set; }
         public Dictionary<int, OtherRate> CurrentOtherRates { get; set; }
         public Decimal? NewRate
         {
@@ -111,4 +112,10 @@ namespace TOne.WhS.Sales.Entities
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
     }
+
+	public class RateType
+	{
+		public int RateTypeId { get; set; }
+		public string Name { get; set; }
+	}
 }

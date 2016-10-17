@@ -2,11 +2,9 @@
     <vr-columns width="3/4row">
         <vr-datagrid datasource="otherRates"
                      on-ready="onGridReady"
-                     dataretrievalfunction="dataRetrievalFunction"
-                     pagingtype="'PagingOnScroll'"
                      norowhighlightonclick="'true'"
-                     idfield="Entity.RateTypeId">
-            <vr-datagridcolumn headertext="'Rate Type'" field="'Entity.Name'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
+                     idfield="RateTypeId">
+            <vr-datagridcolumn headertext="'Rate Type'" field="'Name'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Current Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10">
                 <div style="text-align: right">

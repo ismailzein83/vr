@@ -11,153 +11,191 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ZoneRateManager
-    {
-        #region Fields
+	public class ZoneRateManager
+	{
+		#region Fields
 
-        private SalePriceListOwnerType _ownerType;
-        private int _ownerId;
-        private int? _sellingProductId;
-        private DateTime _effectiveOn;
+		private SalePriceListOwnerType _ownerType;
+		private int _ownerId;
+		private int? _sellingProductId;
+		private DateTime _effectiveOn;
 
-        private IEnumerable<DraftRateToChange> _newRates;
-        private IEnumerable<DraftRateToClose> _rateChanges;
+		private IEnumerable<DraftRateToChange> _newRates;
+		private IEnumerable<DraftRateToClose> _rateChanges;
 
-        private int _targetCurrencyId;
+		private int _targetCurrencyId;
 
-        private SaleEntityZoneRateLocator _rateLocator;
-        private SaleEntityZoneRateLocator _futureRateLocator;
-        private CurrencyExchangeRateManager _currencyExchangeRateManager;
-        private SaleRateManager _saleRateManager;
-        
-        #endregion
+		private SaleEntityZoneRateLocator _rateLocator;
+		private SaleEntityZoneRateLocator _futureRateLocator;
+		private CurrencyExchangeRateManager _currencyExchangeRateManager;
+		private SaleRateManager _saleRateManager;
 
-        #region Public Methods
+		private Guid _rateTypeRuleDefinitionId;
+		private IEnumerable<RateType> _rateTypes;
+		private Vanrise.GenericData.Pricing.RateTypeRuleManager _rateTypeRuleManager;
 
-        public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId)
-        {
-            _ownerType = ownerType;
-            _ownerId = ownerId;
-            _sellingProductId = sellingProductId;
-            _effectiveOn = effectiveOn;
+		#endregion
 
-            if (changes != null && changes.ZoneChanges != null)
-            {
-                _newRates = changes.ZoneChanges.Where(x => x.NewRates != null).SelectMany(x => x.NewRates);
-                _rateChanges = changes.ZoneChanges.Where(x => x.ClosedRates != null).SelectMany(x => x.ClosedRates);
-            }
+		#region Public Methods
 
-            _targetCurrencyId = targetCurrencyId;
+		public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId)
+		{
+			_ownerType = ownerType;
+			_ownerId = ownerId;
+			_sellingProductId = sellingProductId;
+			_effectiveOn = effectiveOn;
 
-            _rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
-            _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
-            _currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            _saleRateManager = new SaleRateManager();
-        }
+			if (changes != null && changes.ZoneChanges != null)
+			{
+				_newRates = changes.ZoneChanges.Where(x => x.NewRates != null).SelectMany(x => x.NewRates);
+				_rateChanges = changes.ZoneChanges.Where(x => x.ClosedRates != null).SelectMany(x => x.ClosedRates);
+			}
 
-        public void SetZoneRate(ZoneItem zoneItem)
-        {
-            SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
-                _rateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
-                _rateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
+			_targetCurrencyId = targetCurrencyId;
 
-            if (rate != null)
-            {
-                if (rate.Rate != null)
-                {
-                    zoneItem.CurrentRateId = rate.Rate.SaleRateId;
-                    zoneItem.CurrentRate = GetConvertedRate(rate.Rate);
-                    zoneItem.CurrentRateBED = rate.Rate.BED;
-                    zoneItem.CurrentRateEED = rate.Rate.EED;
-                    zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
-                }
+			_rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
+			_futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
+			_currencyExchangeRateManager = new CurrencyExchangeRateManager();
+			_saleRateManager = new SaleRateManager();
 
-                if (rate.RatesByRateType != null)
-                {
-                    zoneItem.CurrentOtherRates = new Dictionary<int, OtherRate>();
-                    foreach (KeyValuePair<int, SaleRate> kvp in rate.RatesByRateType)
-                    {
-                        SalePriceListOwnerType otherRateSource;
-                        rate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
+			_rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
+			_rateTypes = GetRateTypes();
+			_rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
+		}
 
-                        zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
-                        {
-                            Rate = GetConvertedRate(kvp.Value),
-                            IsRateEditable = otherRateSource == _ownerType,
-                            BED = kvp.Value.BED,
-                            EED = kvp.Value.EED
-                        });
-                    }
-                }
-            }
+		public void SetZoneRate(ZoneItem zoneItem)
+		{
+			SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
+				_rateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
+				_rateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
 
-            SetFutureRates(zoneItem);
-            SetZoneRateChanges(zoneItem);
-        }
+			if (rate != null)
+			{
+				if (rate.Rate != null)
+				{
+					zoneItem.CurrentRateId = rate.Rate.SaleRateId;
+					zoneItem.CurrentRate = GetConvertedRate(rate.Rate);
+					zoneItem.CurrentRateBED = rate.Rate.BED;
+					zoneItem.CurrentRateEED = rate.Rate.EED;
+					zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
+				}
 
-        #endregion
+				if (rate.RatesByRateType != null)
+				{
+					zoneItem.CurrentOtherRates = new Dictionary<int, OtherRate>();
+					foreach (KeyValuePair<int, SaleRate> kvp in rate.RatesByRateType)
+					{
+						SalePriceListOwnerType otherRateSource;
+						rate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
 
-        #region Private Methods
+						zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
+						{
+							Rate = GetConvertedRate(kvp.Value),
+							IsRateEditable = otherRateSource == _ownerType,
+							BED = kvp.Value.BED,
+							EED = kvp.Value.EED
+						});
+					}
+				}
+			}
 
-        private void SetFutureRates(ZoneItem zoneItem)
-        {
-            SaleEntityZoneRate futureRate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
-                _futureRateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
-                _futureRateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
+			SetFutureRates(zoneItem);
+			SetZoneRateChanges(zoneItem);
+			SetZoneRateTypes(zoneItem);
+		}
 
-            if (futureRate != null)
-            {
-                if (futureRate.Rate != null && futureRate.Rate.BED.Date > _effectiveOn.Date)
-                {
-                    zoneItem.FutureNormalRate = new FutureRate()
-                    {
-                        RateTypeId = futureRate.Rate.RateTypeId,
-                        Rate = GetConvertedRate(futureRate.Rate),
-                        IsRateEditable = futureRate.Source == _ownerType,
-                        BED = futureRate.Rate.BED,
-                        EED = futureRate.Rate.EED
-                    };
-                }
+		#endregion
 
-                if (futureRate.RatesByRateType != null)
-                {
-                    zoneItem.FutureOtherRates = new Dictionary<int, FutureRate>();
-                    foreach (KeyValuePair<int, SaleRate> kvp in futureRate.RatesByRateType)
-                    {
-                        SalePriceListOwnerType fututreOtherRateSource;
-                        futureRate.SourcesByRateType.TryGetValue(kvp.Key, out fututreOtherRateSource);
+		#region Private Methods
 
-                        if (kvp.Value.BED.Date > _effectiveOn.Date)
-                        {
-                            zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
-                            {
-                                RateTypeId = kvp.Value.RateTypeId,
-                                Rate = GetConvertedRate(kvp.Value),
-                                IsRateEditable = fututreOtherRateSource == _ownerType,
-                                BED = kvp.Value.BED,
-                                EED = kvp.Value.EED
-                            });
-                        }
-                    }
-                }
-            }
-        }
+		private IEnumerable<RateType> GetRateTypes()
+		{
+			var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+			IEnumerable<Vanrise.Entities.RateTypeInfo> rateTypeInfoEntities = rateTypeManager.GetAllRateTypes();
+			return (rateTypeInfoEntities != null) ? rateTypeInfoEntities.MapRecords(x => new RateType() { RateTypeId = x.RateTypeId, Name = x.Name }) : _rateTypes = new List<RateType>();
+		}
 
-        private void SetZoneRateChanges(ZoneItem zoneItem)
-        {
-            zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
-            zoneItem.ClosedRates = _rateChanges.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+		private void SetFutureRates(ZoneItem zoneItem)
+		{
+			SaleEntityZoneRate futureRate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
+				_futureRateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
+				_futureRateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
 
-            DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
-            if (rateChange != null)
-                zoneItem.CurrentRateNewEED = rateChange.EED;
-        }
+			if (futureRate != null)
+			{
+				if (futureRate.Rate != null && futureRate.Rate.BED.Date > _effectiveOn.Date)
+				{
+					zoneItem.FutureNormalRate = new FutureRate()
+					{
+						RateTypeId = futureRate.Rate.RateTypeId,
+						Rate = GetConvertedRate(futureRate.Rate),
+						IsRateEditable = futureRate.Source == _ownerType,
+						BED = futureRate.Rate.BED,
+						EED = futureRate.Rate.EED
+					};
+				}
 
-        private decimal GetConvertedRate(SaleRate saleRate)
-        {
-            return _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn);
-        }
-        
-        #endregion
-    }
+				if (futureRate.RatesByRateType != null)
+				{
+					zoneItem.FutureOtherRates = new Dictionary<int, FutureRate>();
+					foreach (KeyValuePair<int, SaleRate> kvp in futureRate.RatesByRateType)
+					{
+						SalePriceListOwnerType fututreOtherRateSource;
+						futureRate.SourcesByRateType.TryGetValue(kvp.Key, out fututreOtherRateSource);
+
+						if (kvp.Value.BED.Date > _effectiveOn.Date)
+						{
+							zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
+							{
+								RateTypeId = kvp.Value.RateTypeId,
+								Rate = GetConvertedRate(kvp.Value),
+								IsRateEditable = fututreOtherRateSource == _ownerType,
+								BED = kvp.Value.BED,
+								EED = kvp.Value.EED
+							});
+						}
+					}
+				}
+			}
+		}
+
+		private void SetZoneRateChanges(ZoneItem zoneItem)
+		{
+			zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+			zoneItem.ClosedRates = _rateChanges.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+
+			DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
+			if (rateChange != null)
+				zoneItem.CurrentRateNewEED = rateChange.EED;
+		}
+
+		private void SetZoneRateTypes(ZoneItem zoneItem)
+		{
+			if (_ownerType == SalePriceListOwnerType.SellingProduct)
+				zoneItem.RateTypes = _rateTypes.ToList();
+			else
+			{
+				Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zoneItem.ZoneId);
+				IEnumerable<int> rateTypeIds = _rateTypeRuleManager.GetRateTypes(_rateTypeRuleDefinitionId, target);
+				if (rateTypeIds != null)
+					zoneItem.RateTypes = _rateTypes.FindAllRecords(x => rateTypeIds.Contains(x.RateTypeId)).ToList();
+			}
+		}
+
+		private Vanrise.GenericData.Entities.GenericRuleTarget GetTarget(long zoneId)
+		{
+			var target = new Vanrise.GenericData.Entities.GenericRuleTarget();
+			target.TargetFieldValues = new Dictionary<string, object>();
+			target.TargetFieldValues.Add("CustomerId", _ownerId);
+			target.TargetFieldValues.Add("SaleZoneId", zoneId);
+			return target;
+		}
+
+		private decimal GetConvertedRate(SaleRate saleRate)
+		{
+			return _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn);
+		}
+
+		#endregion
+	}
 }
