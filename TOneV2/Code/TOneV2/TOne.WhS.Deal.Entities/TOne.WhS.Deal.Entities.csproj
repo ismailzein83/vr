@@ -41,8 +41,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealSettingsConfig.cs" />
     <Compile Include="SwapDeals\SwapDealAnalysisResult.cs" />
     <Compile Include="SwapDeals\SwapDealAnalysisDefinition.cs" />
     <Compile Include="SwapDeals\SwapDealOutbound.cs" />
