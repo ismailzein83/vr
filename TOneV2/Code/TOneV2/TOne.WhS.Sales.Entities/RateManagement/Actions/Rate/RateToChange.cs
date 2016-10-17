@@ -19,8 +19,6 @@ namespace TOne.WhS.Sales.Entities
 
         public ExistingRate RecentExistingRate { get; set; }
 
-        public Dictionary<int, Decimal> OtherRates { get; set; }
-
         public int? CurrencyId { get; set; }
 
         public RateChangeType ChangeType { get; set; }

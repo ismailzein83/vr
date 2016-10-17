@@ -86,7 +86,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = (int)reader["PriceListID"],
                 NormalRate = (decimal)reader["Rate"],
-                OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null,
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 RateChange = GetReaderValue<RateChangeType>(reader, "Change"),

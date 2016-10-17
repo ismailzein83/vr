@@ -176,7 +176,6 @@ namespace TOne.WhS.Sales.Business
             {
                 RateTypeId = rateToChange.RateTypeId,
                 NormalRate = rateToChange.NormalRate,
-                OtherRates = rateToChange.OtherRates,
                 Zone = zone,
                 BED = zone.BED > currentRateBED ? zone.BED : currentRateBED,
                 EED = rateToChange.EED

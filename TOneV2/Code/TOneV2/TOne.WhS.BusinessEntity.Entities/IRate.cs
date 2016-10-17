@@ -9,7 +9,5 @@ namespace TOne.WhS.BusinessEntity.Entities
     public interface IRate
     {
         Decimal NormalRate { get; set; }
-
-        Dictionary<int, Decimal> OtherRates { get; set; }
     }
 }

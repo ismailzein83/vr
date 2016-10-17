@@ -130,7 +130,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             saleRate.RateTypeId = GetReaderValue<int?>(reader, "RateTypeID");
             saleRate.NormalRate = (decimal)reader["Rate"];
-            saleRate.OtherRates = reader["OtherRates"] as string != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(reader["OtherRates"] as string) : null;
 
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");

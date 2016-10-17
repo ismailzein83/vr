@@ -65,13 +65,12 @@ namespace TOne.WhS.Sales.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
                 record.RateId,
                 _processInstanceId,
                 record.Zone.ZoneId,
                 record.RateTypeId,
                 decimal.Round(record.NormalRate, 8),
-                record.OtherRates,
                 record.CurrencyId,
                 record.BED,
                 record.EED

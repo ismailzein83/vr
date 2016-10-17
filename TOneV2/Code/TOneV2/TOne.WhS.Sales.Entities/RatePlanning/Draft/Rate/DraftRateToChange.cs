@@ -16,8 +16,6 @@ namespace TOne.WhS.Sales.Entities
         
         public Decimal NormalRate { get; set; }
 
-        public Dictionary<int, Decimal> OtherRates { get; set; }
-
         public int? CurrencyId { get; set; }
 
         public DateTime BED { get; set; }

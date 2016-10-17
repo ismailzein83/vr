@@ -66,7 +66,6 @@ namespace TOne.WhS.Sales.Data.SQL
             table.Columns.Add("PriceListID", typeof(int));
             table.Columns.Add("CurrencyID", typeof(int));
             table.Columns.Add("NormalRate", typeof(decimal));
-            table.Columns.Add("OtherRates", typeof(string));
             table.Columns.Add("BED", typeof(DateTime));
             table.Columns.Add("EED", typeof(DateTime));
 
@@ -80,8 +79,6 @@ namespace TOne.WhS.Sales.Data.SQL
                 if (newRate.CurrencyId != null)
                     row["CurrencyID"] = newRate.CurrencyId;
                 row["NormalRate"] = newRate.NormalRate;
-                if (newRate.OtherRates != null)
-                    row["OtherRates"] = Vanrise.Common.Serializer.Serialize(newRate.OtherRates);
                 row["BED"] = newRate.BED;
                 if (newRate.EED != null)
                     row["EED"] = newRate.EED;

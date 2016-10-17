@@ -18,8 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public decimal NormalRate { get; set; }
 
-        public Dictionary<int, decimal> OtherRates { get; set; }
-
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
