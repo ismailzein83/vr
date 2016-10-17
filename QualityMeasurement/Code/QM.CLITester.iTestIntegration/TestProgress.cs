@@ -32,6 +32,7 @@ namespace QM.CLITester.iTestIntegration
         public string ReceivedCli { get; set; }
         public string Pdd { get; set; }
         public string Mos { get; set; }
+        public DateTime? Duration { get; set; }
         public CallTestResult CallTestResult { get; set; }
         public string CallTestResultDescription { get; set; }
     }

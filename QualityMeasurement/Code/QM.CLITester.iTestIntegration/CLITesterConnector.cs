@@ -231,6 +231,7 @@ namespace QM.CLITester.iTestIntegration
                     {
                         pdd = pdd + Decimal.Parse(callNode["PDD"].InnerText);
                         mos = mos + Decimal.Parse(callNode["MOS"].InnerText);
+                        long unixTime2 = callNode["Start"] != null ? long.Parse(callNode["Start"].InnerText) : 0;
                         CallResult callResult = new CallResult
                         {
                             Source = callNode["Source"] != null ? callNode["Source"].InnerText : "",
@@ -241,6 +242,7 @@ namespace QM.CLITester.iTestIntegration
                             ReceivedCli = callNode["CLI"] != null ? callNode["CLI"].InnerText : "",
                             Pdd = callNode["PDD"] != null ? callNode["PDD"].InnerText : "",
                             Mos = callNode["MOS"] != null ? callNode["MOS"].InnerText : "",
+                            Duration = epoch.AddSeconds(unixTime2),
                             CallTestResult = CallTestResult.PartiallySucceeded
                         };
                         string callTestResult = callNode["Result"] != null ? callNode["Result"].InnerText : "";
@@ -400,6 +402,7 @@ namespace QM.CLITester.iTestIntegration
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Source" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Destination" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Received Cli" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Start" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "PDD" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "MOS" });
@@ -423,6 +426,7 @@ namespace QM.CLITester.iTestIntegration
                         row.Cells.Add(new ExportExcelCell { Value = callResult.Source });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.Destination });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.ReceivedCli });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.Duration != null ? callResult.Duration.Value.ToString("yyyy-MM-dd H:mm:ss") :"" });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.ReleaseCode });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.Pdd });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.Mos });
