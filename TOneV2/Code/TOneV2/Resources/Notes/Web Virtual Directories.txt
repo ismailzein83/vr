@@ -34,3 +34,4 @@
 	VR_Invoice				C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
 	WhS_Invoice				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Invoice.Web\WhS_Invoice
 	VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
+	WhS_Deal				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Deal.Web\WhS_Deal
