@@ -291,7 +291,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     BED = recentExistingRate.BED,
                     EED = recentExistingRate.OriginalEED,
-                    Rate = recentExistingRate.RateEntity.NormalRate,
+                    Rate = recentExistingRate.ConvertedRate,
                     RateTypeId = recentExistingRate.RateEntity.RateTypeId,
                 };
             }
@@ -344,9 +344,9 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (recentExistingRate != null)
                     {
-                        if (importedRate.Rate > recentExistingRate.RateEntity.NormalRate)
+                        if (importedRate.Rate > recentExistingRate.ConvertedRate)
                             importedRate.ChangeType = RateChangeType.Increase;
-                        else if (importedRate.Rate < recentExistingRate.RateEntity.NormalRate)
+                        else if (importedRate.Rate < recentExistingRate.ConvertedRate)
                             importedRate.ChangeType = RateChangeType.Decrease;
 
                         importedRate.ProcessInfo.RecentExistingRate = recentExistingRate;

@@ -10,6 +10,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public BusinessEntity.Entities.SupplierRate RateEntity { get; set; }
 
+        public Decimal ConvertedRate { get; set; }
+
         public ChangedRate ChangedRate { get; set; }
 
         public IChangedEntity ChangedEntity
