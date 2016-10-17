@@ -95,7 +95,6 @@ as (select * from (values
 ('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',45,1),
 
 ('BE6A7ADC-F901-4113-8840-ABC499307908','CDR Process',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,25,0),
-('55733AB2-3087-4229-9EE8-9CBE88C734B4','CDR Process Rules',null,'BE6A7ADC-F901-4113-8840-ABC499307908',null,4,0),
 
 ('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',50,0)
 
