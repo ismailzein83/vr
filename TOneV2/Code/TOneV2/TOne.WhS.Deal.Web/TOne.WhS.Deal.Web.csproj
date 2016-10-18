@@ -143,12 +143,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Deal\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Deal\Views\DealAnalysis\DealAnalysisEditor.html" />
+    <Content Include="WhS_Deal\Views\DealAnalysis\DealAnalysisEditorController.js" />
+    <Content Include="WhS_Deal\Views\DealAnalysis\DealAnalysisManagement.html" />
+    <Content Include="WhS_Deal\Views\DealAnalysis\DealAnalysisManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="WhS_Deal\Directives\" />
     <Folder Include="WhS_Deal\Services\APIServices\" />
-    <Folder Include="WhS_Deal\Views\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
