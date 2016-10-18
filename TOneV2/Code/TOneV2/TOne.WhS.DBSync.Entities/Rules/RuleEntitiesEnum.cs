@@ -11,6 +11,7 @@ namespace TOne.WhS.DBSync.Entities
         RouteOverride,
         RouteOptionBlock,
         Commission,
-        SaleMarketPrice
+        SaleMarketPrice,
+        RouteBlock
     }
 }

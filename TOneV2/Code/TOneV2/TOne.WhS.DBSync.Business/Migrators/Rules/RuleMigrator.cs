@@ -72,6 +72,9 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.SaleMarketPrice:
                         _routeRuleBaseMigrator = new MarketPriceRuleMigrator(ruleContext);
                         break;
+                    //case RuleEntitiesEnum.RouteBlock:
+                    //    _routeRuleBaseMigrator = new RouteBlockRuleMigrator(ruleContext);
+                    //    break;
                     default:
                         _routeRuleBaseMigrator = null;
                         break;

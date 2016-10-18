@@ -130,6 +130,7 @@
     <Compile Include="Migrators\SwitchMigrator.cs" />
     <Compile Include="DBSyncTaskAction.cs" />
     <Compile Include="DBSyncTaskActionArgument.cs" />
+    <Compile Include="Migrators\Rules\RouteBlockRuleMigrator.cs" />
     <Compile Include="SwitchMigration\ISwitchParser.cs" />
     <Compile Include="SwitchMigration\MVTSSwitchMigrationParser.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRulesManager.cs" />
