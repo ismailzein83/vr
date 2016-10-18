@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum',  'WhS_Routing_SaleZoneRangeOptions',
-    function (WhS_Routing_RPRouteAPIService, VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions) {
+app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'WhS_Routing_SaleZoneRangeOptions', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_Routing_RPRouteAPIService, VRNotificationService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions, UtilsService, VRUIUtilsService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -26,10 +26,13 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
     };
 
     function DirectiveConstructor($scope, ctrl) {
+        this.initializeController = initializeController;
 
         var gridAPI;
-        this.initializeController = initializeController;
         var defaultPolicy = null;
+
+        var rpSettingsAddBlockedOptions;
+
         function initializeController() {
             $scope.supplierZoneRPOptionPolicies = [];
 
@@ -72,7 +75,6 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
 
             defineAPI();
         }
-
         function defineAPI()
         {
             var api = {};
@@ -86,7 +88,8 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                         RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                         RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value,
                         SaleZoneRange: $scope.selectedSaleZoneRange,
-                        SupplierZoneRPOptionPolicies: GetSelectedSupplierPolicies()
+                        SupplierZoneRPOptionPolicies: GetSelectedSupplierPolicies(),
+                        IncludeBlockedSupplierZones: $scope.includeBlockedSupplierZones
                     }
                 };
             };
@@ -102,6 +105,9 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
 
                 if (!$scope.isFuture)
                     $scope.effectiveOn = new Date();
+
+                var getRPSettingsAddBlockedOptionsPromise = getRPSettingsAddBlockedOptionsPromise();
+                promises.push(getRPSettingsAddBlockedOptionsPromise);
 
                 var getPoliciesPromise = WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates();
                 promises.push(getPoliciesPromise);
@@ -128,6 +134,7 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                     });
                 });
 
+
                 function extendPolicy(policy) {
                     policy.directiveReadyDeferred = UtilsService.createPromiseDeferred();
                     policy.directiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -140,6 +147,20 @@ app.directive("vrWhsRoutingRpbuildproduct", [ 'WhS_Routing_RPRouteAPIService', '
                     policy.directiveReadyDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(policy.directiveAPI, undefined, policy.directiveLoadDeferred);
                     });
+                }
+                function getRPSettingsAddBlockedOptionsPromise() {
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
+
+                    WhS_Routing_RPRouteAPIService.GetRPSettingsAddBlockedOptions().then(function (response) {
+
+                        $scope.showIncludeBlockedSupplierZones = response;
+                        promiseDeferred.resolve();
+
+                    }).catch(function (error) {
+                        promiseDeferred.reject(error);
+                    });
+
+                    return promiseDeferred.promise;
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

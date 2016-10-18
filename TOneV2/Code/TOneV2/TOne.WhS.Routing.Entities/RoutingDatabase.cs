@@ -29,6 +29,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public Guid DefaultPolicyId { get; set; }
         public Guid[] SelectedPoliciesIds { get; set; }
+        public bool IncludeBlockedSupplierZones { get; set; }
     }
 
     public class RoutingDatabaseSettings

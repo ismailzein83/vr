@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'VRUIUtilsService', 'VRNotificationService',
-function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'WhS_Routing_SupplierStatusEnum', 'VRUIUtilsService', 'VRNotificationService',
+function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -59,10 +59,30 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_Routing_RPRouteAPIService.GetFilteredRPRouteOptions(dataRetrievalInput).then(function (response) {
+
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                extendRPRouteOptionObject(response.Data[i]);
+                            }                            
+                        }
                         onResponseReady(response);
+
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
+                };
+
+                $scope.getRowStyle = function (dataItem) {
+
+                    var rowStyle;
+
+                    if (dataItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
+                        rowStyle = { CssClass: "bg-warning" }
+
+                    if (dataItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
+                        rowStyle = { CssClass: "bg-danger" }
+
+                    return rowStyle
                 };
 
                 $scope.openRouteOptionSupplier = function (dataItem) {
@@ -73,7 +93,6 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     defineAPI();
                 });
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -142,8 +161,15 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                 
                 return gridAPI.retrieveData(query);
             }
+            function extendRPRouteOptionObject(rpRouteOption)
+            {
+                if (rpRouteOption.Entity.SupplierRate == 0){
+                     rpRouteOption.Entity.SupplierRate = 'N/A'
+                }
+            }
 
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
-    }]);
+}]);

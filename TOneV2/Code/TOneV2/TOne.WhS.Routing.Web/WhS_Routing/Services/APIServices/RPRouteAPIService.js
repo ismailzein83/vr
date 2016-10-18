@@ -31,11 +31,16 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredRPRouteOptions"), input);
         }
 
+        function GetRPSettingsAddBlockedOptions() {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRPSettingsAddBlockedOptions"));
+        }
+
         return ({
             GetFilteredRPRoutes: GetFilteredRPRoutes,
             GetRPRouteOptionSupplier: GetRPRouteOptionSupplier,
             GetPoliciesOptionTemplates: GetPoliciesOptionTemplates,
-            GetFilteredRPRouteOptions: GetFilteredRPRouteOptions
+            GetFilteredRPRouteOptions: GetFilteredRPRouteOptions,
+            GetRPSettingsAddBlockedOptions: GetRPSettingsAddBlockedOptions
         });
     }
 

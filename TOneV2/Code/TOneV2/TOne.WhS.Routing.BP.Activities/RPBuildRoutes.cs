@@ -23,6 +23,8 @@ namespace TOne.WhS.Routing.BP.Activities
         public DateTime? EffectiveDate { get; set; }
 
         public bool IsFuture { get; set; }
+
+        public bool IncludeBlockedSupplierZones { get; set; }
     }
 
     public class BuildRoutingProductRoutesContext : IBuildRoutingProductRoutesContext
@@ -53,13 +55,16 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<BaseQueue<RPCodeMatchesByZone>> InputQueue { get; set; }
 
         [RequiredArgument]
+        public InOutArgument<BaseQueue<RPRouteBatch>> OutputQueue { get; set; }
+
+        [RequiredArgument]
         public InArgument<DateTime?> EffectiveDate { get; set; }
 
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<RPRouteBatch>> OutputQueue { get; set; }
+        public InArgument<bool> IncludeBlockedSupplierZones { get; set; }
 
 
         protected override void DoWork(RPBuildRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
@@ -76,7 +81,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         IEnumerable<int> routingProductIds = routingProductManager.GetRoutingProductIdsBySaleZoneId(preparedRPCodeMatch.SaleZoneId);
                         BuildRoutingProductRoutesContext routingProductContext = new BuildRoutingProductRoutesContext(preparedRPCodeMatch, routingProductIds, inputArgument.SupplierZoneRPOptionPolicies, inputArgument.EffectiveDate, inputArgument.IsFuture);
                         RouteBuilder builder = new RouteBuilder();
-                        IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId);
+                        IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId, inputArgument.IncludeBlockedSupplierZones);
 
                         productRoutesBatch.RPRoutes.AddRange(productRoutes);
                         inputArgument.OutputQueue.Enqueue(productRoutesBatch);
@@ -95,7 +100,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 SupplierZoneRPOptionPolicies = this.SupplierZoneRPOptionPolicies.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
-                IsFuture = this.IsFuture.Get(context)
+                IsFuture = this.IsFuture.Get(context),
+                IncludeBlockedSupplierZones = this.IncludeBlockedSupplierZones.Get(context),
             };
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)

@@ -88,6 +88,16 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                 return loadGridPromiseDeffered.promise;
             };
 
+            $scope.getRowStyle = function (dataItem) {
+
+                var rowStyle;
+
+                if (dataItem.IsBlocked)
+                    rowStyle = { CssClass: "bg-danger" }
+
+                return rowStyle
+            };
+
             defineMenuActions();
         }
 

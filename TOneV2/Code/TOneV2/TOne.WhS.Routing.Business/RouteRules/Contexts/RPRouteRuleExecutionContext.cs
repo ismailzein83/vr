@@ -15,24 +15,29 @@ namespace TOne.WhS.Routing.Business
         internal List<RouteOptionRuleTarget> _supplierZoneOptions = new List<RouteOptionRuleTarget>();
         HashSet<int> _filteredSupplierIds;
         Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions;
+        bool _addBlockedOptions;
+        List<SupplierCodeMatchWithRate> _validSupplierCodeMatches;
+
+        public RouteRule RouteRule
+        {
+            get { throw new NotImplementedException(); }
+        }
+        internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
+        internal SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { private get; set; }
+
+
         public RPRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
         {
-            _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
             _routeRule = routeRule;
+            _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
+            _addBlockedOptions = new ConfigManager().GetProductRouteBuildAddBlockedOptions();
+
             SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
             {
                 RoutingProductId = routeRule.Criteria.RoutingProductId
             };
             _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
-        public RouteRule RouteRule
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
-
-        internal SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { private get; set; }
 
         public bool TryAddSupplierZoneOption(RouteOptionRuleTarget optionTarget)
         {
@@ -42,7 +47,8 @@ namespace TOne.WhS.Routing.Business
                 optionTarget.ExecutedRuleId = routeOptionRule.RuleId;
                 RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext();
                 routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, optionTarget);
-                if (optionTarget.BlockOption)
+
+                if (optionTarget.BlockOption && !_addBlockedOptions)
                     return false;
             }
             _supplierZoneOptions.Add(optionTarget);
@@ -53,8 +59,6 @@ namespace TOne.WhS.Routing.Business
         {
             return _supplierZoneOptions;
         }
-
-        List<SupplierCodeMatchWithRate> _validSupplierCodeMatches;
 
         public List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches()
         {

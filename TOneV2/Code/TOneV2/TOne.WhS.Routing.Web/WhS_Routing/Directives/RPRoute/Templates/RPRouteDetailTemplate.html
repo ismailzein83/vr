@@ -9,14 +9,17 @@
 </vr-row>
 <vr-row>
     <vr-columns colnum="12" simplecol>
-        <vr-datagrid datasource="ctrl.rpRouteOptions"
+        <vr-datagrid on-ready="onGridReady"
+                     datasource="ctrl.rpRouteOptions"
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
-                     on-ready="onGridReady"
-                     defaultsortbyfieldname="'OptionOrder'">
-            <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" isclickable="'true'" onclicked="openRouteOptionSupplier"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Supplier Rate'" field="'Entity.SupplierRate'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Percentage'" field="'Entity.Percentage'"></vr-datagridcolumn>
+                     defaultsortbyfieldname="'OptionOrder'"
+                     getrowstyle="getRowStyle">
+
+            <vr-datagridcolumn headertext="'Supplier'" type="'Text'" field="'SupplierName'" isclickable="'true'" onclicked="openRouteOptionSupplier" widthfactor="3"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Blocked'" type="'Text'" field="'Entity.IsSupplierBlocked'" widthfactor="1"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Supplier Rate'" type="'Number'" field="'Entity.SupplierRate'" numberprecision="'LongPrecision'" widthfactor="3"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Percentage'" type="'Number'" field="'Entity.Percentage'" widthfactor="3"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

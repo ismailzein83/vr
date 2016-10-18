@@ -14,18 +14,24 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<RoutingDatabaseType> Type { get; set; }
+
         [RequiredArgument]
         public InArgument<RoutingProcessType> ProcessType { get; set; }
+
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveTime { get; set; }
+
         [RequiredArgument]
         public InArgument<List<SupplierZoneToRPOptionPolicy>> Policies { get; set; }
+
+        public InArgument<bool> IncludeBlockedSupplierZones { get; set; }
+
         [RequiredArgument]
         public OutArgument<int> DatabaseId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            RoutingDatabaseInformation information = GetDatabaseInformation(this.Policies.Get(context), this.ProcessType.Get(context));
+            RoutingDatabaseInformation information = GetDatabaseInformation(this.ProcessType.Get(context), this.Policies.Get(context), this.IncludeBlockedSupplierZones.Get(context));
             RoutingDatabaseSettings settings = BuildRoutingDatabaseSettings();
 
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
@@ -34,7 +40,7 @@ namespace TOne.WhS.Routing.BP.Activities
             this.DatabaseId.Set(context, databaseId);
         }
 
-        private RoutingDatabaseInformation GetDatabaseInformation(List<SupplierZoneToRPOptionPolicy> policies, RoutingProcessType processType)
+        private RoutingDatabaseInformation GetDatabaseInformation(RoutingProcessType processType, List<SupplierZoneToRPOptionPolicy> policies, bool includeBlockedSupplierZones)
         {
             RoutingDatabaseInformation information = null;
             switch (processType)
@@ -43,7 +49,8 @@ namespace TOne.WhS.Routing.BP.Activities
                     information = new RPRoutingDatabaseInformation()
                     {
                         DefaultPolicyId = policies.Where(p => p.IsDefault).First().ConfigId,
-                        SelectedPoliciesIds = policies.Select(p => p.ConfigId).ToArray()
+                        SelectedPoliciesIds = policies.Select(p => p.ConfigId).ToArray(),
+                        IncludeBlockedSupplierZones = includeBlockedSupplierZones
                     };
                     break;
                 case RoutingProcessType.CustomerRoute:

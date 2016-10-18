@@ -161,6 +161,7 @@
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionTypeEnum.js" />
+    <Content Include="WhS_Routing\Constant\SupplierStatusEnum.js" />
     <Content Include="WhS_Routing\Constant\TimeSettingsTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingProcessTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingSaleZoneRangeOptions.js" />
@@ -281,10 +282,7 @@
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplier.html" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Routing\Directives\MainExtensions\" />
-    <Folder Include="WhS_Routing\Directives\RouteConfiguration\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

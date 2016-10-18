@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public enum SupplierStatus { Active, PartialActive, Block }
+    public enum SupplierStatus { Active = 0, PartialActive = 1, Block = 2 }
 
     public class RPRouteOptionSupplier
     {
@@ -20,8 +20,19 @@ namespace TOne.WhS.Routing.Entities
 
         public List<RPRouteOptionSupplierZone> SupplierZones { get; set; }
 
-        public bool IsSupplierBlocked { get; set; }
+        public SupplierStatus SupplierStatus
+        {
+            get
+            {
+                if (NumberOfBlockedZones == 0)
+                    return Entities.SupplierStatus.Active;
+                if (NumberOfUnblockedZones == 0)
+                    return Entities.SupplierStatus.Block;
+                return Entities.SupplierStatus.PartialActive;
+            }
+        }
 
-        public SupplierStatus SupplierStatus { get; set; }
+        public int NumberOfBlockedZones { get; set; }
+        public int NumberOfUnblockedZones { get; set; }
     }
 }

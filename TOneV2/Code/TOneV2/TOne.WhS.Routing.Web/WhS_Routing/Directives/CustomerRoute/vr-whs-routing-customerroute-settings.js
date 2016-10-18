@@ -39,9 +39,9 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
                     ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
                 }
-                //if (payload != undefined && payload.ProductRoute != undefined) {
-                //    ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
-                //}
+                if (payload != undefined && payload.ProductRoute != undefined) {
+                    ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
+                }
             }
 
             api.getData = function () {
@@ -52,10 +52,10 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                         NumberOfOptions: ctrl.customerRouteNumberOfOptions,
                         AddBlockedOptions: ctrl.customerRouteAddBlockedOptions
                     },
-                    //ProductRoute: {
-                    //    $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                    //    AddBlockedOptions: ctrl.productRouteAddBlockedOptions
-                    //}
+                    ProductRoute: {
+                        $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
+                        AddBlockedOptions: ctrl.productRouteAddBlockedOptions
+                    }
                 }
                 return obj;
             }

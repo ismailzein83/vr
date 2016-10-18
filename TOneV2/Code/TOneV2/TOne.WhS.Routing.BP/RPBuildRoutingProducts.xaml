@@ -55,9 +55,14 @@
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
@@ -112,6 +117,11 @@
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffetiveDate</mca:CSharpValue>
           </InArgument>
         </twrba1:RPBuildRoutes.EffectiveDate>
+        <twrba1:RPBuildRoutes.IncludeBlockedSupplierZones>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IncludeBlockedSupplierZones</mca:CSharpValue>
+          </InArgument>
+        </twrba1:RPBuildRoutes.IncludeBlockedSupplierZones>
         <twrba1:RPBuildRoutes.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPCodeMatchesByZone)">queueCodeMatchesByZone</mca:CSharpValue>
@@ -183,7 +193,7 @@
         </twrba1:ApplyProductRoutesToDB.RoutingDatabaseId>
       </twrba1:ApplyProductRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sGkQDuwEOAgEBRQW5ARACAQJJDUmvAQIBA1IHbCECAX5tB5EBHgIBRZIBB6cBLQIBJKgBB7gBJwIBC18NX2EDAZ8BZA1kdQMBlwFaDVqHAQMBjwFVDVVaAwGHAWkNaVgCAX+EAQ2EAW0CAXZ1DXV/AgFucA1wawIBZokBDYkBeQIBXn8Nf4ABAgFWjgENjgGRAQIBTnoNeloCAUafAQ2fAXECAT2VAQ2VAXgCATWkAQ2kAX8CAS2aAQ2aAYABAgElsAENsAF3AgEcqwENqwF4AgEUtQENtQFhAgEM</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sG0kDxQEOAgEBSgXDARACAQJODU6vAQIBA1cHcSEDAYYBcgebAR4CAUWcAQexAS0CASSyAQfCAScCAQtkDWRhAwGnAWkNaXUDAZ8BXw1fhwEDAZcBWg1aWgMBjwFuDW5YAwGHAY4BDY4BbQIBfn8Nf38CAXZ1DXVrAgFukwENkwF5AgFmeg16bQIBXokBDYkBgAECAVaYAQ2YAZEBAgFOhAENhAFaAgFGqQENqQFxAgE9nwENnwF4AgE1rgENrgF/AgEtpAENpAGAAQIBJboBDboBdwIBHLUBDbUBeAIBFL8BDb8BYQIBDA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

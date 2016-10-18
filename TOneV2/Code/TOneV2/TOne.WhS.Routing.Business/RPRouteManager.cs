@@ -40,16 +40,19 @@ namespace TOne.WhS.Routing.Business
 
         public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
         {
-            IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            manager.RoutingDatabase = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
+            IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            var latestRoutingDatabase  = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
+            dataManager.RoutingDatabase = latestRoutingDatabase;
 
-            BigResult<RPRoute> rpRouteResult = manager.GetFilteredRPRoutes(input);
+            bool includeBlockedSupplierZones = GetIncludeBlockedSupplierZones(latestRoutingDatabase);
+
+            BigResult<RPRoute> rpRouteResult = dataManager.GetFilteredRPRoutes(input);
 
             BigResult<RPRouteDetail> customerRouteDetailResult = new BigResult<RPRouteDetail>()
             {
                 ResultKey = rpRouteResult.ResultKey,
                 TotalCount = rpRouteResult.TotalCount,
-                Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions, null, null))
+                Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions, null, null, includeBlockedSupplierZones))
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
@@ -63,11 +66,14 @@ namespace TOne.WhS.Routing.Business
         public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId)
         {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            dataManager.RoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
+            var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
+            dataManager.RoutingDatabase = latestRoutingDatabase;
+            
+            bool includeBlockedSupplierZones = GetIncludeBlockedSupplierZones(latestRoutingDatabase);
 
             IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
             int systemCurrencyId = GetSystemCurrencyId();
-            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId));
+            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, includeBlockedSupplierZones));
         }
 
         public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId)
@@ -184,7 +190,7 @@ namespace TOne.WhS.Routing.Business
             return productRoutingDatabases.First();
         }
 
-        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId)
+        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId, bool includeBlockedSupplierZones)
         {
             return new RPRouteDetail()
             {
@@ -258,11 +264,13 @@ namespace TOne.WhS.Routing.Business
             var routingDbManager = new RoutingDatabaseManager();
             var routingDbInfoFilter = new RoutingDatabaseInfoFilter() { ProcessType = RoutingProcessType.RoutingProductRoute };
             IEnumerable<RoutingDatabaseInfo> routingDbInfoEntities = routingDbManager.GetRoutingDatabaseInfo(routingDbInfoFilter);
+
             RoutingDatabaseInfo routingDbInfo = routingDbInfoEntities.FindRecord(itm => itm.RoutingDatabaseId == routingDbId);
             if (routingDbInfo == null)
                 throw new NullReferenceException("routingDbInfo");
             if (routingDbInfo.Information == null)
                 throw new NullReferenceException("routingDbInfo.Information");
+
             var rpRoutingDbInfo = routingDbInfo.Information as RPRoutingDatabaseInformation;
             if (rpRoutingDbInfo == null)
                 throw new NullReferenceException("rpRoutingDbInfo");
@@ -271,6 +279,16 @@ namespace TOne.WhS.Routing.Business
 
             defaultPolicyId = rpRoutingDbInfo.DefaultPolicyId;
             return rpRoutingDbInfo.SelectedPoliciesIds;
+        }
+
+        private bool GetIncludeBlockedSupplierZones(RoutingDatabase routingDatabase)
+        {
+            if(routingDatabase.Information == null)
+                throw new NullReferenceException("routingDatabase.Information");
+
+            RPRoutingDatabaseInformation rpRoutingDatabaseInformation = routingDatabase.Information as RPRoutingDatabaseInformation;
+            
+            return rpRoutingDatabaseInformation.IncludeBlockedSupplierZones;
         }
 
         private int GetSystemCurrencyId()

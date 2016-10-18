@@ -66,6 +66,9 @@
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
@@ -106,6 +109,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveOn</mca:CSharpValue>
         </InArgument>
       </twrba1:CreateRoutingDatabase.EffectiveTime>
+      <twrba1:CreateRoutingDatabase.IncludeBlockedSupplierZones>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IncludeBlockedSupplierZones</mca:CSharpValue>
+        </InArgument>
+      </twrba1:CreateRoutingDatabase.IncludeBlockedSupplierZones>
       <twrba1:CreateRoutingDatabase.Policies>
         <InArgument x:TypeArguments="scg:List(twre:SupplierZoneToRPOptionPolicy)">
           <mca:CSharpValue x:TypeArguments="scg:List(twre:SupplierZoneToRPOptionPolicy)">Input.SupplierZoneRPOptionPolicies</mca:CSharpValue>
@@ -464,7 +472,8 @@
                 RoutingDatabaseId = routingDatabaseId,
                 SupplierOptionPolicies = Input.SupplierZoneRPOptionPolicies,
                 EffetiveDate = Input.EffectiveOn,
-                IsFuture = Input.IsFuture
+                IsFuture = Input.IsFuture,
+                IncludeBlockedSupplierZones = Input.IncludeBlockedSupplierZones
             }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
@@ -554,7 +563,7 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sc0wDrgQOAgEBVgtWrQECARFZM1k2AgEQWjNaNgIBD14LXvIBAgECYgV8JAMBxgZ9BYMBIAMBtwaEAQWMARADAagGjQEFkwEiAwGaBpQBBZ4CEAMByASfAgWlAiADAbkEpgIFiQMXAwHnAooDBZADMgMB2QKRAwWhAyUDAbECogMFsgMfAwGJArMDBbkDIAMB+gG6AwWLBBcCAWSMBAWSBCACAVWTBAWZBCsCAUeaBAWgBCYCATmhBAWsBCYCAR50C3RwAwH7BmoLamgDAe4GZQtlYQMB4QZ5C3lyAwHUBm8Lb44BAwHHBoABC4ABhQEDAbkGfWB9dAMBuAaFAQeLAScDAakGkAELkAFhAwGbBpUBB74BJwMB8gW/AQedAhIDAckEogILogKFAQMBuwSfAmCfAqcBAwG6BKkCC6kCiAEDAawEsAIJhwMUAwHoAo0DC40DhwEDAdoCmQMLmQNYAwHMApQDC5QDaAMBvwKeAwueA2UDAbICpQMLpQNbAwGkAqoDC6oDcgMBlwKvAwuvA10DAYoCtgMLtgOFAQMB/AGzA2CzA6EBAwH7Ab0DC70DeAMB7QHEAwmJBBQCAWWPBAuPBIUBAgFXjARgjASGAQIBVpYEC5YEWQIBSJ0EC50EWQIBOqQEC6QEcgIBLKkEC6kEcAIBH4gBDYgBgAEDAaoGnQENnQFbAwGNBpgBDZgBvAEDAYAGogENpwEgAwHzBcABCdABJgMBygXRAQnXATsDAbwF2AEJmgIbAwHNBJsCCZsCbwMBzAScAgmcApsBAwHKBLYCC8YCLgMB+APHAgvaAhwDAdQD2wILhgMQAwHpAskDC9wDHAMBywHdAwuIBBACAWbDAQ/DAYoBAwHlBcgBD8gBbAMB2AXNAQ/NAVwDAcsF1AEP1AGCAQMBvQXbAQ/bAYgBAwGvBeIBDZgCGAMBzgScAnicApgBAwHLBLkCEbkCdgMBmwS+AhG+AmoDAYoEwwIRwwJxAwH5A8oCEdICIAMB5wPXAhHXAoQBAwHWA8cCfMcCggEDAdUD3gIR3gKRAQMB6gLiAg/oAiMDAcID6wIPhAMaAwH7AswDEdQDIAMB3QHZAxHZA4sBAwHNAckDfMkDggEDAcwB4AMR4AOZAQIBZ+QDD+oDIwMBugHtAw+GBBoCAXfmAQ/3ASADAY8F+AEPlwIUAwHPBOUCFeUC3AEDAcMD7AIR9wIaAwGfA/gCEYMDLAMB/ALnAxXnA4ACAwG7Ae4DEfkDGgMBmQH6AxGFBCwCAXjpARXvASADAaAF9AEV9AGRAQMBkQXmAYAB5gGGAQMBkAX7ARX7AcABAwHQBP8BE4UCJwMB/wSIAhOVAh4DAd8E9AIX9AJzAwGxA+8CF+8CdwMBoAOAAxeAA5EBAwGOA/sCF/sCpAIDAf0C9gMX9gN3AwGqAfEDF/EDewMBmgGCBBeCBJEBAwGJAf0DF/0DlwICAXmCAhmCAugBAwGABYkCFZQCHgMB4ASRAhuRArMBAwHwBIwCG4wCkQEDAeEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sdE8DtwQOAgEBWQtZrQECARFcM1w2AgEQXTNdNgIBD2ELYfIBAgECZQWEASQDAcYGhQEFiwEgAwG3BowBBZQBEAMBqAaVAQWbASIDAZoGnAEFpgIQAwHIBKcCBa0CIAMBuQSuAgWRAxcDAecCkgMFmAMyAwHZApkDBakDJQMBsQKqAwW6Ax8DAYkCuwMFwQMgAwH6AcIDBZQEFwIBZJUEBZsEIAIBVZwEBaIEKwIBR6MEBakEJgIBOaoEBbUEJgIBHnwLfHADAYgHcgtyawMB+wZtC21oAwHuBmgLaGEDAeEGgQELgQFyAwHUBncLd44BAwHHBogBC4gBhQEDAbkGhQFghQF0AwG4Bo0BB5MBJwMBqQaYAQuYAWEDAZsGnQEHxgEnAwHyBccBB6UCEgMByQSqAguqAoUBAwG7BKcCYKcCpwEDAboEsQILsQKIAQMBrAS4AgmPAxQDAegClQMLlQOHAQMB2gKhAwuhA1gDAcwCnAMLnANoAwG/AqYDC6YDZQMBsgKtAwutA1sDAaQCsgMLsgNyAwGXArcDC7cDXQMBigK+Awu+A4UBAwH8AbsDYLsDoQEDAfsBxQMLxQN4AwHtAcwDCZIEFAIBZZgEC5gEhQECAVeVBGCVBIYBAgFWnwQLnwRZAgFIpgQLpgRZAgE6rQQLrQRyAgEssgQLsgRwAgEfkAENkAGAAQMBqgalAQ2lAVsDAY0GoAENoAG8AQMBgAaqAQ2vASADAfMFyAEJ2AEmAwHKBdkBCd8BOwMBvAXgAQmiAhsDAc0EowIJowJvAwHMBKQCCaQCmwEDAcoEvgILzgIuAwH4A88CC+ICHAMB1APjAguOAxADAekC0QML5QMcAwHLAeYDC5EEEAIBZssBD8sBigEDAeUF0AEP0AFsAwHYBdUBD9UBXAMBywXcAQ/cAYIBAwG9BeMBD+MBiAEDAa8F6gENoAIYAwHOBKQCeKQCmAEDAcsEwQIRwQJ2AwGbBMYCEcYCagMBigTLAhHLAnEDAfkD0gIR2gIgAwHnA98CEd8ChAEDAdYDzwJ8zwKCAQMB1QPmAhHmApEBAwHqAuoCD/ACIwMBwgPzAg+MAxoDAfsC1AMR3QMgAwHdAeIDEeIDiwEDAc0B0QN80QOCAQMBzAHpAxHpA5kBAgFn7QMP8wMjAwG6AfYDD48EGgIBd+4BD/8BIAMBjwWAAg+fAhQDAc8E7QIV7QLcAQMBwwP0AhH/AhoDAZ8DgAMRiwMsAwH8AvADFfADgAIDAbsB9wMRggQaAwGZAYMEEY4ELAIBePEBFfcBIAMBoAX8ARX8AZEBAwGRBe4BgAHuAYYBAwGQBYMCFYMCwAEDAdAEhwITjQInAwH/BJACE50CHgMB3wT8Ahf8AnMDAbED9wIX9wJ3AwGgA4gDF4gDkQEDAY4DgwMXgwOkAgMB/QL/Axf/A3cDAaoB+gMX+gN7AwGaAYsEF4sEkQEDAYkBhgQXhgSXAgIBeYoCGYoC6AEDAYAFkQIVnAIeAwHgBJkCG5kCswEDAfAElAIblAKRAQMB4QQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

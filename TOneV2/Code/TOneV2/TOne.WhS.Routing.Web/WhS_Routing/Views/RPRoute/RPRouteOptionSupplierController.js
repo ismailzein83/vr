@@ -2,16 +2,15 @@
 
     "use strict";
 
-    RPRouteOptionSupplierController.$inject = ["$scope", "WhS_Routing_RPRouteAPIService", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
+    RPRouteOptionSupplierController.$inject = ["$scope", "WhS_Routing_RPRouteAPIService", "WhS_Routing_RouteOptionRuleService", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function RPRouteOptionSupplierController($scope, WhS_Routing_RPRouteAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function RPRouteOptionSupplierController($scope, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var routingProductId;
         var saleZoneId;
         var supplierId;
         var routingDatabaseId;
         var currencyId;
-
 
         loadParameters();
         defineScope();
@@ -57,6 +56,37 @@
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
+            };
+
+            $scope.getMenuActions = function (dataItem) {
+                var menuActions = [];
+
+                if (dataItem.Entity.ExecutedRuleId) {
+                    menuActions.push({
+                        name: "Option Rule",
+                        clicked: openRouteOptionRuleEditor,
+                    })
+                }
+
+                function openRouteOptionRuleEditor(dataItem) {
+                    WhS_Routing_RouteOptionRuleService.editRouteOptionRule(dataItem.Entity.ExecutedRuleId);
+                }
+
+                return menuActions;
+            };
+
+            $scope.getRowStyle = function (dataItem) {
+
+                var rowStyle;
+
+                if (dataItem.Entity.IsBlocked) {
+                    rowStyle = { CssClass: "bg-danger" }
+                }
+                else if (dataItem.Entity.ExecutedRuleId) {
+                    rowStyle = { CssClass: "bg-success" };
+                }
+
+                return rowStyle
             };
 
             $scope.close = function () {

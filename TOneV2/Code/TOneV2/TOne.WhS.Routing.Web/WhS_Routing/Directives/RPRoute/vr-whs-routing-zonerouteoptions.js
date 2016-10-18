@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "UtilsService",
-function (WhS_Routing_RPRouteService, UtilsService) {
+app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "WhS_Routing_SupplierStatusEnum", "UtilsService",
+function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -34,22 +34,11 @@ function (WhS_Routing_RPRouteService, UtilsService) {
 
             defineAPI();
         }
-
-        function buildTitle(supplierName, percentage) {
-            var result = supplierName;
-            if (percentage) {
-                result = result + ' Percentage: ' + percentage + '%';
-            }
-            return result;
-        }
-
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
                 ctrl.routeOptions = [];
-
-
 
                 if (payload != undefined) {
                     routingDatabaseId = payload.RoutingDatabaseId;
@@ -58,18 +47,35 @@ function (WhS_Routing_RPRouteService, UtilsService) {
                     currencyId = payload.CurrencyId;
 
                     ctrl.routeOptions = [];
-                    if (payload.RouteOptions)
+                    if (payload.RouteOptions) {
                         for (var i = 0; i < payload.RouteOptions.length; i++) {
-
                             var currentItem = payload.RouteOptions[i];
                             currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Entity.Percentage);
+                            currentItem.Color = getRowStyle(currentItem);
                             ctrl.routeOptions.push(currentItem);
                         }
+                    }
                 }
             };
 
             if (ctrl.onReady && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
+        }
+
+        function buildTitle(supplierName, percentage) {
+            var result = supplierName;
+            if (percentage) {
+                result = result + ' Percentage: ' + percentage + '%';
+            }
+            return result;
+        }
+        function getRowStyle(currentItem) {
+
+            if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
+                return 'BurlyWood ';
+
+            if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
+                return 'Red';
         }
     }
 }]);

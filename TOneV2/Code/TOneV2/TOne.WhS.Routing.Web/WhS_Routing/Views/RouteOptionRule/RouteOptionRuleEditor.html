@@ -82,7 +82,7 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Settings'" ng-show="scopeModel.showSettingsSection">
+                <vr-tab header="'Rule Settings'" ng-show="scopeModel.showSettingsSection">
                     <vr-row>
                         <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingRouteOptionRuleSettings">
                             <vr-directivewrapper directive="scopeModel.selectedrouteOptionRuleSettingsTemplate.Editor" on-ready="scopeModel.onRouteOptionRuleSettingsDirectiveReady" />
@@ -90,7 +90,7 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Scheduler'">
+                <vr-tab header="'Time Settings'">
                     <vr-row>
                         <vr-columns width="1/2row">
                             <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="date" label="Begin Effective Date" isrequired></vr-datetimepicker>

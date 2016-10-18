@@ -24,9 +24,9 @@ namespace TOne.WhS.Routing.Entities
 
         public long SaleZoneId { get; set; }
 
-        public bool IsSupplierBlocked { get; set; }
-
         public SupplierStatus SupplierStatus { get; set; }
+
+        public int SupplierServiceWeight { get; set; }
 
         long? IRouteOptionOrderTarget.SaleZoneId
         {
@@ -37,8 +37,5 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return null; }
         }
-
-
-        public int SupplierServiceWeight { get; set; }
     }
 }
