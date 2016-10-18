@@ -34,7 +34,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             {
                 BPBusinessRuleDefinitionId = GetReaderValue<Guid>(reader,"ID"),
                 Settings = Serializer.Deserialize<BPBusinessRuleSettings>(reader["Settings"] as string),
-                BPDefintionId = (int)reader["BPDefintionId"],
+                BPDefintionId = GetReaderValue<Guid>(reader,"BPDefintionId"),
                 Name = reader["Name"] as string
             };
 

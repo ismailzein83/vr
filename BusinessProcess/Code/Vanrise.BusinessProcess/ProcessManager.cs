@@ -12,13 +12,13 @@ namespace Vanrise.BusinessProcess
     {
         #region BP Transaction Methods
 
-        public T GetDefinitionObjectState<T>(int definitionId, string objectKey)
+        public T GetDefinitionObjectState<T>(Guid definitionId, string objectKey)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             return dataManager.GetDefinitionObjectState<T>(definitionId, objectKey);
         }
 
-        public void SaveDefinitionObjectState(int definitionId, string objectKey, object objectValue)
+        public void SaveDefinitionObjectState(Guid definitionId, string objectKey, object objectValue)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             if (dataManager.UpdateDefinitionObjectState(definitionId, objectKey, objectValue) <= 0)

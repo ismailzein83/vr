@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -12,7 +13,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     {
         [HttpGet]
         [Route("GetBusinessRuleDefintionsByBPDefinitionID")]
-        public List<BPBusinessRuleDefinitionDetail> GetBusinessRuleDefintionsByBPDefinitionID(int bpDefinitionId)
+        public List<BPBusinessRuleDefinitionDetail> GetBusinessRuleDefintionsByBPDefinitionID(Guid bpDefinitionId)
         {
             BPBusinessRuleDefinitionManager manager = new BPBusinessRuleDefinitionManager();
             return manager.GetBusinessRuleDefintionsByBPDefinitionID(bpDefinitionId);

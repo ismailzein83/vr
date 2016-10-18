@@ -11,7 +11,7 @@ namespace Vanrise.BusinessProcess.Web.Models
         public long ProcessInstanceID { get; set; }
         public string Title { get; set; }
         public long? ParentProcessID { get; set; }
-        public int DefinitionID { get; set; }
+        public Guid DefinitionID { get; set; }
         public Guid? WorkflowInstanceID { get; set; }
         public BPInstanceStatus Status { get; set; }
         public string StatusDescription { get; set; }

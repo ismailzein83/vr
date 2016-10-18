@@ -105,7 +105,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ProcessInstanceID = (long)reader["ID"],
                 Title = reader["Title"] as string,
                 ParentProcessID = GetReaderValue<long?>(reader, "ParentID"),
-                DefinitionID = (int)reader["DefinitionID"],
+                DefinitionID = GetReaderValue<Guid>(reader,"DefinitionID"),
                 WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
                 LastMessage = reader["LastMessage"] as string,

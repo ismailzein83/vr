@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess.Business
     public class BPBusinessRuleDefinitionManager
     {
         #region public methods
-        public List<BPBusinessRuleDefinition> GetBPBusinessRuleDefinitions(string key, int bpDefinitionId)
+        public List<BPBusinessRuleDefinition> GetBPBusinessRuleDefinitions(string key, Guid bpDefinitionId)
         {
             List<BPBusinessRuleDefinition> result = GetCachedBPBusinessRules();
             if (result == null || result.Count == 0)
@@ -19,7 +19,7 @@ namespace Vanrise.BusinessProcess.Business
             return result.FindAll(itm => itm.BPDefintionId == bpDefinitionId && itm.Name == key);
         }
 
-        public List<BPBusinessRuleDefinitionDetail> GetBusinessRuleDefintionsByBPDefinitionID(int bpDefinitionId)
+        public List<BPBusinessRuleDefinitionDetail> GetBusinessRuleDefintionsByBPDefinitionID(Guid bpDefinitionId)
         {
             List<BPBusinessRuleDefinition> result = GetCachedBPBusinessRules();
             if (result == null || result.Count == 0)

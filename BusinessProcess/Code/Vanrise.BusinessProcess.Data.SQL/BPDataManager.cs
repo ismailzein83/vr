@@ -11,7 +11,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
         }
 
-        public T GetDefinitionObjectState<T>(int definitionId, string objectKey)
+        public T GetDefinitionObjectState<T>(Guid definitionId, string objectKey)
         {
             if (objectKey == null)
                 objectKey = String.Empty;
@@ -19,14 +19,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return objectVal != null ? Serializer.Deserialize<T>(objectVal) : Activator.CreateInstance<T>();
         }
 
-        public int InsertDefinitionObjectState(int definitionId, string objectKey, object objectValue)
+        public int InsertDefinitionObjectState(Guid definitionId, string objectKey, object objectValue)
         {
             if (objectKey == null)
                 objectKey = String.Empty;
             return ExecuteNonQuerySP("bp.sp_BPDefinitionState_Insert", definitionId, objectKey, objectKey != null ? Serializer.Serialize(objectValue) : null);
         }
 
-        public int UpdateDefinitionObjectState(int definitionId, string objectKey, object objectValue)
+        public int UpdateDefinitionObjectState(Guid definitionId, string objectKey, object objectValue)
         {
             if (objectKey == null)
                 objectKey = String.Empty;
