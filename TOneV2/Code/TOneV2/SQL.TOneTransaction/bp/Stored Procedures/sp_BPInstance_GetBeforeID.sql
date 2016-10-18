@@ -6,9 +6,9 @@
 	@EntityID varchar(50)
 AS
 BEGIN	
-	DECLARE @BPDefinitionIDsTable TABLE (BPDefinitionId int)
+	DECLARE @BPDefinitionIDsTable TABLE (BPDefinitionId uniqueidentifier)
             INSERT INTO @BPDefinitionIDsTable (BPDefinitionId)
-            select Convert(int, ParsedString) from [bp].[ParseStringList](@DefinitionsId)
+            select Convert(uniqueidentifier, ParsedString) from [bp].[ParseStringList](@DefinitionsId)
             
 	SELECT TOP(@NbOfRows) [ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],[LastMessage]
 			,EntityID,[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],[timestamp]

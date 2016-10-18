@@ -6,7 +6,7 @@
 CREATE PROCEDURE [bp].[sp_BPTask_Insert]
 	@Title nvarchar(1000),
 	@ProcessInstanceId bigint,
-	@TypeId int,
+	@TypeId uniqueidentifier,
 	@TaskData nvarchar(max),
 	@Status int,
 	@AssignedUsers varchar(max),

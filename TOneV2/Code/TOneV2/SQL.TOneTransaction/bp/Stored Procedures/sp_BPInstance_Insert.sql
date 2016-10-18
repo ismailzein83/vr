@@ -6,7 +6,7 @@
 CREATE PROCEDURE [bp].[sp_BPInstance_Insert]
 	@Title nvarchar(1000),
 	@ParentID bigint,
-	@DefinitionID int,
+	@DefinitionID uniqueidentifier,
 	@InputArguments nvarchar(max),
 	@ExecutionStatus int,
 	@InitiatorUserId int,

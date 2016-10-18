@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [bp].[sp_BPInstance_GetPendingsByDefinitionId]
-	@DefinitionID int,
+	@DefinitionID uniqueidentifier,
 	@Statuses varchar(max),
 	@NbOrRows int,
 	@ServiceInstanceID uniqueidentifier

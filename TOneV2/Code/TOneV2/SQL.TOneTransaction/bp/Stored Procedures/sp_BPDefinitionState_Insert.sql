@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [bp].[sp_BPDefinitionState_Insert]
-	@DefinitionID int,
+	@DefinitionID uniqueidentifier,
 	@ObjectKey varchar(255),
 	@ObjectValue nvarchar(max)
 AS
