@@ -33,14 +33,14 @@ app.directive('vrWhsBeSupplierpricelistSettingsEditor', ['UtilsService', 'VRUIUt
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined)
                     {
-                        ctrl.retroActiveMinDate = payload.data.RetroActiveMinDate;
+                        ctrl.retroActiveMinDateOffset = payload.data.RetroActiveMinDate;
                     }
                 }
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SupplierPriceListSettingsData, TOne.WhS.BusinessEntity.Entities",
-                        RetroActiveMinDate: ctrl.retroActiveMinDate
+                        RetroActiveMinDate: ctrl.retroActiveMinDateOffset
                     };
                 }
 

@@ -30,16 +30,17 @@ namespace TOne.WhS.SupplierPriceList.Business
             SupplierPriceListSettingsData saleAreaSettingsData = settingManager.GetSetting<SupplierPriceListSettingsData>(TOne.WhS.SupplierPriceList.Business.Constants.SupplierPriceListSettings);
             if (saleAreaSettingsData != null)
             {
-                DateTime retroActiveMinDate = saleAreaSettingsData.RetroActiveMinDate;
+                int retroActiveMinDateOffset = saleAreaSettingsData.RetroActiveMinDate;
+                DateTime minimumRetroActiveDate =  DateTime.Today.AddDays(-retroActiveMinDateOffset).Date;
                 foreach (var importedCode in zone.ImportedCodes)
                 {
-                   if(importedCode.BED < retroActiveMinDate)
+                    if (importedCode.BED < minimumRetroActiveDate)
                        return false;
                 }
 
                 foreach (var importedNormalRate in zone.ImportedNormalRates)
                 {
-                    if (importedNormalRate.BED < retroActiveMinDate)
+                    if (importedNormalRate.BED < minimumRetroActiveDate)
                         return false;
                 }
 
@@ -49,7 +50,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     {
                         foreach (var otherRate in importedOtherRate.Value)
                         {
-                            if (otherRate.BED < retroActiveMinDate)
+                            if (otherRate.BED < minimumRetroActiveDate)
                                 return false;
                         }
                     }
@@ -61,7 +62,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     {
                         foreach (var serviceGroup in importedZoneServiceGroup.Value)
                         {
-                            if (serviceGroup.BED < retroActiveMinDate)
+                            if (serviceGroup.BED < minimumRetroActiveDate)
                                 return false;
                         }
                     }

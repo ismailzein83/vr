@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierPriceListSettingsData : SettingData
     {
-        public DateTime RetroActiveMinDate { get; set; }
+        public int RetroActiveMinDate { get; set; }
 
     }
 }
