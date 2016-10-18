@@ -78,6 +78,8 @@ namespace TOne.WhS.DBSync.Entities
         [Description("Rule")]
         Rule,
 
+
+        //Keep this enum at the end
         [Description("SupplierPriceListTemplate")]
         SupplierPriceListTemplate
 

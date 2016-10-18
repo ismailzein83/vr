@@ -238,108 +238,108 @@ namespace TOne.WhS.DBSync.Business
 
         private void CallMigrator(MigrationContext context, DBTable table, MigrationInfoContext migrationInfoContext)
         {
-            IMigrator imgrator = null;
+            IMigrator migrator = null;
             switch ((DBTableName)System.Enum.Parse(typeof(DBTableName), table.Name))
             {
                 case DBTableName.Currency:
-                    imgrator = new CurrencyMigrator(context);
+                    migrator = new CurrencyMigrator(context);
                     break;
 
                 case DBTableName.CurrencyExchangeRate:
-                    imgrator = new CurrencyExchangeRateMigrator(context);
+                    migrator = new CurrencyExchangeRateMigrator(context);
                     break;
 
                 case DBTableName.Country:
-                    imgrator = new CountryMigrator(context);
+                    migrator = new CountryMigrator(context);
                     break;
 
                 case DBTableName.CodeGroup:
-                    imgrator = new CodeGroupMigrator(context);
+                    migrator = new CodeGroupMigrator(context);
                     break;
 
                 case DBTableName.CarrierProfile:
-                    imgrator = new CarrierProfileMigrator(context);
+                    migrator = new CarrierProfileMigrator(context);
                     break;
 
                 case DBTableName.CarrierAccount:
-                    imgrator = new CarrierAccountMigrator(context);
+                    migrator = new CarrierAccountMigrator(context);
                     break;
 
                 case DBTableName.Switch:
-                    imgrator = new SwitchMigrator(context);
+                    migrator = new SwitchMigrator(context);
                     break;
 
                 case DBTableName.SaleZone:
-                    imgrator = new SaleZoneMigrator(context);
+                    migrator = new SaleZoneMigrator(context);
                     break;
 
                 case DBTableName.SupplierZone:
-                    imgrator = new SupplierZoneMigrator(context);
+                    migrator = new SupplierZoneMigrator(context);
                     break;
 
                 case DBTableName.SaleCode:
-                    imgrator = new SaleCodeMigrator(context);
+                    migrator = new SaleCodeMigrator(context);
                     break;
 
                 case DBTableName.SupplierCode:
-                    imgrator = new SupplierCodeMigrator(context);
+                    migrator = new SupplierCodeMigrator(context);
                     break;
 
                 case DBTableName.SalePriceList:
-                    imgrator = new SalePriceListMigrator(context);
+                    migrator = new SalePriceListMigrator(context);
                     break;
 
                 case DBTableName.SupplierPriceList:
-                    imgrator = new SupplierPriceListMigrator(context);
+                    migrator = new SupplierPriceListMigrator(context);
                     break;
 
                 case DBTableName.SaleRate:
-                    imgrator = new SaleRateMigrator(context);
+                    migrator = new SaleRateMigrator(context);
                     break;
 
                 case DBTableName.SupplierRate:
-                    imgrator = new SupplierRateMigrator(context);
+                    migrator = new SupplierRateMigrator(context);
                     break;
 
                 case DBTableName.CustomerZone:
-                    imgrator = new CustomerZoneMigrator(context);
+                    migrator = new CustomerZoneMigrator(context);
                     break;
 
                 case DBTableName.SwitchConnectivity:
-                    imgrator = new SwitchConnectivityMigrator(context);
+                    migrator = new SwitchConnectivityMigrator(context);
                     break;
                 case DBTableName.Rule:
-                    imgrator = new RuleMigrator(context);
+                    migrator = new RuleMigrator(context);
                     break;
                 case DBTableName.ZoneServiceConfig:
-                    imgrator = new FlaggedServiceMigrator(context);
+                    migrator = new FlaggedServiceMigrator(context);
                     break;
                 case DBTableName.SupplierZoneService:
-                    imgrator = new SupplierZoneServicesMigrator(context);
+                    migrator = new SupplierZoneServicesMigrator(context);
                     break;
 
                 case DBTableName.SaleEntityService:
-                    imgrator = new SaleZoneServicesMigrator(context);
+                    migrator = new SaleZoneServicesMigrator(context);
                     break;
-
                 case DBTableName.VRTimeZone:
-                    imgrator = new VRTimeZoneMigrator(context);
+                    migrator = new VRTimeZoneMigrator(context);
                     break;
-                case DBTableName.SupplierPriceListTemplate:
-                    imgrator = new SupplierPriceListTemplateMigrator(context);
+                //Default Case for Table names that do not require migrator
+                default:
+                    migrator = null;
                     break;
             }
 
-            if (imgrator != null)
+            if (migrator != null)
             {
                 if (table.MigrationRequested)
                 {
-                    imgrator.Migrate(migrationInfoContext);
-                    imgrator.FillTableInfo(context.UseTempTables);
+                    migrator.Migrate(migrationInfoContext);
+                    migrator.FillTableInfo(context.UseTempTables);
                 }
                 else
                 {
-                    imgrator.FillTableInfo(false);
+                    migrator.FillTableInfo(false);
                 }
             }
         }

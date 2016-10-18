@@ -40,7 +40,6 @@ namespace TOne.WhS.DBSync.Business
         public override IEnumerable<SourceRule> GetSourceItems()
         {
             List<SourceRule> routeRules = new List<SourceRule>();
-            routeRules.AddRange(GetDefaultRules());
 
             RuleMigrationContext ruleContext = new RuleMigrationContext
             {
@@ -53,7 +52,6 @@ namespace TOne.WhS.DBSync.Business
 
                 },
                 CurrencyId = _currencySettingData.CurrencyId
-
             };
 
             foreach (RuleEntitiesEnum ruleEntitiesEnum in Enum.GetValues(typeof(RuleEntitiesEnum)))
@@ -72,9 +70,12 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.SaleMarketPrice:
                         _routeRuleBaseMigrator = new MarketPriceRuleMigrator(ruleContext);
                         break;
-                    //case RuleEntitiesEnum.RouteBlock:
-                    //    _routeRuleBaseMigrator = new RouteBlockRuleMigrator(ruleContext);
-                    //    break;
+                    case RuleEntitiesEnum.RouteBlock:
+                        _routeRuleBaseMigrator = new RouteBlockRuleMigrator(ruleContext);
+                        break;
+                    case RuleEntitiesEnum.Tariff:
+                        _routeRuleBaseMigrator = new TariffRuleMigrator(ruleContext);
+                        break;
                     default:
                         _routeRuleBaseMigrator = null;
                         break;
@@ -87,98 +88,6 @@ namespace TOne.WhS.DBSync.Business
             }
 
             return routeRules;
-        }
-        IEnumerable<SourceRule> GetDefaultRules()
-        {
-            List<SourceRule> defaultRules = new List<SourceRule>();
-
-            RouteRuleManager manager = new RouteRuleManager();
-
-            RouteRule rule = new RouteRule
-            {
-                Criteria = new RouteRuleCriteria
-                {
-                },
-                Settings = new RegularRouteRule
-                {
-                    OptionOrderSettings = new List<RouteOptionOrderSettings>
-                    {
-                        new OptionOrderByRate()
-                    },
-                    OptionFilters = new List<RouteOptionFilterSettings> 
-                    {
-                        new ServiceOptionFilter(),
-                        new RateOptionFilter
-                        {
-                    RateOption = RateOption.MaximumLoss,
-                    RateOptionType = RateOptionType.Fixed,
-                    RateOptionValue = 0
-                    }
-                    }
-                },
-                BeginEffectiveTime = s_defaultRuleBED,
-                Description = "Default Routing Rule",
-                Name = "Default Routing Rule"
-            };
-
-            defaultRules.Add(GetSourceRule(manager.GetRuleTypeId(), Serializer.Serialize(rule)));
-
-            TariffRuleManager tariffManager = new TariffRuleManager();
-
-            TariffRule saleTariffRule = new TariffRule
-            {
-                BeginEffectiveTime = s_defaultRuleBED,
-                EndEffectiveTime = null,
-                Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
-                {
-                    CallFee = 0.5M,
-                    FirstPeriod = 60,
-                    FirstPeriodRate = 0.5M,
-                    FractionUnit = 60,
-                    PricingUnit = 60,
-                    CurrencyId = _currencySettingData.CurrencyId
-                },
-                DefinitionId = new Guid("F24CB510-0B65-48C8-A723-1F6EBFEEA9E8"),
-                Description = "Default Sale Tariff Rule"
-            };
-
-
-            defaultRules.Add(GetSourceRule(tariffManager.GetRuleTypeId(), Serializer.Serialize(saleTariffRule)));
-
-            TariffRule supplierTariffRule = new TariffRule
-            {
-                BeginEffectiveTime = s_defaultRuleBED,
-                EndEffectiveTime = null,
-                Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
-                {
-                    CallFee = 0.5M,
-                    FirstPeriod = 60,
-                    FirstPeriodRate = 0.5M,
-                    FractionUnit = 60,
-                    PricingUnit = 60,
-                    CurrencyId = _currencySettingData.CurrencyId
-                },
-                DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
-                Description = "Default Supplier Tariff Rule"
-            };
-
-            defaultRules.Add(GetSourceRule(tariffManager.GetRuleTypeId(), Serializer.Serialize(supplierTariffRule)));
-
-            return defaultRules;
-        }
-        SourceRule GetSourceRule(int ruleTypeId, string ruleSerialized)
-        {
-            SourceRule defaultRouteRule = new SourceRule
-            {
-                Rule = new Rule
-                {
-                    BED = s_defaultRuleBED,
-                    EED = null,
-                    TypeId = ruleTypeId,
-                    RuleDetails = ruleSerialized
-                }
-            };
-            return defaultRouteRule;
         }
         public override Rule BuildItemFromSource(SourceRule sourceItem)
         {

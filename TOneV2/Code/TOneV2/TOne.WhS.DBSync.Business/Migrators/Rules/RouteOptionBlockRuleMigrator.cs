@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Business
         public RouteOptionBlockRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
+          
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -115,7 +116,7 @@ namespace TOne.WhS.DBSync.Business
                 BeginEffectiveTime = sourceRule.BED,
                 EndEffectiveTime = sourceRule.EED,
                 Description = sourceRule.Reason,
-                Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                Name = string.Format("Migrated Route Option Block Rule {0}", Context.Counter++),
                 Settings = new BlockRouteOptionRule
                 {
                 },

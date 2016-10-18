@@ -10,6 +10,7 @@ using TOne.WhS.DBSync.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Business.RouteRules.Filters;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
+using TOne.WhS.Routing.Business.RouteRules.Orders;
 using TOne.WhS.Routing.Business.RouteRules.Percentages;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
@@ -30,6 +31,7 @@ namespace TOne.WhS.DBSync.Business
         public RouteOverrideRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
+            
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -46,10 +48,53 @@ namespace TOne.WhS.DBSync.Business
             SourceRouteOverrideRuleDataManager dataManager = new SourceRouteOverrideRuleDataManager(Context.MigrationContext.ConnectionString, true);
             var overrideRules = dataManager.GetRouteOverrideRules();
 
+            routeRules.Add(GetDefaultRule());
             routeRules.AddRange(GetRulesWithCode(overrideRules.Where(o => !o.SaleZoneId.HasValue)));
             routeRules.AddRange(GetRulesWithZone(overrideRules.Where(o => o.SaleZoneId.HasValue)));
 
             return routeRules;
+        }
+
+        SourceRule GetDefaultRule()
+        {
+            RouteRule rule = new RouteRule
+            {
+                Criteria = new RouteRuleCriteria
+                {
+                },
+                Settings = new RegularRouteRule
+                {
+                    OptionOrderSettings = new List<RouteOptionOrderSettings>
+                    {
+                        new OptionOrderByRate()
+                    },
+                    OptionFilters = new List<RouteOptionFilterSettings> 
+                    {
+                        new ServiceOptionFilter(),
+                        new RateOptionFilter
+                        {
+                    RateOption = RateOption.MaximumLoss,
+                    RateOptionType = RateOptionType.Fixed,
+                    RateOptionValue = 0
+                    }
+                    }
+                },
+                BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
+                Description = "Default Routing Rule",
+                Name = "Default Routing Rule"
+            };
+
+            SourceRule defaultRouteRule = new SourceRule
+            {
+                Rule = new Rule
+                {
+                    BED = RuleMigrator.s_defaultRuleBED,
+                    EED = null,
+                    TypeId = _routeRuleTypeId,
+                    RuleDetails = Serializer.Serialize(rule)
+                }
+            };
+            return defaultRouteRule;
         }
         IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
@@ -143,7 +188,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = sourceRule.BED,
                     EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                    Name = string.Format("Migrated Override Rule {0}", Context.Counter++),
                     Criteria = criteria,
                     Settings = GetRuleSettings(sourceRule)
                 };
@@ -230,7 +275,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = sourceRule.BED,
                     EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                    Name = string.Format("Migrated Override Rule {0}", Context.Counter++),
                     Criteria = criteria,
                     Settings = GetRuleSettings(sourceRule)
                 };

@@ -26,7 +26,6 @@ namespace TOne.WhS.DBSync.Business
         {
             get { return "Market Price"; }
         }
-
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly Dictionary<string, ZoneServiceConfig> _allSaleEntityServiceFlags;
@@ -35,6 +34,7 @@ namespace TOne.WhS.DBSync.Business
         public MarketPriceRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
+           
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -117,7 +117,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
                     EndEffectiveTime = null,
                     Description = "Market Price Rule",
-                    Name = "Market Price Rule",
+                    Name = string.Format("Migrated Market Price Rule {0}", Context.Counter++),
                     Settings = new MarketPriceRouteOptionRule
                     {
                         MarketPrices = GetMarketPrices(rules),

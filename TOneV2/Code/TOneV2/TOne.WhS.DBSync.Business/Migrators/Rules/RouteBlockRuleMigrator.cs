@@ -133,7 +133,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = sourceRule.BED,
                     EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Route Block Rule" : sourceRule.Reason,
+                    Name = string.Format("Migrated Route Block Rule {0}", Context.Counter++),
                     Criteria = criteria,
                     Settings = new BlockRouteRule()
                 };
@@ -214,7 +214,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = sourceRule.BED,
                     EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
-                    Name = string.IsNullOrEmpty(sourceRule.Reason) ? "Migrated Rule" : sourceRule.Reason,
+                    Name = string.Format("Migrated Route Block Rule {0}", Context.Counter++),
                     Criteria = criteria,
                     Settings = new BlockRouteRule()
                 };

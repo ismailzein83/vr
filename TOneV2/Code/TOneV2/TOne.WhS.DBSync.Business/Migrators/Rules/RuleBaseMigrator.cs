@@ -26,6 +26,7 @@ namespace TOne.WhS.DBSync.Business
         {
             TotalRowsFailed = 0;
             Context = context;
+            Context.Counter = 0;
         }
     }
 }

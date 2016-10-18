@@ -34,7 +34,6 @@ namespace TOne.WhS.DBSync.Business.Migrators
         public CommissionRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
-
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -105,6 +104,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             ExtraChargeRule extraChargeRule = new ExtraChargeRule
             {
+
                 Settings = new PricingRuleExtraChargeSettings
                 {
                     Actions = GetActions(defaultCommission)
