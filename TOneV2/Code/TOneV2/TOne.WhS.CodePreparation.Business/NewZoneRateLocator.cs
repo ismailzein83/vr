@@ -132,7 +132,7 @@ namespace TOne.WhS.CodePreparation.Business
                 foreach (ExistingRate item in existingRates)
                 {
                     int rateCurrencyId = saleRateManager.GetCurrencyId(item.RateEntity);
-                    decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(item.RateEntity.NormalRate, rateCurrencyId, targetCurrencyId, DateTime.Now);
+                    decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(item.RateEntity.Rate, rateCurrencyId, targetCurrencyId, DateTime.Now);
                     convertedRates.Add(convertedRate);
                 }
 

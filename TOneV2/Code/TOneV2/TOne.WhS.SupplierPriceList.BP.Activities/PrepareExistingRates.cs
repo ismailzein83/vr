@@ -52,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             ExistingRate existingRate = new ExistingRate()
             {
-                ConvertedRate = currencyExchangeRateManager.ConvertValueToCurrency(rateEntity.NormalRate, rateCurrencyId, currencyId, DateTime.Now),
+                ConvertedRate = currencyExchangeRateManager.ConvertValueToCurrency(rateEntity.Rate, rateCurrencyId, currencyId, DateTime.Now),
                 RateEntity = rateEntity,
                 ParentZone = existingZone
             };

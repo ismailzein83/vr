@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface IRate
     {
-        Decimal NormalRate { get; set; }
+        Decimal Rate { get; set; }
     }
 }

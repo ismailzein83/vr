@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int? RateTypeId { get; set; }
 
-        public decimal NormalRate { get; set; }
+        public decimal Rate { get; set; }
 
         public DateTime BED { get; set; }
 

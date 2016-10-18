@@ -81,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             SupplierRate supplierRate = new SupplierRate
             {
-                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
+                Rate = GetReaderValue<decimal>(reader, "Rate"),
                 RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),
                 SupplierRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],

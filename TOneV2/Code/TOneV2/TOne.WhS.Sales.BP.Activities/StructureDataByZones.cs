@@ -209,7 +209,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     zoneRateGroup.NormalRate = new ZoneRate();
 
                     decimal convertedNormalRate =
-                        currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate.NormalRate, saleRateManager.GetCurrencyId(currentRate.Rate), targetCurrencyId, effectiveOn);
+                        currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate.Rate, saleRateManager.GetCurrencyId(currentRate.Rate), targetCurrencyId, effectiveOn);
                     
                     zoneRateGroup.NormalRate.Source = currentRate.Source;
                     zoneRateGroup.NormalRate.Rate = convertedNormalRate;
@@ -229,7 +229,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             currentRate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
 
                             decimal convertedOtherRate =
-                                currencyExchangeRateManager.ConvertValueToCurrency(kvp.Value.NormalRate, saleRateManager.GetCurrencyId(kvp.Value), targetCurrencyId, effectiveOn);
+                                currencyExchangeRateManager.ConvertValueToCurrency(kvp.Value.Rate, saleRateManager.GetCurrencyId(kvp.Value), targetCurrencyId, effectiveOn);
 
                             otherRate.Source = otherRateSource;
                             otherRate.RateTypeId = kvp.Key;

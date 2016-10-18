@@ -193,7 +193,7 @@ namespace TOne.WhS.Sales.Business
 
 		private decimal GetConvertedRate(SaleRate saleRate)
 		{
-			return _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn);
+			return _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn);
 		}
 
 		#endregion

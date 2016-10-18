@@ -129,7 +129,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             saleRate.PriceListId = (int)reader["PriceListID"];
 
             saleRate.RateTypeId = GetReaderValue<int?>(reader, "RateTypeID");
-            saleRate.NormalRate = (decimal)reader["Rate"];
+            saleRate.Rate = (decimal)reader["Rate"];
 
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");

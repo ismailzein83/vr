@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int? CurrencyId { get; set; }
 
-        public decimal NormalRate { get; set; }
+        public decimal Rate { get; set; }
 
         public int? RateTypeId { get; set; }
 

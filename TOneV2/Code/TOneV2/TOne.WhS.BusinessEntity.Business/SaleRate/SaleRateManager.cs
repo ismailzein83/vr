@@ -260,9 +260,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 Decimal convertedRate = 0;
 
                 if (targetCurrencyId.HasValue)
-                    convertedRate = _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, currencyId, targetCurrencyId.Value, rateConversionEffectiveDate.Value);
+                    convertedRate = _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, currencyId, targetCurrencyId.Value, rateConversionEffectiveDate.Value);
                 else
-                    convertedRate = saleRate.NormalRate;
+                    convertedRate = saleRate.Rate;
                 
                 return convertedRate;
             }

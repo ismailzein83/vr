@@ -19,14 +19,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "NormalRate", "BED", "EED", "Change", "RateTypeID", "SourceID" };
+		static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "Rate", "BED", "EED", "Change", "RateTypeID", "SourceID" };
 
         public void ApplySupplierRatesToTemp(List<SupplierRate> supplierRates, long startingId)
         {
             var stream = base.InitializeStreamForBulkInsert();
             foreach (var item in supplierRates)
             {
-                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", startingId++, item.PriceListId, item.ZoneId, item.NormalRate, GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", (int)item.RateChange, item.RateTypeId, item.SourceId);
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", startingId++, item.PriceListId, item.ZoneId, item.Rate, GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", (int)item.RateChange, item.RateTypeId, item.SourceId);
             }
             stream.Close();
             StreamBulkInsertInfo streamBulkInsert = new StreamBulkInsertInfo
@@ -77,7 +77,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierRate> GetSupplierRates(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[NormalRate], [RateTypeID],[BED], [EED], [Change], [SourceID] FROM "
+            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate], [RateTypeID],[BED], [EED], [Change], [SourceID] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -88,7 +88,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SupplierRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
-                NormalRate = GetReaderValue<decimal>(reader, "NormalRate"),
+                Rate = GetReaderValue<decimal>(reader, "Rate"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),

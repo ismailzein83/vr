@@ -65,7 +65,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 throw new NullReferenceException(String.Format("A rate exists for a missing or not effective zone (Id: {0})", saleRate.ZoneId));
 
             decimal convertedRate =
-                currencyExchangeRateManager.ConvertValueToCurrency(saleRate.NormalRate, saleRateManager.GetCurrencyId(saleRate), currencyId, effectiveOn);
+                currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, saleRateManager.GetCurrencyId(saleRate), currencyId, effectiveOn);
 
             return new ExistingRate()
             {

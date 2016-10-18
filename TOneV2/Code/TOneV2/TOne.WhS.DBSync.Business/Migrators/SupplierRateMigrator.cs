@@ -74,7 +74,7 @@ namespace TOne.WhS.DBSync.Business
                 {
                     BED = sourceItem.BeginEffectiveDate.Value,
                     EED = sourceItem.EndEffectiveDate,
-                    NormalRate = sourceItem.Rate.Value,
+                    Rate = sourceItem.Rate.Value,
                     PriceListId = supplierPriceList.PriceListId,
                     ZoneId = supplierZone.SupplierZoneId,
                     RateTypeId = rateTypeId,
@@ -113,7 +113,7 @@ namespace TOne.WhS.DBSync.Business
             {
                 BED = sourceItem.BeginEffectiveDate.Value,
                 EED = sourceItem.EndEffectiveDate,
-                NormalRate = rate.Value,
+                Rate = rate.Value,
                 CurrencyId = currencyId,
                 PriceListId = priceListId,
                 ZoneId = supplierZoneId,

@@ -19,7 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             ImportedRate importedRate = context.Target as ImportedRate;
 
-            return !(importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(item => item.RateEntity.NormalRate < importedRate.Rate));
+            return !(importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(item => item.RateEntity.Rate < importedRate.Rate));
         }
         public override string GetMessage(IRuleTarget target)
         {

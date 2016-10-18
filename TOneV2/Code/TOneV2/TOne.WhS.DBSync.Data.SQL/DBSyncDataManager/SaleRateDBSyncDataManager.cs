@@ -25,7 +25,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             var stream = base.InitializeStreamForBulkInsert();
             foreach (var item in saleRates)
             {
-                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", startingId++, item.PriceListId, item.ZoneId, item.NormalRate, GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", (int)item.RateChange, item.RateTypeId, item.SourceId);
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", startingId++, item.PriceListId, item.ZoneId, item.Rate, GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", (int)item.RateChange, item.RateTypeId, item.SourceId);
             }
             stream.Close();
             StreamBulkInsertInfo streamBulkInsert = new StreamBulkInsertInfo
@@ -85,7 +85,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 SaleRateId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = (int)reader["PriceListID"],
-                NormalRate = (decimal)reader["Rate"],
+                Rate = (decimal)reader["Rate"],
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 RateChange = GetReaderValue<RateChangeType>(reader, "Change"),

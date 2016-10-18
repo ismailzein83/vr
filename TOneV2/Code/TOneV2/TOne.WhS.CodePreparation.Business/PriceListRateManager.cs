@@ -85,7 +85,7 @@ namespace TOne.WhS.CodePreparation.Business
                     RateToAdd rateToAdd = new RateToAdd()
                     {
                         PriceListToAdd = priceListToAdd,
-                        Rate = lastExistingRate.RateEntity.NormalRate,
+                        Rate = lastExistingRate.RateEntity.Rate,
                         ZoneName = zoneToProcess.ZoneName,
                     };
 
@@ -350,7 +350,7 @@ namespace TOne.WhS.CodePreparation.Business
                 OwnerId = owner.OwnerId,
                 BED = lastElement.BED,
                 EED = lastElement.EED,
-                Rate = lastElement.RateEntity.NormalRate,
+                Rate = lastElement.RateEntity.Rate,
                 RateTypeId = lastElement.RateEntity.RateTypeId,
                 HasChanged = hasChanged
             };

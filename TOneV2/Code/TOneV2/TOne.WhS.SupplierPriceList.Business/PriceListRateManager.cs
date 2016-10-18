@@ -328,7 +328,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 BED = firstElementInTheList.BED,
                 EED = lastElementInTheList.OriginalEED,
-                Rate = firstElementInTheList.RateEntity.NormalRate,
+                Rate = firstElementInTheList.RateEntity.Rate,
                 RateTypeId = firstElementInTheList.RateEntity.RateTypeId
             };
         }
@@ -479,7 +479,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         private bool SameRates(ImportedRate importedRate, ExistingRate existingRate)
         {
             return importedRate.BED == existingRate.RateEntity.BED
-               && importedRate.Rate == existingRate.RateEntity.NormalRate
+               && importedRate.Rate == existingRate.RateEntity.Rate
                && importedRate.CurrencyId == existingRate.RateEntity.CurrencyId;
             //TODO: compare CurrencyId of the Pricelists
 

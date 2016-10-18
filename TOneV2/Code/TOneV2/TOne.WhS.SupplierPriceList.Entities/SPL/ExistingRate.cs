@@ -34,7 +34,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             ExistingRate nextExistingRate = nextEntity as ExistingRate;
 
             return this.ParentZone.Name.Equals(nextExistingRate.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase)
-                && this.RateEntity.NormalRate == nextExistingRate.RateEntity.NormalRate;
+                && this.RateEntity.Rate == nextExistingRate.RateEntity.Rate;
         }
 
 
