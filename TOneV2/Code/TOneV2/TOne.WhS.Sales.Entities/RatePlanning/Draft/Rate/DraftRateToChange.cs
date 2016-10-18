@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.Entities
 
         public int? RateTypeId { get; set; }
         
-        public Decimal NormalRate { get; set; }
+        public Decimal Rate { get; set; }
 
         public int? CurrencyId { get; set; }
 

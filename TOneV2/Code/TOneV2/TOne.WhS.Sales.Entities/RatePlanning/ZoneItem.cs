@@ -32,7 +32,7 @@ namespace TOne.WhS.Sales.Entities
             {
                 DraftRateToChange newNormalRate = NewRates.FindRecord(x => x.RateTypeId == null);
                 if (newNormalRate != null)
-                    return newNormalRate.NormalRate;
+                    return newNormalRate.Rate;
                 return null;
             }
         }

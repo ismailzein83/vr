@@ -162,7 +162,7 @@ namespace TOne.WhS.Sales.Business
                 DraftRateToChange newRate = new DraftRateToChange()
                 {
                     ZoneId = calculatedRate.ZoneId,
-                    NormalRate = calculatedRate.CalculatedRate,
+                    Rate = calculatedRate.CalculatedRate,
                 };
 
 				newRate.BED = new List<DateTime>() { newRateBED, calculatedRate.ZoneBED }.Max();

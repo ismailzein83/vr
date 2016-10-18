@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
-        readonly string[] columns = { "ID", "ProcessInstanceID", "ZoneID", "RateTypeID", "NormalRate", "OtherRates", "CurrencyID", "BED", "EED" };
+        readonly string[] columns = { "ID", "ProcessInstanceID", "ZoneID", "RateTypeID", "Rate", "CurrencyID", "BED", "EED" };
 
         private long _processInstanceId;
 
@@ -70,7 +70,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 _processInstanceId,
                 record.Zone.ZoneId,
                 record.RateTypeId,
-                decimal.Round(record.NormalRate, 8),
+                decimal.Round(record.Rate, 8),
                 record.CurrencyId,
                 record.BED,
                 record.EED

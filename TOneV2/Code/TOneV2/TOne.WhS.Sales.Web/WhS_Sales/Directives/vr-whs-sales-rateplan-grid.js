@@ -521,7 +521,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 if (zoneItem.NewRate) {
                     var newRate = {
                         ZoneId: zoneItem.ZoneId,
-                        NormalRate: zoneItem.NewRate,
+                        Rate: zoneItem.NewRate,
                         BED: zoneItem.NewRateBED,
                         EED: zoneItem.NewRateEED
                     };

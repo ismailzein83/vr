@@ -117,7 +117,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             		var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.RateTypeId, 'RateTypeId');
             		if (newOtherRate != null) {
             			zoneItem.IsDirty = true;
-            			otherRate.NewRate = newOtherRate.NormalRate;
+            			otherRate.NewRate = newOtherRate.Rate;
             			otherRate.NewRateBED = newOtherRate.BED;
             			otherRate.NewRateEED = newOtherRate.EED;
             		}
@@ -153,7 +153,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                         zoneItem.NewRates.push({
                             ZoneId: zoneItem.ZoneId,
                             RateTypeId: otherRate.RateTypeId,
-                            NormalRate: otherRate.NewRate,
+                            Rate: otherRate.NewRate,
                             BED: otherRate.NewRateBED,
                             EED: otherRate.NewRateEED
                         });

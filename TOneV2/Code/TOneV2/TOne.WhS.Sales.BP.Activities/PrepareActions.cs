@@ -224,7 +224,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         ZoneId = zoneChanges.ZoneId,
                         ZoneName = zoneChanges.ZoneName,
                         RateTypeId = newRate.RateTypeId,
-                        NormalRate = newRate.NormalRate,
+                        NormalRate = newRate.Rate,
                         CurrencyId = currencyId,
                         BED = newRate.BED,
                         EED = newRate.EED

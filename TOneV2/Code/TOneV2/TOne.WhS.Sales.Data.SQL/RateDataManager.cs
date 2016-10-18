@@ -78,7 +78,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 row["PriceListID"] = priceListId;
                 if (newRate.CurrencyId != null)
                     row["CurrencyID"] = newRate.CurrencyId;
-                row["NormalRate"] = newRate.NormalRate;
+                row["NormalRate"] = newRate.Rate;
                 row["BED"] = newRate.BED;
                 if (newRate.EED != null)
                     row["EED"] = newRate.EED;
