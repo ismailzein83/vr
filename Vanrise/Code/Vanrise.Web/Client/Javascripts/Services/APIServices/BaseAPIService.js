@@ -72,17 +72,19 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
             .error(function (data, status, headers, config) {
                 //if (status === 401)
                 //    redirectToLoginPage();
-                checkHttpStatusCode(status);
-
-                console.log(''); 
-                console.log('Error Occured: ' + data.ExceptionMessage);
-                console.log('');
-                console.log(data);
-                notify.closeAll();
-                notify({ message: 'Error Occured while getting data!', classes: "alert alert-danger" });
-                setTimeout(function () {
+               // checkHttpStatusCode(status);
+                if (!shouldRedirectTonAnotherPage(status)) {
+                    console.log('');
+                    console.log('Error Occured: ' + data.ExceptionMessage);
+                    console.log('');
+                    console.log(data);
                     notify.closeAll();
-                }, 3000);
+                    notify({ message: 'Error Occured while getting data!', classes: "alert alert-danger" });
+                    setTimeout(function () {
+                        notify.closeAll();
+                    }, 3000);
+                }
+               
                 deferred.reject(data);
             });
         return deferred.promise;
@@ -127,23 +129,26 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
               
                 //if (status === 401)
                 //    redirectToLoginPage();
-                checkHttpStatusCode(status);
-
-                console.log('');
-                console.log('Error Occured: ' + data.ExceptionMessage);
-                console.log('');
-                console.log(data);
-                notify.closeAll();
-
-                var exceptionMessage = headers("ExceptionMessage");
-                if (exceptionMessage != undefined) {
-                    showErrorMessage(exceptionMessage)
-                } else {
-                    showErrorMessage('Error Occured while posting data!')
-                }
-                setTimeout(function () {
+               // checkHttpStatusCode(status);
+                if (!shouldRedirectTonAnotherPage(status))
+                {
+                    console.log('');
+                    console.log('Error Occured: ' + data.ExceptionMessage);
+                    console.log('');
+                    console.log(data);
                     notify.closeAll();
-                }, 3000);
+
+                    var exceptionMessage = headers("ExceptionMessage");
+                    if (exceptionMessage != undefined) {
+                        showErrorMessage(exceptionMessage)
+                    } else {
+                        showErrorMessage('Error Occured while posting data!')
+                    }
+                    setTimeout(function () {
+                        notify.closeAll();
+                    }, 3000);
+                }
+
                 deferred.reject(data);
             });
         return deferred.promise;
@@ -155,12 +160,15 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         notify({ message: message, classes: "alert alert-danger" });
     }
 
-    function checkHttpStatusCode(status) {
+    function shouldRedirectTonAnotherPage(status) {
         if (HttpStatusCodeEnum.Unauthorized.value === status) {
             redirectToLoginPage();
+            return true;
         }
         else if (HttpStatusCodeEnum.PaymentRequired.value === status) {
             redirectToPaymentPage();
+            return true;
         }
+        return false;
     }
 });
