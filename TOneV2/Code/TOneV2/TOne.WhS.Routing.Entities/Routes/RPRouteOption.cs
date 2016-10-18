@@ -37,5 +37,8 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return null; }
         }
+
+
+        public int SupplierServiceWeight { get; set; }
     }
 }
