@@ -102,9 +102,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateTypeManager.cs" />
     <Compile Include="Setting\SettingManager.cs" />
-    <Compile Include="StatisticManagement\StatisticBatchManager.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationManager.cs" />
-    <Compile Include="TemplateConfigManager.cs" />
     <Compile Include="TypeManager.cs" />
     <Compile Include="VRObject\VRObjectEvaluator.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorManager.cs" />

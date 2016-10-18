@@ -43,8 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DynamicRules\DynamicRuleConfiguration.cs" />
-    <Compile Include="DynamicRules\DynamicRuleCriteriaField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rule.cs" />
   </ItemGroup>
