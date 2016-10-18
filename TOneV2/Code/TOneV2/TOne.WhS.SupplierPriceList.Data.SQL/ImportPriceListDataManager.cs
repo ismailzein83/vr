@@ -121,7 +121,6 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 	                                   [ZoneID] [bigint] NOT NULL,
                                        [CurrencyID] [int] NULL,
 	                                   [NormalRate] [decimal](9, 5) NOT NULL,
-                                       [OtherRates] [varchar](MAX) NULL,
 	                                   [BED] [datetime] NOT NULL,
 	                                   [EED] [datetime] NULL,
                                        [IsUpdated] [Bit] Null)
@@ -179,13 +178,12 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         private void WriteRecordToRatesStream(Rate record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
                        record.SupplierRateId,
                        record.PriceListId,
                        record.ZoneId,
                        record.CurrencyID,
                        record.NormalRate,
-                       record.OtherRates,
                        record.BeginEffectiveDate,
                        record.EndEffectiveDate,
                        (record.Status != Status.New)?1:0);
@@ -247,8 +245,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder(@"
                                         INSERT INTO [TOneWhS_BE].[SupplierRate] 
-                                        (PriceListID,ZoneID,CurrencyID,NormalRate,OtherRates,BED,EED)
-                                        Select PriceListID,ZoneID,CurrencyID,NormalRate,OtherRates,BED,EED From #TableName# WHERE IsUpdated=0
+                                        (PriceListID,ZoneID,CurrencyID,NormalRate,BED,EED)
+                                        Select PriceListID,ZoneID,CurrencyID,NormalRate,BED,EED From #TableName# WHERE IsUpdated=0
                                         UPDATE sr
                                         SET sr.EED = tsr.EED
                                         FROM [TOneWhS_BE].[SupplierRate] sr INNER JOIN #TableName# tsr ON sr.ID=tsr.ID  

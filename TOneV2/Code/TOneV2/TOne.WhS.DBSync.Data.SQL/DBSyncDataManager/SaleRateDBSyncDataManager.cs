@@ -74,7 +74,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleRate> GetSaleRates(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[OtherRates],[BED], [EED],[Change], [SourceID] FROM "
+            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[BED], [EED],[Change], [SourceID] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
