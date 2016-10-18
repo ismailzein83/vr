@@ -242,7 +242,7 @@ namespace QM.CLITester.iTestIntegration
                             ReceivedCli = callNode["CLI"] != null ? callNode["CLI"].InnerText : "",
                             Pdd = callNode["PDD"] != null ? callNode["PDD"].InnerText : "",
                             Mos = callNode["MOS"] != null ? callNode["MOS"].InnerText : "",
-                            Duration = epoch.AddSeconds(unixTime2),
+                            Duration = unixTime2 == 0 ? (DateTime?)null : epoch.AddSeconds(unixTime2).ToLocalTime(),
                             CallTestResult = CallTestResult.PartiallySucceeded
                         };
                         string callTestResult = callNode["Result"] != null ? callNode["Result"].InnerText : "";
