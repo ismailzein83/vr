@@ -102,6 +102,7 @@
     <Compile Include="Common\Migrator.cs" />
     <Compile Include="Migrators\Rules\MarketPriceRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\CommissionRuleMigrator.cs" />
+    <Compile Include="Migrators\SupplierPriceListTemplateMigrator.cs" />
     <Compile Include="Migrators\VRTimeZoneMigrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />

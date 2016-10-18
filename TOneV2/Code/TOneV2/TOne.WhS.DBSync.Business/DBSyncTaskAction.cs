@@ -167,7 +167,7 @@ namespace TOne.WhS.DBSync.Business
 
                     case DBTableName.SupplierPriceListTemplate:
                         iDBSyncDataManager = new SupplierPriceListTemplateDBSyncDataManager(context.UseTempTables);
-                        break;  
+                        break;
 
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
@@ -315,7 +315,7 @@ namespace TOne.WhS.DBSync.Business
                     imgrator = new FlaggedServiceMigrator(context);
                     break;
                 case DBTableName.SupplierZoneService:
-                    imgrator = new  SupplierZoneServicesMigrator(context);
+                    imgrator = new SupplierZoneServicesMigrator(context);
                     break;
 
                 case DBTableName.SaleEntityService:
@@ -324,6 +324,9 @@ namespace TOne.WhS.DBSync.Business
 
                 case DBTableName.VRTimeZone:
                     imgrator = new VRTimeZoneMigrator(context);
+                    break;
+                case DBTableName.SupplierPriceListTemplate:
+                    imgrator = new SupplierPriceListTemplateMigrator(context);
                     break;
             }
 
@@ -348,14 +351,13 @@ namespace TOne.WhS.DBSync.Business
                 MigrationInfoContext migrationContext = new MigrationInfoContext();
 
                 DBTable dbTable = GetDBTableFromName(context, (DBTableName)dbTableNameValue);
-                if (dbTable.MigrationRequested)
+
+                CallMigrator(context, dbTable, migrationContext);
+                if (migrationContext.GeneratedIdsInfoContext != null)
                 {
-                    CallMigrator(context, dbTable, migrationContext);
-                    if (migrationContext.GeneratedIdsInfoContext != null)
-                    {
-                        _idManagerEntities.Add(new IDManagerEntity() { LastTakenId = migrationContext.GeneratedIdsInfoContext.LastTakenId, TypeId = migrationContext.GeneratedIdsInfoContext.TypeId });
-                    }
+                    _idManagerEntities.Add(new IDManagerEntity() { LastTakenId = migrationContext.GeneratedIdsInfoContext.LastTakenId, TypeId = migrationContext.GeneratedIdsInfoContext.TypeId });
                 }
+
             }
         }
 
