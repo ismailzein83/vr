@@ -13,6 +13,7 @@ namespace TOne.WhS.Routing.Entities
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOption),
                 "SupplierId", "SupplierRate", "Percentage", "OptionWeight", "SaleZoneId");
         }
+
         public int SupplierId { get; set; }
 
         public Decimal SupplierRate { get; set; }
@@ -22,6 +23,10 @@ namespace TOne.WhS.Routing.Entities
         public decimal OptionWeight { get; set; }
 
         public long SaleZoneId { get; set; }
+
+        public bool IsSupplierBlocked { get; set; }
+
+        public SupplierStatus SupplierStatus { get; set; }
 
         long? IRouteOptionOrderTarget.SaleZoneId
         {
