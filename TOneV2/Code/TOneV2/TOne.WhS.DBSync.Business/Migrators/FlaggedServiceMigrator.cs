@@ -68,7 +68,8 @@ namespace TOne.WhS.DBSync.Business
             {
                 Color = sourceItem.ServiceColor != null ? string.Concat("#", sourceItem.ServiceColor) : S_ServiceColors[sourceItem.Symbol],
                 Name = sourceItem.Name,
-                Description = sourceItem.Description
+                Description = sourceItem.Description,
+                Weight = int.Parse(sourceItem.SourceId)
             };
 
             return new ZoneServiceConfig

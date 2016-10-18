@@ -27,6 +27,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Description { get; set; }
 
-
+        public int Weight { get; set; }
     }
 }

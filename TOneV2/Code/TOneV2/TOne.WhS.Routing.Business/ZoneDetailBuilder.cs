@@ -179,9 +179,11 @@ namespace TOne.WhS.Routing.Business
                             SupplierZoneId = supplierZone.SupplierZoneId,
                             EffectiveRateValue = rateValue,
                             SupplierServiceIds = supplierZoneServicesWithChildren != null ? new HashSet<int>(supplierZoneServicesWithChildren.Select(itm => itm.ZoneServiceConfigId)) : null,
-                            ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null
+                            ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null,
                         };
-
+                        if (supplierZoneDetail.ExactSupplierServiceIds != null)
+                            supplierZoneDetail.SupplierServiceWeight = exactSupplierZoneServices != null ? zoneServiceConfigManager.GetAllZoneServicesByIds(supplierZoneDetail.ExactSupplierServiceIds).Sum(itm => itm.Settings.Weight) : 0;
+                        
                         onSupplierZoneDetailAvailable(supplierZoneDetail);
                     }
                 }

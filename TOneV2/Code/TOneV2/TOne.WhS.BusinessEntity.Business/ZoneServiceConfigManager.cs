@@ -91,6 +91,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZoneServiceConfigs.Values;
         }
 
+        public IEnumerable<ZoneServiceConfig> GetAllZoneServicesByIds(HashSet<int> serviceIds)
+        {
+            if (serviceIds == null)
+                return null;
+
+            var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
+            if (allZoneServiceConfigs == null)
+                return null;
+
+            Func<ZoneServiceConfig, bool> filterExpression = (itm) => serviceIds.Contains(itm.ZoneServiceConfigId);
+            return allZoneServiceConfigs.FindAllRecords(filterExpression);
+        }
+
         public string GeZoneServicesNames(List<int> services)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x=>services.Contains(x.Key));
@@ -140,7 +153,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return zoneServiceConfigs.Values;
         }
 
-        public Dictionary<int, Dictionary<int, ZoneServiceConfig>> GetAllZoneServiceConfigsWithChildren(bool getOnlyDirectChildren = false)
+        private Dictionary<int, Dictionary<int, ZoneServiceConfig>> GetAllZoneServiceConfigsWithChildren(bool getOnlyDirectChildren)
         {
             string cacheName;
             if (getOnlyDirectChildren)

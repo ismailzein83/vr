@@ -125,6 +125,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL,
                                                         [SupplierServiceIds] [nvarchar](max) NULL,
                                                         [ExactSupplierServiceIds] [nvarchar](max) NULL,
+                                                        [SupplierServiceWeight] int NOT NULL
                                                         ) ON [PRIMARY];
                                                         
                                                         CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 

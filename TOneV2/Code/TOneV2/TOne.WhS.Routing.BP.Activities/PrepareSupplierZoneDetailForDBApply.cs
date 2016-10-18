@@ -17,10 +17,17 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public BaseQueue<SupplierZoneDetailBatch> InputQueue { get; set; }
         public BaseQueue<Object> OutputQueue { get; set; }
+        public DateTime? EffectiveOn { get; set; }
+        public bool IsFuture { get; set; }
     }
 
     public sealed class PrepareSupplierZoneDetailForDBApply : DependentAsyncActivity<PrepareSupplierZoneDetailForDBApplyInput>
     {
+        [RequiredArgument]
+        public InArgument<DateTime?> EffectiveOn { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> IsFuture { get; set; }
         [RequiredArgument]
         public InArgument<BaseQueue<SupplierZoneDetailBatch>> InputQueue { get; set; }
         [RequiredArgument]
@@ -29,6 +36,8 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void DoWork(PrepareSupplierZoneDetailForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ISupplierZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ISupplierZoneDetailsDataManager>();
+            dataManager.EffectiveDate = inputArgument.EffectiveOn;
+            dataManager.IsFuture = inputArgument.IsFuture;
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, SupplierZoneDetailsBatch => SupplierZoneDetailsBatch.SupplierZoneDetails);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Supplier Zone Detail For DB Apply is done", null);
         }
@@ -38,7 +47,9 @@ namespace TOne.WhS.Routing.BP.Activities
             return new PrepareSupplierZoneDetailForDBApplyInput()
             {
                 InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                EffectiveOn = this.EffectiveOn.Get(context),
+                IsFuture = this.IsFuture.Get(context)
             };
         }
 

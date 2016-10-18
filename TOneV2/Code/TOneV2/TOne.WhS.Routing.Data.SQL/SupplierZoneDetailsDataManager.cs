@@ -13,6 +13,9 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsFuture { get; set; }
+
         readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds" };
         public object FinishDBApplyStream(object dbApplyStream)
         {
@@ -38,7 +41,7 @@ namespace TOne.WhS.Routing.Data.SQL
             string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight);
         }
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {
@@ -81,7 +84,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 SupplierZoneId = (long)reader["SupplierZoneId"],
                 EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
                 SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? new HashSet<int>(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
-                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null
+                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
+                SupplierServiceWeight = GetReaderValue<int>(reader, "SupplierServiceWeight")
             };
         }
 
@@ -122,6 +126,5 @@ namespace TOne.WhS.Routing.Data.SQL
                                             ";
 
         #endregion
-
     }
 }

@@ -17,7 +17,7 @@
         load();
 
         function loadParameters() {
-           
+
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
@@ -68,7 +68,7 @@
                 loadAllControls();
             }
         }
-        
+
         function getZoneServiceConfig() {
             return WhS_BE_ZoneServiceConfigAPIService.GetZoneServiceConfig(zoneServiceConfigId).then(function (response) {
                 zoneServiceConfigEntity = response;
@@ -95,6 +95,7 @@
             $scope.symbol = zoneServiceConfigEntity.Symbol;
             $scope.description = zoneServiceConfigEntity.Settings.Description;
             $scope.color = zoneServiceConfigEntity.Settings.Color;
+            $scope.weight = zoneServiceConfigEntity.Settings.Weight;
         }
 
         function loadServiceZoneConfigSelector() {
@@ -103,9 +104,9 @@
             zoneServiceSelectorReadyDeferred.promise.then(function () {
                 var payload;
 
-                if (zoneServiceConfigEntity != undefined && zoneServiceConfigEntity.Settings != undefined ) {
+                if (zoneServiceConfigEntity != undefined && zoneServiceConfigEntity.Settings != undefined) {
                     payload = {
-                        filter :{
+                        filter: {
                             AssinableToServiceId: zoneServiceConfigId
                         }
                     };
@@ -154,7 +155,8 @@
                     Name: $scope.name,
                     Description: $scope.description,
                     Color: $scope.color,
-                    ParentId: zoneServiceAPI.getSelectedIds()
+                    ParentId: zoneServiceAPI.getSelectedIds(),
+                    Weight: $scope.weight
                 }
             };
             return obj;

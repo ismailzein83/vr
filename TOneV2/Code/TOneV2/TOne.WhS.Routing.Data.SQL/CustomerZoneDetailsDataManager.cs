@@ -13,6 +13,9 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerZoneDetailsDataManager : RoutingDataManager, ICustomerZoneDetailsDataManager
     {
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsFuture { get; set; }
+
         readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "CustomerServiceIds" };
         public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
         {

@@ -111,14 +111,14 @@ namespace TOne.WhS.Routing.Business
         }
 
 
-        internal RouteOption CreateOptionFromTarget(RouteOptionRuleTarget targetOption)
+        internal RouteOption CreateOptionFromTarget(RouteOptionRuleTarget targetOption, RouteRule routeRule)
         {
             var routeOptionRule = GetRouteOptionRule(targetOption);
 
             if (routeOptionRule != null)
             {
                 targetOption.ExecutedRuleId = routeOptionRule.RuleId;
-                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { CustomerServiceIds = CustomerServiceIds };
+                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { CustomerServiceIds = CustomerServiceIds, RouteRule = routeRule };
                 routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, targetOption);
             }
 

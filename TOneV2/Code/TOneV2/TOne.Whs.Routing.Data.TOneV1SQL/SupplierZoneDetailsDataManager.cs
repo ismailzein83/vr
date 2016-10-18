@@ -12,13 +12,19 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsFuture { get; set; }
+        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriority();
+        Guid blockedRuleConfigId = new Guid("5a998636-0de9-4654-b430-c24805dd78d9");
+
         readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds" };
-readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
+        readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
 
         Dictionary<int, CarrierAccount> _allCarriers;
         Dictionary<int, CarrierProfile> _allCarrierProfiles;
@@ -85,13 +91,32 @@ readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "Se
             string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             SupplierZoneDetailBulkInsert supplierZoneDetailBulkInsert = dbApplyStream as SupplierZoneDetailBulkInsert;
-            supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds);
+            supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight);
 
-            CarrierAccount supplier = _allCarriers.GetRecord(record.SupplierId);
-            CarrierProfile profile = _allCarrierProfiles.GetRecord(supplier.CarrierProfileId);
-            SupplierZone supplierZone = _allSupplierZones.GetRecord(record.SupplierZoneId);
+            if (!IsFuture.HasValue)
+                throw new ArgumentNullException("IsFuture");
 
-            supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", supplierZone.SourceId, supplier.SourceId, "SYS", serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
+            if (!IsFuture.Value && !EffectiveDate.HasValue)
+                throw new ArgumentNullException("EffectiveDate");
+
+            var option = new RouteOptionRuleTarget
+            {
+                RouteTarget = new RouteRuleTarget(),
+                SupplierId = record.SupplierId,
+                SupplierZoneId = record.SupplierZoneId,
+                EffectiveOn = EffectiveDate,
+                IsEffectiveInFuture = IsFuture.Value,
+            };
+
+            RouteOptionRule matchRule = GetRouteOptionRule(option);
+
+            if (matchRule == null || matchRule.Settings.ConfigId != blockedRuleConfigId)
+            {
+                CarrierAccount supplier = _allCarriers.GetRecord(record.SupplierId);
+                CarrierProfile profile = _allCarrierProfiles.GetRecord(supplier.CarrierProfileId);
+                SupplierZone supplierZone = _allSupplierZones.GetRecord(record.SupplierZoneId);
+                supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", supplierZone.SourceId, supplier.SourceId, "SYS", serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
+            }
         }
 
         public void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails)
@@ -135,7 +160,8 @@ readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "Se
                 SupplierZoneId = (long)reader["SupplierZoneId"],
                 EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
                 SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? new HashSet<int>(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
-                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null
+                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
+                SupplierServiceWeight = GetReaderValue<int>(reader, "SupplierServiceWeight")
             };
         }
 
@@ -186,6 +212,20 @@ readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "Se
         {
             public StreamBulkInsertInfo SupplierZoneDetailStreamForBulkInsertInfo { get; set; }
             public StreamBulkInsertInfo ZoneRateStreamForBulkInsertInfo { get; set; }
+        }
+
+        private RouteOptionRule GetRouteOptionRule(RouteOptionRuleTarget targetOption)
+        {
+            if (_ruleTreesForRouteOptions != null)
+            {
+                foreach (var ruleTree in _ruleTreesForRouteOptions)
+                {
+                    var matchRule = ruleTree.GetMatchRule(targetOption) as RouteOptionRule;
+                    if (matchRule != null)
+                        return matchRule;
+                }
+            }
+            return null;
         }
     }
 }

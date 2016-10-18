@@ -11,11 +11,20 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
+using Vanrise.Rules;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
     public class CustomerZoneDetailsDataManager : RoutingDataManager, ICustomerZoneDetailsDataManager
     {
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsFuture { get; set; }
+
+        Vanrise.Rules.RuleTree[] _ruleTreesForCustomerRoutes;
+
+        Guid blockedRuleConfigId = new Guid("bbb0ca31-0fcd-4035-a8ed-5d4bad06c662");
+
         readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "CustomerServiceIds" };
 
         readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
@@ -102,11 +111,31 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId,
                                                                                record.EffectiveRateValue, (int)record.RateSource, customerServiceIds);
 
-            CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);
-            CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
-            SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
+            if (!IsFuture.HasValue)
+                throw new ArgumentNullException("IsFuture");
 
-            customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
+            if (!IsFuture.Value && !EffectiveDate.HasValue)
+                throw new ArgumentNullException("EffectiveDate");
+
+
+            var routeRuleTarget = new RouteRuleTarget
+            {
+                CustomerId = record.CustomerId,
+                SaleZoneId = record.SaleZoneId,
+                RoutingProductId = record.RoutingProductId,
+                SaleRate = record.EffectiveRateValue,
+                EffectiveOn = EffectiveDate.Value,
+                IsEffectiveInFuture = IsFuture.Value
+            };
+            RouteRule matchRule = GetRouteRule(routeRuleTarget);
+
+            if (matchRule == null || matchRule.Settings.ConfigId != blockedRuleConfigId)
+            {
+                CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);
+                CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
+                SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
+                customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
+            }
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {
@@ -188,6 +217,22 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             public StreamBulkInsertInfo CustomerZoneDetailStreamForBulkInsertInfo { get; set; }
             public StreamBulkInsertInfo ZoneRateStreamForBulkInsertInfo { get; set; }
         }
-    }
 
+        private RouteRule GetRouteRule(RouteRuleTarget routeRuleTarget)
+        {
+            if (_ruleTreesForCustomerRoutes == null)
+                _ruleTreesForCustomerRoutes = new RouteRuleManager().GetRuleTreesByPriority(null);
+
+            if (_ruleTreesForCustomerRoutes != null)
+            {
+                foreach (var ruleTree in _ruleTreesForCustomerRoutes)
+                {
+                    var matchRule = ruleTree.GetMatchRule(routeRuleTarget) as RouteRule;
+                    if (matchRule != null)
+                        return matchRule;
+                }
+            }
+            return null;
+        }
+    }
 }

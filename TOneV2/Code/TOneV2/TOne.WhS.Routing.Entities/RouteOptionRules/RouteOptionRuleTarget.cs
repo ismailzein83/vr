@@ -31,6 +31,7 @@ namespace TOne.WhS.Routing.Entities
 
         public HashSet<int> ExactSupplierServiceIds { get; set; }
 
+        public int SupplierServiceWeight { get; set; }
 
         #region Interfaces
 

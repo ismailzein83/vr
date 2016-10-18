@@ -44,7 +44,7 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        internal Vanrise.Rules.RuleTree[] GetRuleTreesByPriority()
+        public Vanrise.Rules.RuleTree[] GetRuleTreesByPriority()
         {
             return GetCachedOrCreate("GetRuleTreesByPriority",
                 () =>
