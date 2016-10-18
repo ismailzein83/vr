@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TenantTypes\ApplicationPartTenantType.cs" />
+    <Compile Include="TenantTypes\DefaultTenantType.cs" />
     <Compile Include="VRObjectTypes\UserObjectType.cs" />
     <Compile Include="VRObjectTypes\UserProfilePropertyEvaluator.cs" />
   </ItemGroup>

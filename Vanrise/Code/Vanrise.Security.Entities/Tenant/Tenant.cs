@@ -18,7 +18,9 @@ namespace Vanrise.Security.Entities
     }
 
     public class TenantSettings
-    { 
+    {
+        public Guid TenantTypeId { get; set; }
+
         public List<TenantConnectionString> ConnectionStrings { get; set; }
 
         public List<TenantExtendedSetting> ExtendedSettings { get; set; }

@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class Group
+    public class TenantType
     {
-        public int GroupId { get; set; }
-
-        public int TenantId { get; set; }
+        public Guid TenantTypeId { get; set; }
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
-
-        public GroupSettings Settings { get; set; }
+        public TenantTypeSettings Settings { get; set; }
     }
 }
