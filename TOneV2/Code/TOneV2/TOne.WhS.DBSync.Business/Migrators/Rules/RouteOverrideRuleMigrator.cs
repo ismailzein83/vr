@@ -31,7 +31,7 @@ namespace TOne.WhS.DBSync.Business
         public RouteOverrideRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
-            
+
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -66,7 +66,8 @@ namespace TOne.WhS.DBSync.Business
                 {
                     OptionOrderSettings = new List<RouteOptionOrderSettings>
                     {
-                        new OptionOrderByRate()
+                        new OptionOrderByRate(),
+                        new OptionOrderByService()
                     },
                     OptionFilters = new List<RouteOptionFilterSettings> 
                     {
@@ -77,7 +78,8 @@ namespace TOne.WhS.DBSync.Business
                     RateOptionType = RateOptionType.Fixed,
                     RateOptionValue = 0
                     }
-                    }
+                    },
+                    OrderType = OrderType.Sequential
                 },
                 BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
                 Description = "Default Routing Rule",
