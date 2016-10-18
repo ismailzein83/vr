@@ -13,21 +13,21 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataRecordFieldTypeConfig")]
     public class DataRecordFieldTypeConfigController : BaseAPIController
     {
-        [HttpGet]
-        [Route("GetDataRecordFieldTypes")]
-        public IEnumerable<DataRecordFieldTypeConfig> GetDataRecordFieldTypes()
-        {
-            DataRecordFieldTypeConfigManager manager = new DataRecordFieldTypeConfigManager();
-            return manager.GetDataRecordFieldTypes();
-        }
+        //[HttpGet]
+        //[Route("GetDataRecordFieldTypes")]
+        //public IEnumerable<DataRecordFieldTypeConfig> GetDataRecordFieldTypes()
+        //{
+        //    DataRecordFieldTypeConfigManager manager = new DataRecordFieldTypeConfigManager();
+        //    return manager.GetDataRecordFieldTypes();
+        //}
 
-        [HttpGet]
-        [Route("GetDataRecordFieldTypeConfig")]
-        public DataRecordFieldTypeConfig GetDataRecordFieldTypeConfig(int configId)
-        {
-            DataRecordFieldTypeConfigManager manager = new DataRecordFieldTypeConfigManager();
-            return manager.GetDataRecordFieldTypeConfig(configId);
-        }
+        //[HttpGet]
+        //[Route("GetDataRecordFieldTypeConfig")]
+        //public DataRecordFieldTypeConfig GetDataRecordFieldTypeConfig(int configId)
+        //{
+        //    DataRecordFieldTypeConfigManager manager = new DataRecordFieldTypeConfigManager();
+        //    return manager.GetDataRecordFieldTypeConfig(configId);
+        //}
 
     }
 }

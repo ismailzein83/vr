@@ -11,6 +11,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldBooleanType : DataRecordFieldType
     {
+        public override Guid ConfigId { get { return new Guid("a77fad19-d044-40d8-9d04-6362b79b177b"); } }
+
         public bool IsNullable { get; set; }
 
         public override Type GetRuntimeType()

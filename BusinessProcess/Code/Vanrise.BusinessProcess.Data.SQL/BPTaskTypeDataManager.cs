@@ -32,7 +32,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             var bpTaskType = new BPTaskType
             {
-                BPTaskTypeId = (int)reader["ID"],
+                BPTaskTypeId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string
             };
             string settings = reader["Settings"] as string;

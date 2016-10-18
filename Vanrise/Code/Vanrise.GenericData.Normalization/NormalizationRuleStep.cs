@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Normalization
 {
     public class NormalizationRuleStep : BaseGenericRuleMappingStep
     {
+        public override Guid ConfigId { get { return new Guid("cd71025c-136f-4157-8922-a56294030e46"); } }
+
         public string Value { get; set; }
 
         public string NormalizedValue { get; set; }

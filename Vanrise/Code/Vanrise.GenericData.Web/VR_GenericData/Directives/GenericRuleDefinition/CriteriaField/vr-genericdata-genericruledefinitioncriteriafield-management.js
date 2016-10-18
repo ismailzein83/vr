@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionCriteriaFieldManagementDirective.$inject = ['VR_GenericData_GenericRuleDefinitionCriteriaFieldService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRNotificationService'];
+    GenericRuleDefinitionCriteriaFieldManagementDirective.$inject = ['VR_GenericData_GenericRuleDefinitionCriteriaFieldService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionCriteriaFieldManagementDirective(VR_GenericData_GenericRuleDefinitionCriteriaFieldService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRNotificationService) {
+    function GenericRuleDefinitionCriteriaFieldManagementDirective(VR_GenericData_GenericRuleDefinitionCriteriaFieldService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -94,7 +94,7 @@
                     });
 
                     function loadDataRecordFieldTypeConfigs() {
-                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                             if (response != null) {
                                 dataRecordFieldTypeConfigs = [];
                                 for (var i = 0; i < response.length; i++) {
@@ -171,7 +171,7 @@
                     criteriaField.RuleStructureBehaviorTypeDescription = behaviorTypeObject.description;
                 }
 
-                var fieldTypeConfigObject = UtilsService.getItemByVal(dataRecordFieldTypeConfigs, criteriaField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                var fieldTypeConfigObject = UtilsService.getItemByVal(dataRecordFieldTypeConfigs, criteriaField.FieldType.ConfigId, 'ExtensionConfigurationId');
                 if (fieldTypeConfigObject != null) {
                     criteriaField.FieldTypeDescription = fieldTypeConfigObject.Name;
                 }

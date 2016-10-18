@@ -25,7 +25,7 @@ namespace Vanrise.Queueing.Data.SQL
             return (int)id;
         }
 
-        public int InsertQueueInstance(int executionFlowId, string stageName, string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings)
+        public int InsertQueueInstance(Guid executionFlowId, string stageName, string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings)
         {
             object id;
             ExecuteNonQuerySP("queue.sp_QueueInstance_Insert", out id, executionFlowId, stageName, queueName, title, (int)status, itemTypeId, settings != null ? (object)Serializer.Serialize(settings) : DBNull.Value);
@@ -66,7 +66,7 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 QueueInstanceId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                ExecutionFlowId = GetReaderValue<int?>(reader, "ExecutionFlowID"),
+                ExecutionFlowId = GetReaderValue<Guid?>(reader, "ExecutionFlowID"),
                 StageName = reader["StageName"] as string,
                 Title = reader["Title"] as string,
                 Status = (QueueInstanceStatus)reader["Status"],

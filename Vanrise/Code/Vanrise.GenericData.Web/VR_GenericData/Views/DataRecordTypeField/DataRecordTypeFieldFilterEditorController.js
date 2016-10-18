@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VRUIUtilsService','VRNotificationService','VR_GenericData_RecordFilterAPIService'];
+    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService','VRNotificationService','VR_GenericData_RecordFilterAPIService'];
 
-    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VRUIUtilsService, VRNotificationService, VR_GenericData_RecordFilterAPIService) {
+    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService,  VRUIUtilsService, VRNotificationService, VR_GenericData_RecordFilterAPIService) {
 
         var fields = [];
         var filterObj;
@@ -101,7 +101,7 @@
         }
 
         function getRuleFilterEditorByFieldType(configId) {
-            var dataRecordFieldTypeConfig = UtilsService.getItemByVal($scope.dataRecordFieldTypesConfig, configId, 'DataRecordFieldTypeConfigId');
+            var dataRecordFieldTypeConfig = UtilsService.getItemByVal($scope.dataRecordFieldTypesConfig, configId, 'ExtensionConfigurationId');
             if (dataRecordFieldTypeConfig != undefined) {
                 return dataRecordFieldTypeConfig.RuleFilterEditor;
             }
@@ -109,7 +109,7 @@
 
         function loadDataRecordFieldTypeConfig() {
             $scope.dataRecordFieldTypesConfig = [];
-            return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                 if (response) {
                     for (var i = 0; i < response.length; i++) {
                         $scope.dataRecordFieldTypesConfig.push(response[i]);

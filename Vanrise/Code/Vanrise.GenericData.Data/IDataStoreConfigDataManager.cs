@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Data
 {
     public interface IDataStoreConfigDataManager : IDataManager
     {
-        List<DataStoreConfig> GetDataStoreConfigs();
-        bool AreDataStoreConfigUpdated(ref object updateHandle);
+        //List<DataStoreConfig> GetDataStoreConfigs();
+        //bool AreDataStoreConfigUpdated(ref object updateHandle);
     }
 }

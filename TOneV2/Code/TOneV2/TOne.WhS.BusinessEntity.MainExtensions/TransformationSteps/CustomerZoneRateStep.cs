@@ -10,6 +10,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.TransformationSteps
 {
     public class CustomerZoneRateStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("63cfd19f-d742-4f37-87ae-2b79c140036e"); } }
+
         public string CustomerId { get; set; }
 
         public string SaleZoneId { get; set; }

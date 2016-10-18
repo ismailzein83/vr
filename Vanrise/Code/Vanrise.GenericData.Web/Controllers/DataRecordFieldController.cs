@@ -12,6 +12,14 @@ namespace Vanrise.GenericData.Web.Controllers
     public class DataRecordFieldsController : BaseAPIController
     {
         [HttpGet]
+        [Route("GetDataRecordFieldTypeConfigs")]
+        public IEnumerable<DataRecordFieldTypeConfig> GetDataRecordFieldTypeConfigs()
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetDataRecordFieldTypeConfigs();
+        }
+
+        [HttpGet]
         [Route("GetDataRecordFieldsInfo")]
         public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(string serializedFilter)
         {

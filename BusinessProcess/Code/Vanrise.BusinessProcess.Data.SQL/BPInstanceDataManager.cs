@@ -23,11 +23,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
         #region public methods
-        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId, string entityId)
+        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, string entityId)
         {
             string definitionsIdAsString = null;
             if (definitionsId != null && definitionsId.Count() > 0)
-                definitionsIdAsString = string.Join<int>(",", definitionsId);
+                definitionsIdAsString = string.Join<Guid>(",", definitionsId);
 
             List<BPInstance> bpInstances = new List<BPInstance>();
             byte[] timestamp = null;
@@ -67,7 +67,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             }, BPInstanceDetailMapper, _mapper);
         }
 
-        public List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
+        public List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
         {
             return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, serviceInstanceId);
         }
@@ -87,7 +87,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
 
-        public long InsertInstance(string processTitle, long? parentId, int definitionId, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId,string entityId)
+        public long InsertInstance(string processTitle, long? parentId, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId)
         {
             object processInstanceId;
             if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus, initiatorUserId, entityId) > 0)
@@ -126,7 +126,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             BPPendingInstanceInfo instance = new BPPendingInstanceInfo
             {
-                BPDefinitionId = (int)reader["DefinitionID"],
+                BPDefinitionId = GetReaderValue<Guid>(reader,"DefinitionID"),
                 ProcessInstanceId = (long)reader["ID"],
                 ParentProcessInstanceId = GetReaderValue<long?>(reader, "ParentID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],

@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class AddItemToArrayStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("9c158fa5-8516-4af7-aedd-1bc69d026afc"); } }
+
         public string ArrayVariableName { get; set; }
         public string VariableName { get; set; }
 

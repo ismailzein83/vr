@@ -8,7 +8,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPPendingInstanceInfo
     {
-        public int BPDefinitionId { get; set; }
+        public Guid BPDefinitionId { get; set; }
 
         public long ProcessInstanceId { get; set; }
 

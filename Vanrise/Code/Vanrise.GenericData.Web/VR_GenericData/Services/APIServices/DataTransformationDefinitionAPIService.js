@@ -17,10 +17,17 @@
             GetDataTransformationRecordsInfo:GetDataTransformationRecordsInfo,
             TryCompileSteps: TryCompileSteps,
             HasTryCompileSteps: HasTryCompileSteps,
-            ExportCompilationResult: ExportCompilationResult
+            ExportCompilationResult: ExportCompilationResult,
+            GetDataTransformationStepConfig: GetDataTransformationStepConfig
         });
+
+
         function GetFilteredDataTransformationDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'GetFilteredDataTransformationDefinitions'), input);
+        }
+        
+        function GetDataTransformationStepConfig() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'GetDataTransformationStepConfig'));
         }
 
         function GetDataTransformationDefinition(dataTransformationDefinitionId) {

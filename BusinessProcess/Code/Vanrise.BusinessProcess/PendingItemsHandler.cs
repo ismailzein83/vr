@@ -28,12 +28,12 @@ namespace Vanrise.BusinessProcess
 
         #endregion
 
-        Dictionary<Guid, ConcurrentQueue<int>> _qDefinitionsHavingPendingInstances = new Dictionary<Guid, ConcurrentQueue<int>>();
+        Dictionary<Guid, ConcurrentQueue<Guid>> _qDefinitionsHavingPendingInstances = new Dictionary<Guid, ConcurrentQueue<Guid>>();
 
-        internal void SetPendingDefinitionsToProcess(Guid serviceInstanceId, List<int> bpDefinitionIds)
+        internal void SetPendingDefinitionsToProcess(Guid serviceInstanceId, List<Guid> bpDefinitionIds)
         {
-            ConcurrentQueue<int> qPendingBPDefinitionIds;
-            List<int> existingPendingDefinitionIds;
+            ConcurrentQueue<Guid> qPendingBPDefinitionIds;
+            List<Guid> existingPendingDefinitionIds;
             lock (_qDefinitionsHavingPendingInstances)
             {
                 qPendingBPDefinitionIds = _qDefinitionsHavingPendingInstances.GetOrCreateItem(serviceInstanceId);
@@ -47,9 +47,9 @@ namespace Vanrise.BusinessProcess
             }
         }
 
-        internal bool TryGetPendingDefinitionsToProcess(Guid serviceInstanceId, out int bpDefinitionId)
+        internal bool TryGetPendingDefinitionsToProcess(Guid serviceInstanceId, out Guid bpDefinitionId)
         {
-            ConcurrentQueue<int> qPendingBPDefinitionIds = null;
+            ConcurrentQueue<Guid> qPendingBPDefinitionIds = null;
             lock (_qDefinitionsHavingPendingInstances)
             {
                 qPendingBPDefinitionIds = _qDefinitionsHavingPendingInstances.GetOrCreateItem(serviceInstanceId);
@@ -57,11 +57,11 @@ namespace Vanrise.BusinessProcess
             return qPendingBPDefinitionIds.TryDequeue(out bpDefinitionId);
         }
 
-        Dictionary<Guid, ConcurrentQueue<int>> _qDefinitionsHavingPendingEvents = new Dictionary<Guid, ConcurrentQueue<int>>();
-        internal void SetPendingEventsDefinitionsToProcess(Guid serviceInstanceId, List<int> bpDefinitionIds)
+        Dictionary<Guid, ConcurrentQueue<Guid>> _qDefinitionsHavingPendingEvents = new Dictionary<Guid, ConcurrentQueue<Guid>>();
+        internal void SetPendingEventsDefinitionsToProcess(Guid serviceInstanceId, List<Guid> bpDefinitionIds)
         {
-            ConcurrentQueue<int> qPendingBPDefinitionIds;
-            List<int> existingPendingDefinitionIds;
+            ConcurrentQueue<Guid> qPendingBPDefinitionIds;
+            List<Guid> existingPendingDefinitionIds;
             lock (_qDefinitionsHavingPendingEvents)
             {
                 qPendingBPDefinitionIds = _qDefinitionsHavingPendingEvents.GetOrCreateItem(serviceInstanceId);
@@ -76,9 +76,9 @@ namespace Vanrise.BusinessProcess
         }
 
 
-        internal bool TryGetPendingEventDefinitionsToProcess(Guid serviceInstanceId, out int bpDefinitionId)
+        internal bool TryGetPendingEventDefinitionsToProcess(Guid serviceInstanceId, out Guid bpDefinitionId)
         {
-            ConcurrentQueue<int> qPendingBPDefinitionIds = null;
+            ConcurrentQueue<Guid> qPendingBPDefinitionIds = null;
             lock (_qDefinitionsHavingPendingEvents)
             {
                 qPendingBPDefinitionIds = _qDefinitionsHavingPendingEvents.GetOrCreateItem(serviceInstanceId);

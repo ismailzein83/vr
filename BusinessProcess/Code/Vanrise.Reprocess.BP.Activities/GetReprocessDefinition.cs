@@ -11,7 +11,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
     public sealed class GetReprocessDefinition : CodeActivity
     {
-        public InArgument<int> ReprocessDefinitionId { get; set; }
+        public InArgument<Guid> ReprocessDefinitionId { get; set; }
 
         public OutArgument<ReprocessDefinition> ReprocessDefinition { get; set; }
 

@@ -22,7 +22,7 @@ namespace Vanrise.Queueing
             return executionFlowDefinitions.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
         }
 
-        public IEnumerable<QueueExecutionFlowStageInfo> GetExecutionFlowStagesInfo(int executionFlowDefinitionId, QueueExecutionFlowStageFilter filter)
+        public IEnumerable<QueueExecutionFlowStageInfo> GetExecutionFlowStagesInfo(Guid executionFlowDefinitionId, QueueExecutionFlowStageFilter filter)
         {
             var executionFlowDefinition = GetExecutionFlowDefinition(executionFlowDefinitionId);
             if (executionFlowDefinition == null)
@@ -47,7 +47,7 @@ namespace Vanrise.Queueing
         }
 
 
-        public string GetExecutionFlowDefinitionTitle(int definitionID)
+        public string GetExecutionFlowDefinitionTitle(Guid definitionID)
         {
 
             QueueExecutionFlowDefinition executionFlowDefinition = GetExecutionFlowDefinition(definitionID);
@@ -63,7 +63,7 @@ namespace Vanrise.Queueing
                 return null;
         }
 
-        public QueueExecutionFlowStagesByStageName GetFlowStages(int definitionId)
+        public QueueExecutionFlowStagesByStageName GetFlowStages(Guid definitionId)
         {
             String cacheName = String.Format("GetFlowStages_{0}", definitionId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -99,7 +99,7 @@ namespace Vanrise.Queueing
         }
 
 
-        public QueueExecutionFlowDefinition GetExecutionFlowDefinition(int definitonID)
+        public QueueExecutionFlowDefinition GetExecutionFlowDefinition(Guid definitonID)
         {
             var users = GetCachedExecutionFlowDefinitions();
             return users.GetRecord(definitonID);
@@ -136,16 +136,14 @@ namespace Vanrise.Queueing
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int executionFlowDefinitionId = -1;
-
+            executionFlowDefinitionObj.ID = Guid.NewGuid();
             IQueueExecutionFlowDefinitionDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
-            bool insertActionSucc = dataManager.AddExecutionFlowDefinition(executionFlowDefinitionObj, out executionFlowDefinitionId);
+            bool insertActionSucc = dataManager.AddExecutionFlowDefinition(executionFlowDefinitionObj);
 
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                executionFlowDefinitionObj.ID = executionFlowDefinitionId;
                 insertOperationOutput.InsertedObject = QueueExecutionFlowDefinitionDetailMapper(executionFlowDefinitionObj);
             }
             else
@@ -163,7 +161,7 @@ namespace Vanrise.Queueing
        
         #region Private Methods
 
-        private Dictionary<int, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()
+        private Dictionary<Guid, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedExecutionFlowDefinitions",
                () =>

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ArrayFieldTypeRuntimeEditorDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    ArrayFieldTypeRuntimeEditorDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function ArrayFieldTypeRuntimeEditorDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
+    function ArrayFieldTypeRuntimeEditorDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -72,7 +72,7 @@
                     promises.push(fieldTypeRuntimeEditorLoadDeferred.promise);
 
                     getFieldTypeConfigsPromise.then(function () {
-                        var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                        var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.FieldType.ConfigId, 'ExtensionConfigurationId');
                         ctrl.fieldTypeRuntimeEditorDirective = fieldTypeConfig.RuntimeEditor;
 
                         fieldTypeRuntimeEditorReadyDeferred.promise.then(function () {
@@ -90,7 +90,7 @@
                     });
 
                     function getFieldTypeConfigs() {
-                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                             fieldTypeConfigs = [];
                             for (var i = 0; i < response.length; i++) {
                                 fieldTypeConfigs.push(response[i]);

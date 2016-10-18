@@ -19,7 +19,7 @@ namespace Vanrise.BusinessProcess.Entities
 
         public long ProcessInstanceId { get; set; }
 
-        public int TypeId { get; set; }
+        public Guid TypeId { get; set; }
 
         public string Title { get; set; }
 

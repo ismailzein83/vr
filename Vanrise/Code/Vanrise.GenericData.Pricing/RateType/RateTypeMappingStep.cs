@@ -1,10 +1,12 @@
-﻿using Vanrise.GenericData.Entities;
+﻿using System;
+using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Pricing
 {
     public class RateTypeMappingStep : BaseGenericRuleMappingStep
     {
+        public override Guid ConfigId { get { return new Guid("a61d1f7a-a437-4966-b101-5178a0c07880"); } }
         public string RateTypes { get; set; }
 
         public string RateTypeId { get; set; }

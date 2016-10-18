@@ -35,14 +35,12 @@ namespace Vanrise.Reprocess.Data.SQL
             return base.IsDataUpdated("reprocess.ReprocessDefinition", ref updateHandle);
         }
 
-        public bool Insert(ReprocessDefinition ReprocessDefinitionItem, out int insertedId)
+        public bool Insert(ReprocessDefinition reprocessDefinitionItem)
         {
-            object reprocessDefinitionID;
-            string serializedSettings = ReprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(ReprocessDefinitionItem.Settings) : null;
+            string serializedSettings = reprocessDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(reprocessDefinitionItem.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Insert", out reprocessDefinitionID, ReprocessDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("reprocess.sp_ReprocessDefinition_Insert", reprocessDefinitionItem.ReprocessDefinitionId, reprocessDefinitionItem.Name, serializedSettings);
 
-            insertedId = (affectedRecords > 0) ? (int)reprocessDefinitionID : -1;
             return (affectedRecords > 0);
         }
 
@@ -63,7 +61,7 @@ namespace Vanrise.Reprocess.Data.SQL
         {
             ReprocessDefinition ReprocessDefinition = new ReprocessDefinition
             {
-                ReprocessDefinitionId = (int)reader["ID"],
+                ReprocessDefinitionId =GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<ReprocessDefinitionSettings>(reader["Settings"] as string)
             };

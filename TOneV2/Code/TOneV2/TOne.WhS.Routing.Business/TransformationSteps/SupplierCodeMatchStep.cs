@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.Business.TransformationSteps
 {
     public class SupplierCodeMatchStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("98a78f7e-ca73-471d-b022-d90ec4406871"); } }
+
         public string Number { get; set; }
         public string SupplierId { get; set; }
         public string EffectiveOn { get; set; }

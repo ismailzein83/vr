@@ -17,7 +17,6 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
             {
                 return new GenericData.MainExtensions.DataRecordFields.FieldNumberType 
                 {
-                    ConfigId = 2,
                     DataType = GenericData.MainExtensions.DataRecordFields.FieldNumberDataType.BigInt 
                 };
             }

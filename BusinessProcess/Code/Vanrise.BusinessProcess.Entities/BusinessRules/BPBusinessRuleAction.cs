@@ -1,4 +1,5 @@
-﻿namespace Vanrise.BusinessProcess.Entities
+﻿using System;
+namespace Vanrise.BusinessProcess.Entities
 {
     public class BPBusinessRuleAction
     {
@@ -9,7 +10,7 @@
 
     public class BPBusinessRuleActionDetails
     {
-        public int BPBusinessRuleDefinitionId { get; set; }
+        public Guid BPBusinessRuleDefinitionId { get; set; }
 
         public BPBusinessRuleActionSettings Settings { get; set; }
     }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordFieldTypeSelectiveDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    DataRecordFieldTypeSelectiveDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataRecordFieldTypeSelectiveDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
+    function DataRecordFieldTypeSelectiveDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope:
@@ -38,7 +38,7 @@
                   + '<vr-select on-ready="scopeModel.onSelectorReady"'
                   + 'datasource="scopeModel.fieldTypeConfigs"'
                   + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
-                  + 'datavaluefield="DataRecordFieldTypeConfigId"'
+                  + 'datavaluefield="ExtensionConfigurationId"'
                   + 'datatextfield="Title"'
                   + label
                   + ' text="None"'
@@ -101,7 +101,7 @@
                     getFieldTypeConfigsPromise.then(function () {
                         if (configId != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.fieldTypeConfigs, configId, 'DataRecordFieldTypeConfigId');
+                            $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.fieldTypeConfigs, configId, 'ExtensionConfigurationId');
 
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
@@ -116,7 +116,7 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                     function getFieldTypeConfigs() {
-                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                             if (response != null) {
                                 selectorAPI.clearDataSource();
                                 for (var i = 0; i < response.length; i++) {
@@ -132,7 +132,7 @@
 
                     if ($scope.scopeModel.selectedFieldTypeConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModel.selectedFieldTypeConfig.DataRecordFieldTypeConfigId;
+                        data.ConfigId = $scope.scopeModel.selectedFieldTypeConfig.ExtensionConfigurationId;
                     }
 
                     return data;

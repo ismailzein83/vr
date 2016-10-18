@@ -3,6 +3,7 @@ using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
+using System;
 
 namespace Vanrise.BusinessProcess.Data.SQL
 {
@@ -52,7 +53,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 Name = reader["Name"] as string,
                 ParentId = GetReaderValue<int?>(reader, "ParentID"),
                 Details = Serializer.Deserialize<BPBusinessRuleSetDetails>(reader["Details"] as string),
-                BPDefinitionId = (int)reader["BPDefinitionId"]
+                BPDefinitionId = GetReaderValue<Guid>(reader,"BPDefinitionId")
             };
             return BPBusinessRuleSet;
         }

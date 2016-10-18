@@ -50,7 +50,7 @@ namespace Vanrise.GenericData.Data.SQL
         GenericRuleDefinition GenericRuleDefinitionMapper(IDataReader reader)
         {
             // The Details column doesn't allow null values
-            GenericRuleDefinition details = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>((string)reader["Details"]);
+            GenericRuleDefinition details = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>(reader["Details"] as string);
             return new GenericRuleDefinition()
             {
                 GenericRuleDefinitionId =  GetReaderValue<Guid>(reader,"ID"),

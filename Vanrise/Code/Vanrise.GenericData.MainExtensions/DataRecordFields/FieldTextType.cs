@@ -11,6 +11,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldTextType : DataRecordFieldType
     {
+        public override Guid ConfigId { get { return new Guid("3f29315e-b542-43b8-9618-7de216cd9653"); } }
+
         public override DataRecordFieldOrderType OrderType
         {
             get

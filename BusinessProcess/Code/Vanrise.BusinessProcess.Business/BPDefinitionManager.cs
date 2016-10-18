@@ -83,7 +83,7 @@ namespace Vanrise.BusinessProcess.Business
 
             return updateOperationOutput;
         }
-        public BPDefinition GetBPDefinition(int definitionId)
+        public BPDefinition GetBPDefinition(Guid definitionId)
         {
             return GetCachedBPDefinitions().GetRecord(definitionId);
         }
@@ -124,7 +124,7 @@ namespace Vanrise.BusinessProcess.Business
             SecurityManager secManager = new SecurityManager();
             return secManager.IsAllowed(permission, userId);
         }
-        private Dictionary<int, BPDefinition> GetCachedBPDefinitions()
+        private Dictionary<Guid, BPDefinition> GetCachedBPDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
                () =>

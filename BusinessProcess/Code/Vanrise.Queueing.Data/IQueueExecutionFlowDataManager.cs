@@ -6,7 +6,7 @@ namespace Vanrise.Queueing.Data
     {
         List<Vanrise.Queueing.Entities.QueueExecutionFlow> GetExecutionFlows();
 
-        bool AddExecutionFlow(Vanrise.Queueing.Entities.QueueExecutionFlow executionFlow, out int insertedId);
+        bool AddExecutionFlow(Vanrise.Queueing.Entities.QueueExecutionFlow executionFlow);
 
         bool AreExecutionFlowsUpdated(ref object updateHandle);
 

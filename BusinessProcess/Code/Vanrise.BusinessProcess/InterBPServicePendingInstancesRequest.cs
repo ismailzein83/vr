@@ -11,7 +11,7 @@ namespace Vanrise.BusinessProcess
     {
         public Guid ServiceInstanceId { get; set; }
 
-        public List<int> PendingBPDefinitionIds { get; set; }
+        public List<Guid> PendingBPDefinitionIds { get; set; }
 
         public override object Execute()
         {

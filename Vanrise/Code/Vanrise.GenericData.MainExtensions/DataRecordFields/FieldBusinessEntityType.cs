@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldBusinessEntityType : DataRecordFieldType
     {
+        public override Guid ConfigId { get { return new Guid("2e16c3d4-837b-4433-b80e-7c02f6d71467"); } }
+
         public Guid BusinessEntityDefinitionId { get; set; }
         public bool IsNullable { get; set; }
 

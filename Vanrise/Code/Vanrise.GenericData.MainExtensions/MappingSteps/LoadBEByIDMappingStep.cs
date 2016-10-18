@@ -8,6 +8,8 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 {
     public class LoadBEByIDMappingStep : Vanrise.GenericData.Transformation.Entities.MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("c01eeeaf-7d51-4fce-8842-5db1a8d1b39a"); } }
+
         public Guid BusinessEntityDefinitionId { get; set; }
 
         public string BusinessEntityId { get; set; }

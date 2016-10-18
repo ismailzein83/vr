@@ -8,7 +8,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPDefinition
     {
-        public int BPDefinitionID { get; set; }
+        public Guid BPDefinitionID { get; set; }
 
         public string Name { get; set; }
 

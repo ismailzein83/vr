@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
+app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -85,8 +85,15 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
                         return UtilsService.waitMultiplePromises(promises);
 
                         function getFieldTypeConfig() {
-                            return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypeConfig(fieldType.ConfigId).then(function (fieldTypeConfig) {
-                                $scope.scopeModel.runtimeEditorDirective = fieldTypeConfig.RuntimeEditor;
+                            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
+                                if (response)
+                                {
+                                    var item = UtilsService.getItemByVal(response, fieldType.ConfigId, "ExtensionConfigurationId");
+                                    if(item != undefined)
+                                    {
+                                        $scope.scopeModel.runtimeEditorDirective = item.RuntimeEditor;
+                                    }
+                                }
                             });
                         }
                     }

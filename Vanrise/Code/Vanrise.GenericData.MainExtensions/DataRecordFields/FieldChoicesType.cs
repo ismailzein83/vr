@@ -12,6 +12,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldChoicesType : DataRecordFieldType
     {
+        public override Guid ConfigId { get { return new Guid("eabc41a9-e332-4120-ac85-f0b7e53c0d0d"); } }
         public List<Choice> Choices { get; set; }
         public bool IsNullable { get; set; }
 

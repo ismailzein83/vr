@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericRuleTypeById")]
-        public GenericRuleTypeConfig GetGenericRuleTypeById(int ruleTypeConfigId)
+        public GenericRuleTypeConfig GetGenericRuleTypeById(Guid ruleTypeConfigId)
         {
             GenericRuleTypeConfigManager manager = new GenericRuleTypeConfigManager();
             return manager.GetGenericRuleTypeById(ruleTypeConfigId);

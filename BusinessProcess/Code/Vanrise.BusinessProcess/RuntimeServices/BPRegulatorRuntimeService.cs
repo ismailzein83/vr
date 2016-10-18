@@ -51,7 +51,7 @@ namespace Vanrise.BusinessProcess
             if (pendingInstancesInfo != null && pendingInstancesInfo.Count > 0)
             {
                 var bpDefinitionsList = _bpDefinitionManager.GetBPDefinitions().ToList();
-                Dictionary<int, BPDefinition> bpDefinitions = bpDefinitionsList.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID, bpDefinition => bpDefinition);
+                Dictionary<Guid, BPDefinition> bpDefinitions = bpDefinitionsList.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID, bpDefinition => bpDefinition);
                 Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo
                     = bpServiceInstances.ToDictionary(serviceInstance => serviceInstance.ServiceInstanceId,
                     serviceInstance => new ServiceInstanceBPDefinitionInfo
@@ -179,7 +179,7 @@ namespace Vanrise.BusinessProcess
             List<long> processInstanceIdsHavingEvents = _bpEventDataManager.GetEventsDistinctProcessInstanceIds();
             if(processInstanceIdsHavingEvents != null && processInstanceIdsHavingEvents.Count > 0)
             {
-                Dictionary<Guid, HashSet<int>> bpDefinitionsIdsHavingEventsByServiceInstanceIds = new Dictionary<Guid, HashSet<int>>();
+                Dictionary<Guid, HashSet<Guid>> bpDefinitionsIdsHavingEventsByServiceInstanceIds = new Dictionary<Guid, HashSet<Guid>>();
                 foreach(var processInstanceId in processInstanceIdsHavingEvents)
                 {
                     var matchRunningInstance = runningInstances.FirstOrDefault(itm => itm.ProcessInstanceId == processInstanceId);
@@ -221,7 +221,7 @@ namespace Vanrise.BusinessProcess
             }
         }
 
-        private BPDefinition FindBPDefinition(Dictionary<int, BPDefinition> bpDefinitions, int bpDefinitionId)
+        private BPDefinition FindBPDefinition(Dictionary<Guid, BPDefinition> bpDefinitions, Guid bpDefinitionId)
         {
             BPDefinition definition;
             if (!bpDefinitions.TryGetValue(bpDefinitionId, out definition))
@@ -229,7 +229,7 @@ namespace Vanrise.BusinessProcess
             return definition;
         }
 
-        private Dictionary<int, BPDefinitionInfo> BuildItemsCountByBPDefinition(List<BPDefinition> bpDefinitions)
+        private Dictionary<Guid, BPDefinitionInfo> BuildItemsCountByBPDefinition(List<BPDefinition> bpDefinitions)
         {
             return bpDefinitions.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID
                 , bpDefinition => new BPDefinitionInfo
@@ -248,9 +248,9 @@ namespace Vanrise.BusinessProcess
 
             public bool HasAnyNewInstance { get; set; }
 
-            public Dictionary<int, BPDefinitionInfo> ItemsCountByBPDefinition { get; set; }
+            public Dictionary<Guid, BPDefinitionInfo> ItemsCountByBPDefinition { get; set; }
 
-            internal BPDefinitionInfo GetBPDefinitionInfo(int bpDefinitionId)
+            internal BPDefinitionInfo GetBPDefinitionInfo(Guid bpDefinitionId)
             {
                 BPDefinitionInfo definitionInfo;
                 if (!this.ItemsCountByBPDefinition.TryGetValue(bpDefinitionId, out definitionInfo))

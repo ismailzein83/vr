@@ -14,6 +14,12 @@ namespace Vanrise.GenericData.Web.Controllers
     public class DataStoreController : BaseAPIController
     {
         DataStoreManager _manager = new DataStoreManager();
+        [HttpGet]
+        [Route("GetDataStoreConfigs")]
+        public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
+        {
+            return _manager.GetDataStoreConfigs();
+        }
 
         [HttpPost]
         [Route("GetFilteredDataStores")]

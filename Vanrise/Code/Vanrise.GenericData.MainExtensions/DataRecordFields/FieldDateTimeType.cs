@@ -12,6 +12,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldDateTimeType : DataRecordFieldType
     {
+        public override Guid ConfigId { get { return new Guid("b8712417-83ab-4d4b-9ee1-109d20ceb909"); } }
+
         #region Public Methods
 
         public FieldDateTimeDataType DataType { get; set; }

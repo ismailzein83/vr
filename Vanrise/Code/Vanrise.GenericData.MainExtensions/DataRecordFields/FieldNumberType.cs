@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public enum FieldNumberPrecision { Normal = 0, Long = 1 }
     public class FieldNumberType : DataRecordFieldType
     {
+        public override Guid ConfigId { get { return new Guid("75aef329-27bd-4108-b617-f5cc05ff2aa3"); } }
+
         public FieldNumberPrecision DataPrecision { get; set; }
         public FieldNumberDataType DataType { get; set; }
         public bool IsNullable { get; set; }

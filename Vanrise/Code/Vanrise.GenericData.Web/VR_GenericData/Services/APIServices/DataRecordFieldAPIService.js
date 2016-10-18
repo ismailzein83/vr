@@ -8,7 +8,8 @@
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
             GetDataRecordAttributes: GetDataRecordAttributes,
-            GetDataRecordFieldFormulaExtensionConfigs: GetDataRecordFieldFormulaExtensionConfigs
+            GetDataRecordFieldFormulaExtensionConfigs: GetDataRecordFieldFormulaExtensionConfigs,
+            GetDataRecordFieldTypeConfigs: GetDataRecordFieldTypeConfigs
         });
 
         function GetDataRecordFieldFormulaExtensionConfigs() {
@@ -29,6 +30,11 @@
                     dataRecordTypeId: dataRecordTypeId
                 });
         }
+
+        function GetDataRecordFieldTypeConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordFields", "GetDataRecordFieldTypeConfigs"));
+        }
+        
     }
 
     appControllers.service('VR_GenericData_DataRecordFieldAPIService', DataRecordFieldAPIService);

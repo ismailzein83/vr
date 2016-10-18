@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Vanrise.BusinessProcess.Entities
 {
     public class BPBusinessRuleDefinition
     {
-        public int BPBusinessRuleDefinitionId { get; set; }
+        public Guid BPBusinessRuleDefinitionId { get; set; }
 
         public int BPDefintionId { get; set; }
 

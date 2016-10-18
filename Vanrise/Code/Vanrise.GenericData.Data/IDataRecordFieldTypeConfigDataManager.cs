@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Data
 {
     public interface IDataRecordFieldTypeConfigDataManager:IDataManager
     {
-        List<DataRecordFieldTypeConfig> GetDataRecordFieldTypes();
-        bool AreDataRecordFieldTypeConfigUpdated(ref object updateHandle);
+        //List<DataRecordFieldTypeConfig> GetDataRecordFieldTypes();
+        //bool AreDataRecordFieldTypeConfigUpdated(ref object updateHandle);
     }
 }

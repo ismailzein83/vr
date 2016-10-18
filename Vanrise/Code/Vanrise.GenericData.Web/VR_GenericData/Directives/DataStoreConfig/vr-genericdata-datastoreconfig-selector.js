@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataStoreConfigSelectorDirective.$inject = ['VR_GenericData_DataStoreConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    DataStoreConfigSelectorDirective.$inject = ['VR_GenericData_DataStoreAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataStoreConfigSelectorDirective(VR_GenericData_DataStoreConfigAPIService, UtilsService, VRUIUtilsService) {
+    function DataStoreConfigSelectorDirective(VR_GenericData_DataStoreAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -67,7 +67,7 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_GenericData_DataStoreConfigAPIService.GetDataStoreConfigs().then(function (response) {
+                    return VR_GenericData_DataStoreAPIService.GetDataStoreConfigs().then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {
@@ -75,15 +75,15 @@
                                 ctrl.datasource.push(response[i]);
                             }
                         }
-
+                        console.log(ctrl.datasource)
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'DataStoreConfigId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('DataStoreConfigId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', attrs, ctrl);
                 }
 
                 return api;
@@ -126,8 +126,8 @@
                    // + ' onaddclicked="ctrl.onAddRuleDefinition"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="DataStoreId"'
-                    + ' datatextfield="Name"'
+                    + ' datavaluefield="ExtensionConfigurationId"'
+                    + ' datatextfield="Title"'
                     + ' ' + multipleselection
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'

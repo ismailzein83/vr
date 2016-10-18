@@ -98,7 +98,7 @@ namespace TOne.CDR.Business
             string[] sourceQueueNames = null;
             if (sourceQueueNameTemplate != null)
                 sourceQueueNames = new string[] { String.Format("{0}_{1}", sourceQueueNameTemplate, switchId) };
-            PersistentQueueFactory.Default.CreateQueueIfNotExists(0, null, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
+            PersistentQueueFactory.Default.CreateQueueIfNotExists(Guid.Empty, null, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
         }
 
         static List<int> s_CreatedSwitchesQueues = new List<int>();

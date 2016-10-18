@@ -10,6 +10,10 @@ namespace Vanrise.GenericData.MainExtensions.MappingSteps
 {
     public class BELookupRuleMappingStep : Vanrise.GenericData.Transformation.Entities.MappingStep
     {
+
+        public override Guid ConfigId { get { return new Guid("43932599-404b-4f18-9f5b-963915bf16dc"); } }
+
+
         public Guid BELookupRuleDefinitionId { get; set; }
 
         public string EffectiveTime { get; set; }

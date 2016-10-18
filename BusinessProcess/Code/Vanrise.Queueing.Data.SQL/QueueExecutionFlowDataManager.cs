@@ -26,13 +26,11 @@ namespace Vanrise.Queueing.Data.SQL
             return GetItemsSP("queue.sp_ExecutionFlow_GetAll", ExecutionFlowMapper);
         }
 
-        public bool AddExecutionFlow(QueueExecutionFlow executionFlow, out int insertedId)
+        public bool AddExecutionFlow(QueueExecutionFlow executionFlow)
         {
-            object executionFlowID;
 
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlow_Insert", out executionFlowID, executionFlow.Name, executionFlow.DefinitionId);
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlow_Insert", executionFlow.ExecutionFlowId, executionFlow.Name, executionFlow.DefinitionId);
 
-            insertedId = (recordesEffected > 0) ? (int)executionFlowID : -1;
             return (recordesEffected > 0);
         }
 
@@ -56,8 +54,8 @@ namespace Vanrise.Queueing.Data.SQL
         {
             return new QueueExecutionFlow
             {
-                ExecutionFlowId = (int)reader["ID"],
-                DefinitionId = (int)reader["ExecutionFlowDefinitionID"],
+                ExecutionFlowId = GetReaderValue<Guid>(reader,"ID"),
+                DefinitionId =GetReaderValue<Guid>(reader,"ExecutionFlowDefinitionID"),
                 Name = reader["Name"] as string,
                 Tree = Serializer.Deserialize<QueueExecutionFlowTree>(reader["ExecutionTree"] as string)
             };

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityFilterDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    GenericBusinessEntityFilterDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function GenericBusinessEntityFilterDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
+    function GenericBusinessEntityFilterDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -72,7 +72,7 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                     function loadFieldTypeConfigs() {
-                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                             if (response != null) {
                                 fieldTypeConfigs = [];
                                 for (var i = 0; i < response.length; i++) {
@@ -83,7 +83,7 @@
                     }
                     function getFilter(filterField) {
                         var filter;
-                        var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, filterField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                        var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, filterField.FieldType.ConfigId, 'ExtensionConfigurationId');
                         if (fieldTypeConfig == undefined || fieldTypeConfig.FilterEditor == undefined) {
                             return filter;
                         }

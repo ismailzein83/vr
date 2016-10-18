@@ -46,5 +46,10 @@ namespace Vanrise.GenericData.SQLDataStorage
                 context.DataRecordStorage,
                 context.SummaryTransformationDefinition);
         }
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("2AEEC2DE-EC44-4698-AAEF-8E9DBF669D1E"); }
+        }
     }
 }

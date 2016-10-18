@@ -69,7 +69,7 @@
                             if (payload != undefined && payload.ConfigId != undefined) {
                                 ctrl.disableType = true;
                                 directivePayload = payload;
-                                $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.ConfigId, 'GenericRuleTypeConfigId');
+                                $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.ConfigId, 'ExtensionConfigurationId');
                             } else if (payload != undefined && payload.settingsTypeName != undefined) {
                                 ctrl.disableType = true;
                                 $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.settingsTypeName, 'Name');
@@ -80,7 +80,7 @@
 
                 api.getData = function () {
                     var data = directiveAPI.getData();
-                    data.ConfigId = $scope.scopeModel.selectedSettingsTemplate.GenericRuleTypeConfigId;
+                    data.ConfigId = $scope.scopeModel.selectedSettingsTemplate.ExtensionConfigurationId;
                     return data;
                 };
 

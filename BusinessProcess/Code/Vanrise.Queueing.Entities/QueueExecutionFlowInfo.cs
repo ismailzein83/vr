@@ -8,7 +8,7 @@ namespace Vanrise.Queueing.Entities
 {
    public  class QueueExecutionFlowInfo
    {
-      public int ExecutionFlowId { get; set; }
+       public Guid ExecutionFlowId { get; set; }
 
       public string Name { get; set; }
 

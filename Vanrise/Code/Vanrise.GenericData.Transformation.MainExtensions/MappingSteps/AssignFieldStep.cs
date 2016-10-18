@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class AssignFieldStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("00e8e50c-017e-44ed-96a9-6d4291a9c4b6"); } }
+
         public string Source { get; set; }
 
         public string Target { get; set; }

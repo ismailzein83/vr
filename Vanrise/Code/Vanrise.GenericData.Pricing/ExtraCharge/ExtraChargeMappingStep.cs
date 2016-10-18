@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Pricing
 {
     public class ExtraChargeMappingStep : BaseGenericRuleMappingStep
     {
+        public override Guid ConfigId { get { return new Guid("5d6bbc8b-a602-4a94-ae85-8a602ca26805"); } }
+
         public string InitialRate { get; set; }
         public string EffectiveRate { get; set; }
         public string ExtraChargeRate { get; set; }

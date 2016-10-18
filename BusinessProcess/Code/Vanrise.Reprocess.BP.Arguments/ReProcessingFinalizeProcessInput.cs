@@ -9,7 +9,7 @@ namespace Vanrise.Reprocess.BP.Arguments
 {
     public class ReProcessingFinalizeProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
-        public int ReprocessDefinitionId { get; set; }
+        public Guid ReprocessDefinitionId { get; set; }
 
         public string StageName { get; set; }
 

@@ -3,6 +3,7 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
+using System;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -10,7 +11,7 @@ namespace Vanrise.BusinessProcess.Business
     {
         #region public methods
 
-        public BPTaskType GetBPTaskType(int taskTypeId)
+        public BPTaskType GetBPTaskType(Guid taskTypeId)
         {
             return GetCachedBPTaskTypesById().GetRecord(taskTypeId);
         }
@@ -29,7 +30,7 @@ namespace Vanrise.BusinessProcess.Business
         #endregion
 
         #region private methods
-        private Dictionary<int, BPTaskType> GetCachedBPTaskTypesById()
+        private Dictionary<Guid, BPTaskType> GetCachedBPTaskTypesById()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBPTaskTypesById",
                () =>

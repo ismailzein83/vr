@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess
     {
         public Guid ServiceInstanceId { get; set; }
 
-        public List<int> PendingEventsBPDefinitionIds { get; set; }
+        public List<Guid> PendingEventsBPDefinitionIds { get; set; }
         public override object Execute()
         {
             PendingItemsHandler.Current.SetPendingEventsDefinitionsToProcess(this.ServiceInstanceId, this.PendingEventsBPDefinitionIds);

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericRuleDefinitionSettings
+    public abstract class GenericRuleDefinitionSettings
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
     }
 }

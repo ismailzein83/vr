@@ -38,7 +38,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             var bpDefinition = new BPDefinition
             {
-                BPDefinitionID = (int)reader["ID"],
+                BPDefinitionID = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 WorkflowType = Type.GetType(reader["FQTN"] as string)

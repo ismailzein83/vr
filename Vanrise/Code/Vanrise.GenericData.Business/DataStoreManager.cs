@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Data.SQL;
@@ -15,7 +16,11 @@ namespace Vanrise.GenericData.Business
     public class DataStoreManager
     {
         #region Public Methods
-
+        public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<DataStoreConfig>(DataStoreConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<DataStoreInfo> GetDataStoresInfo()
         {
             return this.GetCachedDataStores().MapRecords(DataStoreInfoMapper).OrderBy(x => x.Name);

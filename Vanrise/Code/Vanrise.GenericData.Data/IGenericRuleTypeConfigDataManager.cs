@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Data
 {
     public interface IGenericRuleTypeConfigDataManager:IDataManager
     {
-        List<GenericRuleTypeConfig> GetGenericRuleTypes();
-        bool AreGenericRuleTypeConfigUpdated(ref object updateHandle);
+        //List<GenericRuleTypeConfig> GetGenericRuleTypes();
+        //bool AreGenericRuleTypeConfigUpdated(ref object updateHandle);
     }
 }

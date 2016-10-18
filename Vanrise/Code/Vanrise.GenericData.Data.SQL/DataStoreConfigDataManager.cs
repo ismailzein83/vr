@@ -11,37 +11,37 @@ namespace Vanrise.GenericData.Data.SQL
 {
     public class DataStoreConfigDataManager : BaseSQLDataManager, IDataStoreConfigDataManager
     {
-        public DataStoreConfigDataManager()
-            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
-        {
+        //public DataStoreConfigDataManager()
+        //    : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+        //{
 
-        }
+        //}
 
-        #region Public Methods
-        public List<DataStoreConfig> GetDataStoreConfigs()
-        {
-            return GetItemsSP("genericdata.sp_DataStoreConfig_GetAll", DataStoreConfigMapper);
-        }
-        public bool AreDataStoreConfigUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("genericdata.DataStoreConfig", ref updateHandle);
-        }
+        //#region Public Methods
+        //public List<DataStoreConfig> GetDataStoreConfigs()
+        //{
+        //    return GetItemsSP("genericdata.sp_DataStoreConfig_GetAll", DataStoreConfigMapper);
+        //}
+        //public bool AreDataStoreConfigUpdated(ref object updateHandle)
+        //{
+        //    return base.IsDataUpdated("genericdata.DataStoreConfig", ref updateHandle);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Mappers
+        //#region Mappers
 
-        DataStoreConfig DataStoreConfigMapper(IDataReader reader)
-        {
-            DataStoreConfig dataStoreConfig = Vanrise.Common.Serializer.Deserialize<DataStoreConfig>(reader["Details"] as string);
-            if (dataStoreConfig != null)
-            {
-                dataStoreConfig.DataStoreConfigId = Convert.ToInt32(reader["ID"]);
-                dataStoreConfig.Name = reader["Name"] as string;
-            }
-            return dataStoreConfig;
-        }
+        //DataStoreConfig DataStoreConfigMapper(IDataReader reader)
+        //{
+        //    DataStoreConfig dataStoreConfig = Vanrise.Common.Serializer.Deserialize<DataStoreConfig>(reader["Details"] as string);
+        //    if (dataStoreConfig != null)
+        //    {
+        //        dataStoreConfig.DataStoreConfigId = Convert.ToInt32(reader["ID"]);
+        //        dataStoreConfig.Name = reader["Name"] as string;
+        //    }
+        //    return dataStoreConfig;
+        //}
 
-        #endregion
+        //#endregion
     }
 }

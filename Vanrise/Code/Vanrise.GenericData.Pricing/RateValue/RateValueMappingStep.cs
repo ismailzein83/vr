@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Pricing
 {
     public class RateValueMappingStep : BaseGenericRuleMappingStep
     {
+        public override Guid ConfigId { get { return new Guid("3fb4b968-b4b1-4072-908f-e6f19eb87be0"); } }
+
         public string NormalRate { get; set; }
 
         public string RatesByRateType { get; set; }

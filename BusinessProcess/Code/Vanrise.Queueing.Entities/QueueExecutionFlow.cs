@@ -8,13 +8,13 @@ namespace Vanrise.Queueing.Entities
 {
     public class QueueExecutionFlow
     {
-        public int ExecutionFlowId { get; set; }
+        public Guid ExecutionFlowId { get; set; }
 
         public string Name { get; set; }
 
         public QueueExecutionFlowTree Tree { get; set; }
 
-        public int DefinitionId { get; set; }
+        public Guid DefinitionId { get; set; }
     }
 
     public class QueueExecutionFlowTree : CompositeExecutionActivity

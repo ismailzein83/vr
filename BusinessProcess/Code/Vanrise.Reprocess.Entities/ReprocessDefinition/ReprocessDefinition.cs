@@ -38,7 +38,7 @@ namespace Vanrise.Reprocess.Entities
 
     public class ReprocessDefinition
     {
-        public int ReprocessDefinitionId { get; set; }
+        public Guid ReprocessDefinitionId { get; set; }
 
         public string Name { get; set; }
 
@@ -49,7 +49,7 @@ namespace Vanrise.Reprocess.Entities
     {
         public Guid SourceRecordStorageId { get; set; }
 
-        public int ExecutionFlowDefinitionId { get; set; }
+        public Guid ExecutionFlowDefinitionId { get; set; }
 
         public List<string> StageNames { get; set; }
 

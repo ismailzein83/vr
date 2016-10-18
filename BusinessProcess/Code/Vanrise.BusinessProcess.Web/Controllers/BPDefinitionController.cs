@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -43,7 +44,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("GetBPDefintion")]
-        public BPDefinition GetBPDefintion(int bpDefinitionId)
+        public BPDefinition GetBPDefintion(Guid bpDefinitionId)
         {
             BPDefinitionManager manager = new BPDefinitionManager();
             return manager.GetBPDefinition(bpDefinitionId);

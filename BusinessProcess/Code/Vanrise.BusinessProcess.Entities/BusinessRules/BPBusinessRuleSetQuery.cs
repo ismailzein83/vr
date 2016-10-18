@@ -8,6 +8,6 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPBusinessRuleSetQuery
     {
-        public List<int> DefinitionsId { get; set; }
+        public List<Guid> DefinitionsId { get; set; }
     }
 }

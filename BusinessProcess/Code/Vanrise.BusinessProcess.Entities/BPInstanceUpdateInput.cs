@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -6,7 +7,7 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public byte[] LastUpdateHandle { get; set; }
         public int NbOfRows { get; set; }
-        public List<int> DefinitionsId { get; set; }
+        public List<Guid> DefinitionsId { get; set; }
         public int ParentId { get; set; }
         public string EntityId { get; set; }
     }

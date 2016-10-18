@@ -15,7 +15,7 @@ namespace Vanrise.Queueing
 
         #region Public Methods
 
-        public QueuesByStages GetQueuesByStages(int executionFlowId)
+        public QueuesByStages GetQueuesByStages(Guid executionFlowId)
         {
             string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages2_{0}", executionFlowId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<ExecutionFlowRuntimeCacheManager>().GetOrCreateObject(cacheName,
@@ -59,16 +59,15 @@ namespace Vanrise.Queueing
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int executionFlowId = -1;
-
+       
+            executionFlowObj.ExecutionFlowId = Guid.NewGuid();
             IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
-            bool insertActionSucc = dataManager.AddExecutionFlow(executionFlowObj, out executionFlowId);
+            bool insertActionSucc = dataManager.AddExecutionFlow(executionFlowObj);
 
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                executionFlowObj.ExecutionFlowId = executionFlowId;
                 insertOperationOutput.InsertedObject = QueueExecutionFlowMapper(executionFlowObj);
             }
             else
@@ -87,7 +86,7 @@ namespace Vanrise.Queueing
         }
 
 
-        public string GetExecutionFlowName(int executionFlowId)
+        public string GetExecutionFlowName(Guid executionFlowId)
         {
             QueueExecutionFlow executionFlow = GetExecutionFlow(executionFlowId);
             return executionFlow != null ? executionFlow.Name : null;
@@ -116,7 +115,7 @@ namespace Vanrise.Queueing
 
         }
 
-        public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
+        public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId)
         {
             var executionFlows = GetCachedQueueExecutionFlows();
             return executionFlows.GetRecord(executionFlowId);
@@ -217,7 +216,7 @@ namespace Vanrise.Queueing
             return queueNameBuilder.ToString();
         }
 
-        Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
+        Dictionary<Guid, QueueExecutionFlow> GetCachedQueueExecutionFlows()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
                () =>

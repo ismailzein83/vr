@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Pricing
 {
     public class TariffMappingStep : BaseGenericRuleMappingStep
     {
+        public override Guid ConfigId { get { return new Guid("3fc597f0-f5ce-4b49-9aea-24795c81fe80"); } }
+
         public string InitialRate { get; set; }
         public string DurationInSeconds { get; set; }
         public string EffectiveRate { get; set; }

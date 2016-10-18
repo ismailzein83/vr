@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticGridWidgetSettingsController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_StyleCodeEnum'];
+    AnalyticGridWidgetSettingsController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_Analytic_StyleCodeEnum'];
 
-    function AnalyticGridWidgetSettingsController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_StyleCodeEnum) {
+    function AnalyticGridWidgetSettingsController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_Analytic_StyleCodeEnum) {
 
         var measureStyleRules;
         var context = [];

@@ -22,9 +22,9 @@ namespace Vanrise.Reprocess.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allReprocessDefinitions.ToBigResult(input, filterExpression, ReprocessDefinitionDetailMapper));
         }
 
-        public ReprocessDefinition GetReprocessDefinition(int reprocessDefinitionId)
+        public ReprocessDefinition GetReprocessDefinition(Guid reprocessDefinitionId)
         {
-            Dictionary<int, ReprocessDefinition> cachedReprocessDefinitions = this.GetCachedReprocessDefinitions();
+            Dictionary<Guid, ReprocessDefinition> cachedReprocessDefinitions = this.GetCachedReprocessDefinitions();
             return cachedReprocessDefinitions.GetRecord(reprocessDefinitionId);
         }
 
@@ -34,15 +34,13 @@ namespace Vanrise.Reprocess.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int reprocessDefintionId = -1;
-
+            reprocessDefinitionItem.ReprocessDefinitionId = Guid.NewGuid();
             IReprocessDefinitionDataManager dataManager = ReprocessDataManagerFactory.GetDataManager<IReprocessDefinitionDataManager>();
 
-            if (dataManager.Insert(reprocessDefinitionItem, out reprocessDefintionId))
+            if (dataManager.Insert(reprocessDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                reprocessDefinitionItem.ReprocessDefinitionId = reprocessDefintionId;
                 insertOperationOutput.InsertedObject = ReprocessDefinitionDetailMapper(reprocessDefinitionItem);
             }
             else
@@ -115,7 +113,7 @@ namespace Vanrise.Reprocess.Business
 
         #region Private Methods
 
-        Dictionary<int, ReprocessDefinition> GetCachedReprocessDefinitions()
+        Dictionary<Guid, ReprocessDefinition> GetCachedReprocessDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetReprocessDefinitions",
                () =>

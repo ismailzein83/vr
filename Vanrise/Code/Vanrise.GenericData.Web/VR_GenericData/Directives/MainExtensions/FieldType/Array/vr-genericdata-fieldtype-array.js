@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ArrayFieldTypeEditorDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService'];
+    ArrayFieldTypeEditorDirective.$inject = [];
 
-    function ArrayFieldTypeEditorDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService) {
+    function ArrayFieldTypeEditorDirective() {
         return {
             restrict: 'E',
             scope: {

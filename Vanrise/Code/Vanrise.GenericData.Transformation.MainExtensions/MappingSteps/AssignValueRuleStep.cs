@@ -12,6 +12,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class AssignValueRuleStep : BaseGenericRuleMappingStep
     {
+        public override Guid ConfigId { get { return new Guid("59b40c67-527f-40f8-bfe7-ce19d2101802"); } }
+
         public string Target { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)

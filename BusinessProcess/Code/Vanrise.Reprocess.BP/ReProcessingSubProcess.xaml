@@ -84,8 +84,8 @@
         </OutArgument>
       </vrba1:GetReprocessDefinition.ReprocessDefinition>
       <vrba1:GetReprocessDefinition.ReprocessDefinitionId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReprocessDefinitionId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.ReprocessDefinitionId</mca:CSharpValue>
         </InArgument>
       </vrba1:GetReprocessDefinition.ReprocessDefinitionId>
     </vrba1:GetReprocessDefinition>
@@ -220,7 +220,7 @@
         </ActivityAction>
       </ParallelForEach>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJT8D4AEOAgEBRAVPDgMBmwFQBVskAwGQAVwFZw4DAYUBaAXeARACAQJMC0yEAQMBoQFHC0dwAwGcAVgLWGMDAZYBUwtTcwMBkQFkC2R4AwGLAV8LX2cDAYYBbAeeARICAUyfAQfdARkCAQNtCZEBJQIBWpIBCZ0BJgIBTaIBDaIBjAECAUapAQvbARYCAQR/D399AgF/cA9wZQIBeXoPeogBAgFziQEPiQF8AgFtdQ91XQIBZ4QBD4QBYwIBYY4BD44BWwIBW5UBD5UBdAIBVJoBD5oBYwIBTqoBDc4BIgIBFM8BDdoBKgIBBcsBE8sBXwIBP7IBE7IBcwIBOLcBE7cBYgIBMa0BE60BYQIBKsEBE8EBggECASPGARPGAXMCARy8ARO8AWcCARXSARPSAXgCAQ3XARPXAWcCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJT8D4AEOAgEBRAVPDgMBmwFQBVskAwGQAVwFZw4DAYUBaAXeARACAQJMC0yEAQMBoQFHC0dwAwGcAVgLWGIDAZYBUwtTcwMBkQFkC2R4AwGLAV8LX2cDAYYBbAeeARICAUyfAQfdARkCAQNtCZEBJQIBWpIBCZ0BJgIBTaIBDaIBjAECAUapAQvbARYCAQR/D399AgF/cA9wZQIBeXoPeogBAgFziQEPiQF8AgFtdQ91XQIBZ4QBD4QBYwIBYY4BD44BWwIBW5UBD5UBdAIBVJoBD5oBYwIBTqoBDc4BIgIBFM8BDdoBKgIBBcsBE8sBXwIBP7IBE7IBcwIBOLcBE7cBYgIBMa0BE60BYQIBKsEBE8EBggECASPGARPGAXMCARy8ARO8AWcCARXSARPSAXgCAQ3XARPXAWcCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

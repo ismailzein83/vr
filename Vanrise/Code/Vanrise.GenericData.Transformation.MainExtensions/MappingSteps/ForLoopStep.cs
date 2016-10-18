@@ -11,6 +11,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class ForLoopStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("d7ce9698-2721-467e-9820-1ed44b446d0d"); } }
+
         public List<MappingStep> Steps { get; set; }
 
         public string ArrayVariableName { get; set; }

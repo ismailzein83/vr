@@ -1,8 +1,9 @@
-﻿namespace Vanrise.Reprocess.Entities
+﻿using System;
+namespace Vanrise.Reprocess.Entities
 {
     public class ReprocessDefinitionInfo
     {
-        public int ReprocessDefinitionId { get; set; }
+        public Guid ReprocessDefinitionId { get; set; }
 
         public string Name { get; set; }
     }

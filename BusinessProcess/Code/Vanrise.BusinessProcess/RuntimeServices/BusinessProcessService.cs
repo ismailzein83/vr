@@ -27,7 +27,7 @@ namespace Vanrise.BusinessProcess
 
         protected override void Execute()
         {
-            int definitionId;
+            Guid definitionId;
             while(PendingItemsHandler.Current.TryGetPendingDefinitionsToProcess(base.ServiceInstance.ServiceInstanceId, out definitionId))
             {
                 BusinessProcessRuntime.Current.ExecutePendings(definitionId, base.ServiceInstance.ServiceInstanceId);

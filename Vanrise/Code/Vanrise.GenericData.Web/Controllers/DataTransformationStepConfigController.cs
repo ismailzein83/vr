@@ -13,13 +13,13 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataTransformationStepConfig")]
     public class DataTransformationStepConfigController : BaseAPIController
     {
-        [HttpGet]
-        [Route("GetDataTransformationSteps")]
-        public IEnumerable<DataTransformationStepConfig> GetDataTransformationSteps()
-        {
-            DataTransformationStepConfigManager manager = new DataTransformationStepConfigManager();
-            return manager.GetDataTransformationSteps();
-        }
+        //[HttpGet]
+        //[Route("GetDataTransformationSteps")]
+        //public IEnumerable<DataTransformationStepConfig> GetDataTransformationSteps()
+        //{
+        //    DataTransformationStepConfigManager manager = new DataTransformationStepConfigManager();
+        //    return manager.GetDataTransformationSteps();
+        //}
 
     }
 }

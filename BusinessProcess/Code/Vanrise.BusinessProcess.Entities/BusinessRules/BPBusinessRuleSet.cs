@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -10,7 +11,7 @@ namespace Vanrise.BusinessProcess.Entities
 
         public string Name { get; set; }
 
-        public int BPDefinitionId { get; set; }
+        public Guid BPDefinitionId { get; set; }
 
         public BPBusinessRuleSetDetails Details { get; set; }
     }

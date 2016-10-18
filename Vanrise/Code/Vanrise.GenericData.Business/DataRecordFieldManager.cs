@@ -40,5 +40,15 @@ namespace Vanrise.GenericData.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<DataRecordFieldFormulaConfig>(DataRecordFieldFormulaConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<DataRecordFieldTypeConfig> GetDataRecordFieldTypeConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<DataRecordFieldTypeConfig>(DataRecordFieldTypeConfig.EXTENSION_TYPE);
+        }
+
+
+
+
     }
 }

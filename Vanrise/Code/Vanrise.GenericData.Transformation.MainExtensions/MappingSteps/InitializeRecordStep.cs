@@ -11,6 +11,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class InitializeRecordStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("f02ac0b5-79a4-4343-8081-85cd3787b88c"); } }
+
         public string RecordName { get; set; }
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {

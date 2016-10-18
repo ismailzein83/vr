@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericRuleTypeConfig
+    public class GenericRuleTypeConfig:ExtensionConfiguration
     {
-        public int GenericRuleTypeConfigId { get; set; }
+        public const string EXTENSION_TYPE = "VR_GenericData_GenericRuleTypeConfig";
 
-        public string Name { get; set; }
+      //  public int GenericRuleTypeConfigId { get; set; }
 
-        public string Title { get; set; }
+        //public string Name { get; set; }
+
+        //public string Title { get; set; }
 
         public string Editor { get; set; }
 

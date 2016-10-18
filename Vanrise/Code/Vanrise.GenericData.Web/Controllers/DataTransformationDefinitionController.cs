@@ -13,6 +13,15 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataTransformationDefinition")]
     public class DataTransformationDefinitionController : BaseAPIController
     {
+
+        [HttpGet]
+        [Route("GetDataTransformationStepConfig")]
+        public IEnumerable<DataTransformationStepConfig> GetDataTransformationStepConfig()
+        {
+            DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
+            return dataRecordTypeManager.GetDataTransformationStepConfig();
+        }
+
         [HttpGet]
         [Route("GetDataTransformationDefinition")]
         public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)

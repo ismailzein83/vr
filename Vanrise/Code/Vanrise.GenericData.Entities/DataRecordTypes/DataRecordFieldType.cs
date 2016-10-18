@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     public enum DataRecordFieldOrderType { ByFieldValue = 0, ByFieldDescription = 1 }
     public abstract class DataRecordFieldType
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
 
         public abstract Type GetRuntimeType();
 

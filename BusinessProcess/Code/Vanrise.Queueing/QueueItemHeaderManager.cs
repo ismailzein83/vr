@@ -59,7 +59,7 @@ namespace Vanrise.Queueing
                                                              by new { qItemStatusSummary, qItemStatusSummary.Status, qInstances.ExecutionFlowId } into res
                                                              select new ExecutionFlowStatusSummary
                                                              {
-                                                                 ExecutionFlowId = (int)res.Key.ExecutionFlowId,
+                                                                 ExecutionFlowId = (Guid)res.Key.ExecutionFlowId,
                                                                  Status = res.Key.Status,
                                                                  Count = res.Key.qItemStatusSummary.Count
                                                              };
@@ -125,7 +125,7 @@ namespace Vanrise.Queueing
             queueItemHeaderDetail.StageName = instance != null ? instance.StageName : "";
             queueItemHeaderDetail.StatusName = Vanrise.Common.Utilities.GetEnumDescription(queueItemHeader.Status);
             queueItemHeaderDetail.QueueTitle = instance.Title;
-            queueItemHeaderDetail.ExecutionFlowName = executionFlowManager.GetExecutionFlowName((int)instance.ExecutionFlowId);
+            queueItemHeaderDetail.ExecutionFlowName = executionFlowManager.GetExecutionFlowName((Guid)instance.ExecutionFlowId);
             return queueItemHeaderDetail;
         }
 

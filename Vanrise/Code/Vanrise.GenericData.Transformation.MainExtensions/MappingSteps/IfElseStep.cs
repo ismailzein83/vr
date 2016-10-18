@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class IfElseStep : MappingStep
     {
+        public override Guid ConfigId { get { return new Guid("9cf3c165-1921-4f83-990d-03b82a04aa5a"); } }
+
         public string Condition { get; set; }
 
         public List<MappingStep> ThenSteps { get; set; }

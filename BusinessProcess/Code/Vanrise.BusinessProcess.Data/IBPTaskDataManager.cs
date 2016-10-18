@@ -9,7 +9,7 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPTaskDataManager : IDataManager
     {
-        bool InsertTask(string title, long processInstanceId, int typeId, List<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId);
+        bool InsertTask(string title, long processInstanceId, Guid typeId, List<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId);
 
         BPTask GetTask(long taskId);
 

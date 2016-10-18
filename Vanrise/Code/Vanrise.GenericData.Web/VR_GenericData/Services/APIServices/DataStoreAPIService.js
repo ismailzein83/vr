@@ -33,7 +33,9 @@
         function HasUpdateDataStore() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataStore", ['UpdateDataStore']));
         }
-
+        function GetDataStoreConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataStore", "GetDataStoreConfigs"));
+        }
 
         return {
             GetDataStoresInfo: GetDataStoresInfo,
@@ -42,7 +44,8 @@
             AddDataStore: AddDataStore,
             HasAddDataStore:HasAddDataStore,
             UpdateDataStore: UpdateDataStore,
-            HasUpdateDataStore: HasUpdateDataStore
+            HasUpdateDataStore: HasUpdateDataStore,
+            GetDataStoreConfigs: GetDataStoreConfigs
         };
     }
 

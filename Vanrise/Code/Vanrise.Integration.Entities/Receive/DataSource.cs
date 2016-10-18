@@ -35,7 +35,7 @@ namespace Vanrise.Integration.Entities
 
         public string MapperCustomCode { get; set; }
 
-        public int ExecutionFlowId { get; set; }
+        public Guid ExecutionFlowId { get; set; }
     }
 
     public class DataSourceMappingSettings

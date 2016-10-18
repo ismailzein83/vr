@@ -86,7 +86,7 @@ namespace Vanrise.Queueing
             return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
-        public void CreateQueue(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null)
+        public void CreateQueue(Guid executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null)
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
@@ -144,7 +144,7 @@ namespace Vanrise.Queueing
             }
         }
 
-        public void CreateQueueIfNotExists(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
+        public void CreateQueueIfNotExists(Guid executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
         {
             queueTitle = queueTitle ?? queueName;            
             if (!QueueExists(queueName))

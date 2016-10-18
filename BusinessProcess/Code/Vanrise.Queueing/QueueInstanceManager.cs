@@ -19,7 +19,7 @@ namespace Vanrise.Queueing
 
             Func<QueueInstance, bool> filterExpression = (queueInstance) =>
 
-                      (input.Query.ExecutionFlowId == null || input.Query.ExecutionFlowId.Contains((int)queueInstance.ExecutionFlowId)) &&
+                      (input.Query.ExecutionFlowId == null || input.Query.ExecutionFlowId.Contains((Guid)queueInstance.ExecutionFlowId)) &&
                       (input.Query.Name == null || queueInstance.Name.Contains(input.Query.Name)) &&
                       (input.Query.StageName == null || input.Query.StageName.Contains(queueInstance.StageName)) &&
                       (input.Query.Title == null || queueInstance.Title.Contains(input.Query.Title)) &&
@@ -39,7 +39,7 @@ namespace Vanrise.Queueing
             List<QueueInstance> queueInstances = new List<QueueInstance>();
             if (filter != null)
             {
-                List<int> filterToList = new List<int>();
+                List<Guid> filterToList = new List<Guid>();
                 filterToList.Add(filter.ExecutionFlowId);
                 queueInstances = GetQueueExecutionFlows(filterToList).ToList();
                 return queueInstances.MapRecords(QueueInstanceInfoMapper, null);
@@ -77,7 +77,7 @@ namespace Vanrise.Queueing
                 return null;
         }
 
-        public IEnumerable<QueueInstance> GetQueueExecutionFlows(List<int> executionFlowIds)
+        public IEnumerable<QueueInstance> GetQueueExecutionFlows(List<Guid> executionFlowIds)
         {
             IEnumerable<QueueInstance> queueInstances = GetCachedQueueInstances().Values.ToList();
             return queueInstances.Where(x => x.ExecutionFlowId.HasValue && executionFlowIds.Contains(x.ExecutionFlowId.Value));
@@ -142,7 +142,7 @@ namespace Vanrise.Queueing
             if (queueInstanceDetail.Entity.ExecutionFlowId != null)
             {
                 QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
-                queueInstanceDetail.ExecutionFlowName = manager.GetExecutionFlowName((int)queueInstanceDetail.Entity.ExecutionFlowId);
+                queueInstanceDetail.ExecutionFlowName = manager.GetExecutionFlowName((Guid)queueInstanceDetail.Entity.ExecutionFlowId);
             }
             else
             {

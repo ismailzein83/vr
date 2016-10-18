@@ -1,8 +1,9 @@
-﻿namespace Vanrise.BusinessProcess.Entities
+﻿using System;
+namespace Vanrise.BusinessProcess.Entities
 {
     public class BPBusinessRuleSetInfoFilter
     {
-        public int? BPDefinitionId { get; set; }
+        public Guid? BPDefinitionId { get; set; }
 
         public int? CanBeParentOfRuleSetId { get; set; }
     }

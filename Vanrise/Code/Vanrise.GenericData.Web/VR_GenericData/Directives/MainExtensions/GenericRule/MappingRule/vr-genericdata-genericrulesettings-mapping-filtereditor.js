@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MappingRuleSettingsFilterEditorDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    MappingRuleSettingsFilterEditorDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function MappingRuleSettingsFilterEditorDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
+    function MappingRuleSettingsFilterEditorDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -62,7 +62,7 @@
                     promises.push(loadWrapperDirectiveDeferred.promise);
 
                     getFieldTypeConfigsPromise.then(function () {
-                        isolatedCtrl.directiveEditor = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
+                        isolatedCtrl.directiveEditor = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.ConfigId, 'ExtensionConfigurationId').FilterEditor;
 
                         directiveReadyDeferred.promise.then(function () {
                             var directivePayload = {
@@ -76,7 +76,7 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                     function getFieldTypeConfigs() {
-                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                             fieldTypeConfigs = [];
                             for (var i = 0; i < response.length; i++) {
                                 fieldTypeConfigs.push(response[i]);

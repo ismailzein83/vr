@@ -9,7 +9,7 @@ namespace Vanrise.Queueing.Entities
     public class ExecutionFlowStatusSummary
     {
 
-        public int ExecutionFlowId { get; set; }
+        public Guid ExecutionFlowId { get; set; }
 
         public QueueItemStatus Status { get; set; }
 

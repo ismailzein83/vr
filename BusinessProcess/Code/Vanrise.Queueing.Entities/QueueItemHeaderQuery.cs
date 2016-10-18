@@ -8,8 +8,8 @@ namespace Vanrise.Queueing.Entities
 {
    public class QueueItemHeaderQuery
     {
-         
-        public List<int> ExecutionFlowIds { get; set; }
+
+       public List<Guid> ExecutionFlowIds { get; set; }
 
         public List<int> QueueIds { get; set; }
 

@@ -13,7 +13,7 @@ namespace Vanrise.Reprocess.Data
 
         bool AreReprocessDefinitionUpdated(ref object updateHandle);
 
-        bool Insert(ReprocessDefinition ReprocessDefinitionItem, out int insertedId);
+        bool Insert(ReprocessDefinition ReprocessDefinitionItem);
 
         bool Update(ReprocessDefinition ReprocessDefinitionItem);
     }

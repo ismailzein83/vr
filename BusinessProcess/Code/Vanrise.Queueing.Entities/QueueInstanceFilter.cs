@@ -8,6 +8,6 @@ namespace Vanrise.Queueing.Entities
 {
     public class QueueInstanceFilter
     {
-        public int ExecutionFlowId { get; set; }
+        public Guid ExecutionFlowId { get; set; }
     }
 }

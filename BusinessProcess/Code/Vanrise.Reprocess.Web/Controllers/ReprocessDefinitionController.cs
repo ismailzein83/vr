@@ -26,7 +26,7 @@ namespace Vanrise.Reprocess.Web.Controllers
 
         [HttpGet]
         [Route("GetReprocessDefinition")]
-        public ReprocessDefinition GetReprocessDefinition(int reprocessDefinitionId)
+        public ReprocessDefinition GetReprocessDefinition(Guid reprocessDefinitionId)
         {
             return _manager.GetReprocessDefinition(reprocessDefinitionId);
         }

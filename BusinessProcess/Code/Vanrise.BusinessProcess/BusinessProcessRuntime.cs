@@ -41,14 +41,14 @@ namespace Vanrise.BusinessProcess
         
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
 
-        Dictionary<int, BPDefinitionInitiator> _processDefinitionInitiators;
+        Dictionary<Guid, BPDefinitionInitiator> _processDefinitionInitiators;
 
 
         #endregion
         
         #region Process Execution
-        
-        public void ExecutePendings(int bpDefinitionId, Guid serviceInstanceId)
+
+        public void ExecutePendings(Guid bpDefinitionId, Guid serviceInstanceId)
         {
             LoadProcessDefinitionInitiators();
             BPDefinitionInitiator bpDefinitionInitiator;
@@ -57,7 +57,7 @@ namespace Vanrise.BusinessProcess
             bpDefinitionInitiator.RunPendingProcesses(serviceInstanceId);
         }
 
-        public void TriggerPendingEvents(int bpDefinitionId, Guid serviceInstanceId)
+        public void TriggerPendingEvents(Guid bpDefinitionId, Guid serviceInstanceId)
         {
             LoadProcessDefinitionInitiators();
             BPDefinitionInitiator bpDefinitionInitiator;
@@ -75,7 +75,7 @@ namespace Vanrise.BusinessProcess
             lock (this)
             {
                 if (_processDefinitionInitiators == null)
-                    _processDefinitionInitiators = new Dictionary<int, BPDefinitionInitiator>();
+                    _processDefinitionInitiators = new Dictionary<Guid, BPDefinitionInitiator>();
                 var definitions = _definitionManager.GetBPDefinitions();
                 foreach (var bpDefinition in definitions)
                 {

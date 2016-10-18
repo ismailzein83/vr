@@ -9,7 +9,7 @@ namespace Vanrise.Reprocess.BP.Arguments
 {
     public class ReProcessingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
-        public int ReprocessDefinitionId { get; set; }
+        public Guid ReprocessDefinitionId { get; set; }
 
         public DateTime FromTime { get; set; }
 

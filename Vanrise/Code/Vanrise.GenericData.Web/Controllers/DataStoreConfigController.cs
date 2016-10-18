@@ -13,20 +13,20 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataStoreConfig")]
     public class DataStoreConfigController:BaseAPIController
     {
-        [HttpGet]
-        [Route("GetDataStoreConfigs")]
-        public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
-        {
-            DataStoreConfigManager manager = new DataStoreConfigManager();
-            return manager.GetDataStoreConfigs();
-        }
+        //[HttpGet]
+        //[Route("GetDataStoreConfigs")]
+        //public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
+        //{
+        //    DataStoreConfigManager manager = new DataStoreConfigManager();
+        //    return manager.GetDataStoreConfigs();
+        //}
 
-        [HttpGet]
-        [Route("GetDataStoreConfig")]
-        public DataStoreConfig GetDataStoreConfig(int dataStoreConfigId)
-        {
-            DataStoreConfigManager manager = new DataStoreConfigManager();
-            return manager.GeDataStoreConfigById(dataStoreConfigId);
-        }
+        //[HttpGet]
+        //[Route("GetDataStoreConfig")]
+        //public DataStoreConfig GetDataStoreConfig(int dataStoreConfigId)
+        //{
+        //    DataStoreConfigManager manager = new DataStoreConfigManager();
+        //    return manager.GeDataStoreConfigById(dataStoreConfigId);
+        //}
     }
 }

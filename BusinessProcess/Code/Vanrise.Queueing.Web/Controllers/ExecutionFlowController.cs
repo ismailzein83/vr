@@ -32,7 +32,7 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpGet]
         [Route("GetExecutionFlow")]
-        public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
+        public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId)
         {
 
             return _manager.GetExecutionFlow(executionFlowId);

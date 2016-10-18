@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public abstract class MappingStep
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
         public abstract void GenerateExecutionCode(IDataTransformationCodeGenerationContext context);
     }
 }

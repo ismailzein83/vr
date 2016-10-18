@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
+app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -122,14 +122,14 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
             {
                 if( $scope.fieldTypeConfigs != undefined)
                 {
-                    var dataRecordFieldTypeConfig = UtilsService.getItemByVal($scope.fieldTypeConfigs, configId, 'DataRecordFieldTypeConfigId');
+                    var dataRecordFieldTypeConfig = UtilsService.getItemByVal($scope.fieldTypeConfigs, configId, 'ExtensionConfigurationId');
                     if (dataRecordFieldTypeConfig != undefined)
                         return dataRecordFieldTypeConfig.RuntimeEditor;
                 }
             }
 
             function loadRunTimeFieldTypeTemplates() {
-                return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                     if (response) {
                         $scope.fieldTypeConfigs = response;
                     }

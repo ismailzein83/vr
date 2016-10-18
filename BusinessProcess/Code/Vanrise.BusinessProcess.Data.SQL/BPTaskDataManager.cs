@@ -17,7 +17,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
         #region public methods
 
-        public bool InsertTask(string title, long processInstanceId, int typeId, List<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId)
+        public bool InsertTask(string title, long processInstanceId, Guid typeId, List<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId)
         {
             string assignedUsers = null;
             if (assignedUserIds != null && assignedUserIds.Count > 0)
@@ -78,7 +78,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             {
                 BPTaskId = (long)reader["ID"],
                 ProcessInstanceId = (long)reader["ProcessInstanceID"],
-                TypeId = (int)reader["TypeID"],
+                TypeId = GetReaderValue<Guid>(reader,"TypeID"),
                 Title = reader["Title"] as string,
                 ExecutedById = GetReaderValue<int?>(reader, "ExecutedBy"),
                 Status = (BPTaskStatus)reader["Status"],

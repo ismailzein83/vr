@@ -2,10 +2,10 @@
 
     "use strict";
 
-    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
+    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService',
         'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
 
-    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService,
+    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService,
         VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService) {
 
         var isEditMode;
@@ -138,12 +138,12 @@
             var loadAllFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadAllFieldsPromiseDeferred.promise);
 
-            var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (allConfigs) {
+            var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (allConfigs) {
 
                 var criteriaFieldsPromises = [];
 
                 angular.forEach(criteriaDefinitionFields, function (field) {
-                    var dataFieldTypeConfig = UtilsService.getItemByVal(allConfigs, field.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                    var dataFieldTypeConfig = UtilsService.getItemByVal(allConfigs, field.FieldType.ConfigId, 'ExtensionConfigurationId');
                     field.runtimeEditor = {};
                     field.runtimeEditor.directive = dataFieldTypeConfig.RuntimeEditor;
                     field.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();

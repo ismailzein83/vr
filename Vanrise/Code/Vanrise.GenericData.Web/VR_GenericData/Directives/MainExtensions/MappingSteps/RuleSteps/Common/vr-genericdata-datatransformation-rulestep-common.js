@@ -205,7 +205,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         ruleTypeName = payload.ruleTypeName;
                         loadRuleType(payload.ruleTypeName).then(function () {
                             ruleDefinitionDirectiveReadyPromiseDeferred.promise.then(function () {
-                                var payloadRuleDefinition = { filter: { RuleTypeId: ruleTypeEntity.GenericRuleTypeConfigId } };
+                                var payloadRuleDefinition = { filter: { RuleTypeId: ruleTypeEntity.ExtensionConfigurationId } };
                                 if (payload.ruleDefinitionId != undefined) {
                                     payloadRuleDefinition.selectedIds = payload.ruleDefinitionId;
                                 }
@@ -297,7 +297,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     }
 
 
-                    obj.ConfigId = ruleTypeEntity != undefined ? ruleTypeEntity.GenericRuleTypeConfigId : undefined;
+                    obj.ConfigId = ruleTypeEntity != undefined ? ruleTypeEntity.ExtensionConfigurationId : undefined;
                     obj.RuleDefinitionId = $scope.selectedRuleDefinition != undefined ? $scope.selectedRuleDefinition.GenericRuleDefinitionId : undefined;
                     obj.EffectiveTime = effectiveTimeDirectiveAPI != undefined ? effectiveTimeDirectiveAPI.getData() : undefined;
                     obj.IsEffectiveInFuture = isEffectiveInFutureDirectiveAPI != undefined ? isEffectiveInFutureDirectiveAPI.getData() : undefined;

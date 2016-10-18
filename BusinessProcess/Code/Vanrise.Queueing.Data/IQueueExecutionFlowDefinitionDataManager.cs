@@ -15,6 +15,6 @@ namespace Vanrise.Queueing.Data
 
         bool AreQueueExecutionFlowDefinitionUpdated(ref object updateHandle);
 
-        bool AddExecutionFlowDefinition(Vanrise.Queueing.Entities.QueueExecutionFlowDefinition executionFlowDefinition, out int insertedId);
+        bool AddExecutionFlowDefinition(Vanrise.Queueing.Entities.QueueExecutionFlowDefinition executionFlowDefinition);
     }
 }

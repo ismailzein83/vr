@@ -44,7 +44,7 @@ namespace Vanrise.BusinessProcess
         
 
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
-        int _definitionId;
+        Guid _definitionId;
 
         static IEnumerable<BPInstanceStatus> s_acceptableBPStatusesToRun = new BPInstanceStatus[] { BPInstanceStatus.New };
         public BPDefinitionInitiator(BusinessProcessRuntime runtime, BPDefinition definition)

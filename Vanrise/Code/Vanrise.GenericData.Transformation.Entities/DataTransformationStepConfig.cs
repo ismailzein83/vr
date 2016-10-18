@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Transformation.Entities
 {
-    public class DataTransformationStepConfig
+    public class DataTransformationStepConfig:ExtensionConfiguration
     {
-        public int DataTransformationStepConfigId { get; set; }
-
-        public string Name { get; set; }
-
-        public string Title { get; set; }
+        public const string EXTENSION_TYPE = "VR_GenericData_DataTransformationStepConfig";
 
         public string Editor { get; set; }
 

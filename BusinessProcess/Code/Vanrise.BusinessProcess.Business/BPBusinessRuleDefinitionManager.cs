@@ -56,7 +56,7 @@ namespace Vanrise.BusinessProcess.Business
             });
         }
 
-        private Dictionary<int, BPBusinessRuleDefinition> GetCachedBPBusinessRulesById()
+        private Dictionary<Guid, BPBusinessRuleDefinition> GetCachedBPBusinessRulesById()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPBusinessRuleDefinitionsById",
             () =>

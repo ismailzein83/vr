@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Transformation.Data
 {
     public interface IDataTransformationStepConfigDataManager:IDataManager
     {
-        List<DataTransformationStepConfig> GetDataTransformationSteps();
-        bool AreDataTransformationStepConfigUpdated(ref object updateHandle);
+        //List<DataTransformationStepConfig> GetDataTransformationSteps();
+        //bool AreDataTransformationStepConfigUpdated(ref object updateHandle);
     }
 }

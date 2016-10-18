@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MeasureStyleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_Analytic_StyleCodeEnum'];
+    MeasureStyleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_StyleCodeEnum'];
 
-    function MeasureStyleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_StyleCodeEnum) {
+    function MeasureStyleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_StyleCodeEnum) {
 
         var measureStyleEntity;
         var fieldTypeConfigs = [];
@@ -70,11 +70,11 @@
         }
 
         function addMeasureStyleRule() {
-            var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, selectedMeasure.FieldType.ConfigId, "DataRecordFieldTypeConfigId");
+            var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, selectedMeasure.FieldType.ConfigId, "ExtensionConfigurationId");
 
             var dataItem = {
                 id: countId++,
-                configId: fieldType != undefined ? fieldType.DataRecordFieldTypeConfigId : undefined,
+                configId: fieldType != undefined ? fieldType.ExtensionConfigurationId : undefined,
                 editor: fieldType != undefined ? fieldType.RuleFilterEditor : undefined,
                 name: fieldType != undefined ? fieldType.Name : undefined,
                 selectedStyleColor: VR_Analytic_StyleCodeEnum.Red,
@@ -122,7 +122,7 @@
 
                             var dataItem = {
                                 id: countId++,
-                                configId: matchItem.DataRecordFieldTypeConfigId,
+                                configId: matchItem.ExtensionConfigurationId,
                                 editor: matchItem.RuleFilterEditor,
                                 name: matchItem.Name,
                                 selectedStyleColor: UtilsService.getItemByVal($scope.scopeModel.styleColors, styleConditionItem.payload.StyleCode, 'value')
@@ -173,7 +173,7 @@
         }
 
         function getFieldTypeConfigs() {
-            return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                 fieldTypeConfigs = [];
                 for (var i = 0; i < response.length; i++) {
                     fieldTypeConfigs.push(response[i]);

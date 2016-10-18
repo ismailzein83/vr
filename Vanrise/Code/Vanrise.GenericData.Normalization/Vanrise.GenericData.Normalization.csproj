@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NormalizationRule.cs" />
+    <Compile Include="NormalizationRuleDefinitionSettings.cs" />
     <Compile Include="NormalizationRuleManager.cs" />
     <Compile Include="NormalizationRuleStep.cs" />
     <Compile Include="NormalizeRuleContext.cs" />

@@ -16,6 +16,12 @@ namespace Vanrise.GenericData.Transformation
     {
         #region Public Methods
 
+        public IEnumerable<DataTransformationStepConfig> GetDataTransformationStepConfig()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<DataTransformationStepConfig>(DataTransformationStepConfig.EXTENSION_TYPE);
+        }
+
         public IEnumerable<DataTransformationDefinitionInfo> GetDataTransformationDefinitions(DataTransformationDefinitionFilter filter)
         {
             return this.GetCachedDataTransformationDefinitions().MapRecords(DataTransformationDefinitionInfoMapper).OrderBy(x => x.Name);
@@ -101,11 +107,11 @@ namespace Vanrise.GenericData.Transformation
 
             return updateOperationOutput;
         }
-        public List<Vanrise.Entities.TemplateConfig> GetMappingStepsTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
-        }
+        //public List<Vanrise.Entities.TemplateConfig> GetMappingStepsTemplates()
+        //{
+        //    TemplateConfigManager manager = new TemplateConfigManager();
+        //    return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
+        //}
 
         private struct GetTransformationRuntimeTypeCacheName
         {

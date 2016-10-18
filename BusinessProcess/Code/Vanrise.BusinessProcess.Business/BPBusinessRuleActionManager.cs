@@ -3,13 +3,14 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
+using System;
 
 namespace Vanrise.BusinessProcess.Business
 {
     public class BPBusinessRuleActionManager
     {
         #region public methods
-        public BPBusinessRuleAction GetBusinessRuleAction(int bpBusinessRuleDefinitionId)
+        public BPBusinessRuleAction GetBusinessRuleAction(Guid bpBusinessRuleDefinitionId)
         {
             return GetCachedBPBusinessRuleActionsByDefinition().GetRecord(bpBusinessRuleDefinitionId);
         }
@@ -17,7 +18,7 @@ namespace Vanrise.BusinessProcess.Business
 
         #region private methods
 
-        private Dictionary<int, BPBusinessRuleAction> GetCachedBPBusinessRuleActionsByDefinition()
+        private Dictionary<Guid, BPBusinessRuleAction> GetCachedBPBusinessRuleActionsByDefinition()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPBusinessRuleActions",
             () =>

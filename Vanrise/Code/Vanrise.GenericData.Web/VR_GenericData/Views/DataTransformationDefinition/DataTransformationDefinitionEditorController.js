@@ -2,9 +2,9 @@
 
     "use strict";
 
-    DataTransformationDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_DataTransformationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataTransformationStepConfigAPIService','VR_GenericData_DataRecordTypeAPIService','VR_GenericData_DataTransformationDefinitionService'];
+    DataTransformationDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_DataTransformationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_DataTransformationDefinitionService'];
 
-    function DataTransformationDefinitionEditorController($scope, VR_GenericData_DataTransformationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataTransformationStepConfigAPIService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataTransformationDefinitionService) {
+    function DataTransformationDefinitionEditorController($scope, VR_GenericData_DataTransformationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataTransformationDefinitionService) {
 
         var isEditMode;
         var dataTransformationDefinitionEntity;
@@ -182,7 +182,7 @@
                         $scope.title = UtilsService.buildTitleForAddEditor('Data Transformation');
                 }
                 function loadAllStepts() {
-                    return VR_GenericData_DataTransformationStepConfigAPIService.GetDataTransformationSteps().then(function (response) {
+                    return VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationStepConfig().then(function (response) {
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModal.stepsDefinition.push(response[i]);
                         }
@@ -250,14 +250,14 @@
             var stepItem = {};
             if (stepDefinition == null)
             {
-                var stepDefinition = UtilsService.getItemByVal($scope.scopeModal.stepsDefinition, stepEntity.ConfigId, "DataTransformationStepConfigId");
+                var stepDefinition = UtilsService.getItemByVal($scope.scopeModal.stepsDefinition, stepEntity.ConfigId, "ExtensionConfigurationId");
                 stepItem.readyPromiseDeferred= UtilsService.createPromiseDeferred();
             }
          
             stepItem.editor= stepDefinition.Editor;
             stepItem.stepPreviewUIControl= stepDefinition.StepPreviewUIControl;
             stepItem.title= stepDefinition.Title;
-            stepItem.dataTransformationStepConfigId= stepDefinition.DataTransformationStepConfigId;
+            stepItem.dataTransformationStepConfigId = stepDefinition.ExtensionConfigurationId;
             stepItem.context= context;
             stepItem.loadPromiseDeferred= UtilsService.createPromiseDeferred();
             

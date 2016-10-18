@@ -44,17 +44,14 @@ namespace Vanrise.Queueing.Data.SQL
         }
 
 
-        public bool AddExecutionFlowDefinition(QueueExecutionFlowDefinition executionFlowDefinition, out int insertedId)
+        public bool AddExecutionFlowDefinition(QueueExecutionFlowDefinition executionFlowDefinition)
         {
-            object executionFlowDefinitionID;
             string serializedObj = null;
             if (executionFlowDefinition.Stages != null)
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(executionFlowDefinition.Stages);
             }
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Insert", out executionFlowDefinitionID, executionFlowDefinition.Name, executionFlowDefinition.Title, serializedObj);
-
-            insertedId = (recordesEffected > 0) ? (int)executionFlowDefinitionID : -1;
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Insert", executionFlowDefinition.ID, executionFlowDefinition.Name, executionFlowDefinition.Title, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -66,7 +63,7 @@ namespace Vanrise.Queueing.Data.SQL
         {
             return new Entities.QueueExecutionFlowDefinition
             {
-                ID = (int)reader["ID"],
+                ID = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 Stages = Vanrise.Common.Serializer.Deserialize<List<QueueExecutionFlowStage>>(reader["Stages"] as string),

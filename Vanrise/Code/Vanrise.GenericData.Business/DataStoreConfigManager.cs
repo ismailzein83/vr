@@ -12,45 +12,45 @@ namespace Vanrise.GenericData.Business
 {
     public class DataStoreConfigManager
     {
-        #region Public Methods
-        public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
-        {
-            return this.GetCachedDataStoreConfigs().MapRecords(x => x).OrderBy(x => x.Name);
-        }
+        //#region Public Methods
+        //public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
+        //{
+        //    return this.GetCachedDataStoreConfigs().MapRecords(x => x).OrderBy(x => x.Name);
+        //}
 
-        public DataStoreConfig GeDataStoreConfigById(int dataStoreConfigId)
-        {
-            var cachedGenericRuleTypes = GetCachedDataStoreConfigs();
-            return cachedGenericRuleTypes.FindRecord(x => x.DataStoreConfigId == dataStoreConfigId);
-        }
+        //public DataStoreConfig GeDataStoreConfigById(int dataStoreConfigId)
+        //{
+        //    var cachedGenericRuleTypes = GetCachedDataStoreConfigs();
+        //    return cachedGenericRuleTypes.FindRecord(x => x.DataStoreConfigId == dataStoreConfigId);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Private Methods
-        private Dictionary<int, DataStoreConfig> GetCachedDataStoreConfigs()
-        {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataStoreConfigs",
-               () =>
-               {
-                   IDataStoreConfigDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreConfigDataManager>();
-                   IEnumerable<DataStoreConfig> denericRuleTypes = dataManager.GetDataStoreConfigs();
-                   return denericRuleTypes.ToDictionary(c => c.DataStoreConfigId , c => c);
-               });
-        }
+        //#region Private Methods
+        //private Dictionary<int, DataStoreConfig> GetCachedDataStoreConfigs()
+        //{
+        //    return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataStoreConfigs",
+        //       () =>
+        //       {
+        //           IDataStoreConfigDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreConfigDataManager>();
+        //           IEnumerable<DataStoreConfig> denericRuleTypes = dataManager.GetDataStoreConfigs();
+        //           return denericRuleTypes.ToDictionary(c => c.DataStoreConfigId , c => c);
+        //       });
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Private Classes
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IDataStoreConfigDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreConfigDataManager>();
-            object _updateHandle;
+        //#region Private Classes
+        //private class CacheManager : Vanrise.Caching.BaseCacheManager
+        //{
+        //    IDataStoreConfigDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreConfigDataManager>();
+        //    object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreDataStoreConfigUpdated(ref _updateHandle);
-            }
-        }
-        #endregion
+        //    protected override bool ShouldSetCacheExpired(object parameter)
+        //    {
+        //        return _dataManager.AreDataStoreConfigUpdated(ref _updateHandle);
+        //    }
+        //}
+        //#endregion
     }
 }

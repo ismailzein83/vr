@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService'];
+    DataRecordStorageEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService'];
 
-    function DataRecordStorageEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService) {
+    function DataRecordStorageEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService) {
 
         var isEditMode;
 
@@ -45,7 +45,7 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.dataRecordTypeFields = [];
-
+            $scope.scopeModel.datasources = [];
 
             $scope.scopeModel.settingsEditor;
 
@@ -130,12 +130,16 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadSettingsDirectiveOnPageLoad, loadDataRecordFields, loadRequiredPermission]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs]).then(function () {
+                loadSettingsDirectiveOnPageLoad().then(function () {
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
             });
-
             function setTitle() {
                 $scope.title = (isEditMode) ?
                     UtilsService.buildTitleForUpdateEditor((dataRecordStorageEntity != undefined) ? dataRecordStorageEntity.Name : null, 'Data Record Storage') :
@@ -216,20 +220,14 @@
             var getDataStorePromise = getDataStore();
             promises.push(getDataStorePromise);
 
-            var getDataStoreConfigDeferred = UtilsService.createPromiseDeferred();
-            promises.push(getDataStoreConfigDeferred.promise);
-
             getDataStore().then(function () {
-                VR_GenericData_DataStoreConfigAPIService.GetDataStoreConfig(dataStoreEntity.Settings.ConfigId).then(function (response) {
-                    if (response != null) {
-                        $scope.scopeModel.settingsEditor = response.DataRecordSettingsEditor
-                    }
-                    getDataStoreConfigDeferred.resolve();
-                }).catch(function (error) {
-                    getDataStoreConfigDeferred.reject(error);
-                });
+                
+                var item = UtilsService.getItemByVal($scope.scopeModel.datasources, dataStoreEntity.Settings.ConfigId, "ExtensionConfigurationId");
+                if (item != undefined)
+                {
+                    $scope.scopeModel.settingsEditor = item.DataRecordSettingsEditor;
+                }
             });
-
             return UtilsService.waitMultiplePromises(promises);
 
             function getDataStore() {
@@ -238,6 +236,16 @@
                     dataStoreEntity = response;
                 });
             }
+        }
+        function loadDataStoreConfigs()
+        {
+            VR_GenericData_DataStoreAPIService.GetDataStoreConfigs().then(function (response) {
+                if (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        $scope.scopeModel.datasources.push(response[i]);
+                    }
+                }
+            });
         }
         function loadSettingsDirectiveFromScope() {
             var selectedTypeId = dataRecordTypeSelectorAPI.getSelectedIds();

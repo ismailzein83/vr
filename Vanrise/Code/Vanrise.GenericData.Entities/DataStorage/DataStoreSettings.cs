@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public abstract class DataStoreSettings
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
 
         public abstract void UpdateRecordStorage(IUpdateRecordStorageContext context);
 
