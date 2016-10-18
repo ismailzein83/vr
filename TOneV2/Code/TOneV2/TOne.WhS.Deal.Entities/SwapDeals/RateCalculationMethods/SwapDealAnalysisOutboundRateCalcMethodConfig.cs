@@ -9,6 +9,8 @@ namespace TOne.WhS.Deal.Entities
 {
     public class SwapDealAnalysisOutboundRateCalcMethodConfig : ExtensionConfiguration
     {
+        public const string EXTENSION_TYPE = "WhS_Deal_SwapDeal_OutboundRateCalculationMetod";
+        
         public string Editor { get; set; }
     }
 }

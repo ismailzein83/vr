@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 
-namespace TOne.WhS.Deal.Business
+namespace TOne.WhS.Deal.MainExtensions
 {
     public class SwapDealAnalysisOutboundItemRateFixed : SwapDealAnalysisOutboundItemRateCalcMethod
     {

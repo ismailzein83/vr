@@ -29,8 +29,6 @@ namespace TOne.WhS.Deal.Entities
         public List<SwapDealAnalysisOutboundSettings> Outbounds { get; set; }
 
         public List<SwapDealAnalysisInboundSettings> Inbounds { get; set; }
-
-        public SwapDealAnalysisOutboundRateCalcMethod OutBoundRateCalcMethod { get; set; }
     }
 
     public class SwapDealAnalysisOutboundSettings

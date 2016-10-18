@@ -13,5 +13,7 @@ namespace TOne.WhS.Deal.Entities
         public abstract string ItemEditor { get; }
         
         public Guid CalculationMethodId { get; set; }
+
+        public string Title { get; set; }
     }
 }

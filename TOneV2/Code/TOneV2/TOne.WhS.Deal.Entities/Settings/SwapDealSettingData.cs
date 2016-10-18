@@ -8,9 +8,9 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Entities.Settings
 {
-    public class DealSettingData : SettingData
+    public class SwapDealSettingData : SettingData
     {
-        public Guid DefaultCalculationMethod { get; set; }
+        public Guid DefaultCalculationMethodId { get; set; }
 
         public Dictionary<Guid, SwapDealAnalysisOutboundRateCalcMethod> CalculationMethods { get; set; }
     }
