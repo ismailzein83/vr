@@ -23,7 +23,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriority();
         Guid blockedRuleConfigId = new Guid("5a998636-0de9-4654-b430-c24805dd78d9");
 
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds" };
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight" };
         readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
 
         Dictionary<int, CarrierAccount> _allCarriers;
@@ -188,6 +188,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[SupplierServiceIds]
                                                   ,zd.[ExactSupplierServiceIds]
+                                                  ,zd.[SupplierServiceWeight]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
@@ -196,6 +197,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[SupplierServiceIds]
                                                   ,zd.[ExactSupplierServiceIds]
+                                                  ,zd.[SupplierServiceWeight]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId
                                             ";

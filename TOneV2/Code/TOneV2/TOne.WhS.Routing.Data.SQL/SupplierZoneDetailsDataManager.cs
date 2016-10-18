@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.Data.SQL
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds" };
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight" };
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -113,6 +113,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[SupplierServiceIds]
                                                   ,zd.[ExactSupplierServiceIds]
+                                                  ,zd.[SupplierServiceWeight]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
@@ -121,6 +122,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[SupplierServiceIds]
                                                   ,zd.[ExactSupplierServiceIds]
+                                                  ,zd.[SupplierServiceWeight]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId
                                             ";
