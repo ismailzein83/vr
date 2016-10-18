@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class Choices
-    {
-        public String Choice { get; set; }
-    }
+    //public class Choices
+    //{
+    //    public String Choice { get; set; }
+    //}
 }

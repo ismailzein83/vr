@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities.StatisticManagement
 {
-    public interface IRawItem
-    {
-    }
+    //public interface IRawItem
+    //{
+    //}
 }

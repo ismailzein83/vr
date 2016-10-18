@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities.StatisticManagement
 {
-    public interface IStatisticItem
-    {
-        long StatisticItemId { get; set; }
+    //public interface IStatisticItem
+    //{
+    //    long StatisticItemId { get; set; }
 
-    }
+    //}
 }

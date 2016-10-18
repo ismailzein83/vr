@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Entities
 {
-    public class DynamicRuleConfiguration
-    {
-        public Dictionary<string, DynamicRuleCriteriaField> CriteriaFields { get; set; }
-    }
+    //public class DynamicRuleConfiguration
+    //{
+    //    public Dictionary<string, DynamicRuleCriteriaField> CriteriaFields { get; set; }
+    //}
 }
