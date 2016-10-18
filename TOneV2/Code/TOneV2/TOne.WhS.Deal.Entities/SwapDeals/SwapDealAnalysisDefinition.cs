@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -41,6 +42,8 @@ namespace TOne.WhS.Deal.Entities
         public int Volume { get; set; }
 
         public Decimal DealRate { get; set; }
+
+        public SwapDealAnalysisOutboundItemRateCalcMethod ItemCalculationMethod { get; set; }
     }
 
     public class SwapDealAnalysisInboundSettings
@@ -52,17 +55,5 @@ namespace TOne.WhS.Deal.Entities
         public int Volume { get; set; }
 
         public Decimal DealRate { get; set; }
-    }
-
-    public abstract class SwapDealAnalysisOutboundRateCalcMethod
-    {
-        public abstract Decimal Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context);
-    }
-
-    public interface ISwapDealAnalysisOutboundRateCalcMethodContext
-    {
-        int SupplierId { get; }
-
-        List<long> SupplierZoneIds { get; }
-    }
+    }   
 }

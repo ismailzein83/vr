@@ -47,6 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DealSettingsConfig.cs" />
+    <Compile Include="Settings\DealSettingData.cs" />
+    <Compile Include="SwapDeals\RateCalculationMethods\SwapDealAnalysisOutboundItemRateCalcMethod.cs" />
+    <Compile Include="SwapDeals\RateCalculationMethods\SwapDealAnalysisOutboundRateCalcMethod.cs" />
+    <Compile Include="SwapDeals\RateCalculationMethods\SwapDealAnalysisOutboundRateCalcMethodConfig.cs" />
     <Compile Include="SwapDeals\SwapDealAnalysisResult.cs" />
     <Compile Include="SwapDeals\SwapDealAnalysisDefinition.cs" />
     <Compile Include="SwapDeals\SwapDealOutbound.cs" />
