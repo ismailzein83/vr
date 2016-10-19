@@ -2086,7 +2086,7 @@ vr-button[class*="divDisabled"] > div{
 
 .vr-control-label {
     font-weight: bold;
-    font-size: smaller;
+    font-size: 11px;
     white-space: nowrap;
     margin-bottom:2px;
 }
