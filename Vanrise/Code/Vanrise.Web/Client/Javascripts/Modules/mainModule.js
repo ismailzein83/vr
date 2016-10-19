@@ -46,7 +46,14 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         e.stopPropagation();
     };
     
-   
+    $scope.getStyle = function () {
+
+        if ($("div[ng-cloak]").length > 0) {
+            return "{'display':'block'}"
+        }
+        else 
+            return "{'display':'none'}"
+    }
 
     $('#dt1').datetimepicker();
     VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
@@ -261,7 +268,9 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $scope.menuItems = response;
         if (currentURL != undefined)
             setSelectedMenuFromURL();
+        $scope.spinner = false;
     })
+    
     function matchParentNode(obj) {
        
         if (obj.Childs != null) {
