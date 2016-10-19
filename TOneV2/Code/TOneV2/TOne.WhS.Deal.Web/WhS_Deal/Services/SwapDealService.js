@@ -6,6 +6,8 @@
 
 	function SwapDealService(VRModalService, VRNotificationService, WhS_BE_DealContractTypeEnum, WhS_BE_DealAgreementTypeEnum, UtilsService)
 	{
+	    var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
+
 		function analyzeSwapDeal(onSwapDealAnalyzed)
 		{
 			var parameters = null;
@@ -18,8 +20,18 @@
 			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealAnalysis.html', parameters, settings);
 		}
 
+
+		function addSwapDeal(onSwapDealAdded) {
+		    var settings = {};
+
+		    settings.onScopeReady = function (modalScope) {
+		        modalScope.onSwapDealAdded = onSwapDealAdded;
+		    };
+		    VRModalService.showModal(editorUrl, null, settings);
+		}
 		return {
-			analyzeSwapDeal: analyzeSwapDeal
+		    analyzeSwapDeal: analyzeSwapDeal,
+		    addSwapDeal: addSwapDeal
 		};
 	}
 

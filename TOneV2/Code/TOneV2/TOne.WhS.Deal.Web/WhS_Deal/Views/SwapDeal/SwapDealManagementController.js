@@ -23,6 +23,12 @@
 				var onSwapDealAnalyzed = function () { };
 				WhS_Deal_SwapDealService.analyzeSwapDeal(onSwapDealAnalyzed);
 			};
+
+			$scope.scopeModel.add = function () {
+          
+			    var onSwapDealAdded = function () { };
+			    WhS_Deal_SwapDealService.addSwapDeal(onSwapDealAdded);
+			};
 		}
 
 		function load() {
