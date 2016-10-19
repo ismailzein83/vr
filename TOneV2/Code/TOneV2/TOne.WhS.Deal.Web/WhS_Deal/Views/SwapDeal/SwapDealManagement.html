@@ -1,0 +1,15 @@
+﻿<vr-panel ng-controller="WhS_Deal_SwapDealManagementController" vr-loader="scopeModel.isLoading">
+	<vr-form name="formFilter">
+		<div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
+			<vr-row removeline></vr-row>
+		</div>
+		<vr-row removeline>
+			<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+				<div transclude-to="buttons">
+					<vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+					<vr-button type="Analyze" data-onclick="scopeModel.analyze"></vr-button>
+				</div>
+			</vr-actionbar>
+		</vr-row>
+	</vr-form>
+</vr-panel>
