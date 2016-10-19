@@ -9,10 +9,12 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace TOne.WhS.Routing.Business
+namespace TOne.WhS.Routing.Business 
 {
     public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
     {
+        #region Public Methods
+
         public override bool ValidateBeforeAdd(RouteRule rule)
         {
             Dictionary<int, RouteRule> cachedRules = base.GetAllRules();
@@ -28,6 +30,23 @@ namespace TOne.WhS.Routing.Business
             IEnumerable<RouteRule> result = cachedRules.FindAllRecords(filterExpression);
             return result == null || result.Count() == 0 ? true : false;
         }
+
+        public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
+        {
+            var routeRules = base.GetAllRules();
+            Func<RouteRule, bool> filterExpression = (routeRule) =>
+                (input.Query.RoutingProductId == null || routeRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
+                 && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeRule.Name) && routeRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
+                 && (string.IsNullOrEmpty(input.Query.Code) || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
+                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
+                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
+                 && (input.Query.RouteRuleSettingsConfigId == Guid.Empty || this.CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigId))
+                 && (!input.Query.EffectiveOn.HasValue || routeRule.BeginEffectiveTime <= input.Query.EffectiveOn)
+                 && (!input.Query.EffectiveOn.HasValue || !routeRule.EndEffectiveTime.HasValue || routeRule.EndEffectiveTime > input.Query.EffectiveOn);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
+        }
+
         public RouteRule GetMatchRule(RouteRuleTarget target, int? routingProductId)
         {
             var ruleTrees = GetRuleTreesByPriority(routingProductId);
@@ -75,48 +94,10 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
-        int GetRuleTypePriority(RouteRuleSettingsConfig ruleTypeConfig)
-        {
-            return ruleTypeConfig.Priority.HasValue ? ruleTypeConfig.Priority.Value : int.MaxValue;
-        }
-
         public IEnumerable<RouteRuleSettingsConfig> GetRouteRuleTypesTemplates()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
-        }
-
-        public Dictionary<Guid, RouteRuleSettingsConfig> GetRouteRuleTypesTemplatesDict()
-        {
-            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurationsByType<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
-        }
-
-
-        IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
-        {
-            List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
-            return ruleStructureBehaviors;
-        }
-
-        public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
-        {
-            var routeRules = base.GetAllRules();
-            Func<RouteRule, bool> filterExpression = (routeRule) =>
-                (input.Query.RoutingProductId == null || routeRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
-                 && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeRule.Name) && routeRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
-                 && (string.IsNullOrEmpty(input.Query.Code) || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
-                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
-                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
-                 && (input.Query.RouteRuleSettingsConfigId == Guid.Empty || this.CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigId))
-                 && (!input.Query.EffectiveOn.HasValue || routeRule.BeginEffectiveTime <= input.Query.EffectiveOn)
-                 && (!input.Query.EffectiveOn.HasValue || !routeRule.EndEffectiveTime.HasValue || routeRule.EndEffectiveTime > input.Query.EffectiveOn);
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
         public override RouteRuleDetail MapToDetails(RouteRule rule)
@@ -138,6 +119,32 @@ namespace TOne.WhS.Routing.Business
                 CssClass = _cssClass,
                 RouteRuleSettingsTypeName = _routeRuleSettingsTypeName
             };
+        }
+
+        public Dictionary<Guid, RouteRuleSettingsConfig> GetRouteRuleTypesTemplatesDict()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurationsByType<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
+        }
+        
+        #endregion
+
+
+        #region Private Methods
+
+        private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
+        {
+            List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
+            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
+            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
+            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
+            return ruleStructureBehaviors;
+        }
+
+        private int GetRuleTypePriority(RouteRuleSettingsConfig ruleTypeConfig)
+        {
+            return ruleTypeConfig.Priority.HasValue ? ruleTypeConfig.Priority.Value : int.MaxValue;
         }
 
         private bool CheckIfCodeCriteriaSettingsContains(RouteRule routeRule, string code)
@@ -180,5 +187,7 @@ namespace TOne.WhS.Routing.Business
 
             return false;
         }
+
+        #endregion
     }
 }

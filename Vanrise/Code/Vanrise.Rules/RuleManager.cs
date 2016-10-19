@@ -21,7 +21,8 @@ namespace Vanrise.Rules
         where T : BaseRule
         where Q : class
     {
-        public abstract Q MapToDetails(T rule);
+
+        #region Public Methods
 
         public virtual bool ValidateBeforeAdd(T rule) { return true; }
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
@@ -54,7 +55,6 @@ namespace Vanrise.Rules
             return insertOperationOutput;
         }
 
-
         public virtual bool ValidateBeforeUpdate(T rule) { return true; }
         public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
         {
@@ -78,7 +78,7 @@ namespace Vanrise.Rules
                     updateOperationOutput.UpdatedObject = MapToDetails(rule);
                 }
             }
-            else 
+            else
             {
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
@@ -100,24 +100,6 @@ namespace Vanrise.Rules
             return deleteOperationOutput;
         }
 
-        public T GetRule(int ruleId)
-        {
-            var allRules = GetAllRules();
-            T rule;
-            if (allRules != null && allRules.TryGetValue(ruleId, out rule))
-                return rule;
-            else
-                return null;
-        }
-
-        public Q GetRuleDetail(int ruleId)
-        {
-            var rule = GetRule(ruleId);
-            if (rule != null)
-                return MapToDetails(rule);
-            else
-                return null;
-        }
 
         public IEnumerable<T> GetFilteredRules(Func<T, bool> filter)
         {
@@ -150,6 +132,31 @@ namespace Vanrise.Rules
                });
         }
 
+        public T GetRule(int ruleId)
+        {
+            var allRules = GetAllRules();
+            T rule;
+            if (allRules != null && allRules.TryGetValue(ruleId, out rule))
+                return rule;
+            else
+                return null;
+        }
+
+        public Q GetRuleDetail(int ruleId)
+        {
+            var rule = GetRule(ruleId);
+            if (rule != null)
+                return MapToDetails(rule);
+            else
+                return null;
+        }
+
+        public abstract Q MapToDetails(T rule);
+
+        #endregion
+
+        #region Caching
+
         protected R GetCachedOrCreate<R>(Object cacheName, Func<R> createObject)
         {
             return GetCacheManager().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
@@ -166,6 +173,8 @@ namespace Vanrise.Rules
             return s_cacheManager;
         }
 
+        #endregion
+
         #region Private Methods
 
         static ConcurrentDictionary<string, int> s_ruleTypesIds = new ConcurrentDictionary<string, int>();
@@ -173,7 +182,7 @@ namespace Vanrise.Rules
         public int GetRuleTypeId()
         {
             string ruleType;
-            if(!s_ruleTypes.TryGetValue(typeof(T), out ruleType))
+            if (!s_ruleTypes.TryGetValue(typeof(T), out ruleType))
             {
                 s_ruleTypes.TryAdd(typeof(T), typeof(T).FullName);
                 ruleType = s_ruleTypes[typeof(T)];
@@ -214,5 +223,6 @@ namespace Vanrise.Rules
         }
 
         #endregion
+
     }
 }

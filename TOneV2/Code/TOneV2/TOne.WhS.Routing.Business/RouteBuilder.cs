@@ -287,6 +287,11 @@ namespace TOne.WhS.Routing.Business
                         route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails);
                     }
 
+                    if (routeOptionRuleTarget.BlockOption)
+                        optionSupplierDetails.NumberOfBlockedZones++;
+                    else
+                        optionSupplierDetails.NumberOfUnblockedZones++;
+
                     var optionSupplierZone = new RPRouteOptionSupplierZone
                     {
                         SupplierZoneId = routeOptionRuleTarget.SupplierZoneId,
@@ -296,11 +301,6 @@ namespace TOne.WhS.Routing.Business
                         ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId,
                         ExactSupplierServiceIds = routeOptionRuleTarget.ExactSupplierServiceIds
                     };
-
-                    if (routeOptionRuleTarget.BlockOption)
-                        optionSupplierDetails.NumberOfBlockedZones++;
-                    else
-                        optionSupplierDetails.NumberOfUnblockedZones++;
 
                     optionSupplierDetails.SupplierZones.Add(optionSupplierZone);
                 }
@@ -397,3 +397,4 @@ namespace TOne.WhS.Routing.Business
         #endregion
     }
 }
+ 
