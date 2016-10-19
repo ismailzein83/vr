@@ -291,9 +291,9 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Generate Invoice',
                     class: "glyphicon glyphicon-retweet"
                 }
-            case 'Analyse':
+            case 'Analyze':
                 return {
-                    text: 'Analyse',
+                	text: 'Analyze',
                     class: "glyphicon glyphicon-retweet"
                 }
             case 'Preview':
