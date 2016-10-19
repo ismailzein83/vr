@@ -159,8 +159,8 @@
                     var carrierMapping = $scope.scopeModel.carrierAccountMappings[i];
                     result[carrierMapping.CarrierAccountId] = {
                         CarrierId: carrierMapping.CarrierAccountId,
-                        CustomerMapping: carrierMapping.CustomerMapping.split($scope.scopeModel.separator),
-                        SupplierMapping: carrierMapping.SupplierMapping.split($scope.scopeModel.separator)
+                        CustomerMapping: carrierMapping.CustomerMapping == undefined ? null : carrierMapping.CustomerMapping.split($scope.scopeModel.separator),
+                        SupplierMapping: carrierMapping.SupplierMapping == undefined ? null : carrierMapping.SupplierMapping.split($scope.scopeModel.separator)
                     };
                 }
                 return result;
