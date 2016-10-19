@@ -11,6 +11,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class GetServiceWithMinimumBEDAction : BusinessRuleAction
     {
+        public override Guid BPBusinessRuleActionTypeId
+        {
+            get { return new Guid("2C3ED299-C955-44B3-A708-E9B53A24CB0E"); }
+        }
         public override void Execute(IBusinessRuleActionExecutionContext context)
         {
             ImportedDataByZone importedDataByZone = context.Target as ImportedDataByZone;
