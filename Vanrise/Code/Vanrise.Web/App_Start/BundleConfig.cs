@@ -121,6 +121,7 @@ namespace Vanrise.Web
                 "~/Client/Javascripts/Modules", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Constants", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Services", "*.js", true).IncludeDirectory(
+                "~/Client/Javascripts/Filters", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
         }

@@ -289,12 +289,12 @@
                     else if (colDef.numberPrecision == "LongPrecision")
                         numberPrecision = 4;
                     template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
-                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:" + numberPrecision);
+                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| vrtextOrNumber:" + numberPrecision);
                     template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
                 }
                 else if (colDef.type == "Progress" || colDef.type == "MultiProgress") {
                     template = template.replace("#TEXTALIGN#", "center;position:absolute;color:#666;");
-                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:1");
+                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| vrtextOrNumber:1");
                     template = UtilsService.replaceAll(template, "#PERCENTAGE#", "%");
                 }
                 else {
