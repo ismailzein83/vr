@@ -2082,8 +2082,10 @@ vr-label[breakline] .vr-control-label {
     white-space: normal !important;
     word-wrap: break-word;
 }
-
-
+vr-label[ellipsis] .vr-control-label {   
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+}
 .permmesion-background {
     background: url("../../Client/Images/bichartpermission.jpg") center no-repeat;
     background-size: contain;
