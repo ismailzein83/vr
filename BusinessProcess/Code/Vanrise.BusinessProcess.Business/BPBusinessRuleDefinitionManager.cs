@@ -35,7 +35,7 @@ namespace Vanrise.BusinessProcess.Business
             foreach (BPBusinessRuleDefinitionDetail bpBusinessRuleDefinitionDetail in bpBusinessRuleDefinitionDetails)
             {
                 bpBusinessRuleDefinitionDetail.ActionTypes = new List<BPBusinessRuleActionType>();
-                foreach (int actionTypeId in bpBusinessRuleDefinitionDetail.Entity.Settings.ActionTypes)
+                foreach (Guid actionTypeId in bpBusinessRuleDefinitionDetail.Entity.Settings.ActionTypes)
                 {
                     bpBusinessRuleDefinitionDetail.ActionTypes.Add(bpBusinessRuleActionTypeManager.GetBusinessRuleActionType(actionTypeId));
                 }

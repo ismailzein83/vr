@@ -66,7 +66,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                 BusinessProcess_BPBusinessRuleSetAPIService.UpdateBusinessRuleSet(businessRuleSetObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Bussiness Rule Set", response)) {
                         if ($scope.onBusinessRuleSetUpdated != undefined) {
-                            $scope.onBusinessRuleSetUpdated(businessRuleSetObj);
+                            $scope.onBusinessRuleSetUpdated(response.UpdatedObject);
                         }
                         $scope.modalContext.closeModal();
                     }
@@ -78,8 +78,8 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                 BusinessProcess_BPBusinessRuleSetAPIService.AddBusinessRuleSet(businessRuleSetObj).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Bussiness Rule Set", response)) {
                         if ($scope.onBusinessRuleSetAdded != undefined && response.InsertedObject != undefined) {
-                            businessRuleSetObj.BPBusinessRuleSetId = response.InsertedObject.BPBusinessRuleSetId;
-                            $scope.onBusinessRuleSetAdded(businessRuleSetObj);
+                            //businessRuleSetObj.BPBusinessRuleSetId = response.InsertedObject.Entity.BPBusinessRuleSetId;
+                            $scope.onBusinessRuleSetAdded(response.InsertedObject);
                         }
                         $scope.modalContext.closeModal();
                     }

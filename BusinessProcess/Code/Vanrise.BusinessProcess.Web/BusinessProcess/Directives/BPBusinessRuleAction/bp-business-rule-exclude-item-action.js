@@ -39,7 +39,6 @@ app.directive("businessprocessBpBusinessRuleExcludeItemAction", [function () {
                 return {
                     action: {
                         $type: "Vanrise.BusinessProcess.ExcludeItemAction, Vanrise.BusinessProcess",
-                        BPBusinessRuleActionTypeId : 2
                     }
                 };
             };

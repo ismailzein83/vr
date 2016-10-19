@@ -9,6 +9,10 @@ namespace Vanrise.BusinessProcess
 {
     public class WarningItemAction : BusinessRuleAction
     {
+        public override Guid BPBusinessRuleActionTypeId
+        {
+            get { return new Guid("FBFE2B36-12F6-40C1-8163-26CFE2D23501"); }
+        }
         public override void Execute(IBusinessRuleActionExecutionContext context)
         {
             if (context.Target == null)

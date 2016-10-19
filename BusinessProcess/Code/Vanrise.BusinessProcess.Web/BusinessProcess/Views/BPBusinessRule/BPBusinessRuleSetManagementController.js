@@ -32,8 +32,7 @@
 
             $scope.addBusinessRuleSet = function () {
                 var onBusinessRuleSetAdded = function (addedItem) {
-                    var addedItemObj = { Entity: addedItem };
-                    gridAPI.onBusinessRuleSetAdded(addedItemObj);
+                    gridAPI.onBusinessRuleSetAdded(addedItem);
                 };
 
                 BusinessProcess_BPBusinessRuleSetService.addBusinessRuleSet(onBusinessRuleSetAdded);

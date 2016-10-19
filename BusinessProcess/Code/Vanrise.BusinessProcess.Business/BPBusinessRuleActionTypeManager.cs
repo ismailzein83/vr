@@ -3,40 +3,24 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
+using System;
+using Vanrise.Common.Business;
 
 namespace Vanrise.BusinessProcess.Business
 {
     public class BPBusinessRuleActionTypeManager
     {
         #region public methods
-        public BPBusinessRuleActionType GetBusinessRuleActionType(int bpBusinessRuleActionTypeId)
+        public BPBusinessRuleActionType GetBusinessRuleActionType(Guid bpBusinessRuleActionTypeId)
         {
-            return GetCachedBPBusinessRuleActionTypes().GetRecord(bpBusinessRuleActionTypeId);
-        }
-        #endregion
-
-        #region private methods
-
-        private Dictionary<int, BPBusinessRuleActionType> GetCachedBPBusinessRuleActionTypes()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPBusinessRuleActionTypes",
-            () =>
-            {
-                IBPBusinessRuleActionTypeDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleActionTypeDataManager>();
-                var data = dataManager.GetBPBusinessRuleActionTypes();
-                return data.ToDictionary(cn => cn.BPBusinessRuleActionTypeId, cn => cn);
-            });
+            var extensions = GetBPBusinessRuleActionTypeConfigs();
+            return extensions.FindRecord(x=>x.ExtensionConfigurationId == bpBusinessRuleActionTypeId);
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public IEnumerable<BPBusinessRuleActionType> GetBPBusinessRuleActionTypeConfigs()
         {
-            IBPBusinessRuleActionTypeDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleActionTypeDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreBPBusinessRuleActionTypesUpdated(ref _updateHandle);
-            }
+            ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<BPBusinessRuleActionType>(BPBusinessRuleActionType.EXTENSION_TYPE);
         }
         #endregion
     }

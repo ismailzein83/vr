@@ -81,8 +81,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
 
         function editBPBusinessRuleSet(bpBusinessRuleSetObj) {
             var onBusinessRuleSetUpdated = function (updatedItem) {
-                var updatedItemObj = { Entity: updatedItem };
-                gridAPI.itemUpdated(updatedItemObj);
+                gridAPI.itemUpdated(updatedItem);
             };
             BusinessProcess_BPBusinessRuleSetService.editBPBusinessRuleSet(bpBusinessRuleSetObj.Entity.BPBusinessRuleSetId, onBusinessRuleSetUpdated);
         };

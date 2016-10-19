@@ -39,7 +39,7 @@ app.directive("businessprocessBpBusinessRuleStopExecutionAction", [function () {
                 return {
                     action: {
                         $type: "Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess",
-                        BPBusinessRuleActionTypeId: 1
+
                     }
                 };
             };

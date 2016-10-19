@@ -39,7 +39,6 @@ app.directive("businessprocessBpBusinessRuleWarningItemAction", [function () {
                 return {
                     action: {
                         $type: "Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess",
-                        BPBusinessRuleActionTypeId : 3
                     }
                 };
             };

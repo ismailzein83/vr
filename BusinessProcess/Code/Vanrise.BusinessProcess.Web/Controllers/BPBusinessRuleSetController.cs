@@ -20,7 +20,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpPost]
         [Route("AddBusinessRuleSet")]
-        public Vanrise.Entities.InsertOperationOutput<BPBusinessRuleSet> AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
+        public Vanrise.Entities.InsertOperationOutput<BPBusinessRuleSetDetail> AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
         {
             BPBusinessRuleSetManager manager = new BPBusinessRuleSetManager();
             return manager.AddBusinessRuleSet(businessRuleSetObj);
@@ -28,7 +28,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpPost]
         [Route("UpdateBusinessRuleSet")]
-        public Vanrise.Entities.UpdateOperationOutput<BPBusinessRuleSet> UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
+        public Vanrise.Entities.UpdateOperationOutput<BPBusinessRuleSetDetail> UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
         {
             BPBusinessRuleSetManager manager = new BPBusinessRuleSetManager();
             return manager.UpdateBusinessRuleSet(businessRuleSetObj);

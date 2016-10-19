@@ -92,7 +92,8 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                             if (currentRule.BPBusinessRuleDefinitionId == $scope.businessRuleDefintions[n].Entity.BPBusinessRuleDefinitionId) {
                                 var matchedRule = $scope.businessRuleDefintions[n];
                                 for (var p = 0; p < matchedRule.ActionTypes.length; p++) {
-                                    if (matchedRule.ActionTypes[p].BPBusinessRuleActionTypeId == currentRule.Settings.Action.BPBusinessRuleActionTypeId) {
+
+                                    if (matchedRule.ActionTypes[p].ExtensionConfigurationId == currentRule.Settings.Action.BPBusinessRuleActionTypeId) {
                                         matchedRule.selectedAction = matchedRule.ActionTypes[p];
                                     }
                                 }
@@ -125,6 +126,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
             if ($scope.scopeModel.selectedbusinessRuleDefintion != undefined) {
 
                 var dataItem = $scope.scopeModel.selectedbusinessRuleDefintion;
+
                 removedItems.push($scope.scopeModel.selectedbusinessRuleDefintion);
                 $scope.businessRuleDefintions.splice($scope.businessRuleDefintions.indexOf($scope.scopeModel.selectedbusinessRuleDefintion), 1);
 

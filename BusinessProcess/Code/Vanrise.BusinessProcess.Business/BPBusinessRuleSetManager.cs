@@ -67,9 +67,9 @@ namespace Vanrise.BusinessProcess.Business
             return IsMatching(item, bpBusinessRuleSets, bpBusinessRuleSetId);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<BPBusinessRuleSet> AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
+        public Vanrise.Entities.InsertOperationOutput<BPBusinessRuleSetDetail> AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
         {
-            InsertOperationOutput<BPBusinessRuleSet> insertOperationOutput = new InsertOperationOutput<BPBusinessRuleSet>();
+            InsertOperationOutput<BPBusinessRuleSetDetail> insertOperationOutput = new InsertOperationOutput<BPBusinessRuleSetDetail>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -83,7 +83,7 @@ namespace Vanrise.BusinessProcess.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 businessRuleSetObj.BPBusinessRuleSetId = bpBusinessRuleSetId;
-                insertOperationOutput.InsertedObject = businessRuleSetObj;
+                insertOperationOutput.InsertedObject = BPBusinessRuleSetDetailMapper(businessRuleSetObj);
             }
             else
             {
@@ -93,11 +93,11 @@ namespace Vanrise.BusinessProcess.Business
             return insertOperationOutput;
         }
 
-        public UpdateOperationOutput<BPBusinessRuleSet> UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
+        public UpdateOperationOutput<BPBusinessRuleSetDetail> UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
         {
             IBPBusinessRuleSetDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleSetDataManager>();
             bool updateActionSucc = dataManager.UpdateBusinessRuleSet(businessRuleSetObj);
-            UpdateOperationOutput<BPBusinessRuleSet> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BPBusinessRuleSet>();
+            UpdateOperationOutput<BPBusinessRuleSetDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BPBusinessRuleSetDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -106,7 +106,7 @@ namespace Vanrise.BusinessProcess.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = businessRuleSetObj;
+                updateOperationOutput.UpdatedObject = BPBusinessRuleSetDetailMapper(businessRuleSetObj);
             }
             else
             {

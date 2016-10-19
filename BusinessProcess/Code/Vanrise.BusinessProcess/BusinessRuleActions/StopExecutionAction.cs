@@ -9,7 +9,10 @@ namespace Vanrise.BusinessProcess
 {
     public class StopExecutionAction : BusinessRuleAction
     {
-
+        public override Guid BPBusinessRuleActionTypeId
+        {
+            get { return new Guid("715F7F90-2C23-4185-AEB8-EDA947DE3978"); }
+        }
         public override void Execute(IBusinessRuleActionExecutionContext context)
         {
             context.StopExecution = true;
