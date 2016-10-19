@@ -10,7 +10,7 @@
                      isdynamicrowstyle="true">
 
             <vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
-                <vr-label isvalue="true"><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
+                <vr-label isvalue="true" ellipsis><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Product'"
                                type="'Text'"
@@ -18,7 +18,7 @@
                                widthfactor="8"
                                disablesorting="true">
                 <span ng-click="viewScope.onEffectiveRPClicked(dataItem)">
-                    <vr-label isvalue="true">{{dataItem.EffectiveRoutingProductName}}</vr-label>
+                    <vr-label isvalue="true" ellipsis>{{dataItem.EffectiveRoutingProductName}}</vr-label>
                 </span>
             </vr-datagridcolumn>
 
