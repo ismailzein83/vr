@@ -12,6 +12,15 @@ namespace Retail.BusinessEntity.Data.SQL
 {
     public class POSDataManager : BaseSQLDataManager, IPOSDataManager
     {
+        #region Constructors
+        public POSDataManager()
+            : base(GetConnectionStringName("Retail_BE_DBConnStringKey", "RetailDBConnString"))
+        {
+
+        }
+        #endregion
+
+        #region Public Methods
         public IEnumerable<PointOfSale> GetPointOfSales()
         {
             return GetItemsSP("Retail.sp_POS_GetAll", PosMapper);
@@ -43,6 +52,8 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return IsDataUpdated("Retail.POS", ref updateHandle);
         }
+
+        #endregion
 
         #region Mapper
         PointOfSale PosMapper(IDataReader reader)

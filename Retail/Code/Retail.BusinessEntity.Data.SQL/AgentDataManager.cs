@@ -11,7 +11,15 @@ namespace Retail.BusinessEntity.Data.SQL
 {
     public class AgentDataManager : BaseSQLDataManager, IAgentDataManager
     {
+        #region Constructors
+        public AgentDataManager()
+            : base(GetConnectionStringName("Retail_BE_DBConnStringKey", "RetailDBConnString"))
+        {
 
+        }
+        #endregion
+
+        #region Public Methods
         public IEnumerable<Agent> GetAgents()
         {
             return GetItemsSP("Retail.sp_Agent_GetAll", AgentMapper);
@@ -43,6 +51,8 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return IsDataUpdated("Retail.Agent", ref updateHandle);
         }
+
+        #endregion
 
         #region Mapper
         private Agent AgentMapper(IDataReader reader)

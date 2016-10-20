@@ -11,7 +11,16 @@ namespace Retail.BusinessEntity.Data.SQL
 {
     public class DistributorDataManager : BaseSQLDataManager, IDistributorDataManager
     {
+        #region Constructors
+        public DistributorDataManager()
+            : base(GetConnectionStringName("Retail_BE_DBConnStringKey", "RetailDBConnString"))
+        {
 
+        }
+
+        #endregion
+
+        #region Public Methods
         public IEnumerable<Distributor> GetDistributors()
         {
             return GetItemsSP("Retail.sp_Distributor_GetAll", DistributorMapper);
@@ -43,6 +52,8 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return IsDataUpdated("Retail.Distributor", ref updateHandle);
         }
+
+        #endregion
 
         #region Mapper
         private Distributor DistributorMapper(IDataReader reader)
