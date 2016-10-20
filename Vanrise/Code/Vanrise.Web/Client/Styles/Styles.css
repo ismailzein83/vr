@@ -602,6 +602,11 @@ add padding .left-addon input {
     padding: 0px;
 }
 
+.modal-title {  
+    white-space: normal !important;
+    word-wrap: break-word;
+}
+
 .vr-select-add {
     position: absolute;
     padding: 5px 2px;
