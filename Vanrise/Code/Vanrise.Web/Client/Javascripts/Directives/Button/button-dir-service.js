@@ -311,6 +311,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Exclude All',
                     class: "glyphicon glyphicon-eject"
                 }
+        	case "Load":
+        		return {
+        			text: "Load",
+        			class: "glyphicon glyphicon-search"
+        		};
         } 
     }
 }]);
