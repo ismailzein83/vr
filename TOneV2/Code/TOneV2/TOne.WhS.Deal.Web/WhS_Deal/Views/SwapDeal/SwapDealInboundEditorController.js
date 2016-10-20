@@ -7,12 +7,18 @@
     function SwapDealInboundEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
+
+
         var swapDealInboundEntity;
         var sellingNumberPlanId;
 
-        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+   
 
         loadParameters();
         defineScope();
@@ -45,6 +51,10 @@
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
             }
+            $scope.onCountryDirectiveReady = function (api) {
+                countryDirectiveApi = api;
+                countryReadyPromiseDeferred.resolve();
+            }
         }
 
         function load() {
@@ -60,7 +70,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSaleZoneSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySelector  , loadSaleZoneSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -83,6 +93,18 @@
             return loadSaleZonePromiseDeferred.promise;
         }
 
+        function loadCountrySelector() {
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.CountryId :  undefined
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                });
+            return countryLoadPromiseDeferred.promise;
+        }
 
         function setTitle() {
             if (isEditMode) {

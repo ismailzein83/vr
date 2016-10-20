@@ -10,9 +10,13 @@
         var swapDealOutboundEntity;
         var supplierId;
 
-        var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var supplierZoneDirectiveAPI;
+        var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+      
 
         loadParameters();
         defineScope();
@@ -46,6 +50,11 @@
                 supplierZoneDirectiveAPI = api;
                 supplierZoneReadyPromiseDeferred.resolve();
             }
+
+            $scope.onCountryDirectiveReady = function (api) {
+                countryDirectiveApi = api;
+                countryReadyPromiseDeferred.resolve();
+            }
         }
 
         function load() {
@@ -61,14 +70,25 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSaleZoneSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySelector, loadSaleZoneSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
+        function loadCountrySelector() {
+            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.CountryId : undefined
+                    };
 
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                });
+            return countryLoadPromiseDeferred.promise;
+        }
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
