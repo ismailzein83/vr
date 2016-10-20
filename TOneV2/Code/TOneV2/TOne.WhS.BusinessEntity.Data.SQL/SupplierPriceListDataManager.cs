@@ -41,7 +41,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region Mappers
 
-
         SupplierPriceList SupplierPriceListMapper(IDataReader reader)
         {
             SupplierPriceList supplierPriceList = new SupplierPriceList
@@ -56,6 +55,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-
     }
 }

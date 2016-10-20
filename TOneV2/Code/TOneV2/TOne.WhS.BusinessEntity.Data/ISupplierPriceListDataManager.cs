@@ -10,7 +10,9 @@ namespace TOne.WhS.BusinessEntity.Data
     public interface ISupplierPriceListDataManager : IDataManager
     {
         SupplierPriceList GetPriceList(int priceListId);
+
         List<SupplierPriceList> GetPriceLists();
+
         bool ArGetPriceListsUpdated(ref object updateHandle);
 
     }

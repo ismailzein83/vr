@@ -7,11 +7,10 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-   public interface ISalePriceListDataManager: IDataManager
+    public interface IStateBackupDataManager : IDataManager
     {
-       List<SalePriceList> GetPriceLists();
+        void BackupData(StateBackupType backupType);
 
-       bool ArGetSalePriceListsUpdated(ref object updateHandle);
-
+        void RestoreData(int stateBackupId);
     }
 }

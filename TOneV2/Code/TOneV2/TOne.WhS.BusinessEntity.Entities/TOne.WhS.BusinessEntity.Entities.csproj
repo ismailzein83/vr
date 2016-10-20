@@ -192,6 +192,9 @@
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleEntityService.cs" />
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
+    <Compile Include="StateBackup\StateBackupAllCustomers.cs" />
+    <Compile Include="StateBackup\StateBackupCustomer.cs" />
+    <Compile Include="StateBackup\StateBackupType.cs" />
     <Compile Include="SupplierCode\SupplierCodeQuery.cs" />
     <Compile Include="SupplierCode\SupplierCodeDetail.cs" />
     <Compile Include="SupplierOtherRate\SupplierOtherRate.cs" />
