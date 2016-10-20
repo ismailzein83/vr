@@ -161,6 +161,10 @@
     <Content Include="WhS_Deal\Services\SwapDealOutboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysis\InboundEditor.html" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysis\InboundEditorController.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysis\OutboundEditor.html" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysis\OutboundEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealOutboundEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealOutboundEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealInboundEditor.html" />
