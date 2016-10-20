@@ -31,6 +31,9 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
     function filterCtor(ctrl, $scope) {
         var existingItems = [];
+        ctrl.optionOrderSettingsGroupTemplates = [];
+        ctrl.datasource = [];
+
         ctrl.isValid = function () {
             var result = checkRequiredFilters();
             if (result != null) {
@@ -50,40 +53,10 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
             return null;
         }
-        ctrl.optionOrderSettingsGroupTemplates = [];
-        ctrl.datasource = [];
-
         ctrl.addOptionOrderType = function () {
             addNewItem(ctrl.selectedOptionOrderSettingsGroupTemplate);
             ctrl.selectedOptionOrderSettingsGroupTemplate = undefined;
         };
-
-        function addNewItem(itemAdded) {
-            var dataItem = {
-                id: ctrl.datasource.length + 1,
-                configId: itemAdded.ExtensionConfigurationId,
-                editor: itemAdded.Editor,
-                name: itemAdded.Title,
-                percentageValue: undefined
-            };
-
-            dataItem.onDirectiveReady = function (api) {
-                dataItem.directiveAPI = api;
-                var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-            };
-
-            for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
-                if (ctrl.optionOrderSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
-                    existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
-                    ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
-                    break;
-                }
-            }
-
-            ctrl.datasource.push(dataItem);
-        }
-
         ctrl.removeOption = function (dataItem) {
             var configId = dataItem.configId;
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
@@ -96,42 +69,9 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             }
         };
 
-        function checkRequiredFilters() {
-            var requiredFiltersNames = [];
-            if (ctrl.optionOrderSettingsGroupTemplates.length == 0) {
-                return null;
-            }
-            angular.forEach(ctrl.optionOrderSettingsGroupTemplates, function (dataItem) {
-                if (dataItem.Settings != null && dataItem.Settings.IsRequired) {
-                    requiredFiltersNames.push(dataItem.Title);
-                }
-            });
-            var result = null;
-            if (requiredFiltersNames.length > 0) {
-                result = '';
-                if (requiredFiltersNames.length == 1) {
-                    result = 'Order ' + requiredFiltersNames[0] + ' is required';
-                }
-                else {
-                    result = result = 'Order ' + requiredFiltersNames[0];
-                    for (var x = 1; x < requiredFiltersNames.length; x++) {
-                        var currentItem = requiredFiltersNames[x];
-                        if (x == requiredFiltersNames.length - 1) {
-                            result += ' and ' + currentItem + ' are required';
-                        }
-                        else {
-                            result += ', ' + currentItem;
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
         function initializeController() {
             defineAPI();
         }
-
         function defineAPI() {
             var api = {};
 
@@ -257,6 +197,64 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function checkRequiredFilters() {
+            var requiredFiltersNames = [];
+            if (ctrl.optionOrderSettingsGroupTemplates.length == 0) {
+                return null;
+            }
+            angular.forEach(ctrl.optionOrderSettingsGroupTemplates, function (dataItem) {
+                if (dataItem.Settings != null && dataItem.Settings.IsRequired) {
+                    requiredFiltersNames.push(dataItem.Title);
+                }
+            });
+            var result = null;
+            if (requiredFiltersNames.length > 0) {
+                result = '';
+                if (requiredFiltersNames.length == 1) {
+                    result = 'Order ' + requiredFiltersNames[0] + ' is required';
+                }
+                else {
+                    result = result = 'Order ' + requiredFiltersNames[0];
+                    for (var x = 1; x < requiredFiltersNames.length; x++) {
+                        var currentItem = requiredFiltersNames[x];
+                        if (x == requiredFiltersNames.length - 1) {
+                            result += ' and ' + currentItem + ' are required';
+                        }
+                        else {
+                            result += ', ' + currentItem;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        function addNewItem(itemAdded) {
+            var dataItem = {
+                id: ctrl.datasource.length + 1,
+                configId: itemAdded.ExtensionConfigurationId,
+                editor: itemAdded.Editor,
+                name: itemAdded.Title,
+                percentageValue: undefined
+            };
+
+            dataItem.onDirectiveReady = function (api) {
+                dataItem.directiveAPI = api;
+                var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+            };
+
+            for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
+                if (ctrl.optionOrderSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
+                    existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
+                    ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
+                    break;
+                }
+            }
+
+            ctrl.datasource.push(dataItem);
         }
 
         this.initializeController = initializeController;
