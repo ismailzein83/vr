@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSource_Get] 
-@DataSourceID int
+@DataSourceID uniqueidentifier
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -12,15 +12,12 @@ BEGIN
 	SELECT ds.[ID],
 		ds.[Name],
 		ds.[adapterID],
-		at.Name AS AdapterName,
 		ds.[AdapterState],
-		at.[Info],
 		ds.[TaskId],
 		st.IsEnabled,
 		ds.[Settings]
 
 	FROM integration.DataSource ds WITH(NOLOCK) 
-	INNER JOIN integration.AdapterType at  WITH(NOLOCK) ON at.ID = ds.AdapterID
 	INNER JOIN runtime.ScheduleTask st  WITH(NOLOCK) ON st.ID = ds.TaskId
    
 	WHERE DS.[ID] = @DataSourceID

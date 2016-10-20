@@ -3,7 +3,7 @@ CREATE PROCEDURE  [bp].[sp_BPBusinessRuleSet_Insert]
 @Name nvarchar(MAX),
 @ParentId int,
 @Details nvarchar(MAX),
-@BPDefinitionId int,
+@BPDefinitionId uniqueidentifier,
 @Id int out
 AS
 BEGIN

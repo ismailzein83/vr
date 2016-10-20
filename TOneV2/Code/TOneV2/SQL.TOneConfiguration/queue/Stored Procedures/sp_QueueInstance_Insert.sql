@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [queue].[sp_QueueInstance_Insert] 
-	@ExecutionFlowID int,
+	@ExecutionFlowID uniqueidentifier,
 	@StageName varchar(255),
 	@Name varchar(255),
 	@Title nvarchar(255),

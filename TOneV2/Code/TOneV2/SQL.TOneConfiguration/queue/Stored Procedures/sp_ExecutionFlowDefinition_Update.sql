@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [queue].[sp_ExecutionFlowDefinition_Update] 
-		@ID int,
+		@ID uniqueidentifier,
 		@Name nvarchar(255),
 		@Title nvarchar(255),
 		@Stages nvarchar(max)

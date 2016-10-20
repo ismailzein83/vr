@@ -4,16 +4,16 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [queue].[sp_ExecutionFlow_Insert]
+	@Id uniqueidentifier ,
 	@Name Nvarchar(255),
-	@DefinitionId int,
-	@Id int out
+	@DefinitionId uniqueidentifier
+
 AS
 BEGIN
 	IF NOT EXISTS(select 1 from [queue].[ExecutionFlow] where Name = @Name)
 	BEGIN
-		Insert into [queue].[ExecutionFlow] ([Name], [ExecutionFlowDefinitionID])
-		values(@Name, @DefinitionId)
-		
-		SET @Id = SCOPE_IDENTITY()
+		Insert into [queue].[ExecutionFlow] (ID,[Name], [ExecutionFlowDefinitionID])
+		values(@ID,@Name, @DefinitionId)
+
 	END
 END

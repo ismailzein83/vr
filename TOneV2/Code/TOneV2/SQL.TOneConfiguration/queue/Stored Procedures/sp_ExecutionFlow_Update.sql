@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [queue].[sp_ExecutionFlow_Update] 
-	@ExecutionFlowId int,
+	@ExecutionFlowId uniqueidentifier,
 	@Name nvarchar(255)
 AS
 BEGIN

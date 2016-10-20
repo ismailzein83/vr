@@ -4,7 +4,7 @@ CREATE PROCEDURE  [bp].[sp_BPBusinessRuleSet_Update]
 @Name nvarchar(MAX),
 @ParentId int,
 @Details nvarchar(MAX),
-@BPDefinitionId int
+@BPDefinitionId uniqueidentifier
 AS
 BEGIN
   	IF NOT EXISTS(Select Name from [bp].[BPBusinessRuleSet] WITH(NOLOCK) where Name = @Name And ID != @BusinessRuleSetId)

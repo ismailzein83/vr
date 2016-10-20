@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_SchedulerTask_UpdateInfo]
-	@ID int,
+	@ID uniqueidentifier,
 	@Name Nvarchar(255),
 	@IsEnabled bit,
 	@TriggerTypeId uniqueidentifier,

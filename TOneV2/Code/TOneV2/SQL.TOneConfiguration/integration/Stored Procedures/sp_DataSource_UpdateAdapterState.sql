@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSource_UpdateAdapterState]
-	@DataSourceID int,
+	@DataSourceID uniqueidentifier,
 	@AdapterState varchar(1000)
 AS
 BEGIN

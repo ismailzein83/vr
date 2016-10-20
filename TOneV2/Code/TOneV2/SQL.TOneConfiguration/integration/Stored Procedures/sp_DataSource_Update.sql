@@ -4,9 +4,9 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSource_Update]
-	@ID int,
+	@ID uniqueidentifier,
 	@Name varchar(100),
-	@AdapterTypeId int,
+	@AdapterTypeId uniqueidentifier,
 	@Settings varchar(max)
 AS
 BEGIN

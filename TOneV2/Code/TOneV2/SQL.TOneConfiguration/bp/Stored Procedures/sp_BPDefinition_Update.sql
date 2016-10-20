@@ -1,6 +1,6 @@
 ﻿
-Create PROCEDURE  [bp].[sp_BPDefinition_Update]
-@BPDefinitionId int,
+CREATE PROCEDURE  [bp].[sp_BPDefinition_Update]
+@BPDefinitionId uniqueidentifier,
 @Title nvarchar(255),
 @Config nvarchar(MAX)
 AS

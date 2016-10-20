@@ -4,16 +4,15 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSource_Insert]
+		@Id uniqueidentifier ,
 	@Name varchar(100),
-	@AdapterTypeId int,
+	@AdapterTypeId uniqueidentifier,
 	@AdapterState varchar(1000),
-	@TaskId int,
-	@Settings varchar(max),
-	@Id int out
+	@TaskId uniqueidentifier,
+	@Settings varchar(max)
+
 AS
 BEGIN
-	Insert into integration.DataSource ([Name], [AdapterID], [AdapterState], [TaskId], [Settings])
-	Values(@Name, @AdapterTypeId, @AdapterState, @TaskId, @Settings)
-	
-	Set @Id = SCOPE_IDENTITY()
+	Insert into integration.DataSource (Id,[Name], [AdapterID], [AdapterState], [TaskId], [Settings])
+	Values(@Id,@Name, @AdapterTypeId, @AdapterState, @TaskId, @Settings)
 END

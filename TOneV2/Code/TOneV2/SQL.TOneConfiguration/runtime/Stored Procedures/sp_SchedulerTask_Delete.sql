@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_SchedulerTask_Delete]
-	@Id INT
+	@Id uniqueidentifier
 AS
 BEGIN
 	DELETE FROM [runtime].[ScheduleTask]

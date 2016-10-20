@@ -466,7 +466,6 @@
     <Build Include="integration\Stored Procedures\sp_DataSource_GetAll.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_Get.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_Delete.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSource_CreateTemp.sql" />
     <Build Include="integration\Stored Procedures\sp_AdapterType_GetAll.sql" />
     <Build Include="queue\User Defined Types\IDIntType.sql" />
     <Build Include="runtime\User Defined Types\IDIntType.sql" />

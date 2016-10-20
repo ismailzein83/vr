@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSource_Delete]
-	@Id INT
+	@Id uniqueidentifier
 AS
 BEGIN
 	DELETE FROM [integration].[DataSource]

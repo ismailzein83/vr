@@ -1,5 +1,5 @@
-﻿Create PROCEDURE [reprocess].[sp_ReprocessDefinition_Update]
-	@ID int,
+﻿CREATE PROCEDURE [reprocess].[sp_ReprocessDefinition_Update]
+	@ID uniqueidentifier,
 	@Name Nvarchar(255),
 	@Settings nvarchar(MAX)
 AS
