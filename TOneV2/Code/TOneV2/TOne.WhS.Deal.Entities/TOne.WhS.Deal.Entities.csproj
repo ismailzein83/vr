@@ -58,7 +58,7 @@
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItemTier.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealSettings.cs" />
-    <Compile Include="Deal.cs" />
+    <Compile Include="DealDefinition.cs" />
     <Compile Include="DealSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />

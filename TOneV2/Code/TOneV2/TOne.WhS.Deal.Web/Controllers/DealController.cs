@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         //DealManager _manager = new DealManager();
         //[HttpPost]
         [Route("AddDeal")]
-        public Vanrise.Entities.InsertOperationOutput<TOne.WhS.Deal.Entities.Deal> AddDeal(TOne.WhS.Deal.Entities.Deal deal)
+        public Vanrise.Entities.InsertOperationOutput<DealDefinition> AddDeal(DealDefinition deal)
         {
             return null;
         }

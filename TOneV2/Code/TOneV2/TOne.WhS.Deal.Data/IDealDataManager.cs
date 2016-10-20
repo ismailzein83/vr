@@ -9,12 +9,12 @@ namespace TOne.WhS.Deal.Data
 {
     public interface IDealDataManager : IDataManager
     {
-        List<TOne.WhS.Deal.Entities.Deal> GetDeals();
+        List<DealDefinition> GetDeals();
 
         bool AreDealsUpdated(ref object updateHandle);
 
-        bool Insert(TOne.WhS.Deal.Entities.Deal deal, out int insertedId);
+        bool Insert(DealDefinition deal, out int insertedId);
 
-        bool Update(TOne.WhS.Deal.Entities.Deal deal);
+        bool Update(DealDefinition deal);
     }
 }

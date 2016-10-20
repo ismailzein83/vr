@@ -23,7 +23,7 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region Public Methods
 
-        public List<TOne.WhS.Deal.Entities.Deal> GetDeals()
+        public List<DealDefinition> GetDeals()
         {
             return GetItemsSP("TOneWhS_Deal.sp_Deal_GetAll", DealMapper);
         }
@@ -33,7 +33,7 @@ namespace TOne.WhS.Deal.Data.SQL
             return base.IsDataUpdated("TOneWhS_Deal.Deal", ref updateHandle);
         }
 
-        public bool Insert(TOne.WhS.Deal.Entities.Deal deal, out int insertedId)
+        public bool Insert(DealDefinition deal, out int insertedId)
         {
             object dealId;
 
@@ -46,7 +46,7 @@ namespace TOne.WhS.Deal.Data.SQL
             return insertedSuccesfully;
         }
 
-        public bool Update(TOne.WhS.Deal.Entities.Deal deal)
+        public bool Update(DealDefinition deal)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_Deal.sp_Deal_Update", deal.DealId, deal.Name, Vanrise.Common.Serializer.Serialize(deal.Settings));
             return (recordsEffected > 0);
@@ -56,9 +56,9 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region  Mappers
 
-        private TOne.WhS.Deal.Entities.Deal DealMapper(IDataReader reader)
+        private DealDefinition DealMapper(IDataReader reader)
         {
-            TOne.WhS.Deal.Entities.Deal deal = new TOne.WhS.Deal.Entities.Deal
+            DealDefinition deal = new DealDefinition
             {
                 DealId = (int)reader["ID"],
                 Name = reader["Name"] as string,
