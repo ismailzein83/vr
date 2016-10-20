@@ -163,6 +163,7 @@
     <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealinbound-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-inbound-management.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-management.js" />
+    <Content Include="WhS_Deal\Services\SwapDealAnalysisService.js" />
     <Content Include="WhS_Deal\Services\SwapDealOutboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
