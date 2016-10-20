@@ -22,3 +22,6 @@ System.Web.WebPages
 System.Web.WebPages.Deployment
 System.Web.WebPages.Razor
 System.Web.Razor
+
+make sure that below DLLs has reference from C:\TFS\Vanrise\Code\Resources\DLLs\ path
+Newtonsoft.Json.dll
