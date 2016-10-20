@@ -10,7 +10,7 @@ namespace QM.CLITester.Data
     public interface ITestCallDataManager : IDataManager
     {
         bool Insert(int supplierId, int countryId, long zoneId, int callTestStatus, int callTestResult,
-            int initiationRetryCount, int getProgressRetryCount, int userId, int profileId, long? batchNumber, int? scheduleId, int quantity);
+            int initiationRetryCount, int getProgressRetryCount, int userId, int profileId, long? batchNumber, Guid? scheduleId, int quantity);
         List<TestCall> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId, int numberOfMinutes);
         List<TestCall> GetBeforeId(GetBeforeIdInput input);
         List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus);

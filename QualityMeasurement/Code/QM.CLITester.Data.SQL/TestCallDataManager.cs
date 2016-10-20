@@ -34,7 +34,7 @@ namespace QM.CLITester.Data.SQL
         }
 
         public bool Insert(int supplierId, int countryId, long zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount,
-            int userId, int profileId, long? batchNumber, int? scheduleId, int quantity)
+            int userId, int profileId, long? batchNumber, Guid? scheduleId, int quantity)
         {
             object testCallId;
 
@@ -170,7 +170,7 @@ namespace QM.CLITester.Data.SQL
                 Measure = measure,
                 FailureMessage = reader["FailureMessage"] as string,
                 BatchNumber = GetReaderValue<long>(reader, "BatchNumber"),
-                ScheduleId = GetReaderValue<int>(reader, "ScheduleID"),
+                ScheduleId = GetReaderValue<Guid>(reader, "ScheduleID"),
                 Quantity = GetReaderValue<int>(reader, "Quantity")
             };
 

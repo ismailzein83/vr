@@ -18,7 +18,7 @@ namespace QM.CLITester.Entities
         public List<int> SupplierIds { get; set; }
 
         public List<int> ProfileIds { get; set; }
-        public List<int> ScheduleIds { get; set; }
+        public List<Guid> ScheduleIds { get; set; }
 
         public List<int> CountryIds { get; set; }
 

@@ -18,7 +18,7 @@ namespace QM.CLITester.Entities
         public string ZoneSourceId { get; set; }
         public int ProfileID { get; set; }
         public int UserId { get; set; }
-        public int? ScheduleId { get; set; }
+        public Guid? ScheduleId { get; set; }
         public int Quantity { get; set; }
     }
 }
