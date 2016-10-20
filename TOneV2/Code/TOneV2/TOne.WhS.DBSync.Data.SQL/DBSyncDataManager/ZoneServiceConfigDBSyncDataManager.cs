@@ -20,7 +20,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplyZoneServicesConfigToTemp(List<ZoneServiceConfig> zoneServicesConfig, long startingId)
+        public void ApplyZoneServicesConfigToTemp(List<ZoneServiceConfig> zoneServicesConfig)
         {
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
@@ -36,7 +36,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row["Symbol"] = item.Symbol;
                 row["Settings"] = Vanrise.Common.Serializer.Serialize(item.Settings);
                 row["SourceID"] = item.SourceId;
-                row["ID"] = startingId++;
+                row["ID"] = item.ZoneServiceConfigId;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
