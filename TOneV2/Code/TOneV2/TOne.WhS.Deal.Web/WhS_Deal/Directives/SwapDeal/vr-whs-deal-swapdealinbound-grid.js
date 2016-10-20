@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService", "WhS_BE_DealSellingService",
-    function (UtilsService, VRNotificationService, WhS_BE_DealSellingService) {
+app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationService", "WhS_Deal_SwapDealInboundService",
+    function (UtilsService, VRNotificationService, WhS_Deal_SwapDealInboundService) {
 
         var directiveDefinitionObject = {
 
@@ -13,19 +13,19 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var dealSellingGrid = new DealSellingGrid($scope, ctrl, $attrs);
-                dealSellingGrid.initializeController();
+                var swapDealInboundGrid = new SwapDealInboundGrid($scope, ctrl, $attrs);
+                swapDealInboundGrid.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/Deal/Templates/DealSellingGridTemplate.html'
+            templateUrl: '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealInboundGridTemplate.html'
 
         };
 
-        function DealSellingGrid($scope, ctrl, $attrs) {
+        function SwapDealInboundGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
             var mainPayload;
@@ -33,14 +33,14 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
 
                 ctrl.datasource = [];
 
-                ctrl.addDealSelling = function () {
+                ctrl.addSwapDealInbound = function () {
 
 
                     var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
-                    var onDealSellingAdded = function (addedDealSelling) {
-                        ctrl.datasource.push(addedDealSelling);
+                    var onSwapDealInboundAdded = function (addedSwapDealInbound) {
+                        ctrl.datasource.push(addedSwapDealInbound);
                     };
-                    WhS_BE_DealSellingService.addDealSelling(onDealSellingAdded, sellingNumberPlanId);
+                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId);
                 };
 
                 defineMenuActions();
@@ -53,9 +53,9 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 api.load = function (payload) {
                     mainPayload = payload;
                     
-                    if (payload.SellingParts != undefined && payload.SellingParts != null) {
+                    if (payload.InboundParts != undefined && payload.InboundParts != null) {
 
-                        ctrl.datasource = payload.SellingParts;
+                        ctrl.datasource = payload.InboundParts;
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             ctrl.datasource[i].Amount = ctrl.datasource[i].Volume * ctrl.datasource[i].Rate;
                         }
@@ -68,9 +68,7 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 api.getData = function () {
                     var sellingObj = 
                     {
-                        sellingParts: [],
-                        sellingAmount: 0,
-                        sellingDuration: 0
+                        sellingParts: []
                     }
 
                     if (ctrl.datasource != undefined) {
@@ -81,16 +79,9 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,
-                                MaxBuyingRate: currentItem.MaxBuyingRate,
-                                SubstituteRate: currentItem.SubstituteRate,
-                                ExtraVolumeRate: currentItem.ExtraVolumeRate,
-                                SaleZoneIds: currentItem.SaleZoneIds,
-                                ASR: currentItem.ASR,
-                                NER: currentItem.NER,
-                                ACD: currentItem.ACD
+                                SaleZoneIds: currentItem.SaleZoneIds
                             });
-                            sellingObj.sellingAmount = sellingObj.sellingAmount + (currentItem.Volume * currentItem.Rate);
-                            sellingObj.sellingDuration = Number(sellingObj.sellingDuration) + Number(currentItem.Volume);
+                           
                         }
 
                     }
@@ -105,11 +96,11 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editDealSelling
+                    clicked: editSwapDealInbound
                 },
                 {
                     name: "Delete",
-                    clicked: deleteDealSelling
+                    clicked: deleteSwapDealInbound
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -117,23 +108,23 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 }
             }
 
-            function editDealSelling(dealSellingObj) {
-                var onDealSellingUpdated = function (dealSelling) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealSellingObj.Name, 'Name');
-                    ctrl.datasource[index] = dealSelling;
+            function editSwapDealInbound(dealInboundObj) {
+                var onDealInboundUpdated = function (dealInbound) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealInboundObj.Name, 'Name');
+                    ctrl.datasource[index] = dealInbound;
                 }
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
-                WhS_BE_DealSellingService.editDealSelling(dealSellingObj, sellingNumberPlanId, onDealSellingUpdated);
+                WhS_BE_DealInboundService.editDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated);
             }
 
-            function deleteDealSelling(dealSellingObj) {
-                var onDealSellingDeleted = function () {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealSellingObj.Name, 'Name');
+            function deleteSwapDealInbound(swapDealInboundObj) {
+                var onSwapDealInboundDeleted = function () {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, swapDealInboundObj.Name, 'Name');
                     ctrl.datasource.splice(index, 1);
                 };
 
-                WhS_BE_DealSellingService.deleteDealSelling($scope, dealSellingObj, onDealSellingDeleted);
+                WhS_BE_DealInboundService.deleteDealInbound($scope, swapDealInboundObj, onSwapDealInboundDeleted);
             }
 
         }

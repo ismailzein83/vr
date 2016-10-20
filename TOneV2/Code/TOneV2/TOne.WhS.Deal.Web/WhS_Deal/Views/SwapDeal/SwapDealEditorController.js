@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_BE_DealAPIService', 'WhS_BE_DealSellingService', 'WhS_BE_DealBuyingService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_BE_DealAPIService','WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService'];
 
-    function SwapDealEditorController($scope, WhS_BE_SwapDealAPIService, WhS_BE_SwapDealSellingService, WhS_BE_SwapDealBuyingService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService) {
+    function SwapDealEditorController($scope, WhS_BE_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService) {
         var isEditMode;
 
         var dealId;
@@ -13,11 +13,11 @@
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var dealSellingAPI;
-        var dealSellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var dealInboundAPI;
+        var dealInboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var dealBuyingAPI;
-        var dealBuyingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var dealOutboundAPI;
+        var dealOutboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -47,24 +47,24 @@
             };
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
+                if (carrierAccountInfo != undefined && carrierAccountInfo.InboundNumberPlanId) {
 
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = {
-                        sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
+                        sellingNumberPlanId: carrierAccountInfo.InboundNumberPlanId
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
-                        payload.SellingParts = dealEntity.Settings.SellingParts;
+                        payload.InboundParts = dealEntity.Settings.InboundParts;
                     
 
-                    var payloadBuying = {
+                    var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
-                        payloadBuying.BuyingParts = dealEntity.Settings.BuyingParts;
+                        payloadOutbound.OutboundParts = dealEntity.Settings.OutboundParts;
 
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealSellingAPI, payload, setLoader);
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealBuyingAPI, payloadBuying, setLoader);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealInboundAPI, payload, setLoader);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealOutboundAPI, payloadOutbound, setLoader);
                 }
             }
             $scope.scopeModel.save = function () {
@@ -80,14 +80,14 @@
                 $scope.modalContext.closeModal();
             };
 
-            $scope.scopeModel.onSwapDealSellingDirectiveReady = function (api) {
-                dealSellingAPI = api;
-                dealSellingReadyPromiseDeferred.resolve();
+            $scope.scopeModel.onSwapDealInboundDirectiveReady = function (api) {
+                dealInboundAPI = api;
+                dealInboundReadyPromiseDeferred.resolve();
             }
             
-            $scope.scopeModel.onSwapDealBuyingDirectiveReady = function (api) {
-                dealBuyingAPI = api;
-                dealBuyingReadyPromiseDeferred.resolve();
+            $scope.scopeModel.onSwapDealOutboundDirectiveReady = function (api) {
+                dealOutboundAPI = api;
+                dealOutboundReadyPromiseDeferred.resolve();
             }
 
         }
@@ -121,84 +121,84 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwapDealSelling, loadSwapDealBuying]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwapDealInbound, loadSwapDealOutbound]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function loadSwapDealSelling() {
+        function loadSwapDealInbound() {
 
-            var loadSwapDealSellingPromiseDeferred = UtilsService.createPromiseDeferred();
+            var loadSwapDealInboundPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
             if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI != null) {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
-                    dealSellingReadyPromiseDeferred.promise
+                if (carrierAccountInfo != undefined && carrierAccountInfo.InboundNumberPlanId) {
+                    dealInboundReadyPromiseDeferred.promise
                         .then(function() {
                             var directivePayload = {
-                                sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
+                                sellingNumberPlanId: carrierAccountInfo.InboundNumberPlanId
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
-                                directivePayload.SellingParts = dealEntity.Settings.SellingParts;
-                            VRUIUtilsService.callDirectiveLoad(dealSellingAPI, directivePayload, loadSwapDealSellingPromiseDeferred);
+                                directivePayload.InboundParts = dealEntity.Settings.InboundParts;
+                            VRUIUtilsService.callDirectiveLoad(dealInboundAPI, directivePayload, loadSwapDealInboundPromiseDeferred);
                         });
                 }
             }
             else {
-                dealSellingReadyPromiseDeferred.promise
+                dealInboundReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload = {
                             sellingNumberPlanId: null
                         }
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
-                            directivePayload.SellingParts = dealEntity.Settings.SellingParts;
+                            directivePayload.InboundParts = dealEntity.Settings.InboundParts;
 
-                        VRUIUtilsService.callDirectiveLoad(dealSellingAPI, directivePayload, loadSwapDealSellingPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(dealInboundAPI, directivePayload, loadSwapDealInboundPromiseDeferred);
                     });
             }
 
 
-            return loadSwapDealSellingPromiseDeferred.promise;
+            return loadSwapDealInboundPromiseDeferred.promise;
         }
 
-        function loadSwapDealBuying() {
+        function loadSwapDealOutbound() {
 
-            var loadSwapDealBuyingPromiseDeferred = UtilsService.createPromiseDeferred();
+            var loadSwapDealOutboundPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
             if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI != null) {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
-                    dealBuyingReadyPromiseDeferred.promise
+                if (carrierAccountInfo != undefined && carrierAccountInfo.InboundNumberPlanId) {
+                    dealOutboundReadyPromiseDeferred.promise
                         .then(function () {
                             var directivePayload = {
-                                sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
+                                sellingNumberPlanId: carrierAccountInfo.InboundNumberPlanId
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
-                                directivePayload.BuyingParts = dealEntity.Settings.BuyingParts;
+                                directivePayload.OutboundParts = dealEntity.Settings.OutboundParts;
 
-                            VRUIUtilsService.callDirectiveLoad(dealBuyingAPI, directivePayload, loadSwapDealBuyingPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, directivePayload, loadSwapDealOutboundPromiseDeferred);
                         });
                 }
             }
             else {
-                dealBuyingReadyPromiseDeferred.promise
+                dealOutboundReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload = {
                             sellingNumberPlanId: null
                         }
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
-                            directivePayload.BuyingParts = dealEntity.Settings.BuyingParts;
+                            directivePayload.OutboundParts = dealEntity.Settings.OutboundParts;
 
-                        VRUIUtilsService.callDirectiveLoad(dealBuyingAPI, directivePayload, loadSwapDealBuyingPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, directivePayload, loadSwapDealOutboundPromiseDeferred);
                     });
             }
 
 
-            return loadSwapDealBuyingPromiseDeferred.promise;
+            return loadSwapDealOutboundPromiseDeferred.promise;
         }
 
 
@@ -220,8 +220,8 @@
             $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.AgreementType, 'value');
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
-            $scope.scopeModel.sellingParts = dealEntity.Settings.SellingParts;
-            $scope.scopeModel.buyingParts = dealEntity.Settings.BuyingParts;
+            $scope.scopeModel.sellingParts = dealEntity.Settings.InboundParts;
+            $scope.scopeModel.buyingParts = dealEntity.Settings.OutboundParts;
             $scope.scopeModel.active = dealEntity.Settings.Active;
         }
 
@@ -288,12 +288,12 @@
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     ContractType: $scope.scopeModel.selectedContractType.value,
                     AgreementType: $scope.scopeModel.selectedAgreementType.value,
-                    SellingParts: dealSellingAPI.getData().sellingParts,
-                    BuyingParts: dealBuyingAPI.getData().buyingParts,
-                    SellingAmount: dealSellingAPI.getData().sellingAmount,
-                    SellingDuration: dealSellingAPI.getData().sellingDuration,
-                    BuyingAmount: dealBuyingAPI.getData().buyingAmount,
-                    BuyingDuration: dealBuyingAPI.getData().buyingDuration,
+                    InboundParts: dealInboundAPI.getData().sellingParts,
+                    OutboundParts: dealOutboundAPI.getData().buyingParts,
+                    InboundAmount: dealInboundAPI.getData().sellingAmount,
+                    InboundDuration: dealInboundAPI.getData().sellingDuration,
+                    OutboundAmount: dealOutboundAPI.getData().buyingAmount,
+                    OutboundDuration: dealOutboundAPI.getData().buyingDuration,
                     Active: $scope.scopeModel.active
                 }
             };

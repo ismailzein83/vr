@@ -2,12 +2,12 @@
 
     'use strict';
 
-    SwapDealBuyingEditorController.$inject = ['$scope', 'WhS_BE_DealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealOutboundEditorController.$inject = ['$scope',  'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function SwapDealBuyingEditorController($scope, WhS_BE_DealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealOutboundEditorController($scope,  UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
-        var swapDealBuyingEntity;
+        var swapDealOutboundEntity;
         var supplierId;
 
         var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -22,18 +22,18 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 supplierId = parameters.supplierId;
-                swapDealBuyingEntity = parameters.swapDealBuying;
+                swapDealOutboundEntity = parameters.swapDealOutbound;
             }
 
 
-            isEditMode = (swapDealBuyingEntity != undefined);
+            isEditMode = (swapDealOutboundEntity != undefined);
         }
 
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateDealBuying() : insertDealBuying();
+                return (isEditMode) ? updateDealOutbound() : insertDealOutbound();
             };
 
 
@@ -76,7 +76,7 @@
 
                 var payload = {
                     supplierId: supplierId,
-                    selectedIds: swapDealBuyingEntity != undefined ? swapDealBuyingEntity.SupplierZoneIds : undefined
+                    selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
@@ -87,44 +87,44 @@
 
         function setTitle() {
             if (isEditMode) {
-                if (swapDealBuyingEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealBuyingEntity.Name, 'Buying Part');
+                if (swapDealOutboundEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealOutboundEntity.Name, 'Buying Part');
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Buying Part');
         }
 
         function loadStaticData() {
-            if (swapDealBuyingEntity == undefined)
+            if (swapDealOutboundEntity == undefined)
                 return;
-            $scope.scopeModel.name = swapDealBuyingEntity.Name;
-            $scope.scopeModel.volume = swapDealBuyingEntity.Volume;
-            $scope.scopeModel.rate = swapDealBuyingEntity.Rate;
-            $scope.scopeModel.minSellingRate = swapDealBuyingEntity.MinSellingRate;
-            $scope.scopeModel.substituteRate = swapDealBuyingEntity.SubstituteRate;
-            $scope.scopeModel.extraVolumeRate = swapDealBuyingEntity.ExtraVolumeRate;
-            $scope.scopeModel.asr = swapDealBuyingEntity.ASR;
-            $scope.scopeModel.ner = swapDealBuyingEntity.NER;
-            $scope.scopeModel.acd = swapDealBuyingEntity.ACD;
+            $scope.scopeModel.name = swapDealOutboundEntity.Name;
+            $scope.scopeModel.volume = swapDealOutboundEntity.Volume;
+            $scope.scopeModel.rate = swapDealOutboundEntity.Rate;
+            $scope.scopeModel.minSellingRate = swapDealOutboundEntity.MinSellingRate;
+            $scope.scopeModel.substituteRate = swapDealOutboundEntity.SubstituteRate;
+            $scope.scopeModel.extraVolumeRate = swapDealOutboundEntity.ExtraVolumeRate;
+            $scope.scopeModel.asr = swapDealOutboundEntity.ASR;
+            $scope.scopeModel.ner = swapDealOutboundEntity.NER;
+            $scope.scopeModel.acd = swapDealOutboundEntity.ACD;
         }
 
-        function insertDealBuying() {
+        function insertDealOutbound() {
             $scope.scopeModel.isLoading = true;
 
-            var dealBuyingObject = buildDealBuyingObjFromScope();
-            if ($scope.onDealBuyingAdded != undefined)
-                $scope.onDealBuyingAdded(dealBuyingObject);
+            var dealOutboundObject = buildDealOutboundObjFromScope();
+            if ($scope.onDealOutboundAdded != undefined)
+                $scope.onDealOutboundAdded(dealOutboundObject);
             $scope.modalContext.closeModal();
         }
 
-        function updateDealBuying() {
-            var dealBuyingObject = buildDealBuyingObjFromScope();
-            if ($scope.onDealBuyingUpdated != undefined)
-                $scope.onDealBuyingUpdated(dealBuyingObject);
+        function updateDealOutbound() {
+            var dealOutboundObject = buildDealOutboundObjFromScope();
+            if ($scope.onDealOutboundUpdated != undefined)
+                $scope.onDealOutboundUpdated(dealOutboundObject);
             $scope.modalContext.closeModal();
         }
 
-        function buildDealBuyingObjFromScope() {
+        function buildDealOutboundObjFromScope() {
             var obj = {
                 Name: $scope.scopeModel.name,
                 SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
@@ -142,6 +142,6 @@
         }
     }
 
-    appControllers.controller('WhS_Deal_SwapDealBuyingEditorController', SwapDealBuyingEditorController);
+    appControllers.controller('WhS_Deal_SwapDealOutboundEditorController', SwapDealOutboundEditorController);
 
 })(appControllers);

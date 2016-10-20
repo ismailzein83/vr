@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsDealSwapdealbuyingGrid", ["UtilsService", "VRNotificationService", "WhS_Deal_SwapDealBuyingService",
-    function (UtilsService, VRNotificationService, WhS_Deal_SwapDealBuyingService) {
+app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationService", "WhS_Deal_SwapDealOutboundService",
+    function (UtilsService, VRNotificationService, WhS_Deal_SwapDealOutboundService) {
 
         var directiveDefinitionObject = {
 
@@ -13,19 +13,19 @@ app.directive("vrWhsDealSwapdealbuyingGrid", ["UtilsService", "VRNotificationSer
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var swapDealBuyingGrid = new SwapDealBuyingGrid($scope, ctrl, $attrs);
-                swapDealBuyingGrid.initializeController();
+                var swapDealOutboundGrid = new SwapDealOutboundGrid($scope, ctrl, $attrs);
+                swapDealOutboundGrid.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealBuyingGridTemplate.html'
+            templateUrl: '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealOutboundGridTemplate.html'
 
         };
 
-        function SwapDealBuyingGrid($scope, ctrl, $attrs) {
+        function SwapDealOutboundGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
             var mainPayload;
@@ -33,14 +33,14 @@ app.directive("vrWhsDealSwapdealbuyingGrid", ["UtilsService", "VRNotificationSer
 
                 ctrl.datasource = [];
 
-                ctrl.addSwapDealBuying = function () {
+                ctrl.addSwapDealOutbound = function () {
 
 
                     var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
-                    var onSwapDealBuyingAdded = function (addedSwapDealBuying) {
-                        ctrl.datasource.push(addedSwapDealBuying);
+                    var onSwapDealOutboundAdded = function (addedSwapDealOutbound) {
+                        ctrl.datasource.push(addedSwapDealOutbound);
                     };
-                    WhS_Deal_SwapDealBuyingService.addSwapDealBuying(onSwapDealBuyingAdded, supplierId);
+                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId);
                 };
 
                 defineMenuActions();
@@ -95,11 +95,11 @@ app.directive("vrWhsDealSwapdealbuyingGrid", ["UtilsService", "VRNotificationSer
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editSwapDealBuying
+                    clicked: editSwapDealOutbound
                 },
                 {
                     name: "Delete",
-                    clicked: deleteSwapDealBuying
+                    clicked: deleteSwapDealOutbound
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -107,24 +107,24 @@ app.directive("vrWhsDealSwapdealbuyingGrid", ["UtilsService", "VRNotificationSer
                 }
             }
 
-            function editSwapDealBuying(swapDealBuyingObj) {
-                var onSwapDealBuyingUpdated = function (swapDealBuying) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, swapDealBuyingObj.Name, 'Name');
-                    ctrl.datasource[index] = swapDealBuying;
+            function editSwapDealOutbound(swapDealOutboundObj) {
+                var onSwapDealOutboundUpdated = function (swapDealOutbound) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, swapDealOutboundObj.Name, 'Name');
+                    ctrl.datasource[index] = swapDealOutbound;
                 }
                 var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
 
-                WhS_Deal_SwapDealBuyingService.editSwapDealBuying(swapDealBuyingObj, supplierId, onSwapDealBuyingUpdated);
+                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated);
 
             }
 
-            function deleteDealBuying(dealBuyingObj) {
-                var onDealBuyingDeleted = function () {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealBuyingObj.Name, 'Name');
+            function deleteSwapDealOutbound(swapDealOutboundObj) {
+                var onSwapDealOutboundDeleted = function () {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, swapDealOutboundObj.Name, 'Name');
                     ctrl.datasource.splice(index, 1);
                 };
 
-                WhS_Deal_SwapDealBuyingService.deleteSwapDealBuying($scope, dealBuyingObj, onDealBuyingDeleted);
+                WhS_Deal_SwapDealOutboundService.deleteSwapDealOutbound($scope, swapDealOutboundObj, onSwapDealOutboundDeleted);
             }
 
         }

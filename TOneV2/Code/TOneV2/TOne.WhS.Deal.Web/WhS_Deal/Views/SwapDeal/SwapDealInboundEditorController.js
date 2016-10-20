@@ -2,12 +2,12 @@
 
     'use strict';
 
-    SwapDealSellingEditorController.$inject = ['$scope',  'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealInboundEditorController.$inject = ['$scope',  'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function SwapDealSellingEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealInboundEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
-        var swapDealSellingEntity;
+        var swapDealInboundEntity;
         var sellingNumberPlanId;
 
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -22,17 +22,17 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
-                swapDealSellingEntity = parameters.swapDealSelling;
+                swapDealInboundEntity = parameters.swapDealInbound;
             }
             
-            isEditMode = (swapDealSellingEntity != undefined);
+            isEditMode = (swapDealInboundEntity != undefined);
         }
 
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateDealSelling() : insertDealSelling();
+                return (isEditMode) ? updateDealInbound() : insertDealInbound();
             };
 
 
@@ -75,7 +75,7 @@
                 
                 var payload = {
                     sellingNumberPlanId: sellingNumberPlanId,
-                    selectedIds: swapDealSellingEntity != undefined ? swapDealSellingEntity.SaleZoneIds : undefined
+                    selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
@@ -86,39 +86,39 @@
 
         function setTitle() {
             if (isEditMode) {
-                if (swapDealSellingEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealSellingEntity.Name, 'Selling Part');
+                if (swapDealInboundEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealInboundEntity.Name, 'Selling Part');
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Selling Part');
         }
 
         function loadStaticData() {
-            if (swapDealSellingEntity == undefined)
+            if (swapDealInboundEntity == undefined)
                 return;
-            $scope.scopeModel.name = swapDealSellingEntity.Name;
-            $scope.scopeModel.volume = swapDealSellingEntity.Volume;
-            $scope.scopeModel.rate = swapDealSellingEntity.Rate;
+            $scope.scopeModel.name = swapDealInboundEntity.Name;
+            $scope.scopeModel.volume = swapDealInboundEntity.Volume;
+            $scope.scopeModel.rate = swapDealInboundEntity.Rate;
            
         }
 
-        function insertDealSelling() {
+        function insertDealInbound() {
             $scope.scopeModel.isLoading = true;
             
-            var dealSellingObject = buildDealSellingObjFromScope();
-            if ($scope.onDealSellingAdded != undefined)
-                $scope.onDealSellingAdded(dealSellingObject);
+            var dealInboundObject = buildDealInboundObjFromScope();
+            if ($scope.onDealInboundAdded != undefined)
+                $scope.onDealInboundAdded(dealInboundObject);
             $scope.modalContext.closeModal();
         }
 
-        function updateDealSelling() {
-            var dealSellingObject = buildDealSellingObjFromScope();
-            if ($scope.onDealSellingUpdated != undefined)
-                $scope.onDealSellingUpdated(dealSellingObject);
+        function updateDealInbound() {
+            var dealInboundObject = buildDealInboundObjFromScope();
+            if ($scope.onDealInboundUpdated != undefined)
+                $scope.onDealInboundUpdated(dealInboundObject);
             $scope.modalContext.closeModal();
         }
 
-        function buildDealSellingObjFromScope() {
+        function buildDealInboundObjFromScope() {
             var obj = {
                 Name: $scope.scopeModel.name,
                 SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
@@ -130,6 +130,6 @@
         }
     }
 
-    appControllers.controller('WhS_BE_DealSellingEditorController', DealSellingEditorController);
+    appControllers.controller('WhS_Deal_SwapDealInboundEditorController', SwapDealInboundEditorController);
 
 })(appControllers);
