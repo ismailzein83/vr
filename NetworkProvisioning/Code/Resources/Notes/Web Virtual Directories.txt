@@ -1,0 +1,7 @@
+﻿Expand the IIS web site of NetworkProvisioning.Web project:
+ - Add the following virtual directory under the root site:
+Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+
+ - Add the following virtual directories under Client > Modules folder:
+Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
