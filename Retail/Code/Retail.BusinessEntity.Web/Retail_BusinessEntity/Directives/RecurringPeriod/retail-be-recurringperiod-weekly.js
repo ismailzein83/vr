@@ -32,9 +32,10 @@ app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService', 'UtilsS
                 }
             }
             function defineApi() {
-              
+
                 var api = {};
                 api.load = function (payload) {
+                    dayOfWeekEntity = 0;
                     if (payload != undefined) {
                         dayOfWeekEntity = payload.DayOfWeek;
                     }
@@ -51,7 +52,7 @@ app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService', 'UtilsS
                     var dayOfWeekSelectorLoadDeferred = utilsService.createPromiseDeferred();
                     daysOfWeekSelectorReadyDeferred.promise.then(function () {
                         var dayOfWeekSelectorPayload = null;
-                        if (dayOfWeekEntity!=undefined) {
+                        if (dayOfWeekEntity != undefined) {
                             dayOfWeekSelectorPayload = {
                                 selectedIds: dayOfWeekEntity
                             };
