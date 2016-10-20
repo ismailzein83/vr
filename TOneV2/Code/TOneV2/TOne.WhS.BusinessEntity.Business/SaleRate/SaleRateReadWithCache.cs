@@ -52,9 +52,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     SaleRatesByCustomer = new Dictionary<int, SaleRatesByZone>(),
                     SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>()
                 };
-                var priceLists = new SalePriceListManager().GetCachedSalePriceLists();
+                SalePriceListManager salePriceListManager = new SalePriceListManager();
+                var priceLists = salePriceListManager.GetCachedSalePriceLists();
                 foreach (SaleRate saleRate in saleRates)
                 {
+                    if (salePriceListManager.IsSalePriceListDeleted(saleRate.PriceListId))
+                        continue;
+
                     var cachedRate = cacheManager.CacheAndGetRate(saleRate);
                     SalePriceList priceList = priceLists.GetRecord(cachedRate.PriceListId);
                     if (priceList == null)
