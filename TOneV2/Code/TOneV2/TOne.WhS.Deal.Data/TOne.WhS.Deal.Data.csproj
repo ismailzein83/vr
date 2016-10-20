@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DealDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDealDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
