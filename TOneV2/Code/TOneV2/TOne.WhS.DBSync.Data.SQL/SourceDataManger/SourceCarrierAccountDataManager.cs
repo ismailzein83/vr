@@ -27,6 +27,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 ServicesFlag = (short)reader["ServicesFlag"],
                 ActivationStatus = (SourceActivationStatus)reader["ActivationStatus"],
                 RoutingStatus = (SourceRoutingStatus)reader["RoutingStatus"],
+                NominalCapacityInE1s = GetReaderValue<int?>(reader, "NominalCapacityInE1s"),
                 CustomerGMTTime = GetReaderValue<short?>(reader, "CustomerGMTTime"),
                 GMTTime = GetReaderValue<short?>(reader, "GMTTime"),
                 AccountType = (SourceAccountType)reader["AccountType"],
@@ -39,7 +40,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         const string query_getSourceCarrierAccounts = @"SELECT  ca.CarrierAccountID CarrierAccountID, ca.ProfileID ProfileID, ca.ActivationStatus ActivationStatus, ca.RoutingStatus RoutingStatus,  
                                                                 ca.AccountType AccountType, ca.NameSuffix NameSuffix, ca.ServicesFlag ServicesFlag, ca.GMTTime GMTTime, ca.CustomerGMTTime CustomerGMTTime,
-                                                                cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask , ca.IsDeleted IsDeleted
+                                                                cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask , ca.IsDeleted IsDeleted, ca.NominalCapacityInE1s NominalCapacityInE1s
                                                                 FROM  CarrierAccount ca WITH (NOLOCK) INNER JOIN CarrierProfile cp 
                                                                 ON ca.ProfileID = cp.ProfileID";
     }

@@ -25,6 +25,8 @@ namespace TOne.WhS.DBSync.Entities
 
         public string CurrencyId { get; set; }
 
+        public int? NominalCapacityInE1s { get; set; }
+
         public short? CustomerGMTTime { get; set; }
 
         public short? GMTTime { get; set; }

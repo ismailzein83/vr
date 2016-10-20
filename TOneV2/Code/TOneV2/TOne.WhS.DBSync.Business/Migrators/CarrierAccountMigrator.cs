@@ -134,6 +134,9 @@ namespace TOne.WhS.DBSync.Business
                 FillTimeZoneAndDefaultServicesForCarrierAccount(sourceItem, carrierAccountCustomerSettings, carrierAccountSupplierSettings);
 
                 carrierAccountSettings.Mask = sourceItem.CarrierMask;
+               
+                if (sourceItem.NominalCapacityInE1s.HasValue)
+                    carrierAccountSettings.NominalCapacity = sourceItem.NominalCapacityInE1s.Value;
 
                 return new CarrierAccount
                 {
