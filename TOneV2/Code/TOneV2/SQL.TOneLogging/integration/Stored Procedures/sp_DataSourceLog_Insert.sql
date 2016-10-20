@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSourceLog_Insert] 
-	@DataSourceId int,
+	@DataSourceId uniqueidentifier,
 	@Severity int,
 	@Message nvarchar(max),
 	@ImportedBatchId bigint,

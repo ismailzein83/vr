@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [integration].[sp_DataSourceRuntimeInstance_InsertIfNotMaximum]
 	@InstanceID uniqueidentifier,
-	@DataSourceID int,
+	@DataSourceID uniqueidentifier,
 	@MaxNumberOfInstances int
 AS
 BEGIN

@@ -2,9 +2,9 @@
 	@TaskIds varchar(max)
 AS
 BEGIN	
-	DECLARE @TaskIdsTable TABLE (TaskId int)
+	DECLARE @TaskIdsTable TABLE (TaskId uniqueidentifier)
 	INSERT INTO @TaskIdsTable (TaskId)
-	select Convert(int, ParsedString) from [runtime].[ParseStringList](@TaskIds)
+	select Convert(uniqueidentifier, ParsedString) from [runtime].[ParseStringList](@TaskIds)
             
             
 	SELECT [TaskId]

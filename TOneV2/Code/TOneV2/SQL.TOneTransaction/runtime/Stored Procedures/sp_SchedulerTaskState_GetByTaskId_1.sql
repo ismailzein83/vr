@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [runtime].[sp_SchedulerTaskState_GetByTaskId]
-	@TaskId int
+	@TaskId uniqueidentifier
 AS
 BEGIN	
 	SELECT [TaskId]

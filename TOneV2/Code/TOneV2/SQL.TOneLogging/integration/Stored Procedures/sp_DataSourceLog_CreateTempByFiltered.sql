@@ -6,7 +6,7 @@
 CREATE PROCEDURE [integration].[sp_DataSourceLog_CreateTempByFiltered]
 (
 	@TempTableName VARCHAR(200),
-	@DataSourceId INT = NULL,
+	@DataSourceId uniqueidentifier = NULL,
 	@Severities [integration].[SeverityType] READONLY,
 	@From DATETIME = NULL,
 	@To DATETIME = NULL

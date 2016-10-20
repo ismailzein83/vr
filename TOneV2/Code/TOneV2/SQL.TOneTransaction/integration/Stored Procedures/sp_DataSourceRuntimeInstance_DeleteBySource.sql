@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [integration].[sp_DataSourceRuntimeInstance_DeleteBySource]
-	@DataSourceID int
+	@DataSourceID uniqueidentifier
 AS
 BEGIN
 	DELETE integration.DataSourceRuntimeInstance

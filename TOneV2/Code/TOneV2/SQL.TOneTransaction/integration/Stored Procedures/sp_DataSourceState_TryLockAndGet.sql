@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE integration.sp_DataSourceState_TryLockAndGet 
-	@DataSourceID int,
+CREATE PROCEDURE [integration].[sp_DataSourceState_TryLockAndGet] 
+	@DataSourceID uniqueidentifier,
 	@CurrentRuntimeProcessID int,	
 	@RunningRuntimeProcessIDs VARCHAR(MAX) = NULL
 AS

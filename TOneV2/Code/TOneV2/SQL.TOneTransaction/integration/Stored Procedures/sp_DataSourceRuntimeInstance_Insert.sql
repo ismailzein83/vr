@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [integration].[sp_DataSourceRuntimeInstance_Insert]
 	@InstanceID uniqueidentifier,
-	@DataSourceID int
+	@DataSourceID uniqueidentifier
 AS
 BEGIN
 	INSERT INTO integration.DataSourceRuntimeInstance

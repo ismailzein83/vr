@@ -6,7 +6,7 @@
 CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_CreateTempByFiltered]
 (
 	@TempTableName VARCHAR(200),
-	@DataSourceId INT = NULL,
+	@DataSourceId uniqueidentifier = NULL,
 	@BatchName NVARCHAR(1000) = NULL,
 	@MappingResults [integration].[MappingResultType] READONLY,
 	@From DATETIME = NULL,

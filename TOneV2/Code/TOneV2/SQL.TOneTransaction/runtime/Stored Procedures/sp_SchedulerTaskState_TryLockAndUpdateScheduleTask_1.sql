@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [runtime].[sp_SchedulerTaskState_TryLockAndUpdateScheduleTask]	
-	@TaskId int,
+	@TaskId uniqueidentifier,
 	@CurrentRuntimeProcessID int,
 	@RunningProcessIDs [runtime].IDIntType readonly
 	

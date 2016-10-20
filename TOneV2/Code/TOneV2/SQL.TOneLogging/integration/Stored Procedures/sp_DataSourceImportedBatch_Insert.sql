@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_Insert] 
-	@DataSourceId int,
+	@DataSourceId uniqueidentifier,
 	@BatchDescription nvarchar(1000),
 	@BatchSize decimal(18, 5),
 	@RecordsCount int,

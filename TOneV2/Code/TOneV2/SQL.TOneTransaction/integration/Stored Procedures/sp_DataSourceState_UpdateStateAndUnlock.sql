@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE integration.sp_DataSourceState_UpdateStateAndUnlock 
-	@DataSourceID int,
+CREATE PROCEDURE [integration].[sp_DataSourceState_UpdateStateAndUnlock] 
+	@DataSourceID uniqueidentifier,
 	@State nvarchar(max)
 AS
 BEGIN

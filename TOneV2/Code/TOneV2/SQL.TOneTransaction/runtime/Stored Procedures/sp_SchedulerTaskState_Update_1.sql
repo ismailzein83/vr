@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_SchedulerTaskState_Update]
-	@TaskID int,
+	@TaskID uniqueidentifier,
 	@Status int,
 	@NextRuntime datetime,
 	@LastRuntime datetime,

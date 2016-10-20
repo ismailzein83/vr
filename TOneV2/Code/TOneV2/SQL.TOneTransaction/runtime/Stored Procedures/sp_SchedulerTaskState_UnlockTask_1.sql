@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [runtime].[sp_SchedulerTaskState_UnlockTask]	
-	@TaskId int	
+	@TaskId uniqueidentifier	
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from

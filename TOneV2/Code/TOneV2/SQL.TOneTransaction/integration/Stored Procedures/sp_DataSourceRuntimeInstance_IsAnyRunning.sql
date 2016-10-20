@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [integration].[sp_DataSourceRuntimeInstance_IsAnyRunning]
-	@DataSourceID int,
+	@DataSourceID uniqueidentifier,
 	@RunningRuntimeProcessIDs VARCHAR(MAX) = NULL
 AS
 BEGIN
