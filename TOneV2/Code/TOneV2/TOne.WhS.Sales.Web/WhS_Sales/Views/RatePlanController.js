@@ -237,7 +237,7 @@
                 gridReadyDeferred.resolve();
             };
 
-            $scope.search = function () {
+            $scope.load = function () {
                 return loadRatePlan();
             };
             $scope.sellNewCountries = function () {
