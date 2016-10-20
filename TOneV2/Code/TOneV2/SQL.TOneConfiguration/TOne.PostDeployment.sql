@@ -47,7 +47,7 @@ as (select * from (values
 (43,'CostZones','CostZones',0,'{"ColumnID":"[CostZones].[ID]","ColumnName":"[CostZones].[Z One Name]","Expression":""}',null),
 (48,'Customer Priced Duration In Minutes','Priced sale duration ',1,'{"ColumnName":"[Measures].[Customer Priced Duration In Minutes]","Expression":"","Unit":"min"}',null),
 (50,'Supplier Priced Duration In Minutes','Priced cost duration',1,'{"ColumnName":"[Measures].[Supplier Priced Duration In Minutes]","Expression":"","Unit":"min"}',null),
-(88,'Default Time','Default Time',2,'{"Date":"[Dim Time].[Date]","Year":"[Dim Time].[Year]","MonthOfYear":"[Dim Time].[Month Of Year]","WeekOfMonth":"[Dim Time].[Week Of Month]","DayOfMonth":"[Dim Time].[Day Of Month]","Hour":"[Dim Time].[Hour]","IsDefault":"True"}',null)
+(88,'Default Time','Default Time',2,'{"Date":"[Date].[Date]","Year":"[Date].[Year]","MonthOfYear":"[Date].[Month Of Year]","WeekOfMonth":"[Date].[Week Of Month]","DayOfMonth":"[Date].[Day Of Month]","Hour":"[Date].[Hour]","IsDefault":"True"}',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[DisplayName],[Type],[Configuration],[Rank]))
 merge	[BI].[SchemaConfiguration] as t
