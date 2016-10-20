@@ -1,7 +1,7 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
         <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" text="None"
-                   label="Order Type" datasource="ctrl.optionOrderSettingsGroupTemplates" selectedvalues="ctrl.selectedOptionOrderSettingsGroupTemplate">
+                   label="Order By" datasource="ctrl.optionOrderSettingsGroupTemplates" selectedvalues="ctrl.selectedOptionOrderSettingsGroupTemplate">
         </vr-select>
     </vr-columns>
     <vr-columns width="normal">
@@ -9,15 +9,21 @@
             <vr-button type="Add" vr-disabled="ctrl.selectedOptionOrderSettingsGroupTemplate == undefined" data-onclick="ctrl.addOptionOrderType" standalone></vr-button>
         </div>
     </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-whs-routing-routerulesettings-ordertype on-ready="scopeModel.onRouteRuleSettingsOrderTypeSelectorReady"
+                                                    selectedvalues="scopeModel.selectedRouteRuleSettingsOrderType"
+                                                    ng-show="ctrl.datasource.length > 1">
+        </vr-whs-routing-routerulesettings-ordertype>
+    </vr-columns>
 </vr-row>
 
 <vr-row>
 
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" on-ready="onGridReady" ondeleterow="ctrl.removeOption" hidegridmenu>
+            <vr-datagrid datasource="ctrl.datasource" on-ready="onGridReady" ondeleterow="ctrl.removeOption" enabledraggablerow="true" hidegridmenu >
                 <vr-datagridcolumn headertext="'Option Order'" field="'name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Percentage'" ng-show="ctrl.datasource.length > 1" widthfactor="5" disablesorting="true">
+                <vr-datagridcolumn headertext="'Percentage'" ng-show="scopeModel.showPercentage()" widthfactor="5" disablesorting="true">
                     <div>
                         <vr-textbox value="dataItem.percentageValue" type="number" maxvalue="100" isrequired="true"></vr-textbox>
                     </div>

@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Routing\Constant\OrderTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionEnum.js" />
@@ -186,6 +187,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\Templates\ExcludedOptionDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderTypeSelector.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byservice.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />

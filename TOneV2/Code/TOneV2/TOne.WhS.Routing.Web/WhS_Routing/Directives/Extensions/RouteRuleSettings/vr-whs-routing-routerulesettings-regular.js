@@ -70,11 +70,11 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionSettingsGroupDirectiveAPI, optionSettingsGroupPayload, setLoader, routeOptionSettingsReadyPromiseDeferred);
                 }
 
-                $scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
-                    routeRuleOptionOrderSettingsDirectiveAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingOptionOrderSettingsSection = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleOptionOrderSettingsDirectiveAPI, undefined, setLoader, routeRuleOptionOrderSettingsReadyPromiseDeferred);
-                }
+                //$scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
+                //    routeRuleOptionOrderSettingsDirectiveAPI = api;
+                //    var setLoader = function (value) { $scope.isLoadingOptionOrderSettingsSection = value };
+                //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleOptionOrderSettingsDirectiveAPI, undefined, setLoader, routeRuleOptionOrderSettingsReadyPromiseDeferred);
+                //}
 
                 $scope.onOptionFilterSettingsGroupDirectiveReady = function (api) {
                     routeRuleOptionFilterSettingsDirectiveAPI = api;
@@ -94,7 +94,6 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
 
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -196,9 +195,12 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         var loadOptionOrderTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         optionOrderTypeReadyPromiseDeferred.promise.then(function () {
-                            var optionOrderPayload;
-                            if (payload != undefined && payload.RouteRuleSettings != undefined && payload.RouteRuleSettings.OptionOrderSettings!=null)
-                                optionOrderPayload = payload.RouteRuleSettings.OptionOrderSettings;
+
+                            var optionOrderPayload = {};
+                            if (payload != undefined && payload.RouteRuleSettings != undefined) {
+                                optionOrderPayload.optionOrderSettings = payload.RouteRuleSettings.OptionOrderSettings;
+                                optionOrderPayload.orderType = payload.RouteRuleSettings.OrderType;
+                            }
 
                             VRUIUtilsService.callDirectiveLoad(optionOrderTypeDirectiveAPI, optionOrderPayload, loadOptionOrderTypeReadyPromiseDeferred);
                         });
@@ -242,10 +244,14 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                 }
 
                 api.getData = function () {
+
+                    var optionOrderTypeDirectiveData = optionOrderTypeDirectiveAPI.getData();
+
                     return {
                         $type: "TOne.WhS.Routing.Business.RegularRouteRule, TOne.WhS.Routing.Business",
                         OptionsSettingsGroup: VRUIUtilsService.getSettingsFromDirective($scope, routeOptionSettingsGroupDirectiveAPI, 'selectedOptionSettingsGroupTemplate'),
-                        OptionOrderSettings: optionOrderTypeDirectiveAPI.getData(),
+                        OrderType: optionOrderTypeDirectiveData.OrderType,
+                        OptionOrderSettings: optionOrderTypeDirectiveData.OptionOrderSettings,
                         OptionFilters: routeRuleOptionFilterSettingsDirectiveAPI.getData(),
                         OptionPercentageSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'selectedPercentageSettingsGroupTemplate')
                     };
@@ -257,5 +263,6 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
 
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }]);
