@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Entities
 {
     public interface IAdapterImportDataContext
     {
-        int DataSourceId { get; }
+        Guid DataSourceId { get; }
 
         BaseAdapterArgument AdapterArgument { get; }
         

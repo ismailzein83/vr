@@ -132,9 +132,9 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     }
    
     function getDataSourceTask() {
-        return SchedulerTaskAPIService.GetTask(dataSourceEntity.TaskId)
+        return SchedulerTaskAPIService.GetTask(dataSourceEntity.Entity.TaskId)
                .then(function (taskResponse) {
-                   dataSourceTask = { DataSourceData: dataSourceEntity, TaskData: taskResponse };
+                   dataSourceTask = { DataSourceData: dataSourceEntity.Entity, TaskData: taskResponse };
                });
               
     }
@@ -157,8 +157,8 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
             angular.forEach(response, function (item) {
                 $scope.scopeModel.adapterTypes.push(item);
             });
-            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.AdapterTypeId != undefined)
-                $scope.scopeModel.selectedAdapterType = UtilsService.getItemByVal($scope.scopeModel.adapterTypes, dataSourceEntity.AdapterTypeId, "AdapterTypeId");
+            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity.AdapterTypeId != undefined)
+                $scope.scopeModel.selectedAdapterType = UtilsService.getItemByVal($scope.scopeModel.adapterTypes, dataSourceEntity.Entity.AdapterTypeId, "ExtensionConfigurationId");
 
         });
     }
@@ -168,8 +168,8 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
             angular.forEach(response, function (item) {
                 $scope.scopeModel.executionFlows.push(item);
             });
-            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Settings != undefined && dataSourceEntity.Settings.ExecutionFlowId != undefined)
-                $scope.scopeModel.selectedExecutionFlow = UtilsService.getItemByVal($scope.scopeModel.executionFlows, dataSourceEntity.Settings.ExecutionFlowId, "ExecutionFlowId");
+            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.Settings != undefined && dataSourceEntity.Entity.Settings.ExecutionFlowId != undefined)
+                $scope.scopeModel.selectedExecutionFlow = UtilsService.getItemByVal($scope.scopeModel.executionFlows, dataSourceEntity.Entity.Settings.ExecutionFlowId, "ExecutionFlowId");
 
         });
     }
@@ -180,20 +180,20 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
             angular.forEach(response, function (item) {
                 $scope.scopeModel.adapterTypes.push(item);
             });
-            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.AdapterTypeId != undefined)
-                $scope.scopeModel.selectedAdapterType = UtilsService.getItemByVal($scope.scopeModel.adapterTypes, dataSourceEntity.AdapterTypeId, "AdapterTypeId");
+            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.AdapterTypeId != undefined)
+                $scope.scopeModel.selectedAdapterType = UtilsService.getItemByVal($scope.scopeModel.adapterTypes, dataSourceEntity.Entity.AdapterTypeId, "ExtensionConfigurationId");
             else {
-                $scope.scopeModel.selectedAdapterType = UtilsService.getItemByVal($scope.scopeModel.adapterTypes, 1, "AdapterTypeId");
+                $scope.scopeModel.selectedAdapterType = UtilsService.getItemByVal($scope.scopeModel.adapterTypes, "432aafd8-62c3-4d2b-99a8-9967d198337f", "ExtensionConfigurationId");
             }
         });
 
         promises.push(dataSourcePromiseLoad);
 
         var adapterPayload = {};
-        if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Settings != undefined && dataSourceEntity.Settings.AdapterArgument != undefined)
-            adapterPayload.adapterArgument = dataSourceEntity.Settings.AdapterArgument;
-        if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.AdapterState != undefined && adapterPayload != undefined)
-            adapterPayload.adapterState = dataSourceEntity.AdapterState;
+        if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.Settings != undefined && dataSourceEntity.Entity.Settings.AdapterArgument != undefined)
+            adapterPayload.adapterArgument = dataSourceEntity.Entity.Settings.AdapterArgument;
+        if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.AdapterState != undefined && adapterPayload != undefined)
+            adapterPayload.adapterState = dataSourceEntity.Entity.AdapterState;
 
 
         var loadAdapterTypePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -233,9 +233,9 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
 
         taskId = dataSourceTask.TaskData.TaskId;
 
-        $scope.scopeModel.dataSourceName = dataSourceEntity.Name;
+        $scope.scopeModel.dataSourceName = dataSourceEntity.Entity.Name;
 
-        $scope.scopeModel.customCode = dataSourceEntity.Settings.MapperCustomCode;
+        $scope.scopeModel.customCode = dataSourceEntity.Entity.Settings.MapperCustomCode;
         $scope.scopeModel.isEnabled = dataSourceTask.TaskData.IsEnabled;
 
         $scope.scopeModel.startEffDate = dataSourceTask.TaskData.TaskSettings.StartEffDate;
@@ -247,7 +247,7 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
         var dataSourceData = {
             DataSourceId: (dataSourceId != null) ? dataSourceId : 0,
             Name: $scope.scopeModel.dataSourceName,
-            AdapterTypeId: $scope.scopeModel.selectedAdapterType.AdapterTypeId,
+            AdapterTypeId: $scope.scopeModel.selectedAdapterType.ExtensionConfigurationId,
             AdapterState: adapterTypeDirectiveAPI.getStateData(),
             TaskId: taskId,
             Settings: { AdapterArgument: adapterTypeDirectiveAPI.getData(), MapperCustomCode: $scope.scopeModel.customCode, ExecutionFlowId: $scope.scopeModel.selectedExecutionFlow.ExecutionFlowId }

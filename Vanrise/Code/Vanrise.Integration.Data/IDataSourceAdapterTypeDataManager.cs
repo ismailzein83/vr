@@ -8,6 +8,6 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceAdapterTypeDataManager : IDataManager
     {
-        List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes();
+        //List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes();
     }
 }

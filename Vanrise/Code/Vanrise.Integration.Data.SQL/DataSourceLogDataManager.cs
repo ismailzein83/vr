@@ -27,7 +27,7 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public void InsertEntry(Vanrise.Entities.LogEntryType entryType, string message, int dataSourceId, long? importedBatchId, string logTimeSpan)
+        public void InsertEntry(Vanrise.Entities.LogEntryType entryType, string message, Guid dataSourceId, long? importedBatchId, string logTimeSpan)
         {
             ExecuteNonQuerySP("integration.sp_DataSourceLog_Insert", dataSourceId, entryType, message, importedBatchId, logTimeSpan);
         }
@@ -60,7 +60,7 @@ namespace Vanrise.Integration.Data.SQL
             Vanrise.Integration.Entities.DataSourceLog dataSourceLog = new Vanrise.Integration.Entities.DataSourceLog
             {
                 ID = (int)reader["ID"],
-                DataSourceId = (int)reader["DataSourceId"],
+                DataSourceId = GetReaderValue<Guid>(reader,"DataSourceId"),
                 Severity = (LogEntryType)reader["Severity"],
                 Message = GetReaderValue<string>(reader, "Message"),
                 LogEntryTime = (DateTime)reader["LogEntryTime"]

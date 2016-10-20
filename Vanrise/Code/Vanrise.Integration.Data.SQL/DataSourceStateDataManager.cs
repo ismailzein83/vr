@@ -17,7 +17,7 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public bool TryLockAndGet(int dataSourceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, out BaseAdapterState adapterState)
+        public bool TryLockAndGet(Guid dataSourceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, out BaseAdapterState adapterState)
         {
             string runningProcessIdsAsString = null;
             if (runningRuntimeProcessesIds != null)
@@ -37,7 +37,7 @@ namespace Vanrise.Integration.Data.SQL
             return isLocked;
         }
 
-        public void UpdateStateAndUnlock(int dataSourceId, Entities.BaseAdapterState state)
+        public void UpdateStateAndUnlock(Guid dataSourceId, Entities.BaseAdapterState state)
         {
             ExecuteNonQuerySP("integration.sp_DataSourceState_UpdateStateAndUnlock", dataSourceId, state != null ? Serializer.Serialize(state) : null);
         }

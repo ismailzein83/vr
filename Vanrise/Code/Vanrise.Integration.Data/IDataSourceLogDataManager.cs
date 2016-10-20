@@ -9,7 +9,7 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceLogDataManager : IDataManager
     {
-        void InsertEntry(Vanrise.Entities.LogEntryType entryType, string message, int dataSourceId, long? queueItemId, string logTimeSpan);
+        void InsertEntry(Vanrise.Entities.LogEntryType entryType, string message, Guid dataSourceId, long? queueItemId, string logTimeSpan);
 
         Vanrise.Entities.BigResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input);
     }

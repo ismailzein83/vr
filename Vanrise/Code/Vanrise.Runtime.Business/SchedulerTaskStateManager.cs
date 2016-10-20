@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
@@ -31,19 +32,19 @@ namespace Vanrise.Runtime.Business
             return dataManager.GetDueTasks();
         }
 
-        public bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
+        public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
             return dataManager.TryLockTask(taskId, currentRuntimeProcessId, runningRuntimeProcessesIds);
         }
 
-        public void UnlockTask(int taskId)
+        public void UnlockTask(Guid taskId)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
             dataManager.UnlockTask(taskId);
         }
 
-        public SchedulerTaskStateUpdateOutput GetUpdated(List<int> taskIds)
+        public SchedulerTaskStateUpdateOutput GetUpdated(List<Guid> taskIds)
         {
             SchedulerTaskStateUpdateOutput bpInstanceUpdateOutput = new SchedulerTaskStateUpdateOutput();
             IEnumerable<SchedulerTaskState> taskStates = GetSchedulerTaskStateByTaskIds(taskIds);
@@ -62,13 +63,13 @@ namespace Vanrise.Runtime.Business
             return bpInstanceUpdateOutput;
         }
 
-        public SchedulerTaskState GetSchedulerTaskStateByTaskId(int taskId)
+        public SchedulerTaskState GetSchedulerTaskStateByTaskId(Guid taskId)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
             return dataManager.GetSchedulerTaskStateByTaskId(taskId);
         }
 
-        public List<SchedulerTaskState> GetSchedulerTaskStateByTaskIds(List<int> taskIds)
+        public List<SchedulerTaskState> GetSchedulerTaskStateByTaskIds(List<Guid> taskIds)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
             return dataManager.GetSchedulerTaskStateByTaskIds(taskIds);
@@ -80,13 +81,13 @@ namespace Vanrise.Runtime.Business
             return dataManager.GetAllScheduleTaskStates();
         }
 
-        public void InsertSchedulerTaskState(int taskId)
+        public void InsertSchedulerTaskState(Guid taskId)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
             dataManager.InsertSchedulerTaskState(taskId);
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<SchedulerTaskState> DeleteTaskState(int taskId)
+        public Vanrise.Entities.DeleteOperationOutput<SchedulerTaskState> DeleteTaskState(Guid taskId)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
 

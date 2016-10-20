@@ -9,8 +9,8 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceStateDataManager : IDataManager
     {
-        void UpdateStateAndUnlock(int dataSourceId, BaseAdapterState updatedState);
+        void UpdateStateAndUnlock(Guid dataSourceId, BaseAdapterState updatedState);
 
-        bool TryLockAndGet(int dataSourceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, out BaseAdapterState state);
+        bool TryLockAndGet(Guid dataSourceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, out BaseAdapterState state);
     }
 }

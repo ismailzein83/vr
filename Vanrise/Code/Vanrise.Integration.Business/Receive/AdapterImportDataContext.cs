@@ -21,7 +21,7 @@ namespace Vanrise.Integration.Business
             _onDataReceivedAction = onDataReceivedAction;
         }
 
-        public int DataSourceId
+        public Guid DataSourceId
         {
             get { return _dataSource.DataSourceId; }
         }

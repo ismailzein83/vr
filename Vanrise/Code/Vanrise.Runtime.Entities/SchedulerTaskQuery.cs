@@ -10,6 +10,6 @@ namespace Vanrise.Runtime.Entities
     {
         public string NameFilter { get; set; }
         public List<ISchedulerTaskFilter> Filters { get; set; }
-        public List<int> TaskIds { get; set; }
+        public List<Guid> TaskIds { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Vanrise.Integration.Entities
     public class DataSourceLog
     {
         public int ID { get; set; }
-        public int DataSourceId { get; set; }
+        public Guid DataSourceId { get; set; }
         public string DataSourceName { get; set; }
         public LogEntryType Severity { get; set; }
         public string Message { get; set; }

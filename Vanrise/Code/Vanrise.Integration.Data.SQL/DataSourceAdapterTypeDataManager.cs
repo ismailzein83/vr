@@ -11,26 +11,26 @@ namespace Vanrise.Integration.Data.SQL
 {
     public class DataSourceAdapterTypeDataManager : BaseSQLDataManager, IDataSourceAdapterTypeDataManager
     {
-        public DataSourceAdapterTypeDataManager()
-            : base(GetConnectionStringName("IntegrationConfigDBConnStringKey", "IntegrationConfigDBConnString"))
-        {
+        //public DataSourceAdapterTypeDataManager()
+        //    : base(GetConnectionStringName("IntegrationConfigDBConnStringKey", "IntegrationConfigDBConnString"))
+        //{
 
-        }
+        //}
 
-        public List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
-        {
-            return GetItemsSP("integration.sp_AdapterType_GetAll", DataSourceAdapterTypeMapper);
-        }
+        //public List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
+        //{
+        //    return GetItemsSP("integration.sp_AdapterType_GetAll", DataSourceAdapterTypeMapper);
+        //}
 
-        Vanrise.Integration.Entities.DataSourceAdapterType DataSourceAdapterTypeMapper(IDataReader reader)
-        {
-            Vanrise.Integration.Entities.DataSourceAdapterType adapterType = new Vanrise.Integration.Entities.DataSourceAdapterType
-            {
-                AdapterTypeId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-                Info = Serializer.Deserialize<Vanrise.Integration.Entities.AdapterTypeInfo>(reader["Info"] as string)
-            };
-            return adapterType;
-        }
+        //Vanrise.Integration.Entities.DataSourceAdapterType DataSourceAdapterTypeMapper(IDataReader reader)
+        //{
+        //    Vanrise.Integration.Entities.DataSourceAdapterType adapterType = new Vanrise.Integration.Entities.DataSourceAdapterType
+        //    {
+        //        AdapterTypeId = (int)reader["ID"],
+        //        Name = reader["Name"] as string,
+        //        Info = Serializer.Deserialize<Vanrise.Integration.Entities.AdapterTypeInfo>(reader["Info"] as string)
+        //    };
+        //    return adapterType;
+        //}
     }
 }

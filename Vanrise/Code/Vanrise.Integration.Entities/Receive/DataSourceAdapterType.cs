@@ -3,24 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Integration.Entities
 {
-    public class DataSourceAdapterType
+    public class DataSourceAdapterType:ExtensionConfiguration
     {
-        public int AdapterTypeId { get; set; }
-
-        public string Name { get; set; }
-
-        public AdapterTypeInfo Info { get; set; }
-    }
-
-    public class AdapterTypeInfo
-    {
+        public const string EXTENSION_TYPE = "VR_Integration_AdapterTypeConfig";
         public string AdapterTemplateURL { get; set; }
-
         public string FQTN { get; set; }
-
         public string Editor { get; set; }
     }
 }

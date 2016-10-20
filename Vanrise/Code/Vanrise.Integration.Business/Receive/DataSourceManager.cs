@@ -12,6 +12,7 @@ using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Integration.Business
 {
@@ -27,32 +28,43 @@ namespace Vanrise.Integration.Business
         }
         public IEnumerable<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources(DataSourceFilter filter)
         {
+            var dataSources = GetCachedDataSources();
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             if (filter !=null)
             {
-                return datamanager.GetDataSources().Where(x => (!filter.AllExcept.Contains(x.DataSourceID)));
+                return dataSources.MapRecords(DataSourceInfoMapper).Where(x => (!filter.AllExcept.Contains(x.DataSourceID)));
             }
-            return datamanager.GetDataSources() ;
+            return dataSources.MapRecords(DataSourceInfoMapper);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Integration.Entities.DataSourceDetail> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input)
         {
-            IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSources(input));
+
+            var cachedDataSources = GetCachedDataSources();
+            Func<DataSource, bool> filterExpression = (dataSource) =>
+                (input.Query.Name == null || dataSource.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
+                &&
+                (input.Query.AdapterTypeIDs == null || input.Query.AdapterTypeIDs.Count() == 0 || input.Query.AdapterTypeIDs.Contains(dataSource.AdapterTypeId))
+                &&
+                (input.Query.IsEnabled == null || input.Query.IsEnabled == dataSource.IsEnabled);
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedDataSources.ToBigResult(input, filterExpression, DataSourceDetailMapper));
         }
 
-        public Vanrise.Integration.Entities.DataSourceDetail GetDataSourceDetail(int dataSourceId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSourceDetail(Guid dataSourceId)
         {
-            IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            return datamanager.GetDataSource(dataSourceId);
+            var cachedDataSources = GetCachedDataSources();
+            var dataSource = cachedDataSources.GetRecord(dataSourceId);
+            if (dataSource == null)
+                return null;
+            else return DataSourceDetailMapper(dataSource);
         }
 
-        public DataSource GetDataSource(int dataSourceId)
+        public DataSource GetDataSource(Guid dataSourceId)
         {
             return GetCachedDataSources().GetRecord(dataSourceId);
         }
 
-        public string GetDataSourceName(int dataSourceId)
+        public string GetDataSourceName(Guid dataSourceId)
         {
             DataSource dataSource = GetDataSource(dataSourceId);
 
@@ -62,16 +74,16 @@ namespace Vanrise.Integration.Business
             return null;
         }
 
-        public Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(int taskId)
+        public Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(Guid taskId)
         {
-            IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            return datamanager.GetDataSourcebyTaskId(taskId);
+            var cachedDataSources = GetCachedDataSources();
+            return cachedDataSources.FindRecord(x=>x.TaskId == taskId);
         }
 
-        public List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
+        public IEnumerable<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
         {
-            IDataSourceAdapterTypeDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceAdapterTypeDataManager>();
-            return datamanager.GetDataSourceAdapterTypes();
+            ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<DataSourceAdapterType>(DataSourceAdapterType.EXTENSION_TYPE);
         }
 
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject, 
@@ -88,20 +100,18 @@ namespace Vanrise.Integration.Business
             taskObject.ActionTypeId = new Guid("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68");
             taskObject.TriggerTypeId = new Guid("295B4FAC-DBF9-456F-855E-60D0B176F86B");
             Vanrise.Entities.InsertOperationOutput<Vanrise.Runtime.Entities.SchedulerTask> taskAdded = schedulerManager.AddTask(taskObject);
-
+            dataSourceObject.DataSourceId = Guid.NewGuid();
             if (taskAdded.Result == InsertOperationResult.Succeeded)
             {
-                int dataSourceId = -1;
-
                 dataSourceObject.TaskId = taskAdded.InsertedObject.TaskId;
                 
                 IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-                bool dataSourceInsertActionSucc = dataManager.AddDataSource(dataSourceObject, out dataSourceId);
+                bool dataSourceInsertActionSucc = dataManager.AddDataSource(dataSourceObject);
 
                 if (dataSourceInsertActionSucc)
                 {
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                    insertOperationOutput.InsertedObject = dataManager.GetDataSource(dataSourceId);
+                    insertOperationOutput.InsertedObject =  GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
             }
 
@@ -128,14 +138,14 @@ namespace Vanrise.Integration.Business
                 if (dataSourceUpdateActionSucc)
                 {
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = dataManager.GetDataSource(dataSourceObject.DataSourceId);
+                    updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
             }
             
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId, int taskId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(Guid dataSourceId, Guid taskId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
@@ -155,7 +165,7 @@ namespace Vanrise.Integration.Business
             return deleteOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> AddDataSourceTask(int dataSourceId, Vanrise.Runtime.Entities.SchedulerTask task)
+        public Vanrise.Entities.UpdateOperationOutput<object> AddDataSourceTask(Guid dataSourceId, Vanrise.Runtime.Entities.SchedulerTask task)
         {
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
 
@@ -197,12 +207,11 @@ namespace Vanrise.Integration.Business
             return manager.GetAll();
         }
 
-        public bool UpdateAdapterState(int dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState)
+        public bool UpdateAdapterState(Guid dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState)
         {
             IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return manager.UpdateAdapterState(dataSourceId, adapterState);
         }
-
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
@@ -225,12 +234,12 @@ namespace Vanrise.Integration.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetDataSourceName(Convert.ToInt32(context.EntityId));
+            return GetDataSourceName(new Guid(context.EntityId.ToString()));
         }
 
         #region Private Methods
 
-        private Dictionary<int, DataSource> GetCachedDataSources()
+        private Dictionary<Guid, DataSource> GetCachedDataSources()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDataSources",
                () =>
@@ -245,6 +254,31 @@ namespace Vanrise.Integration.Business
         }
 
         #endregion
+
+        #region Mappers
+        DataSourceDetail DataSourceDetailMapper(DataSource dataSource)
+        {
+            var adapterTypes = GetDataSourceAdapterTypes();
+
+            var adapterType = adapterTypes.FindRecord(x=>x.ExtensionConfigurationId == dataSource.AdapterTypeId);
+
+            return new DataSourceDetail()
+            {
+                AdapterInfo = adapterType,
+                Entity = dataSource
+            };
+        }
+        DataSourceInfo DataSourceInfoMapper(DataSource dataSource)
+        {
+            DataSourceInfo dataSourceInfo = new DataSourceInfo
+            {
+                DataSourceID = dataSource.DataSourceId,
+                Name = dataSource.Name
+            };
+            return dataSourceInfo;
+        }
+        #endregion
+
 
         #region Private Classes
 

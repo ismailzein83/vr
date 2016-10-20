@@ -10,6 +10,6 @@ namespace Vanrise.Integration.Entities
     {
         public Guid DataSourceRuntimeInstanceId { get; set; }
 
-        public int DataSourceId { get; set; }
+        public Guid DataSourceId { get; set; }
     }
 }

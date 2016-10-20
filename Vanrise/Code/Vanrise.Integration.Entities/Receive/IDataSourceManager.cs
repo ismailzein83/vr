@@ -8,6 +8,6 @@ namespace Vanrise.Integration.Entities
 {
     public interface IDataSourceManager
     {
-        bool UpdateAdapterState(int dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState);
+        bool UpdateAdapterState(Guid dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState);
     }
 }

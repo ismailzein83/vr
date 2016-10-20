@@ -33,7 +33,7 @@ namespace Vanrise.Integration.Web.Controllers
 
         [HttpGet]
         [Route("GetDataSource")]
-        public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(Guid dataSourceId)
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.GetDataSourceDetail(dataSourceId);
@@ -41,7 +41,7 @@ namespace Vanrise.Integration.Web.Controllers
 
         [HttpGet]
         [Route("GetDataSourceAdapterTypes")]
-        public List<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
+        public IEnumerable<Vanrise.Integration.Entities.DataSourceAdapterType> GetDataSourceAdapterTypes()
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.GetDataSourceAdapterTypes();
@@ -89,7 +89,7 @@ namespace Vanrise.Integration.Web.Controllers
 
         [HttpGet]
         [Route("DeleteDataSource")]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(int dataSourceId, int taskId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(Guid dataSourceId, Guid taskId)
         {
             DataSourceManager manager = new DataSourceManager();
             return manager.DeleteDataSource(dataSourceId, taskId);

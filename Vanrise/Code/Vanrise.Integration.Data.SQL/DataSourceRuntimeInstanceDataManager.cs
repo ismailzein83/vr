@@ -17,12 +17,12 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public void AddNewInstance(Guid runtimeInstanceId, int dataSourceId)
+        public void AddNewInstance(Guid runtimeInstanceId, Guid dataSourceId)
         {
             ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_Insert]", runtimeInstanceId, dataSourceId);
         }
 
-        public void TryAddNewInstance(Guid runtimeInstanceId, int dataSourceId, int maxNumberOfParallelInstances)
+        public void TryAddNewInstance(Guid runtimeInstanceId, Guid dataSourceId, int maxNumberOfParallelInstances)
         {
             ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_InsertIfNotMaximum]", runtimeInstanceId, dataSourceId, maxNumberOfParallelInstances);
         }
@@ -37,7 +37,7 @@ namespace Vanrise.Integration.Data.SQL
             ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_SetCompleted]", dsRuntimeInstanceId);
         }
 
-        public bool IsAnyInstanceRunning(int dataSourceId, IEnumerable<int> runningRuntimeProcessesIds)
+        public bool IsAnyInstanceRunning(Guid dataSourceId, IEnumerable<int> runningRuntimeProcessesIds)
         {
             string runningProcessIdsAsString = null;
             if (runningRuntimeProcessesIds != null)
@@ -45,7 +45,7 @@ namespace Vanrise.Integration.Data.SQL
             return Convert.ToBoolean(ExecuteScalarSP("[integration].[sp_DataSourceRuntimeInstance_IsAnyRunning]", dataSourceId, runningProcessIdsAsString));
         }
 
-        public void DeleteDSInstances(int dataSourceId)
+        public void DeleteDSInstances(Guid dataSourceId)
         {
             ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_DeleteBySource]", dataSourceId);
         }
@@ -58,7 +58,7 @@ namespace Vanrise.Integration.Data.SQL
             {
 
                 DataSourceRuntimeInstanceId = (Guid)reader["ID"],
-                DataSourceId = (int)reader["DataSourceID"]
+                DataSourceId = GetReaderValue<Guid>(reader,"DataSourceID")
             };
         }
 

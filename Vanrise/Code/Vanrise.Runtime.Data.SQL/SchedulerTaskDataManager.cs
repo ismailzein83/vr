@@ -24,25 +24,23 @@ namespace Vanrise.Runtime.Data.SQL
             return base.IsDataUpdated("[runtime].[ScheduleTask]", ref updateHandle);
         }
 
-        public bool AddTask(Entities.SchedulerTask taskObject, out int insertedId)
+        public bool AddTask(Entities.SchedulerTask taskObject)
         {
-            object taskId;
 
-            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Insert", out taskId, taskObject.Name, 
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Insert", taskObject.TaskId, taskObject.Name, 
                 taskObject.IsEnabled, taskObject.TaskType, taskObject.TriggerTypeId, taskObject.ActionTypeId,
                 Common.Serializer.Serialize(taskObject.TaskSettings), taskObject.OwnerId);
-            insertedId = (int)taskId;
             return (recordesEffected > 0);
         }
 
-        public bool UpdateTaskInfo(int taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings)
+        public bool UpdateTaskInfo(Guid taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings)
         {
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_UpdateInfo", taskId, name,
                 isEnabled, triggerTypeId, actionTypeId, Common.Serializer.Serialize(taskSettings));
             return (recordesEffected > 0);
         }
 
-        public bool DeleteTask(int taskId)
+        public bool DeleteTask(Guid taskId)
         {
             int recordsEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Delete", taskId);
             return (recordsEffected > 0);
@@ -54,7 +52,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             SchedulerTask task = new SchedulerTask
             {
-                TaskId = (int)reader["ID"],
+                TaskId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 IsEnabled = bool.Parse(reader["IsEnabled"].ToString()),
                 TriggerTypeId = GetReaderValue<Guid>(reader,"TriggerTypeId"),

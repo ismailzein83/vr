@@ -26,7 +26,7 @@ namespace Vanrise.Integration.Entities
             _dataSourceManager = manager;
         }
 
-        protected bool UpdateAdapterState(int dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState)
+        protected bool UpdateAdapterState(Guid dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState)
         {
             return _dataSourceManager.UpdateAdapterState(dataSourceId, adapterState);
         }

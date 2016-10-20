@@ -10,9 +10,9 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceLogger : Entities.IDataSourceLogger
     {
-        int _dataSourceId = 0;
+        Guid _dataSourceId = Guid.Empty;
 
-        public int DataSourceId
+        public Guid DataSourceId
         {
             set { this._dataSourceId = value; }
         }

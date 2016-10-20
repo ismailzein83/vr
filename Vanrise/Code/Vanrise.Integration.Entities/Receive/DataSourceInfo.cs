@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Entities
 {
     public class DataSourceInfo
     {
-        public int DataSourceID { get; set; }
+        public Guid DataSourceID { get; set; }
 
         public string Name { get; set; }
     }

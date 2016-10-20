@@ -12,13 +12,13 @@ namespace Vanrise.Integration.Business
     public class DataSourceRuntimeInstanceManager
     {
         IDataSourceRuntimeInstanceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceRuntimeInstanceDataManager>();
-        
-        internal void AddNewInstance(int dataSourceId)
+
+        internal void AddNewInstance(Guid dataSourceId)
         {
             _dataManager.AddNewInstance(Guid.NewGuid(), dataSourceId);
         }
 
-        internal void TryAddNewInstance(int dataSourceId, int maxNumberOfParallelInstances)
+        internal void TryAddNewInstance(Guid dataSourceId, int maxNumberOfParallelInstances)
         {
             _dataManager.TryAddNewInstance(Guid.NewGuid(), dataSourceId, maxNumberOfParallelInstances);
         }
@@ -33,7 +33,7 @@ namespace Vanrise.Integration.Business
             _dataManager.SetInstanceCompleted(dsRuntimeInstanceId);
         }
 
-        internal bool AreDSInstancesCompleted(int dataSourceId)
+        internal bool AreDSInstancesCompleted(Guid dataSourceId)
         {
             RunningProcessManager runningProcessManager = new RunningProcessManager();
             IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);

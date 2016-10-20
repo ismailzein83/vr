@@ -87,7 +87,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                 gridAPI.itemUpdated(dataSource);
             }
 
-            VR_Integration_DataSourceService.editDataSource(dataSourceObj.DataSourceId, onDataSourceUpdated);
+            VR_Integration_DataSourceService.editDataSource(dataSourceObj.Entity.DataSourceId, onDataSourceUpdated);
         }
 
         function hasEditDataSourcePermission() {
@@ -99,7 +99,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                 gridAPI.itemDeleted(dataSource);
             }
 
-            VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj, onDataSourceDeleted);
+            VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj.Entity, onDataSourceDeleted);
         }
 
         function hasDeleteDataSourcePermission() {

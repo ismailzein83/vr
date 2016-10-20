@@ -105,7 +105,7 @@ namespace Vanrise.Runtime.Business
             return tasks.ToList();
         }
 
-        public Vanrise.Runtime.Entities.SchedulerTask GetTask(int taskId)
+        public Vanrise.Runtime.Entities.SchedulerTask GetTask(Guid taskId)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
             SchedulerTask task;
@@ -155,16 +155,15 @@ namespace Vanrise.Runtime.Business
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int taskId = -1;
+            taskObject.TaskId = Guid.NewGuid();
             taskObject.OwnerId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            bool insertActionSucc = dataManager.AddTask(taskObject, out taskId);
+            bool insertActionSucc = dataManager.AddTask(taskObject);
 
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                taskObject.TaskId = taskId;
                 insertOperationOutput.InsertedObject = taskObject;
             }
 
@@ -191,7 +190,7 @@ namespace Vanrise.Runtime.Business
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(int taskId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(Guid taskId)
         {
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
@@ -209,7 +208,7 @@ namespace Vanrise.Runtime.Business
         }
 
         #region private methods
-        private Dictionary<int, SchedulerTask> GetCachedSchedulerTasks()
+        private Dictionary<Guid, SchedulerTask> GetCachedSchedulerTasks()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSchedulerTasks",
                () =>

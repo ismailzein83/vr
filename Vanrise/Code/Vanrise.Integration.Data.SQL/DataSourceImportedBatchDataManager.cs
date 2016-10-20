@@ -19,7 +19,7 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public long InsertEntry(int dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, Entities.MappingResult result, string mapperMessage, string queueItemsIds, string logEntryTime)
+        public long InsertEntry(Guid dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, Entities.MappingResult result, string mapperMessage, string queueItemsIds, string logEntryTime)
         {
             return (long)ExecuteScalarSP("integration.sp_DataSourceImportedBatch_Insert",  dataSourceId, batchDescription, batchSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime);
         }

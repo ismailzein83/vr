@@ -9,16 +9,16 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceRuntimeInstanceDataManager : IDataManager
     {
-        void AddNewInstance(Guid runtimeInstanceId, int dataSourceId);
+        void AddNewInstance(Guid runtimeInstanceId, Guid dataSourceId);
 
-        void TryAddNewInstance(Guid runtimeInstanceId, int dataSourceId, int maxNumberOfParallelInstances);
+        void TryAddNewInstance(Guid runtimeInstanceId, Guid dataSourceId, int maxNumberOfParallelInstances);
 
         DataSourceRuntimeInstance TryGetOneAndLock(int currentRuntimeProcessId);
 
         void SetInstanceCompleted(Guid dsRuntimeInstanceId);
 
-        bool IsAnyInstanceRunning(int dataSourceId, IEnumerable<int> runningRuntimeProcessesIds);
+        bool IsAnyInstanceRunning(Guid dataSourceId, IEnumerable<int> runningRuntimeProcessesIds);
 
-        void DeleteDSInstances(int dataSourceId);
+        void DeleteDSInstances(Guid dataSourceId);
     }
 }

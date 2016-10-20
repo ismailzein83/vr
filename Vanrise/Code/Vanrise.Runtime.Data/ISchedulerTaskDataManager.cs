@@ -13,10 +13,10 @@ namespace Vanrise.Runtime.Data
 
         bool AreSchedulerTasksUpdated(ref object updateHandle);
         
-        bool AddTask(Entities.SchedulerTask taskObject, out int insertedId);
+        bool AddTask(Entities.SchedulerTask taskObject);
 
-        bool UpdateTaskInfo(int taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings);
+        bool UpdateTaskInfo(Guid taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings);
 
-        bool DeleteTask(int taskId);
+        bool DeleteTask(Guid taskId);
     }
 }

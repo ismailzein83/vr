@@ -3,11 +3,11 @@
              pagingtype="'PagingOnScroll'"
              on-ready="gridReady"
              menuactions="gridMenuActions"
-             idfield="DataSourceId">
+             idfield="Entity.DataSourceId">
 
-    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Type'" field="'AdapterName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Scheduler Task Enabled'" field="'IsEnabled'">
-        <vr-icon icontype="dataItem.IsEnabled"></vr-icon>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'AdapterInfo.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Scheduler Task Enabled'" field="'Entity.IsEnabled'">
+        <vr-icon icontype="dataItem.Entity.IsEnabled"></vr-icon>
     </vr-datagridcolumn>
 </vr-datagrid>

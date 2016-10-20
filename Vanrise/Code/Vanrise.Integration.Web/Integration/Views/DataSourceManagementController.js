@@ -55,7 +55,7 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
     function getGridQuery() {
         var query = {
             Name: $scope.name,
-            AdapterTypeIDs: UtilsService.getPropValuesFromArray($scope.selectedAdapterTypes, "AdapterTypeId"),
+            AdapterTypeIDs: UtilsService.getPropValuesFromArray($scope.selectedAdapterTypes, "ExtensionConfigurationId"),
             IsEnabled: ($scope.selectedStatuses.length == 1) ? $scope.selectedStatuses[0].value : null
         };
         return query;

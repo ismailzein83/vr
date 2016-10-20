@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
 {
     public interface IDataSourceLogger
     {
-        int DataSourceId { set; }
+        Guid DataSourceId { set; }
 
         long LogImportedBatchEntry(ImportedBatchEntry enrty);
 

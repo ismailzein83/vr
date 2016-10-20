@@ -9,25 +9,17 @@ namespace Vanrise.Integration.Data
 {
     public interface IDataSourceDataManager : IDataManager
     {
-        List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources();
-
         List<Vanrise.Integration.Entities.DataSource> GetAllDataSources();
 
-        Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSourceDetail> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input);
-
-        Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId);
-
-        Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(int taskId);
-
-        bool AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject, out int insertedId);
+        bool AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject);
 
         bool UpdateDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject);
 
-        bool DeleteDataSource(int dataSourceId);
+        bool DeleteDataSource(Guid dataSourceId);
 
-        bool UpdateTaskId(int dataSourceId, int taskId);
+        bool UpdateTaskId(Guid dataSourceId, Guid taskId);
 
-        bool UpdateAdapterState(int dataSourceId, Entities.BaseAdapterState adapterState);
+        bool UpdateAdapterState(Guid dataSourceId, Entities.BaseAdapterState adapterState);
 
         bool AreDataSourcesUpdated(ref object updateHandle);
     }

@@ -27,14 +27,14 @@ namespace Vanrise.Integration.Business
         IDataSourceStateDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceStateDataManager>();
 
 
-        public void GetStateWithLock(int dataSourceId, Func<BaseAdapterState, BaseAdapterState> onStateReady)
+        public void GetStateWithLock(Guid dataSourceId, Func<BaseAdapterState, BaseAdapterState> onStateReady)
         {
             BaseAdapterState dsState = LockDSState(dataSourceId);
             var updatedState = onStateReady(dsState);
             _dataManager.UpdateStateAndUnlock(dataSourceId, updatedState);
         }
 
-        private BaseAdapterState LockDSState(int dataSourceId)
+        private BaseAdapterState LockDSState(Guid dataSourceId)
         {
             int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
             RunningProcessManager runningProcessManager = new RunningProcessManager();

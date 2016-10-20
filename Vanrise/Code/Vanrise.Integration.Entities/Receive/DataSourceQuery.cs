@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
     {
         public string Name { get; set; }
 
-        public List<int> AdapterTypeIDs { get; set; }
+        public List<Guid> AdapterTypeIDs { get; set; }
 
         public bool? IsEnabled { get; set; }
     }

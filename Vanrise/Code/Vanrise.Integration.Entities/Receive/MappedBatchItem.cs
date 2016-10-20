@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
     public abstract class MappedBatchItem : PersistentQueueItem
     {
         public abstract int GetRecordCount();
-        public int DataSourceID { get; set; }
+        public Guid DataSourceID { get; set; }
     }
 
     public class MappedBatchItemToEnqueue

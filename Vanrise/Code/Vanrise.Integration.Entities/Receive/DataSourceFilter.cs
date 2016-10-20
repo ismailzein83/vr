@@ -8,6 +8,6 @@ namespace Vanrise.Integration.Entities
 {
     public class DataSourceFilter
     {
-        public List<int> AllExcept { get; set; }
+        public List<Guid> AllExcept { get; set; }
     }
 }

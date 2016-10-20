@@ -22,14 +22,14 @@ namespace Vanrise.Integration.Business
             {
                 Console.WriteLine("{0}: DataSourceRuntimeService Data Source is started", DateTime.Now);
                 var dataSourceManager = new DataSourceManager();
-                var dataSource = dataSourceManager.GetDataSource(dsRuntimeInstance.DataSourceId);
+                var dataSource = dataSourceManager.GetDataSourceDetail(dsRuntimeInstance.DataSourceId);
                 if (dataSource == null)
                     throw new ArgumentNullException(String.Format("dataSource '{0}'", dsRuntimeInstance.DataSourceId));
                 
                 DataSourceLogger logger = new DataSourceLogger();
 
-                logger.DataSourceId = dataSource.DataSourceId;
-                logger.WriteInformation("A new runtime instance started for the Data Source '{0}'", dataSource.Name);
+                logger.DataSourceId = dataSource.Entity.DataSourceId;
+                logger.WriteInformation("A new runtime instance started for the Data Source '{0}'", dataSource.Entity.Name);
 
                 logger.WriteVerbose("Preparing queues and stages");
 
@@ -37,7 +37,7 @@ namespace Vanrise.Integration.Business
                 try
                 {
                     Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
-                    queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Settings.ExecutionFlowId);
+                    queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Entity.Settings.ExecutionFlowId);
 
                     if (queuesByStages == null || queuesByStages.Count == 0)
                     {
@@ -67,7 +67,7 @@ namespace Vanrise.Integration.Business
                     {
                         logger.WriteVerbose("Executing the custom code written for the mapper");
                         MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
-                        MappingOutput outputResult = this.ExecuteCustomCode(dataSource.DataSourceId, dataSource.Settings.MapperCustomCode, data, outputItems, logger);
+                        MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
 
                         if (!data.IsMultipleReadings)
                             data.OnDisposed();
@@ -93,7 +93,7 @@ namespace Vanrise.Integration.Business
                             {
                                 try
                                 {
-                                    outputItem.Item.DataSourceID = dataSource.DataSourceId;
+                                    outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
                                     logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
 
                                     long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
@@ -121,20 +121,20 @@ namespace Vanrise.Integration.Business
                         logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
                     };
 
-                    AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource, onDataReceivedAction);
+                    AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource.Entity, onDataReceivedAction);
                     adapter.ImportData(adapterContext);
                 }
                 finally
                 {
                     _dsRuntimeInstanceManager.SetInstanceCompleted(dsRuntimeInstance.DataSourceRuntimeInstanceId);
 
-                    logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Name);
+                    logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
                     Console.WriteLine("{0}: DataSourceRuntimeService Data Source is Done", DateTime.Now);
                 }
             }            
         }
 
-        private MappingOutput ExecuteCustomCode(int dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems, IDataSourceLogger logger)
+        private MappingOutput ExecuteCustomCode(Guid dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems, IDataSourceLogger logger)
         {
             MappingOutput outputResult = new MappingOutput();
 
@@ -157,7 +157,7 @@ namespace Vanrise.Integration.Business
             return outputResult;
         }
 
-        Type GetMapperRuntimeType(int dataSourceId, IDataSourceLogger logger)
+        Type GetMapperRuntimeType(Guid dataSourceId, IDataSourceLogger logger)
         {
             string cacheName = String.Format("DataSourceRuntimeService_GetMapperRuntimeType_{0}", dataSourceId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataSourceManager.CacheManager>().GetOrCreateObject(cacheName,

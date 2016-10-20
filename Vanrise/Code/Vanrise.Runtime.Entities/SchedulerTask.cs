@@ -34,7 +34,7 @@ namespace Vanrise.Runtime.Entities
 
     public class SchedulerTask
     {
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
 
         public string Name { get; set; }
 
@@ -87,7 +87,7 @@ namespace Vanrise.Runtime.Entities
         {
 
         }
-        public SchedulerTaskState(int taskId, SchedulerTaskStatus status, DateTime? nextRunTime, DateTime? lastRunTime, Object executionInfo)
+        public SchedulerTaskState(Guid taskId, SchedulerTaskStatus status, DateTime? nextRunTime, DateTime? lastRunTime, Object executionInfo)
         {
             this.TaskId = taskId;
             this.Status = status;
@@ -95,7 +95,7 @@ namespace Vanrise.Runtime.Entities
             this.LastRunTime = lastRunTime;
             this.ExecutionInfo = executionInfo;
         }
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
 
         public SchedulerTaskStatus Status { get; set; }
 

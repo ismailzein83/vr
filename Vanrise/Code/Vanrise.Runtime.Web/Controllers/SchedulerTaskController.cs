@@ -31,7 +31,7 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("GetTask")]
-        public SchedulerTask GetTask(int taskId)
+        public SchedulerTask GetTask(Guid taskId)
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.GetTask(taskId);
@@ -87,7 +87,7 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("DeleteTask")]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(int taskId)
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(Guid taskId)
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.DeleteTask(taskId);
