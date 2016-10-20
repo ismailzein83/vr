@@ -146,14 +146,18 @@
     <Content Include="WhS_Deal\Constant\DealContractTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ModuleConfig.js" />
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealBuyingGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealSellingGridTemplate.html" />
-    <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealAnalysisInboundManagementTemplate.html" />
-    <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealAnalysisOutboundManagementTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisInboundManagementTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisOutboundManagementTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-result.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-settings.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealbuying-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealselling-grid.js" />
-    <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealanalysis-inbound-management.js" />
-    <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealanalysis-outbound-management.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-inbound-management.js" />
+    <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-management.js" />
     <Content Include="WhS_Deal\Services\SwapDealBuyingService.js" />
     <Content Include="WhS_Deal\Services\SwapDealSellingService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
@@ -163,8 +167,8 @@
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealSellingEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealEditorController.js" />
-    <Content Include="WhS_Deal\Views\SwapDeal\SwapDealAnalysis.html" />
-    <Content Include="WhS_Deal\Views\SwapDeal\SwapDealAnalysisController.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysis\SwapDealAnalysis.html" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysis\SwapDealAnalysisController.js" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealManagement.html" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealManagementController.js" />
   </ItemGroup>

@@ -1,0 +1,70 @@
+﻿<vr-row>
+	<vr-columns width="fullrow">
+		<vr-section title="Analysis Result">
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Deal Period (Days)</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>{{scopeModel.dealPeriod}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Total Revenue Cost</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.totalCommitmentCost | number}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Total Revenue Sale</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.totalCommitmentRevenue | number}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Total Margin per Period (Sale)</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.totalCustomerProfit | number}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Total Margin per Period (Cost)</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.totalSaving | number}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Total Margin per Period</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.totalCommitmentProfit |  number}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Margins</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>{{scopeModel.margins * 100 | number:2  }}%</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Netting</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.exposure | number}}</vr-label>
+				</vr-columns>
+			</vr-row>
+		</vr-section>
+	</vr-columns>
+</vr-row>

@@ -17,7 +17,7 @@
 				modalScope.onSwapDealAnalyzed = onSwapDealAnalyzed;
 			};
 
-			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealAnalysis.html', parameters, settings);
+			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/SwapDealAnalysis.html', parameters, settings);
 		}
 
 
