@@ -312,7 +312,8 @@
     <Content Include="Client\Javascripts\Directives\TimeRange\vr-period-selector.js" />
     <Content Include="Client\Javascripts\Directives\TimeRange\vr-timerange-directive.js" />
     <Content Include="Client\Javascripts\Directives\TreeView\vr-treeview-directive.js" />
-    <Content Include="Client\Javascripts\Filters\vr-textornumber-filter.js" />
+    <Content Include="Client\Javascripts\Filters\vr-time-no-timezone-filter.js" />
+    <Content Include="Client\Javascripts\Filters\vr-text-or-number-filter.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
