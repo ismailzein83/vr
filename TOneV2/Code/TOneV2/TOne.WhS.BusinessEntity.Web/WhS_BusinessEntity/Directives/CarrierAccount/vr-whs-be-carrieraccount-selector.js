@@ -8,6 +8,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             onReady: '=',
             getcustomers: "@",
             getsuppliers: "@",
+			getexchangecarriers: '@',
             ismultipleselection: "@",
             hideselectedvaluessection: '@',
             onselectionchanged: '=',
@@ -47,13 +48,22 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
     function getTemplate(attrs) {
         var label;
         if (attrs.ismultipleselection != undefined) {
-
-            label = (attrs.getcustomers != undefined) ? "Customers" : "Suppliers";
-            label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Carriers" : label;
+        	if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
+        		label = 'Carriers';
+        	}
+        	else if (attrs.getcustomers != undefined)
+        		label = 'Customers';
+        	else
+        		label = 'Suppliers';
         }
         else {
-            label = (attrs.getcustomers != undefined) ? "Customer" : "Supplier";
-            label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Carrier" : label;
+        	if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
+        		label = 'Carrier';
+        	}
+        	else if (attrs.getcustomers != undefined)
+        		label = 'Customer';
+        	else
+        		label = 'Supplier';
         }
 
         var hideselectedvaluessection = "";
@@ -105,6 +115,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                     filter = {};
                 filter.GetCustomers = attrs.getcustomers != undefined;
                 filter.GetSuppliers = attrs.getsuppliers != undefined;
+                filter.GetExchangeCarriers = attrs.getexchangecarriers != undefined;
 
                 var serializedFilter = {};
                 if (filter != undefined)
