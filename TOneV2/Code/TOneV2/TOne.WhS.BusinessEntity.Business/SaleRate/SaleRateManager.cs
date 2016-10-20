@@ -23,7 +23,18 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SaleRate> GetSaleRatesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.GetSaleRatesEffectiveAfter(sellingNumberPlanId, minimumDate);
+            List<SaleRate> allSaleRates = dataManager.GetSaleRatesEffectiveAfter(sellingNumberPlanId, minimumDate);
+
+            List<SaleRate> saleRates = new List<SaleRate>();
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+
+            foreach (SaleRate item in allSaleRates)
+            {
+                if (!salePriceListManager.IsSalePriceListDeleted(item.PriceListId))
+                    saleRates.Add(item);
+            }
+
+            return saleRates;          
         }
 
         public IEnumerable<SaleRate> GetSaleRatesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)

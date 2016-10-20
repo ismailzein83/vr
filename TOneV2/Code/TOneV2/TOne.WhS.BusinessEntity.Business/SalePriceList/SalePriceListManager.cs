@@ -12,9 +12,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePriceListManager
     {
-
-
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             var salePricelists = GetCachedSalePriceLists();
@@ -28,6 +27,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, salePricelists.ToBigResult(input, filterExpression, SalePricelistDetailMapper));
 
         }
+        
         public SalePriceList GetPriceList(int priceListId)
         {
             return GetCachedSalePriceLists().GetRecord(priceListId);
@@ -50,18 +50,60 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
+        public bool IsSalePriceListDeleted(int priceListId)
+        {
+            Dictionary<int, SalePriceList> allSalePriceLists = this.GetCachedSalePriceListsWithDeleted();
+            SalePriceList salePriceList = allSalePriceLists.GetRecord(priceListId);
+
+            if (salePriceList == null)
+                throw new DataIntegrityValidationException(string.Format("Sale Price List with Id {0} does not exist", priceListId));
+
+            return salePriceList.IsDeleted;
+        }
+
         #endregion
 
         #region  Private Members
+
         public Dictionary<int, SalePriceList> GetCachedSalePriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCashedSalePriceLists"),
                () =>
                {
                    ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
-                   return dataManager.GetPriceLists().ToDictionary(itm => itm.PriceListId, itm => itm);
+                   Dictionary<int, SalePriceList> allSalePriceLists = this.GetCachedSalePriceListsWithDeleted();
+                   Dictionary<int, SalePriceList> dic = new Dictionary<int, SalePriceList>();
+
+                   foreach (SalePriceList item in allSalePriceLists.Values)
+                   {
+                       if (!item.IsDeleted)
+                           dic.Add(item.PriceListId, item);
+                   }
+                   return dic;
                });
         }
+
+        private Dictionary<int, SalePriceList> GetCachedSalePriceListsWithDeleted()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("AllSalePriceLists"),
+               () =>
+               {
+                   ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
+                   IEnumerable<SalePriceList> salePriceLists = dataManager.GetPriceLists();
+                   Dictionary<int, SalePriceList> dic = new Dictionary<int, SalePriceList>();
+                   CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+                   foreach (SalePriceList item in salePriceLists)
+                   {
+                       if (item.OwnerType == SalePriceListOwnerType.Customer && carrierAccountManager.IsCarrierAccountDeleted(item.OwnerId))
+                           item.IsDeleted = true;
+
+                       dic.Add(item.PriceListId, item);
+                   }
+                   return dic;
+               });
+        }
+        
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISalePriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
@@ -80,6 +122,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.ArGetSalePriceListsUpdated(ref _updateHandle);
             }
         }
+        
         private string GetCurrencyName(int? currencyId)
         {
             if (currencyId.HasValue)

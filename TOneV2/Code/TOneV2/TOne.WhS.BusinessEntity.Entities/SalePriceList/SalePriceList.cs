@@ -23,5 +23,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string SourceId { get; set; }
 
         public DateTime EffectiveOn { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
