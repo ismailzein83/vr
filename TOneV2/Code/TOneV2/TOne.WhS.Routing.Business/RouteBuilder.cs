@@ -84,7 +84,7 @@ namespace TOne.WhS.Routing.Business
             return customerRoutes;
         }
 
-        public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId, bool includeBlockedSupplierZones = false)
+        public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId, bool includeBlockedSupplierZones)
         {
             List<RPRoute> routes = new List<RPRoute>();
 
@@ -284,7 +284,7 @@ namespace TOne.WhS.Routing.Business
                             NumberOfUnblockedZones = 0
                         };
 
-                        route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails);
+                        route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails); 
                     }
 
                     if (routeOptionRuleTarget.BlockOption)

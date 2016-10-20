@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Business
             else
             {
                 var notBlockedSupplierZones = context.SupplierOptionDetail.SupplierZones.FindAll(itm => !itm.IsBlocked);
-                if (notBlockedSupplierZones != null)
+                if (notBlockedSupplierZones != null && notBlockedSupplierZones.Count() > 0)
                     context.EffectiveRate = notBlockedSupplierZones.Min(itm => itm.SupplierRate);
             }
         }

@@ -51,7 +51,10 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsServi
                         for (var i = 0; i < payload.RouteOptions.length; i++) {
                             var currentItem = payload.RouteOptions[i];
                             currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Entity.Percentage);
-                            currentItem.Color = getRowStyle(currentItem);
+
+                            if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
+                                currentItem.Color = 'Red';
+
                             ctrl.routeOptions.push(currentItem);
                         }
                     }
@@ -69,13 +72,14 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsServi
             }
             return result;
         }
-        function getRowStyle(currentItem) {
 
-            if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
-                return 'BurlyWood ';
+        //function getRowStyle(optionStatus) {
 
-            if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
-                return 'Red';
-        }
+        //    if (optionStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
+        //        return '#d0c89e'; //'BurlyWood';
+
+        //    if (optionStatus == WhS_Routing_SupplierStatusEnum.Block.value)
+        //        return '#efa2a2'; //'Red';
+        //}
     }
 }]);

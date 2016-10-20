@@ -19,9 +19,7 @@
             </vr-row>
             <vr-row>
                 <vr-columns colnum="2">
-                    <vr-select datatextfield="Title" datavaluefield="TemplateConfigID" label="Rule Type" datasource="routeRuleTypeTemplates"
-                               selectedvalues="selectedRouteRuleTypeTemplate" on-ready="onRouteRuleTypeSelectorReady">
-                    </vr-select>
+                    <vr-whs-routing-routerulesettings-selector on-ready="onRouteRuleTypeSelectorReady"></vr-whs-routing-routerulesettings-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -29,7 +27,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewRouteRule" haspermission="hasAddRulePermission"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewRouteRule" haspermission="hasAddRulePermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

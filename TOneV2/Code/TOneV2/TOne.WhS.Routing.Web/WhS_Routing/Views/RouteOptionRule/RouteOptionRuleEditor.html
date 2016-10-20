@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_Routing_RouteOptionRuleEditorController" vr-loader="scopeModel.isLoading" width="'55%'">
+﻿<div vr-modalcontent ng-controller="WhS_Routing_RouteOptionRuleEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
     <vr-modalbody>
         <vr-form name="formRouteOptionRuleEditor">
             <vr-tabs>
@@ -8,9 +8,11 @@
                             <vr-textbox value="scopeModel.routeOptionRuleName" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/4row">
-                            <vr-select datatextfield="Title" datavaluefield="TemplateConfigID" label="Option Rule Type" datasource="scopeModel.routeOptionRuleSettingsTemplates"
-                                       selectedvalues="scopeModel.selectedrouteOptionRuleSettingsTemplate" onselectionchanged="scopeModel.onRouteOptionRuleSettingsSelectionChanged" isrequired>
-                            </vr-select>
+                            <vr-whs-routing-routeoptionrulesettings-selector on-ready="scopeModel.onRouteOptionRuleSettingsTypeSelectorReady"
+                                                                             selectedvalues="scopeModel.selectedRouteOptionRuleSettingsTemplate"
+                                                                             onselectionchanged="scopeModel.onRouteOptionRuleSettingsTypeSelectionChanged"
+                                                                             hideremoveicon>
+                            </vr-whs-routing-routeoptionrulesettings-selector>
                         </vr-columns>
                     </vr-row> 
                 </vr-tab>
@@ -85,7 +87,7 @@
                 <vr-tab header="'Rule Settings'" ng-show="scopeModel.showSettingsSection">
                     <vr-row>
                         <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingRouteOptionRuleSettings">
-                            <vr-directivewrapper directive="scopeModel.selectedrouteOptionRuleSettingsTemplate.Editor" on-ready="scopeModel.onRouteOptionRuleSettingsDirectiveReady" />
+                            <vr-directivewrapper directive="scopeModel.selectedRouteOptionRuleSettingsTemplate.Editor" on-ready="scopeModel.onRouteOptionRuleSettingsDirectiveReady" />
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

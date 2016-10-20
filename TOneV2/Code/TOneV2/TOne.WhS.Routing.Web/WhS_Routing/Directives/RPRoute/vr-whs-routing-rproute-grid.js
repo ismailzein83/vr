@@ -30,8 +30,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         var routingDatabaseId;
         var policies;
         var defaultPolicyId;
-
         var selectedPolicyConfigId;
+
         function initializeController() {
             $scope.showGrid = false;
             $scope.rpRoutes = [];
@@ -159,5 +159,4 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
     }
 
     return directiveDefinitionObject;
-
 }]);

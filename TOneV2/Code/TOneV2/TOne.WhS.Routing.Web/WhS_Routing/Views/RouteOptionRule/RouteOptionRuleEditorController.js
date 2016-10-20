@@ -17,6 +17,9 @@
         var routeOptionRuleEntity;
         var settingsEditorRuntime;
 
+        var routeOptionRuleSettingsTypeSelectorAPI;
+        var routeOptionRuleSettingsTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var saleZoneGroupSettingsAPI;
         var saleZoneGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -61,7 +64,10 @@
             $scope.scopeModel.excludedCodes = [];
             $scope.scopeModel.routeOptionRuleSettingsTemplates = [];
 
-
+            $scope.scopeModel.onRouteOptionRuleSettingsTypeSelectorReady = function (api) {
+                routeOptionRuleSettingsTypeSelectorAPI = api;
+                routeOptionRuleSettingsTypeSelectorReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.onSuppliersWithZonesGroupSettingsDirectiveReady = function (api) {
                 suppliersWithZonesGroupSettingsAPI = api;
                 suppliersWithZonesGroupSettingsReadyPromiseDeferred.resolve();
@@ -94,7 +100,7 @@
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionRuleSettingsAPI, routeOptionRuleSettingsPayload, setLoader, routeOptionRuleSettingsReadyPromiseDeferred);
             }
-
+            
             $scope.scopeModel.onRouteOptionRuleCriteriaTypeSelectionChanged = function () {
 
                 if ($scope.scopeModel.selectedRouteOptionRuleCriteriaType == undefined)
@@ -110,9 +116,9 @@
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
             }
-            $scope.scopeModel.onRouteOptionRuleSettingsSelectionChanged = function () {
+            $scope.scopeModel.onRouteOptionRuleSettingsTypeSelectionChanged = function () {
 
-                var _selectedItem = $scope.scopeModel.selectedrouteOptionRuleSettingsTemplate;
+                var _selectedItem = routeOptionRuleSettingsTypeSelectorAPI.getSelectedIds();
                 if (_selectedItem != undefined) {
 
                     $scope.scopeModel.showCriteriaSection = $scope.scopeModel.showSettingsSection = true;
@@ -174,7 +180,6 @@
                     return customerGroupSettingsLoadPromiseDeferred.promise;
                 }
             }
-
 
             //TODO: make the validation below a custom validation
             $scope.scopeModel.addExcludedCode = function () {
@@ -285,16 +290,18 @@
                 }
             }
 
-            var loadRouteOptionRuleSettingsTemplatesPromise = WhS_Routing_RouteOptionRuleAPIService.GetRouteOptionRuleSettingsTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.scopeModel.routeOptionRuleSettingsTemplates.push(item);
-                });
+            //loading RouteOptionRuleSettingsTypeSelector
+            var loadRouteOptionRuleSettingsTemplatesPromise = UtilsService.createPromiseDeferred();
+            promises.push(loadRouteOptionRuleSettingsTemplatesPromise.promise);
 
-                if (routeOptionRuleSettingsPayload != undefined)
-                    $scope.scopeModel.selectedrouteOptionRuleSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.routeOptionRuleSettingsTemplates, routeOptionRuleSettingsPayload.RouteOptionRuleSettings.ConfigId, "ExtensionConfigurationId");
+            var routeOptionRuleSettingsTypePayload = {};
+            if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Settings != undefined) {
+                routeOptionRuleSettingsTypePayload.selectedIds = routeOptionRuleEntity.Settings.ConfigId;
+            };
+            routeOptionRuleSettingsTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(routeOptionRuleSettingsTypeSelectorAPI, routeOptionRuleSettingsTypePayload, loadRouteOptionRuleSettingsTemplatesPromise);
             });
 
-            promises.push(loadRouteOptionRuleSettingsTemplatesPromise);
 
             if (routeOptionRuleSettingsPayload != undefined) {
                 routeOptionRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -498,7 +505,7 @@
                     CodeCriteriaGroupSettings: $scope.scopeModel.showIncludedCodeSection ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate') : undefined,
                     SuppliersWithZonesGroupSettings: suppliersWithZonesGroupSettingsAPI.getData()
                 },
-                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, routeOptionRuleSettingsAPI, 'selectedrouteOptionRuleSettingsTemplate'),
+                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, routeOptionRuleSettingsAPI, 'selectedRouteOptionRuleSettingsTemplate'),
                 BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };

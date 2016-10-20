@@ -176,6 +176,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\Templates\RouteOptionRulesSettingsMarketPriceTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-marketprice.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByRateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByServiceDirective.html" />
@@ -186,6 +187,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byservice.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\Templates\OptionPercentageOptimizationDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-optimization.js" />
@@ -197,6 +199,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byrate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-selector.js" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealCompletionProgressRoutingOptimizerItemSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealProfitRoutingOptimizerItemSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\MarginRoutingOptimizerItemSettingsTemplate.html" />

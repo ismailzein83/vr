@@ -10,30 +10,21 @@
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var routeOptionRuleTypeSelectorAPI;
-        var routeOptionRuleTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var routeOptionRuleTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
 
         function defineScope() {
             $scope.routeOptionRuleTypeTemplates = [];
-            $scope.selectedRouteOptionRuleTypeTemplate = undefined;
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
-
-            $scope.onSellingNumberPlanDirectiveReady = function (api) {
-                sellingNumberPlanDirectiveAPI = api;
-                sellingNumberPlanReadyPromiseDeferred.resolve();
             }
 
             $scope.onSaleZoneDirectiveReady = function (api) {
@@ -41,22 +32,11 @@
                 saleZoneReadyPromiseDeferred.resolve();
             }
 
-            $scope.onSelectSellingNumberPlan = function (selectedItem) {
-                $scope.showSaleZoneSelector = true;
-
-                var payload = {
-                    sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                }
-
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-            }
-
-            $scope.onRouteOptionRuleTypeSelectorReady = function (api) {
+            $scope.onRouteOptionRuleSettingsSelectorReady = function (api) {
                 routeOptionRuleTypeSelectorAPI = api;
-                routeOptionRuleTypeReadyPromiseDeferred.resolve();
+                routeOptionRuleTypeSelectorReadyPromiseDeferred.resolve();
             }
-
+            
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(getFilterObject());
@@ -67,7 +47,7 @@
                     return gridAPI.loadGrid(getFilterObject());
             };
 
-            $scope.AddNewRouteOptionRule = AddNewRouteOptionRule;
+            $scope.addNewRouteOptionRule = addNewRouteOptionRule;
 
             $scope.hasAddRulePermission = function () {
                 return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
@@ -75,15 +55,13 @@
 
             function getFilterObject() {
 
-                var routeOptionRuleSettingsConfigId = $scope.selectedRouteOptionRuleTypeTemplate != undefined ? $scope.selectedRouteOptionRuleTypeTemplate.ExtensionConfigurationId : undefined;
-
                 var query = {
                     Code: $scope.code,
                     Name: $scope.name,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,
-                    RouteOptionRuleSettingsConfigId: routeOptionRuleSettingsConfigId
+                    RouteOptionRuleSettingsConfigId: routeOptionRuleTypeSelectorAPI.getSelectedIds()
                 };
                 return query;
             }
@@ -91,7 +69,8 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.effectiveOn = new Date();
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteOptionRuleTypeSection]).catch(function (error) {
+
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteOptionRuleTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -116,16 +95,17 @@
 
             return loadSellingNumberPlanPromiseDeferred.promise;
         }
-        function loadRouteOptionRuleTypeSection() {
+        function loadRouteOptionRuleTypeSelector() {
+            var loadRouteOptionRuleTypePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            return WhS_Routing_RouteOptionRuleAPIService.GetRouteOptionRuleSettingsTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.routeOptionRuleTypeTemplates.push(item);
-                });
+            routeOptionRuleTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(routeOptionRuleTypeSelectorAPI, undefined, loadRouteOptionRuleTypePromiseDeferred);
             });
+
+            return loadRouteOptionRuleTypePromiseDeferred.promise;
         }
 
-        function AddNewRouteOptionRule() {
+        function addNewRouteOptionRule() {
             var onRouteOptionRuleAdded = function (addedItem) {
                 gridAPI.onRouteOptionRuleAdded(addedItem);
             };
