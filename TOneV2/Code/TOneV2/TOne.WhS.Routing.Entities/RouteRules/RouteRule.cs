@@ -6,12 +6,14 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
     {
-        public string SourceId { get; set; }
+        public string Name { get; set; }
+
         public RouteRuleCriteria Criteria { get; set; }
 
         public RouteRuleSettings Settings { get; set; }
 
-        public string Name { get; set; }
+        public string SourceId { get; set; }
+
 
         public CorrespondentType CorrespondentType { get { return Settings.CorrespondentType; } }
 

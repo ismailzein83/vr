@@ -9,13 +9,14 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
     {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
         public RouteOptionRuleCriteria Criteria { get; set; }
 
         public RouteOptionRuleSettings Settings { get; set; }
 
-        public string Name { get; set; }
-
-        public string Description { get; set; }
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
@@ -60,6 +61,12 @@ namespace TOne.WhS.Routing.Entities
             return groupContext;
         }
 
+        public override void RefreshRuleState(Vanrise.Rules.IRefreshRuleStateContext context)
+        {
+            this.Settings.RefreshState(context);
+        }
+
+
         IEnumerable<int> IRuleSupplierCriteria.SupplierIds
         {
             get
@@ -90,7 +97,6 @@ namespace TOne.WhS.Routing.Entities
                 return null;
             }
         }
-
 
         IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
         {
@@ -138,9 +144,6 @@ namespace TOne.WhS.Routing.Entities
             get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
 
-        public override void RefreshRuleState(Vanrise.Rules.IRefreshRuleStateContext context)
-        {
-            this.Settings.RefreshState(context);
-        }
+
     }
 }
