@@ -538,31 +538,9 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 for (var j = 0; j < $scope.scopeModal.columnWidth.length; j++)
                     if (bodyContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
                         numberOfColumns = $scope.scopeModal.columnWidth[j];
-
                 if (bodyValue != null) {
-                    bodyValue.onElementReady = function (api) {
-                        bodyValue.API = api;
-                        var bodyPayload = {
-                            previewMode: true,
-                            title: bodyContent.SectionTitle,
-                            settings: bodyValue.Setting.Settings
-                        }
-                        var setLoader = function (value) {
-                            $scope.scopeModal.isLoadingBodyDirective = value;
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bodyValue.API, bodyPayload, setLoader);
-                    }
-                    var viewWidget = {
-                        Widget: bodyValue,
-                        NumberOfColumns: numberOfColumns,
-                        SectionTitle: bodyContent.SectionTitle
-                    }
-                    if (bodyContent.DefaultPeriod != undefined && bodyContent.DefaultGrouping != undefined) {
-                        viewWidget.DefaultPeriod = bodyContent.DefaultPeriod
-                        viewWidget.DefaultGrouping = bodyContent.DefaultGrouping
-                    }
-                    $scope.scopeModal.addedBodyWidgets.push(viewWidget);
-                    $scope.scopeModal.bodyWidgets.splice($scope.scopeModal.bodyWidgets.indexOf(bodyValue), 1);
+                    addBodyContentAPI(bodyValue, numberOfColumns, bodyContent);
+                   
                 }
 
             }
@@ -574,35 +552,9 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 for (var j = 0; j < $scope.scopeModal.columnWidth.length; j++)
                     if (summaryContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
                         numberOfColumns = $scope.scopeModal.columnWidth[j];
-
                 if (summaryValue != null) {
-
-                    summaryValue.onElementReady = function (api) {
-                        summaryValue.API = api;
-                        var summaryPayload = {
-                            previewMode: true,
-                            title: summaryContent.SectionTitle,
-                            settings: summaryValue.Setting.Settings
-                        }
-                        var setLoader = function (value) {
-                            $scope.scopeModal.isLoadingSummaryDirective = value;
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, summaryValue.API, summaryPayload, setLoader);
-                    }
-                    var viewWidget = {
-                        Widget: summaryValue,
-                        NumberOfColumns: numberOfColumns,
-                        SectionTitle: summaryContent.SectionTitle
-                    }
-                    if (summaryContent.DefaultPeriod != undefined && summaryContent.DefaultGrouping != undefined) {
-                        viewWidget.DefaultPeriod = summaryContent.DefaultPeriod
-                        viewWidget.DefaultGrouping = summaryContent.DefaultGrouping
-                    }
-
-                    $scope.scopeModal.addedSummaryWidgets.push(viewWidget);
-                    $scope.scopeModal.summaryWidgets.splice($scope.scopeModal.summaryWidgets.indexOf(summaryValue), 1);
+                    addSummaryContentAPI(summaryValue, numberOfColumns, summaryContent)
                 }
-
             }
             //$scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
             // addIsSelected($scope.menuList, $scope.filter.ModuleId);
@@ -619,6 +571,59 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             }
         }
 
+    }
+
+    function addBodyContentAPI(bodyValue, numberOfColumns, bodyContent)
+    {
+        bodyValue.onElementReady = function (api) {
+            bodyValue.API = api;
+            var bodyPayload = {
+                previewMode: true,
+                title: bodyContent.SectionTitle,
+                settings: bodyValue.Setting.Settings
+            }
+            var setLoader = function (value) {
+                $scope.scopeModal.isLoadingBodyDirective = value;
+            };
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bodyValue.API, bodyPayload, setLoader);
+        }
+        var viewWidget = {
+            Widget: bodyValue,
+            NumberOfColumns: numberOfColumns,
+            SectionTitle: bodyContent.SectionTitle
+        }
+        if (bodyContent.DefaultPeriod != undefined && bodyContent.DefaultGrouping != undefined) {
+            viewWidget.DefaultPeriod = bodyContent.DefaultPeriod
+            viewWidget.DefaultGrouping = bodyContent.DefaultGrouping
+        }
+        $scope.scopeModal.addedBodyWidgets.push(viewWidget);
+        $scope.scopeModal.bodyWidgets.splice($scope.scopeModal.bodyWidgets.indexOf(bodyValue), 1);
+    }
+    function addSummaryContentAPI(summaryValue, numberOfColumns, summaryContent)
+    {
+        summaryValue.onElementReady = function (api) {
+            summaryValue.API = api;
+            var summaryPayload = {
+                previewMode: true,
+                title: summaryContent.SectionTitle,
+                settings: summaryValue.Setting.Settings
+            }
+            var setLoader = function (value) {
+                $scope.scopeModal.isLoadingSummaryDirective = value;
+            };
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, summaryValue.API, summaryPayload, setLoader);
+        }
+        var viewWidget = {
+            Widget: summaryValue,
+            NumberOfColumns: numberOfColumns,
+            SectionTitle: summaryContent.SectionTitle
+        }
+        if (summaryContent.DefaultPeriod != undefined && summaryContent.DefaultGrouping != undefined) {
+            viewWidget.DefaultPeriod = summaryContent.DefaultPeriod
+            viewWidget.DefaultGrouping = summaryContent.DefaultGrouping
+        }
+        $scope.scopeModal.addedSummaryWidgets.push(viewWidget);
+        $scope.scopeModal.summaryWidgets.splice($scope.scopeModal.summaryWidgets.indexOf(summaryValue), 1);
     }
 
     function loadTree() {
