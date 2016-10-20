@@ -10,8 +10,17 @@
                         <retail-be-entitytype-selector on-ready="scopeModel.onEntityTypeSelectorReady" normal-col-num="6" isrequired="true"></retail-be-entitytype-selector>
                     </vr-row>
                     <vr-row>
-                        <vr-common-styledefinition-selector on-ready="scopeModel.onStyleDefinitionSelectorReady" normal-col-num="6" isrequired="true"></vr-common-styledefinition-selector>
+                        <span>
+                            <vr-common-styledefinition-selector on-ready="scopeModel.onStyleDefinitionSelectorReady" normal-col-num="6" isrequired="true"></vr-common-styledefinition-selector>
+                        </span>
+                        <vr-columns width="1/4row">
+                            <vr-switch label="Has Initial Charge" value="scopeModel.HasInitialCharge"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-switch label="Has Recurring Charge" value="scopeModel.HasRecurringCharge"></vr-switch>
+                        </vr-columns>
                     </vr-row>
+
                 </vr-tab>
             </vr-tabs>
         </vr-form>

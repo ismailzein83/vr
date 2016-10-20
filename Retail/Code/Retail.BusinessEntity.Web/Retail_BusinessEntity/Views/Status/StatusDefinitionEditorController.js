@@ -68,7 +68,7 @@
                 });
             }
             else {
-                    loadAllControls();
+                loadAllControls();
             }
         }
 
@@ -98,6 +98,8 @@
                 if (statusDefinitionEntity == undefined)
                     return;
                 $scope.scopeModel.name = statusDefinitionEntity.Name;
+                $scope.scopeModel.HasInitialCharge = statusDefinitionEntity.Settings.HasInitialCharge;
+                $scope.scopeModel.HasRecurringCharge = statusDefinitionEntity.Settings.HasRecurringCharge;
             }
             function loadEntityTypeSelector() {
                 var entityTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -160,7 +162,9 @@
         function buildStatusDefinitionObjFromScope() {
 
             var settings = {
-                StyleDefinitionId: styleDefinitionAPI.getSelectedIds()
+                StyleDefinitionId: styleDefinitionAPI.getSelectedIds(),
+                HasInitialCharge: $scope.scopeModel.HasInitialCharge,
+                HasRecurringCharge: $scope.scopeModel.HasRecurringCharge
             }
 
             return {
