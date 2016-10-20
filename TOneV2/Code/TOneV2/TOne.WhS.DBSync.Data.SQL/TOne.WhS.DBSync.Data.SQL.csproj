@@ -83,7 +83,7 @@
     <Compile Include="Common\IDBSyncDataManager.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\MigrationUtils.cs" />
-    <Compile Include="DBSyncDataManager\SupplierPriceListTemplateDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\ClearTempTablesDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\VRTimeZoneDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SaleZoneServicesDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SupplierZoneServicesDBSyncDataManager.cs" />

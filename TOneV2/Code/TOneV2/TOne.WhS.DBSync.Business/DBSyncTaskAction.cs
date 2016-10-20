@@ -164,11 +164,6 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.VRTimeZone:
                         iDBSyncDataManager = new VRTimeZoneDBSyncDataManager(context.UseTempTables);
                         break;
-
-                    case DBTableName.SupplierPriceListTemplate:
-                        iDBSyncDataManager = new SupplierPriceListTemplateDBSyncDataManager(context.UseTempTables);
-                        break;
-
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
 

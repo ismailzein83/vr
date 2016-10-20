@@ -162,8 +162,8 @@ namespace TOne.WhS.DBSync.Business
         {
             if (_context.MigrationRequestedTables.Contains(DBTableName.CarrierAccount))
             {
-                SupplierPriceListTemplateDBSyncDataManager supplierPriceListTemplateDataManager = new SupplierPriceListTemplateDBSyncDataManager(_context.UseTempTables);
-                supplierPriceListTemplateDataManager.ClearSupplierPriceListTemplateTable();
+                ClearTempTablesDBSyncDataManager clearTempTablesDBSyncDataManager = new ClearTempTablesDBSyncDataManager(_context.UseTempTables);
+                clearTempTablesDBSyncDataManager.ClearTempTables();
             }
         }
 
