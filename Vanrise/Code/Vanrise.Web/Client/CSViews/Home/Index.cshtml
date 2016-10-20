@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{{getPageName()}}</title>
+    <title  ng-bind="getPageName()"></title>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
     @Styles.Render("~/Content/HandsonTable")
@@ -61,8 +61,7 @@
         </nav>
         <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
             <div class="inner-sub ">
-                <h4 class="vr-page-title">
-                    {{currentPage.Title}}
+                <h4 class="vr-page-title" ng-bind="currentPage.Title">
                 </h4>
             </div>
         </div>
