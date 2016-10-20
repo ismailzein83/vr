@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -75,9 +75,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.MainA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.RingoExtensions", "Retail.BusinessEntity.RingoExtensions\Retail.BusinessEntity.RingoExtensions.csproj", "{79EE241B-C553-470E-A091-03FBBCCD971F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dealers", "Dealers", "{42FFE4CF-282F-411F-9D73-FDA3890FA682}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Dealers.Entities", "Retail.Dealers.Entities\Retail.Dealers.Entities.csproj", "{BA26719C-F713-4A38-B4F7-5E3C47D014A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Dealers.MainExtensions", "Retail.Dealers.MainExtensions\Retail.Dealers.MainExtensions.csproj", "{B92A81FF-1E31-46D2-B311-6E854D89915A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 28
+		SccNumberOfProjects = 30
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -189,6 +195,14 @@ Global
 		SccProjectTopLevelParentUniqueName27 = Retail.sln
 		SccProjectName27 = Retail.BusinessEntity.RingoExtensions
 		SccLocalPath27 = Retail.BusinessEntity.RingoExtensions
+		SccProjectUniqueName28 = Retail.Dealers.Entities\\Retail.Dealers.Entities.csproj
+		SccProjectTopLevelParentUniqueName28 = Retail.sln
+		SccProjectName28 = Retail.Dealers.Entities
+		SccLocalPath28 = Retail.Dealers.Entities
+		SccProjectUniqueName29 = Retail.Dealers.MainExtensions\\Retail.Dealers.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName29 = Retail.sln
+		SccProjectName29 = Retail.Dealers.MainExtensions
+		SccLocalPath29 = Retail.Dealers.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,6 +321,14 @@ Global
 		{79EE241B-C553-470E-A091-03FBBCCD971F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79EE241B-C553-470E-A091-03FBBCCD971F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79EE241B-C553-470E-A091-03FBBCCD971F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA26719C-F713-4A38-B4F7-5E3C47D014A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA26719C-F713-4A38-B4F7-5E3C47D014A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA26719C-F713-4A38-B4F7-5E3C47D014A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA26719C-F713-4A38-B4F7-5E3C47D014A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B92A81FF-1E31-46D2-B311-6E854D89915A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B92A81FF-1E31-46D2-B311-6E854D89915A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B92A81FF-1E31-46D2-B311-6E854D89915A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B92A81FF-1E31-46D2-B311-6E854D89915A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -343,5 +365,8 @@ Global
 		{48D55B41-D141-4CC8-97CA-06A6A7F993BA} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 		{B6E5274A-9455-41E7-A07D-E78731DC1767} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 		{79EE241B-C553-470E-A091-03FBBCCD971F} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{42FFE4CF-282F-411F-9D73-FDA3890FA682} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{BA26719C-F713-4A38-B4F7-5E3C47D014A1} = {42FFE4CF-282F-411F-9D73-FDA3890FA682}
+		{B92A81FF-1E31-46D2-B311-6E854D89915A} = {42FFE4CF-282F-411F-9D73-FDA3890FA682}
 	EndGlobalSection
 EndGlobal
