@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
 
         public bool GetEffectiveOnly { get; set; }
+
+		public IEnumerable<int> CountryIds { get; set; }
     }
 }

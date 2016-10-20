@@ -97,23 +97,40 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
-            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
-            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
-            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
-            DateTime now = DateTime.Now;
+			string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
+			IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
-            Func<SaleZone, bool> zoneFilter = (zone) =>
+			if (filter == null)
+			{
+				return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
+			}
+
+			var now = DateTime.Now;
+			HashSet<long> filteredZoneIds = null;
+
+			if (filter.SaleZoneFilterSettings != null)
+			{
+				filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
+			}
+
+            Func<SaleZone, bool> filterPredicate = (zone) =>
             {
                 if (filter.GetEffectiveOnly && (zone.BED > now || (zone.EED.HasValue && zone.EED.Value < now)))
                     return false;
+
                 if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
                     return false;
-                if (nameFilterLower != null && !zone.Name.ToLower().Contains(nameFilterLower))
+
+                if (zoneName != null && !zone.Name.ToLower().Contains(zoneName))
                     return false;
+
+				if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
+					return false;
 
                 return true;
             };
-            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter).OrderBy(x => x.Name);
+
+            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
