@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class StateBackupCustomerBehavior : StateBackupTypeBehavior
     {
-        public override string GetBackupCommand(int stateBackupId)
+        public override string GetBackupCommands(int stateBackupId)
         {
             StateBackupCustomer backupCustomerData = base.Data as StateBackupCustomer;
             int customerId = backupCustomerData.CustomerId;
@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return salePriceListManager.BackupAllDataByCustomerId(stateBackupId, base.BackupDatabaseName, customerId);
         }
 
-        public override string GetRestoreCommand(int stateBackupId)
+        public override string GetRestoreCommands(int stateBackupId)
         {
             throw new NotImplementedException();
         }

@@ -13,8 +13,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public StateBackupType Data { get; set; }
 
-        public abstract string GetBackupCommand(int stateBackupId);
+        public abstract string GetBackupCommands(int stateBackupId);
 
-        public abstract string GetRestoreCommand(int stateBackupId);
+        public abstract string GetRestoreCommands(int stateBackupId);
     }
 }

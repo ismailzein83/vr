@@ -9,13 +9,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class StateBackupAllCustomersBehavior : StateBackupTypeBehavior
     {
-        public override string GetBackupCommand(int stateBackupId)
+        public override string GetBackupCommands(int stateBackupId)
         {
+            //It should return all tables tht should have backup for this type all customers
             SalePriceListDataManager salePriceListManager = new SalePriceListDataManager();
             return salePriceListManager.BackupAllData(stateBackupId, base.BackupDatabaseName);
         }
 
-        public override string GetRestoreCommand(int stateBackupId)
+        public override string GetRestoreCommands(int stateBackupId)
         {
             throw new NotImplementedException();
         }

@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             this.PrepareData(backupType);
             //Save Backup Record to DB and get StateBackup Id to pass it to the next method
-            string backupCommand = _stateBackupBehavior.GetBackupCommand(1);
+            string backupCommand = _stateBackupBehavior.GetBackupCommands(1);
         }
 
         public void RestoreData(int stateBackupId)
