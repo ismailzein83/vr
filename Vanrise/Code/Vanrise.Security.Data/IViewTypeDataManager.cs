@@ -9,7 +9,7 @@ namespace Vanrise.Security.Data
 {
     public interface IViewTypeDataManager  :IDataManager
     {
-        List<ViewType> GetViewTypes();
-        bool AreViewTypesUpdated(ref object updateHandle);
+        //List<ViewType> GetViewTypes();
+        //bool AreViewTypesUpdated(ref object updateHandle);
     }
 }

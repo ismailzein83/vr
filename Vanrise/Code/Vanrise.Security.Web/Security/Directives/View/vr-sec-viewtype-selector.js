@@ -60,7 +60,7 @@ app.directive('vrSecViewtypeSelector', ['VR_Sec_ViewTypeAPIService', 'UtilsServi
                 label = attrs.customlabel;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="ViewTypeId" isrequired="ctrl.isrequired"'
+                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="ExtensionConfigurationId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="View Type" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
                 + '</div>'
         }
@@ -95,13 +95,13 @@ app.directive('vrSecViewtypeSelector', ['VR_Sec_ViewTypeAPIService', 'UtilsServi
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ViewTypeId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ViewTypeId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', attrs, ctrl);
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
