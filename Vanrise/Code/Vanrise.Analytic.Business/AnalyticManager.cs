@@ -441,8 +441,7 @@ namespace Vanrise.Analytic.Business
                 var queryContext = new AnalyticTableQueryContext(query);
                 var dataProvider = queryContext.GetTable().Settings.DataProvider;
                 if (dataProvider == null)
-                    dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.Postgres.PostgresAnalyticDataProvider, Vanrise.Analytic.Data.Postgres")) as AnalyticDataProvider;
-                //dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
+                    dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
                 var dataManager = dataProvider.CreateDataManager(queryContext);
                 HashSet<string> includeDBDimensions;
                 var dbRecords = dataManager.GetAnalyticRecords(input, out includeDBDimensions);
