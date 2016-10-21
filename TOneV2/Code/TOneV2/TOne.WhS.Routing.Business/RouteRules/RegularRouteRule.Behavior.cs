@@ -300,23 +300,28 @@ namespace TOne.WhS.Routing.Business
                 }
             }
 
-            IOrderedEnumerable<KeyValuePair<IRouteOptionOrderTarget, List<decimal>>> orderedData = orderValues.OrderBy(itm => itm.Value[0]);
-            if (OptionOrderSettings.Count > 1)
+            if (orderValues.Count > 0)
             {
-                for (var x = 1; x < OptionOrderSettings.Count; x++)
+                IOrderedEnumerable<KeyValuePair<IRouteOptionOrderTarget, List<decimal>>> orderedData = orderValues.OrderBy(itm => itm.Value[0]);
+                if (OptionOrderSettings.Count > 1)
                 {
-                    orderedData = orderedData.ThenBy(itm => itm.Value[x]);
+                    for (var x = 1; x < OptionOrderSettings.Count; x++)
+                    {
+                        var index = x;
+                        orderedData = orderedData.ThenBy(itm => itm.Value[index]);
+                    }
                 }
-            }
-            orderedData = orderedData.ThenBy(itm => itm.Key.SupplierId);
+                orderedData = orderedData.ThenBy(itm => itm.Key.SupplierId);
 
-            List<IRouteOptionOrderTarget> list = new List<IRouteOptionOrderTarget>();
+                List<IRouteOptionOrderTarget> list = new List<IRouteOptionOrderTarget>();
 
-            foreach (KeyValuePair<IRouteOptionOrderTarget, List<decimal>> item in orderedData)
-            {
-                list.Add(item.Key);
+                foreach (KeyValuePair<IRouteOptionOrderTarget, List<decimal>> item in orderedData)
+                {
+                    list.Add(item.Key);
+                }
+                options = list.VRCast<T>();
             }
-            return list.VRCast<T>();
+            return options;
         }
 
         private IEnumerable<T> OrderOptionsByPercentage<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget

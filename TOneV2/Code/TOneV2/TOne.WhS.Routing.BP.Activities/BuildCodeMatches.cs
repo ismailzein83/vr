@@ -75,8 +75,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
             foreach (CodePrefix code in inputArgument.CodePrefixGroup)
             {
-                IEnumerable<SaleCode> saleCodes = inputArgument.SaleCodes.FirstOrDefault(itm => itm.CodePrefix == code).SaleCodes;
-                IEnumerable<SupplierCode> supplierCodes = inputArgument.SupplierCodes.FirstOrDefault(itm => itm.CodePrefix == code).SupplierCodes;
+                IEnumerable<SaleCode> saleCodes = inputArgument.SaleCodes.FirstOrDefault(itm => itm.CodePrefix == code).SaleCodes.OrderBy(itm => itm.BED);
+                IEnumerable<SupplierCode> supplierCodes = inputArgument.SupplierCodes.FirstOrDefault(itm => itm.CodePrefix == code).SupplierCodes.OrderBy(itm => itm.BED);
                 codeMatchContext.CodePrefix = code.Code;
                 builder.BuildCodeMatches(codeMatchContext, saleCodes, supplierCodes, codeMatch =>
                 {

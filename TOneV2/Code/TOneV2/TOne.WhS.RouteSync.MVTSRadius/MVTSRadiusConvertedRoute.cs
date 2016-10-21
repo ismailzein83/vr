@@ -15,7 +15,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
                 if (this.MVTSRadiusOptions == null || this.MVTSRadiusOptions.Count == 0)
                     return false;
 
-                return this.MVTSRadiusOptions.FirstOrDefault(itm => itm.Percentage.HasValue) != null;
+                return this.MVTSRadiusOptions.FirstOrDefault(itm => itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
             }
         }
     }
