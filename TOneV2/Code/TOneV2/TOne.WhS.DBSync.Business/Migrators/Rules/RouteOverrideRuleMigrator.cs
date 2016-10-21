@@ -57,30 +57,38 @@ namespace TOne.WhS.DBSync.Business
 
         SourceRule GetDefaultRule()
         {
+            //RouteRule rule = new RouteRule
+            //{
+            //    Criteria = new RouteRuleCriteria
+            //    {
+            //    },
+            //    Settings = new RegularRouteRule
+            //    {
+            //        OptionOrderSettings = new List<RouteOptionOrderSettings>
+            //        {
+            //            new OptionOrderByRate(),
+            //            new OptionOrderByService()
+            //        },
+            //        OptionFilters = new List<RouteOptionFilterSettings> 
+            //        {
+            //            new ServiceOptionFilter(),
+            //            new RateOptionFilter
+            //            {
+            //        RateOption = RateOption.MaximumLoss,
+            //        RateOptionType = RateOptionType.Fixed,
+            //        RateOptionValue = 0
+            //        }
+            //        },
+            //        OrderType = OrderType.Sequential
+            //    },
+            //    BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
+            //    Description = "Default Routing Rule",
+            //    Name = "Default Routing Rule"
+            //};
             RouteRule rule = new RouteRule
             {
-                Criteria = new RouteRuleCriteria
-                {
-                },
-                Settings = new RegularRouteRule
-                {
-                    OptionOrderSettings = new List<RouteOptionOrderSettings>
-                    {
-                        new OptionOrderByRate(),
-                        new OptionOrderByService()
-                    },
-                    OptionFilters = new List<RouteOptionFilterSettings> 
-                    {
-                        new ServiceOptionFilter(),
-                        new RateOptionFilter
-                        {
-                    RateOption = RateOption.MaximumLoss,
-                    RateOptionType = RateOptionType.Fixed,
-                    RateOptionValue = 0
-                    }
-                    },
-                    OrderType = OrderType.Sequential
-                },
+                Criteria = new RouteRuleCriteria(),
+                Settings = new LCRRouteRule(),
                 BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
                 Description = "Default Routing Rule",
                 Name = "Default Routing Rule"
@@ -190,7 +198,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = sourceRule.BED,
                     EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
-                    Name = string.Format("Migrated Override Rule {0}", Context.Counter++),
+                    Name = string.Format("Migrated Fixed Rule {0}", Context.Counter++),
                     Criteria = criteria,
                     Settings = GetRuleSettings(sourceRule)
                 };
@@ -277,7 +285,7 @@ namespace TOne.WhS.DBSync.Business
                     BeginEffectiveTime = sourceRule.BED,
                     EndEffectiveTime = sourceRule.EED,
                     Description = sourceRule.Reason,
-                    Name = string.Format("Migrated Override Rule {0}", Context.Counter++),
+                    Name = string.Format("Migrated Fixed Rule {0}", Context.Counter++),
                     Criteria = criteria,
                     Settings = GetRuleSettings(sourceRule)
                 };
@@ -285,18 +293,12 @@ namespace TOne.WhS.DBSync.Business
             }
         }
 
-        RegularRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
+        FixedRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
         {
-            var rule = new RegularRouteRule
+            var rule = new FixedRouteRule()
             {
-
-                OptionsSettingsGroup = new SelectiveOptions
-                {
-                    Options = GetOptions(sourceRule),
-                    Filters = GetSuppliersFilters(sourceRule)
-
-                },
-                OptionPercentageSettings = GetOptionPercentageSettings(sourceRule)
+                Filters= GetSuppliersFilters(sourceRule),
+                Options = GetOptions(sourceRule),
             };
             return rule;
         }
