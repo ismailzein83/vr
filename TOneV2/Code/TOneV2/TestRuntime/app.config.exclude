@@ -164,6 +164,7 @@
     <!--<add key="Routing_TOneV1" value="false"/>--><!--Routing_TOneV1 key if set to true will be used to build only current TOne route and route option tables-->
     <add key="TOneV1RoutingDBConnStringKey" value="TOneV1RoutingDBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="StateBackupDatabase" value="TOneV2_Dev_Backup"/>
   </appSettings>
   <system.codedom>
     <compilers>
