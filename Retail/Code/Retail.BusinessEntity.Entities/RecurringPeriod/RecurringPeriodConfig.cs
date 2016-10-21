@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities.RecurringPeriod
 {
     public class RecurringPeriodConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_BE_RecurringPeriodDefinition";
+        public const string EXTENSION_TYPE = "Retail_BE_RecurringPeriod";
         public string Editor { get; set; }
     }
 }
