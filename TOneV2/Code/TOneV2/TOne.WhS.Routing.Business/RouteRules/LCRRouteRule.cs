@@ -114,10 +114,10 @@ namespace TOne.WhS.Routing.Business
         {
             HashSet<int> supplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null;
 
-            if (ExecuteServiceOptionFilter(customerServiceIds, supplierServices))
+            if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
                 return true;
 
-            if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
+            if (ExecuteServiceOptionFilter(customerServiceIds, supplierServices))
                 return true;
 
             return false;
