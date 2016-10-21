@@ -81,6 +81,11 @@ namespace TOne.WhS.Routing.Business
             return false;
         }
 
+        #endregion
+
+
+        #region SaleEntity Execution
+
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             var options = CreateOptions(context, target);
@@ -99,10 +104,6 @@ namespace TOne.WhS.Routing.Business
         {
             this.ApplyOptionsPercentage<RouteOption>(options);
         }
-
-        #endregion
-
-        #region SaleEntity Execution
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
@@ -131,48 +132,8 @@ namespace TOne.WhS.Routing.Business
             //}
         }
 
-        private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
-        {
-            var options = new List<RouteOptionRuleTarget>();
-            if (this.OptionsSettingsGroup != null)
-            {
-                IRouteOptionSettingsContext routeOptionSettingsContext = new RouteOptionSettingsContext
-                {
-                    SupplierFilterSettings = new SupplierFilterSettings
-                    {
-                        RoutingProductId = target.RoutingProductId
-                    }
-                };
-                var optionsSettings = routeOptionSettingsContext.GetGroupOptionSettings(this.OptionsSettingsGroup);
-                if (optionsSettings != null)
-                {
-                    foreach (var optionSettings in optionsSettings)
-                    {
-                        SupplierCodeMatchWithRate optionSupplierCodeMatch = context.GetSupplierCodeMatch(optionSettings.SupplierId);
-                        if (optionSupplierCodeMatch != null)
-                        {
-                            var option = CreateOption(target, optionSupplierCodeMatch, optionSettings.Percentage);
-                            options.Add(option);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
-                if (allSuppliersCodeMatches != null)
-                {
-                    foreach (var supplierCodeMatch in allSuppliersCodeMatches)
-                    {
-                        var option = CreateOption(target, supplierCodeMatch, null);
-                        options.Add(option);
-                    }
-                }
-            }
-            return options;
-        }
-
         #endregion
+
 
         #region Routing Product Execution
 
@@ -228,7 +189,49 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
 
+
         #region Private Methods
+
+        private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
+        {
+            var options = new List<RouteOptionRuleTarget>();
+            if (this.OptionsSettingsGroup != null)
+            {
+                IRouteOptionSettingsContext routeOptionSettingsContext = new RouteOptionSettingsContext
+                {
+                    SupplierFilterSettings = new SupplierFilterSettings
+                    {
+                        RoutingProductId = target.RoutingProductId
+                    }
+                };
+                var optionsSettings = routeOptionSettingsContext.GetGroupOptionSettings(this.OptionsSettingsGroup);
+                if (optionsSettings != null)
+                {
+                    foreach (var optionSettings in optionsSettings)
+                    {
+                        SupplierCodeMatchWithRate optionSupplierCodeMatch = context.GetSupplierCodeMatch(optionSettings.SupplierId);
+                        if (optionSupplierCodeMatch != null)
+                        {
+                            var option = CreateOption(target, optionSupplierCodeMatch, optionSettings.Percentage);
+                            options.Add(option);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
+                if (allSuppliersCodeMatches != null)
+                {
+                    foreach (var supplierCodeMatch in allSuppliersCodeMatches)
+                    {
+                        var option = CreateOption(target, supplierCodeMatch, null);
+                        options.Add(option);
+                    }
+                }
+            }
+            return options;
+        }
 
         private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, Decimal? percentage)
         {
