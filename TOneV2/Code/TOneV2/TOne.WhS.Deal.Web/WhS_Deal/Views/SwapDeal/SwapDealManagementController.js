@@ -2,10 +2,12 @@
 
 	'use strict';
 
-	DealAnalysisManagementController.$inject = ['$scope', 'WhS_Deal_SwapDealService', 'UtilsService', 'VRNotificationService'];
+	DealAnalysisManagementController.$inject = ['$scope', 'WhS_Deal_SwapDealService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-	function DealAnalysisManagementController($scope, WhS_Deal_SwapDealService, UtilsService, VRNotificationService) {
+	function DealAnalysisManagementController($scope, WhS_Deal_SwapDealService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
+	    var carrierAccountSelectorAPI;
+	    var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 		var gridAPI;
 
 		defineScope();
@@ -13,20 +15,27 @@
 
 		function defineScope()
 		{
-			$scope.scopeModel = {};
+		    $scope.scopeModel = {};
 
-			$scope.scopeModel.search = function () {
-
+			$scope.scopeModel.onGridReady = function (api) {
+			    gridAPI = api;
+			    api.load({});
 			};
-
+			$scope.scopeModel.search = function () {
+			    return gridAPI.load(buildGridQuery());
+			};
+			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
+			    carrierAccountSelectorAPI = api;
+			    carrierAccountSelectorReadyDeferred.resolve();
+			};
 			$scope.scopeModel.analyze = function () {
 				var onSwapDealAnalyzed = function () { };
 				WhS_Deal_SwapDealService.analyzeSwapDeal(onSwapDealAnalyzed);
-			};
-
-			$scope.scopeModel.add = function () {
-          
-			    var onSwapDealAdded = function () { };
+			};			
+			$scope.scopeModel.add = function () {          
+			    var onSwapDealAdded = function (swapDealObj) {
+			        gridAPI.onSwapDealAdded(swapDealObj);
+			    };
 			    WhS_Deal_SwapDealService.addSwapDeal(onSwapDealAdded);
 			};
 		}
@@ -38,11 +47,25 @@
 
 		function loadAllControls()
 		{
-			UtilsService.waitMultipleAsyncOperations([]).catch(function (error) {
+		    UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector]).catch(function (error) {
 				VRNotificationService.notifyException(error, $scope);
 			}).finally(function () {
 				$scope.scopeModel.isLoading = false;
 			});
+		}
+
+		function loadCarrierAccountSelector() {
+		    var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+		    carrierAccountSelectorReadyDeferred.promise.then(function () {		        
+		        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, undefined, carrierAccountSelectorLoadDeferred);
+		    });
+		    return carrierAccountSelectorLoadDeferred.promise;
+		}
+		function buildGridQuery() {
+		    return {
+		        CarrierAccountIds: carrierAccountSelectorAPI.getSelectedIds(),
+		        Name: $scope.scopeModel.description
+		    };
 		}
 	}
 

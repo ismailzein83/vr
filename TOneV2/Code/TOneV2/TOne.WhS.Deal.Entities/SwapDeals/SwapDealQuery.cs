@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public class DealDefinitionQuery 
+    public class SwapDealQuery 
     {
         public string Name { get; set; }
+
+        public List<int> CarrierAccountIds { get; set; }
     }
 }

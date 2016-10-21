@@ -20,7 +20,6 @@
 			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/SwapDealAnalysis.html', parameters, settings);
 		}
 
-
 		function addSwapDeal(onSwapDealAdded) {
 		    var settings = {};
 
@@ -29,9 +28,24 @@
 		    };
 		    VRModalService.showModal(editorUrl, null, settings);
 		}
+
+		function editSwapDeal(dealId, onSwapDealUpdated) {
+		    var parameters = {
+		        dealId: dealId
+		    };
+
+		    var settings = {};
+
+		    settings.onScopeReady = function (modalScope) {
+		        modalScope.onSwapDealUpdated = onSwapDealUpdated;
+		    };
+
+		    VRModalService.showModal(editorUrl, parameters, settings);
+		}
 		return {
 		    analyzeSwapDeal: analyzeSwapDeal,
-		    addSwapDeal: addSwapDeal
+		    addSwapDeal: addSwapDeal,
+		    editSwapDeal: editSwapDeal
 		};
 	}
 

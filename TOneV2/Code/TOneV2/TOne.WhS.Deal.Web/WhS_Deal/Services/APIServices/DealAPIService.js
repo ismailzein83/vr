@@ -7,8 +7,8 @@
     function DealAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig, SecurityService) {
         var controllerName = 'DealDefinition';
 
-        function GetFilteredDeals(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredDeals'), input);
+        function GetFilteredSwapDeals(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredSwapDeals'), input);
         }
 
         function GetDeal(dealId) {
@@ -37,7 +37,7 @@
         }
 
         return ({
-            GetFilteredDeals: GetFilteredDeals,
+            GetFilteredSwapDeals: GetFilteredSwapDeals,
             GetDeal: GetDeal,
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,

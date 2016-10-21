@@ -29,8 +29,6 @@
             if (parameters != undefined && parameters != null) {
                 dealId = parameters.dealId;
             }
-               
-
             isEditMode = (dealId != undefined);
         }
 
@@ -54,14 +52,14 @@
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
-                        payload.InboundParts = dealEntity.Settings.InboundParts;
+                        payload.Inbounds = dealEntity.Settings.Inbounds;
                     
 
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
-                        payloadOutbound.OutboundParts = dealEntity.Settings.OutboundParts;
+                        payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealInboundAPI, payload, setLoader);
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealOutboundAPI, payloadOutbound, setLoader);
@@ -99,7 +97,7 @@
 
                     loadCarrierAccountSelector().then(function () {
                         loadAllControls().finally(function () {
-                            //dealEntity = undefined;
+                            dealEntity = undefined;
                         });
                     });
 
@@ -115,7 +113,7 @@
         }
 
         function getSwapDeal() {
-            return WhS_Deal_DealAPIService.GetSwapDeal(dealId).then(function (response) {
+            return WhS_Deal_DealAPIService.GetDeal(dealId).then(function (response) {
                 dealEntity = response;
             });
         }
@@ -142,10 +140,11 @@
                                 sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
-                                directivePayload.InboundParts = dealEntity.Settings.InboundParts;
+                                directivePayload.Inbounds = dealEntity.Settings.Inbounds; 
                             VRUIUtilsService.callDirectiveLoad(dealInboundAPI, directivePayload, loadSwapDealInboundPromiseDeferred);
                         });
                 }
+
             }
             else {
                 dealInboundReadyPromiseDeferred.promise
@@ -154,8 +153,7 @@
                             sellingNumberPlanId: null
                         }
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
-                            directivePayload.InboundParts = dealEntity.Settings.InboundParts;
-
+                            directivePayload.Inbounds = dealEntity.Settings.Inbounds;                      
                         VRUIUtilsService.callDirectiveLoad(dealInboundAPI, directivePayload, loadSwapDealInboundPromiseDeferred);
                     });
             }
@@ -178,7 +176,7 @@
                                 supplierId: carrierAccountInfo.SupplierId
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
-                                directivePayload.OutboundParts = dealEntity.Settings.OutboundParts;
+                                directivePayload.Outbounds = dealEntity.Settings.Outbounds;
 
                             VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, directivePayload, loadSwapDealOutboundPromiseDeferred);
                         });
@@ -191,7 +189,7 @@
                             supplierId: null
                         }
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
-                            directivePayload.OutboundParts = dealEntity.Settings.OutboundParts;
+                            directivePayload.Outbounds = dealEntity.Settings.Outbounds;
 
                         VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, directivePayload, loadSwapDealOutboundPromiseDeferred);
                     });
@@ -205,23 +203,21 @@
         function setTitle() {
             if (isEditMode) {
                 if (dealEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealEntity.Settings.Description, 'SwapDeal');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealEntity.Name, 'Swap Deal');
             }
             else
-                $scope.title = UtilsService.buildTitleForAddEditor('SwapDeal');
+                $scope.title = UtilsService.buildTitleForAddEditor('Swap Deal');
         }
 
         function loadStaticData() {
             if (dealEntity == undefined)
                 return;
-            $scope.scopeModel.description = dealEntity.Settings.Description;
-            $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
-            $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.ContractType, 'value');
-            $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.AgreementType, 'value');
+            $scope.scopeModel.description = dealEntity.Name;
+            //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
+            $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
+            $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
-            $scope.scopeModel.sellingParts = dealEntity.Settings.InboundParts;
-            $scope.scopeModel.buyingParts = dealEntity.Settings.OutboundParts;
             $scope.scopeModel.active = dealEntity.Settings.Active;
         }
 
@@ -277,11 +273,12 @@
                 Name: $scope.scopeModel.description,
                 Settings: {
                     $type: "TOne.WhS.Deal.Entities.SwapDealSettings, TOne.WhS.Deal.Entities",
+                    CarrierAccountId:carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
                     EndDate: $scope.scopeModel.endDate,
                     GracePeriod: $scope.scopeModel.gracePeriod,
-                    ContractType: $scope.scopeModel.selectedContractType.value,
-                    AgreementType: $scope.scopeModel.selectedAgreementType.value,
+                    DealContract: $scope.scopeModel.selectedContractType.value,
+                    DealType: $scope.scopeModel.selectedAgreementType.value,
                     Inbounds: dealInboundAPI.getData(),
                     Outbounds: dealOutboundAPI.getData()
                 }

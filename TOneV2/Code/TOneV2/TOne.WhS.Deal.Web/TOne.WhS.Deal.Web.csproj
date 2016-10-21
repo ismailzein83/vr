@@ -153,12 +153,14 @@
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealOutboundGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealInboundGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisInboundManagementTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisOutboundManagementTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-result.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-settings.js" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdeal-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealoutbound-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealinbound-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-inbound-management.js" />
