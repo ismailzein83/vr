@@ -41,7 +41,12 @@ namespace Vanrise.Analytic.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<AnalyticItemActionTemplate>(AnalyticItemActionTemplate.EXTENSION_TYPE);
-        } 
+        }
+
+        public IEnumerable<AnalyticDataProviderConfig> GetAnalyticDataProviderConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<AnalyticDataProviderConfig>(AnalyticDataProviderConfig.EXTENSION_TYPE);
+        }
     }
 }
- 

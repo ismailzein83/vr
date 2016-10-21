@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Analytic.Entities
@@ -41,6 +42,11 @@ namespace Vanrise.Analytic.Entities
         public abstract IAnalyticDataManager CreateDataManager(IAnalyticTableQueryContext queryContext);
     }
 
+    public class AnalyticDataProviderConfig : ExtensionConfiguration
+    {
+        public const string EXTENSION_TYPE = "VR_Analytic_AnalyticDataProviderSettings";
+        public string Editor { get; set; }
+    }
 
     public interface IAnalyticDataManager
     {

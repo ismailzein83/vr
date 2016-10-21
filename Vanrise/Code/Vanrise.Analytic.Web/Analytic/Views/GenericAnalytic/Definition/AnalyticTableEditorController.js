@@ -2,7 +2,7 @@
 
     "use strict";
 
-    AnalyticTableEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticTableAPIService'];
+    AnalyticTableEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticTableAPIService'];
 
     function AnalyticTableEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTableAPIService) {
 
@@ -14,6 +14,9 @@
 
         var requiredPermissionAPI;
         var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var analyticDataProviderSettingsDirectiveAPI;
+        var analyticDataProviderSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var connectionStringType;
         loadParameters();
@@ -36,8 +39,7 @@
                 ConnectionStringName: { value: 1, description: "Connection String Name" },
             }
 
-            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api)
-            {
+            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
             }
@@ -45,6 +47,10 @@
                 requiredPermissionAPI = api;
                 requiredPermissionReadyDeferred.resolve();
             }
+            $scope.onAnalyticDataProviderSettingsDirectiveReady = function (api) {
+                analyticDataProviderSettingsDirectiveAPI = api;
+                analyticDataProviderSettingsDirectiveReadyDeferred.resolve();
+            };
             $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
             $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
             $scope.scopeModel.showConnectionString = true;
@@ -89,9 +95,9 @@
             else {
                 loadAllControls();
             }
-           
+
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -107,10 +113,8 @@
                         $scope.title = UtilsService.buildTitleForAddEditor('Analytic Table Editor');
                 }
 
-                function loadStaticData()
-                {
-                    if (tableEntity != undefined)
-                    {
+                function loadStaticData() {
+                    if (tableEntity != undefined) {
                         $scope.scopeModel.name = tableEntity.Name;
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
                         $scope.scopeModel.tableName = tableEntity.Settings.TableName;
@@ -157,7 +161,7 @@
             requiredPermissionReadyDeferred.promise.then(function () {
                 var payload;
 
-                if (tableEntity != undefined && tableEntity.Settings != undefined && tableEntity.Settings.RequiredPermission!= null) {
+                if (tableEntity != undefined && tableEntity.Settings != undefined && tableEntity.Settings.RequiredPermission != null) {
                     payload = {
                         data: tableEntity.Settings.RequiredPermission
                     };
@@ -177,15 +181,16 @@
 
         function buildTableObjectFromScope() {
             var table = {
-                AnalyticTableId:tableId,
-                Name:  $scope.scopeModel.name ,
-                Settings:{
+                AnalyticTableId: tableId,
+                Name: $scope.scopeModel.name,
+                Settings: {
                     TableName: $scope.scopeModel.tableName,
                     TimeColumnName: $scope.scopeModel.timeColumnName,
-                    ConnectionStringName: $scope.scopeModel.showConnectionStringName? $scope.scopeModel.connectionStringName:undefined,
+                    ConnectionStringName: $scope.scopeModel.showConnectionStringName ? $scope.scopeModel.connectionStringName : undefined,
                     ConnectionString: $scope.scopeModel.showConnectionString ? $scope.scopeModel.connectionString : undefined,
                     DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
-                    RequiredPermission:requiredPermissionAPI.getData()
+                    RequiredPermission: requiredPermissionAPI.getData(),
+                    DataProvider: analyticDataProviderSettingsDirectiveAPI.getData()
                 }
             }
             return table;
@@ -232,6 +237,19 @@
 
         }
 
+        function loadAnalyticDataProviderSettingsDirective() {
+            var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            analyticDataProviderSettingsDirectiveReadyDeferred.promise.then(function () {
+                var settingsDirectivePayload;
+                if (tableEntity != undefined && tableEntity.Settings != undefined) {
+                    settingsDirectivePayload = { AnalyticDataProvider: tableEntity.Settings.DataProvider };
+                }
+                VRUIUtilsService.callDirectiveLoad(analyticDataProviderSettingsDirectiveAPI, settingsDirectivePayload, analyticDataProviderSettingsDirectiveReadyDeferred);
+            });
+
+            return analyticDataProviderSettingsDirectiveReadyDeferred.promise;
+        }
     }
 
     appControllers.controller('VR_Analytic_AnalyticTableEditorController', AnalyticTableEditorController);

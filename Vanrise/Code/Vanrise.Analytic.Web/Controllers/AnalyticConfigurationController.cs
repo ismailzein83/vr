@@ -51,6 +51,14 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetMeasureStyleRuleTemplateConfigs();
         }
+
+        [HttpGet]
+        [Route("GetAnalyticDataProviderConfigs")]
+        public IEnumerable<AnalyticDataProviderConfig> GetAnalyticDataProviderConfigs()
+        {
+            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
+            return manager.GetAnalyticDataProviderConfigs();
+        }
         
     }
 }

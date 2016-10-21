@@ -11,42 +11,44 @@
                 </vr-tab>
                 <vr-tab header="'Settings'">
 
+                    <vr-analytic-dataprovider-settings on-ready="onAnalyticDataProviderSettingsDirectiveReady" normal-col-num="6"></vr-analytic-dataprovider-settings>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.tableName" label="Table Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.timeColumnName" label="Time Column Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+
+                        <!--<vr-columns width="fullrow">
+        <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
+    </vr-columns>-->
 
 
+                        <vr-columns width="1/2row">
+                            <vr-select label="Connection Type" datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
+                                       datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" hideremoveicon>
+                        </vr-columns>
 
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="scopeModel.tableName" label="Table Name" isrequired="true"></vr-textbox>
-                    </vr-columns>
+                        <vr-columns width="fullrow" ng-show="scopeModel.showConnectionStringName">
+                            <vr-textbox value="scopeModel.connectionStringName" label="Connection String Name" isrequired="scopeModel.showConnectionStringName"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="fullrow" ng-show="scopeModel.showConnectionString">
+                            <vr-textarea value="scopeModel.connectionString" label="Connection String" isrequired="scopeModel.showConnectionString"></vr-textarea>
+                        </vr-columns>
 
-                    <vr-columns width="1/2row">
-                        <vr-textbox value="scopeModel.timeColumnName" label="Time Column Name" isrequired="true"></vr-textbox>
-                    </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-genericdata-datarecordtype-selector selectedvalues="scopeModel.selectedDataRecordType"
+                                                                    isrequired="true"
+                                                                    hideremoveicon
+                                                                    ismultipleselection
+                                                                    on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                                    label="Mapping Record Types"></vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                    </vr-row>
+                   
 
-                    <!--<vr-columns width="fullrow">
-                        <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
-                    </vr-columns>-->
-
-
-                    <vr-columns width="1/2row">
-                        <vr-select label="Connection Type" datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
-                                    datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" hideremoveicon>
-                    </vr-columns>
-
-                    <vr-columns width="2/3row" ng-show="scopeModel.showConnectionStringName">
-                        <vr-textbox value="scopeModel.connectionStringName" label="Connection String Name" isrequired="scopeModel.showConnectionStringName"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="2/3row" ng-show="scopeModel.showConnectionString">
-                        <vr-textarea value="scopeModel.connectionString" label="Connection String" isrequired="scopeModel.showConnectionString"></vr-textarea>
-                    </vr-columns>
-                  
-                    <vr-columns width="1/2row">
-                        <vr-genericdata-datarecordtype-selector selectedvalues="scopeModel.selectedDataRecordType"
-                                                                isrequired="true"
-                                                                hideremoveicon
-                                                                ismultipleselection
-                                                                on-ready="scopeModel.onDataRecordTypeSelectorReady"
-                                                                label="Mapping Record Types"></vr-genericdata-datarecordtype-selector>
-                    </vr-columns>
                 </vr-tab>
 
                 <vr-tab header="'Security'">

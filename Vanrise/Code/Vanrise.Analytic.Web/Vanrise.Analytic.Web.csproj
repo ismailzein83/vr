@@ -130,6 +130,8 @@
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-join-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />
+    <Content Include="Analytic\Directives\AnalyticDataProvider\Templates\AnalyticDataProviderSettings.html" />
+    <Content Include="Analytic\Directives\AnalyticDataProvider\vr-analytic-dataprovider-settings.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\AggregateEditorTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\DimensionEditorTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\JoinEditorTemplate.html" />
@@ -217,6 +219,10 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\RangeConditionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-compare.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-range.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\Templates\PostgresAnalyticDataProviderTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\Templates\SqlAnalyticDataProviderTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\vr-analytic-postgres-dataprovider.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\vr-analytic-sql-dataprovider.js" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\CountAggregateTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\DistinctCountAggregateTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\SumAggregateTemplate.html" />
