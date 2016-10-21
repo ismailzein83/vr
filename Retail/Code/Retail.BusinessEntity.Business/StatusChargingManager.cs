@@ -97,35 +97,19 @@ namespace Retail.BusinessEntity.Business
 
         public List<EntityStatusChargeInfo> GetStatusChargeInfos(int entityTypeId)
         {
-            var entityTypeTemp = (EntityType)entityTypeId;
-            if (entityTypeTemp == EntityType.Account)
-                return new List<EntityStatusChargeInfo>    
-                {
-                    new EntityStatusChargeInfo
-                    {
-                        StatusDefinitionId = new Guid("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B"),
-                        StatusName = "Active",
-                        HasInitialCharge = true,
-                        HasRecurringCharge = true
-                    },
-                    new EntityStatusChargeInfo
-                    {
-                        StatusDefinitionId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
-                        StatusName = "Suspended",
-                        HasRecurringCharge = true
-                    }
+            StatusDefinitionManager manager = new StatusDefinitionManager();
+            StatusDefinitionFilter filter = new StatusDefinitionFilter
+            {
+                EntityType = (EntityType)entityTypeId
             };
-            else
-                return new List<EntityStatusChargeInfo>         
-                {
-                    new EntityStatusChargeInfo
-                    {
-                        StatusDefinitionId = new Guid("DCF62E68-80F4-45D6-8099-5A64523F7EC9"),
-                        StatusName = "Active",
-                        HasInitialCharge = true,
-                        HasRecurringCharge = true
-                    }
-                };
+            var statusDefinitions = manager.GetFilteredStatusDefinitions(filter);
+            return statusDefinitions.Select(def => new EntityStatusChargeInfo
+            {
+                StatusDefinitionId = def.StatusDefinitionId,
+                StatusName = def.Name,
+                HasInitialCharge = def.Settings.HasInitialCharge,
+                HasRecurringCharge = def.Settings.HasRecurringCharge
+            }).ToList();
         }
 
         #region Private Classes

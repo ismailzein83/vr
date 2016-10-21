@@ -87,7 +87,7 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(StatusDefinitionFilter filter)
         {
             Func<StatusDefinition, bool> filterExpression = null;
-            if(filter != null)
+            if (filter != null)
             {
                 filterExpression = (item) =>
                 {
@@ -97,6 +97,20 @@ namespace Retail.BusinessEntity.Business
                 };
             }
             return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+        public IEnumerable<StatusDefinition> GetFilteredStatusDefinitions(StatusDefinitionFilter filter)
+        {
+            Func<StatusDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = item =>
+                {
+                    if (filter.EntityType == null || item.EntityType == filter.EntityType)
+                        return true;
+                    return false;
+                };
+            }
+            return GetCachedStatusDefinitions().FindAllRecords(filterExpression);
         }
         #endregion
 
