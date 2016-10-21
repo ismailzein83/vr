@@ -13,9 +13,10 @@
 
 
 
+
+
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ScheduleTaskState_TaskId]
-    ON [runtime].[ScheduleTaskState]([OldTaskId] ASC);
+
 
 
 
