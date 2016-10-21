@@ -156,7 +156,7 @@ namespace TOne.WhS.Routing.Business
             if (Filters != null)
             {
                 List<RouteOptionFilterSettings> optionFilters = Filters.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierId);
-                if(optionFilters!=null)
+                if (optionFilters != null)
                 {
                     foreach (var optionFilter in optionFilters)
                     {
@@ -174,13 +174,25 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
-            
+
             return false;
         }
 
         private void ApplyOptionsPercentage<T>(IEnumerable<T> options) where T : IRouteOptionPercentageTarget
         {
-            
+            if (options == null)
+                return;
+
+            decimal totalAssignedPercentage = options.Sum(itm => itm.Percentage.Value);
+            if (totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
+                return;
+
+            decimal unassignedPercentages = 100 - totalAssignedPercentage;
+
+            foreach (var option in options)
+            {
+                option.Percentage = decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage, 2);
+            }
         }
     }
 }

@@ -25,6 +25,9 @@ namespace TOne.WhS.Routing.Business
         #region Public Methods
         public override void Execute(IRouteOptionRuleExecutionContext context, RouteOptionRuleTarget target)
         {
+            if (context.RouteRule != null && context.RouteRule.CorrespondentType == CorrespondentType.Override)
+                return;
+
             MarketPrice tempMarketPrice;
 
             if (context.CustomerServiceIds == null)
