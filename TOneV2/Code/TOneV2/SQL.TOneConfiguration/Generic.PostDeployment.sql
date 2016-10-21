@@ -12,37 +12,39 @@ Post-Deployment Script Template
 --common.[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('DFA58374-4249-4526-AB1A-7786AAC6B91B','VR_GenericData_GenericBusinessEntity','Business Entity','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}'),
 ('3090A9AD-CAA3-410B-9AA0-867F4B74CCD2','VR_GenericData_RecordSearch','Record Search','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageSettingsEditor.html","EnableAdd":true}'),
 ('A3AD3B1D-B56A-49D0-BC25-0F1EF7DFB03D','VR_GenericData_GenericRule','Generic Rule','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),
-('9CF3C165-1921-4F83-990D-03B82A04AA5A','IfElseStep','IfElseStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-ifelsestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ifelsestep-preview"}'),
+
+('9CF3C165-1921-4F83-990D-03B82A04AA5A','IfElseStep','IfElseStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-ifelsestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ifelsestep-preview"}'),
 ('9C158FA5-8516-4AF7-AEDD-1BC69D026AFC','AddItemToArrayStep','AddItemToArrayStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-additemtoarraystep","StepPreviewUIControl":"vr-genericdata-datatransformation-additemtoarraystep-preview"}'),
 ('D7CE9698-2721-467E-9820-1ED44B446D0D','ForLoopStep','ForLoopStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-forloopstep","StepPreviewUIControl":"vr-genericdata-datatransformation-forloopstep-preview"}'),
 ('3FC597F0-F5CE-4B49-9AEA-24795C81FE80','TariffRule','TariffRule','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-tariffrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-tariffrulestep-preview"}'),
 ('A61D1F7A-A437-4966-B101-5178A0C07880','RateTypeRuleStep','RateTypeRuleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-ratetyperulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ratetyperulestep-preview"}'),
+('5D6BBC8B-A602-4A94-AE85-8A602CA26805','ExtraChargeRuleStep','ExtraChargeRuleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-extrachargerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-extrachargerulestep-preview"}'),
 ('C01EEEAF-7D51-4FCE-8842-5DB1A8D1B39A','LoadBEByIDStep','LoadBEByIDStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-loadbebyidstep","StepPreviewUIControl":"vr-genericdata-loadbebyidstep-preview"}'),
 ('3FB4B968-B4B1-4072-908F-E6F19EB87BE0','RateValueRuleStep','RateValueRuleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-ratevaluerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ratevaluerulestep-preview"}'),
 ('59B40C67-527F-40F8-BFE7-CE19D2101802','AssignValueruleStep','AssignValueruleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-assignvaluerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignvaluerulestep-preview"}'),
 ('60435713-B35E-4E38-A538-9A479061472E','Execute Transformation','Execute Transformation','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-executetransformationstep","StepPreviewUIControl":"vr-genericdata-datatransformation-executetransformationstep-preview"}'),
 ('CD71025C-136F-4157-8922-A56294030E46','NormalizationRuleStep','NormalizationRuleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-normalizationrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-normalizationrulestep-preview"}'),
 ('43932599-404B-4F18-9F5B-963915BF16DC','BELookupRuleStep','BELookupRuleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-belookuprulestep","StepPreviewUIControl":"vr-genericdata-belookuprulestep-preview"}'),
-('5D6BBC8B-A602-4A94-AE85-8A602CA26805','ExtraChargeRuleStep','ExtraChargeRuleStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-extrachargerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-extrachargerulestep-preview"}'),
 ('F02AC0B5-79A4-4343-8081-85CD3787B88C','InitializeRecordStep','InitializeRecordStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-initializerecordstep","StepPreviewUIControl":"vr-genericdata-datatransformation-initializerecordstep-preview"}'),
 ('00E8E50C-017E-44ED-96A9-6D4291A9C4B6','AssignFieldStep','AssignFieldStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"vr-genericdata-datatransformation-assignfieldstep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignfieldstep-preview"}'),
-('75AEF329-27BD-4108-B617-F5CC05FF2AA3','Number','Number','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-number","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-number-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-number-rulefiltereditor"}'),
-('EABC41A9-E332-4120-AC85-F0B7E53C0D0D','Choices','Choices','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),
+
+
+
 ('F663BF74-99DB-4746-8CBC-E74198E1786C','VR_GenericData_VRObjectTypes_DataRecordField','Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator','{"Editor":"vr_genericdata_datarecordobjectfield"}'),
 ('C47176FB-32EB-430C-B92D-D34DFADCDDF9','Time Interval','Time Interval','VR_GenericData_SummaryBatchIntervalSettings','{"Editor":"vr-genericdata-summarytransformation-timeinterval-selector"}'),
-('7FD67C90-3FF6-4E5D-9052-BB0A87AB371E','VR_ExtraChargeRule','Extra Charge Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-extracharge", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRuleManager, Vanrise.GenericData.Pricing"}'),
-('5969790E-1BD4-45E4-BE39-B8D7FA6A1842','VR_RateTypeRule','Rate Type Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratetype", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateTypeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateTypeRuleManager, Vanrise.GenericData.Pricing"}'),
+
 ('2AEEC2DE-EC44-4698-AAEF-8E9DBF669D1E','SQL','SQL','VR_GenericData_DataStoreConfig',' {"Editor":"vr-genericdata-datastoresetting-sql","DataRecordSettingsEditor":"vr-genericdata-datarecordstoragesettings-sql"}'),
-('3F29315E-B542-43B8-9618-7DE216CD9653','Text','Text','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-text","RuntimeEditor":"vr-genericdata-fieldtype-text-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-text-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-text-rulefiltereditor"}'),
-('2E16C3D4-837B-4433-B80E-7C02F6D71467','Business Entity','Business Entity','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),
-('AE91755C-F573-4ADD-8DBA-7733193384AF','VR_MappingRule','Mapping Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-mapping","RuntimeEditor":"vr-genericdata-genericrulesettings-mapping-runtimeeditor","RuleTypeFQTN":"Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities","RuleManagerFQTN":"Vanrise.GenericData.Transformation.MappingRuleManager, Vanrise.GenericData.Transformation","FilterEditor":"vr-genericdata-genericrulesettings-mapping-filtereditor"}'),
-('A77FAD19-D044-40D8-9D04-6362B79B177B','Boolean','Boolean','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-boolean","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor"}'),
-('D2BA0E63-A47D-4F41-93C9-2DF105EDC26C','VR_NormalizationRule','Normalization Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-normalizenumbersettings", "RuleTypeFQTN":"Vanrise.GenericData.Normalization.NormalizationRule, Vanrise.GenericData.Normalization", "RuleManagerFQTN":"Vanrise.GenericData.Normalization.NormalizationRuleManager, Vanrise.GenericData.Normalization"}'),
-('FC76233F-5F8F-4B5E-BF10-1E77EA24FD35','VR_RateValueRule','Rate Value Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratevalue", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateValueRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateValueRuleManager, Vanrise.GenericData.Pricing"}'),
+
 ('BBC57155-0412-4371-83E5-1917A8BEA468','VR_GenericData_VRObjectTypes_DataRecordType','Data Record','VR_Common_ObjectType','{"Editor":"vr_genericdata_datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}'),
 ('FC4B69F0-D577-4319-8D10-ED8F95E07441','VR_Generic_DataRecordFieldFormula_ParentBusinessEntity','Parent Business Entity','VR_Generic_DataRecordFieldFormula','{"Editor":"vr-genericdata-datarecordtypefields-formula-parentbusinessentity"}'),
-('B8712417-83AB-4D4B-9EE1-109D20CEB909','DateTime','DateTime','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-datetime","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),
-('B2061C48-A2C9-4494-A707-0E84A195B5E5','VR_TariffRule','Tariff Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
+
+
+('FC76233F-5F8F-4B5E-BF10-1E77EA24FD35','VR_RateValueRule','Rate Value Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratevalue", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateValueRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateValueRuleManager, Vanrise.GenericData.Pricing"}'),
+('7FD67C90-3FF6-4E5D-9052-BB0A87AB371E','VR_ExtraChargeRule','Extra Charge Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-extracharge", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRuleManager, Vanrise.GenericData.Pricing"}'),
+('AE91755C-F573-4ADD-8DBA-7733193384AF','VR_MappingRule','Mapping Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-mapping","RuntimeEditor":"vr-genericdata-genericrulesettings-mapping-runtimeeditor","RuleTypeFQTN":"Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities","RuleManagerFQTN":"Vanrise.GenericData.Transformation.MappingRuleManager, Vanrise.GenericData.Transformation","FilterEditor":"vr-genericdata-genericrulesettings-mapping-filtereditor"}'),
+('D2BA0E63-A47D-4F41-93C9-2DF105EDC26C','VR_NormalizationRule','Normalization Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-normalizenumbersettings", "RuleTypeFQTN":"Vanrise.GenericData.Normalization.NormalizationRule, Vanrise.GenericData.Normalization", "RuleManagerFQTN":"Vanrise.GenericData.Normalization.NormalizationRuleManager, Vanrise.GenericData.Normalization"}'),
+('5969790E-1BD4-45E4-BE39-B8D7FA6A1842','VR_RateTypeRule','Rate Type Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratetype", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateTypeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateTypeRuleManager, Vanrise.GenericData.Pricing"}'),
+('B2061C48-A2C9-4494-A707-0E84A195B5E5','VR_TariffRule','Tariff Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}'),('EBB2BF06-4FD8-4942-8DF4-8892A22AA6FD','VR_BalanceAlert','Balance Alert Rule','VR_GenericData_GenericRuleTypeConfig','{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-accountbalance-balancealertrulesettings", "RuleTypeFQTN":"Vanrise.AccountBalance.Entities.BalanceAlertRule, Vanrise.AccountBalance.Entities", "RuleManagerFQTN":" Vanrise.AccountBalance.Business.BalanceAlertRuleManager, Vanrise.AccountBalance.Business"}'),('B8712417-83AB-4D4B-9EE1-109D20CEB909','DateTime','DateTime','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-datetime","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),('3F29315E-B542-43B8-9618-7DE216CD9653','Text','Text','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-text","RuntimeEditor":"vr-genericdata-fieldtype-text-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-text-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-text-rulefiltereditor"}'),('75AEF329-27BD-4108-B617-F5CC05FF2AA3','Number','Number','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-number","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-number-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-number-rulefiltereditor"}'),('EABC41A9-E332-4120-AC85-F0B7E53C0D0D','Choices','Choices','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),('A77FAD19-D044-40D8-9D04-6362B79B177B','Boolean','Boolean','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-boolean","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor"}'),('2E16C3D4-837B-4433-B80E-7C02F6D71467','Business Entity','Business Entity','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),('82E04A93-5A3F-4C32-80A4-08E1DAFCF305','Array','Array','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
 --[sec].[Module]---------------------------301 to 400---------------------------------------------------------
 begin
@@ -198,34 +200,7 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
---[genericdata].[GenericRuleTypeConfig]-------------------------------------------------------------
-begin
-set nocount on;
-set identity_insert [genericdata].[GenericRuleTypeConfig] on;
-;with cte_data([ID],[Name],[Title],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'VR_MappingRule','Mapping Rule','{"GenericRuleTypeConfigId":"1","Name":"GenericRuleMapping","Title":"Mapping","Editor":"vr-genericdata-genericruledefinitionsettings-mapping","RuntimeEditor":"vr-genericdata-genericrulesettings-mapping-runtimeeditor","RuleTypeFQTN":"Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities","RuleManagerFQTN":"Vanrise.GenericData.Transformation.MappingRuleManager, Vanrise.GenericData.Transformation","FilterEditor":"vr-genericdata-genericrulesettings-mapping-filtereditor"}'),
-(2,'VR_NormalizationRule','Normalization Rule','{"GenericRuleTypeConfigId":"2","Name":"VR_NormalizationRule","Title":"Normalization Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-normalizenumbersettings", "RuleTypeFQTN":"Vanrise.GenericData.Normalization.NormalizationRule, Vanrise.GenericData.Normalization", "RuleManagerFQTN":"Vanrise.GenericData.Normalization.NormalizationRuleManager, Vanrise.GenericData.Normalization"}'),
-(3,'VR_RateTypeRule','Rate Type Rule','{"GenericRuleTypeConfigId":"3","Name":"VR_RateTypeRule","Title":"Rate Type Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratetype", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateTypeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateTypeRuleManager, Vanrise.GenericData.Pricing"}'),
-(4,'VR_TariffRule','Tariff Rule','{"GenericRuleTypeConfigId":"4","Name":"VR_TariffRule","Title":"Tariff Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}'),
-(5,'VR_ExtraChargeRule','Extra Charge Rule','{"GenericRuleTypeConfigId":"5","Name":"VR_ExtraChargeRule","Title":"Extra Charge Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-extracharge", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.ExtraChargeRuleManager, Vanrise.GenericData.Pricing"}'),
-(6,'VR_RateValueRule','Rate Value Rule','{"GenericRuleTypeConfigId":"6","Name":"VR_RateValueRule","Title":"Rate Value Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-rules-pricingrulesettings-ratevalue", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateValueRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateValueRuleManager, Vanrise.GenericData.Pricing"}'),
-(8,'VR_BalanceAlert','Balance Alert Rule','{"GenericRuleTypeConfigId":"8","Name":"VR_BalanceAlert","Title":"Balance Alert Rule","Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-accountbalance-balancealertrulesettings", "RuleTypeFQTN":"Vanrise.AccountBalance.Entities.BalanceAlertRule, Vanrise.AccountBalance.Entities", "RuleManagerFQTN":" Vanrise.AccountBalance.Business.BalanceAlertRuleManager, Vanrise.AccountBalance.Business"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Details]))
-merge	[genericdata].[GenericRuleTypeConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name], [Title] = s.[Title],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Title],[Details])
-	values(s.[ID],s.[Name],[Title],s.[Details]);
-set identity_insert [genericdata].[GenericRuleTypeConfig] off;
-----------------------------------------------------------------------------------------------------
-end
+
 
 --[genericdata].[ExpressionBuilderConfig]-----------------------------------------------------------
 begin
@@ -247,92 +222,6 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[ExpressionBuilderConfig] off;
-----------------------------------------------------------------------------------------------------
-end
-
---[genericdata].[DataTransformationStepConfig]------------------------------------------------------
-begin
-set nocount on;
-set identity_insert [genericdata].[DataTransformationStepConfig] on;
-;with cte_data([ID],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'AssignFieldStep','{"DataTransformationStepConfigId":"1","Name":"AssignFieldStep","Title":"Assign Value","Editor":"vr-genericdata-datatransformation-assignfieldstep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignfieldstep-preview"}'),
-(2,'AssignValueruleStep','{"DataTransformationStepConfigId":"2","Name":"AssignValueruleStep","Title":"Assign Value using Rule","Editor":"vr-genericdata-datatransformation-assignvaluerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignvaluerulestep-preview"}'),
-(3,'NormalizationRuleStep','{"DataTransformationStepConfigId":"3","Name":"NormalizationRuleStep","Title":"Normalization Rule","Editor":"vr-genericdata-datatransformation-normalizationrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-normalizationrulestep-preview"}'),
-(4,'RateValueRuleStep','{"DataTransformationStepConfigId":"4","Name":"RateValueRuleStep","Title":"Rate Value Rule","Editor":"vr-genericdata-datatransformation-ratevaluerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ratevaluerulestep-preview"}'),
-(5,'RateTypeRuleStep','{"DataTransformationStepConfigId":"5","Name":"RateTypeRuleStep","Title":"Rate Type Rule","Editor":"vr-genericdata-datatransformation-ratetyperulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ratetyperulestep-preview"}'),
-(6,'ForLoopStep','{"DataTransformationStepConfigId":"6","Name":"ForLoopStep","Title":"For Loop","Editor":"vr-genericdata-datatransformation-forloopstep","StepPreviewUIControl":"vr-genericdata-datatransformation-forloopstep-preview"}'),
-(7,'InitializeRecordStep','{"DataTransformationStepConfigId":"7","Name":"InitializeRecordStep","Title":"Initialize Record","Editor":"vr-genericdata-datatransformation-initializerecordstep","StepPreviewUIControl":"vr-genericdata-datatransformation-initializerecordstep-preview"}'),
-(8,'AddItemToArrayStep','{"DataTransformationStepConfigId":"8","Name":"AddItemToArrayStep","Title":"Add Item To Array","Editor":"vr-genericdata-datatransformation-additemtoarraystep","StepPreviewUIControl":"vr-genericdata-datatransformation-additemtoarraystep-preview"}'),
-(9,'IfElseStep','{"DataTransformationStepConfigId":"9","Name":"IfElseStep","Title":"If Else","Editor":"vr-genericdata-datatransformation-ifelsestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ifelsestep-preview"}'),
-(10,'ExtraChargeRuleStep','{"DataTransformationStepConfigId":"10","Name":"ExtraChargeRuleStep","Title":"Extra Charge Rule","Editor":"vr-genericdata-datatransformation-extrachargerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-extrachargerulestep-preview"}'),
-(11,'TariffRule','{"DataTransformationStepConfigId":"11","Name":"TariffRule","Title":"Tariff Rule","Editor":"vr-genericdata-datatransformation-tariffrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-tariffrulestep-preview"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
-merge	[genericdata].[DataTransformationStepConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
-set identity_insert [genericdata].[DataTransformationStepConfig] off;
-----------------------------------------------------------------------------------------------------
-end
-
---[genericdata].[DataStoreConfig]-------------------------------------------------------------------
-begin
-
-set nocount on;
-set identity_insert [genericdata].[DataStoreConfig] on;
-;with cte_data([ID],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'SQL',' {"DataStoreConfigId":1,"Name":"SQL","Title":"SQL","Editor":"vr-genericdata-datastoresetting-sql","DataRecordSettingsEditor":"vr-genericdata-datarecordstoragesettings-sql"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
-merge	[genericdata].[DataStoreConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
-set identity_insert [genericdata].[DataStoreConfig] off;
-----------------------------------------------------------------------------------------------------
-end
-
---[genericdata].[DataRecordFieldTypeConfig]---------------------------------------------------------
-begin
-set nocount on;
-set identity_insert [genericdata].[DataRecordFieldTypeConfig] on;
-;with cte_data([ID],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Text','{"DataRecordFieldTypeConfigId":"1","Name":"Text","Title":"Text","Editor":"vr-genericdata-fieldtype-text","RuntimeEditor":"vr-genericdata-fieldtype-text-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-text-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-text-rulefiltereditor"}'),
-(2,'Number','{"DataRecordFieldTypeConfigId":"2","Name":"Number","Title":"Number","Editor":"vr-genericdata-fieldtype-number","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-number-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-number-rulefiltereditor"}'),
-(3,'DateTime','{"DataRecordFieldTypeConfigId":"3","Name":"DateTime","Title":"DateTime","Editor":"vr-genericdata-fieldtype-datetime","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),
-(6,'Choices','{"DataRecordFieldTypeConfigId":"6","Name":"Choices","Title":"Choices","Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),
-(7,'Boolean','{"DataRecordFieldTypeConfigId":"7","Name":"Boolean","Title":"Boolean","Editor":"vr-genericdata-fieldtype-boolean","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor"}'),
-(9,'Business Entity','{"DataRecordFieldTypeConfigId":"9","Name":"Business Entity","Title":"Business Entity","Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),
-(10,'Array','{"DataRecordFieldTypeConfigId":"10","Name":"Array","Title":"Array","Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
-merge	[genericdata].[DataRecordFieldTypeConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
-set identity_insert [genericdata].[DataRecordFieldTypeConfig] off;
 ----------------------------------------------------------------------------------------------------
 end
 
@@ -366,41 +255,5 @@ end
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 begin
 set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('DF5CDC08-DDF1-4D4E-B1F6-D17B3833452F',16,'VR_Common_Country','Country','{"SelectorUIControl":"vr-common-country-selector","ManagerFQTN":"Vanrise.Common.Business.CountryManager,Vanrise.Common.Business", "IdType": "System.Int32"}'),('E522907C-AEBD-48B6-82F4-FE55238942F2',20,'VR_Integration_DataSource','Data Source','{"SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Int32"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Settings])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Settings]);
-----------------------------------------------------------------------------------------------------
-end
-
---[genericdata].[DataTransformationStepConfig]----------------21-500--------------------------------
-begin
-set nocount on;
-set identity_insert [genericdata].[DataTransformationStepConfig] on;
-;with cte_data([ID],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'AssignFieldStep','{"DataTransformationStepConfigId":"1","Name":"AssignFieldStep","Title":"Assign Value","Editor":"vr-genericdata-datatransformation-assignfieldstep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignfieldstep-preview"}'),
-(2,'AssignValueruleStep','{"DataTransformationStepConfigId":"2","Name":"AssignValueruleStep","Title":"Assign Value using Rule","Editor":"vr-genericdata-datatransformation-assignvaluerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignvaluerulestep-preview"}'),
-(3,'NormalizationRuleStep','{"DataTransformationStepConfigId":"3","Name":"NormalizationRuleStep","Title":"Normalization Rule","Editor":"vr-genericdata-datatransformation-normalizationrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-normalizationrulestep-preview"}'),
-(4,'RateValueRuleStep','{"DataTransformationStepConfigId":"4","Name":"RateValueRuleStep","Title":"Rate Value Rule","Editor":"vr-genericdata-datatransformation-ratevaluerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ratevaluerulestep-preview"}'),
-(5,'RateTypeRuleStep','{"DataTransformationStepConfigId":"5","Name":"RateTypeRuleStep","Title":"Rate Type Rule","Editor":"vr-genericdata-datatransformation-ratetyperulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ratetyperulestep-preview"}'),
-(6,'ForLoopStep','{"DataTransformationStepConfigId":"6","Name":"ForLoopStep","Title":"For Loop","Editor":"vr-genericdata-datatransformation-forloopstep","StepPreviewUIControl":"vr-genericdata-datatransformation-forloopstep-preview"}'),
-(7,'InitializeRecordStep','{"DataTransformationStepConfigId":"7","Name":"InitializeRecordStep","Title":"Initialize Record","Editor":"vr-genericdata-datatransformation-initializerecordstep","StepPreviewUIControl":"vr-genericdata-datatransformation-initializerecordstep-preview"}'),
-(8,'AddItemToArrayStep','{"DataTransformationStepConfigId":"8","Name":"AddItemToArrayStep","Title":"Add Item To Array","Editor":"vr-genericdata-datatransformation-additemtoarraystep","StepPreviewUIControl":"vr-genericdata-datatransformation-additemtoarraystep-preview"}'),
-(9,'IfElseStep','{"DataTransformationStepConfigId":"9","Name":"IfElseStep","Title":"If Else","Editor":"vr-genericdata-datatransformation-ifelsestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ifelsestep-preview"}'),
-(10,'ExtraChargeRuleStep','{"DataTransformationStepConfigId":"10","Name":"ExtraChargeRuleStep","Title":"Extra Charge Rule","Editor":"vr-genericdata-datatransformation-extrachargerulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-extrachargerulestep-preview"}'),
-(11,'TariffRule','{"DataTransformationStepConfigId":"11","Name":"TariffRule","Title":"Tariff Rule","Editor":"vr-genericdata-datatransformation-tariffrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-tariffrulestep-preview"}'),
-(17,'Execute Transformation','{"DataTransformationStepConfigId":"17","Name":"ExecuteTransformation","Title":"Execute Transformation","Editor":"vr-genericdata-datatransformation-executetransformationstep","StepPreviewUIControl":"vr-genericdata-datatransformation-executetransformationstep-preview"}'),
-(19,'BELookupRuleStep','{"DataTransformationStepConfigId":"19","Name":"BELookupRuleStep","Title":"BE Lookup Rule Step","Editor":"vr-genericdata-belookuprulestep","StepPreviewUIControl":"vr-genericdata-belookuprulestep-preview"}'),
-(20,'LoadBEByIDStep','{"DataTransformationStepConfigId":"20","Name":"LoadBEByIDStep","Title":"Load BE By ID Step","Editor":"vr-genericdata-loadbebyidstep","StepPreviewUIControl":"vr-genericdata-loadbebyidstep-preview"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
-merge	[genericdata].[DataTransformationStepConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
-set identity_insert [genericdata].[DataTransformationStepConfig] off;
 ----------------------------------------------------------------------------------------------------
 end
