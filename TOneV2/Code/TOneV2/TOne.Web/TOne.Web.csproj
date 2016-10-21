@@ -138,6 +138,9 @@
     <Reference Include="Vanrise.Analytic.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.Data.Postgres">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
     </Reference>
