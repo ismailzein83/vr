@@ -28,7 +28,7 @@ namespace Vanrise.Analytic.Business
                 string[] measureProperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
-            
+
             return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
         }
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
@@ -425,7 +425,7 @@ namespace Vanrise.Analytic.Business
 
         private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>
         {
-            
+
             public AnalyticRecordRequestHandler()
             {
             }
@@ -440,8 +440,9 @@ namespace Vanrise.Analytic.Business
                 var query = input.Query;
                 var queryContext = new AnalyticTableQueryContext(query);
                 var dataProvider = queryContext.GetTable().Settings.DataProvider;
-                if(dataProvider == null)
-                    dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
+                if (dataProvider == null)
+                    dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.Postgres.PostgresAnalyticDataProvider, Vanrise.Analytic.Data.Postgres")) as AnalyticDataProvider;
+                //dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
                 var dataManager = dataProvider.CreateDataManager(queryContext);
                 HashSet<string> includeDBDimensions;
                 var dbRecords = dataManager.GetAnalyticRecords(input, out includeDBDimensions);

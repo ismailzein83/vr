@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.3.1.8\lib\net45\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetMeasureExpressionContext.cs" />
     <Compile Include="PostgresAnalyticDataManager.cs" />
     <Compile Include="PostgresAnalyticDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +60,10 @@
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.Postgres\Vanrise.Data.Postgres.csproj">
+      <Project>{1d156372-ed9e-4d47-b81e-63f34c44858b}</Project>
+      <Name>Vanrise.Data.Postgres</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
@@ -63,6 +71,18 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj">
+      <Project>{00bce586-bffb-4679-92b7-9b65988fe346}</Project>
+      <Name>Vanrise.GenericData.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
+      <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>
+      <Name>Vanrise.GenericData.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
