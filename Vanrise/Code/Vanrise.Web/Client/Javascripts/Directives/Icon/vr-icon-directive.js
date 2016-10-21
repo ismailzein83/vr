@@ -71,7 +71,7 @@ app.directive('vrIcon', [function ($compile) {
                 template += '<div style="text-align: left;' + containerstyle + '"><img style="width:20px;height:20px" title="' + ctrl.tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
         }
         else
-            template += '<div style="text-align: left;' + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '"  /></div>'
+            template += '<div style="text-align: left;' + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '" title="' + ctrl.tooltip + '" /></div>'
 
         return template;
     }

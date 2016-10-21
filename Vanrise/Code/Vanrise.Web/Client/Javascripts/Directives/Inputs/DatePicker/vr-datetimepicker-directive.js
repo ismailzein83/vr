@@ -68,7 +68,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             }
             divDatePicker.datetimepicker({
                 format: format,
-                showClose: true
+                showClose: true,
+                useCurrent: false,
+                allowInputToggle: $attrs.disablefocus == undefined 
             });
             divDatePicker
                 .on('dp.show', function (e) {
@@ -202,10 +204,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
 
             }
 
-            ctrl.setDefaultDate = function () {
-                if (ctrl.value == null)
-                    divDatePicker.data("DateTimePicker").date(new Date());
-            }
+            //ctrl.setDefaultDate = function () {
+            //    if (ctrl.value == null )
+            //        divDatePicker.data("DateTimePicker").date(new Date());
+            //}
 
 
             if ($attrs.hint != undefined)
@@ -240,7 +242,6 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     return;
                 var date;
                 if ($attrs.type == "time") {
-                    console.log("her")
                     var initialDate = new Date();
                     if (ctrl.value.Hour == undefined)
                         ctrl.value.Hour = 0;
