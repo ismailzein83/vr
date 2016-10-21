@@ -208,8 +208,17 @@
                 for (var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++) {
                     var item = carrierProfileEntity.Settings.Contacts[y];
                     var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
-                    if (matchedItem != null)
-                        matchedItem.description = item.Description;
+
+                    if (matchedItem != null) {
+                        if (matchedItem.inputetype == 'text')
+                            matchedItem.description = item.Description;
+                        else {
+                            if (item.Description != null && item.Description != "") {
+                                matchedItem.description = item.Description;
+                                matchedItem.description = item.Description.split(";");
+                            }
+                        }   
+                    }
                 }
         }
 
@@ -322,8 +331,15 @@
                 obj.Settings.Contacts = [];
                 for (var i = 0; i < $scope.scopeModal.contacts.length; i++) {
                     var item = $scope.scopeModal.contacts[i];
-                    if (item.description != undefined)
-                        obj.Settings.Contacts.push({ Type: item.value, Description: item.description })
+                    
+                    if (item.description != undefined) {
+                        if (item.inputetype == 'email') {
+                            var des = item.description.join(";");
+                            obj.Settings.Contacts.push({ Type: item.value, Description: des });
+                        }
+                        else
+                            obj.Settings.Contacts.push({ Type: item.value, Description: item.description });
+                    }
                 };
             }
 

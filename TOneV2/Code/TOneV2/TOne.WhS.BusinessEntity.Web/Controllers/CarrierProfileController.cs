@@ -9,7 +9,8 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
-     [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierProfile")]
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierProfile")]
     public class WhSBE_CarrierProfileController : BaseAPIController
     {
         [HttpPost]

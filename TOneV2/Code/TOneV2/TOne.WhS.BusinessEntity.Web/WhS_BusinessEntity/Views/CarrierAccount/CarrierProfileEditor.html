@@ -91,7 +91,8 @@
                     <vr-row>
                         <vr-columns width="1/2row" ng-repeat="c in scopeModal.contacts">
                             <vr-label>{{c.label}}</vr-label>
-                            <vr-textbox value="c.description" type="c.inputetype"></vr-textbox>
+                            <vr-textbox value="c.description" ng-if="c.inputetype == 'text'" type="c.inputetype"></vr-textbox>
+                            <vr-textbox-multiple value="c.description" ng-if="c.inputetype == 'email'" datatype="c.inputetype"></vr-textbox-multiple>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

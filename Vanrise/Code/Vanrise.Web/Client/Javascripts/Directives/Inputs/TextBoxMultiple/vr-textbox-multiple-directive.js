@@ -67,7 +67,8 @@
                     pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
 
-                        ctrl.value = [];
+                        if (ctrl.value == undefined)
+                            ctrl.value = [];
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
@@ -122,8 +123,8 @@
                         }
                         ctrl.addNewValue = function () {
                             if (!IsInvalide(ctrl.valuetext)) {
-                                    ctrl.value.push(ctrl.valuetext);
-                                    ctrl.valuetext = null;
+                                ctrl.value.push(ctrl.valuetext);
+                                ctrl.valuetext = null;
                             }
                            
                         }
@@ -141,7 +142,7 @@
                         }
                         ctrl.getLabelText = function () {
                             if (ctrl.value == 0) return "Select";
-                            else return ctrl.value.join(";")
+                            else if (ctrl.value != undefined) return ctrl.value.join(";");
                         }
                         ctrl.adjustTooltipPosition = function (e) {
                             setTimeout(function() {
