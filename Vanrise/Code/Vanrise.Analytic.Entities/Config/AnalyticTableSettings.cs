@@ -30,5 +30,20 @@ namespace Vanrise.Analytic.Entities
         public List<Guid> DataRecordTypeIds { get; set; }
 
         public RequiredPermissionSettings RequiredPermission { get; set; }
+
+        public AnalyticDataProvider DataProvider { get; set; }
+    }
+
+    public abstract class AnalyticDataProvider
+    {
+        public abstract Guid ConfigId { get; }
+
+        public abstract IAnalyticDataManager CreateDataManager(IAnalyticTableQueryContext queryContext);
+    }
+
+
+    public interface IAnalyticDataManager
+    {
+        IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions);
     }
 }

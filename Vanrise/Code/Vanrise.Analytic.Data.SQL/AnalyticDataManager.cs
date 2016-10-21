@@ -13,7 +13,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Data.SQL
 {
-    public class AnalyticDataManager : BaseSQLDataManager, IAnalyticDataManager
+    public class AnalyticDataManager : BaseSQLDataManager, Entities.IAnalyticDataManager
     {
         #region Public Methods
         public AnalyticDataManager()

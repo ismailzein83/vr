@@ -437,13 +437,14 @@ namespace Vanrise.Analytic.Business
             AnalyticRecord _summaryRecord;
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
-                HashSet<string> includeDBDimensions;
-                IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
-                dataManager.AnalyticTableQueryContext = new AnalyticTableQueryContext(input.Query);
-                var dbRecords = dataManager.GetAnalyticRecords(input, out includeDBDimensions);
                 var query = input.Query;
-
-
+                var queryContext = new AnalyticTableQueryContext(query);
+                var dataProvider = queryContext.GetTable().Settings.DataProvider;
+                if(dataProvider == null)
+                    dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
+                var dataManager = dataProvider.CreateDataManager(queryContext);
+                HashSet<string> includeDBDimensions;
+                var dbRecords = dataManager.GetAnalyticRecords(input, out includeDBDimensions);
 
                 if (dbRecords != null)
                     return (new AnalyticManager()).ProcessSQLRecords(new AnalyticTableQueryContext(query), query.DimensionFields, query.ParentDimensions, query.MeasureFields, query.MeasureStyleRules, query.Filters, query.FilterGroup,
