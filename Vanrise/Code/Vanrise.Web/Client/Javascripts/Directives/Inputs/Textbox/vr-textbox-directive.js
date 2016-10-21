@@ -215,9 +215,12 @@
                 if (attrs.tonextinput != undefined) {
                     keypressclass = 'next-input';
                 }
+                var format = "";
+                if (attrs.type === TextboxTypeEnum.Number.name)
+                    format = 'format="number"';
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<vr-validator validate="ctrl.validate()" >'
-                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput" placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="ctrl.onKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)">'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput" '+format+' placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="ctrl.onKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)">'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
@@ -242,5 +245,21 @@
 
 })(app);
 
+app.directive('format', ['$filter', function ($filter) {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            ctrl.$formatters.unshift(function (a) {
+                return $filter(attrs.format)(ctrl.$modelValue)
+            });
+            ctrl.$parsers.unshift(function (viewValue) {
+                var plainNumber = viewValue.replace(/[^\d|\-+|\.+]/g, '');
+                elem.val($filter(attrs.format)(plainNumber));
+                return plainNumber;
+            });
+        }
+    };
+}]);
 
 
