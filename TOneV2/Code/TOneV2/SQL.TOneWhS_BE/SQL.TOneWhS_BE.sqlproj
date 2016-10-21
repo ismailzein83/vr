@@ -101,6 +101,7 @@
     <Folder Include="VR_Invoice\User Defined Types\" />
     <Folder Include="TOneWhS_Deal\" />
     <Folder Include="TOneWhS_Deal\Tables\" />
+    <Folder Include="TOneWhS_Deal\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -421,5 +422,7 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierOtherRate_GetFiltered.sql" />
     <Build Include="Security\TOneWhS_Deal.sql" />
     <Build Include="TOneWhS_BE\Tables\StateBackup.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_Insert.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_GetAll.sql" />
   </ItemGroup>
 </Project>
