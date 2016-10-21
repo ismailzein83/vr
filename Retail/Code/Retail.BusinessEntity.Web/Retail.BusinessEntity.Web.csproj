@@ -237,6 +237,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-otherinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeEntitiesInfoPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeOtherInfoPartRuntimeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\WeeklyPeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-trafficdirection-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfo-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfoitem-grid.js" />
@@ -367,10 +371,6 @@
     <Content Include="Retail_BusinessEntity\Directives\Pos\Templates\PosConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Pos\Templates\PosSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Pos\Templates\PosGridTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
-    <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
-    <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\WeeklyPeriodTemplate .html" />
-    <Content Include="Retail_BusinessEntity\Directives\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
