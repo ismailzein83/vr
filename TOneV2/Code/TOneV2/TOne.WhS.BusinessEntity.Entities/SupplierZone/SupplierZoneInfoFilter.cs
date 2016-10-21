@@ -9,5 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SupplierZoneInfoFilter
     {
         public bool GetEffectiveOnly { get; set; }
+
+		public IEnumerable<int> CountryIds { get; set; }
     }
 }

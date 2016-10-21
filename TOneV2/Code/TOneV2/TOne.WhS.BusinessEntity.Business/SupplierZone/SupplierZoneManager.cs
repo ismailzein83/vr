@@ -72,14 +72,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
             IEnumerable<SupplierZone> supplierZones = GetSupplierZonesBySupplier(supplierId);
 
-            Func<SupplierZone, bool> filterExpression = (item) =>
-               {
-                   if (filter.GetEffectiveOnly && (item.BED > now || (item.EED.HasValue && item.EED.Value < now)))
-                       return false;
-                   if (nameFilterLower != null && !item.Name.ToLower().Contains(nameFilterLower))
-                       return false;
-                   return true;
-               };
+            Func<SupplierZone, bool> filterExpression = (supplierZone) =>
+            {
+				if (filter.CountryIds != null && !filter.CountryIds.Contains(supplierZone.CountryId))
+					return false;
+
+                if (filter.GetEffectiveOnly && (supplierZone.BED > now || (supplierZone.EED.HasValue && supplierZone.EED.Value < now)))
+                    return false;
+
+                if (nameFilterLower != null && !supplierZone.Name.ToLower().Contains(nameFilterLower))
+                    return false;
+
+                return true;
+            };
 
             return supplierZones.MapRecords(SupplierZoneInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
