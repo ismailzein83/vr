@@ -84,6 +84,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return saleZoneInfo;
         }
         #endregion
-  
+
+
+        #region State Backup Methods
+
+        public string BackupAllDataBySellingNumberingPlanId(int stateBackupId, string backupDatabase, int sellingNumberPlanId)
+        {
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleZone] WITH (TABLOCK)
+                                            SELECT [ID], [SellingNumberPlanID], [CountryID], [Name], [BED], [EED], [SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleZone]
+                                            Where SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
+        }
+
+        #endregion
     }
 }

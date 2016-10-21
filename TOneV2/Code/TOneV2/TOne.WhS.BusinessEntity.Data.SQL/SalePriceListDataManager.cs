@@ -53,18 +53,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region State Backup Methods
 
-        public string BackupAllData(int stateBackupId, string backupDatabase)
+        public string BackupAllDataBySellingNumberingPlanId(int stateBackupId, string backupDatabase, int sellingNumberPlanId)
         {
-            return String.Format(@"INSERT INTO [{0}].[dbo].[SalePriceList] WITH (TABLOCK)
-                                            SELECT {1} AS StateBackupID, [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID] FROM [TOneWhS_BE].[SalePriceList]
-                                            WITH (NOLOCK) Where OwnerType = 1", backupDatabase, stateBackupId);
-        }
-
-        public string BackupAllDataByCustomerId(int stateBackupId, string backupDatabase, int customerId)
-        {
-            return String.Format(@"INSERT INTO [{0}].[dbo].[SalePriceList] WITH (TABLOCK)
-                                            SELECT {1} AS StateBackupID, [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID] FROM [TOneWhS_BE].[SalePriceList]
-                                            WITH (NOLOCK) Where OwnerType = 1 And OwnerId = {2}", backupDatabase, stateBackupId, customerId);
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
+                                            SELECT sp.[ID], sp.[OwnerType], sp.[OwnerID], sp.[CurrencyID], sp.[EffectiveOn], sp.[SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SalePriceList]
+                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleRate sr WITH (NOLOCK) on sp.ID = sr.PriceListID 
+                                            Inner join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on sr.ZoneID = sz.ID
+                                            Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
 
         #endregion

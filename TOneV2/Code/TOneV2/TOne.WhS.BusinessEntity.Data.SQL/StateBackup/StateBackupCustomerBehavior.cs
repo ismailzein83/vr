@@ -13,9 +13,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             StateBackupCustomer backupCustomerData = base.Data as StateBackupCustomer;
             int customerId = backupCustomerData.CustomerId;
-
-            SalePriceListDataManager salePriceListManager = new SalePriceListDataManager();
-            return salePriceListManager.BackupAllDataByCustomerId(stateBackupId, base.BackupDatabaseName, customerId);
+            return null;
+            //SalePriceListDataManager salePriceListManager = new SalePriceListDataManager();
+            //return salePriceListManager.BackupAllDataByCustomerId(stateBackupId, base.BackupDatabaseName, customerId);
         }
 
         public override string GetRestoreCommands(int stateBackupId)

@@ -11,9 +11,27 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
         public override string GetBackupCommands(int stateBackupId)
         {
-            //It should return all tables tht should have backup for this type all customers
-            SalePriceListDataManager salePriceListManager = new SalePriceListDataManager();
-            return salePriceListManager.BackupAllData(stateBackupId, base.BackupDatabaseName);
+            StateBackupAllCustomers backupAllCustomersData = base.Data as StateBackupAllCustomers;
+            int sellingNumberPlanId = backupAllCustomersData.SellingNumberPlanId;
+
+            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            string result = salePriceListDataManager.BackupAllDataBySellingNumberingPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId);
+
+            SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
+            result = string.Concat(result, saleZoneDataManager.BackupAllDataBySellingNumberingPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId));
+
+            SaleCodeDataManager saleCodeDataManager = new SaleCodeDataManager();
+            result = string.Concat(result, saleCodeDataManager.BackupAllDataBySellingNumberingPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId));
+
+            SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
+            result = string.Concat(result, saleRateDataManager.BackupAllDataBySellingNumberingPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId));
+
+            SaleEntityServiceDataManager saleEntityServiceDataManager = new SaleEntityServiceDataManager();
+            result = string.Concat(result, saleEntityServiceDataManager.BackupAllSaleEntityZoneServiceDataBySellingNumberPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId));
+
+            result = string.Concat(result, saleEntityServiceDataManager.BackupAllSaleEntityRoutingProductDataBySellingNumberPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId));
+            
+            return result;
         }
 
         public override string GetRestoreCommands(int stateBackupId)

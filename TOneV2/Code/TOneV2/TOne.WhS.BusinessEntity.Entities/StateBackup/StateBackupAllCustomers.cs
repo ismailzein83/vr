@@ -8,6 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class StateBackupAllCustomers : StateBackupType
     {
-
+        public int SellingNumberPlanId { get; set; }
     }
 }

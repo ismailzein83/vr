@@ -97,6 +97,7 @@
     <Compile Include="ApplyPreviewRatesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
+    <Compile Include="BackupData.cs" />
     <Compile Include="GenerateRatesPreview.cs" />
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="GenerateZonesPreview.cs" />
