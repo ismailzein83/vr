@@ -82,6 +82,7 @@
     <Compile Include="ApplyRatePreviewsToDB.cs" />
     <Compile Include="ApplySaleZoneRoutingProductPreviewsToDB.cs" />
     <Compile Include="ApplySaleZoneServicePreviewsToDB.cs" />
+    <Compile Include="BackupData.cs" />
     <Compile Include="GetExistingSaleEntityDefaultServices.cs" />
     <Compile Include="GetExistingSaleEntityZoneServices.cs" />
     <Compile Include="StructureDefaultData.cs" />

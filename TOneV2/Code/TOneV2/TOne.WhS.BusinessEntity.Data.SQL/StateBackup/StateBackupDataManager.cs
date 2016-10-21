@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             this.PrepareData(backupType);
             object stateBackupId;
             ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert",out stateBackupId, "Descriptions", Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
-            string backupCommand = _stateBackupBehavior.GetBackupCommands((int)stateBackupId);
+            string backupCommand = _stateBackupBehavior.GetBackupCommands((long)stateBackupId);
 
             ExecuteNonQueryText(backupCommand, null);
         }
@@ -52,10 +52,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         private void PrepareData(StateBackupType backupType)
         {
-            if (backupType is StateBackupAllCustomers)
-                _stateBackupBehavior = new StateBackupAllCustomersBehavior();
+            if (backupType is StateBackupAllSaleEntities)
+                _stateBackupBehavior = new StateBackupAllSaleEntitiesBehavior();
             else if (backupType is StateBackupCustomer)
-                _stateBackupBehavior = new StateBackupCustomerBehavior();
+                _stateBackupBehavior = new StateBackupSaleEntityBehavior();
             else if (backupType is StateBackupSupplier)
                 _stateBackupBehavior = new StateBackupSupplierBehavior();
 

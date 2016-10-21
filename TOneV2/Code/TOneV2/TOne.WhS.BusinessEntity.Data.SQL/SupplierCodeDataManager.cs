@@ -135,7 +135,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region State Backup Methods
 
-        public string BackupAllDataBySupplierId(int stateBackupId, string backupDatabase, int supplierId)
+        public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierCode] WITH (TABLOCK)
                                             SELECT sc.[ID], sc.[Code], sc.[ZoneID], sc.[CodeGroupID], sc.[BED], sc.[EED], sc.[SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierCode] sc

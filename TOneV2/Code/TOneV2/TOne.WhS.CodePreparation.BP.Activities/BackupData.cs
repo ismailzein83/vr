@@ -21,7 +21,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
 
-            StateBackupAllCustomers backupAllCustomers = new StateBackupAllCustomers()
+            StateBackupAllSaleEntities backupAllCustomers = new StateBackupAllSaleEntities()
             {
                 SellingNumberPlanId = sellingNumberPlanId
             };

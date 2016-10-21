@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class StateBackupSupplierBehavior : StateBackupTypeBehavior
     {
-        public override string GetBackupCommands(int stateBackupId)
+        public override string GetBackupCommands(long stateBackupId)
         {
             StateBackupSupplier backupSupplierData = base.Data as StateBackupSupplier;
             int supplierId = backupSupplierData.SupplierId;
@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return result;
         }
 
-        public override string GetRestoreCommands(int stateBackupId)
+        public override string GetRestoreCommands(long stateBackupId)
         {
             throw new NotImplementedException();
         }

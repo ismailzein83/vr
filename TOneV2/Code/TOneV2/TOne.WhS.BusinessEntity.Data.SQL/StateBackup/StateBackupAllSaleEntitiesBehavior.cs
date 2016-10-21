@@ -7,12 +7,12 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class StateBackupAllCustomersBehavior : StateBackupTypeBehavior
+    public class StateBackupAllSaleEntitiesBehavior : StateBackupTypeBehavior
     {
-        public override string GetBackupCommands(int stateBackupId)
+        public override string GetBackupCommands(long stateBackupId)
         {
-            StateBackupAllCustomers backupAllCustomersData = base.Data as StateBackupAllCustomers;
-            int sellingNumberPlanId = backupAllCustomersData.SellingNumberPlanId;
+            StateBackupAllSaleEntities backupAllSaleEntities = base.Data as StateBackupAllSaleEntities;
+            int sellingNumberPlanId = backupAllSaleEntities.SellingNumberPlanId;
 
             SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
             string result = salePriceListDataManager.BackupAllDataBySellingNumberingPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId);
@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return result;
         }
 
-        public override string GetRestoreCommands(int stateBackupId)
+        public override string GetRestoreCommands(long stateBackupId)
         {
             throw new NotImplementedException();
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class StateBackupAllCustomers : StateBackupType
+    public class StateBackupAllSaleEntities : StateBackupType
     {
         public int SellingNumberPlanId { get; set; }
     }

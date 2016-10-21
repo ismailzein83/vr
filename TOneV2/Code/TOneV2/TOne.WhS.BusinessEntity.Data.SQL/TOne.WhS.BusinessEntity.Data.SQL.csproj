@@ -80,9 +80,9 @@
     <Compile Include="SellingNumberPlanDataManager.cs" />
     <Compile Include="StateBackup\StateBackupSupplierBehavior.cs" />
     <Compile Include="StateBackup\StateBackupTypeBehavior.cs" />
-    <Compile Include="StateBackup\StateBackupCustomerBehavior.cs" />
+    <Compile Include="StateBackup\StateBackupSaleEntityBehavior.cs" />
     <Compile Include="StateBackup\StateBackupDataManager.cs" />
-    <Compile Include="StateBackup\StateBackupAllCustomersBehavior.cs" />
+    <Compile Include="StateBackup\StateBackupAllSaleEntitiesBehavior.cs" />
     <Compile Include="SupplierCodeDataManager.cs" />
     <Compile Include="SupplierPriceListDataManager.cs" />
     <Compile Include="SupplierOtherRateDataManager.cs" />
