@@ -52,7 +52,7 @@ namespace Vanrise.Data.SQL
         }
 
         public BaseSQLDataManager(string connectionString, bool getFromConfigSection)
-            :base(connectionString, getFromConfigSection)
+            : base(connectionString, getFromConfigSection)
         {
 
         }
@@ -104,14 +104,16 @@ namespace Vanrise.Data.SQL
 
         protected int ExecuteNonQueryText(string cmdText, Action<DbCommand> prepareCommand)
         {
+            int rowsAffected;
             var db = CreateDatabase();
             using (var cmd = CreateCommand(db, cmdText))
             {
                 if (prepareCommand != null)
                     prepareCommand(cmd);
 
-                return db.ExecuteNonQuery(cmd);
+                rowsAffected = db.ExecuteNonQuery(cmd);
             }
+            return rowsAffected;
         }
 
         #endregion
@@ -132,14 +134,16 @@ namespace Vanrise.Data.SQL
 
         protected object ExecuteScalarText(string cmdText, Action<DbCommand> prepareCommand)
         {
+            object val = null;
             var db = CreateDatabase();
             using (var cmd = CreateCommand(db, cmdText))
             {
                 if (prepareCommand != null)
                     prepareCommand(cmd);
 
-                return db.ExecuteScalar(cmd);
+                val = db.ExecuteScalar(cmd);
             }
+            return val;
         }
 
         #endregion
@@ -390,7 +394,7 @@ namespace Vanrise.Data.SQL
                 return string.Format("-f {0}", formatFileName);
 
             formatFileName = System.IO.Path.GetTempFileName();
-            
+
             string sqlPassword;
             string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, " format nul ", out sqlPassword);
 
@@ -589,7 +593,7 @@ namespace Vanrise.Data.SQL
         protected IEnumerable<T> GetAllDataFromTempTable<T>(string tempTableName, string orderByColumnName, bool isDescending, Func<IDataReader, T> objectBuilder)
         {
             string query = String.Format(@"SELECT * FROM {0} ORDER BY {1} {2}", tempTableName, orderByColumnName, isDescending ? "DESC" : "ASC");
-            
+
             return GetItemsText(query,
                 objectBuilder,
                 (cmd) =>
@@ -597,7 +601,7 @@ namespace Vanrise.Data.SQL
                 });
         }
 
-        protected BigResult<T> RetrieveData<T>(DataRetrievalInput input, Action<string> createTempTableIfNotExists, Func<IDataReader, T> objectBuilder, Dictionary<string,string> fieldsToColumnsMapper = null, BigResult<T> rslt = null)
+        protected BigResult<T> RetrieveData<T>(DataRetrievalInput input, Action<string> createTempTableIfNotExists, Func<IDataReader, T> objectBuilder, Dictionary<string, string> fieldsToColumnsMapper = null, BigResult<T> rslt = null)
         {
             TempTableName tempTableName = null;
             if (!String.IsNullOrWhiteSpace(input.ResultKey))
@@ -608,7 +612,7 @@ namespace Vanrise.Data.SQL
             if (rslt == null)
                 rslt = new BigResult<T>();
             rslt.ResultKey = tempTableName.Key;
-            
+
             createTempTableIfNotExists(tempTableName.TableName);
             string sortByColumnName = input.SortByColumnName;
             if (fieldsToColumnsMapper != null && fieldsToColumnsMapper.ContainsKey(sortByColumnName))
@@ -617,7 +621,7 @@ namespace Vanrise.Data.SQL
             {
                 int totalDataCount;
                 rslt.Data = GetDataFromTempTable(tempTableName.TableName, input.FromRow.Value, input.ToRow.Value, sortByColumnName, input.IsSortDescending, objectBuilder, out totalDataCount);
-                rslt.TotalCount = totalDataCount;                
+                rslt.TotalCount = totalDataCount;
             }
             else
             {
@@ -626,7 +630,7 @@ namespace Vanrise.Data.SQL
             }
             return rslt;
         }
-        
+
         #endregion
 
         #region Caching Methods
