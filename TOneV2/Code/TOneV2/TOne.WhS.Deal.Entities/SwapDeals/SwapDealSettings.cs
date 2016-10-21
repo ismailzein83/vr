@@ -31,9 +31,11 @@ namespace TOne.WhS.Deal.Entities
 
     public class SwapDealSettings : DealSettings
     {
+        public static Guid SwapDealSettingsConfigId = new Guid("63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65");
+
         public override Guid ConfigId
         {
-            get { return new Guid("63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65"); }
+            get { return SwapDealSettingsConfigId; }
         }
 
         public int CarrierAccountId { get; set; }
