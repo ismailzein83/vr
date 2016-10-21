@@ -10,7 +10,6 @@ BEGIN
 	SELECT  sr.[ID]
 		  ,sr.RateTypeID
 		  ,sr.Rate
-		  ,sr.OtherRates
 		  ,sr.PriceListID
 		  ,sr.ZoneID
 		  ,sr.BED

@@ -7,7 +7,7 @@
 	BEGIN
 		SET NOCOUNT ON
 
-		 SELECT rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[OtherRates],rate.RateTypeID, rate.[BED], rate.[EED], rate.[timestamp],rate.Change
+		 SELECT rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[Rate],rate.RateTypeID, rate.[BED], rate.[EED], rate.[timestamp],rate.Change
          FROM	[TOneWhS_BE].[SupplierRate] rate WITH(NOLOCK) 
 				inner join [TOneWhS_BE].[SupplierPriceList] priceList WITH(NOLOCK) on rate.PriceListID=priceList.ID
 

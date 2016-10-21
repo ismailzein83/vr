@@ -12,12 +12,13 @@
 		INSERT INTO @ZonesIDsTable (ZoneID)
 		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
 
-		 SELECT rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[NormalRate], rate.[OtherRates],rate.RateTypeID, rate.[BED], rate.[EED], rate.[timestamp],rate.Change
+		 SELECT rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[Rate],rate.RateTypeID, rate.[BED], rate.[EED], rate.[timestamp],rate.Change
          FROM	[TOneWhS_BE].[SupplierRate] rate WITH(NOLOCK) 
 				inner join [TOneWhS_BE].[SupplierPriceList] priceList WITH(NOLOCK) on rate.PriceListID=priceList.ID
 
 		 WHERE	(@SupplierId =0 OR priceList.SupplierID = @SupplierId)
 				 and (@ZonesIDs  is null or rate.ZoneID in (select ZoneID from @ZonesIDsTable))
+				 And rate.RateTypeID is null
 				 AND   (rate.BED < = @EffectiveOn   and (rate.EED is null or rate.EED  > @EffectiveOn) );			
 			
 		

@@ -420,5 +420,6 @@
     <Build Include="TOneWhS_Deal\Tables\Deal.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierOtherRate_GetFiltered.sql" />
     <Build Include="Security\TOneWhS_Deal.sql" />
+    <Build Include="TOneWhS_BE\Tables\StateBackup.sql" />
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-		SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED
+		SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED
 		FROM	[TOneWhS_BE].SaleRate sr 
 				LEFT JOIN [TOneWhS_BE].SalePriceList spl WITH(NOLOCK) ON sr.PriceListID = spl.ID 
 				Left Join @ActiveCustomersInfo ci on ci.CustomerId = spl.OwnerId
@@ -24,7 +24,7 @@ BEGIN
 				AND spl.OwnerType = @CustomerOwnerType 
 		
 	Union		
-		SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED
+		SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED
 		FROM	[TOneWhS_BE].SaleRate sr WITH(NOLOCK) 
 				LEFT JOIN [TOneWhS_BE].SalePriceList spl WITH(NOLOCK) ON sr.PriceListID = spl.ID 
 		Where	((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))

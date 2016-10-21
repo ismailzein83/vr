@@ -3,12 +3,13 @@
     [ProcessInstanceID] BIGINT          NOT NULL,
     [ZoneID]            BIGINT          NOT NULL,
     [RateTypeID]        INT             NULL,
-    [NormalRate]        DECIMAL (20, 8) NOT NULL,
-    [OtherRates]        NVARCHAR (MAX)  NULL,
+    [Rate]              DECIMAL (20, 8) NOT NULL,
     [CurrencyID]        INT             NULL,
     [BED]               DATETIME        NOT NULL,
     [EED]               DATETIME        NULL
 );
+
+
 
 
 

@@ -15,7 +15,7 @@ DECLARE @ZonesIDsTable TABLE (ZoneID int)
 INSERT INTO @ZonesIDsTable (ZoneID)
 select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
 	
-	SELECT	sr.[ID],sr.[PriceListID],sr.[ZoneID],sr.[CurrencyID],sr.RateTypeID,sr.[Rate],sr.[OtherRates],sr.[BED],sr.[EED],sr.Change
+	SELECT	sr.[ID],sr.[PriceListID],sr.[ZoneID],sr.[CurrencyID],sr.RateTypeID,sr.[Rate],sr.[BED],sr.[EED],sr.Change
 	FROM	[TOneWhS_BE].SaleRate sr WITH(NOLOCK) 
 			inner join   [TOneWhS_BE].SalePriceList sp WITH(NOLOCK) on sr.PriceListID = sp.ID
 			inner join  [TOneWhS_BE].SaleZone sz WITH(NOLOCK) on  sr.ZoneID = sz.ID          

@@ -12,7 +12,7 @@ BEGIN
 	SELECT @Effective = @Effective_FromOut
 	SET NOCOUNT ON;
 
-	SELECT  sr.[ID],sr.NormalRate,sr.OtherRates,sr.PriceListID,sr.RateTypeID,sr.CurrencyID,sr.ZoneID,sr.BED,sr.EED,sr.Change
+	SELECT  sr.[ID],sr.Rate,sr.PriceListID,sr.RateTypeID,sr.CurrencyID,sr.ZoneID,sr.BED,sr.EED,sr.Change
 	FROM	[TOneWhS_BE].SupplierRate sr WITH(NOLOCK) 
 	Where	(sr.BED<=@Effective and (sr.EED is null or sr.EED > @Effective))
 			

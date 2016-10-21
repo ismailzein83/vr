@@ -8,7 +8,7 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-SELECT  sr.[ID],sr.NormalRate,sr.OtherRates,sr.PriceListID,sr.RateTypeID,sr.CurrencyId,sr.ZoneID,sr.BED,sr.EED,sr.Change
+SELECT  sr.[ID],sr.Rate,sr.PriceListID,sr.RateTypeID,sr.CurrencyId,sr.ZoneID,sr.BED,sr.EED,sr.Change
 FROM	[TOneWhS_BE].SupplierRate sr WITH(NOLOCK) 	  
 		JOIN [TOneWhS_BE].SupplierPriceList pl WITH(NOLOCK) ON sr.PriceListID = pl.ID 
 		JOIN @ActiveSuppliersInfo s on s.SupplierId = pl.SupplierId

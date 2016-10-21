@@ -13,7 +13,7 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change, sr.CurrencyID
+SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change, sr.CurrencyID
 FROM	[TOneWhS_BE].SaleRate sr WITH(NOLOCK) 
 Where	(sr.BED<=@Effective and (sr.EED is null or sr.EED > @Effective))
 		

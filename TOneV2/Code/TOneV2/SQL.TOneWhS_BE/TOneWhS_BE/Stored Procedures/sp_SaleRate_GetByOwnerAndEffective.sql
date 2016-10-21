@@ -14,7 +14,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.OtherRates,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change, sr.CurrencyID
+SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED,sr.Change, sr.CurrencyID
 FROM	[TOneWhS_BE].SaleRate sr WITH(NOLOCK) 
 		LEFT JOIN [TOneWhS_BE].SalePriceList spl WITH(NOLOCK) ON sr.PriceListID=spl.ID 
 Where	(sr.BED<=@Effective and (sr.EED is null or sr.EED > @Effective))
