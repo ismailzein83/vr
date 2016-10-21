@@ -11,15 +11,15 @@ using Vanrise.Entities;
 namespace TOne.WhS.Deal.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "Deal")]
-    public class DealController : Vanrise.Web.Base.BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "DealDefinition")]
+    public class DealDefinitionController : Vanrise.Web.Base.BaseAPIController
     {
-        //DealManager _manager = new DealManager();
-        //[HttpPost]
+        DealManager _manager = new DealManager();
+        [HttpPost]
         [Route("AddDeal")]
-        public Vanrise.Entities.InsertOperationOutput<DealDefinition> AddDeal(DealDefinition deal)
+        public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
-            return null;
+            return _manager.AddDeal(deal);
         }
     }
 }

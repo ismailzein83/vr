@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_BE_DealAPIService','WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService'];
 
-    function SwapDealEditorController($scope, WhS_BE_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService) {
+    function SwapDealEditorController($scope, WhS_Deal_DealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService) {
         var isEditMode;
 
         var dealId;
@@ -47,11 +47,11 @@
             };
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.InboundNumberPlanId) {
+                if (carrierAccountInfo != undefined) {
 
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = {
-                        sellingNumberPlanId: carrierAccountInfo.InboundNumberPlanId
+                        sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payload.InboundParts = dealEntity.Settings.InboundParts;
@@ -115,7 +115,7 @@
         }
 
         function getSwapDeal() {
-            return WhS_BE_SwapDealAPIService.GetSwapDeal(dealId).then(function (response) {
+            return WhS_Deal_DealAPIService.GetSwapDeal(dealId).then(function (response) {
                 dealEntity = response;
             });
         }
@@ -135,11 +135,11 @@
 
             if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI != null) {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.InboundNumberPlanId) {
+                if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
                     dealInboundReadyPromiseDeferred.promise
                         .then(function() {
                             var directivePayload = {
-                                sellingNumberPlanId: carrierAccountInfo.InboundNumberPlanId
+                                sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.InboundParts = dealEntity.Settings.InboundParts;
@@ -171,11 +171,11 @@
 
             if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI != null) {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.InboundNumberPlanId) {
+                if (carrierAccountInfo != undefined && carrierAccountInfo.SupplierId) {
                     dealOutboundReadyPromiseDeferred.promise
                         .then(function () {
                             var directivePayload = {
-                                sellingNumberPlanId: carrierAccountInfo.InboundNumberPlanId
+                                supplierId: carrierAccountInfo.SupplierId
                             }
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.OutboundParts = dealEntity.Settings.OutboundParts;
@@ -188,7 +188,7 @@
                 dealOutboundReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload = {
-                            sellingNumberPlanId: null
+                            supplierId: null
                         }
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
                             directivePayload.OutboundParts = dealEntity.Settings.OutboundParts;
@@ -243,10 +243,8 @@
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;
-            return WhS_BE_SwapDealAPIService.AddSwapDeal(buildSwapDealObjFromScope()).then(function (response) {
-                WhS_BE_SwapDealService.addNeedsFields(response.InsertedObject.Entity);
-
-                if (VRNotificationService.notifyOnItemAdded('SwapDeal', response, 'Description')) {
+            return WhS_Deal_DealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
                         $scope.onSwapDealAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -260,12 +258,8 @@
 
         function updateSwapDeal() {
             $scope.scopeModel.isLoading = true;
-            return WhS_BE_SwapDealAPIService.UpdateSwapDeal(buildSwapDealObjFromScope()).then(function (response) {
-
-
-                WhS_BE_SwapDealService.addNeedsFields(response.UpdatedObject.Entity);
-
-                if (VRNotificationService.notifyOnItemUpdated('SwapDeal', response, 'Description')) {
+            return WhS_Deal_DealAPIService.UpdateDeal(buildSwapDealObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealUpdated != undefined)
                         $scope.onSwapDealUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
@@ -277,24 +271,19 @@
             });
         }
 
-        function buildSwapDealObjFromScope() {
+        function buildSwapDealObjFromScope() {            
             var obj = {
-                SwapDealId: dealId,
+                DealId: dealId,
+                Name: $scope.scopeModel.description,
                 Settings: {
-                    Description: $scope.scopeModel.description,
-                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                    $type: "TOne.WhS.Deal.Entities.SwapDealSettings, TOne.WhS.Deal.Entities",
                     BeginDate: $scope.scopeModel.beginDate,
                     EndDate: $scope.scopeModel.endDate,
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     ContractType: $scope.scopeModel.selectedContractType.value,
                     AgreementType: $scope.scopeModel.selectedAgreementType.value,
-                    InboundParts: dealInboundAPI.getData().sellingParts,
-                    OutboundParts: dealOutboundAPI.getData().buyingParts,
-                    InboundAmount: dealInboundAPI.getData().sellingAmount,
-                    InboundDuration: dealInboundAPI.getData().sellingDuration,
-                    OutboundAmount: dealOutboundAPI.getData().buyingAmount,
-                    OutboundDuration: dealOutboundAPI.getData().buyingDuration,
-                    Active: $scope.scopeModel.active
+                    Inbounds: dealInboundAPI.getData(),
+                    Outbounds: dealOutboundAPI.getData()
                 }
             };
             return obj;

@@ -34,8 +34,6 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 ctrl.datasource = [];
 
                 ctrl.addSwapDealOutbound = function () {
-
-
                     var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
                     var onSwapDealOutboundAdded = function (addedSwapDealOutbound) {
                         ctrl.datasource.push(addedSwapDealOutbound);
@@ -53,11 +51,9 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 api.load = function (payload) {
                     mainPayload = payload;
 
-                    if (payload.Inbounds != undefined && payload.Inbounds != null) {
-                        ctrl.datasource = payload.Inbounds;
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            ctrl.datasource[i].Amount = ctrl.datasource[i].Volume * ctrl.datasource[i].Rate;
-                        }
+                    if (payload.Outbounds != undefined && payload.Outbounds != null) {
+                        ctrl.datasource = payload.Outbounds;
+                       
                     }
                         
                     else
@@ -66,25 +62,23 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 };
 
                 api.getData = function () {
-                    var buyingObj =
-                      {
-                          buyingParts: []
-                      }
+                    var outbounds = [];
+
 
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        buyingObj.buyingParts = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            buyingObj.buyingParts.push({
+                            outbounds.push({
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,                               
-                                SupplierZoneIds: currentItem.SupplierZoneIds
+                                SupplierZoneIds: currentItem.SupplierZoneIds,
+                                CountryId: currentItem.CountryId
                             });
                         }
 
                     }
-                    return buyingObj;
+                    return outbounds;
                 }
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')

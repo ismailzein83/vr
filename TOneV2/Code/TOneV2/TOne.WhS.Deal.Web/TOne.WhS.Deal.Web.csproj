@@ -163,6 +163,7 @@
     <Content Include="WhS_Deal\Directives\SwapDeal\vr-whs-deal-swapdealinbound-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-inbound-management.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-management.js" />
+    <Content Include="WhS_Deal\Services\APIServices\DealAPIService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisService.js" />
     <Content Include="WhS_Deal\Services\SwapDealOutboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
@@ -182,9 +183,7 @@
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealManagement.html" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Deal\Services\APIServices\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

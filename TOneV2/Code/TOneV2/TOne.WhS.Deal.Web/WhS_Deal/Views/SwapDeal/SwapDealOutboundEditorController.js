@@ -16,7 +16,8 @@
         var supplierZoneDirectiveAPI;
         var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-      
+        var countrySelectedPromiseDeferred;
+
 
         loadParameters();
         defineScope();
@@ -37,7 +38,7 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateDealOutbound() : insertDealOutbound();
+                return (isEditMode) ? updateSwapDealOutbound() : insertSwapDealOutbound();
             };
 
 
@@ -55,6 +56,24 @@
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
+
+
+            $scope.onCountrySelectionChanged = function () {
+                var country = countryDirectiveApi.getSelectedIds();
+                if (country != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingSelector = value };
+                    var payload = {
+                        supplierId: supplierId,
+                        filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
+                        selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
+
+                    }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
+
+                }
+                else if (supplierZoneDirectiveAPI != undefined)
+                    $scope.supplierzones.length = 0;
+            }
         }
 
         function load() {
@@ -70,38 +89,52 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySelector, loadSaleZoneSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function loadCountrySelector() {
-            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            countryReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {
-                        selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.CountryId : undefined
-                    };
 
-                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
-                });
-            return countryLoadPromiseDeferred.promise;
-        }
-        function loadSaleZoneSection() {
-            var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadCountrySupplierZoneSection() {
+            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            supplierZoneReadyPromiseDeferred.promise.then(function () {
+            var promises = [];
+            promises.push(loadCountryPromiseDeferred.promise);
 
-                var payload = {
-                    supplierId: supplierId,
-                    selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
-                };
+            var payload;
 
-                VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSaleZonePromiseDeferred);
+            if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.CountryId != undefined) {
+                payload = {};
+                payload.selectedIds = swapDealOutboundEntity != undefined ? swapDealOutboundEntity.CountryId : undefined;
+                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
+            countryReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
-            return loadSaleZonePromiseDeferred.promise;
+
+
+
+            if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.CountryId != undefined) {
+                var loadSupplierZonePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                promises.push(loadSupplierZonePromiseDeferred.promise);
+
+                UtilsService.waitMultiplePromises([supplierZoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
+                    var supplierZonePayload = {
+                        supplierId: supplierId,
+                        filter: { CountryIds: [swapDealOutboundEntity.CountryId] },
+                        selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, supplierZonePayload, loadSupplierZonePromiseDeferred);
+                    countrySelectedPromiseDeferred = undefined;
+                });
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
 
@@ -120,43 +153,32 @@
             $scope.scopeModel.name = swapDealOutboundEntity.Name;
             $scope.scopeModel.volume = swapDealOutboundEntity.Volume;
             $scope.scopeModel.rate = swapDealOutboundEntity.Rate;
-            $scope.scopeModel.minSellingRate = swapDealOutboundEntity.MinSellingRate;
-            $scope.scopeModel.substituteRate = swapDealOutboundEntity.SubstituteRate;
-            $scope.scopeModel.extraVolumeRate = swapDealOutboundEntity.ExtraVolumeRate;
-            $scope.scopeModel.asr = swapDealOutboundEntity.ASR;
-            $scope.scopeModel.ner = swapDealOutboundEntity.NER;
-            $scope.scopeModel.acd = swapDealOutboundEntity.ACD;
         }
 
-        function insertDealOutbound() {
+        function insertSwapDealOutbound() {
             $scope.scopeModel.isLoading = true;
 
-            var dealOutboundObject = buildDealOutboundObjFromScope();
-            if ($scope.onDealOutboundAdded != undefined)
-                $scope.onDealOutboundAdded(dealOutboundObject);
+            var swapDealOutboundObject = buildSwapDealOutboundObjFromScope();
+            if ($scope.onSwapDealOutboundAdded != undefined)
+                $scope.onSwapDealOutboundAdded(swapDealOutboundObject);
             $scope.modalContext.closeModal();
         }
 
-        function updateDealOutbound() {
-            var dealOutboundObject = buildDealOutboundObjFromScope();
-            if ($scope.onDealOutboundUpdated != undefined)
-                $scope.onDealOutboundUpdated(dealOutboundObject);
+        function updateSwapDealOutbound() {
+            var swapDealOutboundObject = buildSwapDealOutboundObjFromScope();
+            if ($scope.onSwapDealOutboundUpdated != undefined)
+                $scope.onSwapDealOutboundUpdated(swapDealOutboundObject);
             $scope.modalContext.closeModal();
         }
 
-        function buildDealOutboundObjFromScope() {
+        function buildSwapDealOutboundObjFromScope() {
             var obj = {
                 Name: $scope.scopeModel.name,
                 SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModel.volume,
                 Rate: $scope.scopeModel.rate,
-                MinSellingRate: $scope.scopeModel.minSellingRate,
-                SubstituteRate: $scope.scopeModel.substituteRate,
-                ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
-                ASR: $scope.scopeModel.asr,
-                NER: $scope.scopeModel.ner,
-                ACD: $scope.scopeModel.acd,
-                Amount: $scope.scopeModel.volume * $scope.scopeModel.rate
+                CountryId: countryDirectiveApi.getSelectedIds()
+
             };
             return obj;
         }

@@ -4,7 +4,7 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" getcustomers getsuppliers
+                        <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" getexchangecarriers
                                                            isrequired="true" hideremoveicon="true" onselectionchanged="scopeModel.onCarrierAccountSelectionChanged"></vr-whs-be-carrieraccount-selector>
 
                         <vr-columns width="1/3row">
@@ -52,14 +52,14 @@
                 <vr-tab header="'Selling Part'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealSellingDirectiveReady"></vr-whs-deal-swapdealinbound-grid>
+                            <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady"></vr-whs-deal-swapdealinbound-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Buying Part'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-whs-deal-swapdealoutbound-grid on-ready="scopeModel.onSwapDealBuyingDirectiveReady"></vr-whs-deal-swapdealoutbound-grid>
+                            <vr-whs-deal-swapdealoutbound-grid on-ready="scopeModel.onSwapDealOutboundDirectiveReady"></vr-whs-deal-swapdealoutbound-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
