@@ -31,10 +31,27 @@ when not matched by target then
 	insert([ID],[Name],[DirectiveName],[Setting])
 	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting]);
 set identity_insert [sec].[WidgetDefinition] off;
-
 ----------------------------------------------------------------------------------------------------
-
 end
+
+--[common].[ExtensionConfiguration]-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('82B4CD55-3500-4158-ACCD-E5D244390746','VR_Sec_BI','BI','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html","EnableAdd":true}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ConfigType],[Settings]))
+merge	[common].[ExtensionConfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 
 --[sec].[Module]------------------------------1301 to 1400------------------------------------------------------
 begin
@@ -56,13 +73,6 @@ when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 --------------------------------------------------------------------------------------------------------------
-
-end
-
---[sec].[viewtype]---------------------------301 to 400---------------------------------------------
-begin
-set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Details])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('82B4CD55-3500-4158-ACCD-E5D244390746',301,'VR_Sec_BI','BI','{"ViewTypeId":"82b4cd55-3500-4158-accd-e5d244390746","Name":"VR_Sec_BI","Title":"Business Intelligence","Editor":"/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html","EnableAdd":true}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Details]))merge	[sec].[ViewType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Details])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Details]);
-----------------------------------------------------------------------------------------------------
 
 end
 
@@ -108,5 +118,4 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 ----------------------------------------------------------------------------------------------------
-
 end

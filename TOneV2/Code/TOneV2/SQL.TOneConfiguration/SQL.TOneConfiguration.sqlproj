@@ -313,10 +313,8 @@
     <Build Include="sec\Tables\Tenant.sql" />
     <Build Include="Analytic\Tables\AnalyticTable.sql" />
     <Build Include="Analytic\Tables\AnalyticItemConfig.sql" />
-    <Build Include="sec\Tables\ViewType.sql" />
     <Build Include="common\Tables\ExtensionConfiguration.sql" />
     <Build Include="common\Functions\ParseStringList.sql" />
-    <Build Include="sec\Stored Procedures\sp_ViewType_GetAll.sql" />
     <Build Include="common\Stored Procedures\SP_ExtensionConfiguration_GetByType.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_GetAll.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticItemConfig_GetByTableIdAndItemType.sql" />
