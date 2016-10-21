@@ -12,7 +12,7 @@ namespace TOne.WhS.Deal.Entities
 
         public int? RetroActiveFromTierNumber { get; set; }
 
-        public Decimal? DefaultRate { get; set; }
+        public Decimal DefaultRate { get; set; }
 
         public VolCommitmentDealItemTierZoneRate ExceptionZoneRates { get; set; }
     }
