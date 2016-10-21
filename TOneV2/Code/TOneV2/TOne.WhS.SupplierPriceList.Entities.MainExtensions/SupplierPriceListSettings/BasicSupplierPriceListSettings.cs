@@ -205,7 +205,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                         {
                             decimal? rate = null;
                             if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
-                                rate = (decimal)rateField.FieldValue;
+                                rate = Convert.ToDecimal(rateField.FieldValue);
                             priceListRates.Add(new PriceListRate
                             {
                                 ZoneName = zoneField.FieldValue !=null? zoneField.FieldValue.ToString() : null,
@@ -248,7 +248,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 {
                                     decimal? rate = null;
                                     if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
-                                        rate = (decimal)rateField.FieldValue;
+                                        rate = Convert.ToDecimal(rateField.FieldValue);
 
                                    PriceListRate priceListRate = new PriceListRate
                                     {

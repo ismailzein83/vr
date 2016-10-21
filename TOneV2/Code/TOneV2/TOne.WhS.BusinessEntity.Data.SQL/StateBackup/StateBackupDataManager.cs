@@ -4,11 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class StateBackupDataManager : IStateBackupDataManager
+    public class StateBackupDataManager : BaseSQLDataManager, IStateBackupDataManager
     {
+
+        #region ctor/Local Variables
+        public StateBackupDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
+        #endregion
+
         #region Private Memebers
 
         private StateBackupTypeBehavior _stateBackupBehavior = null;
@@ -17,11 +27,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region Public Methods
 
+
+
         public void BackupData(StateBackupType backupType)
         {
             this.PrepareData(backupType);
-            //Save Backup Record to DB and get StateBackup Id to pass it to the next method
-            string backupCommand = _stateBackupBehavior.GetBackupCommands(1);
+            object stateBackupId;
+            ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert",out stateBackupId, "Descriptions", Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
+            string backupCommand = _stateBackupBehavior.GetBackupCommands((int)stateBackupId);
+
+            ExecuteNonQueryText(backupCommand, null);
         }
 
         public void RestoreData(int stateBackupId)
@@ -41,6 +56,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 _stateBackupBehavior = new StateBackupAllCustomersBehavior();
             else if (backupType is StateBackupCustomer)
                 _stateBackupBehavior = new StateBackupCustomerBehavior();
+            else if (backupType is StateBackupSupplier)
+                _stateBackupBehavior = new StateBackupSupplierBehavior();
 
             if (_stateBackupBehavior == null)
                 throw new InvalidOperationException("Backup Type is not specified");

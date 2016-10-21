@@ -78,6 +78,7 @@
     <Compile Include="SaleRateDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />
     <Compile Include="SellingNumberPlanDataManager.cs" />
+    <Compile Include="StateBackup\StateBackupSupplierBehavior.cs" />
     <Compile Include="StateBackup\StateBackupTypeBehavior.cs" />
     <Compile Include="StateBackup\StateBackupCustomerBehavior.cs" />
     <Compile Include="StateBackup\StateBackupDataManager.cs" />

@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class PriceListZoneServiceManager
     {
-        public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context)
+        public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context, IEnumerable<int> importedServiceTypeIds)
         {
             ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones);
 

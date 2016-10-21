@@ -97,5 +97,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
 
+        #region State Backup Methods
+
+        public string BackupAllDataBySupplierId(int stateBackupId, string backupDatabase, int supplierId)
+        {
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierRate] WITH (TABLOCK)
+                                            SELECT  sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[Rate], sr.[RateTypeID], sr.[Change], sr.[BED], sr.[EED], sr.[SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierRate] sr
+                                            WITH (NOLOCK)  Inner Join [TOneWhS_BE].[SupplierZone] sz WITH (NOLOCK)  on sz.ID = sr.ZoneID
+                                            Where sz.SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
+        }
+
+        #endregion
+
     }
 }
