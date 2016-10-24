@@ -10,6 +10,8 @@ namespace TOne.WhS.Routing.Business
 {
     public class FixedRouteRule : RouteRuleSettings
     {
+        #region Properties/Ctor
+
         public List<RouteOptionSettings> Options { get; set; }
 
         public Dictionary<int, List<RouteOptionFilterSettings>> Filters { get; set; }
@@ -35,6 +37,11 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
+        #endregion
+
+
+        #region SaleEntity Execution
+
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             return CreateOptions(context, target);
@@ -45,10 +52,21 @@ namespace TOne.WhS.Routing.Business
             return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option);
         }
 
+        public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
+        {
+            base.ApplyOptionsPercentage(options);
+            ApplyOptionsPercentage<RouteOption>(options);
+        }
+
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             throw new NotSupportedException("ExecuteForSaleEntity is not supported for FixedRouteRule.");
         }
+
+        #endregion
+
+
+        #region RoutingProduct Execution
 
         public override void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target)
         {
@@ -92,11 +110,10 @@ namespace TOne.WhS.Routing.Business
             ApplyOptionsPercentage<RPRouteOption>(options);
         }
 
-        public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
-        {
-            base.ApplyOptionsPercentage(options);
-            ApplyOptionsPercentage<RouteOption>(options);
-        }
+        #endregion
+
+
+        #region Private Methods
 
         private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
@@ -104,9 +121,9 @@ namespace TOne.WhS.Routing.Business
             if (this.Options != null)
             {
                 SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
-                 {
-                     RoutingProductId = target.RoutingProductId
-                 };
+                {
+                    RoutingProductId = target.RoutingProductId
+                };
 
                 var fixedOptions = this.Options;
                 HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
@@ -194,5 +211,7 @@ namespace TOne.WhS.Routing.Business
                 option.Percentage = decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage, 2);
             }
         }
+
+        #endregion
     }
 }

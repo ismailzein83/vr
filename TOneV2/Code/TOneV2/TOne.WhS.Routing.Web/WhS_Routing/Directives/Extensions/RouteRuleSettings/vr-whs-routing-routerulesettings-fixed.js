@@ -67,7 +67,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     });
                 };
 
-                $scope.scopeModel.onDeselectSupplier = function (selectedItem) {
+                $scope.scopeModel.onDeselectSupplier = function (deselectedItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.fixedSuppliers, selectedItem.CarrierAccountId, 'CarrierAccountId');
                     $scope.scopeModel.fixedSuppliers.splice(index, 1);
                 };
@@ -99,36 +99,35 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                     loadCarrierAccountSelectorPromise.then(function () {
                         for (var i = 0; i < $scope.scopeModel.fixedSuppliers.length; i++) {
-                            var supplier = $scope.scopeModel.fixedSuppliers[i];
+                            var currentSupplier = $scope.scopeModel.fixedSuppliers[i];
                             var currentOption = options[i];
-                            supplier.percentageValue = currentOption.Percentage;
-                            supplier.isRemoveLoss = filters[currentOption.SupplierId] ? true : false;
+                            currentSupplier.percentageValue = currentOption.Percentage;
+                            currentSupplier.isRemoveLoss = filters[currentOption.SupplierId] ? true : false;
                         }
                     });
 
+                    function getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options) {
+                        var loadCarrierAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
+
+                            var carrierAccountPayload = {
+                                filter: { SupplierFilterSettings: supplierFilterSettings },
+                                selectedIds: []
+                            };
+                            if (options != undefined) {
+                                for (var i = 0; i < options.length; i++) {
+                                    carrierAccountPayload.selectedIds.push(options[i].SupplierId);
+                                }
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, loadCarrierAccountSelectorPromiseDeferred);
+                        });
+
+                        return loadCarrierAccountSelectorPromiseDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
-
-                function getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options) {
-                    var loadCarrierAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
-
-                        var carrierAccountPayload = {
-                            filter: { SupplierFilterSettings: supplierFilterSettings },
-                            selectedIds: []
-                        };
-                        if (options != undefined) {
-                            for (var i = 0; i < options.length; i++) {
-                                carrierAccountPayload.selectedIds.push(options[i].SupplierId);
-                            }
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, loadCarrierAccountSelectorPromiseDeferred);
-                    });
-
-                    return loadCarrierAccountSelectorPromiseDeferred.promise;
                 }
 
                 api.getData = function () {
@@ -151,7 +150,6 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                         return options;
                     }
-
                     function getFilters() {
                         var filters = {};
                         for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
