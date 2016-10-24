@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
@@ -14,6 +15,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
             {
@@ -59,86 +61,95 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     CarrierSummaryFormatted carrierSummary = new CarrierSummaryFormatted();
 
+                    bool isDeleted = false;
+
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
+                    {
+                        isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
                         carrierSummary.Customer = customerValue.Name;
-                    var supplierValue = analyticRecord.DimensionValues[1];
-                    if (supplierValue != null)
-                        carrierSummary.Supplier = supplierValue.Name;
-
-                    var saleZoneValue = analyticRecord.DimensionValues[2];
-                    if (saleZoneValue != null)
-                        carrierSummary.SaleZoneName = saleZoneValue.Name;
-
-                    var costZoneValue = analyticRecord.DimensionValues[3];
-                    if (costZoneValue != null)
-                        carrierSummary.CostZoneName = costZoneValue.Name;
-
-                    var costRateValue = analyticRecord.DimensionValues[4];
-                    if (costRateValue != null)
-                    {
-                        carrierSummary.CostRate = Convert.ToDouble(costRateValue.Value ?? 0.0);
-                        carrierSummary.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.CostRate);
-                    }
-                    var saleRateValue = analyticRecord.DimensionValues[5];
-                    if (saleRateValue != null)
-                    {
-                        carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
-                        carrierSummary.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleRate);
-                    }
-                    var saleRateChange = analyticRecord.DimensionValues[7];
-                    if (saleRateChange != null)
-                    {
-                        carrierSummary.SaleRateChange = saleRateChange.Value != null ? saleRateChange.Value.ToString() : "";
-                        carrierSummary.SaleRateChangeFormatted = carrierSummary.SaleRateChange;
-                    }
-                    var saleRateEffectiveDate = analyticRecord.DimensionValues[8];
-                    if (saleRateEffectiveDate != null)
-                    {
-                        carrierSummary.SaleRateEffectiveDate = Convert.ToDateTime(saleRateEffectiveDate.Value);
-                    }
-                    var costRateChange = analyticRecord.DimensionValues[10];
-                    if (costRateChange != null)
-                    {
-                        carrierSummary.CostRateChange = costRateChange.Value != null ? costRateChange.Value.ToString() : "";
-                        carrierSummary.CostRateChangeFormatted = carrierSummary.CostRateChange;
-                    }
-                    var costRateEffectiveDate = analyticRecord.DimensionValues[11];
-                    if (costRateEffectiveDate != null)
-                    {
-                        carrierSummary.CostRateEffectiveDate = Convert.ToDateTime(costRateEffectiveDate.Value);
                     }
 
-                    MeasureValue saleDuration;
-                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                    carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleDuration);
+                    if (!isDeleted)
+                    {
+                        var supplierValue = analyticRecord.DimensionValues[1];
+                        if (supplierValue != null)
+                            carrierSummary.Supplier = supplierValue.Name;
 
-                    MeasureValue costDuration;
-                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                    carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                    carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostDuration);
+                        var saleZoneValue = analyticRecord.DimensionValues[2];
+                        if (saleZoneValue != null)
+                            carrierSummary.SaleZoneName = saleZoneValue.Name;
 
-                    MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                    carrierSummary.CostAmount = Convert.ToDouble(costNet.Value ?? 0.0);
-                    carrierSummary.CostAmountFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostAmount);
+                        var costZoneValue = analyticRecord.DimensionValues[3];
+                        if (costZoneValue != null)
+                            carrierSummary.CostZoneName = costZoneValue.Name;
 
-                    MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                        var costRateValue = analyticRecord.DimensionValues[4];
+                        if (costRateValue != null)
+                        {
+                            carrierSummary.CostRate = Convert.ToDouble(costRateValue.Value ?? 0.0);
+                            carrierSummary.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.CostRate);
+                        }
+                        var saleRateValue = analyticRecord.DimensionValues[5];
+                        if (saleRateValue != null)
+                        {
+                            carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
+                            carrierSummary.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleRate);
+                        }
+                        var saleRateChange = analyticRecord.DimensionValues[7];
+                        if (saleRateChange != null)
+                        {
+                            carrierSummary.SaleRateChange = saleRateChange.Value != null ? saleRateChange.Value.ToString() : "";
+                            carrierSummary.SaleRateChangeFormatted = carrierSummary.SaleRateChange;
+                        }
+                        var saleRateEffectiveDate = analyticRecord.DimensionValues[8];
+                        if (saleRateEffectiveDate != null)
+                        {
+                            carrierSummary.SaleRateEffectiveDate = Convert.ToDateTime(saleRateEffectiveDate.Value);
+                        }
+                        var costRateChange = analyticRecord.DimensionValues[10];
+                        if (costRateChange != null)
+                        {
+                            carrierSummary.CostRateChange = costRateChange.Value != null ? costRateChange.Value.ToString() : "";
+                            carrierSummary.CostRateChangeFormatted = carrierSummary.CostRateChange;
+                        }
+                        var costRateEffectiveDate = analyticRecord.DimensionValues[11];
+                        if (costRateEffectiveDate != null)
+                        {
+                            carrierSummary.CostRateEffectiveDate = Convert.ToDateTime(costRateEffectiveDate.Value);
+                        }
 
-                    carrierSummary.SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    carrierSummary.SaleAmountFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleAmount);
+                        MeasureValue saleDuration;
+                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                        carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                        carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleDuration);
 
-                    MeasureValue profit;
-                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
-                    carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                    carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
+                        MeasureValue costDuration;
+                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
+                        carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
+                        carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostDuration);
 
-                    carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" : (carrierSummary.SaleAmount != 0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
+                        MeasureValue costNet;
+                        analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                        carrierSummary.CostAmount = Convert.ToDouble(costNet.Value ?? 0.0);
+                        carrierSummary.CostAmountFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostAmount);
+
+                        MeasureValue saleNet;
+                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+
+                        carrierSummary.SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
+                        carrierSummary.SaleAmountFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleAmount);
+
+                        MeasureValue profit;
+                        analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                        carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
+                        carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
+
+                        carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" : (carrierSummary.SaleAmount != 0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
 
 
-                    listCarrierSummaryDetailed.Add(carrierSummary);
+                        listCarrierSummaryDetailed.Add(carrierSummary);
+                    }
                 }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources =

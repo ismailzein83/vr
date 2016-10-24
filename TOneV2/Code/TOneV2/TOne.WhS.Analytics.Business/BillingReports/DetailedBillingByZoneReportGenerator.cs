@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Analytics.Entities.BillingReport;
+using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -15,6 +16,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
             double service = 0;
@@ -117,13 +119,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (zoneValue != null)
                         detailedBillingByZone.Zone = zoneValue.Name;
 
-
+                    bool isDeleted = false;
 
                     if (parameters.IsCost)
                     {
                         if (parameters.GroupBySupplier)
                         {
                             var supplierValue = analyticRecord.DimensionValues[1];
+                            isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
                             if (supplierValue != null)
                                 detailedBillingByZone.SupplierID = supplierValue.Name;
                         }
@@ -131,109 +134,112 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                     {
                         var customerValue = analyticRecord.DimensionValues[1];
+                        isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
                         if (customerValue != null)
                             detailedBillingByZone.CustomerID = customerValue.Name;
                     }
+                    if (!isDeleted)
+                    {
+                        MeasureValue durationNet;
+                        analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                        detailedBillingByZone.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
+                        detailedBillingByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.DurationNet);
 
-                    MeasureValue durationNet;
-                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
-                    detailedBillingByZone.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                    detailedBillingByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.DurationNet);
+                        MeasureValue calls;
+                        analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
+                        detailedBillingByZone.Calls = (calls == null) ? 0 : Convert.ToInt32(calls.Value ?? 0);
 
-                    MeasureValue calls;
-                    analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
-                    detailedBillingByZone.Calls = (calls == null) ? 0 : Convert.ToInt32(calls.Value ?? 0);
+                        MeasureValue rate;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
+                        detailedBillingByZone.Rate = (rate == null) ? 0.0 : Convert.ToDouble(rate.Value ?? 0.0);
+                        detailedBillingByZone.RateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.Rate);
 
-                    MeasureValue rate;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
-                    detailedBillingByZone.Rate = (rate == null) ? 0.0 : Convert.ToDouble(rate.Value ?? 0.0);
-                    detailedBillingByZone.RateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.Rate);
+                        MeasureValue net;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                        detailedBillingByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
+                        detailedBillingByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.Net);
 
-                    MeasureValue net;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
-                    detailedBillingByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-                    detailedBillingByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.Net);
+                        MeasureValue extraChargeValue;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
+                        detailedBillingByZone.ExtraChargeValue = (extraChargeValue == null) ? 0.0 : Convert.ToDouble(extraChargeValue.Value ?? 0.0);
+                        detailedBillingByZone.CommissionValueFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.ExtraChargeValue);
 
-                    MeasureValue extraChargeValue;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
-                    detailedBillingByZone.ExtraChargeValue = (extraChargeValue == null) ? 0.0 : Convert.ToDouble(extraChargeValue.Value ?? 0.0);
-                    detailedBillingByZone.CommissionValueFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.ExtraChargeValue);
+                        MeasureValue durationDetails;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostDurationDetails", out durationDetails);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleDurationDetails", out durationDetails);
+                        detailedBillingByZone.DurationInSeconds = (durationDetails == null) ? 0 : Convert.ToDecimal(durationDetails.Value ?? 0.0);
+                        detailedBillingByZone.DurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.DurationInSeconds);
 
-                    MeasureValue durationDetails;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostDurationDetails", out durationDetails);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleDurationDetails", out durationDetails);
-                    detailedBillingByZone.DurationInSeconds = (durationDetails == null) ? 0 : Convert.ToDecimal(durationDetails.Value ?? 0.0);
-                    detailedBillingByZone.DurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.DurationInSeconds);
+                        MeasureValue offPeakDuration;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostOffPeakDuration", out offPeakDuration);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleOffPeakDuration", out offPeakDuration);
+                        detailedBillingByZone.OffPeakDurationInSeconds = (offPeakDuration == null) ? 0 : Convert.ToDecimal(offPeakDuration.Value ?? 0.0);
+                        detailedBillingByZone.OffPeakDurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.OffPeakDurationInSeconds);
 
-                    MeasureValue offPeakDuration;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostOffPeakDuration", out offPeakDuration);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleOffPeakDuration", out offPeakDuration);
-                    detailedBillingByZone.OffPeakDurationInSeconds = (offPeakDuration == null) ? 0 : Convert.ToDecimal(offPeakDuration.Value ?? 0.0);
-                    detailedBillingByZone.OffPeakDurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.OffPeakDurationInSeconds);
+                        MeasureValue offPeakRate;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostOffPeakRate", out offPeakRate);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleOffPeakRate", out offPeakRate);
+                        detailedBillingByZone.OffPeakRate = (offPeakRate == null) ? 0 : Convert.ToDouble(offPeakRate.Value ?? 0.0);
+                        detailedBillingByZone.OffPeakRateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.OffPeakRate);
 
-                    MeasureValue offPeakRate;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostOffPeakRate", out offPeakRate);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleOffPeakRate", out offPeakRate);
-                    detailedBillingByZone.OffPeakRate = (offPeakRate == null) ? 0 : Convert.ToDouble(offPeakRate.Value ?? 0.0);
-                    detailedBillingByZone.OffPeakRateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.OffPeakRate);
+                        MeasureValue offPeakNet;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostOffPeakNet", out offPeakNet);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleOffPeakNet", out offPeakNet);
+                        detailedBillingByZone.OffPeakNet = (offPeakNet == null) ? 0 : Convert.ToDouble(offPeakNet.Value ?? 0.0);
+                        detailedBillingByZone.OffPeakNetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.OffPeakNet);
 
-                    MeasureValue offPeakNet;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostOffPeakNet", out offPeakNet);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleOffPeakNet", out offPeakNet);
-                    detailedBillingByZone.OffPeakNet = (offPeakNet == null) ? 0 : Convert.ToDouble(offPeakNet.Value ?? 0.0);
-                    detailedBillingByZone.OffPeakNetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.OffPeakNet);
+                        MeasureValue weekEndRate;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostWeekEndRate", out weekEndRate);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleWeekEndRate", out weekEndRate);
+                        detailedBillingByZone.WeekEndRate = (weekEndRate == null) ? 0 : Convert.ToDouble(weekEndRate.Value ?? 0.0);
+                        detailedBillingByZone.WeekEndRateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.WeekEndRate);
 
-                    MeasureValue weekEndRate;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostWeekEndRate", out weekEndRate);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleWeekEndRate", out weekEndRate);
-                    detailedBillingByZone.WeekEndRate = (weekEndRate == null) ? 0 : Convert.ToDouble(weekEndRate.Value ?? 0.0);
-                    detailedBillingByZone.WeekEndRateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.WeekEndRate);
+                        MeasureValue weekEndDuration;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostWeekEndDuration", out weekEndDuration);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleWeekEndDuration", out weekEndDuration);
+                        detailedBillingByZone.WeekEndDurationInSeconds = (weekEndDuration == null) ? 0 : Convert.ToDecimal(weekEndDuration.Value ?? 0.0);
+                        detailedBillingByZone.WeekEndDurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.WeekEndDurationInSeconds);
 
-                    MeasureValue weekEndDuration;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostWeekEndDuration", out weekEndDuration);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleWeekEndDuration", out weekEndDuration);
-                    detailedBillingByZone.WeekEndDurationInSeconds = (weekEndDuration == null) ? 0 : Convert.ToDecimal(weekEndDuration.Value ?? 0.0);
-                    detailedBillingByZone.WeekEndDurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.WeekEndDurationInSeconds);
+                        MeasureValue weekEndNet;
+                        if (parameters.IsCost)
+                            analyticRecord.MeasureValues.TryGetValue("CostWeekEndNet", out weekEndNet);
+                        else
+                            analyticRecord.MeasureValues.TryGetValue("SaleWeekEndNet", out weekEndNet);
+                        detailedBillingByZone.WeekEndNet = (weekEndNet == null) ? 0 : Convert.ToDouble(weekEndNet.Value ?? 0.0);
+                        detailedBillingByZone.WeekEndNetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.WeekEndNet);
 
-                    MeasureValue weekEndNet;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostWeekEndNet", out weekEndNet);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleWeekEndNet", out weekEndNet);
-                    detailedBillingByZone.WeekEndNet = (weekEndNet == null) ? 0 : Convert.ToDouble(weekEndNet.Value ?? 0.0);
-                    detailedBillingByZone.WeekEndNetFormatted = ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.WeekEndNet);
+                        detailedBillingByZone.TotalAmountFormatted =
+                            ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.Net + detailedBillingByZone.OffPeakNet +
+                                                       detailedBillingByZone.WeekEndNet);
 
-                    detailedBillingByZone.TotalAmountFormatted =
-                        ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.Net + detailedBillingByZone.OffPeakNet +
-                                                   detailedBillingByZone.WeekEndNet);
+                        detailedBillingByZone.TotalDurationFormatted =
+                            ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.DurationInSeconds +
+                                                       detailedBillingByZone.OffPeakDurationInSeconds +
+                                                       detailedBillingByZone.WeekEndDurationInSeconds);
 
-                    detailedBillingByZone.TotalDurationFormatted =
-                        ReportHelpers.FormatNormalNumberDigit(detailedBillingByZone.DurationInSeconds +
-                                                   detailedBillingByZone.OffPeakDurationInSeconds +
-                                                   detailedBillingByZone.WeekEndDurationInSeconds);
-
-                    listDetailedBillingByZone.Add(detailedBillingByZone);
+                        listDetailedBillingByZone.Add(detailedBillingByZone);
+                    }
                 }
 
             decimal services = 0;
