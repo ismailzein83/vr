@@ -58,7 +58,7 @@ namespace TOne.WhS.DBSync.Business
             foreach (ZoneServiceConfig zoneServiceConfig in itemsToAdd)
                 zoneServiceConfig.ZoneServiceConfigId = startingId++;
 
-            foreach (ZoneServiceConfig zoneServiceConfig in itemsToAdd)
+            foreach (ZoneServiceConfig zoneServiceConfig in itemsToAdd.OrderBy(item => item.SourceId))
             {
                 foreach (ZoneServiceConfig item in itemsToAdd)
                 {
