@@ -51,7 +51,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                     var total = 0;
                     for (var x = 0; x < suppliers.length; x++) {
-                        total += parseFloat(suppliers[x].percentageValue);
+                        total += parseFloat(suppliers[x].PercentageValue);
                     }
 
                     if (total != 100)
@@ -61,6 +61,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 }
 
                 $scope.scopeModel.onSelectSupplier = function (selectedItem) {
+
                     $scope.scopeModel.fixedSuppliers.push({
                         CarrierAccountId: selectedItem.CarrierAccountId,
                         Name: selectedItem.Name
@@ -68,7 +69,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 };
 
                 $scope.scopeModel.onDeselectSupplier = function (deselectedItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fixedSuppliers, selectedItem.CarrierAccountId, 'CarrierAccountId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fixedSuppliers, deselectedItem.CarrierAccountId, 'CarrierAccountId');
                     $scope.scopeModel.fixedSuppliers.splice(index, 1);
                 };
                 
@@ -98,11 +99,16 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     promises.push(loadCarrierAccountSelectorPromise);
 
                     loadCarrierAccountSelectorPromise.then(function () {
-                        for (var i = 0; i < $scope.scopeModel.fixedSuppliers.length; i++) {
-                            var currentSupplier = $scope.scopeModel.fixedSuppliers[i];
+                        for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
+                            var currentSupplier = $scope.scopeModel.selectedSuppliers[i];
                             var currentOption = options[i];
-                            currentSupplier.percentageValue = currentOption.Percentage;
-                            currentSupplier.isRemoveLoss = filters[currentOption.SupplierId] ? true : false;
+
+                            $scope.scopeModel.fixedSuppliers.push({
+                                CarrierAccountId: currentSupplier.CarrierAccountId,
+                                Name: currentSupplier.Name,
+                                PercentageValue: currentOption.Percentage,
+                                IsRemoveLoss: filters[currentOption.SupplierId] ? true : false
+                            });
                         }
                     });
 
@@ -118,6 +124,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                             if (options != undefined) {
                                 for (var i = 0; i < options.length; i++) {
                                     carrierAccountPayload.selectedIds.push(options[i].SupplierId);
+                                    //$scope.scopeModel.fixedSuppliers.push(options[i]);
                                 }
                             }
 
@@ -144,18 +151,17 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                             var supplier = $scope.scopeModel.fixedSuppliers[i];
                             options.push({
                                 SupplierId: supplier.CarrierAccountId,
-                                Percentage: supplier.percentageValue,
+                                Percentage: supplier.PercentageValue,
                             });
                         }
-
                         return options;
                     }
                     function getFilters() {
                         var filters = {};
-                        for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
+                        for (var i = 0; i < $scope.scopeModel.fixedSuppliers.length; i++) {
 
-                            var supplier = $scope.scopeModel.selectedSuppliers[i];
-                            if (supplier.isRemoveLoss) {
+                            var supplier = $scope.scopeModel.fixedSuppliers[i];
+                            if (supplier.IsRemoveLoss) {
                                 filters[supplier.CarrierAccountId] = [{
                                     $type: "TOne.WhS.Routing.Business.RouteRules.Filters.RateOptionFilter, TOne.WhS.Routing.Business",
                                     RateOption: WhS_Routing_RateOptionEnum.MaximumLoss.value,
