@@ -197,7 +197,7 @@ namespace Vanrise.Integration.Business
 
         private string BuildCustomClass(string customCode, out string fullTypeName)
         {
-            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(int dataSourceId, Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
+            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(Guid dataSourceId, Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
                                                             {").Append(customCode).Append("}").ToString();
 
             StringBuilder classDefinitionBuilder = new StringBuilder().Append(@"
