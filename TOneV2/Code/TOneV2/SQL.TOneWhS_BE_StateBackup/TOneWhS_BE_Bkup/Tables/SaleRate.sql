@@ -9,9 +9,10 @@
     [EED]           DATETIME        NULL,
     [SourceID]      VARCHAR (50)    NULL,
     [Change]        TINYINT         NULL,
-    [StateBackupID] BIGINT          NOT NULL,
-    CONSTRAINT [PK_SaleRate] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [StateBackupID] BIGINT          NOT NULL
 );
+
+
 
 
 

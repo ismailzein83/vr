@@ -5,9 +5,10 @@
     [CurrencyID]    INT          NOT NULL,
     [EffectiveOn]   DATETIME     NULL,
     [SourceID]      VARCHAR (50) NULL,
-    [StateBackupID] BIGINT       NOT NULL,
-    CONSTRAINT [PK_SalePriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [StateBackupID] BIGINT       NOT NULL
 );
+
+
 
 
 

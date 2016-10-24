@@ -6,9 +6,10 @@
     [RoutingProductID] INT      NOT NULL,
     [BED]              DATETIME NOT NULL,
     [EED]              DATETIME NULL,
-    [StateBackupID]    BIGINT   NOT NULL,
-    CONSTRAINT [PK_SaleZoneRoutingProduct] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [StateBackupID]    BIGINT   NOT NULL
 );
+
+
 
 
 
