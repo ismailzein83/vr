@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Entities
 {
     public class DataSourceImportedBatchQuery
     {
-        public int? DataSourceId { get; set; }
+        public Guid? DataSourceId { get; set; }
         public string BatchName { get; set; } // string is nullable by default
         public List<MappingResult> MappingResults { get; set; }
         public DateTime? From { get; set; }

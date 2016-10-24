@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
 {
     public class DataSourceLogQuery
     {
-        public int? DataSourceId { get; set; }
+        public Guid? DataSourceId { get; set; }
         public List<LogEntryType> Severities { get; set; }
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
