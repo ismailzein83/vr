@@ -335,7 +335,7 @@
             var loadBPBusinessRuleSetSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             bpBusinessRuleSetReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    filter: { BPDefinitionId: 3 },
+                    filter: { BPDefinitionId: "6EF1A7A7-9B70-4A8F-B94E-F9BB5E347CF2" },
                     selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined && carrierAccountEntity.CarrierAccountSettings.PriceListSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.PriceListSettings.BPBusinessRuleSetIds : undefined)
                 };
 
