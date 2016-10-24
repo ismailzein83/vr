@@ -593,7 +593,7 @@
                 ZoneItemStatus: $scope.currentNode.status,
                 CountryId: $scope.currentNode.countryId,
                 ShowDraftStatus: $scope.hasState,
-                ShowSelectCode: $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value
+                ShowSelectCode: $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.Renamed.value
             };
         }
 
