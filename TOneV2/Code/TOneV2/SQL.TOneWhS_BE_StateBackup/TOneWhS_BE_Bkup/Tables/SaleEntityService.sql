@@ -6,8 +6,9 @@
     [BED]           DATETIME       NOT NULL,
     [EED]           DATETIME       NULL,
     [SourceID]      VARCHAR (50)   NULL,
-    [StateBackupID] INT            NOT NULL,
-    CONSTRAINT [PK_SaleZoneService] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_SaleZoneService_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE_Bkup].[SaleZone] ([ID])
+    [StateBackupID] BIGINT         NOT NULL,
+    CONSTRAINT [PK_SaleZoneService] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

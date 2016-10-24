@@ -9,9 +9,9 @@
     [EED]           DATETIME        NULL,
     [SourceID]      VARCHAR (50)    NULL,
     [Change]        TINYINT         NULL,
-    [StateBackupID] INT             NOT NULL,
-    CONSTRAINT [PK_SaleRate] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_SaleRate_SalePriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE_Bkup].[SalePriceList] ([ID]),
-    CONSTRAINT [FK_SaleRate_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE_Bkup].[SaleZone] ([ID])
+    [StateBackupID] BIGINT          NOT NULL,
+    CONSTRAINT [PK_SaleRate] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

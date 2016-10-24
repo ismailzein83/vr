@@ -9,9 +9,9 @@
     [BED]           DATETIME        NOT NULL,
     [EED]           DATETIME        NULL,
     [SourceID]      VARCHAR (50)    NULL,
-    [StateBackupID] INT             NOT NULL,
-    CONSTRAINT [PK_SupplierRate] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_SupplierRate_SupplierPriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE_Bkup].[SupplierPriceList] ([ID]),
-    CONSTRAINT [FK_SupplierRate_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE_Bkup].[SupplierZone] ([ID])
+    [StateBackupID] BIGINT          NOT NULL,
+    CONSTRAINT [PK_SupplierRate] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

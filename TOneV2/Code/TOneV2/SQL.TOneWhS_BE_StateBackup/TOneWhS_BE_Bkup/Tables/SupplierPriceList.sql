@@ -6,7 +6,9 @@
     [EffectiveOn]   DATETIME     NULL,
     [CreatedTime]   DATETIME     CONSTRAINT [DF_SupplierPriceList_CreatedDate] DEFAULT (getdate()) NULL,
     [SourceID]      VARCHAR (50) NULL,
-    [StateBackupID] INT          NULL,
+    [StateBackupID] BIGINT       NULL,
     CONSTRAINT [PK_SupplierPriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

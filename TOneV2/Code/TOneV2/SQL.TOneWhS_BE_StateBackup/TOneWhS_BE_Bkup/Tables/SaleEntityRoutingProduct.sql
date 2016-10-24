@@ -6,8 +6,9 @@
     [RoutingProductID] INT      NOT NULL,
     [BED]              DATETIME NOT NULL,
     [EED]              DATETIME NULL,
-    [StateBackupID]    INT      NOT NULL,
-    CONSTRAINT [PK_SaleZoneRoutingProduct] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_SaleEntityRoutingProduct_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE_Bkup].[SaleZone] ([ID])
+    [StateBackupID]    BIGINT   NOT NULL,
+    CONSTRAINT [PK_SaleZoneRoutingProduct] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

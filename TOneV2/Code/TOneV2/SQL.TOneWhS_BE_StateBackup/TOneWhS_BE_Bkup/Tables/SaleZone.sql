@@ -6,7 +6,9 @@
     [BED]                 DATETIME       NOT NULL,
     [EED]                 DATETIME       NULL,
     [SourceID]            VARCHAR (50)   NULL,
-    [StateBackupID]       INT            NOT NULL,
+    [StateBackupID]       BIGINT         NOT NULL,
     CONSTRAINT [PK_SaleZone] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
