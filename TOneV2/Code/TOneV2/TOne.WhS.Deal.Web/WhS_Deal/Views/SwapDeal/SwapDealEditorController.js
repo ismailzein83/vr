@@ -121,9 +121,7 @@
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwapDealInbound, loadSwapDealOutbound]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
+            })
         }
 
         function loadSwapDealInbound() {
@@ -227,9 +225,7 @@
             carrierAccountSelectorReadyDeferred.promise.then(function () {
                 var payload = (dealEntity != undefined) ? { selectedIds: dealEntity.Settings.CarrierAccountId } : undefined;
                 VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
-
                 $scope.scopeModel.isLoading = false;
-
             });
 
             return carrierAccountSelectorLoadDeferred.promise;
