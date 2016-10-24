@@ -54,8 +54,25 @@ namespace TOne.WhS.Routing.Business
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
         {
-            base.ApplyOptionsPercentage(options);
-            ApplyOptionsPercentage<RouteOption>(options);
+            if (options == null)
+                return;
+
+            decimal? totalAssignedPercentage = null;
+
+            var unblockedOptions = options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered);
+            if (unblockedOptions != null)
+                totalAssignedPercentage = unblockedOptions.Sum(itm => itm.Percentage.Value);
+
+
+            if (totalAssignedPercentage.HasValue && (totalAssignedPercentage == 100 || totalAssignedPercentage == 0))
+                return;
+
+            decimal unassignedPercentages = totalAssignedPercentage.HasValue ? 100 - totalAssignedPercentage.Value : 0;
+
+            foreach (var option in options)
+            {
+                option.Percentage = option.IsBlocked || option.IsFiltered ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
+            }
         }
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -107,7 +124,25 @@ namespace TOne.WhS.Routing.Business
 
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
-            ApplyOptionsPercentage<RPRouteOption>(options);
+            if (options == null)
+                return;
+
+            decimal? totalAssignedPercentage = null;
+
+            var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
+            if (unblockedOptions != null)
+                totalAssignedPercentage = unblockedOptions.Sum(itm => itm.Percentage.Value);
+
+
+            if (totalAssignedPercentage.HasValue && (totalAssignedPercentage == 100 || totalAssignedPercentage == 0))
+                return;
+
+            decimal unassignedPercentages = totalAssignedPercentage.HasValue ? 100 - totalAssignedPercentage.Value : 0;
+
+            foreach (var option in options)
+            {
+                option.Percentage = option.SupplierStatus == SupplierStatus.Block ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
+            }
         }
 
         #endregion
@@ -193,23 +228,6 @@ namespace TOne.WhS.Routing.Business
             }
 
             return false;
-        }
-
-        private void ApplyOptionsPercentage<T>(IEnumerable<T> options) where T : IRouteOptionPercentageTarget
-        {
-            if (options == null)
-                return;
-
-            decimal totalAssignedPercentage = options.Sum(itm => itm.Percentage.Value);
-            if (totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
-                return;
-
-            decimal unassignedPercentages = 100 - totalAssignedPercentage;
-
-            foreach (var option in options)
-            {
-                option.Percentage = decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage, 2);
-            }
         }
 
         #endregion

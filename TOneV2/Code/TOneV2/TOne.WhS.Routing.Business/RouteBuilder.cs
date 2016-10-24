@@ -281,10 +281,11 @@ namespace TOne.WhS.Routing.Business
                             SupplierId = routeOptionRuleTarget.SupplierId,
                             SupplierZones = new List<RPRouteOptionSupplierZone>(),
                             NumberOfBlockedZones = 0,
-                            NumberOfUnblockedZones = 0
+                            NumberOfUnblockedZones = 0,
+                            Percentage = routeOptionRuleTarget.Percentage
                         };
 
-                        route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails); 
+                        route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails);
                     }
 
                     if (routeOptionRuleTarget.BlockOption)
@@ -321,7 +322,8 @@ namespace TOne.WhS.Routing.Business
                                 SupplierId = item.SupplierId,
                                 SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate,
                                 SaleZoneId = saleZoneId,
-                                SupplierStatus = item.SupplierStatus
+                                SupplierStatus = item.SupplierStatus,
+                                Percentage = item.Percentage
                             });
                     }
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
@@ -397,4 +399,3 @@ namespace TOne.WhS.Routing.Business
         #endregion
     }
 }
- 

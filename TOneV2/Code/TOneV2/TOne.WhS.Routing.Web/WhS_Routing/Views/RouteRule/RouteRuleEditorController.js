@@ -116,11 +116,13 @@
                 if (_selectedItem != undefined) {
 
                     $scope.scopeModel.showCriteriaSection = $scope.scopeModel.showSettingsSection = true;
-                    $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
-                    $scope.scopeModel.excludedCodes = [];
-                    reloadFilterBySection();
-                    reloadSaleZoneGroupSection();
-                    reloadCustomerGroupSection();
+
+                    ////Reloading Criteria Tab section
+                    //$scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
+                    //$scope.scopeModel.excludedCodes = [];
+                    //reloadFilterBySection();
+                    //reloadSaleZoneGroupSection();
+                    //reloadCustomerGroupSection();
                 }
 
                 function reloadFilterBySection() {
