@@ -118,7 +118,7 @@ namespace TOne.WhS.Sales.Business
 
             // Set the route options, calculate the costs, and calculate the rate for all zone items
             IEnumerable<RPZone> rpZones = zoneItems.MapRecords(itm => new RPZone() { RoutingProductId = itm.EffectiveRoutingProductId, SaleZoneId = itm.ZoneId });
-            ZoneRouteOptionManager routeOptionSetter = new ZoneRouteOptionManager(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
+            ZoneRouteOptionManager routeOptionSetter = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.SelectedCostCalculationMethodConfigId, input.RateCalculationMethod, input.CurrencyId);
 
             routeOptionSetter.SetZoneRouteOptionProperties(zoneItems);
             return zoneItems.FindAllRecords(x => x.CalculatedRate != null);

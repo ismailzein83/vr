@@ -349,6 +349,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccount.IsDeleted;
         }
 
+		public int? GetCarrierProfileId(int carrierAccountId)
+		{
+			CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+			if (carrierAccount != null)
+				return carrierAccount.CarrierProfileId;
+			return null;
+		}
+
         #endregion
 
         #region ICarrierAccountManager Memebers

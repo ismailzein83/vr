@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Entities;
@@ -18,11 +19,16 @@ namespace TOne.WhS.Sales.Business
         private Guid? _rateCalculationCostColumnConfigId;
         private RateCalculationMethod _rateCalculationMethod;
 
-        public ZoneRouteOptionManager(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
             RPRouteManager rpRouteManager = new RPRouteManager();
-            _routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId);
-            _costCalculationMethods = costCalculationMethods;
+
+			int? customerId = null;
+			if (ownerType == SalePriceListOwnerType.Customer)
+				customerId = ownerId;
+			_routes = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId, customerId);
+            
+			_costCalculationMethods = costCalculationMethods;
             _rateCalculationCostColumnConfigId = rateCalculationCostColumnConfigId;
             _rateCalculationMethod = rateCalculationMethod;
         }
