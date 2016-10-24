@@ -107,14 +107,18 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
                 Settings = new PricingRuleExtraChargeSettings
                 {
-                    Actions = GetActions(defaultCommission)
+                    Actions = GetActions(defaultCommission),
+                    CurrencyId = Context.CurrencyId
                 },
                 Criteria = new GenericRuleCriteria
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
 
                 },
-                DefinitionId = new Guid("ADED2932-BB9F-49B7-A561-CB7C1413084F")
+                DefinitionId = new Guid("ADED2932-BB9F-49B7-A561-CB7C1413084F"),
+                Description = string.Format("Migrated Purchase Extra Charge Rule {0}", Context.Counter++),
+                BeginEffectiveTime = defaultCommission.BED,
+                EndEffectiveTime = defaultCommission.EED
             };
 
             extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues
@@ -156,13 +160,17 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 Settings = new PricingRuleExtraChargeSettings
                 {
-                    Actions = GetActions(defaultCommission)
+                    Actions = GetActions(defaultCommission),
+                    CurrencyId = Context.CurrencyId
                 },
                 Criteria = new GenericRuleCriteria
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
                 },
-                DefinitionId = new Guid("90A47A0A-3EF9-4941-BC21-CA0BE44FC5A4")
+                DefinitionId = new Guid("90A47A0A-3EF9-4941-BC21-CA0BE44FC5A4"),
+                Description = string.Format("Migrated Sale Extra Charge Rule {0}", Context.Counter++),
+                BeginEffectiveTime = defaultCommission.BED,
+                EndEffectiveTime = defaultCommission.EED
             };
 
             extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues
