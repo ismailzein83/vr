@@ -159,6 +159,7 @@
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
     <Content Include="WhS_Routing\Constant\OrderTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
+    <Content Include="WhS_Routing\Constant\RouteStatusEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionEnum.js" />
     <Content Include="WhS_Routing\Constant\RateOptionTypeEnum.js" />

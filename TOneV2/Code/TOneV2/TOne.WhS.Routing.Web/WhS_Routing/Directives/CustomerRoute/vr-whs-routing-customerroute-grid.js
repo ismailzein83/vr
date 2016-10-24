@@ -66,8 +66,6 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                        }
                        onResponseReady(response);
 
-                       console.log(response);
-
                        //showGrid
                        UtilsService.waitMultiplePromises(_customerRouteServiceViewerPromises).then(function () {
                            $scope.showGrid = true;
