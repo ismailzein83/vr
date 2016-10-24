@@ -1,0 +1,33 @@
+﻿<div vr-modalcontent ng-controller="WhS_Deal_VolumeCommitmentItemTierEditorController" width="'20%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formEditor">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-switch value="scopeModel.isLastTier" label="Is Last Tier"></vr-switch>
+                </vr-columns>
+                <vr-columns width="fullrow" vr-disabled="scopeModel.isLastTier">
+                    <vr-textbox value="scopeModel.upToVolume" type="number" label="Up To Volume" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-textbox value="scopeModel.defaultRate" type="number" label="Default Rate" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-select label="Retro Active From"
+                               datasource="[]"
+                               datavaluefield="tierid"
+                               datatextfield="tiername"
+                               selectedvalues="scopeModel.selectedRetroActive">
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

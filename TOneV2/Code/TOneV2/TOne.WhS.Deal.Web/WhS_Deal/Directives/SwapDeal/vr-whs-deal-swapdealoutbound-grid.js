@@ -51,7 +51,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 api.load = function (payload) {
                     mainPayload = payload;
 
-                    if (payload.Outbounds != undefined && payload.Outbounds != null) {
+                    if (payload!= undefined && payload.Outbounds != null) {
                         ctrl.datasource = payload.Outbounds;
                        
                     }

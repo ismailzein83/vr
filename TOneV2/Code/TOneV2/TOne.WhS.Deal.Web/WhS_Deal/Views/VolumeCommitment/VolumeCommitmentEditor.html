@@ -1,0 +1,63 @@
+﻿<div vr-modalcontent ng-controller="WhS_Deal_VolumeCommitmentEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody>
+        <vr-form name="formEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-select label="Type"
+                                       datasource="scopeModel.volumeCommitmentTypes"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       selectedvalues="scopeModel.selectedVolumeCommitmentType"
+                                       isrequired="true"
+                                       hideremoveicon="true">
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true"></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="2/3row">
+                            <vr-textarea label="Description" value="scopeModel.description" isrequired="true"></vr-textarea>
+                        </vr-columns>
+                        
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Details'">
+                    <vr-row>
+                        <span vr-loader="scopeModel.isLoadingDirective">
+                            <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ></vr-directivewrapper>
+                        </span>
+
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-show="scopeModel.selectedVolumeCommitmentType !=undefined">
+                            <vr-whs-deal-volumecommitment-items on-ready="scopeModel.onVolumeCommitmenetItemsReady"></vr-whs-deal-volumecommitment-items>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save" haspermission="scopeModel.hasSavePermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
