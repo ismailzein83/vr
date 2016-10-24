@@ -119,7 +119,9 @@ as (select * from (values
 ('98B8E899-4ED7-4BCB-B6EF-8AE94E382E62','WhS_Sales_CostCalculationMethod_Avarage','Average','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-avgcostcalculation"}'),
 ('BBB0CA31-0FCD-4035-A8ED-5D4BAD06C662','Block','Block','WhS_Routing_RouteRuleSettingsType','{"Editor":"vr-whs-routing-routerulesettings-block","Priority":1, "CssClass":"bg-danger"}'),
 ('31B3226E-A2B2-40D5-8C33-83C6601E8730','LCR','LCR','WhS_Routing_RouteRuleSettingsType','{"Editor":"vr-whs-routing-routerulesettings-lcr"}'),
-('5A492AA2-9642-453C-8B18-967D745AD812','Advanced','Advanced','WhS_Routing_RouteRuleSettingsType','{"Editor":"vr-whs-routing-routerulesettings-regular"}')
+('5A492AA2-9642-453C-8B18-967D745AD812','Advanced','Advanced','WhS_Routing_RouteRuleSettingsType','{"Editor":"vr-whs-routing-routerulesettings-regular"}'),
+('10631F32-9116-4443-A73D-2D4B77111634','Postgres Data Provider','Postgres Data Provider','VR_Analytic_AnalyticDataProviderSettings','{"Editor":"vr-analytic-postgres-dataprovider"}'),
+('3CBA3F20-6535-4EBF-9704-DF65AC605671','Sql Data Provider','Sql Data Provider','VR_Analytic_AnalyticDataProviderSettings','{"Editor":"vr-analytic-sql-dataprovider"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
