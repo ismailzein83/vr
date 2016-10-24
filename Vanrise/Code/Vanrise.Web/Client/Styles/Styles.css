@@ -2554,3 +2554,10 @@ wysiwyg-edit .tinyeditor .sizer {
     height: 200px;
     position: relative;
 }
+
+/*vr-datetimepicker today class*/
+.datepicker-days .today{
+    border: 1px solid #666;
+    border-style: dotted;
+}
+    

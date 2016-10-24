@@ -11066,12 +11066,12 @@
                     'blur': options.debug ? '' : hide,
                     'keydown': keydown,
                     'keyup': keyup,
-                    'focus': options.allowInputToggle ? show : ''
+                    'focus': options.allowInputToggle==true ? show : ''
                 });
 
                 if (element.is('input')) {
                     input.on({
-                        'focus': show
+                        'focus': options.allowInputToggle == true ? show : ''
                     });
                 } else if (component) {
                     component.on('click', toggle);
@@ -11085,12 +11085,12 @@
                     'blur': hide,
                     'keydown': keydown,
                     'keyup': keyup,
-                    'focus': options.allowInputToggle ? hide : ''
+                    'focus': options.allowInputToggle==true ? hide : ''
                 });
 
                 if (element.is('input')) {
                     input.off({
-                        'focus': show
+                        'focus': options.allowInputToggle == true ? hide : ''
                     });
                 } else if (component) {
                     component.off('click', toggle);
