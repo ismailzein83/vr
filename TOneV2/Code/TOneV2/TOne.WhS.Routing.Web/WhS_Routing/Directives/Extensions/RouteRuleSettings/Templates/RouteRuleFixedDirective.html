@@ -12,14 +12,15 @@
             <vr-validator validate="scopeModel.isValid()">
                 <vr-datagrid datasource="scopeModel.fixedSuppliers"
                              enabledraggablerow="true"
+                             ondeleterow="scopeModel.onDeleteRow"
                              hidegridmenu>
 
                     <vr-datagridcolumn headertext="'Suppliers'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Remove Loss'">
-                        <vr-switch value="dataItem.IsRemoveLoss"></vr-switch>
-                    </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Percentage'">
                         <vr-textbox value="dataItem.PercentageValue" type="number" minvalue="0" maxvalue=" 100" isrequired="true"></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Remove Loss'">
+                        <vr-switch value="dataItem.IsRemoveLoss"></vr-switch>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-validator>
