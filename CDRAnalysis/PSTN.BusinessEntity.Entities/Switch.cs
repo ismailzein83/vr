@@ -14,6 +14,6 @@ namespace PSTN.BusinessEntity.Entities
 
         public TimeSpan TimeOffset { get; set; }
 
-        public int? DataSourceId { get; set; }
+        public Guid? DataSourceId { get; set; }
     }
 }

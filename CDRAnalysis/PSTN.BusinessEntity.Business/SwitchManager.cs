@@ -57,7 +57,7 @@ namespace PSTN.BusinessEntity.Business
             return switches.GetRecord(switchId);
         }
 
-        public Switch GetSwitchByDataSourceId(int dataSourceId)
+        public Switch GetSwitchByDataSourceId(Guid dataSourceId)
         {
             var switches = GetCachedSwitches();
             return switches.FindRecord(x => x.DataSourceId == dataSourceId);
@@ -75,7 +75,7 @@ namespace PSTN.BusinessEntity.Business
             return switches.MapRecords(SwitchInfoMapper, x => switchIds.Contains(x.SwitchId));
         }
 
-        public IEnumerable<int> GetSwitchAssignedDataSources()
+        public IEnumerable<Guid> GetSwitchAssignedDataSources()
         {
             var switches = GetCachedSwitches();
             return switches.FindAllRecords( x => x.DataSourceId != null).Select(x=>x.DataSourceId.Value);

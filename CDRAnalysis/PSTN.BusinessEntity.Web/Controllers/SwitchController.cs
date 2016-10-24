@@ -1,5 +1,6 @@
 ﻿using PSTN.BusinessEntity.Business;
 using PSTN.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;
@@ -45,7 +46,7 @@ namespace PSTN.BusinessEntity.Web.Controllers
         }
         [HttpGet]
         [Route("GetSwitchAssignedDataSources")]
-        public IEnumerable<int> GetSwitchAssignedDataSources()
+        public IEnumerable<Guid> GetSwitchAssignedDataSources()
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchAssignedDataSources();

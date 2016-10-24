@@ -14,7 +14,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
     public class StringIranSQLMappers
     {
 
-        static int dataSourceId = 24;
+        static Guid dataSourceId = new Guid("BE08FA12-7978-4774-B0DF-4CC543596A71");
         static DBReaderImportedData data = new DBReaderImportedData();
 
         public static void FillData()

@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.CDRImport.Entities
 
         public List<StagingCDR> StagingCDRs { get; set; }
 
-        public int Datasource { get; set; }
+        public Guid Datasource { get; set; }
 
         public override int GetRecordCount()
         {

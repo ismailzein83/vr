@@ -63,7 +63,7 @@ namespace PSTN.BusinessEntity.Data.SQL
             switchObject.BrandId = (int)reader["TypeID"];
             switchObject.AreaCode = reader["AreaCode"] as string;
             switchObject.TimeOffset = TimeSpan.Parse(reader["TimeOffset"] as string);
-            switchObject.DataSourceId = GetReaderValue<int?>(reader, "DataSourceID");
+            switchObject.DataSourceId = GetReaderValue<Guid?>(reader, "DataSourceID");
 
             return switchObject;
         }

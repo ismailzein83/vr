@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
     {
 
         static StreamReaderImportedData data = new StreamReaderImportedData();
-        static int dataSourceId = 24;
+        static Guid dataSourceId = new Guid("BE08FA12-7978-4774-B0DF-4CC543596A71");
         public static void FillData()
         {
             data.StreamReader = new StreamReader("E:\\CDR1\\1.DAT");
