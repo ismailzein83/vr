@@ -266,6 +266,26 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NP.IVSwitch.Business\NP.IVSwitch.Business.csproj">
+      <Project>{9fca948f-c31c-43aa-ab80-20af788a2ce2}</Project>
+      <Name>NP.IVSwitch.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NP.IVSwitch.Data.Postgres\NP.IVSwitch.Data.Postgres.csproj">
+      <Project>{35277c37-8db3-4185-b093-6a99235a01ab}</Project>
+      <Name>NP.IVSwitch.Data.Postgres</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NP.IVSwitch.Data\NP.IVSwitch.Data.csproj">
+      <Project>{b40dce75-0729-4d4b-93d8-be81afe6b557}</Project>
+      <Name>NP.IVSwitch.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NP.IVSwitch.Entities\NP.IVSwitch.Entities.csproj">
+      <Project>{a4a8fb0a-28e9-4e41-bbe9-b3f4ed6f66d8}</Project>
+      <Name>NP.IVSwitch.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NP.IVSwitch.Web\NP.IVSwitch.Web.csproj">
+      <Project>{d300fe75-8b51-441d-87db-f02d830932f9}</Project>
+      <Name>NP.IVSwitch.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config.exclude" />

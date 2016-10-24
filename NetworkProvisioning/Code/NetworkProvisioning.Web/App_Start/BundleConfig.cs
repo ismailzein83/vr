@@ -12,7 +12,8 @@ namespace NetworkProvisioning.Web
 
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Security", "*.js", true));
+                "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/NP_IVSwitch", "*.js", true));
         }
     }
 }

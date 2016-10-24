@@ -25,9 +25,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\..\Vanris
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkProvisioning.Web", "NetworkProvisioning.Web\NetworkProvisioning.Web.csproj", "{5F6E4462-C715-4050-8C2F-98D27C49E839}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IVSwitch", "IVSwitch", "{40E7C91A-1932-41EA-9765-ADE317B72C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.IVSwitch.Entities", "NP.IVSwitch.Entities\NP.IVSwitch.Entities.csproj", "{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.IVSwitch.Data", "NP.IVSwitch.Data\NP.IVSwitch.Data.csproj", "{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.IVSwitch.Data.Postgres", "NP.IVSwitch.Data.Postgres\NP.IVSwitch.Data.Postgres.csproj", "{35277C37-8DB3-4185-B093-6A99235A01AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.IVSwitch.Business", "NP.IVSwitch.Business\NP.IVSwitch.Business.csproj", "{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NP.IVSwitch.Web", "NP.IVSwitch.Web\NP.IVSwitch.Web.csproj", "{D300FE75-8B51-441D-87DB-F02D830932F9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -55,6 +67,26 @@ Global
 		SccProjectTopLevelParentUniqueName6 = NetworkProvisioning.sln
 		SccProjectName6 = NetworkProvisioning.Web
 		SccLocalPath6 = NetworkProvisioning.Web
+		SccProjectUniqueName7 = NP.IVSwitch.Entities\\NP.IVSwitch.Entities.csproj
+		SccProjectTopLevelParentUniqueName7 = NetworkProvisioning.sln
+		SccProjectName7 = NP.IVSwitch.Entities
+		SccLocalPath7 = NP.IVSwitch.Entities
+		SccProjectUniqueName8 = NP.IVSwitch.Data\\NP.IVSwitch.Data.csproj
+		SccProjectTopLevelParentUniqueName8 = NetworkProvisioning.sln
+		SccProjectName8 = NP.IVSwitch.Data
+		SccLocalPath8 = NP.IVSwitch.Data
+		SccProjectUniqueName9 = NP.IVSwitch.Data.Postgres\\NP.IVSwitch.Data.Postgres.csproj
+		SccProjectTopLevelParentUniqueName9 = NetworkProvisioning.sln
+		SccProjectName9 = NP.IVSwitch.Data.Postgres
+		SccLocalPath9 = NP.IVSwitch.Data.Postgres
+		SccProjectUniqueName10 = NP.IVSwitch.Business\\NP.IVSwitch.Business.csproj
+		SccProjectTopLevelParentUniqueName10 = NetworkProvisioning.sln
+		SccProjectName10 = NP.IVSwitch.Business
+		SccLocalPath10 = NP.IVSwitch.Business
+		SccProjectUniqueName11 = NP.IVSwitch.Web\\NP.IVSwitch.Web.csproj
+		SccProjectTopLevelParentUniqueName11 = NetworkProvisioning.sln
+		SccProjectName11 = NP.IVSwitch.Web
+		SccLocalPath11 = NP.IVSwitch.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +133,36 @@ Global
 		{5F6E4462-C715-4050-8C2F-98D27C49E839}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F6E4462-C715-4050-8C2F-98D27C49E839}.x64|Any CPU.ActiveCfg = Release|Any CPU
 		{5F6E4462-C715-4050-8C2F-98D27C49E839}.x64|Any CPU.Build.0 = Release|Any CPU
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8}.x64|Any CPU.Build.0 = Release|Any CPU
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557}.x64|Any CPU.Build.0 = Release|Any CPU
+		{35277C37-8DB3-4185-B093-6A99235A01AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35277C37-8DB3-4185-B093-6A99235A01AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35277C37-8DB3-4185-B093-6A99235A01AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35277C37-8DB3-4185-B093-6A99235A01AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35277C37-8DB3-4185-B093-6A99235A01AB}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{35277C37-8DB3-4185-B093-6A99235A01AB}.x64|Any CPU.Build.0 = Release|Any CPU
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2}.x64|Any CPU.Build.0 = Release|Any CPU
+		{D300FE75-8B51-441D-87DB-F02D830932F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D300FE75-8B51-441D-87DB-F02D830932F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D300FE75-8B51-441D-87DB-F02D830932F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D300FE75-8B51-441D-87DB-F02D830932F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D300FE75-8B51-441D-87DB-F02D830932F9}.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{D300FE75-8B51-441D-87DB-F02D830932F9}.x64|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,5 +174,11 @@ Global
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {B861E622-7DDA-4E44-9246-630B485A62F0}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {B861E622-7DDA-4E44-9246-630B485A62F0}
 		{5F6E4462-C715-4050-8C2F-98D27C49E839} = {B861E622-7DDA-4E44-9246-630B485A62F0}
+		{40E7C91A-1932-41EA-9765-ADE317B72C32} = {DD78267E-3DB1-4A4A-AEC5-D2449F73EDCC}
+		{A4A8FB0A-28E9-4E41-BBE9-B3F4ED6F66D8} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
+		{B40DCE75-0729-4D4B-93D8-BE81AFE6B557} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
+		{35277C37-8DB3-4185-B093-6A99235A01AB} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
+		{9FCA948F-C31C-43AA-AB80-20AF788A2CE2} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
+		{D300FE75-8B51-441D-87DB-F02D830932F9} = {40E7C91A-1932-41EA-9765-ADE317B72C32}
 	EndGlobalSection
 EndGlobal

@@ -5,3 +5,4 @@ Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
  - Add the following virtual directories under Client > Modules folder:
 Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
 Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+NP_IVSwitch				C:\TFS\NetworkProvisioning\Code\NP.IVSwitch.Web\NP_IVSwitch
