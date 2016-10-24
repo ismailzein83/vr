@@ -52,9 +52,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     foreach (SaleEntityDefaultService defaultService in defaultServices)
                     {
+                      
+                        if (salePriceListManager.IsSalePriceListDeleted(defaultService.PriceListId))
+                            continue;
+
                         SalePriceList priceList = salePriceListManager.GetPriceList(defaultService.PriceListId);
-                        if (priceList == null)
-                            throw new NullReferenceException("priceList");
 
                         if (priceList.OwnerType == SalePriceListOwnerType.SellingProduct)
                         {
