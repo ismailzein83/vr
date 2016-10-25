@@ -9,6 +9,6 @@ BEGIN
 	Insert into TOneWhS_BE.Switch([Name], [Settings])
 	Values(@Name, @Settings)
 	
-	Set @Id = @@IDENTITY
+	Set @Id = SCOPE_IDENTITY()
 	END
 END

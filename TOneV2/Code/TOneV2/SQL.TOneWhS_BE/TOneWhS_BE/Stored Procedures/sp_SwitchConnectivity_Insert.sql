@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 		
-create PROCEDURE [TOneWhS_BE].[sp_SwitchConnectivity_Insert]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SwitchConnectivity_Insert]
 	@Name nvarchar(450),
 	@SwitchID int,
 	@CarrierAccountID int,
@@ -20,6 +20,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.SwitchConnectivity WHERE [Name] = @Name)
 		Insert into TOneWhS_BE.SwitchConnectivity([Name],CarrierAccountID,SwitchID,Settings ,BED,EED)
 		Values(@Name,@CarrierAccountID, @SwitchID, @Settings,@BED,@EED)
 	
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

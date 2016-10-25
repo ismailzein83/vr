@@ -15,6 +15,6 @@ SET @id =0;
 		Insert into [TOneWhS_BE].[StateBackup]([Description],[Info],[BackupDate])
 		Values(@Description,@Info,@BackupDate)
 	
-		Set @Id = CONVERT(bigint, @@IDENTITY)
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

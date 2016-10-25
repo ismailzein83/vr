@@ -20,6 +20,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.CarrierAccount WHERE [NameSuffix] = @Name
 		Insert into TOneWhS_BE.CarrierAccount([NameSuffix],[CarrierProfileID],[AccountType],[SupplierSettings] ,[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID] )
 		Values(@Name,@CarrierProfileId, @AccountType, @SupplierSettings,@CustomerSettings,@CarrierAccountSettings,@SellingNumberPlanID)
 	
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

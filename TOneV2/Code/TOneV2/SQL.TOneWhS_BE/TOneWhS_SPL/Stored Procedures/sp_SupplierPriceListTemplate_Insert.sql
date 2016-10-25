@@ -14,6 +14,6 @@ BEGIN
 	BEGIN
 		INSERT INTO [TOneWhS_SPL].SupplierPriceListTemplate ( SupplierID,  ConfigDetails,Draft)
 		VALUES ( @SupplierID,  @ConfigDetails,@Draft)
-		SET @ID = @@IDENTITY
+		SET @ID = SCOPE_IDENTITY()
 	END
 END

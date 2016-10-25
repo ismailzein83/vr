@@ -13,5 +13,5 @@ BEGIN
 	INSERT INTO TOneWhS_BE.CustomerZone (CustomerID, Details, BED)
 	VALUES (@customerId, @zones, @startEffectiveTime)
 	
-	SET @id = @@IDENTITY
+	SET @id = SCOPE_IDENTITY()
 END

@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create Procedure [TOneWhS_RouteSync].[sp_RouteSyncDefinition_Insert]
+CREATE Procedure [TOneWhS_RouteSync].[sp_RouteSyncDefinition_Insert]
 	@Name nvarchar(255),
 	@Settings nvarchar(MAX),
 	@Id int out
@@ -14,6 +14,6 @@ BEGIN
 		insert into TOneWhS_RouteSync.RouteSyncDefinition ([Name], [Settings])
 		values(@Name, @Settings)
 		
-		set @Id = @@IDENTITY
+		set @Id = SCOPE_IDENTITY()
 	END
 END

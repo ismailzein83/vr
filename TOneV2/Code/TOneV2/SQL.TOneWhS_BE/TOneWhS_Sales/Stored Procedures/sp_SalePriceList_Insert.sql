@@ -13,5 +13,5 @@ BEGIN
 	INSERT INTO TOneWhS_BE.SalePriceList (OwnerType, OwnerID, CurrencyID)
 	VALUES(@OwnerType, @OwnerId, @CurrencyId)
 	
-	SET @Id = @@IDENTITY
+	SET @Id = SCOPE_IDENTITY()
 END

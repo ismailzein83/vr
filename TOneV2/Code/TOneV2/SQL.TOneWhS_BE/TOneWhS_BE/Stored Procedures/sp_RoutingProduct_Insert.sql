@@ -15,6 +15,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.RoutingProduct WHERE [Name] = @Name)
 		Insert into TOneWhS_BE.RoutingProduct ([Name], [SellingNumberPlanID], [Settings])
 		Values(@Name, @SellingNumberPlanID, @Settings)
 	
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

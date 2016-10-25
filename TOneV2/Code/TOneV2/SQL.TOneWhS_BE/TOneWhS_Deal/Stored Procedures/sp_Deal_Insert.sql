@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 		
-Create PROCEDURE [TOneWhS_Deal].[sp_Deal_Insert]
+CREATE PROCEDURE [TOneWhS_Deal].[sp_Deal_Insert]
 	@Name nvarchar(255),
 	@Settings nvarchar(MAX),
 	@Id int out
@@ -16,6 +16,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_Deal.Deal WHERE [Name] = @Name)
 		Insert into TOneWhS_Deal.Deal(Name,Settings)
 		Values(@Name,@Settings)
 	
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

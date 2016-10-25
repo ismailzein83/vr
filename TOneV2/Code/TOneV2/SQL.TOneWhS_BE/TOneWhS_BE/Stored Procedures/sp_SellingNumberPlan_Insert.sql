@@ -10,7 +10,7 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[SellingNumberPlan] WHERE Name = @Name)
 		INSERT INTO TOneWhS_BE.SellingNumberPlan(Name)
 		VALUES (@Name)
 
-		SET @id = @@IDENTITY
+		SET @id = SCOPE_IDENTITY()
 	END
 END
 

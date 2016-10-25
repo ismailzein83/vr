@@ -20,5 +20,5 @@ BEGIN
            @EffectiveTime,
            @Information)
            
-     SET @ID = @@IDENTITY
+     SET @ID = SCOPE_IDENTITY()
 END

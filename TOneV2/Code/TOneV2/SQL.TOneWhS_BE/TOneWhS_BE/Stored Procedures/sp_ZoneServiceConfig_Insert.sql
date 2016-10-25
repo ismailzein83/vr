@@ -11,6 +11,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[ZoneServiceConfig] WHERE Symbol = @Symbo
 	BEGIN
 		INSERT INTO TOneWhS_BE.ZoneServiceConfig(Symbol, Settings)
 		VALUES ( @Symbol, @Settings)
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END

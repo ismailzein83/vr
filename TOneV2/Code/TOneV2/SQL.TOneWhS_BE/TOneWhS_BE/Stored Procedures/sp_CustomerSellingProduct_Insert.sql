@@ -25,7 +25,7 @@ BEGIN
 		BEGIN
 			Insert into TOneWhS_BE.CustomerSellingProduct([CustomerID] ,[SellingProductID],[BED])
 			VALUES (@CustomerID,@SellingProductID,@BED)
-			Set @IdentityValue = @@IDENTITY
+			Set @IdentityValue = SCOPE_IDENTITY()
 			Insert into @tempTable(ID,[CustomerID] ,[SellingProductID],[BED])
 			VALUES (@IdentityValue,@CustomerID,@SellingProductID,@BED)
 			FETCH NEXT FROM CustomerSellingProduct INTO @CustomerID,@SellingProductID,@BED

@@ -11,5 +11,5 @@ AS
 BEGIN
 	Insert into TOneWhS_BE.SupplierPriceList(SupplierID,CurrencyID,CreatedTime)
 	Values(@SupplierAccountId,@CurrencyId,GETDATE())
-	Set @Id = @@IDENTITY
+	Set @Id = SCOPE_IDENTITY()
 END

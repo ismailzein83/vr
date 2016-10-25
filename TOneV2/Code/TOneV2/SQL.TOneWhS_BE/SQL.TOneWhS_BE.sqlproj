@@ -426,5 +426,6 @@
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_GetAll.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetById.sql" />
   </ItemGroup>
 </Project>

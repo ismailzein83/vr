@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 		
-create PROCEDURE [TOneWhS_BE].sp_VolumeCommitment_Insert
+CREATE PROCEDURE [TOneWhS_BE].[sp_VolumeCommitment_Insert]
 	@Settings nvarchar(MAX),
 	@Id int out
 AS
@@ -15,6 +15,6 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.VolumeCommitment WHERE [ID] = @Id)
 		Insert into TOneWhS_BE.VolumeCommitment(Settings)
 		Values(@Settings)
 	
-		Set @Id = @@IDENTITY
+		Set @Id = SCOPE_IDENTITY()
 	END
 END
