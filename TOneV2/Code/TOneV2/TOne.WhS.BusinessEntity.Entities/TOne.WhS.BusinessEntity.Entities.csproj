@@ -136,7 +136,7 @@
     <Compile Include="RoutingCarrierInfo\RoutingSupplierInfo.cs" />
     <Compile Include="RoutingProduct\CustomerZoneRoutingProduct.cs" />
     <Compile Include="RoutingProduct\DefaultRoutingProduct.cs" />
-    <Compile Include="RoutingProduct\RoutingProductDetail.cs" />
+    <Compile Include="RoutingProduct\RoutingProduct.cs" />
     <Compile Include="RoutingProduct\RoutingProductInfoFilter.cs" />
     <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
     <Compile Include="SaleAreaSettings\SaleAreaSettingsData.cs" />
@@ -173,7 +173,7 @@
     <Compile Include="RoutingProduct\IRuleRoutingProductCriteria.cs" />
     <Compile Include="RoutingProduct\IRuleRoutingProductTarget.cs" />
     <Compile Include="RoutingProduct\RoutingProductInfo.cs" />
-    <Compile Include="RoutingProduct\RoutingProduct.cs" />
+    <Compile Include="RoutingProduct\RoutingProductDetail.cs" />
     <Compile Include="RoutingProduct\RoutingProductQuery.cs" />
     <Compile Include="RoutingProduct\RoutingProductSettings.cs" />
     <Compile Include="SaleZone\IRuleSaleZoneCriteria.cs" />

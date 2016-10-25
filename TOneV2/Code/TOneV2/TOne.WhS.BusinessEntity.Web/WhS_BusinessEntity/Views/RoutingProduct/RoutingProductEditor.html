@@ -9,23 +9,26 @@
                         </vr-columns>
 
                         <span vr-disabled="isEditMode">
-                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModal.onSellingNumberPlanSelectionChanged"
-                                                                  selectedvalues="scopeModal.selectedSellingNumberPlan" isrequired="true" />
+                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModal.onSellingNumberPlanSelectionChanged"
+                                                                  selectedvalues="scopeModal.selectedSellingNumberPlan" normal-col-num="6" isrequired="true">
+                            </vr-whs-be-sellingnumberplan-selector>
                         </span>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Sale Zones'">
+                <vr-tab header="'Sale Zones'" ng-show="scopeModal.selectedSellingNumberPlan">
                     <vr-row vr-loader="scopeModal.isLoadingSaleZonesSelector">
+
                         <vr-validator validate="scopeModal.validateSellingNumberPlan()">
-                            <div ng-show="scopeModal.selectedSellingNumberPlan">
+                            <div>
                                 <vr-columns width="1/2row">
-                                    <vr-select datatextfield="description" datavaluefield="value" label="Sale Zones" datasource="scopeModal.saleZoneRelationType"
-                                               selectedvalues="scopeModal.selectedSaleZoneRelationType" onselectionchanged="scopeModal.onSaleZoneRelationTypeSelectionChanged" hideremoveicon />
+                                    <vr-select datatextfield="description" datavaluefield="value" onselectionchanged="scopeModal.onSaleZoneRelationTypeSelectionChanged" label="Sale Zones"
+                                               datasource="scopeModal.saleZoneRelationType" selectedvalues="scopeModal.selectedSaleZoneRelationType" hideremoveicon>
+                                    </vr-select>
                                 </vr-columns>
                                 <vr-columns width="1/2row" ng-show="scopeModal.showSaleZoneSelector">
                                     <vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady"
-                                                                 isdisabled="!scopeModal.selectedSellingNumberPlan"
                                                                  selectedvalues="scopeModal.selectedSaleZones"
+                                                                 isdisabled="!scopeModal.selectedSellingNumberPlan"
                                                                  isrequired="scopeModal.showSaleZoneSelector"
                                                                  ismultipleselection>
                                     </vr-whs-be-salezone-selector>
@@ -38,8 +41,9 @@
                 <vr-tab header="'Suppliers'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-select datatextfield="description" datavaluefield="value" label="Suppliers" datasource="scopeModal.supplierRelationType"
-                                       selectedvalues="scopeModal.selectedSupplierRelationType" onselectionchanged="scopeModal.onSupplierRelationTypeSelectionChanged" hideremoveicon />
+                            <vr-select datatextfield="description" datavaluefield="value" datasource="scopeModal.supplierRelationType" selectedvalues="scopeModal.selectedSupplierRelationType"
+                                       onselectionchanged="scopeModal.onSupplierRelationTypeSelectionChanged" label="Suppliers" hideremoveicon>
+                            </vr-select>
                         </vr-columns>
                         <vr-columns width="1/2row" ng-show="scopeModal.showSupplierSelector">
                             <vr-whs-be-carrieraccount-selector on-ready="scopeModal.onCarrierAccountSelectorReady"
@@ -52,7 +56,6 @@
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
-
         </vr-form>
     </vr-modalbody>
     <div>
@@ -62,6 +65,5 @@
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
-
     </div>
 </div>

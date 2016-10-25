@@ -35,7 +35,6 @@
             isEditMode = (routingProductId != undefined);
             $scope.isEditMode = isEditMode;
         }
-
         function defineScope() {
             $scope.hasSaveRoutingProductPermission = function () {
                 if (isEditMode)
@@ -104,8 +103,17 @@
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
-        }
 
+            function getSaleZoneSelectorPayload() {
+                var zoneIds = [];
+
+                for (var i = 0; i < routingProductEntity.Settings.Zones.length; i++) {
+                    zoneIds.push(routingProductEntity.Settings.Zones[i].ZoneId);
+                }
+
+                return zoneIds;
+            }
+        }
         function load() {
             $scope.scopeModal.isLoading = true;
 
@@ -133,19 +141,18 @@
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadSellingNumberPlanSelector, loadSaleZoneRelationTypes,
-                loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModal.isLoading = false;
-              });
+                        loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
+                        .catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        })
+                        .finally(function () {
+                            $scope.scopeModal.isLoading = false;
+                        });
         }
 
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(routingProductEntity ? routingProductEntity.Name : null, 'Routing Product') : UtilsService.buildTitleForAddEditor('Routing Product');
         }
-
         function loadSellingNumberPlanSelector() {
             var sellingNumberPlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -159,7 +166,6 @@
                 });
             return sellingNumberPlanLoadPromiseDeferred.promise;
         }
-
         function loadSaleZoneRelationTypes() {
             $scope.scopeModal.saleZoneRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum);
 
@@ -168,17 +174,6 @@
             else
                 $scope.scopeModal.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum, 'value', WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones.value);
         }
-
-        function getSaleZoneSelectorPayload() {
-            var zoneIds = [];
-
-            for (var i = 0; i < routingProductEntity.Settings.Zones.length; i++) {
-                zoneIds.push(routingProductEntity.Settings.Zones[i].ZoneId);
-            }
-
-            return zoneIds;
-        }
-
         function loadSupplierRelationTypes() {
             $scope.scopeModal.supplierRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum);
 
@@ -187,7 +182,6 @@
             else
                 $scope.scopeModal.selectedSupplierRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum, 'value', WhS_BE_RoutingProductSupplierRelationTypeEnum.AllSuppliers.value);
         }
-
         function loadSupplierSelector() {
             var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -212,7 +206,6 @@
 
             return carrierAccountLoadPromiseDeferred.promise;
         }
-
         function loadStaticSection() {
             if (routingProductEntity == undefined)
                 return;
@@ -235,7 +228,6 @@
                 $scope.scopeModal.isLoading = false;
             });
         }
-
         function updateRoutingProduct() {
             $scope.scopeModal.isLoading = true;
             return WhS_BE_RoutingProductAPIService.UpdateRoutingProduct(buildRoutingProductObjFromScope())
@@ -269,7 +261,6 @@
 
             return obj;
         }
-
         function buildRoutingProductZoneObj() {
             var routingProductZones = undefined;
             var zoneIds = saleZoneDirectiveAPI.getSelectedIds();
@@ -286,7 +277,6 @@
 
             return routingProductZones;
         }
-
         function buildRoutingProductSupplierObj() {
             var routingProductSuppliers = undefined;
             var supplierIds = carrierAccountDirectiveAPI.getSelectedIds();
