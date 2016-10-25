@@ -14,3 +14,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SupplierZoneService_StateBackupID]
+    ON [TOneWhS_BE_Bkup].[SupplierZoneService]([StateBackupID] ASC);
+

@@ -13,3 +13,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SaleEntityRoutingProduct_StateBackupID]
+    ON [TOneWhS_BE_Bkup].[SaleEntityRoutingProduct]([StateBackupID] ASC);
+

@@ -16,3 +16,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SaleRate_StateBackupID]
+    ON [TOneWhS_BE_Bkup].[SaleRate]([StateBackupID] ASC);
+
