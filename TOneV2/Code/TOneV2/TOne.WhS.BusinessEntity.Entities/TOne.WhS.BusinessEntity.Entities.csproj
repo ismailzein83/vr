@@ -194,6 +194,7 @@
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
     <Compile Include="StateBackup\StateBackup.cs" />
     <Compile Include="StateBackup\StateBackupAllSaleEntities.cs" />
+    <Compile Include="StateBackup\StateBackupQuery.cs" />
     <Compile Include="StateBackup\StateBackupSupplier.cs" />
     <Compile Include="StateBackup\StateBackupSaleEntity.cs" />
     <Compile Include="StateBackup\StateBackupType.cs" />
