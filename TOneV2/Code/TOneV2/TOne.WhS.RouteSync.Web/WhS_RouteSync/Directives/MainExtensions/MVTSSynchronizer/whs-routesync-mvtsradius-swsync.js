@@ -21,19 +21,15 @@
 
         };
         function MVTSRadiusSWSyncronizer($scope, ctrl, $attrs) {
-            var gridAPI;
 
+            var gridAPI;
             var radiusDataManager;
-            //var redundantRadiusDataManager;
 
             var carrierAccountsAPI;
             var carrierAccountsPromiseDiffered;
 
             var radiusDataManagerSettingsDirectiveAPI;
             var radiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-            //var redundantRadiusDataManagerSettingsDirectiveAPI;
-            //var redundantRadiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
 
@@ -43,20 +39,53 @@
                 $scope.scopeModel.isLoading = false;
                 $scope.scopeModel.separator = ';';
                 $scope.scopeModel.carrierAccountMappings = [];
+                $scope.scopeModel.filterdCarrierMappings = [];
 
                 $scope.onRadiusDataManagerSettingsDirectiveReady = function (api) {
                     radiusDataManagerSettingsDirectiveAPI = api;
                     radiusDataManagerSettingsDirectiveReadyDeferred.resolve();
                 };
 
-                //$scope.onRedundantRadiusDataManagerSettingsDirectiveReady = function (api) {
-                //    redundantRadiusDataManagerSettingsDirectiveAPI = api;
-                //    redundantRadiusDataManagerSettingsDirectiveReadyDeferred.resolve();
-                //};
+                $scope.scopeModel.loadMoreData = function () {
+                    return loadCarrierMapping();
+                };
 
-                defineAPI();
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+                };
             }
 
+            function buildFilter() {
+                var filter = {};
+                return filter;
+            }
+
+            function loadCarrierMapping() {
+                var filter = buildFilter();
+                var pageInfo = gridAPI.getPageInfo();
+
+                var getRoutingInput = {
+                    Filter: filter,
+                    FromRow: pageInfo.fromRow,
+                    ToRow: pageInfo.toRow
+                };
+
+                var items = [];
+                var itemsLength = pageInfo.toRow;
+                if (pageInfo.toRow > $scope.scopeModel.carrierAccountMappings.length) {
+                    if (pageInfo.fromRow < $scope.scopeModel.carrierAccountMappings.length) {
+                        itemsLength = $scope.scopeModel.carrierAccountMappings.length;
+                    }
+                    else
+                        return;
+                }
+
+                for (var i = pageInfo.fromRow; i < itemsLength; i++) {
+                    items.push($scope.scopeModel.carrierAccountMappings[i]);
+                }
+                gridAPI.addItemsToSource(items);
+            }
 
             function defineAPI() {
                 var api = {};
@@ -118,11 +147,11 @@
                      if (response) {
                          if (payload && payload.switchSynchronizerSettings && payload.switchSynchronizerSettings.CarrierMappings) {
                              for (var i = 0; i < response.length; i++) {
-
-                                 var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId];
+                                 var carrierAccount = response[i];
+                                 var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[carrierAccount.CarrierAccountId];
                                  var carrierMapping = {
-                                     CarrierAccountId: response[i].CarrierAccountId,
-                                     CarrierAccountName: response[i].Name,
+                                     CarrierAccountId: carrierAccount.CarrierAccountId,
+                                     CarrierAccountName: carrierAccount.Name,
                                      CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
                                      SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
                                  };
@@ -132,9 +161,10 @@
                          }
                          else {
                              for (var i = 0; i < response.length; i++) {
+                                 var carrierAccount = response[i];
                                  var carrierMapping = {
-                                     CarrierAccountId: response[i].CarrierAccountId,
-                                     CarrierAccountName: response[i].Name,
+                                     CarrierAccountId: carrierAccount.CarrierAccountId,
+                                     CarrierAccountName: carrierAccount.Name,
                                      CustomerMapping: '',
                                      SupplierMapping: ''
                                  };
@@ -143,6 +173,7 @@
                              }
                          }
                      }
+                     loadCarrierMapping();
                  })
                   .catch(function (error) {
                       VRNotificationService.notifyException(error, $scope);
@@ -170,10 +201,6 @@
                 return radiusDataManagerSettingsDirectiveAPI.getData().DataManager;
             }
 
-            //function getRedundantDataManager() {
-            //    return redundantRadiusDataManagerSettingsDirectiveAPI.getData().DataManager;
-            //}
-
             function loadSwitchSyncSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -188,19 +215,6 @@
                 return radiusDataManagerSettingsDirectiveReadyDeferred.promise;
             }
 
-            //function loadRedundantSwitchSyncSettingsDirective() {
-            //    var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            //    redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
-            //        var settingsDirectivePayload;
-            //        if (redundantRadiusDataManager != undefined) {
-            //            settingsDirectivePayload = { radiusDataManagersSettings: redundantRadiusDataManager }
-            //        }
-            //        VRUIUtilsService.callDirectiveLoad(redundantRadiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, redundantRadiusDataManagerSettingsDirectiveReadyDeferred);
-            //    });
-
-            //    return redundantRadiusDataManagerSettingsDirectiveReadyDeferred.promise;
-            //}
         }
     }
 

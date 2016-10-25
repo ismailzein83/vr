@@ -34,6 +34,13 @@ namespace TestRuntime
             RunMigration();
             return;
 
+            var runtimeServices = new List<RuntimeService>();
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(schedulerService);
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+            return;
+
             //RadiusDataManagerConfig settings = new RadiusDataManagerConfig
             //{
             //    RadiusDataManager = new RadiusSQLDataManager()
@@ -69,16 +76,16 @@ namespace TestRuntime
             //RunPartialRouteBuild();
 
 
-            RuntimeHost _host;
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //RuntimeHost _host;
+            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            //BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
 
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            var runtimeServices = new List<RuntimeService> { queueActivationService, bpService, bpRegulatorService, transactionLockRuntimeService };
+            //TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            //var runtimeServices = new List<RuntimeService> { queueActivationService, bpService, bpRegulatorService, transactionLockRuntimeService };
 
-            _host = new RuntimeHost(runtimeServices);
-            _host.Start();
+            //_host = new RuntimeHost(runtimeServices);
+            //_host.Start();
         }
 
         //private static void RunCompleteProductRouteBuild()
@@ -215,7 +222,8 @@ namespace TestRuntime
                     //case DBTableName.CustomerZone:
                     //    migrationTables.Add(table);
                     //    break;
-                    //case DBTableName.SwitchConnectivity:
+
+                    //case DBTableName.ZoneServiceConfig:
                     //    migrationTables.Add(table);
                     //    break;
                     case DBTableName.Rule:
@@ -224,12 +232,10 @@ namespace TestRuntime
                 }
             }
 
-
-
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
             {
-                ConnectionString =
-                    "Server=192.168.110.185;Database=TOneV2_Dev_RoutingDB;User ID=development;Password=dev!123;",
+                ConnectionString = "Server=192.168.110.185;Database=TOneV1_Spactrom;User ID=development;Password=dev!123;",
+                //ConnectionString = "Server=192.168.110.195;Database=NetTalkFidaa;User ID=sa;Password=QAP@ssw0rd;",
                 DefaultSellingNumberPlanId = 1,
                 SellingProductId = 1,
                 OffPeakRateTypeId = -2,

@@ -4,14 +4,14 @@
             <whs-routesync-radiusdatamanagers-settings on-ready="onRadiusDataManagerSettingsDirectiveReady" normal-col-num="6" isrequired="true"></whs-routesync-radiusdatamanagers-settings>
         </vr-section>
     </vr-columns>
-<!--</vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-section title="Redundant" collapsible>
-            <whs-routesync-radiusdatamanagers-settings on-ready="onRedundantRadiusDataManagerSettingsDirectiveReady" normal-col-num="6" ></whs-routesync-radiusdatamanagers-settings>
-        </vr-section>
-    </vr-columns>
-</vr-row>-->
+</vr-row>
+<!-- <vr-row>
+     <vr-columns width="fullrow">
+         <vr-section title="Redundant" collapsible>
+             <whs-routesync-radiusdatamanagers-settings on-ready="onRedundantRadiusDataManagerSettingsDirectiveReady" normal-col-num="6" ></whs-routesync-radiusdatamanagers-settings>
+         </vr-section>
+     </vr-columns>
+ </vr-row>-->
 <vr-row removeline>
     <vr-columns width="1/2row">
         <vr-textbox label="Separator" type="text" value="scopeModel.separator" isrequired></vr-textbox>
@@ -22,10 +22,8 @@
 </vr-row>
 <vr-row>
     <vr-column width="fullrow" vr-loader="scopeModel.isLoading">
-        <vr-datagrid datasource="scopeModel.carrierAccountMappings"
-                     maxheight="500px"
-                     pagingtype="'PagingOnScroll'"
-                     idfield="CarrierAccountId">
+        <vr-datagrid datasource="scopeModel.filterdCarrierMappings"
+                     loadmoredata="scopeModel.loadMoreData" maxheight="250px" on-ready="scopeModel.onGridReady">
 
             <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
@@ -36,5 +34,6 @@
                 <vr-textbox type="text" tonextinput value="dataItem.SupplierMapping"></vr-textbox>
             </vr-datagridcolumn>
         </vr-datagrid>
+
     </vr-column>
 </vr-row>
