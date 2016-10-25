@@ -92,8 +92,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.BusinessEntity.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.dll</HintPath>
+    </Reference>
     <Reference Include="TOne.WhS.BusinessEntity.Data.SQL">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
     </Reference>
     <Reference Include="TOne.WhS.Routing.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

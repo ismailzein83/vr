@@ -312,7 +312,7 @@ namespace Retail.Runtime.Mappers
                 edr.IdCDR = long.Parse(rowData[0]);
                 edr.StartDate = DateTime.ParseExact(rowData[2], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-                
+
 
                 edr.TrafficType = rowData[3];
                 edr.TypeMessage = rowData[4];
@@ -365,14 +365,18 @@ namespace Retail.Runtime.Mappers
         }
         public Vanrise.Integration.Entities.MappingOutput ImportingRingoEventEDR_File()
         {
+            LogVerbose("Started");
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
-            var ringoSmsEDRs = new List<dynamic>();
+
+            var dataEDRs = new List<dynamic>();
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type ringoMessageEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RingoEventEDR");
+            Type gprsEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("GprsEDR");
+
+            var currentItemCount = 21;
+            var headerText = "H";
 
             DateTime creationDate = default(DateTime);
-            var currentItemCount = 5;
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
             {
@@ -382,26 +386,63 @@ namespace Retail.Runtime.Mappers
 
                 string[] rowData = currentLine.Split(';');
 
+                if (rowData.Length == 2 && rowData[0] == headerText)
+                {
+                    creationDate = DateTime.ParseExact(rowData[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+                    continue;
+                }
 
-                //if (rowData.Length != currentItemCount)
-                //continue;
+                else if (rowData.Length != currentItemCount)
+                    continue;
 
-                dynamic edr = Activator.CreateInstance(ringoMessageEDRRuntimeType) as dynamic;
-                edr.MSISDN = rowData[0];
-                edr.EventIdMvno = int.Parse(rowData[1]);
-                edr.EventId = int.Parse(rowData[2]);
-                edr.CreatedDate = DateTime.Now;
-                edr.Event = rowData[3];
-                edr.Parameters = rowData[4];
+                dynamic edr = Activator.CreateInstance(gprsEDRRuntimeType) as dynamic;
+                edr.StartDate = DateTime.ParseExact(rowData[2], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                edr.TypeGprs = rowData[4];
+                edr.Calling = rowData[5];
+                edr.Zone = rowData[6];
 
-                ringoSmsEDRs.Add(edr);
+                string bill = rowData[7];
+                edr.Bill = !string.IsNullOrEmpty(bill) ? int.Parse(bill) : default(int?);
+
+                string credit = rowData[9];
+                edr.Credit = !string.IsNullOrEmpty(credit) ? decimal.Parse(credit) : default(decimal?);
+
+                edr.TrafficType = rowData[3];
+                edr.Unit = rowData[8];
+
+                string balance = rowData[10];
+                edr.Balance = !string.IsNullOrEmpty(balance) ? decimal.Parse(balance) : default(decimal?);
+
+                edr.Bag = rowData[11];
+
+                string amount = rowData[12];
+                edr.Amount = !string.IsNullOrEmpty(amount) ? decimal.Parse(amount) : default(decimal?);
+
+                edr.TypeConsumed = rowData[13];
+                edr.PricePlan = rowData[14];
+                edr.Promotion = rowData[15];
+                edr.AccessPointName = rowData[16];
+                //cdr.ParentIdCDR
+                edr.IdCDR = long.Parse(rowData[0]);
+
+                string idCdrGprs = rowData[17];
+                edr.IdCdrGprs = !string.IsNullOrEmpty(idCdrGprs) ? long.Parse(idCdrGprs) : default(long?);
+
+
+                edr.FileName = rowData[19];
+                edr.FileDate = DateTime.ParseExact(rowData[20], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                edr.CreationDate = creationDate;
+
+
+                dataEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
-            mappedBatches.Add("Ringo Event EDR Storage Stage", batch);
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            mappedBatches.Add("GPRS EDR Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
             return result;
         }
 
