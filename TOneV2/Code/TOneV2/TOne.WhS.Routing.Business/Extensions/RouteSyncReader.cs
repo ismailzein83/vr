@@ -22,7 +22,7 @@ namespace TOne.WhS.Routing.Business.Extensions
                 {
                     case TOneRouteRangeType.ByCustomer:
                         context.RangeType = RouteRangeType.ByCustomer;
-                        context.Ranges = new BusinessEntity.Business.CarrierAccountManager().GetAllCustomers().Select(customer => new RouteRangeInfo { CustomerId = customer.CarrierAccountId.ToString() }).ToList();
+                        context.Ranges = new BusinessEntity.Business.CarrierAccountManager().GetRoutingActiveCustomers().Select(customer => new RouteRangeInfo { CustomerId = customer.CustomerId.ToString() }).ToList();
                         break;
                 }
                 return true;
