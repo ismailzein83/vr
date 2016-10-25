@@ -772,6 +772,10 @@
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
       <Name>TOne.WhS.Deal.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.MainExtensions\TOne.WhS.Deal.MainExtensions.csproj">
+      <Project>{fb425cbf-8711-4ddf-898e-5598e197a46b}</Project>
+      <Name>TOne.WhS.Deal.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Deal.Web\TOne.WhS.Deal.Web.csproj">
       <Project>{92644dd3-3d07-4b1c-a6fb-a7427f18e229}</Project>
       <Name>TOne.WhS.Deal.Web</Name>
