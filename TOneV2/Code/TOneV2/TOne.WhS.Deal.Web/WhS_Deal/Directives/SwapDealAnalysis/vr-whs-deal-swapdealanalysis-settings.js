@@ -65,6 +65,10 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTy
 				return loadCarrierAccountSelector(carrierAccountId);
 			};
 
+			api.getCarrierAccountId = function () {
+				return carrierAccountSelectorAPI.getSelectedIds();
+			};
+
 			if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
 				ctrl.onReady(api);
 		}

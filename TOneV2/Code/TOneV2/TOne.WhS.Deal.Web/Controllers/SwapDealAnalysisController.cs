@@ -2,10 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Web.Base;
 
 namespace TOne.WhS.Deal.Web.Controllers
 {
-	public class SwapDealAnalysisController
+	[JSONWithTypeAttribute]
+	[RoutePrefix(Constants.ROUTE_PREFIX + "SwapDealAnalysis")]
+	public class SwapDealAnalysisController : Vanrise.Web.Base.BaseAPIController
 	{
+		[HttpGet]
+		[Route("GetOutboundRateCalcMethodExtensionConfigs")]
+		public IEnumerable<SwapDealAnalysisOutboundRateCalcMethodConfig> GetOutboundRateCalcMethodExtensionConfigs()
+		{
+			var manager = new SwapDealAnalysisManager();
+			return manager.GetOutboundRateCalcMethodExtensionConfigs();
+		}
 	}
 }

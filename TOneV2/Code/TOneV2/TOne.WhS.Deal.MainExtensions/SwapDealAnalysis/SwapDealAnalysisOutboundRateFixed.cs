@@ -16,7 +16,7 @@ namespace TOne.WhS.Deal.MainExtensions
 
         public override string ItemEditor
         {
-            get { return "fill here the url to item editor"; }
+			get { return "vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-itemeditor"; }
         }
     }
 }

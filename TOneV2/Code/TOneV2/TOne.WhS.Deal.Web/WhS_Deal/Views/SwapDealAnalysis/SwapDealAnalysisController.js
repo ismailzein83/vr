@@ -6,8 +6,12 @@
 
 	function SwapDealAnalysisController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
+		var swapDealAnalysisId;
+		var swapDealAnalysisEntity;
+
 		var settingsAPI;
 		var settingsReadyDeferred = UtilsService.createPromiseDeferred();
+		var settingsLoadDeferred = UtilsService.createPromiseDeferred();
 
 		var outboundManagementAPI;
 		var outboundManagementReadyDeferred = UtilsService.createPromiseDeferred();
@@ -15,12 +19,20 @@
 		var resultAPI;
 		var resultReadyDeferred = UtilsService.createPromiseDeferred();
 
+		var isEditMode;
+
 		loadParameters();
 		defineScope();
 		load();
 
 		function loadParameters() {
+			var parameters = VRNavigationService.getParameters($scope);
 
+			if (parameters != undefined && parameters != null) {
+				swapDealAnalysisId = parameters.swapDealAnalysisId;
+			}
+
+			isEditMode = (swapDealAnalysisId != undefined);
 		}
 		function defineScope() {
 			$scope.scopeModel = {};
@@ -47,7 +59,21 @@
 
 		function load() {
 			$scope.scopeModel.isLoading = true;
-			loadAllControls();
+
+			if (isEditMode) {
+				getSwapDealAnalysis().then(function () {
+					loadAllControls();
+				}).catch(function (error) {
+					VRNotificationService.notifyExceptionWithClose(error, $scope);
+				});
+			}
+			else {
+				loadAllControls();
+			}
+		}
+
+		function getSwapDealAnalysis() {
+			console.log('NotImplementedException');
 		}
 		function loadAllControls() {
 			return UtilsService.waitMultipleAsyncOperations([setTitle, loadSettings, loadOutboundManagement]).catch(function (error) {
@@ -57,14 +83,22 @@
 			});
 		}
 		function setTitle() {
-			$scope.title = 'Swap Deal Analysis Definition';
+			if (isEditMode) {
+				var swapDealAnalysisName;
+				if (swapDealAnalysisEntity != undefined)
+					swapDealAnalysisName = swapDealAnalysisEntity.Name;
+				$scope.title = UtilsService.buildTitleForUpdateEditor(swapDealAnalysisName, 'Swap Deal Analyasis');
+			}
+			else
+				$scope.title = UtilsService.buildTitleForAddEditor('Swap Deal Analysis');
 		}
 		function loadSettings()
 		{
-			var settingsLoadDeferred = UtilsService.createPromiseDeferred();
-
 			settingsReadyDeferred.promise.then(function () {
-				var settingsPayload = undefined;
+				var settingsPayload;
+				if (swapDealAnalysisEntity != undefined) {
+					settingsPayload = swapDealAnalysisEntity.Settings;
+				}
 				VRUIUtilsService.callDirectiveLoad(settingsAPI, settingsPayload, settingsLoadDeferred);
 			});
 
@@ -74,8 +108,12 @@
 		{
 			var outboundManagementLoadDeferred = UtilsService.createPromiseDeferred();
 
-			outboundManagementReadyDeferred.promise.then(function () {
-				var outboundManagementPayload = undefined;
+			UtilsService.waitMultiplePromises([settingsLoadDeferred.promise, outboundManagementReadyDeferred.promise]).then(function () {
+				var outboundManagementPayload = {
+					context: {
+						settingsAPI: settingsAPI
+					}
+				};
 				VRUIUtilsService.callDirectiveLoad(outboundManagementAPI, outboundManagementPayload, outboundManagementLoadDeferred);
 			});
 

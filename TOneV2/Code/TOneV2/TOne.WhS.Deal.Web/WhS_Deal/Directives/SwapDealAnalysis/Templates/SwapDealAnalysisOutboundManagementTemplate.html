@@ -5,17 +5,13 @@
 					 datasource="scopeModel.outbounds"
 					 menuactions="scopeModel.menuActions"
 					 ondeleterow="scopeModel.removeOutbound"
-					 norowhighlightonclick="true"
+					 hidegridmenu="true"
 					 maxheight="300px"
-					 hidegridmenu="true">
-			<vr-datagridcolumn headertext="'Destination/Group'" field="'Name'" disablesorting></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Duration'" field="'CommitedVolume'" summaryfield="'TotalOutVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Duration per Day'" field="'DailyVolume'" type="'Number'" summaryfield="'TotalOutVolumesDay'" disablesorting></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Deal Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Current Cost'" field="'CurrentCost'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Margin per Minute'" field="'CostSavingFromRate'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Margin per Period'" field="'TotalDealSaving'" type="'Number'" summaryfield="'TotalSaving'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Revenue'" field="'RevenuePerDeal'" type="'Number'" summaryfield="'TotalCommitmentCost'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
+					 norowhighlightonclick="true">
+			<vr-datagridcolumn headertext="'Group Name'" field="'GroupName'" disablesorting></vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Volume'" field="'Volume'" summaryfield="'TotalOutVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Deal Rate'" field="'DealRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Current Rate'" field="'CurrentRate'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
 		</vr-datagrid>
 	</vr-columns>
 </vr-row>

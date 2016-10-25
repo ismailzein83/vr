@@ -13,5 +13,11 @@ namespace TOne.WhS.Deal.Business
         {
             throw new NotImplementedException();
         }
+
+		public IEnumerable<SwapDealAnalysisOutboundRateCalcMethodConfig> GetOutboundRateCalcMethodExtensionConfigs()
+		{
+			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
+			return extensionConfigManager.GetExtensionConfigurations<SwapDealAnalysisOutboundRateCalcMethodConfig>(SwapDealAnalysisOutboundRateCalcMethodConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+		}
     }
 }

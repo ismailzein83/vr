@@ -1,9 +1,56 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div vr-modalcontent ng-controller="WhS_Deal_OutboundEditorController" vr-loader="scopeModel.isLoading" width="'45%'">
+	<vr-modalbody>
+		<vr-form name="formEditor">
+			<vr-row>
+				<vr-columns width="1/3row">
+					<vr-textbox label="Group Name" value="scopeModel.groupName" isrequired="true"></vr-textbox>
+				</vr-columns>
+				<vr-common-country-selector on-ready="scopeModel.onCountrySelectorReady"
+											selectedvalues="scopeModel.selectedCountry"
+											onselectionchanged="scopeModel.onCountrySelectionChanged"
+											normal-col-num="4"
+											isrequired="true"
+											hideremoveicon="true">
+				</vr-common-country-selector>
+				<span vr-disabled="scopeModel.selectedCountry == undefined">
+					<vr-whs-be-supplierzone-selector on-ready="scopeModel.onSupplierZoneSelectorReady"
+													 selectedvalues="scopeModel.selectedSupplierZones"
+													 ismultipleselection="true"
+													 normal-col-num="4"
+													 isrequired="true"
+													 hideremoveicon="true">
+					</vr-whs-be-supplierzone-selector>
+				</span>
+				<vr-columns width="1/3row">
+					<vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true"></vr-textbox>
+				</vr-columns>
+				<vr-columns width="1/3row">
+					<vr-textbox label="Deal Rate" value="scopeModel.dealRate" type="number" isrequired="true"></vr-textbox>
+				</vr-columns>
+				<vr-columns width="1/3row">
+					<vr-textbox label="Current Rate" value="scopeModel.currentRate" type="number" isrequired="true"></vr-textbox>
+				</vr-columns>
 
-</body>
-</html>
+				<vr-columns width="1/3row">
+					<vr-select on-ready="scopeModel.onRateCalcMethodSelectorReady"
+							   label="Rate Calc Method"
+							   datasource="scopeModel.rateCalcMethodExtensionConfigs"
+							   selectedvalues="scopeModel.selectedRateCalcMethodExtensionConfig"
+							   datatextfield="Title"
+							   datavaluefield="ExtensionConfigurationId"
+							   isrequired="true"
+							   hideremoveicon="true">
+					</vr-select>
+				</vr-columns>
+			</vr-row>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>

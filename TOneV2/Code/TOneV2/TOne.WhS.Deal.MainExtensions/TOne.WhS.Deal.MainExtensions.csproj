@@ -44,8 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwapDeals\SwapDealAnalysisOutboundItemRateFixed.cs" />
-    <Compile Include="SwapDeals\SwapDealAnalysisOutboundRateFixed.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundItemRateFixed.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundRateFixed.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">

@@ -126,6 +126,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\DealController.cs" />
+    <Compile Include="Controllers\SwapDealAnalysisController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +157,10 @@
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\FixedOutboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-itemeditor.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-editor.js" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\Templates\SwapDealAnalysisOutboundSettingsEditorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsEditorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-settings-editor.js" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-settings-editor.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealGridTemplate.html" />
@@ -175,12 +180,16 @@
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volumecommitment-grid.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volumecommitment-items.js" />
     <Content Include="WhS_Deal\Services\APIServices\DealAPIService.js" />
+    <Content Include="WhS_Deal\Services\APIServices\SwapDealAnalysisAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\VolumeCommitmentAPIService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisService.js" />
+    <Content Include="WhS_Deal\Services\SwapDealAnalysisSettingsService.js" />
     <Content Include="WhS_Deal\Services\SwapDealOutboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
     <Content Include="WhS_Deal\Services\VolumeCommitmentService.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\OutboundRateCalcMethodEditorController.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\Templates\OutboundRateCalcMethodEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysis\InboundEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysis\InboundEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysis\OutboundEditor.html" />

@@ -1,0 +1,14 @@
+﻿<vr-row>
+	<vr-columns width="fullrow">
+		<vr-button type="Add" data-onclick="scopeModel.addRateCalcMethod" standalone="true"></vr-button>
+		<vr-datagrid on-ready="scopeModel.onGridReady"
+					 datasource="scopeModel.rateCalcMethods"
+					 menuactions="scopeModel.menuActions"
+					 ondeleterow="scopeModel.removeRateCalcMethod"
+					 hidegridmenu="true"
+					 maxheight="300px"
+					 norowhighlightonclick="true">
+			<vr-datagridcolumn headertext="'Rate Calc Method'" field="'rateCalcMethod.Title'" disablesorting="true"></vr-datagridcolumn>
+		</vr-datagrid>
+	</vr-columns>
+</vr-row>

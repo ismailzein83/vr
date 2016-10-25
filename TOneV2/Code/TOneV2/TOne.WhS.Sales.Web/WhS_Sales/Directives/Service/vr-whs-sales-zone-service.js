@@ -72,8 +72,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                 var selectedIds = selectorAPI.getSelectedIds();
 
                 if (selectedIds != undefined) {
-                    var newServiceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
-                    setServiceDates(newServiceBED, undefined); // null and undefined don't work!
+                    setServiceDates(getNewServiceBED(), undefined); // null and undefined don't work!
                 }
                 else {
                     setServiceDates(zoneItem.CurrentServiceBED, zoneItem.CurrentServiceEED);
@@ -196,7 +195,7 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
                         showLinks(true, false);
                     }
                     else {
-                        $scope.scopeModel.serviceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
+                        $scope.scopeModel.serviceBED = getNewServiceBED();
                     }
 
                     if (zoneItem.ResetService != null) {
@@ -287,9 +286,24 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
         }
 
         function setServiceDates(serviceBED, serviceEED) {
-            $scope.scopeModel.serviceBED = serviceBED;
-            $scope.scopeModel.serviceEED = serviceEED;
+            $scope.scopeModel.serviceBED = new Date(serviceBED);
+            $scope.scopeModel.serviceEED = (serviceEED != null) ? new Date(serviceEED) : null;
         }
+
+        function getNewServiceBED() {
+
+            var dateTab = zoneItem.ZoneBED.split("T")[0].split("-");
+
+            var zoneBED = new Date();
+            zoneBED.setYear(dateTab[0]);
+            zoneBED.setMonth(dateTab[1]);
+            zoneBED.setDate(dateTab[2]);
+            var newServiceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
+            var maxBED = (newServiceBED > zoneBED) ? newServiceBED : zoneItem.ZoneBED;
+            //console.log(maxBED);
+            return maxBED;
+        }
+
         function showLinks(showResetLink, showUndoLink) {
             $scope.scopeModel.showResetLink = showResetLink;
             $scope.scopeModel.showUndoLink = showUndoLink;
