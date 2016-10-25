@@ -361,6 +361,7 @@
     <Content Include="WhS_BusinessEntity\Services\DealBuyingService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealSellingService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealService.js" />
+    <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
@@ -437,6 +438,8 @@
     <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentItemEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelist.html" />
