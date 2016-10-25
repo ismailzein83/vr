@@ -12,8 +12,13 @@
 			return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetOutboundRateCalcMethodExtensionConfigs'));
 		}
 
+		function GetSwapDealAnalysisSettingData() {
+			return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealAnalysisSettingData'));
+		}
+
 		return {
-			GetOutboundRateCalcMethodExtensionConfigs: GetOutboundRateCalcMethodExtensionConfigs
+			GetOutboundRateCalcMethodExtensionConfigs: GetOutboundRateCalcMethodExtensionConfigs,
+			GetSwapDealAnalysisSettingData: GetSwapDealAnalysisSettingData
 		};
 	}
 

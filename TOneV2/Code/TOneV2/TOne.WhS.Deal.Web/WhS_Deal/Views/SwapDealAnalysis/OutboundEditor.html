@@ -27,21 +27,20 @@
 				<vr-columns width="1/3row">
 					<vr-textbox label="Deal Rate" value="scopeModel.dealRate" type="number" isrequired="true"></vr-textbox>
 				</vr-columns>
-				<vr-columns width="1/3row">
-					<vr-textbox label="Current Rate" value="scopeModel.currentRate" type="number" isrequired="true"></vr-textbox>
-				</vr-columns>
 
 				<vr-columns width="1/3row">
 					<vr-select on-ready="scopeModel.onRateCalcMethodSelectorReady"
 							   label="Rate Calc Method"
-							   datasource="scopeModel.rateCalcMethodExtensionConfigs"
-							   selectedvalues="scopeModel.selectedRateCalcMethodExtensionConfig"
+							   datasource="scopeModel.rateCalcMethods"
+							   selectedvalues="scopeModel.selectedRateCalcMethod"
 							   datatextfield="Title"
-							   datavaluefield="ExtensionConfigurationId"
+							   datavaluefield="CalculationMethodId"
 							   isrequired="true"
 							   hideremoveicon="true">
 					</vr-select>
 				</vr-columns>
+				
+				<vr-directivewrapper directive="scopeModel.selectedRateCalcMethod.ItemEditor" on-ready="scopeModel.onDirectiveReady" normal-col-num="4"></vr-directivewrapper>
 			</vr-row>
 		</vr-form>
 	</vr-modalbody>

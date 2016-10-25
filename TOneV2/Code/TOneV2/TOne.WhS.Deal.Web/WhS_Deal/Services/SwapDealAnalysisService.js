@@ -6,9 +6,10 @@
 
 	function SwapDealAnalysisService(VRModalService, VRNotificationService, UtilsService) {
 
-		function addOutbound(carrierAccountId, onOutboundAdded)
+		function addOutbound(settings, carrierAccountId, onOutboundAdded)
 		{
 			var parameters = {
+				settings: settings,
 				carrierAccountId: carrierAccountId
 			};
 
@@ -20,8 +21,9 @@
 			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/OutboundEditor.html', parameters, settings);
 		}
 
-		function editOutbound(carrierAccountId, outboundEntity, onOutboundUpdated) {
+		function editOutbound(settings, carrierAccountId, outboundEntity, onOutboundUpdated) {
 			var parameters = {
+				settings: settings,
 				carrierAccountId: carrierAccountId,
 				outboundEntity: outboundEntity
 			};

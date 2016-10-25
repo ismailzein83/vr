@@ -1,14 +1,19 @@
 ﻿<vr-row>
 	<vr-columns width="fullrow">
 		<vr-button type="Add" data-onclick="scopeModel.addRateCalcMethod" standalone="true"></vr-button>
-		<vr-datagrid on-ready="scopeModel.onGridReady"
-					 datasource="scopeModel.rateCalcMethods"
-					 menuactions="scopeModel.menuActions"
-					 ondeleterow="scopeModel.removeRateCalcMethod"
-					 hidegridmenu="true"
-					 maxheight="300px"
-					 norowhighlightonclick="true">
-			<vr-datagridcolumn headertext="'Rate Calc Method'" field="'rateCalcMethod.Title'" disablesorting="true"></vr-datagridcolumn>
-		</vr-datagrid>
+		<vr-validator validate="scopeModel.validateSelection()">
+			<vr-datagrid on-ready="scopeModel.onGridReady"
+						 datasource="scopeModel.rateCalcMethods"
+						 menuactions="scopeModel.menuActions"
+						 ondeleterow="scopeModel.removeRateCalcMethod"
+						 hidegridmenu="true"
+						 maxheight="300px"
+						 norowhighlightonclick="true">
+				<vr-datagridcolumn widthfactor="1" disablesorting="true">
+					<vr-check value="dataItem.isSelected"></vr-check>
+				</vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Rate Calc Method'" field="'Entity.Title'" disablesorting="true"></vr-datagridcolumn>
+			</vr-datagrid>
+		</vr-validator>
 	</vr-columns>
 </vr-row>

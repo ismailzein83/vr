@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', function (UtilsService) {
+app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -38,21 +38,36 @@ app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', functi
 		}
 
 		function defineAPI() {
+
 			var api = {};
 
 			api.load = function (payload) {
-				
+				var promises = [];
+
+				if (payload != undefined && payload.data != undefined) {
+
+					var outboundSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+					promises.push(outboundSettingsLoadDeferred.promise);
+
+					var outboundSettingsPayload = {
+						defaultCalculationMethodId: payload.data.DefaultCalculationMethodId,
+						outboundCalculationMethods: payload.data.OutboundCalculationMethods
+					};
+					VRUIUtilsService.callDirectiveLoad(outboundSettingsEditorAPI, outboundSettingsPayload, outboundSettingsLoadDeferred);
+				}
+
+				return UtilsService.waitMultiplePromises(promises);
 			};
 
 			api.getData = function () {
-				console.log({
+				var data = {};
+				var outboundSettingsData = outboundSettingsEditorAPI.getData();
+				var data = {
 					$type: 'TOne.WhS.Deal.Entities.Settings.SwapDealAnalysisSettingData, TOne.WhS.Deal.Entities',
-					OutboundCalculationMethods: outboundSettingsEditorAPI.getData()
-				});
-				return {
-					$type: 'TOne.WhS.Deal.Entities.Settings.SwapDealAnalysisSettingData, TOne.WhS.Deal.Entities',
-					OutboundCalculationMethods: outboundSettingsEditorAPI.getData()
+					DefaultCalculationMethodId: outboundSettingsData.DefaultCalculationMethodId,
+					OutboundCalculationMethods: outboundSettingsData.OutboundCalculationMethods
 				};
+				return data;
 			};
 
 			if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')

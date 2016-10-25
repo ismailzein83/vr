@@ -39,6 +39,19 @@ app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_Swap
 				$scope.scopeModel.rateCalcMethods.splice($scope.scopeModel.rateCalcMethods.indexOf(rateCalcMethod), 1);
 			};
 
+			$scope.scopeModel.validateSelection = function () {
+				var counter = 0;
+				for (var i = 0; i < $scope.scopeModel.rateCalcMethods.length; i++) {
+					if ($scope.scopeModel.rateCalcMethods[i].isSelected === true)
+						counter++;
+				}
+				if (counter == 0)
+					return 'Select a default rate calc method';
+				if (counter > 1)
+					return 'You can only select 1 rate calc method';
+				return null;
+			};
+
 			defineMenuActions();
 		}
 
@@ -46,15 +59,32 @@ app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_Swap
 			var api = {};
 
 			api.load = function (payload) {
-
+				if (payload != undefined && payload.outboundCalculationMethods != undefined) {
+					for (var key in payload.outboundCalculationMethods) {
+						if (key == '$type')
+							continue;
+						var rateCalcMethod = { Entity: payload.outboundCalculationMethods[key] }
+						if (payload.outboundCalculationMethods[key].CalculationMethodId == payload.defaultCalculationMethodId)
+							rateCalcMethod.isSelected = true;
+						$scope.scopeModel.rateCalcMethods.push(rateCalcMethod);
+					}
+				}
 			};
 
 			api.getData = function () {
-				var data = {};
+
+				var data = {
+					DefaultCalculationMethodId: UtilsService.getItemByVal($scope.scopeModel.rateCalcMethods, true, 'isSelected').Entity.CalculationMethodId
+				};
+				
 				var rateCalcMethods = getRateCalcMethods();
-				if (rateCalcMethods != undefined)
+
+				if (rateCalcMethods != undefined) {
+					data.OutboundCalculationMethods = {};
 					for (var i = 0; i < rateCalcMethods.length; i++)
-						data[rateCalcMethods[i].CalculationMethodId] = rateCalcMethods[i];
+						data.OutboundCalculationMethods[rateCalcMethods[i].CalculationMethodId] = rateCalcMethods[i];
+				}
+
 				return data;
 			};
 
@@ -68,35 +98,30 @@ app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_Swap
 				clicked: editRateCalcMethod
 			}];
 		}
-		function addRateCalcMethod()
-		{
+		function addRateCalcMethod() {
 			var onRateCalcMethodAdded = function (addedRateCalcMethod) {
 				if (addedRateCalcMethod != undefined) {
-					addedRateCalcMethod.CalculationMethodId = UtilsService.guid();
-					var dataItem = {
-						rateCalcMethod: addedRateCalcMethod
-					};
-					$scope.scopeModel.rateCalcMethods.push(dataItem);
+					var obj = {};
+					obj.Entity = addedRateCalcMethod;
+					obj.Entity.CalculationMethodId = UtilsService.guid();
+					$scope.scopeModel.rateCalcMethods.push(obj);
 				}
 			};
 			WhS_Deal_SwapDealAnalysisSettingsService.addOutboundRateCalcMethod(onRateCalcMethodAdded);
 		}
-		function editRateCalcMethod(dataItem)
-		{
+		function editRateCalcMethod(rateCalcMethod) {
 			var onRateCalcMethodUpdated = function (updatedRateCalcMethod) {
 				if (updatedRateCalcMethod != undefined) {
 					var rateCalcMethods = getRateCalcMethods();
-					var index = UtilsService.getItemIndexByVal(rateCalcMethods, updatedRateCalcMethod.CalculationMethodId, 'CalculationMethodId');
-					$scope.scopeModel.rateCalcMethods[index] = {
-						rateCalcMethod: updatedRateCalcMethod
-					};
+					var updatedRateCalcMethodIndex = UtilsService.getItemIndexByVal(rateCalcMethods, updatedRateCalcMethod.CalculationMethodId, 'CalculationMethodId');
+					$scope.scopeModel.rateCalcMethods[updatedRateCalcMethodIndex] = { Entity: updatedRateCalcMethod };
 				}
 			};
-			WhS_Deal_SwapDealAnalysisSettingsService.editOutboundRateCalcMethod(dataItem.rateCalcMethod.CalculationMethodId, dataItem.rateCalcMethod, onRateCalcMethodUpdated);
+			WhS_Deal_SwapDealAnalysisSettingsService.editOutboundRateCalcMethod(rateCalcMethod.Entity.CalculationMethodId, rateCalcMethod.Entity, onRateCalcMethodUpdated);
 		}
 
 		function getRateCalcMethods() {
-			return UtilsService.getPropValuesFromArray($scope.scopeModel.rateCalcMethods, 'rateCalcMethod');
+			return UtilsService.getPropValuesFromArray($scope.scopeModel.rateCalcMethods, 'Entity');
 		}
 	}
 }]);

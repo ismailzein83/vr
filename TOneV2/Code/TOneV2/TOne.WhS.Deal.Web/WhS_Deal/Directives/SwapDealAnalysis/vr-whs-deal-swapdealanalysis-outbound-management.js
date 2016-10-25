@@ -23,6 +23,8 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 		var gridAPI;
 		var context;
 
+		var settings;
+
 		function initializeController()
 		{
 			$scope.scopeModel = {};
@@ -45,7 +47,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 						$scope.scopeModel.outbounds.push(addedOutbound);
 					}
 				};
-				WhS_Deal_SwapDealAnalysisService.addOutbound(carrierAccountId, onOutboundAdded);
+				WhS_Deal_SwapDealAnalysisService.addOutbound(settings, carrierAccountId, onOutboundAdded);
 			};
 
 			$scope.scopeModel.removeOutbound = function (outbound) {
@@ -62,6 +64,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 			{
 				if (payload != undefined) {
 					context = payload.context;
+					settings = payload.settings;
 				}
 			};
 
@@ -86,7 +89,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 					$scope.scopeModel.outbounds[$scope.scopeModel.outbounds.indexOf(outboundEntity)] = updatedOutbound;
 				}
 			};
-			WhS_Deal_SwapDealAnalysisService.editOutbound(carrierAccountId, outboundEntity, onOutboundUpdated);
+			WhS_Deal_SwapDealAnalysisService.editOutbound(settings, carrierAccountId, outboundEntity, onOutboundUpdated);
 		}
 	}
 }]);

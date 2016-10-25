@@ -21,6 +21,11 @@
 		var rateCalcMethodSelectorAPI;
 		var rateCalcMethodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+		var directiveAPI;
+		var directiveReadyDeferred;
+
+		var settings;
+
 		loadParameters();
 		defineScope();
 		load();
@@ -31,6 +36,7 @@
 			if (parameters != undefined && parameters != null) {
 				supplierId = parameters.carrierAccountId;
 				outboundEntity = parameters.outboundEntity;
+				settings = parameters.settings;
 			}
 
 			isEditMode = (outboundEntity != undefined);
@@ -39,7 +45,7 @@
 		{
 			$scope.scopeModel = {};
 
-			$scope.scopeModel.rateCalcMethodExtensionConfigs = [];
+			$scope.scopeModel.rateCalcMethods = [];
 
 			$scope.scopeModel.onCountrySelectorReady = function (api) {
 				countrySelectorAPI = api;
@@ -79,6 +85,17 @@
 				rateCalcMethodSelectorReadyDeferred.resolve();
 			};
 
+			$scope.scopeModel.onDirectiveReady = function (api) {
+				directiveAPI = api;
+				var setLoader = function (value) {
+					$scope.scopeModel.isLoading = value;
+				};
+				var payload;
+				if (outboundEntity != undefined)
+					payload = outboundEntity.ItemCalculationMethod;
+				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
+			};
+
 			$scope.scopeModel.save = function () {
 				return (isEditMode) ? updateOutbound() : insertOutbound();
 			};
@@ -89,11 +106,16 @@
 		}
 		function load() {
 			$scope.scopeModel.isLoading = true;
+
+			if (isEditMode) {
+				directiveReadyDeferred = UtilsService.createPromiseDeferred();
+			}
+
 			loadAllControls();
 		}
 
 		function loadAllControls() {
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadSupplierZoneSection, loadRateCalcMethodSelector]).catch(function (error) {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadSupplierZoneSection, loadRateCalcMethodSelector, loadDirective]).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
 				$scope.scopeModel.isLoading = false;
@@ -115,7 +137,6 @@
 			$scope.scopeModel.groupName = outboundEntity.GroupName;
 			$scope.scopeModel.volume = outboundEntity.Volume;
 			$scope.scopeModel.dealRate = outboundEntity.DealRate;
-			$scope.scopeModel.currentRate = outboundEntity.CurrentRate;
 		}
 		function loadSupplierZoneSection()
 		{
@@ -186,12 +207,28 @@
 			return supplierZoneSelectorLoadDeferred.promise;
 		}
 		function loadRateCalcMethodSelector() {
-			return WhS_Deal_SwapDealAnalysisAPIService.GetOutboundRateCalcMethodExtensionConfigs().then(function (response) {
-				if (response != null) {
-					for (var i = 0; i < response.length; i++)
-						$scope.scopeModel.rateCalcMethodExtensionConfigs.push(response[i]);
-				}
+			if (settings == undefined || settings.outboundRateCalcMethods == undefined)
+				return;
+			for (var key in settings.outboundRateCalcMethods) {
+				$scope.scopeModel.rateCalcMethods.push(settings.outboundRateCalcMethods[key]);
+			}
+			$scope.scopeModel.selectedRateCalcMethod = (outboundEntity != undefined) ?
+				UtilsService.getItemByVal($scope.scopeModel.rateCalcMethods, outboundEntity.CalculationMethodId, 'CalculationMethodId') :
+				UtilsService.getItemByVal($scope.scopeModel.rateCalcMethods, settings.defaultRateCalcMethodId, 'CalculationMethodId');
+		}
+		function loadDirective() {
+
+			if (outboundEntity == undefined)
+				return;
+
+			var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+			directiveReadyDeferred.promise.then(function () {
+				directiveReadyDeferred = undefined;
+				VRUIUtilsService.callDirectiveLoad(directiveAPI, outboundEntity.ItemCalculationMethod, directiveLoadDeferred);
 			});
+
+			return directiveLoadDeferred.promise;
 		}
 
 		function insertOutbound() {
@@ -213,7 +250,8 @@
 				SupplierZoneIds: supplierZoneSelectorAPI.getSelectedIds(),
 				Volume: $scope.scopeModel.volume,
 				DealRate: $scope.scopeModel.dealRate,
-				CurrentRate: $scope.scopeModel.currentRate
+				CalculationMethodId: $scope.scopeModel.selectedRateCalcMethod.CalculationMethodId,
+				ItemCalculationMethod: directiveAPI.getData()
 			};
 			return obj;
 		}
