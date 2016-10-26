@@ -35,6 +35,16 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            $scope.scopeModel.validateUpToVolume = function () {
+                if (tiers.length > 0 && $scope.scopeModel.upToVolume!=undefined && parseFloat(tiers[tiers.length - 1].UpToVolume) >= parseFloat($scope.scopeModel.upToVolume))
+                    return "Up To Volume must be greater than " + tiers[tiers.length - 1].UpToVolume;
+                return null;
+            };
+
+            $scope.scopeModel.resetUpToVolume = function () {
+                $scope.scopeModel.upToVolume = undefined;
+            }
         }
 
         function load() {

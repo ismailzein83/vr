@@ -3,11 +3,11 @@
         <vr-form name="formEditor">
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-switch value="scopeModel.isLastTier" label="Is Last Tier"></vr-switch>
+                    <vr-switch value="scopeModel.isLastTier" label="Is Last Tier" onvaluechanged="scopeModel.resetUpToVolume"></vr-switch>
                 </vr-columns>
                 <vr-columns width="fullrow" >
                     <span vr-disabled="scopeModel.isLastTier">
-                        <vr-textbox value="scopeModel.upToVolume" type="number" label="Up To Volume"></vr-textbox>
+                        <vr-textbox value="scopeModel.upToVolume" type="number" label="Up To Volume" customvalidate="scopeModel.validateUpToVolume()"></vr-textbox>
                     </span>
                 </vr-columns>
                 <vr-columns width="fullrow">
