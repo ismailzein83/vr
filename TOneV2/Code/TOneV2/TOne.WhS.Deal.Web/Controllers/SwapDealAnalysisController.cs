@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.Web.Controllers
 
 		[HttpGet]
 		[Route("GetSwapDealAnalysisSettingData")]
-		public SwapDealAnalysisSettingData GetSwapDealAnalysisSettingData()
+		public SwapDealSettingData GetSwapDealAnalysisSettingData()
 		{
 			var manager = new SwapDealAnalysisManager();
 			return manager.GetSwapDealAnalysisSettingData();

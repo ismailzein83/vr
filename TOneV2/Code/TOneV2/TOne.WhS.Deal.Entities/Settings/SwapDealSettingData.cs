@@ -8,10 +8,13 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Entities.Settings
 {
-    public class SwapDealAnalysisSettingData : SettingData
+    public class SwapDealSettingData : SettingData
     {
         public Guid DefaultCalculationMethodId { get; set; }
 
         public Dictionary<Guid, SwapDealAnalysisOutboundRateCalcMethod> OutboundCalculationMethods { get; set; }
+
+        public int GracePeriod { get; set; }
+
     }
 }

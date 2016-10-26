@@ -23,15 +23,15 @@ namespace TOne.WhS.Deal.Business
 			return extensionConfigManager.GetExtensionConfigurations<SwapDealAnalysisOutboundRateCalcMethodConfig>(SwapDealAnalysisOutboundRateCalcMethodConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
 		}
 
-		public SwapDealAnalysisSettingData GetSwapDealAnalysisSettingData()
+		public SwapDealSettingData GetSwapDealAnalysisSettingData()
 		{
 			var settingManager = new SettingManager();
-			Setting setting = settingManager.GetSettingByType(Constants.SwapDealAnalysisSettings);
+			Setting setting = settingManager.GetSettingByType(Constants.SwapDealSettings);
 			if (setting == null)
 				throw new NullReferenceException("setting");
 			if (setting.Data == null)
 				throw new NullReferenceException("setting.Data");
-			var swapDealAnalysisSettingData = setting.Data as SwapDealAnalysisSettingData;
+            var swapDealAnalysisSettingData = setting.Data as SwapDealSettingData;
 			if (swapDealAnalysisSettingData == null)
 				throw new NullReferenceException("swapDealAnalysisSettingData");
 			return swapDealAnalysisSettingData;

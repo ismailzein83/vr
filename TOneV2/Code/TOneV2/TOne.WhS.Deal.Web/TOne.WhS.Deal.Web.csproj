@@ -157,10 +157,10 @@
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\FixedOutboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-itemeditor.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-editor.js" />
-    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\Templates\SwapDealAnalysisOutboundSettingsEditorTemplate.html" />
-    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsEditorTemplate.html" />
-    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-settings-editor.js" />
-    <Content Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-settings-editor.js" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\Templates\SwapDealAnalysisOutboundSettingsEditorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\Templates\SwapDealSettingsEditorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdealanalysis-outbound-settings-editor.js" />
+    <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdeal-settings-editor.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealGridTemplate.html" />
@@ -213,7 +213,9 @@
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagement.html" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

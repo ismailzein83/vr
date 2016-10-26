@@ -14,7 +14,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_Swap
 		},
 		controllerAs: 'ctrl',
 		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_Deal/Directives/Settings/SwapDealAnalysis/Templates/SwapDealAnalysisOutboundSettingsEditorTemplate.html'
+		templateUrl: '/Client/Modules/WhS_Deal/Directives/Settings/SwapDealSettings/Templates/SwapDealAnalysisOutboundSettingsEditorTemplate.html'
 	};
 
 	function SwapDealAnalysisOutboundSettingsEditor($scope, ctrl, $attrs) {

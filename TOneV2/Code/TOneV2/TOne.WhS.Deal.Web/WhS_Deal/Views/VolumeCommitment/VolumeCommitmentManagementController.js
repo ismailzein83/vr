@@ -1,10 +1,10 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     "use strict";
 
-    volumeCommitmentManagementController.$inject = ["$scope", "WhS_Deal_VolumeCommitmentService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_Deal_VolumeCommitmentAPIService"];
+    volumeCommitmentManagementController.$inject = ["$scope", "WhS_Deal_VolumeCommitmentService", "UtilsService", "VRUIUtilsService", "VRNotificationService"];
 
-    function volumeCommitmentManagementController($scope, WhS_Deal_VolumeCommitmentService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Deal_VolumeCommitmentAPIService) {
+    function volumeCommitmentManagementController($scope, WhS_Deal_VolumeCommitmentService, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
 
         defineScope();
@@ -23,11 +23,7 @@
 
             $scope.AddVolumeCommitment = AddVolumeCommitment;
 
-            function getFilterObject() {
-                var query = {
-                };
-                return query;
-            }
+            
         }
 
         function load() {
@@ -37,10 +33,15 @@
             var onVolumeCommitmentAdded = function (addedItem) {
                 gridAPI.onVolumeCommitmentAdded(addedItem);
             };
-
             WhS_Deal_VolumeCommitmentService.addVolumeCommitment(onVolumeCommitmentAdded);
+        }
+
+        function getFilterObject() {
+            var query = {
+            };
+            return query;
         }
     }
 
-    appControllers.controller("WhS_Deal_VolumeCommitmentManagementController", volumeCommitmentManagementController);
-})(appControllers);
+    app.controller("WhS_Deal_VolumeCommitmentManagementController", volumeCommitmentManagementController);
+})(app);

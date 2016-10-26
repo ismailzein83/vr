@@ -1,4 +1,9 @@
 ﻿<vr-tabs>
+    <vr-tab header="'General'">
+        <vr-columns width="1/2row">
+            <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" isrequired="true"></vr-textbox>
+        </vr-columns>
+    </vr-tab>
 	<vr-tab header="'Outbound'">
 		<vr-whs-deal-swapdealanalysis-outbound-settings-editor on-ready="scopeModel.onOutboundSettingsEditorReady"></vr-whs-deal-swapdealanalysis-outbound-settings-editor>
 	</vr-tab>

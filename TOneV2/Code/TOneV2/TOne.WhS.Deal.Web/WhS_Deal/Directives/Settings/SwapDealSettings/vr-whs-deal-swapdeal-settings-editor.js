@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsDealSwapdealSettingsEditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -14,7 +14,7 @@ app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', 'VRUIU
 		},
 		controllerAs: 'ctrl',
 		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_Deal/Directives/Settings/SwapDealAnalysis/Templates/SwapDealAnalysisSettingsEditorTemplate.html'
+		templateUrl: '/Client/Modules/WhS_Deal/Directives/Settings/SwapDealSettings/Templates/SwapDealSettingsEditorTemplate.html'
 	};
 
 	function SwapDealAnalysisSettingsEditor($scope, ctrl, $attrs) {
@@ -54,6 +54,8 @@ app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', 'VRUIU
 						outboundCalculationMethods: payload.data.OutboundCalculationMethods
 					};
 					VRUIUtilsService.callDirectiveLoad(outboundSettingsEditorAPI, outboundSettingsPayload, outboundSettingsLoadDeferred);
+
+					$scope.scopeModel.gracePeriod = payload.data.GracePeriod;
 				}
 
 				return UtilsService.waitMultiplePromises(promises);
@@ -63,9 +65,10 @@ app.directive('vrWhsDealSwapdealanalysisSettingsEditor', ['UtilsService', 'VRUIU
 				var data = {};
 				var outboundSettingsData = outboundSettingsEditorAPI.getData();
 				var data = {
-					$type: 'TOne.WhS.Deal.Entities.Settings.SwapDealAnalysisSettingData, TOne.WhS.Deal.Entities',
+					$type: 'TOne.WhS.Deal.Entities.Settings.SwapDealSettingData, TOne.WhS.Deal.Entities',
 					DefaultCalculationMethodId: outboundSettingsData.DefaultCalculationMethodId,
-					OutboundCalculationMethods: outboundSettingsData.OutboundCalculationMethods
+					OutboundCalculationMethods: outboundSettingsData.OutboundCalculationMethods,
+					GracePeriod: $scope.scopeModel.gracePeriod
 				};
 				return data;
 			};

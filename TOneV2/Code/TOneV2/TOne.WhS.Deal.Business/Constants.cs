@@ -8,6 +8,6 @@ namespace TOne.WhS.Deal.Business
 {
 	public class Constants
 	{
-		public const string SwapDealAnalysisSettings = "WhS_Deal_SwapDealAnalysisSettings";
+		public const string SwapDealSettings = "WhS_Deal_SwapDealSettings";
 	}
 }

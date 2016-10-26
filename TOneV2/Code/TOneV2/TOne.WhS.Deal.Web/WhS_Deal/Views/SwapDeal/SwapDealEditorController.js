@@ -1,4 +1,4 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     'use strict';
 
@@ -293,6 +293,6 @@
         }
     }
 
-    appControllers.controller('WhS_Deal_SwapDealEditorController', SwapDealEditorController);
+    app.controller('WhS_Deal_SwapDealEditorController', SwapDealEditorController);
 
-})(appControllers);
+})(app);
