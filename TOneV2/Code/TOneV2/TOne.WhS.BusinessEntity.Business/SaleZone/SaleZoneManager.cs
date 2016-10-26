@@ -97,21 +97,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
-			string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
-			IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+            string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
+            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
-			if (filter == null)
-			{
-				return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
-			}
+            if (filter == null)
+            {
+                return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
+            }
 
-			var now = DateTime.Now;
-			HashSet<long> filteredZoneIds = null;
+            var now = DateTime.Now;
+            HashSet<long> filteredZoneIds = null;
 
-			if (filter.SaleZoneFilterSettings != null)
-			{
-				filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
-			}
+            if (filter.SaleZoneFilterSettings != null)
+            {
+                filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
+            }
 
             Func<SaleZone, bool> filterPredicate = (zone) =>
             {
@@ -124,8 +124,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (zoneName != null && !zone.Name.ToLower().Contains(zoneName))
                     return false;
 
-				if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
-					return false;
+                if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
+                    return false;
+
+                if (filter.AvailableZoneIds != null && !filter.AvailableZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
+                    return false;
 
                 return true;
             };
@@ -168,6 +174,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleZone.Name;
 
             return null;
+        }
+
+        public Dictionary<long, string> GetSaleZonesNames(IEnumerable<long> saleZoneIds)
+        {
+            var allSaleZones = GetCachedSaleZones().FindAllRecords(x => saleZoneIds.Contains(x.Key));
+            if (allSaleZones == null)
+                return null;
+
+            return allSaleZones.ToDictionary(x => x.Key, x => x.Value.Name);
         }
 
         public bool IsCountryEmpty(int sellingNumberPlanId, int countryId, DateTime minimumDate)

@@ -11,6 +11,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 isrequired: "=",
                 isdisabled: "=",
                 selectedvalues: '=',
+                onselectitem: '=',
+                ondeselectitem: '=',
                 normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
@@ -58,6 +60,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isSaleZoneRequired()"'
                    + '  vr-disabled="ctrl.isdisabled"'
+                   + '  onselectitem="ctrl.onselectitem"'
+                   + '  ondeselectitem="ctrl.ondeselectitem"'
                    + '  label="' + label + '"'
                    + '  >'
                    + '</vr-select>'
@@ -66,6 +70,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
         function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {
             var filter;
+            var availableZoneIds;
+            var excludedZoneIds;
+
             var selectorApi;
             var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -122,6 +129,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                         filter = { GetEffectiveOnly: getEffectiveOnly };
                     }
 
+                    filter.availableZoneIds = availableZoneIds;
+                    filter.excludedZoneIds = excludedZoneIds;
+
                     var serializedFilter = UtilsService.serializetoJson(filter);
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
                 }
@@ -149,9 +159,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     var payloadSellingNumberPlanId;
 
                     if (payload != undefined) {
-                        filter = payload.filter;
                         selectedIds = payload.selectedIds;
                         payloadSellingNumberPlanId = payload.sellingNumberPlanId;
+                        filter = payload.filter;
+                        availableZoneIds = payload.availableZoneIds;
+                        excludedZoneIds = payload.excludedZoneIds;
                     }
 
                     if (payloadSellingNumberPlanId != undefined) {
