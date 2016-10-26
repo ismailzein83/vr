@@ -51,7 +51,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 api.load = function (payload) {
                     mainPayload = payload;
 
-                    if (payload!= undefined && payload.Outbounds != null) {
+                    if (payload != undefined && payload.Outbounds!=undefined) {
                         ctrl.datasource = payload.Outbounds;
                        
                     }
@@ -65,7 +65,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                     var outbounds = [];
 
 
-                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
+                    if (ctrl.datasource != undefined ) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
                             outbounds.push({
@@ -80,7 +80,9 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                     }
                     return outbounds;
                 }
-
+                api.hasData = function () {
+                    return ctrl.datasource.length > 0;
+                }
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }

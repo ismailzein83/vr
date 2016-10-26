@@ -9,7 +9,7 @@ namespace TOne.WhS.Deal.Data
 {
     public interface IDealDataManager : IDataManager
     {
-        List<DealDefinition> GetDeals();
+        IEnumerable<DealDefinition> GetDeals();
 
         bool AreDealsUpdated(ref object updateHandle);
 

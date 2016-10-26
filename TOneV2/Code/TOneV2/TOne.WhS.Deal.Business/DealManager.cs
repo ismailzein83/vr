@@ -19,12 +19,32 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
-            var cachedEntities = this.GetCachedDealsByConfig().GetRecord(SwapDealSettings.SwapDealSettingsConfigId);
+            var cachedEntities = this.GetCachedSwapDeals();
             Func<DealDefinition, bool> filterExpression = (deal) =>
             {
                 if (input.Query.Name != null && !deal.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 if (input.Query.CarrierAccountIds != null && !input.Query.CarrierAccountIds.Contains((deal.Settings as SwapDealSettings).CarrierAccountId))
+                    return false;
+
+                return true;
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDefinitionDetailMapper));
+        }
+
+
+
+        public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
+        {
+            var cachedEntities = this.GetCachedVolCommitmentDeals();
+            Func<DealDefinition, bool> filterExpression = (deal) =>
+            {
+                if (input.Query.Name != null && !deal.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.CarrierAccountIds != null && !input.Query.CarrierAccountIds.Contains((deal.Settings as VolCommitmentDealSettings).CarrierAccountId))
+                    return false;
+                if (input.Query.Types != null && !input.Query.Types.Contains((deal.Settings as VolCommitmentDealSettings).DealType))
                     return false;
 
                 return true;
@@ -109,8 +129,19 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Methods
-       
-        Dictionary<Guid,List<DealDefinition>>  GetCachedDealsByConfig()
+        IEnumerable<DealDefinition> GetCachedSwapDeals()
+        {
+            return this.GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
+        }
+
+        IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
+        {
+            return this.GetCachedDealsByConfigId().GetRecord(VolCommitmentDealSettings.VolCommitmentDealSettingsConfigId); ;
+        }
+
+        
+
+        Dictionary<Guid,List<DealDefinition>>  GetCachedDealsByConfigId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDealsByConfig", () =>
             {

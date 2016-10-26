@@ -16,10 +16,6 @@
                 dealId: dealId
             });
         }
-
-        function GetDealsInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetDealsInfo'));
-        }
         function AddDeal(deal) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'AddDeal'), deal);
         }
@@ -42,8 +38,7 @@
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,
             HasAddDealPermission: HasAddDealPermission,
-            HasEditDealPermission: HasEditDealPermission,
-            GetDealsInfo: GetDealsInfo
+            HasEditDealPermission: HasEditDealPermission
         });
     }
 

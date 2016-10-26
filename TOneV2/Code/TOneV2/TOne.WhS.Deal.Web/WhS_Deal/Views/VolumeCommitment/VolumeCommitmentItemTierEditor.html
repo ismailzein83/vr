@@ -5,17 +5,19 @@
                 <vr-columns width="fullrow">
                     <vr-switch value="scopeModel.isLastTier" label="Is Last Tier"></vr-switch>
                 </vr-columns>
-                <vr-columns width="fullrow" vr-disabled="scopeModel.isLastTier">
-                    <vr-textbox value="scopeModel.upToVolume" type="number" label="Up To Volume" isrequired="true"></vr-textbox>
+                <vr-columns width="fullrow" >
+                    <span vr-disabled="scopeModel.isLastTier">
+                        <vr-textbox value="scopeModel.upToVolume" type="number" label="Up To Volume"></vr-textbox>
+                    </span>
                 </vr-columns>
                 <vr-columns width="fullrow">
                     <vr-textbox value="scopeModel.defaultRate" type="number" label="Default Rate" isrequired="true"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="fullrow">
                     <vr-select label="Retro Active From"
-                               datasource="[]"
-                               datavaluefield="tierid"
-                               datatextfield="tiername"
+                               datasource="scopeModel.tiers"
+                               datavaluefield="tierId"
+                               datatextfield="tierName"
                                selectedvalues="scopeModel.selectedRetroActive">
                     </vr-select>
                 </vr-columns>

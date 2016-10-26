@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService', 'VRValidationService'];
 
-    function SwapDealEditorController($scope, WhS_Deal_DealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService) {
+    function SwapDealEditorController($scope, WhS_Deal_DealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService, VRValidationService) {
         var isEditMode;
 
         var dealId;
@@ -19,10 +19,12 @@
         var dealOutboundAPI;
         var dealOutboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var carrierAccountSelectedPromise;
+
         loadParameters();
         defineScope();
         load();
-
+        var oldselectedCarrier;
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -43,28 +45,45 @@
                 carrierAccountSelectorAPI = api;
                 carrierAccountSelectorReadyDeferred.resolve();
             };
+
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined) {
-
-                    var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
                     }
-                    if (dealEntity != undefined && dealEntity.Settings != undefined)
-                        payload.Inbounds = dealEntity.Settings.Inbounds;
-                    
-
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId
                     }
-                    if (dealEntity != undefined && dealEntity.Settings != undefined)
-                        payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealInboundAPI, payload, setLoader);
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealOutboundAPI, payloadOutbound, setLoader);
+                    if (carrierAccountSelectedPromise != undefined){
+                        carrierAccountSelectedPromise.resolve();
+                        oldselectedCarrier = $scope.scopeModel.carrierAcount;
+                    }
+                    else if (oldselectedCarrier != undefined && oldselectedCarrier.CarrierAccountId != carrierAccountInfo.CarrierAccountId) {                       
+                        if (dealInboundAPI.hasData() || dealOutboundAPI.hasData()) {
+                            VRNotificationService.showConfirmation('Data will be lost,Are you sure you want to continue?').then(function (response) {
+                                if (response) {
+                                        dealInboundAPI.load(payload);
+                                        dealOutboundAPI.load(payloadOutbound);
+                                        oldselectedCarrier = carrierAccountInfo;
+                                    }
+                                    else {
+                                        $scope.scopeModel.carrierAcount = oldselectedCarrier;
+                                    }
+                              });
+                        }
+                        else {
+                            dealInboundAPI.load(payload);
+                            dealOutboundAPI.load(payloadOutbound);
+                        }
+                    }
+                    else if (oldselectedCarrier==undefined) {
+                        oldselectedCarrier = carrierAccountInfo;
+                        dealInboundAPI.load(payload);
+                        dealOutboundAPI.load(payloadOutbound);
+                    }
                 }
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
             };
@@ -81,26 +100,38 @@
             $scope.scopeModel.onSwapDealInboundDirectiveReady = function (api) {
                 dealInboundAPI = api;
                 dealInboundReadyPromiseDeferred.resolve();
-            }
+            };
             
             $scope.scopeModel.onSwapDealOutboundDirectiveReady = function (api) {
                 dealOutboundAPI = api;
                 dealOutboundReadyPromiseDeferred.resolve();
-            }
+            };
 
+            $scope.scopeModel.validateDatesRange = function () {               
+                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            };
+
+            $scope.scopeModel.validateSwapDealInbounds = function () {
+                if(dealInboundAPI != undefined && dealInboundAPI.getData().length == 0)
+                    return 'At least one Inbounds SwapDeal must be added.'
+                return null;
+            };
+            $scope.scopeModel.validateSwapDealOutbounds = function () {
+                if(dealOutboundAPI!=undefined && dealOutboundAPI.getData().length == 0)
+                    return 'At least one Outbounds SwapDeal must be added.'
+                return null;
+            };
         }
+
+
 
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
                 getSwapDeal().then(function () {
-
-                    loadCarrierAccountSelector().then(function () {
-                        loadAllControls().finally(function () {
-                            dealEntity = undefined;
-                        });
+                    loadAllControls().finally(function () {
+                        dealEntity = undefined;
                     });
-
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
@@ -108,7 +139,6 @@
             }
             else {
                 loadAllControls();
-                loadCarrierAccountSelector();
             }
         }
 
@@ -119,82 +149,64 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwapDealInbound, loadSwapDealOutbound]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
-        function loadSwapDealInbound() {
+       
 
-            var loadSwapDealInboundPromiseDeferred = UtilsService.createPromiseDeferred();
+      
 
+        function loadCarrierBoundsSection() {
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI != null) {
-                var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
-                    dealInboundReadyPromiseDeferred.promise
-                        .then(function() {
-                            var directivePayload = {
-                                sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                            }
-                            if (dealEntity != undefined && dealEntity.Settings != undefined)
-                                directivePayload.Inbounds = dealEntity.Settings.Inbounds; 
-                            VRUIUtilsService.callDirectiveLoad(dealInboundAPI, directivePayload, loadSwapDealInboundPromiseDeferred);
-                        });
-                }
+            var promises = [];
+            promises.push(loadCarrierAccountPromiseDeferred.promise);
+
+            var payload ;
+            if(dealEntity != undefined && dealEntity.Settings!=undefined) {
+                payload = { selectedIds: dealEntity.Settings.CarrierAccountId };
+                carrierAccountSelectedPromise = UtilsService.createPromiseDeferred();
 
             }
-            else {
-                dealInboundReadyPromiseDeferred.promise
-                    .then(function () {
-                        var directivePayload = {
-                            sellingNumberPlanId: null
-                        }
-                        if (dealEntity != undefined && dealEntity.Settings != undefined)
-                            directivePayload.Inbounds = dealEntity.Settings.Inbounds;                      
-                        VRUIUtilsService.callDirectiveLoad(dealInboundAPI, directivePayload, loadSwapDealInboundPromiseDeferred);
-                    });
+            carrierAccountSelectorReadyDeferred.promise.then(function () {
+
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, loadCarrierAccountPromiseDeferred);
+            });
+
+
+
+            if (dealEntity != undefined && dealEntity.Settings != undefined) {
+
+                var loadSwapDealInboundPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadSwapDealInboundPromiseDeferred.promise);
+
+                var loadSwapDealOutboundPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadSwapDealOutboundPromiseDeferred.promise);
+
+                UtilsService.waitMultiplePromises([dealInboundReadyPromiseDeferred.promise, dealOutboundReadyPromiseDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
+                    var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
+                    var payload = {
+                        sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
+                        Inbounds: dealEntity.Settings.Inbounds
+                    }
+                  
+                    var payloadOutbound = {
+                        supplierId: carrierAccountInfo.CarrierAccountId,
+                        Outbounds: dealEntity.Settings.Outbounds
+                    }
+                    if (dealEntity != undefined && dealEntity.Settings != undefined)
+                        payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
+                    VRUIUtilsService.callDirectiveLoad(dealInboundAPI, payload, loadSwapDealInboundPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, payloadOutbound, loadSwapDealOutboundPromiseDeferred);
+                    carrierAccountSelectedPromise = undefined;
+                });
             }
 
-
-            return loadSwapDealInboundPromiseDeferred.promise;
-        }
-
-        function loadSwapDealOutbound() {
-
-            var loadSwapDealOutboundPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
-            if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI != null) {
-                var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined && carrierAccountInfo.SupplierId) {
-                    dealOutboundReadyPromiseDeferred.promise
-                        .then(function () {
-                            var directivePayload = {
-                                supplierId: carrierAccountInfo.SupplierId
-                            }
-                            if (dealEntity != undefined && dealEntity.Settings != undefined)
-                                directivePayload.Outbounds = dealEntity.Settings.Outbounds;
-
-                            VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, directivePayload, loadSwapDealOutboundPromiseDeferred);
-                        });
-                }
-            }
-            else {
-                dealOutboundReadyPromiseDeferred.promise
-                    .then(function () {
-                        var directivePayload = {
-                            supplierId: null
-                        }
-                        if (dealEntity != undefined && dealEntity.Settings != undefined)
-                            directivePayload.Outbounds = dealEntity.Settings.Outbounds;
-
-                        VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, directivePayload, loadSwapDealOutboundPromiseDeferred);
-                    });
-            }
-
-
-            return loadSwapDealOutboundPromiseDeferred.promise;
+            return UtilsService.waitMultiplePromises(promises);
         }
 
 
@@ -230,8 +242,6 @@
 
             return carrierAccountSelectorLoadDeferred.promise;
         }
-
-
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;

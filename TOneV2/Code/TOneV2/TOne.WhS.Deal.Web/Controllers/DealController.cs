@@ -14,12 +14,22 @@ namespace TOne.WhS.Deal.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "DealDefinition")]
     public class DealDefinitionController : Vanrise.Web.Base.BaseAPIController
     {
+        DealManager _manager = new DealManager();
+
         [HttpPost]
         [Route("GetFilteredSwapDeals")]
         public object GetFilteredDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredSwapDeals(input));
         }
+
+        [HttpPost]
+        [Route("GetFilteredVolCommitmentDeals")]
+        public object GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredVolCommitmentDeals(input));
+        }
+
         [HttpGet]
         [Route("GetDeal")]
         public DealDefinition GetDeal(int dealId)
@@ -33,8 +43,6 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return _manager.UpdateDeal(deal);
         }
-
-        DealManager _manager = new DealManager();
         [HttpPost]
         [Route("AddDeal")]
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)

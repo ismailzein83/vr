@@ -54,12 +54,11 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 api.load = function (payload) {
                     mainPayload = payload;
                     
-                    if (payload!= undefined && payload.Inbounds != null) {
+                    if (payload != undefined && payload.Inbounds!=undefined) {
 
                         ctrl.datasource = payload.Inbounds;
                        
-                    }
-                        
+                    }                        
                     else
                         ctrl.datasource.length = 0;
                 };
@@ -83,7 +82,9 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                     }
                     return inbounds;
                 }
-
+                api.hasData = function () {
+                    return ctrl.datasource.length > 0;
+                }
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }

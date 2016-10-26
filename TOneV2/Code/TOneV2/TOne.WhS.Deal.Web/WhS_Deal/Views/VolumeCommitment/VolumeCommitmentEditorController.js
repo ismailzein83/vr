@@ -2,12 +2,12 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolumeCommitmentAPIService',  'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService','WhS_Deal_VolumeCommitmentTypeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolumeCommitmentAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_DealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
         var isEditMode;
 
-        var volumeCommitmentId;
+        var dealId;
         var volumeCommitmentEntity;
 
         var carrierAccountSelectorAPI;
@@ -25,9 +25,9 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
-                volumeCommitmentId = parameters.volumeCommitmentId;
+                dealId = parameters.dealId;
 
-            isEditMode = (volumeCommitmentId != undefined);
+            isEditMode = (dealId != undefined);
         }
 
         function defineScope() {
@@ -75,7 +75,7 @@
         }
 
         function getVolumeCommitment() {
-            return WhS_BE_VolumeCommitmentAPIService.GetVolumeCommitment(volumeCommitmentId).then(function (response) {
+            return WhS_Deal_DealAPIService.GetDeal(dealId).then(function (response) {
                 volumeCommitmentEntity = response;
             });
         }
@@ -138,8 +138,8 @@
         }
         function insertVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
-            return WhS_BE_VolumeCommitmentAPIService.AddVolumeCommitment(buildVolumeCommitmentObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('VolumeCommitment', response, 'Description')) {
+            return WhS_Deal_DealAPIService.AddDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Volume Commitment', response, 'Description')) {
                     if ($scope.onVolumeCommitmentAdded != undefined)
                         $scope.onVolumeCommitmentAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -153,8 +153,8 @@
 
         function updateVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
-            return WhS_BE_VolumeCommitmentAPIService.UpdateVolumeCommitment(buildVolumeCommitmentObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('VolumeCommitment', response, 'Description')) {
+            return WhS_Deal_DealAPIService.UpdateDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Volume Commitment', response, 'Description')) {
                     if ($scope.onVolumeCommitmentUpdated != undefined)
                         $scope.onVolumeCommitmentUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
@@ -168,15 +168,14 @@
 
         function buildVolumeCommitmentObjFromScope() {
             var obj = {
-                VolumeCommitmentId: volumeCommitmentId,
+                DealId: dealId,
+                Name: $scope.scopeModel.description,
                 Settings: {
-                    Description: $scope.scopeModel.description,
-                    Type:$scope.scopeModel.selectedVolumeCommitmentType.value,
+                    $type: "TOne.WhS.Deal.Entities.VolCommitmentDealSettings, TOne.WhS.Deal.Entities",
+                    DealType:$scope.scopeModel.selectedVolumeCommitmentType.value,
                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
                     EndDate: $scope.scopeModel.endDate,
-                    GracePeriod: $scope.scopeModel.gracePeriod,
-                    Active: $scope.scopeModel.active,
                     Items: volumeCommitmenetItemsAPI.getData()
                 }
             };

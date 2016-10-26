@@ -19,10 +19,10 @@
 
 			$scope.scopeModel.onGridReady = function (api) {
 			    gridAPI = api;
-			    api.load({});
+			    api.load(getFilterObject());
 			};
 			$scope.scopeModel.search = function () {
-			    return gridAPI.load(buildGridQuery());
+			    return gridAPI.load(getFilterObject());
 			};
 			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
 			    carrierAccountSelectorAPI = api;
@@ -42,17 +42,14 @@
 
 		function load() {
 			$scope.scopeModel.isLoading = true;
-			loadAllControls();
-		}
-
-		function loadAllControls()
-		{
-		    UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector]).catch(function (error) {
-				VRNotificationService.notifyException(error, $scope);
+			UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector]).catch(function (error) {
+			    VRNotificationService.notifyException(error, $scope);
 			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
+			    $scope.scopeModel.isLoading = false;
 			});
 		}
+
+		
 
 		function loadCarrierAccountSelector() {
 		    var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -61,7 +58,7 @@
 		    });
 		    return carrierAccountSelectorLoadDeferred.promise;
 		}
-		function buildGridQuery() {
+		function getFilterObject() {
 		    return {
 		        CarrierAccountIds: carrierAccountSelectorAPI.getSelectedIds(),
 		        Name: $scope.scopeModel.description

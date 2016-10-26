@@ -5,7 +5,7 @@
     SwapDealInboundService.$inject = ['VRModalService', 'VRNotificationService'];
 
     function SwapDealInboundService(VRModalService, VRNotificationService) {
-        var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealInboundEditor.html';
+        var editorUrl = '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealInboundEditor.html';
 
         function addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId) {
             var settings = {};

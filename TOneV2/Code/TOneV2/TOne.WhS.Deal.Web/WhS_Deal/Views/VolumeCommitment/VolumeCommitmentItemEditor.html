@@ -7,26 +7,23 @@
                         <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
-                            <span vr-loader="scopeModel.isLoadingDirective">
-                                <vr-directivewrapper directive="scopeModel.zoneSelector" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
-                            </span>
+                        <span vr-loader="scopeModel.isLoadingDirective">
+                            <vr-directivewrapper directive="scopeModel.zoneSelector" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
+                        </span>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-button type="Add" data-onclick="scopeModel.addRate" standalone></vr-button>
+                            <vr-button type="Add" data-onclick="scopeModel.addTier" standalone></vr-button>
 
                             <vr-validator validate="scopeModel.isValid()">
-                                <vr-datagrid datasource="scopeModel.rates" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                                             on-ready="scopeModel.onGridReady"  ondeleterow="scopeModel.removeRate" hidegridmenu>
-                                   
-                                    <vr-datagridcolumn headertext="'Tier name'" widthfactor="10" filed="'name'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'From'" filed="'name'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Rate'" widthfactor="10" disablesorting>
-                                        <vr-textbox value="dataItem.Rate" type="number" isrequired="true"></vr-textbox>
-                                    </vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Retro Active'" widthfactor="5" disablesorting>
-                                        <vr-switch value="dataItem.IsRetroActive"></vr-switch>
-                                    </vr-datagridcolumn>
+                                <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                                             on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeRate" hidegridmenu>
+                                    <vr-datagridcolumn headertext="'Tier name'" field="'tierName'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'From'" field="'FromVol'"  type="'Number'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'To'" field="'UpToVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Rate'"  field="'DefaultRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Retro Active From'" field="'RetroActiveFromTier'"  disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Retro Active Volume'" field="'RetroActiveVolume'" type="'Number'"  disablesorting></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>

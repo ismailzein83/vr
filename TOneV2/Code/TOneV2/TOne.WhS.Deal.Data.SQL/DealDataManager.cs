@@ -14,7 +14,7 @@ namespace TOne.WhS.Deal.Data.SQL
         #region Constructors
 
         public DealDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
@@ -23,8 +23,9 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region Public Methods
 
-        public List<DealDefinition> GetDeals()
+        public IEnumerable<DealDefinition> GetDeals()
         {
+            
             return GetItemsSP("TOneWhS_Deal.sp_Deal_GetAll", DealMapper);
         }
 

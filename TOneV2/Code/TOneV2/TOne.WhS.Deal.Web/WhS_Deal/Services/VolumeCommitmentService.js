@@ -67,27 +67,29 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItemTier(onVolumeCommitmentItemAdded) {
+        function addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded,tiers) {
             var settings = {
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVolumeCommitmentItemAdded = onVolumeCommitmentItemAdded;
+                modalScope.onVolumeCommitmentItemTierAdded = onVolumeCommitmentItemTierAdded;
             };
             var parameters = {
+                tiers: tiers
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemtierEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemUpdated) {
+        function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemTierUpdated, tiers) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVolumeCommitmentItemUpdated = onVolumeCommitmentItemUpdated;
+                modalScope.onVolumeCommitmentItemTierUpdated = onVolumeCommitmentItemTierUpdated;
             };
             var parameters = {
-                volumeCommitmentItemTierEntity: volumeCommitmentItemTierEntity
+                volumeCommitmentItemTierEntity: volumeCommitmentItemTierEntity,
+                tiers: tiers
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemTierEditor.html', parameters, settings);

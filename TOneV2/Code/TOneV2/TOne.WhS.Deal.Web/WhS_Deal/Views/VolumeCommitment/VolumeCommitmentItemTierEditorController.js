@@ -7,6 +7,7 @@
     function VolumeCommitmentItemTierEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var volumeCommitmentItemTierEntity;
+        var tiers;
         var context;
         var isEditMode;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -21,6 +22,7 @@
             var parametersObj = VRNavigationService.getParameters($scope);
             if (parametersObj != undefined) {
                 volumeCommitmentItemTierEntity = parametersObj.volumeCommitmentItemTierEntity;
+                tiers = parametersObj.tiers;
             }
             isEditMode = (volumeCommitmentItemTierEntity != undefined);
         }
@@ -36,13 +38,13 @@
         }
 
         function load() {
+            $scope.scopeModel.tiers = tiers != undefined ? tiers : [];
             $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).then(function () {
-
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
@@ -66,14 +68,16 @@
     
         function builVolumeCommitmentItemTierObjFromScope() {
             return {
-             
+                UpToVolume: $scope.scopeModel.upToVolume,
+                DefaultRate: $scope.scopeModel.defaultRate,
+                RetroActiveFromTierNumber:($scope.scopeModel.selectedRetroActive!=undefined)? $scope.scopeModel.selectedRetroActive.tierId:undefined
             };
         }
 
         function addVolumeCommitmentItem() {
             var parameterObj = builVolumeCommitmentItemTierObjFromScope();
-            if ($scope.onVolumeCommitmentItemAdded != undefined) {
-                $scope.onVolumeCommitmentItemAdded(parameterObj);
+            if ($scope.onVolumeCommitmentItemTierAdded != undefined) {
+                $scope.onVolumeCommitmentItemTierAdded(parameterObj);
             }
             $scope.modalContext.closeModal();
         }

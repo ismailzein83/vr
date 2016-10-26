@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings\GracePeriodSettingData.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\SwapDealAnalysisOutboundItemRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\SwapDealAnalysisOutboundRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\SwapDealAnalysisOutboundRateCalcMethodConfig.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="SwapDeals\SwapDealAnalysisDefinition.cs" />
     <Compile Include="SwapDeals\SwapDealOutbound.cs" />
     <Compile Include="SwapDeals\SwapDealInbound.cs" />
+    <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItemTier.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealSettings.cs" />
