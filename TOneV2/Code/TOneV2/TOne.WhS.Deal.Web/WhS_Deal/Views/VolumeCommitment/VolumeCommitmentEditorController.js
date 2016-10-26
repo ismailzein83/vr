@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_DealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_DealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService) {
         var isEditMode;
 
         var dealId;
@@ -54,6 +54,9 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.validateDatesRange = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            };
         }
 
         function load() {
@@ -80,7 +83,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierAccountSelector, loadVolumeCommitmenetItems]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGracePeriod, loadCarrierAccountSelector, loadVolumeCommitmenetItems]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -105,7 +108,15 @@
             $scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         }
-
+        function loadGracePeriod() {
+            if (volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings.GracePeriod != undefined) {
+                $scope.scopeModel.gracePeriod = volumeCommitmentEntity.Settings.GracePeriod;
+                return;
+            }
+            return WhS_Deal_DealAPIService.GetSwapDealSettingData().then(function (response) {
+                $scope.scopeModel.gracePeriod = response.GracePeriod;
+            });
+        }
         function loadCarrierAccountSelector() {
             if (volumeCommitmentEntity == undefined)
                 return;

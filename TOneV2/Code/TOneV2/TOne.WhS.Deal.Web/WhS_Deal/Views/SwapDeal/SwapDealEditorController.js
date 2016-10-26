@@ -38,7 +38,6 @@
         function defineScope() {
             
             $scope.scopeModel = {};
-            $scope.scopeModel.gracePeriod = 7;
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
 
@@ -155,7 +154,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection,loadGraceperiod]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -232,6 +231,16 @@
             $scope.scopeModel.active = dealEntity.Settings.Active;
         }
 
+        function loadGraceperiod() {
+            if (dealEntity != undefined && dealEntity.Settings.GracePeriod != undefined){
+                $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod
+               return;
+            }
+            return WhS_Deal_DealAPIService.GetSwapDealSettingData().then(function (response) {
+                $scope.scopeModel.gracePeriod = response.GracePeriod;
+            })
+               
+        }
         function loadCarrierAccountSelector() {
             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 

@@ -50,7 +50,7 @@
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
         function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context) {
@@ -64,7 +64,7 @@
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
         function addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded,tiers) {
@@ -78,7 +78,7 @@
                 tiers: tiers
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemtierEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemtierEditor.html', parameters, settings);
         }
 
         function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemTierUpdated, tiers) {
@@ -92,7 +92,7 @@
                 tiers: tiers
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentItemTierEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierEditor.html', parameters, settings);
         }
     }
 

@@ -206,10 +206,10 @@
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealManagementController.js" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentEditor.html" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentEditorController.js" />
-    <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentItemTierEditor.html" />
-    <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentItemEditor.html" />
-    <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentItemTierEditorController.js" />
-    <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentItemEditorController.js" />
+    <Content Include="WhS_Deal\Directives\VolumeCommitment\Templates\VolumeCommitmentItemTierEditor.html" />
+    <Content Include="WhS_Deal\Directives\VolumeCommitment\Templates\VolumeCommitmentItemEditor.html" />
+    <Content Include="WhS_Deal\Directives\VolumeCommitment\VolumeCommitmentItemTierEditorController.js" />
+    <Content Include="WhS_Deal\Directives\VolumeCommitment\VolumeCommitmentItemEditorController.js" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagement.html" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagementController.js" />
   </ItemGroup>
