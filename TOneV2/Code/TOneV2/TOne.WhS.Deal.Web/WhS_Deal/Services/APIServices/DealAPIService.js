@@ -31,14 +31,17 @@
         function HasEditDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['UpdateDeal']));
         }
-
+        function GetSwapDealSettingData() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealSettingData'));
+        }
         return ({
             GetFilteredSwapDeals: GetFilteredSwapDeals,
             GetDeal: GetDeal,
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,
             HasAddDealPermission: HasAddDealPermission,
-            HasEditDealPermission: HasEditDealPermission
+            HasEditDealPermission: HasEditDealPermission,
+            GetSwapDealSettingData: GetSwapDealSettingData
         });
     }
 

@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	SwapDealAnalysisController.$inject = ['$scope', 'WhS_Deal_SwapDealAnalysisAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+	SwapDealAnalysisController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-	function SwapDealAnalysisController($scope, WhS_Deal_SwapDealAnalysisAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
+	function SwapDealAnalysisController($scope, WhS_Deal_DealAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
 		var swapDealAnalysisId;
 		var swapDealAnalysisEntity;
@@ -96,7 +96,7 @@
 				$scope.title = UtilsService.buildTitleForAddEditor('Swap Deal Analysis');
 		}
 		function loadSwapDealSettings() {
-			return WhS_Deal_SwapDealAnalysisAPIService.GetSwapDealAnalysisSettingData().then(function (response) {
+			return WhS_Deal_DealAPIService.GetSwapDealSettingData().then(function (response) {
 				swapDealSettings = response;
 				swapDealSettingsLoadDeferred.resolve();
 			});

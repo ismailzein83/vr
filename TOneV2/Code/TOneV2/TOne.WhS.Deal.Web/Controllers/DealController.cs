@@ -7,6 +7,7 @@ using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Entities;
+using TOne.WhS.Deal.Entities.Settings;
 
 namespace TOne.WhS.Deal.Web.Controllers
 {
@@ -48,6 +49,13 @@ namespace TOne.WhS.Deal.Web.Controllers
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
             return _manager.AddDeal(deal);
+        }
+
+        [HttpGet]
+        [Route("GetSwapDealSettingData")]
+        public SwapDealSettingData GetSwapDealSettingData()
+        {
+            return _manager.GetSwapDealSettingData();
         }
     }
 }

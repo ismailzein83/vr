@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Data;
 using Vanrise.Caching;
+using TOne.WhS.Deal.Entities.Settings;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -111,6 +112,20 @@ namespace TOne.WhS.Deal.Business
             return updateOperationOutput;
         }
 
+
+        public SwapDealSettingData GetSwapDealSettingData()
+        {
+            var settingManager = new SettingManager();
+            Setting setting = settingManager.GetSettingByType(Constants.SwapDealSettings);
+            if (setting == null)
+                throw new NullReferenceException("setting");
+            if (setting.Data == null)
+                throw new NullReferenceException("setting.Data");
+            var swapDealAnalysisSettingData = setting.Data as SwapDealSettingData;
+            if (swapDealAnalysisSettingData == null)
+                throw new NullReferenceException("swapDealAnalysisSettingData");
+            return swapDealAnalysisSettingData;
+        }
 
         #endregion
 

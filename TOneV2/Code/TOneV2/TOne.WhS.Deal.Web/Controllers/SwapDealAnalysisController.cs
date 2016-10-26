@@ -22,12 +22,5 @@ namespace TOne.WhS.Deal.Web.Controllers
 			return manager.GetOutboundRateCalcMethodExtensionConfigs();
 		}
 
-		[HttpGet]
-		[Route("GetSwapDealAnalysisSettingData")]
-		public SwapDealSettingData GetSwapDealAnalysisSettingData()
-		{
-			var manager = new SwapDealAnalysisManager();
-			return manager.GetSwapDealAnalysisSettingData();
-		}
 	}
 }

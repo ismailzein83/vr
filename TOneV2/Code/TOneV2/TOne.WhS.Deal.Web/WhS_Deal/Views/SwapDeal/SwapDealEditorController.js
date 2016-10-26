@@ -25,6 +25,7 @@
         defineScope();
         load();
         var oldselectedCarrier;
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -112,18 +113,23 @@
             };
 
             $scope.scopeModel.validateSwapDealInbounds = function () {
+                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues()
+                if (selectedcarrier == undefined)
+                    return 'Please select a Carrier Account.';
                 if(dealInboundAPI != undefined && dealInboundAPI.getData().length == 0)
-                    return 'At least one Inbounds SwapDeal must be added.'
+                    return 'Please, one record must be added at least.'
                 return null;
             };
+
             $scope.scopeModel.validateSwapDealOutbounds = function () {
+                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues()
+                if (selectedcarrier == undefined)
+                    return 'Please select a Carrier Account.';
                 if(dealOutboundAPI!=undefined && dealOutboundAPI.getData().length == 0)
-                    return 'At least one Outbounds SwapDeal must be added.'
+                    return 'Please,one record must be added at least.'
                 return null;
             };
         }
-
-
 
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -155,10 +161,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
-       
-
-      
 
         function loadCarrierBoundsSection() {
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -208,7 +210,6 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-
 
         function setTitle() {
             if (isEditMode) {
