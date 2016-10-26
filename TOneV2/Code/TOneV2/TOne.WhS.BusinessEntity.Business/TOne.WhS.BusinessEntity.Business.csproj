@@ -119,6 +119,7 @@
     <Compile Include="SaleRate\SaleRateReadAllNoCache.cs" />
     <Compile Include="SaleRate\SaleRateReadWithCache.cs" />
     <Compile Include="SaleService\SaleEntityServiceReadAllNoCache.cs" />
+    <Compile Include="SaleZone\SaleZoneGroupCleanupContext.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
     <Compile Include="SellingProductManager.cs" />
     <Compile Include="PricingRules\BasePricingRuleManager.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="SupplierService\SupplierZoneServiceLocator.cs" />
     <Compile Include="SupplierService\SupplierZoneServiceReadAllNoCache.cs" />
     <Compile Include="SupplierZoneService\SupplierZoneServiceManager.cs" />
+    <Compile Include="SupplierZone\SaleZoneGroupCleanupContext.cs" />
     <Compile Include="SupplierZone\SupplierZoneGroupContext.cs" />
     <Compile Include="SupplierZone\SupplierZoneManager.cs" />
     <Compile Include="SupplierZone\SupplierZoneRateLocator.cs" />

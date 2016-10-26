@@ -16,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public abstract IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context);
 
+        public abstract void CleanDeletedZoneIds(ISaleZoneGroupCleanupContext context);
+
         public abstract string GetDescription(ISaleZoneGroupContext context);
 
         IEnumerable<object> Vanrise.GenericData.Entities.IBusinessEntityGroup.GetIds(IBusinessEntityGroupContext context)

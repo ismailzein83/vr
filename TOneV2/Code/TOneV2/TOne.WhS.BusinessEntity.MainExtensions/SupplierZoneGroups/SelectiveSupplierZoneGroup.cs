@@ -48,5 +48,36 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SupplierZoneGroups
             return null;
         }
 
+
+        public override void CleanDeletedZoneIds(ISupplierZoneGroupCleanupContext context)
+        {
+            context.Result = SupplierZoneGroupCleanupResult.NoChange;
+
+            if(this.SuppliersWithZones != null && this.SuppliersWithZones.Count > 0)
+            {
+                List<int> supplierZoneIdstoDelete = new List<int>();
+                foreach (SupplierWithZones supplier in this.SuppliersWithZones)
+                {
+                    if(supplier.SupplierZoneIds != null && supplier.SupplierZoneIds.Count > 0)
+                    {
+                        foreach (int deletedZoneId in context.DeletedSupplierZoneIds)
+                        {
+                            if(supplier.SupplierZoneIds.Contains(deletedZoneId))
+                            {
+                                context.Result = SupplierZoneGroupCleanupResult.ZonesUpdated;
+                                supplier.SupplierZoneIds.Remove(deletedZoneId);
+                            }
+                        }
+
+                        if(supplier.SupplierZoneIds.Count == 0)
+                            supplierZoneIdstoDelete.Add(supplier.SupplierId);
+                    }
+                }
+
+                this.SuppliersWithZones.RemoveAll(x => supplierZoneIdstoDelete.Contains(x.SupplierId));
+                if (this.SuppliersWithZones.Count == 0)
+                    context.Result = SupplierZoneGroupCleanupResult.AllZonesRemoved;
+            }
+        }
     }
 }

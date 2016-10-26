@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan
 {
     public class SelectiveSellingNumberPlan : SaleZoneGroupSettings
     {
-        public override Guid ConfigId { get { return new Guid("d566ce83-0010-42ab-88bc-b8b3eaf5b556"); } }
+        public override Guid ConfigId { get { return new Guid("34546F3F-CF45-4F74-865D-916D608CD86B"); } }
         public List<int> SellingNumberPlanIds { get; set; }
         public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)
         {
@@ -28,10 +28,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return string.Format("Sale Zones of following Number Plans: {0}", manager.GetDescription(SellingNumberPlanIds));
         }
-    }
 
-    public class SelectiveSellingNumberPlanTemplateConfigSettings
-    {
-        public bool IsHiddenInRP { get; set; }
+        public override void CleanDeletedZoneIds(ISaleZoneGroupCleanupContext context)
+        {
+            context.Result = SaleZoneGroupCleanupResult.NoChange;
+        }
     }
 }

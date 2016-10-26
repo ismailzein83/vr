@@ -11,12 +11,18 @@ namespace TOne.WhS.BusinessEntity.Entities
     public abstract class SupplierZoneGroup : Vanrise.GenericData.Entities.IBusinessEntityGroup
     {
         public abstract Guid ConfigId { get; }
+        
         public abstract IEnumerable<long> GetSupplierZoneIds(ISupplierZoneGroupContext context);
+
+        public abstract void CleanDeletedZoneIds(ISupplierZoneGroupCleanupContext context);
+
         public abstract string GetDescription(ISupplierZoneGroupContext context);
+        
         IEnumerable<object> Vanrise.GenericData.Entities.IBusinessEntityGroup.GetIds(IBusinessEntityGroupContext context)
         {
             return GetSupplierZoneIds(null).MapRecords(itm => (object)itm);
         }
+        
         string Vanrise.GenericData.Entities.IBusinessEntityGroup.GetDescription(IBusinessEntityGroupContext context)
         {
             return this.GetDescription(null);

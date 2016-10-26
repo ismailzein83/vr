@@ -44,5 +44,22 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
             else
                 return null;
         }
+
+        public override void CleanDeletedZoneIds(ISaleZoneGroupCleanupContext context)
+        {
+            context.Result = SaleZoneGroupCleanupResult.NoChange;
+
+            if (this.ZoneIds != null && this.ZoneIds.Count > 0)
+            {
+                foreach (int deletedZoneId in context.DeletedSaleZoneIds)
+                {
+                    if (this.ZoneIds.Contains(deletedZoneId))
+                    {
+                        context.Result = SaleZoneGroupCleanupResult.ZonesUpdated;
+                        this.ZoneIds.Remove(deletedZoneId);
+                    }
+                }
+            }
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public const string EXTENSION_TYPE = "WhS_BE_SaleZoneGroup";
         public string Editor { get; set; }
         public string BehaviorFQTN { get; set; }
+
+        public bool IsHiddenInRP { get; set; }
     }
 }

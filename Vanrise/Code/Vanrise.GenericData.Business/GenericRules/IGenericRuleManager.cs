@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.Business
         IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input);
         GenericRule GetGenericRule(int ruleId);
 
+        IEnumerable<GenericRule> GetGenericRulesByDefinitionId(Guid ruleDefinitionId);
+
         Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule);
 
         Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule);

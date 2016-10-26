@@ -31,11 +31,25 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)));
         }
 
-
-
         public GenericRule GetGenericRule(int ruleId)
         {
             return GetAllRules().GetRecord(ruleId);
+        }
+
+        private struct GetGenericRulesByDefinitionIdCacheName
+        {
+            public Guid RuleDefinitionId { get; set; }
+        }
+
+        public IEnumerable<GenericRule> GetGenericRulesByDefinitionId(Guid ruleDefinitionId)
+        {
+            var cacheName = new GetGenericRulesByDefinitionIdCacheName { RuleDefinitionId = ruleDefinitionId };
+            return GetCachedOrCreate(cacheName, () =>
+            {
+                GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
+                GenericRuleDefinition ruleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
+                return GetAllRules().FindAllRecords(itm => itm.DefinitionId == ruleDefinitionId);
+            });
         }
 
         public T GetMatchRule(Guid ruleDefinitionId, GenericRuleTarget target)
@@ -166,24 +180,24 @@ namespace Vanrise.GenericData.Business
             return rule.AreSettingsMatched(ruleDefinition.SettingsDefinition, settingsFilterValue);
         }
 
-        private struct RuleTreeCacheName
+        private struct GetRuleTreeCacheName
         {
             public Guid RuleDefinitionId { get; set; }
         }
         private RuleTree GetRuleTree(Guid ruleDefinitionId)
         {
-            var cacheName = new RuleTreeCacheName { RuleDefinitionId = ruleDefinitionId };// String.Concat("GenericRuleManager<T>_GetRuleTree_", ruleDefinitionId);
+            var cacheName = new GetRuleTreeCacheName { RuleDefinitionId = ruleDefinitionId };// String.Concat("GenericRuleManager<T>_GetRuleTree_", ruleDefinitionId);
             return GetCachedOrCreate(cacheName, () =>
             {
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
                 GenericRuleDefinition ruleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
-                IEnumerable<T> rules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == ruleDefinitionId);
+                IEnumerable<GenericRule> rules = this.GetGenericRulesByDefinitionId(ruleDefinitionId);
                 return BuildRuleTree(ruleDefinition.CriteriaDefinition, rules);
             });
 
         }
 
-        public RuleTree BuildRuleTree(GenericRuleDefinitionCriteria ruleDefinitionCriteria, IEnumerable<T> rules)
+        public RuleTree BuildRuleTree(GenericRuleDefinitionCriteria ruleDefinitionCriteria, IEnumerable<GenericRule> rules)
         {
             List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
             foreach (var ruleDefinitionCriteriaField in ruleDefinitionCriteria.Fields.OrderBy(itm => itm.Priority))

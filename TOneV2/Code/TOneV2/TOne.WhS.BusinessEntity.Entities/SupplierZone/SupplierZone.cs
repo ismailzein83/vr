@@ -4,6 +4,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierZone
     {
+        public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("AD86042C-0B49-4379-966A-DC0D39ADBA6D");
+
         public long SupplierZoneId { get; set; }
 
         public int CountryId { get; set; }
