@@ -112,12 +112,9 @@
 
             if (isEditMode) {
                 getDataRecordStorage().then(function () {
-                    loadAllControls().finally(function () {
-                        dataRecordStorageEntity = undefined;
-                    });
+                    loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
                 });
             }
             else {
@@ -132,6 +129,7 @@
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs]).then(function () {
                 loadSettingsDirectiveOnPageLoad().then(function () {
+                    dataRecordStorageEntity = undefined;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
