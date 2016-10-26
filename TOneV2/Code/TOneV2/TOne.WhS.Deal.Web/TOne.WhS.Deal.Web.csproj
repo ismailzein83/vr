@@ -213,9 +213,7 @@
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagement.html" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Deal\Directives\Settings\SwapDealAnalysis\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
