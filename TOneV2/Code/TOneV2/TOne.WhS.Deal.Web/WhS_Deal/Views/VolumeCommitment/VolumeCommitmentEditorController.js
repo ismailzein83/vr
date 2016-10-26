@@ -33,7 +33,6 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.gracePeriod = 7;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
@@ -62,7 +61,7 @@
             if (isEditMode) {
                 getVolumeCommitment().then(function () {
                         loadAllControls().finally(function () {
-                            //volumeCommitmentEntity = undefined;
+                            volumeCommitmentEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -91,21 +90,20 @@
         function setTitle() {
             if (isEditMode) {
                 if (volumeCommitmentEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentEntity.Settings.Description, 'VolumeCommitment');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentEntity.Name, 'Volume Commitment');
             }
             else
-                $scope.title = UtilsService.buildTitleForAddEditor('VolumeCommitment');
+                $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment');
         }
 
         function loadStaticData() {
             if (volumeCommitmentEntity == undefined)
                 return;
-            $scope.scopeModel.description = volumeCommitmentEntity.Settings.Description;
-            $scope.scopeModel.gracePeriod = volumeCommitmentEntity.Settings.GracePeriod;
+            $scope.scopeModel.description = volumeCommitmentEntity.Name;
             $scope.scopeModel.beginDate = volumeCommitmentEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EndDate;
             $scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
-            $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.Type, "value");
+            $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         }
 
         function loadCarrierAccountSelector() {

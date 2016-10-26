@@ -17,7 +17,7 @@
 
                             <vr-validator validate="scopeModel.isValid()">
                                 <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                                             on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeRate" hidegridmenu>
+                                             on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeTier" hidegridmenu>
                                     <vr-datagridcolumn headertext="'Tier name'" field="'tierName'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'From'" field="'FromVol'"  type="'Number'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'To'" field="'UpToVolume'" type="'Number'" disablesorting></vr-datagridcolumn>

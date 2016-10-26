@@ -10,7 +10,9 @@
         function GetFilteredSwapDeals(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredSwapDeals'), input);
         }
-
+        function GetFilteredVolCommitmentDeals(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredVolCommitmentDeals'), input);
+        }
         function GetDeal(dealId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetDeal'), {
                 dealId: dealId
@@ -27,7 +29,6 @@
         function HasAddDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['AddDeal']));
         }
-
         function HasEditDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['UpdateDeal']));
         }
@@ -36,6 +37,7 @@
         }
         return ({
             GetFilteredSwapDeals: GetFilteredSwapDeals,
+            GetFilteredVolCommitmentDeals:GetFilteredVolCommitmentDeals,
             GetDeal: GetDeal,
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,

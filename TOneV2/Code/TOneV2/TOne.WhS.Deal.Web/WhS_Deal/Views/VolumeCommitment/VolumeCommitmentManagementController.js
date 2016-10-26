@@ -14,16 +14,12 @@
             $scope.scopeModel = {};
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                api.load({});
-            }
-
+                api.load(getFilterObject());
+            };
             $scope.searchClicked = function () {
                 return gridAPI.load(getFilterObject());
             };
-
             $scope.AddVolumeCommitment = AddVolumeCommitment;
-
-            
         }
 
         function load() {
@@ -37,9 +33,9 @@
         }
 
         function getFilterObject() {
-            var query = {
+            return {
+                Name: $scope.scopeModel.description
             };
-            return query;
         }
     }
 

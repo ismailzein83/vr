@@ -33,16 +33,7 @@
             $scope.scopeModel.addTier = function ()
             {
                 var onVolumeCommitmentItemtierAdded = function (volumeCommitmentItemTier) {
-                    var obj = {
-                        tierId: $scope.scopeModel.tiers.length,
-                        tierName: 'Tier ' + parseInt($scope.scopeModel.tiers.length + 1),
-                        FromVol: $scope.scopeModel.tiers.length == 0 ? 0 : $scope.scopeModel.tiers[$scope.scopeModel.tiers.length - 1].UpToVolume,
-                        UpToVolume: volumeCommitmentItemTier.UpToVolume,
-                        DefaultRate: volumeCommitmentItemTier.DefaultRate,
-                        RetroActiveFromTierNumber:volumeCommitmentItemTier.RetroActiveFromTierNumber,
-                        RetroActiveFromTier: (volumeCommitmentItemTier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, volumeCommitmentItemTier.RetroActiveFromTierNumber, 'tierId').tierName : '',
-                        RetroActiveVolume: (volumeCommitmentItemTier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, volumeCommitmentItemTier.RetroActiveFromTierNumber, 'tierId').FromVol : ''
-                    }
+                    var obj = bulidTierObject(volumeCommitmentItemTier, $scope.scopeModel.tiers.length);
                     $scope.scopeModel.tiers.push(obj);
                 }
                 WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTier(onVolumeCommitmentItemtierAdded, $scope.scopeModel.tiers);
@@ -53,7 +44,7 @@
                     return null;
                 return "You Should add at least one rate.";
             }
-            $scope.scopeModel.removeRate = function (dataItem) {
+            $scope.scopeModel.removeTier = function (dataItem) {
                 var index = $scope.scopeModel.tiers.indexOf(dataItem);
                 $scope.scopeModel.tiers.splice(index, 1);
             }
@@ -108,10 +99,11 @@
             if (volumeCommitmentItemEntity != undefined) {
                 $scope.scopeModel.name = volumeCommitmentItemEntity.Name;
 
-                if (volumeCommitmentItemEntity.Rates != undefined && volumeCommitmentItemEntity.Rates.length > 0) {
-                    for (var i = 0; i < volumeCommitmentItemEntity.Rates.length; i++) {
-                        var rate = volumeCommitmentItemEntity.Rates[i];
-                        $scope.scopeModel.tiers.push(rate);
+                if (volumeCommitmentItemEntity.Tiers != undefined && volumeCommitmentItemEntity.Tiers.length > 0) {
+                    for (var i = 0; i < volumeCommitmentItemEntity.Tiers.length; i++) {
+                        var tier = volumeCommitmentItemEntity.Tiers[i];
+                        var obj = bulidTierObject(tier,i)
+                        $scope.scopeModel.tiers.push(obj);
                     }
                 }
             }
@@ -134,6 +126,18 @@
                 Name: $scope.scopeModel.name,
                 ZoneIds: zoneDirectiveAPI.getSelectedIds(),
                 Tiers: tiers
+            };
+        }
+        function bulidTierObject(tier , index) {
+            return {
+                tierId: index,
+                tierName: 'Tier ' + parseInt(index + 1),
+                FromVol: index == 0 ? 0 : $scope.scopeModel.tiers[index - 1].UpToVolume,
+                UpToVolume: tier.UpToVolume,
+                DefaultRate: tier.DefaultRate,
+                RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
+                RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
+                RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A'
             };
         }
 

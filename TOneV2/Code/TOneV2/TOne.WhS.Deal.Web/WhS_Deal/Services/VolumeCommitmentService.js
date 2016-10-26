@@ -26,14 +26,14 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitment(volumeCommitmentId, onVolumeCommitmentUpdated) {
+        function editVolumeCommitment(dealId, onVolumeCommitmentUpdated) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVolumeCommitmentUpdated = onVolumeCommitmentUpdated;
             };
             var parameters = {
-                volumeCommitmentId: volumeCommitmentId
+                dealId: dealId
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolumeCommitmentAPIService', 'WhS_Deal_VolumeCommitmentService', 'VRNotificationService'];
+    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_DealAPIService', 'WhS_Deal_VolumeCommitmentService', 'VRNotificationService'];
 
-    function VolumeCommitmentGridDirective(WhS_Deal_VolumeCommitmentAPIService, WhS_Deal_VolumeCommitmentService, VRNotificationService) {
+    function VolumeCommitmentGridDirective(WhS_Deal_DealAPIService, WhS_Deal_VolumeCommitmentService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -36,13 +36,7 @@
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_Deal_VolumeCommitmentAPIService.GetFilteredVolumeCommitments(dataRetrievalInput).then(function (response) {
-
-                        if (response != undefined && response.Data != undefined) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                            }
-                        }
-
+                    return WhS_Deal_DealAPIService.GetFilteredVolCommitmentDeals(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -77,12 +71,12 @@
                     var onVolumeCommitmentUpdated = function (updatedVolumeCommitment) {
                         gridAPI.itemUpdated(updatedVolumeCommitment);
                     };
-                    WhS_Deal_VolumeCommitmentService.editVolumeCommitment(dataItem.Entity.VolumeCommitmentId, onVolumeCommitmentUpdated);
+                    WhS_Deal_VolumeCommitmentService.editVolumeCommitment(dataItem.Entity.DealId, onVolumeCommitmentUpdated);
                 }
             }
         }
     }
 
-    app.directive('vrWhsBeVolumecommitmentGrid', VolumeCommitmentGridDirective);
+    app.directive('vrWhsDealVolumecommitmentGrid', VolumeCommitmentGridDirective);
 
 })(app);

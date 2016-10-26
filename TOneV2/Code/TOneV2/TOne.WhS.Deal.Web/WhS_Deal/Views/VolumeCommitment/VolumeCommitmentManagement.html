@@ -1,7 +1,10 @@
 ﻿<vr-panel ng-controller="WhS_Deal_VolumeCommitmentManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
-            <vr-row removeline>
+            <vr-row removeline>                
+                <vr-columns width="normal">
+                    <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
@@ -14,7 +17,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <!--<vr-whs-be-volumecommitment-grid on-ready="scopeModel.onGridReady"></vr-whs-be-volumecommitment-grid>-->
+                <vr-whs-deal-volumecommitment-grid on-ready="scopeModel.onGridReady"></vr-whs-deal-volumecommitment-grid>
             </vr-columns>
         </vr-row>
     </vr-form>
