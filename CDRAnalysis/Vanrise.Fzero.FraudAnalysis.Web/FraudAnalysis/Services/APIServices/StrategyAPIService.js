@@ -24,8 +24,9 @@
             });
         }
 
-        function GetFilters() {
-            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'GetFilters'));
+        function GetFilters(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'GetFilters'),
+                {filter:filter});
         }
 
         function GetAggregates() {
@@ -48,6 +49,10 @@
         function HasUpdateStrategyPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['UpdateStrategy']));
         }
+        function GetStrategyCriteriaTemplateConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'GetStrategyCriteriaTemplateConfigs'));
+        }
 
         return ({
             HasAddStrategyPermission: HasAddStrategyPermission,
@@ -58,7 +63,8 @@
             GetFilters: GetFilters,
             GetAggregates: GetAggregates,
             AddStrategy: AddStrategy,
-            UpdateStrategy: UpdateStrategy
+            UpdateStrategy: UpdateStrategy,
+            GetStrategyCriteriaTemplateConfigs: GetStrategyCriteriaTemplateConfigs
         });
     }
 

@@ -92,6 +92,8 @@
     <Compile Include="AccountCaseManager.cs" />
     <Compile Include="AccountStatusManager.cs" />
     <Compile Include="AggregateManager.cs" />
+    <Compile Include="Context\PrepareStrategySettingsCriteriaContext.cs" />
+    <Compile Include="Context\StrategySettingsCriteriaContext.cs" />
     <Compile Include="DWAccountCaseManager.cs" />
     <Compile Include="DWTimeManager.cs" />
     <Compile Include="DWDimensionManager.cs" />

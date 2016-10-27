@@ -49,10 +49,21 @@
     <Compile Include="BPTaskData\BPTaskDataConfirmCancelStrategyonCaseCount.cs" />
     <Compile Include="BPTaskExecution\BPTaskConfirmCancelStrategyonCaseCount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SuspicionRuleStrategySettingsCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BPTaskAssigne\" />
     <Folder Include="BPTaskType\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Business\Vanrise.Fzero.FraudAnalysis.Business.csproj">
+      <Project>{c195cfd3-948d-447c-83b4-3365d0515ec9}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Entities\Vanrise.Fzero.FraudAnalysis.Entities.csproj">
+      <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

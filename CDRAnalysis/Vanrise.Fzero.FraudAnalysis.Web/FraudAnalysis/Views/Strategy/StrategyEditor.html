@@ -1,174 +1,43 @@
 ﻿<div vr-modalcontent ng-controller="CDRAnalysis_FA_StrategyEditorController" width="'95%'">
-    <vr-modalbody maxheight="'1200px'" vr-loader="modalScope.isLoading">
+    <vr-modalbody maxheight="'1200px'" vr-loader="scopeModel.isLoading">
         <vr-form name="formStrategyEditor">
-            <vr-row removeline>
-                <vr-columns width="normal">
-                    <vr-textbox value="modalScope.name" label="Name" isrequired></vr-textbox>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <cdranalysis-fa-period-selector label="Type" on-ready="modalScope.onPeriodSelectorReady" onselectionchanged="modalScope.onPeriodSelectionChanged" isrequired="true" hideremoveicon></cdranalysis-fa-period-selector>
-                </vr-columns>
-                <vr-columns width="large">
-                    <vr-textbox value="modalScope.description" label="Description" isrequired></vr-textbox>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-switch value="modalScope.isEnabled" label="Enabled"></vr-switch>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-switch value="modalScope.isDefault" label="System built in" ng-hide="true"></vr-switch>
-                </vr-columns>
-            </vr-row>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <cdranalysis-fa-period-selector label="Type" on-ready="scopeModel.onPeriodSelectorReady" onselectionchanged="scopeModel.onPeriodSelectionChanged" isrequired="true" hideremoveicon></cdranalysis-fa-period-selector>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-switch value="scopeModel.isEnabled" label="Enabled"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textarea value="scopeModel.description" label="Description" isrequired></vr-textarea>
+                        </vr-columns>
+                    </vr-row>
 
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-tabs>
-                        <vr-tab header="'Strategy Filters'">
-                            <vr-row>
-                                <vr-columns width="3/4row">
-                                    <vr-validator validationcontext="SaveGroup" validate="modalScope.validateStrategyFilters()">
-                                        <vr-datagrid datasource="modalScope.strategyFilters"
-                                                     maxheight="400px"
-                                                     norowhighlightonclick="'true'"
-                                                     hidegridmenu
-                                                     hidepaginginfo>
-                                            <vr-datagridcolumn headertext="''" widthfactor="3" disablesorting>
-                                                <vr-check value="dataItem.isSelected" ng-show="dataItem.isShown"></vr-check>
-                                            </vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Hint'" widthfactor="3" disablesorting>
-                                                <vr-hint value="{{dataItem.hint}}" ng-if="dataItem.hasParameters"></vr-hint>
-                                            </vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" disablesorting>
-                                            </vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20" disablesorting></vr-datagridcolumn>
-                                            <vr-datagridcolumn headertext="'Threshold'" disablesorting>
-                                                <div style="max-width: 150px; float: left">
-                                                    <vr-textbox type="number"
-                                                                value="dataItem.threshold"
-                                                                minvalue="{{dataItem.minValue}}"
-                                                                maxvalue="{{dataItem.maxValue}}"
-                                                                decimalprecision="{{dataItem.decimalPrecision}}"
-                                                                placeholder="{{dataItem.label}}"
-                                                                title="{{dataItem.toolTip}}"
-                                                                ng-show="dataItem.isSelected"
-                                                                isrequired="dataItem.isSelected">
-                                                    </vr-textbox>
-                                                </div>
-                                            </vr-datagridcolumn>
-                                        </vr-datagrid>
-                                    </vr-validator>
-                                </vr-columns>
+                </vr-tab>
+                <vr-tab header="'Criteria'">
+                    <span vr-loader="scopeModel.isLoadingStrategyCriteria">
+                        <cdranalysis-fa-strategy-criteria on-ready="scopeModel.onStrategyCriteriaReady" normal-col-num="2"></cdranalysis-fa-strategy-criteria>
+                    </span>
 
-                                <vr-columns width="1/4row">
-                                    <vr-section title="Strategy Parameters">
-                                        <div style="max-height: 385px; overflow-y: auto; overflow-x: hidden">
-                                            <vr-row ng-show="modalScope.strategyFilters[13].isSelected">
-                                                <vr-columns width="fullrow">
-                                                    <vr-common-hour-selector on-ready="modalScope.onHourSelectorReady"
-                                                                             label="Peak Hours"
-                                                                             selectedvalues="modalScope.selectedPeakHours"
-                                                                             hint="Related to the following filter(s):  {{modalScope.getFilterHint('Peak Hours')}}"
-                                                                             isrequired="modalScope.strategyFilters[13].isSelected"
-                                                                             ismultipleselection>
-                                                    </vr-common-hour-selector>
-                                                </vr-columns>
-                                            </vr-row>
-                                            <vr-row ng-show="modalScope.strategyFilters[15].isSelected">
-                                                <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Gap between Consecutive Calls in Seconds')}}" value="modalScope.gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired="modalScope.strategyFilters[15].isSelected"></vr-textbox>
-                                                </vr-columns>
-                                            </vr-row>
-                                            <vr-row ng-show="modalScope.strategyFilters[16].isSelected ">
-                                                <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Gap between Failed Consecutive Calls in Seconds')}}" value="modalScope.gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired="modalScope.strategyFilters[16].isSelected"></vr-textbox>
-                                                </vr-columns>
-                                            </vr-row>
-                                            <vr-row ng-show="modalScope.strategyFilters[17].isSelected">
-                                                <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Maximum Low Duration Call (s)')}}" value="modalScope.maxLowDurationCall" type="number" label="Maximum Low Duration Call (s)" isrequired="modalScope.strategyFilters[17].isSelected"></vr-textbox>
-                                                </vr-columns>
-                                            </vr-row>
-                                            <vr-row ng-show="modalScope.strategyFilters[8].isSelected">
-                                                <vr-columns width="fullrow">
-                                                    <vr-textbox hint="Related to the following filter(s):  {{modalScope.getFilterHint('Minimum Count of Calls per Hour')}}" value="modalScope.minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired="modalScope.strategyFilters[8].isSelected"></vr-textbox>
-                                                </vr-columns>
-                                            </vr-row>
-                                        </div>
-                                    </vr-section>
-                                </vr-columns>
-                            </vr-row>
-                        </vr-tab>
-                        <vr-tab header="'Suspicion Rules'">
-                            <vr-row>
-                                <vr-columns width="fullrow">
-                                    <vr-button type="Add" data-onclick="modalScope.addSuspicionRule" standalone></vr-button>
-                                </vr-columns>
-                            </vr-row>
-                            <vr-row removeline>
-                                <vr-columns width="fullrow">
-                                    <vr-validator validationcontext="SaveGroup" validate="modalScope.validateStrategyLevels()">
-                                        <vr-datagrid datasource="modalScope.suspicionRules"
-                                                     maxheight="400px"
-                                                     norowhighlightonclick="'true'"
-                                                     hidegridmenu
-                                                     hidepaginginfo>
-                                            <vr-datagridcolumn headertext="'Suspicion Level'" disablesorting>
-                                                <div style="width: 100%; display: inline-block; max-width: 160px">
-                                                    <vr-select datasource="viewScope.modalScope.suspicionLevels"
-                                                               selectedvalues="dataItem.suspicionLevel"
-                                                               datavaluefield="value"
-                                                               datatextfield="description"
-                                                               ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.modalScope.suspicionLevels[0] : dataItem.suspicionLevel)"
-                                                               columnindex="0"
-                                                               isrequired
-                                                               hideremoveicon>
-                                                    </vr-select>
-                                                </div>
-                                            </vr-datagridcolumn>
-                                            <vr-datagridcolumn ng-repeat="filter in modalScope.strategyFilters"
-                                                               ng-show="filter.isSelected"
-                                                               columnindex="$index + 1"
-                                                               headertext="'Filter: ' + filter.filterId"
-                                                               headerdescription="filter.description"
-                                                               tag="filter"
-                                                               disablesorting>
-                                                <span ng-init="filterIndex = viewScope.modalScope.strategyFilters.indexOf(colDef.tag)">
-                                                    <div style="max-width: 50px; float: left">
-                                                        <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"
-                                                                   hint="{{viewScope.modalScope.showThresholdHint(viewScope.modalScope.strategyFilters[filterIndex], dataItem.StrategyLevelCriterias[filterIndex])}}">
-                                                        </vr-switch>
-                                                    </div>
-                                                    <div style="max-width: 100px; float: left">
-                                                        <div style="width:100%; display:inline-block; max-width:100px">
-                                                            <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected"
-                                                                        value="dataItem.StrategyLevelCriterias[filterIndex].percentage"
-                                                                        minvalue="-99"
-                                                                        maxvalue="99"
-                                                                        stepvalue="10"
-                                                                        upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}"
-                                                                        downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}"
-                                                                        unit="%"
-                                                                        isrequired>
-                                                            </vr-numeric>
-                                                        </div>
-                                                    </div>
-                                                </span>
-                                            </vr-datagridcolumn>
-                                            <vr-datagridcolumn widthfactor="2"><span class="hand-cursor glyphicon glyphicon-remove" ng-click="viewScope.modalScope.deleteSuspicionRule(dataItem)"></span></vr-datagridcolumn>
-                                        </vr-datagrid>
-                                    </vr-validator>
-                                </vr-columns>
-                            </vr-row>
-                        </vr-tab>
-                    </vr-tabs>
-                </vr-columns>
-            </vr-row>
+                </vr-tab>
+                <vr-tab header="'Strategy Parameters'">
+                    <cdranalysis-fa-strategy-parameters on-ready="scopeModel.onStrategyParametersReady"></cdranalysis-fa-strategy-parameters>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="modalScope.saveStrategy" validationcontext="SaveGroup" formname="formStrategyEditor" haspermission="hasSaveStrategyPermission"></vr-button>
-                <vr-button type="Close" data-onclick="modalScope.close"></vr-button>
+                <vr-button type="Save" data-onclick="scopeModel.saveStrategy" validationcontext="SaveGroup" formname="formStrategyEditor" haspermission="hasSaveStrategyPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

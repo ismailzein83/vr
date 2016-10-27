@@ -1,0 +1,23 @@
+﻿<vr-row >
+    <vr-columns width="1/3row" ng-show="scopeModel.showSelectedPeakHoursParameter" vr-loader="scopeModel.isLoadingHourlySelector">
+        <vr-common-hour-selector on-ready="scopeModel.onHourSelectorReady"
+                                 label="Peak Hours"
+                                 selectedvalues="scopeModel.selectedPeakHours"
+                                 hint="Related to the following filter(s):  {{scopeModel.selectedPeakHoursParameterHint}}"
+                                 isrequired="scopeModel.showSelectedPeakHoursParameter"
+                                 ismultipleselection>
+        </vr-common-hour-selector>
+    </vr-columns>
+    <vr-columns width="1/3row" ng-if="scopeModel.showGapBetweenConsecutiveCallsParameter">
+        <vr-textbox hint="Related to the following filter(s):  {{scopeModel.gapBetweenConsecutiveCallsParameterHint}}" value="scopeModel.gapBetweenConsecutiveCalls" type="number" label="Gap between Consecutive Calls in Seconds" isrequired="scopeModel.showGapBetweenConsecutiveCallsParameter"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" ng-if="scopeModel.showGapBetweenFailedConsecutiveCallsParameter">
+        <vr-textbox hint="Related to the following filter(s):  {{scopeModel.gapBetweenFailedConsecutiveCallsParameterHint}}" value="scopeModel.gapBetweenFailedConsecutiveCalls" type="number" label="Gap between Failed Consecutive Calls in Seconds" isrequired="scopeModel.showGapBetweenFailedConsecutiveCallsParameter"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" ng-if="scopeModel.showMaxLowDurationCallParameter">
+        <vr-textbox hint="Related to the following filter(s):  {{scopeModel.maxLowDurationCallParameterHint }}" value="scopeModel.maxLowDurationCall" type="number" label="Maximum Low Duration Call (s)" isrequired="scopeModel.showMaxLowDurationCallParameter"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" ng-if="scopeModel.showMinimumCountOfCallParameter">
+        <vr-textbox hint="Related to the following filter(s):  {{scopeModel.minimumCountOfCallParameterHint}}" value="scopeModel.minCountofCallsinActiveHour" type="number" label="Minimum Count of Calls per Hour" isrequired="scopeModel.showMinimumCountOfCallParameter"></vr-textbox>
+    </vr-columns>
+</vr-row>

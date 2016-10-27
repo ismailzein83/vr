@@ -42,10 +42,11 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
         [HttpGet]
         [Route("GetFilters")]
-        public List<FilterInfo> GetFilters()
+        public List<FilterInfo> GetFilters(string filter = null)
         {
+            FilterForFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<FilterForFilter>(filter) : null;
             FilterManager manager = new FilterManager();
-            return manager.GetCriteriaNames();
+            return manager.GetCriteriaNames(deserializedFilter);
         }
 
         [HttpGet]
@@ -68,6 +69,12 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         public UpdateOperationOutput<StrategyDetail> UpdateStrategy(Strategy strategyObject)
         {
             return _manager.UpdateStrategy(strategyObject);
+        }
+        [HttpGet]
+        [Route("GetStrategyCriteriaTemplateConfigs")]
+        public IEnumerable<StrategyCriteriaConfig> GetStrategyCriteriaTemplateConfigs()
+        {
+            return _manager.GetStrategyCriteriaTemplateConfigs();
         }
     }
 }

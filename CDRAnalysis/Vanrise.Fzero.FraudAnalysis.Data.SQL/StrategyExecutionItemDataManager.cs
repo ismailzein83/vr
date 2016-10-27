@@ -262,7 +262,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             string imies = GetReaderValue<string>(reader, "IMEIs");
             if (imies != null)
                 item.IMEIs = new HashSet<string>((imies).Split(','));
-            item.StrategyExecutionID = (long)reader["StrategyExecutionID"];
+            item.StrategyExecutionID = Convert.ToInt64(reader["StrategyExecutionID"]);
             item.AccountNumber = reader["AccountNumber"] as string;
             item.SuspicionLevelID = (int)reader["SuspicionLevelID"];
             item.CaseID = GetReaderValue<int?>(reader, "CaseID");
@@ -274,7 +274,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private AccountSuspicionDetail AccountSuspicionDetailMapper(IDataReader reader)
         {
             var detail = new AccountSuspicionDetail(); // a detail is a fraud result instance
-            detail.StrategyExecutionId = (long)reader["StrategyExecutionID"];
+            detail.StrategyExecutionId = Convert.ToInt64(reader["StrategyExecutionID"]);
             detail.DetailID = (long)reader["DetailID"];
             detail.SuspicionLevelID = (SuspicionLevel)reader["SuspicionLevelID"];
             detail.StrategyName = reader["StrategyName"] as string;

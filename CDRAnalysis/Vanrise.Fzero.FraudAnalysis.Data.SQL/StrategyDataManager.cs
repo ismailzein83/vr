@@ -27,11 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyObject.Name,
                 strategyObject.Description,
                 DateTime.Now,
-                strategyObject.IsDefault,
-                strategyObject.IsEnabled,
-                strategyObject.PeriodId,
-                Vanrise.Common.Serializer.Serialize(strategyObject)
-
+                Vanrise.Common.Serializer.Serialize(strategyObject.Settings)
             );
 
             if (recordsEffected > 0)
@@ -57,11 +53,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyObject.Name,
                 strategyObject.Description,
                 DateTime.Now,
-                strategyObject.IsDefault,
-                strategyObject.IsEnabled,
-                strategyObject.PeriodId,
-                Vanrise.Common.Serializer.Serialize(strategyObject));
-
+                Vanrise.Common.Serializer.Serialize(strategyObject.Settings));
             return (recordsEffected > 0);
         }
 
@@ -74,10 +66,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         private Strategy StrategyMapper(IDataReader reader)
         {
-            var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(reader["StrategyContent"] as string);
-            strategy.Id = (int)reader["Id"];
-            strategy.UserId = (int)reader["UserId"];
-            return strategy;
+            return new Strategy
+            {
+                Id = (int)reader["Id"],
+                Description = reader["Description"] as string,
+                LastUpdatedOn = GetReaderValue<DateTime>(reader, "LastUpdatedOn"),
+                UserId = GetReaderValue<int>(reader, "UserId"),
+                Name = reader["Name"] as string,
+                Settings = Vanrise.Common.Serializer.Deserialize<StrategySettings>(reader["Settings"] as string)
+            };
         }
        
         #endregion

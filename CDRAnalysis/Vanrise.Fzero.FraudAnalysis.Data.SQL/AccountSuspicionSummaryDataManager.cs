@@ -123,7 +123,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
         {
             var summary = new AccountSuspicionSummary();
-            summary.StrategyExecutionId = (long)reader["StrategyExecutionID"];
+            summary.StrategyExecutionId =Convert.ToInt64(reader["StrategyExecutionID"]);
             summary.AccountNumber = reader["AccountNumber"] as string;
             summary.SuspicionLevelID = GetReaderValue<SuspicionLevel>(reader, "SuspicionLevelID");
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];

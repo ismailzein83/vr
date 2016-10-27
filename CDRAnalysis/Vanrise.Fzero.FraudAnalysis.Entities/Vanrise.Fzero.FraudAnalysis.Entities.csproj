@@ -77,6 +77,8 @@
     <Compile Include="IStrategyManager.cs" />
     <Compile Include="DWBTSDictionary.cs" />
     <Compile Include="CaseStatus.cs" />
+    <Compile Include="Strategy\FilterForFilter.cs" />
+    <Compile Include="Strategy\StrategyCriteriaConfig.cs" />
     <Compile Include="SuspicionOccuranceStatus.cs" />
     <Compile Include="SuspicionLevel.cs" />
     <Compile Include="PeriodEnum.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -25,6 +26,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         #region Public Methods
 
+        public IEnumerable<StrategyCriteriaConfig> GetStrategyCriteriaTemplateConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<StrategyCriteriaConfig>(StrategyCriteriaConfig.EXTENSION_TYPE);
+        }
         public Vanrise.Entities.IDataRetrievalResult<StrategyDetail> GetFilteredStrategies(Vanrise.Entities.DataRetrievalInput<StrategyQuery> input)
         {
             var cachedStrategies = GetCachedStrategies();
@@ -34,10 +40,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 && (input.Query.Description == null || strategyObject.Description.ToLower().Contains(input.Query.Description.ToLower()))
                 && (input.Query.FromDate == null || strategyObject.LastUpdatedOn >= input.Query.FromDate)
                 && (input.Query.ToDate == null || strategyObject.LastUpdatedOn < input.Query.ToDate)
-                && (input.Query.PeriodIds == null || input.Query.PeriodIds.Contains((PeriodEnum)strategyObject.PeriodId))
+                && (input.Query.PeriodIds == null || input.Query.PeriodIds.Contains((PeriodEnum)strategyObject.Settings.PeriodId))
                 && (input.Query.UserIds == null || input.Query.UserIds.Contains(strategyObject.UserId))
-                && (input.Query.Kinds == null || input.Query.Kinds.Contains(strategyObject.IsDefault ? StrategyKind.SystemBuiltIn : StrategyKind.UserDefined))
-                && (input.Query.Statuses == null || input.Query.Statuses.Contains(strategyObject.IsEnabled ? StrategyStatus.Enabled : StrategyStatus.Disabled));
+                && (input.Query.Kinds == null || input.Query.Kinds.Contains(strategyObject.Settings.IsDefault ? StrategyKind.SystemBuiltIn : StrategyKind.UserDefined))
+                && (input.Query.Statuses == null || input.Query.Statuses.Contains(strategyObject.Settings.IsEnabled ? StrategyStatus.Enabled : StrategyStatus.Disabled));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedStrategies.ToBigResult(input, filterExpression, StrategyDetailMapper));
         }
@@ -61,7 +67,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             Func<Strategy, bool> filterExpression = null;
             if (filter != null)
             {
-                filterExpression = (strategy) => (filter.PeriodId == null || filter.PeriodId.Value == strategy.PeriodId) && (filter.IsEnabled == null || filter.IsEnabled.Value == strategy.IsEnabled);
+                filterExpression = (strategy) => (filter.PeriodId == null || filter.PeriodId.Value == strategy.Settings.PeriodId) && (filter.IsEnabled == null || filter.IsEnabled.Value == strategy.Settings.IsEnabled);
             }
             return cachedStrategies.MapRecords(StrategyInfoMapper, filterExpression);
         }
@@ -166,8 +172,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             StrategyDetail strategyDetail = new StrategyDetail();
             strategyDetail.Entity = strategy;
             strategyDetail.Analyst = _userManager.GetUserName(strategy.UserId);
-            strategyDetail.StrategyType = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)strategy.PeriodId);
-            strategyDetail.StrategyKind = Vanrise.Common.Utilities.GetEnumDescription<StrategyKind>((strategy.IsDefault ? StrategyKind.SystemBuiltIn : StrategyKind.UserDefined));
+            strategyDetail.StrategyType = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)strategy.Settings.PeriodId);
+            strategyDetail.StrategyKind = Vanrise.Common.Utilities.GetEnumDescription<StrategyKind>((strategy.Settings.IsDefault ? StrategyKind.SystemBuiltIn : StrategyKind.UserDefined));
             return strategyDetail;
         }
 
@@ -176,8 +182,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             StrategyInfo strategyInfo = new StrategyInfo();
             strategyInfo.Id = strategy.Id;
             strategyInfo.Name = strategy.Name;
-            strategyInfo.PeriodId = strategy.PeriodId;
-            strategyInfo.IsDefault = strategy.IsDefault;
+            strategyInfo.PeriodId = strategy.Settings.PeriodId;
+            strategyInfo.IsDefault = strategy.Settings.IsDefault;
             return strategyInfo;
         }
 

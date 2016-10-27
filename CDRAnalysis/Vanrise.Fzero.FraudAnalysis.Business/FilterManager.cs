@@ -11,10 +11,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class FilterManager
     {
-
-
-
-
         private static Dictionary<int, Filter> GetCachedFilters()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetFilters",
@@ -25,7 +21,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                    return filters.ToDictionary(kvp => kvp.FilterId, kvp => kvp);
                });
         }
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IFilterDataManager _dataManager = FraudDataManagerFactory.GetDataManager<IFilterDataManager>();
@@ -36,17 +31,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 return _dataManager.AreFiltersUpdated(ref _updateHandle);
             }
         }
-
-
-
         public Decimal? GetCriteriaValue(Filter criteria, NumberProfile numberProfile)
         {
             return s_criteriaDefinitions[criteria.FilterId].Expression(numberProfile);
         }
-
         static Dictionary<int, Filter> s_criteriaDefinitions = BuildAndGetCriteriaDefinitions();
-
-
         static Dictionary<int, Filter> BuildAndGetCriteriaDefinitions()
         {
 
@@ -87,20 +76,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return dictionary.Where(x => x.Value.OperatorTypeAllowed == GlobalConstants._DefaultOperatorType || x.Value.OperatorTypeAllowed == OperatorType.Both).OrderBy(x => x.Value.FilterId).ToDictionary(i => i.Key, i => i.Value);
         }
-
-
-
-
         public Dictionary<int, Filter> GetCriteriaDefinitions()
         {
             return s_criteriaDefinitions;
         }
-
-        public List<FilterInfo> GetCriteriaNames()
+        public List<FilterInfo> GetCriteriaNames(FilterForFilter filter)
         {
             List<FilterInfo> names = new List<FilterInfo>();
             foreach (var i in s_criteriaDefinitions)
             {
+                if(filter != null)
+                {
+                    if (i.Value.ExcludeHourly == filter.ExcludeHourly && filter.ExcludeHourly == true)
+                  {
+                      continue;
+                  }
+                }
                 string upSign = "";
                 string downSign = "";
 
@@ -164,7 +155,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
         // Funcs
-
         static decimal? CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls(NumberProfile numberProfile)
         {
             Decimal countInCalls = numberProfile.AggregateValues[Constants._CountInCalls];
@@ -173,8 +163,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
                 return null;
         }
-
-
         static decimal? CalculateRatioIncomingCallsvsOutgoingCalls(NumberProfile numberProfile)
         {
             Decimal countOutCalls = numberProfile.AggregateValues[Constants._CountOutCalls];
@@ -183,32 +171,26 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
                 return null;
         }
-
         static decimal? CalculateCountofDistinctDestinations(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._DiffOutputNumbers];
         }
-
         static decimal? CalculateCountOutgoingCalls(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountOutCalls];
         }
-
         static decimal? CalculateCountofTotalBTSPerMSISDN(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalBTS];
         }
-
         static decimal? CalculateTotalOriginatedVolume(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalOutVolume];
         }
-
         static decimal? CalculateCountofTotalIMEIPerMSISDN(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalIMEI];
         }
-
         static decimal? CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration(NumberProfile numberProfile)
         {
             decimal callOutDurAvg = numberProfile.AggregateValues[Constants._CallOutDurAvg];
@@ -217,7 +199,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
                 return null;
         }
-
         static decimal? CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls(NumberProfile numberProfile)
         {
             decimal countOutOnNets = numberProfile.AggregateValues[Constants._CountOutOnNets];
@@ -226,26 +207,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
                 return null;
         }
-
         static decimal? CalculateCountofDailyActiveHours(NumberProfile numberProfile)
         {
 
             return numberProfile.AggregateValues[Constants._CountActiveHours];
 
         }
-
         static decimal? CalculateDistinctDestinationofNightCalls(NumberProfile numberProfile)
         {
 
             return numberProfile.AggregateValues[Constants._DiffOutputNumbersNightCalls];
 
         }
-
         static decimal? CalculateVoiceOnlyServiceUsage(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountOutSMSs];
         }
-
         static decimal? CalculateRatioofDistinctDestinationvsTotalNumberofCalls(NumberProfile numberProfile)
         {
             decimal countOutCalls = numberProfile.AggregateValues[Constants._CountOutCalls];
@@ -254,7 +231,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
                 return null;
         }
-
         static decimal? CalculateRatioInternationalOriginatedvsOutgoingCalls(NumberProfile numberProfile)
         {
             decimal countOutCalls = numberProfile.AggregateValues[Constants._CountOutCalls];
@@ -263,32 +239,26 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             else
                 return null;
         }
-
         static decimal? CalculateCountofOutgoingDuringPeakHours(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountOutCallsPeakHours];
         }
-
         static decimal? CalculateDataUsage(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalDataVolume];
         }
-
         static decimal? CalculateDifferentDestinationZones(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._DiffDestZones];
         }
-
         static decimal? CalculateDifferentSourceZones(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._DiffSourcesZones];
         }
-
         static decimal? CalculateConsecutiveCalls(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountConsecutiveCalls];
         }
-
         static decimal? CalculateFailConsecutiveCalls(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountFailConsecutiveCalls];

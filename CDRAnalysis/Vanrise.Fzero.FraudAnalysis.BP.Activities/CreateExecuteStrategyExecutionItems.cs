@@ -46,11 +46,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             foreach (int strategyID in context.GetValue(StrategyIds))
             {
                 Strategy strategy = strategyManager.GetStrategy(strategyID);
-                if (!strategy.IsEnabled)
+                if (!strategy.Settings.IsEnabled)
                     ContextExtensions.WriteTrackingMessage(context, LogEntryType.Warning, "Strategy named: {0} was not loaded because it is disabled", strategy.Name);
                 else
                 {
-                    StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID, Status = SuspicionOccuranceStatus.Open, ExecutedBy = this.UserId.Get(context), ExecutionDate=DateTime.Now };
+                    StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.Settings.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID, Status = SuspicionOccuranceStatus.Open, ExecutedBy = this.UserId.Get(context), ExecutionDate = DateTime.Now };
 
                     strategyExecutionManager.ExecuteStrategy(strategyExecution);
 

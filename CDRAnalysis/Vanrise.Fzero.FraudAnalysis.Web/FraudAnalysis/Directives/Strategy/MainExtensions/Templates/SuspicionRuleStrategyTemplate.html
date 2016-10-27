@@ -1,0 +1,101 @@
+﻿<vr-tabs>
+    <vr-tab header="'Strategy Filters'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-validator validationcontext="SaveGroup" validate="scopeModel.validateStrategyFilters()">
+                    <vr-datagrid datasource="scopeModel.strategyFilters"
+                                 maxheight="400px"
+                                 norowhighlightonclick="'true'"
+                                 hidegridmenu
+                                 hidepaginginfo>
+                        <vr-datagridcolumn headertext="''" widthfactor="3" disablesorting>
+                            <vr-check value="dataItem.isSelected" ng-show="dataItem.isShown" onvaluechanged="viewScope.scopeModel.onFilterSelected(dataItem)"></vr-check>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Hint'" widthfactor="3" disablesorting>
+                            <vr-hint value="{{dataItem.hint}}" ng-if="dataItem.hasParameters"></vr-hint>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Filter'" field="'abbreviation'" disablesorting>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Threshold'" disablesorting>
+                            <div style="max-width: 150px; float: left">
+                                <vr-textbox type="number"
+                                            value="dataItem.threshold"
+                                            minvalue="{{dataItem.minValue}}"
+                                            maxvalue="{{dataItem.maxValue}}"
+                                            decimalprecision="{{dataItem.decimalPrecision}}"
+                                            placeholder="{{dataItem.label}}"
+                                            title="{{dataItem.toolTip}}"
+                                            ng-show="dataItem.isSelected"
+                                            isrequired="dataItem.isSelected">
+                                </vr-textbox>
+                            </div>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Suspicion Rules'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-button type="Add" data-onclick="scopeModel.addSuspicionRule" standalone></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns width="fullrow">
+                <vr-validator validationcontext="SaveGroup" validate="scopeModel.validateStrategyLevels()">
+                    <vr-datagrid datasource="scopeModel.suspicionRules"
+                                 maxheight="400px"
+                                 norowhighlightonclick="'true'"
+                                 hidegridmenu
+                                 hidepaginginfo>
+                        <vr-datagridcolumn headertext="'Suspicion Level'" disablesorting>
+                            <div style="width: 100%; display: inline-block; max-width: 160px">
+                                <vr-select datasource="viewScope.scopeModel.suspicionLevels"
+                                           selectedvalues="dataItem.suspicionLevel"
+                                           datavaluefield="value"
+                                           datatextfield="description"
+                                           ng-init="dataItem.suspicionLevel = (dataItem.suspicionLevel == undefined ? viewScope.scopeModel.suspicionLevels[0] : dataItem.suspicionLevel)"
+                                           columnindex="0"
+                                           isrequired
+                                           hideremoveicon>
+                                </vr-select>
+                            </div>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn ng-repeat="filter in scopeModel.strategyFilters"
+                                           ng-show="filter.isSelected"
+                                           columnindex="$index + 1"
+                                           headertext="'Filter: ' + filter.filterId"
+                                           headerdescription="filter.description"
+                                           tag="filter"
+                                           disablesorting>
+                            <span ng-init="filterIndex = viewScope.scopeModel.strategyFilters.indexOf(colDef.tag)">
+                                <div style="max-width: 50px; float: left">
+                                    <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"
+                                               hint="{{viewScope.scopeModel.showThresholdHint(viewScope.scopeModel.strategyFilters[filterIndex], dataItem.StrategyLevelCriterias[filterIndex])}}">
+                                    </vr-switch>
+                                </div>
+                                <div style="max-width: 100px; float: left">
+                                    <div style="width:100%; display:inline-block; max-width:100px">
+                                        <vr-numeric ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected"
+                                                    value="dataItem.StrategyLevelCriterias[filterIndex].percentage"
+                                                    minvalue="-99"
+                                                    maxvalue="99"
+                                                    stepvalue="10"
+                                                    upsign="{{dataItem.StrategyLevelCriterias[filterIndex].upSign}}"
+                                                    downsign="{{dataItem.StrategyLevelCriterias[filterIndex].downSign}}"
+                                                    unit="%"
+                                                    isrequired>
+                                        </vr-numeric>
+                                    </div>
+                                </div>
+                            </span>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn widthfactor="2"><span class="hand-cursor glyphicon glyphicon-remove" ng-click="viewScope.scopeModel.deleteSuspicionRule(dataItem)"></span></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>
