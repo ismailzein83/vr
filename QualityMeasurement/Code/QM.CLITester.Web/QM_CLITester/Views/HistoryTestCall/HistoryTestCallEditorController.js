@@ -22,6 +22,7 @@
         var releaseCode;
         var ringDuration;
         var duration;
+        var start;
 
         loadParameters();
         defineScope();
@@ -46,6 +47,7 @@
                 releaseCode = parameters.ReleaseCode;
                 ringDuration = parameters.RingDuration;
                 duration = parameters.Duration;
+                start = parameters.Start;
             }
         }
         function defineScope() {
@@ -83,7 +85,8 @@
                 RingDuration: (ringDuration != null) ? ringDuration : "",
                 CallDuration: (duration != null) ? duration : "",
                 ReleaseCode: (releaseCode != null) ? releaseCode : "",
-                ToMail: $scope.toMail.join(";")
+                ToMail: $scope.toMail.join(";"),
+                Start: (start != null) ? start : ""
             };
             return obj;
         }

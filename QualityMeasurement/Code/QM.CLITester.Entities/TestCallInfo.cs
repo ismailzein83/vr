@@ -24,6 +24,7 @@ namespace QM.CLITester.Entities
         public string RingDuration { get; set; }
         public string CallDuration { get; set; }
         public string ReleaseCode { get; set; }
+        public string Start { get; set; }
         public string ToMail { get; set; }
     }
 }

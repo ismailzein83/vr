@@ -78,6 +78,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             var destination = "";
             var receivedCli = "";
             var releaseCode = "";
+            var start = "";
             var pdd = "";
             var mos = "";
             var ringDuration = "";
@@ -89,6 +90,8 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                     destination = destination + ";" + testCallObj.Entity.TestProgress.CallResults[i].Destination;
                     receivedCli = receivedCli + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReceivedCli;
                     releaseCode = releaseCode + ";" + testCallObj.Entity.TestProgress.CallResults[i].ReleaseCode;
+                    var d = new Date(testCallObj.Entity.TestProgress.CallResults[i].Duration), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
+                    start = start + ";" + year + "-" + month + "-" + day + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
                     pdd = pdd + ";" + testCallObj.Entity.TestProgress.CallResults[i].Pdd;
                     mos = mos + ";" + testCallObj.Entity.TestProgress.CallResults[i].Mos;
                     ringDuration = ringDuration + ";" + testCallObj.Entity.TestProgress.CallResults[i].Ring;
@@ -97,7 +100,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 }
             Qm_CliTester_TestCallService.sendTestCall(testCallObj.SupplierName, testCallObj.UserName, testCallObj.CountryName, testCallObj.ZoneName,
                 testCallObj.CallTestStatusDescription, callTestResultDescription, testCallObj.ScheduleName, pdd, mos, testCallObj.Entity.CreationDate, source, destination, receivedCli, releaseCode,
-                ringDuration, duration, onSendTestCall);
+                ringDuration, duration, start, onSendTestCall);
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {

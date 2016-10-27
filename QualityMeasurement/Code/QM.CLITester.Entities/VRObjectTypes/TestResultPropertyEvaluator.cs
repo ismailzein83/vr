@@ -9,7 +9,7 @@ namespace QM.CLITester.Entities.VRObjectTypes
 {
     public enum TestCallDetailField { SupplierName = 0, UserName = 1, CountryName = 2, ZoneName = 3, CallTestStatusDescription = 4,
     CallTestResultDescription = 5, ScheduleName = 6, Pdd = 7, Mos = 8, CreationDate = 9, Source = 10, Destination = 11, ReceivedCli = 12,
-    RingDuration = 13, CallDuration = 14, ReleaseCode = 15, ToMail = 16 }
+    RingDuration = 13, CallDuration = 14, ReleaseCode = 15, ToMail = 16, Start = 17 }
     public class TestResultPropertyEvaluator : VRObjectPropertyEvaluator
     {
         public override Guid ConfigId { get { return new Guid("3c2d781d-5089-4d1e-9061-fa5a895ae9a2"); } }
@@ -40,6 +40,7 @@ namespace QM.CLITester.Entities.VRObjectTypes
                 case TestCallDetailField.CallDuration: return testCallDetailInfo.CallDuration;
                 case TestCallDetailField.ReleaseCode: return testCallDetailInfo.ReleaseCode;
                 case TestCallDetailField.ToMail: return testCallDetailInfo.ToMail;
+                case TestCallDetailField.Start: return testCallDetailInfo.Start;
             }
 
             return null;

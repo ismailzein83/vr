@@ -22,7 +22,7 @@
         }
 
         function sendTestCall(supplierName,userName, countryName, zoneName,callTestStatusDescription, callTestResultDescription, scheduleName, 
-            pdd, mos, creationDate, source, destination, receivedCli, releaseCode, ringDuration, duration, onSendTestCall) {
+            pdd, mos, creationDate, source, destination, receivedCli, releaseCode, ringDuration, duration, start, onSendTestCall) {
             var settings = {
             };
 
@@ -44,6 +44,7 @@
                 Destination: destination,
                 ReceivedCli: receivedCli,
                 ReleaseCode: releaseCode,
+                Start: start,
                 RingDuration: ringDuration,
                 Duration: duration
             };
