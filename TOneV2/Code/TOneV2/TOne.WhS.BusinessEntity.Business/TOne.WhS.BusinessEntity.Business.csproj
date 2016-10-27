@@ -148,7 +148,9 @@
     <Compile Include="SaleService\SaleEntityServiceLocator.cs" />
     <Compile Include="SaleService\SaleEntityServiceManager.cs" />
     <Compile Include="SaleService\SaleEntityServiceReadWithCache.cs" />
+    <Compile Include="StateBackup\StateBackupContext.cs" />
     <Compile Include="StateBackup\StateBackupManager.cs" />
+    <Compile Include="StateBackup\SupplierStateBackupBehavior.cs" />
     <Compile Include="SupplierCode\SupplierCodeCachedObjectCreationHandler.cs" />
     <Compile Include="SupplierOtherRate\SupplierOtherRateManager.cs" />
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />

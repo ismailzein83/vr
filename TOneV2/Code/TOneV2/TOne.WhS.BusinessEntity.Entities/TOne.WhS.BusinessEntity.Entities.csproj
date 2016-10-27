@@ -193,12 +193,15 @@
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleEntityService.cs" />
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
+    <Compile Include="StateBackup\IStateBackupContext.cs" />
     <Compile Include="StateBackup\StateBackup.cs" />
     <Compile Include="StateBackup\StateBackupAllSaleEntities.cs" />
+    <Compile Include="StateBackup\StateBackupBehavior.cs" />
     <Compile Include="StateBackup\StateBackupQuery.cs" />
     <Compile Include="StateBackup\StateBackupSupplier.cs" />
     <Compile Include="StateBackup\StateBackupSaleEntity.cs" />
     <Compile Include="StateBackup\StateBackupType.cs" />
+    <Compile Include="StateBackup\StateBackupTypeConfig.cs" />
     <Compile Include="SupplierCode\SupplierCodeQuery.cs" />
     <Compile Include="SupplierCode\SupplierCodeDetail.cs" />
     <Compile Include="SupplierOtherRate\SupplierOtherRate.cs" />

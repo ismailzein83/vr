@@ -8,6 +8,11 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class StateBackupSupplier : StateBackupType
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public int SupplierId { get; set; }
     }
 }

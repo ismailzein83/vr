@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public long StateBackupId { get; set; }
 
+        //TODO: to be removed
         public String Description { get; set; }
 
         public StateBackupType Info { get; set; }

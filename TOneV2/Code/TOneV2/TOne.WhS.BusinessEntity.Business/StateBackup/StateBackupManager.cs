@@ -75,6 +75,13 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Private Mappers
         private StateBackup StateBackupMapper(StateBackup stateBackup)
         {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            Dictionary<Guid, StateBackupTypeConfig> backupTypeConfigEntities = manager.GetExtensionConfigurationsByType<StateBackupTypeConfig>(StateBackupTypeConfig.EXTENSION_TYPE);
+            StateBackupTypeConfig config = backupTypeConfigEntities[stateBackup.Info.ConfigId];
+            StateBackupContext context = new StateBackupContext() { Data = stateBackup.Info };
+            string description = config.Behavior.GetDescription(context);
+            string backupType = config.Title;
+
             return stateBackup;
         }
 

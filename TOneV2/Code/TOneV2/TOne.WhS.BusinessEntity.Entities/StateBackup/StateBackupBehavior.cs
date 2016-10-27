@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public abstract class StateBackupType
+    public abstract class StateBackupBehavior
     {
-        public abstract Guid ConfigId { get; }
+        public abstract string GetDescription(IStateBackupContext context);
     }
 }
