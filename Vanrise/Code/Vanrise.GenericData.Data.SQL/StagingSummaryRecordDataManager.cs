@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Entities;
-using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.GenericData.Data.SQL
 {
@@ -21,9 +17,9 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #region Public Methods
-        public List<Vanrise.Reprocess.Entities.BatchRecord> GetStageRecordInfo(long processInstanceId, string stageName)
+        public List<StagingSummaryInfo> GetStagingSummaryInfo(long processInstanceId, string stageName)
         {
-            return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StageRecordInfoMapper, processInstanceId, stageName);
+            return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StagingSummaryInfoMapper, processInstanceId, stageName);
         }
 
         public void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, Action<StagingSummaryRecord> onItemLoaded)
@@ -91,9 +87,9 @@ namespace Vanrise.GenericData.Data.SQL
             };
         }
 
-        private Vanrise.Reprocess.Entities.BatchRecord StageRecordInfoMapper(IDataReader reader)
+        private StagingSummaryInfo StagingSummaryInfoMapper(IDataReader reader)
         {
-            return new StageRecordInfo()
+            return new StagingSummaryInfo()
             {
                 BatchStart = GetReaderValue<DateTime>(reader, "BatchStart")
             };

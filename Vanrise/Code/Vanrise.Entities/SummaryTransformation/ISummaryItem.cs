@@ -12,6 +12,6 @@ namespace Vanrise.Entities.SummaryTransformation
 
         DateTime BatchStart { set; }
 
-        DateTime BatchEnd { set; }
+        DateTime BatchEnd { get; set; }
     }
 }

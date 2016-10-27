@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
-using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.GenericData.Data
 {
@@ -10,7 +9,7 @@ namespace Vanrise.GenericData.Data
         void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, Action<StagingSummaryRecord> onItemLoaded);
         void ApplyStreamToDB(object stream);
         void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart);
-        List<Vanrise.Reprocess.Entities.BatchRecord> GetStageRecordInfo(long processInstanceId, string stageName);
+        List<StagingSummaryInfo> GetStagingSummaryInfo(long processInstanceId, string stageName);
     }
 }
 
