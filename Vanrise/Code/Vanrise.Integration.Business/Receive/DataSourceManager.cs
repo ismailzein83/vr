@@ -110,6 +110,7 @@ namespace Vanrise.Integration.Business
 
                 if (dataSourceInsertActionSucc)
                 {
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject =  GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
@@ -137,6 +138,7 @@ namespace Vanrise.Integration.Business
             {
                 if (dataSourceUpdateActionSucc)
                 {
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
