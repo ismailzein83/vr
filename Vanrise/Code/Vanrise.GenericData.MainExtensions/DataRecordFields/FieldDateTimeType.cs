@@ -56,7 +56,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             switch (dateTimeRecordFilter.CompareOperator)
             {
                 case DateTimeRecordFilterOperator.Equals: return valueAsDateTime == filterValue;
-                case DateTimeRecordFilterOperator.NotEquals: return valueAsDateTime == filterValue;
+                case DateTimeRecordFilterOperator.NotEquals: return valueAsDateTime != filterValue;
                 case DateTimeRecordFilterOperator.Greater: return valueAsDateTime > filterValue;
                 case DateTimeRecordFilterOperator.GreaterOrEquals: return valueAsDateTime >= filterValue;
                 case DateTimeRecordFilterOperator.Less: return valueAsDateTime < filterValue;

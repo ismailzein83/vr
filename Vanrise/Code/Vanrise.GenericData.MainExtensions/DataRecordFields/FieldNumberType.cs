@@ -116,7 +116,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             switch (numberRecordFilter.CompareOperator)
             {
                 case NumberRecordFilterOperator.Equals: return valueAsDecimal == filterValue;
-                case NumberRecordFilterOperator.NotEquals: return valueAsDecimal == filterValue;
+                case NumberRecordFilterOperator.NotEquals: return valueAsDecimal != filterValue;
                 case NumberRecordFilterOperator.Greater: return valueAsDecimal > filterValue;
                 case NumberRecordFilterOperator.GreaterOrEquals: return valueAsDecimal >= filterValue;
                 case NumberRecordFilterOperator.Less: return valueAsDecimal < filterValue;
