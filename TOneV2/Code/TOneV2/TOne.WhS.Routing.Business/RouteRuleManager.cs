@@ -9,7 +9,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace TOne.WhS.Routing.Business 
+namespace TOne.WhS.Routing.Business
 {
     public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
     {
@@ -34,15 +34,35 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
         {
             var routeRules = base.GetAllRules();
+            string ruleNameLower = !string.IsNullOrEmpty(input.Query.Name) ? input.Query.Name.ToLower() : null;
             Func<RouteRule, bool> filterExpression = (routeRule) =>
-                (input.Query.RoutingProductId == null || routeRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
-                 && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeRule.Name) && routeRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
-                 && (string.IsNullOrEmpty(input.Query.Code) || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
-                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
-                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
-                 && (input.Query.RouteRuleSettingsConfigId == Guid.Empty || this.CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigId))
-                 && (!input.Query.EffectiveOn.HasValue || routeRule.BeginEffectiveTime <= input.Query.EffectiveOn)
-                 && (!input.Query.EffectiveOn.HasValue || !routeRule.EndEffectiveTime.HasValue || routeRule.EndEffectiveTime > input.Query.EffectiveOn);
+                {
+                    if (!input.Query.RoutingProductId.HasValue && routeRule.Criteria.RoutingProductId.HasValue)
+                        return false;
+
+                    if (input.Query.RoutingProductId.HasValue && (!routeRule.Criteria.RoutingProductId.HasValue || routeRule.Criteria.RoutingProductId.Value != input.Query.RoutingProductId.Value))
+                        return false;
+
+                    if (!string.IsNullOrEmpty(ruleNameLower) && (string.IsNullOrEmpty(routeRule.Name) || !routeRule.Name.ToLower().Contains(ruleNameLower)))
+                        return false;
+
+                    if (!string.IsNullOrEmpty(input.Query.Code) && !CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
+                        return false;
+
+                    if (input.Query.CustomerIds != null && !CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
+                        return false;
+
+                    if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
+                        return false;
+
+                    if (input.Query.RouteRuleSettingsConfigId != default(Guid) && !CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigId))
+                        return false;
+
+                    if (input.Query.EffectiveOn.HasValue && (routeRule.BeginEffectiveTime > input.Query.EffectiveOn || (routeRule.EndEffectiveTime.HasValue && routeRule.EndEffectiveTime <= input.Query.EffectiveOn)))
+                        return false;
+
+                    return true;
+                };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
         }
@@ -126,7 +146,7 @@ namespace TOne.WhS.Routing.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurationsByType<RouteRuleSettingsConfig>(RouteRuleSettingsConfig.EXTENSION_TYPE);
         }
-        
+
         #endregion
 
 
