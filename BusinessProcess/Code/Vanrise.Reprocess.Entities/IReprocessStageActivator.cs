@@ -30,6 +30,8 @@ namespace Vanrise.Reprocess.Entities
 
         void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo);
 
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat);
+
         bool ShouldStop();
 
         void EnqueueBatch(string stageName, IReprocessBatch batch);

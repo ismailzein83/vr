@@ -64,8 +64,8 @@ namespace Vanrise.Reprocess.BP.Activities
             var executionContext = new ReprocessStageActivatorExecutionContext(inputArgument.Stage.StageQueue,
                 (actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus, handle, actionToDo),
                 (previousActivityStatus_Internal, actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus_Internal, handle, actionToDo),
-                () => base.ShouldStop(handle), inputArgument.StageManager.EnqueueBatch, inputArgument.From, inputArgument.To, inputArgument.StageNames, 
-                inputArgument.Stage.StageName, inputArgument.CurrentProcessId);
+                () => base.ShouldStop(handle), inputArgument.StageManager.EnqueueBatch, inputArgument.From, inputArgument.To, inputArgument.StageNames,
+                inputArgument.Stage.StageName, inputArgument.CurrentProcessId, (logEntryType, message) =>handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message, null));
 
             inputArgument.Stage.Activator.ExecuteStage(executionContext);
             return new ExecuteStageOutput();
@@ -88,10 +88,11 @@ namespace Vanrise.Reprocess.BP.Activities
             List<string> _stageNames;
             string _currentStageName;
             long _processInstanceId;
+            Action<LogEntryType, string> _writeTrackingMessage;
 
             public ReprocessStageActivatorExecutionContext(Queueing.BaseQueue<IReprocessBatch> inputQueue, Action<Action> doWhilePreviousRunningAction, Action<AsyncActivityStatus,
                 Action> doWhilePreviousRunningAction2, Func<bool> shouldStopFunc, Action<string, IReprocessBatch> enqueueItem, DateTime from, DateTime to, List<string> stageNames,
-                string currentStageName, long processInstanceId)
+                string currentStageName, long processInstanceId, Action<LogEntryType, string> writeTrackingMessage)
             {
                 _inputQueue = inputQueue;
                 _doWhilePreviousRunningAction = doWhilePreviousRunningAction;
@@ -103,6 +104,7 @@ namespace Vanrise.Reprocess.BP.Activities
                 _stageNames = stageNames;
                 _processInstanceId = processInstanceId;
                 _currentStageName = currentStageName;
+                _writeTrackingMessage = writeTrackingMessage;
             }
 
             public Queueing.BaseQueue<IReprocessBatch> InputQueue
@@ -118,6 +120,11 @@ namespace Vanrise.Reprocess.BP.Activities
             public void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo)
             {
                 _doWhilePreviousRunningAction2(previousActivityStatus, actionToDo);
+            }
+
+            public void WriteTrackingMessage(LogEntryType severity, string messageFormat)
+            {
+                _writeTrackingMessage(severity, messageFormat);
             }
 
             public bool ShouldStop()
