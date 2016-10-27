@@ -311,7 +311,9 @@ namespace Vanrise.Analytic.Business
                         var nonNullFilterValues = dimFilter.FilterValues.Where(itm => itm != null).ToList();
                         if (nonNullFilterValues.Count > 0)
                         {
-                            if (!nonNullFilterValues.Contains(Convert.ChangeType(dimensionValue.Value, nonNullFilterValues[0].GetType())))
+                            var filterValueType = nonNullFilterValues[0].GetType();
+                            var convertedDimensionValue = filterValueType == typeof(string) ? dimensionValue.Value.ToString() : Convert.ChangeType(dimensionValue.Value, filterValueType);
+                            if (!nonNullFilterValues.Contains(convertedDimensionValue))
                                 return false;
                         }
                     }
