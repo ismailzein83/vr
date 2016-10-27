@@ -9,7 +9,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
 {
     public class WFTaskBPDefinitionFilter : ISchedulerTaskFilter
     {
-        public int BPDefinitionId { get; set; }
+        public Guid BPDefinitionId { get; set; }
 
         public bool IsMatched(SchedulerTask task)
         {

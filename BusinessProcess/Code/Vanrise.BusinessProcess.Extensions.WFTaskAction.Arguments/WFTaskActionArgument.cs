@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
 {
     public class WFTaskActionArgument : BaseTaskActionArgument
     {
-        public int BPDefinitionID { get; set; }
+        public Guid BPDefinitionID { get; set; }
 
         public BaseProcessInputArgument ProcessInputArguments { get; set; }
     }
