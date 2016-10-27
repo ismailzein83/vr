@@ -161,6 +161,26 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                            Where pl.OwnerId = {2} and pl.OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
         }
 
+
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
+        {
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleRate] ([ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [SourceID], [Change])
+                                            SELECT [ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [SourceID], [Change] FROM [{0}].[TOneWhS_BE_Bkup].[SaleRate]
+                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+        }
+
+        public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
+        {
+            return String.Format(@"DELETE sr FROM [TOneWhS_BE].[SaleRate] sr Inner Join [TOneWhS_BE].SaleZone sz  on sr.ZoneID = sz.ID
+                                            Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
+        }
+
+        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
+        {
+            return String.Format(@"DELETE sr FROM [TOneWhS_BE].[SaleRate] sr Inner Join [TOneWhS_BE].[SalePriceList] pl  on sr.PriceListID = pl.ID
+                                           Where pl.OwnerId = {0} and pl.OwnerType = {1}", ownerId, ownerType);
+        }
+
         #endregion
     }
 }

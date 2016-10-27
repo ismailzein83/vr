@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeStatebackupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierCodeAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SupplierCodeAPIService) {
+app.directive("vrWhsBeStatebackupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_StateBackupAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierCodeAPIService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var grid = new SupplierCodeGrid($scope, ctrl, $attrs);
+            var grid = new StateBackupsGrid($scope, ctrl, $attrs);
             grid.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,18 +19,21 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierCodeAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SupplierCode/Templates/SupplierCodeGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/StateBackup/Templates/StateBackupGridTemplate.html"
 
     };
 
-    function SupplierCodeGrid($scope, ctrl, $attrs) {
+    function StateBackupsGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
            
-            $scope.suppliercodes = [];
+            $scope.stateBackups = [];
+
+            defineMenuActions();
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 
@@ -48,7 +51,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierCodeAPIService) {
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SupplierCodeAPIService.GetFilteredSupplierCodes(dataRetrievalInput)
+                return WhS_BE_StateBackupAPIService.GetFilteredStateBackups(dataRetrievalInput)
                     .then(function (response) {
                          onResponseReady(response);
                     })
@@ -57,6 +60,36 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierCodeAPIService) {
                     });
             };
         }
+
+
+        function defineMenuActions() {
+            var menuActions = [{
+                name: "Restore",
+                clicked: restoreStateBackup
+            }];
+
+            $scope.gridMenuActions = function (dataItem) {
+                if (dataItem.RestoreDate == null)
+                    return menuActions;
+            };
+        }
+
+
+        function restoreStateBackup(stateBackupObject) {
+            var onStateBackupRestored = function (stateBackup) {
+                gridAPI.itemUpdated(stateBackup);
+            }
+            return VRNotificationService.showConfirmation().then(function (result) {
+                if (result) {
+                    return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.StateBackupId).then(function (response) {
+                        if (VRNotificationService.notifyOnItemUpdated("State Backup", response, ""))
+                            onStateBackupRestored(response.UpdatedObject);
+                    });
+                }
+            });
+
+        }
+
 
     }
 

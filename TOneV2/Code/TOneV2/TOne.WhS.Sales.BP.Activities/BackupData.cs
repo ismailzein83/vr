@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
 
 
-            StateBackupCustomer backupCustomer = new StateBackupCustomer()
+            StateBackupSaleEntity backupCustomer = new StateBackupSaleEntity()
             {
                 OwnerId = ownerId,
                 OwnerType = ownerType

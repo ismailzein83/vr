@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿
+<vr-datagrid datasource="stateBackups"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady"
+             menuactions="gridMenuActions">
+    <vr-datagridcolumn headertext="'ID'" field="'StateBackupId'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Backup Date'" field="'BackupDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Restore Date'" field="'RestoreDate'" type="'Date'"></vr-datagridcolumn>
+</vr-datagrid>

@@ -16,5 +16,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public abstract string GetBackupCommands(long stateBackupId);
 
         public abstract string GetRestoreCommands(long stateBackupId);
+
     }
 }

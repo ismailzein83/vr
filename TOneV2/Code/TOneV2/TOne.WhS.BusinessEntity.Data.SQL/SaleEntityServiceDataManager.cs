@@ -167,23 +167,27 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             Where pl.OwnerId = {2} and pl.OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
         }
 
-
-        public string BackupAllSaleEntityRoutingProductDataBySellingNumberPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleEntityRoutingProduct] WITH (TABLOCK)
-                                            SELECT erp.[ID], erp.[OwnerType], erp.[OwnerID], erp.[ZoneID], erp.[RoutingProductID], erp.[BED], erp.[EED], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleEntityRoutingProduct]
-                                            erp WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on erp.ZoneID = sz.ID
-                                            Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleEntityService] ([ID], [PriceListID], [ZoneID], [Services], [BED], [EED], [SourceID])
+                                            SELECT [ID], [PriceListID], [ZoneID], [Services], [BED], [EED], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SaleEntityService]
+                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 
 
-        public string BackupAllSaleEntityRoutingProductDataByByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
+        public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
         {
-            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleEntityRoutingProduct] WITH (TABLOCK)
-                                           SELECT [ID], [OwnerType], [OwnerID], [ZoneID], [RoutingProductID], [BED], [EED], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleEntityRoutingProduct] WITH (NOLOCK)
-                                           Where OwnerId = {2} and OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
+            return String.Format(@"DELETE ses FROM [TOneWhS_BE].[SaleEntityService] ses Inner Join [TOneWhS_BE].SaleZone sz on ses.ZoneID = sz.ID
+                                            Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
         }
 
+
+        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
+        {
+            return String.Format(@"DELETE ses FROM [TOneWhS_BE].[SaleEntityService]
+                                            ses  Inner Join [TOneWhS_BE].SalePriceList pl  on ses.PriceListID = pl.ID
+                                            Where pl.OwnerId = {0} and pl.OwnerType = {1}", ownerId, ownerType);
+        }
 
         #endregion
 

@@ -11,28 +11,58 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
         public override string GetBackupCommands(long stateBackupId)
         {
-            StateBackupCustomer backupSaleEntityData = base.Data as StateBackupCustomer;
+            StateBackupSaleEntity backupSaleEntityData = base.Data as StateBackupSaleEntity;
             int ownerId = backupSaleEntityData.OwnerId;
             int ownerType = (int)backupSaleEntityData.OwnerType;
 
+            StringBuilder backupCommand = new StringBuilder();
+
             SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
-            string result = salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType);
+            backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
 
             SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
-            result = string.Concat(result, saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
+            backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
 
             SaleEntityServiceDataManager saleEntityServiceDataManager = new SaleEntityServiceDataManager();
+            backupCommand.AppendLine(saleEntityServiceDataManager.BackupAllSaleEntityZoneServiceDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
 
-            result = string.Concat(result, saleEntityServiceDataManager.BackupAllSaleEntityZoneServiceDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
+            SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
+            backupCommand.AppendLine(saleEntityRoutingProductDataManager.BackupAllSaleEntityRoutingProductDataByByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
 
-            result = string.Concat(result, saleEntityServiceDataManager.BackupAllSaleEntityRoutingProductDataByByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
-
-            return result;
+            return backupCommand.ToString();
         }
 
         public override string GetRestoreCommands(long stateBackupId)
         {
-            throw new NotImplementedException();
+            StateBackupSaleEntity backupSaleEntityData = base.Data as StateBackupSaleEntity;
+            int ownerId = backupSaleEntityData.OwnerId;
+            int ownerType = (int)backupSaleEntityData.OwnerType;
+
+            StringBuilder restoreCommands = new StringBuilder();
+
+            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
+            SaleCodeDataManager saleCodeDataManager = new SaleCodeDataManager();
+            SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
+            SaleEntityServiceDataManager saleEntityServiceDataManager = new SaleEntityServiceDataManager();
+            SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
+
+            restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(saleCodeDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(saleEntityServiceDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(saleZoneDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+
+
+            restoreCommands.AppendLine(salePriceListDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+            restoreCommands.AppendLine(saleZoneDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+            restoreCommands.AppendLine(saleCodeDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+            restoreCommands.AppendLine(saleRateDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+            restoreCommands.AppendLine(saleEntityServiceDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+            restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+
+            return restoreCommands.ToString();
         }
     }
 }

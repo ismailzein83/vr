@@ -143,6 +143,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             Where sz.SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
 
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
+        {
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierCode] ([ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID])
+                                            SELECT [ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierCode]
+                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+        }
+
+        public string GetDeleteCommandsBySupplierId(int supplierId)
+        {
+            return String.Format(@"DELETE sc FROM [TOneWhS_BE].[SupplierCode] sc Inner Join [TOneWhS_BE].[SupplierZone] sz on sz.ID = sc.ZoneID
+                                            Where sz.SupplierID = {0}", supplierId);
+        }
+
         #endregion
     
     }

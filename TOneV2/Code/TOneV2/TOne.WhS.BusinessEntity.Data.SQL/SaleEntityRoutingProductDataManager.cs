@@ -106,5 +106,46 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
+
+        #region State Backup Methods
+
+        public string BackupAllSaleEntityRoutingProductDataBySellingNumberPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
+        {
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleEntityRoutingProduct] WITH (TABLOCK)
+                                            SELECT erp.[ID], erp.[OwnerType], erp.[OwnerID], erp.[ZoneID], erp.[RoutingProductID], erp.[BED], erp.[EED], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleEntityRoutingProduct]
+                                            erp WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on erp.ZoneID = sz.ID
+                                            Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
+        }
+
+
+        public string BackupAllSaleEntityRoutingProductDataByByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
+        {
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleEntityRoutingProduct] WITH (TABLOCK)
+                                           SELECT [ID], [OwnerType], [OwnerID], [ZoneID], [RoutingProductID], [BED], [EED], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleEntityRoutingProduct] WITH (NOLOCK)
+                                           Where OwnerId = {2} and OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
+        }
+
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
+        {
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleEntityRoutingProduct] ([ID], [OwnerType], [OwnerID], [ZoneID], [RoutingProductID], [BED], [EED])
+                                           SELECT [ID], [OwnerType], [OwnerID], [ZoneID], [RoutingProductID], [BED], [EED] FROM [{0}].[TOneWhS_BE_Bkup].[SaleEntityRoutingProduct]
+                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+        }
+
+        public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
+        {
+            return String.Format(@"DELETE erp FROM [TOneWhS_BE].[SaleEntityRoutingProduct]
+                                            erp Inner Join [TOneWhS_BE].SaleZone sz on erp.ZoneID = sz.ID
+                                            Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
+        }
+
+
+        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
+        {
+            return String.Format(@"DELETE FROM [TOneWhS_BE].[SaleEntityRoutingProduct] 
+                                           Where OwnerId = {0} and OwnerType = {1}", ownerId, ownerType);
+        }
+
+        #endregion
     }
 }

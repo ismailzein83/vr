@@ -1,9 +1,23 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-panel ng-controller="WhS_BE_StateBackupManagementController" vr-loader="isGettingData">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
 
-</body>
-</html>
+               
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-be-statebackup-grid on-ready="onGridReady"></vr-whs-be-statebackup-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>

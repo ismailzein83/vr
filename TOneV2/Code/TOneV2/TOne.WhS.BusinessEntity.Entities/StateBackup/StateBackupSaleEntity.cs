@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class StateBackupCustomer : StateBackupType
+    public class StateBackupSaleEntity : StateBackupType
     {
         public int OwnerId { get; set; }
         public SalePriceListOwnerType OwnerType { get; set; }

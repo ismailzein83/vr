@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 
@@ -27,23 +30,63 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region Public Methods
 
-
+        public IEnumerable<StateBackup> GetFilteredStateBackups(StateBackupQuery input)
+        {
+            return GetItemsSP("[TOneWhS_BE].[sp_StateBackup_GetFiltered]", StateBackupMapper);
+        }
 
         public void BackupData(StateBackupType backupType)
         {
             this.PrepareData(backupType);
-            object stateBackupId;
-            ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert",out stateBackupId, "Descriptions", Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
-            string backupCommand = _stateBackupBehavior.GetBackupCommands((long)stateBackupId);
 
-            ExecuteNonQueryText(backupCommand, null);
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                object stateBackupId;
+                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert", out stateBackupId, "Descriptions", Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
+                string backupCommand = _stateBackupBehavior.GetBackupCommands((long)stateBackupId);
+                ExecuteNonQueryText(backupCommand, null);
+                scope.Complete();
+            }
+
         }
 
-        public void RestoreData(int stateBackupId)
+        public bool RestoreData(long stateBackupId)
         {
-            //Get State Backup from DB
-            //Call prepare data sending it the backup type
-            //Call restore
+
+            StateBackup stateBackup = GetItemSP("TOneWhS_BE.sp_StateBackup_GetById", StateBackupMapper, stateBackupId);
+            this.PrepareData(stateBackup.Info);
+            bool result = false;
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Update", stateBackupId, DateTime.Now);
+
+                string restoreCommand = _stateBackupBehavior.GetRestoreCommands(stateBackup.StateBackupId);
+                ExecuteNonQueryText(restoreCommand, null);
+
+                scope.Complete();
+                result = true;
+
+            }
+
+            return result;
+        }
+
+
+        public StateBackup GetStateBackup(long stateBackupId)
+        {
+            return GetItemSP("TOneWhS_BE.sp_StateBackup_GetById", StateBackupMapper, stateBackupId);
         }
 
         #endregion
@@ -54,7 +97,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             if (backupType is StateBackupAllSaleEntities)
                 _stateBackupBehavior = new StateBackupAllSaleEntitiesBehavior();
-            else if (backupType is StateBackupCustomer)
+            else if (backupType is StateBackupSaleEntity)
                 _stateBackupBehavior = new StateBackupSaleEntityBehavior();
             else if (backupType is StateBackupSupplier)
                 _stateBackupBehavior = new StateBackupSupplierBehavior();
@@ -64,6 +107,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             _stateBackupBehavior.Data = backupType;
             _stateBackupBehavior.BackupDatabaseName = System.Configuration.ConfigurationManager.AppSettings["StateBackupDatabase"];
+        }
+
+        #endregion
+
+
+        #region Private Mappers
+
+        private StateBackup StateBackupMapper(IDataReader reader)
+        {
+            StateBackup stateBackup = new StateBackup
+           {
+               StateBackupId = (long)reader["ID"],
+               Description = reader["Description"] as string,
+               Info = Vanrise.Common.Serializer.Deserialize<StateBackupType>(reader["Info"] as string),
+               BackupDate = GetReaderValue<DateTime>(reader, "BackupDate"),
+               RestoreDate = GetReaderValue<DateTime?>(reader, "RestoreDate")
+           };
+
+            return stateBackup;
         }
 
         #endregion

@@ -70,6 +70,28 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             WITH (NOLOCK) Where OwnerId = {2} and OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
         }
 
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
+        {
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SalePriceList] ( [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID])
+                                            SELECT [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SalePriceList]
+                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+        }
+
+
+        public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
+        {
+            return String.Format(@"Delete sp FROM [TOneWhS_BE].[SalePriceList] sp Inner Join [TOneWhS_BE].SaleRate sr on sp.ID = sr.PriceListID 
+                                            Inner join [TOneWhS_BE].SaleZone sz on sr.ZoneID = sz.ID
+                                            Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
+        }
+
+        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
+        {
+            return String.Format(@"DELETE FROM [TOneWhS_BE].[SalePriceList]
+                                           Where OwnerId = {0} and OwnerType = {1}", ownerId, ownerType);
+        }
+
+
         #endregion
 
     }
