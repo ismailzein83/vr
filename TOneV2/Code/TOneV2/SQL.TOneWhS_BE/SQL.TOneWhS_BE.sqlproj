@@ -328,11 +328,7 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlanPreviewSummary_Insert.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_Get.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter.sql" />
-    <Build Include="TOneWhS_BE\Tables\Deal.sql" />
     <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_UpdateSettings.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_Update.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_Insert.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_Deal_GetAll.sql" />
     <Build Include="TOneWhS_Sales\Tables\RP_DefaultRoutingProduct_Preview.sql" />
     <Build Include="TOneWhs_CP\Tables\SaleZone_Preview.sql" />
     <Build Include="TOneWhs_CP\Tables\SaleCode_Preview.sql" />
@@ -427,5 +423,7 @@
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetById.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetFiltered.sql" />
   </ItemGroup>
 </Project>

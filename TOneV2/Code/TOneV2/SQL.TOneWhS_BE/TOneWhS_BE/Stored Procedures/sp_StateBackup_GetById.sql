@@ -11,7 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-SELECT  [ID], [Description], [Info], [BackupDate], [RestoreDate]
+SELECT  [ID], [Info], [BackupDate], [RestoreDate]
 from	[TOneWhS_BE].[StateBackup]  WITH(NOLOCK) 
 where ID=@StateBackupID
 END
