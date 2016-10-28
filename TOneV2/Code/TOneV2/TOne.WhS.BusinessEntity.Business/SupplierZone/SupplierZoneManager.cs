@@ -83,6 +83,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (nameFilterLower != null && !supplierZone.Name.ToLower().Contains(nameFilterLower))
                     return false;
 
+                if (filter.AvailableZoneIds != null && !filter.AvailableZoneIds.Contains(supplierZone.SupplierZoneId))
+                    return false;
+
+                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Contains(supplierZone.SupplierZoneId))
+                    return false;
+
                 return true;
             };
 

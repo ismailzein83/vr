@@ -11,5 +11,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool GetEffectiveOnly { get; set; }
 
 		public IEnumerable<int> CountryIds { get; set; }
+
+        public IEnumerable<long> AvailableZoneIds { get; set; }
+
+        public IEnumerable<long> ExcludedZoneIds { get; set; }
     }
 }
