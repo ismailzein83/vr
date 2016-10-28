@@ -41,9 +41,9 @@ BEGIN
 			INSERT INTO @ProfileIDsTable (ProfileID)
 			select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@ProfileIDs)
 
-			DECLARE @ScheduleIDsTable TABLE (ScheduleID int)
+			DECLARE @ScheduleIDsTable TABLE (ScheduleID uniqueidentifier)
 			INSERT INTO @ScheduleIDsTable (ScheduleID)
-			select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@ScheduleIDs)
+			select Convert(uniqueidentifier, ParsedString) from [QM_CLITester].[ParseStringList](@ScheduleIDs)
 			
 			DECLARE @CountryIDsTable TABLE (CountryID int)
 			INSERT INTO @CountryIDsTable (CountryID)

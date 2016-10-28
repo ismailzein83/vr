@@ -14,7 +14,7 @@ CREATE PROCEDURE [QM_CLITester].[sp_TestCall_Insert]
 	@UserID int,
 	@ProfileID int,
 	@BatchNumber bigint,
-	@scheduleID int,
+	@scheduleID uniqueidentifier,
 	@Quantity int,
 	@ID int out
 AS
