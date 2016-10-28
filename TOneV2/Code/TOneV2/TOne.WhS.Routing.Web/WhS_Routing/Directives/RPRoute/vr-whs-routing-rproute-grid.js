@@ -113,15 +113,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         }
 
         function setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail) {
-            rpRouteDetail.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
-
-            rpRouteDetail.onRouteOptionsReady = function (api) {
-                rpRouteDetail.RouteOptionsAPI = api;
-                rpRouteDetail.RouteOptionsReadyDeferred.resolve();
-            };
+            var promises = [];
 
             rpRouteDetail.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-            rpRouteDetail.RouteOptionsReadyDeferred.promise.then(function () {
+            rpRouteDetail.onRouteOptionsReady = function (api) {
+                rpRouteDetail.RouteOptionsAPI = api;
+
                 var payload = {
                     RoutingDatabaseId: routingDatabaseId,
                     SaleZoneId: rpRouteDetail.SaleZoneId,
@@ -129,9 +126,25 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                     RouteOptions: rpRouteDetail.RouteOptionsDetails
                 };
                 VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
-            });
+            };
+            promises.push(rpRouteDetail.RouteOptionsLoadDeferred.promise);
 
-            return rpRouteDetail.RouteOptionsLoadDeferred.promise;
+            rpRouteDetail.saleZoneServiceLoadDeferred = UtilsService.createPromiseDeferred();
+            rpRouteDetail.onServiceViewerReady = function (api) {
+                rpRouteDetail.serviceViewerAPI = api;
+
+                var serviceViewerPayload;
+                if (rpRouteDetail != undefined) {
+                    serviceViewerPayload = {
+                        selectedIds: rpRouteDetail.SaleZoneServiceIds
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(rpRouteDetail.serviceViewerAPI, serviceViewerPayload, rpRouteDetail.saleZoneServiceLoadDeferred);
+            };
+            promises.push(rpRouteDetail.saleZoneServiceLoadDeferred.promise);
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function initDrillDownDefinitions() {

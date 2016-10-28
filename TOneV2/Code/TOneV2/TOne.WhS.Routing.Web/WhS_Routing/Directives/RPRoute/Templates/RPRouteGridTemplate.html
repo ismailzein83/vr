@@ -10,10 +10,14 @@
 
         <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" disablesorting></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Services'" disablesorting="true">
+            <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+        </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
             <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
         </vr-datagridcolumn>
+
         <vr-datagridexpandablerow>
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>
