@@ -10,6 +10,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public abstract string GetDescription(IStateBackupContext context);
 
-        //public abstract bool IsMatch(IStateBackupContext context, object filter);
+        public abstract bool IsMatch(IStateBackupContext context, object filter);
     }
 }

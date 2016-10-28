@@ -30,6 +30,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return  manager.RestoreData(stateBackupId);
         }
 
+
+        [HttpGet]
+        [Route("GetStateBackupTypes")]
+        public IEnumerable<StateBackupTypeConfig> GetStateBackupTypes()
+        {
+            StateBackupManager manager = new StateBackupManager();
+            return manager.GetStateBackupTypes();
+        }
        
     }
 }

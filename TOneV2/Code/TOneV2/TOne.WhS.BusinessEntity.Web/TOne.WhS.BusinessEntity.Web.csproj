@@ -246,6 +246,12 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\whs-be-sourcemigrationreader.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\Templates\SourceMigrationReader.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\StateBackup\Templates\AllSaleEntitiesStateBackupEditor.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\StateBackup\Templates\SaleEntityStateBackupEditor.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\StateBackup\Templates\SupplierStateBackupEditor.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\StateBackup\vr-whs-statebackup-allsaleentities.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\StateBackup\vr-whs-statebackup-saleentity.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\StateBackup\vr-whs-statebackup-supplier.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierZoneGroup\Templates\SelectiveSupplierZonesDirectiveTemplate.html" />

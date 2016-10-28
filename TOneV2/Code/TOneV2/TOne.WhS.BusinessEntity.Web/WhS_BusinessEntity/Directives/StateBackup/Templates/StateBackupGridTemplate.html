@@ -4,8 +4,8 @@
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
              menuactions="gridMenuActions">
-    <vr-datagridcolumn headertext="'ID'" field="'StateBackupId'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Backup Date'" field="'BackupDate'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Restore Date'" field="'RestoreDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.StateBackupId'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'Type'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Backup Date'" field="'Entity.BackupDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Restore Date'" field="'Entity.RestoreDate'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

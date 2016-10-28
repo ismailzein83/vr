@@ -148,6 +148,8 @@
     <Compile Include="SaleService\SaleEntityServiceLocator.cs" />
     <Compile Include="SaleService\SaleEntityServiceManager.cs" />
     <Compile Include="SaleService\SaleEntityServiceReadWithCache.cs" />
+    <Compile Include="StateBackup\AllSaleEntitiesStateBackupBehavior.cs" />
+    <Compile Include="StateBackup\SaleEntityStateBackupBehavior.cs" />
     <Compile Include="StateBackup\StateBackupContext.cs" />
     <Compile Include="StateBackup\StateBackupManager.cs" />
     <Compile Include="StateBackup\SupplierStateBackupBehavior.cs" />

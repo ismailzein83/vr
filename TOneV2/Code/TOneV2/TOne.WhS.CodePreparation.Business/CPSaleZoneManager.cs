@@ -87,7 +87,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
 
-            if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+            if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null && !input.NewZoneName.Equals(input.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
             {
                 output.Result = ValidationOutput.ValidationError;
                 output.Zone = renamedZone;

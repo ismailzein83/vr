@@ -15,9 +15,14 @@
                 stateBackupId : stateBackupId});
         }
 
+        function GetStateBackupTypes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetStateBackupTypes"));
+        }
+
         return ({
             GetFilteredStateBackups: GetFilteredStateBackups,
-            RestoreData: RestoreData
+            RestoreData: RestoreData,
+            GetStateBackupTypes: GetStateBackupTypes
         });
     }
 
