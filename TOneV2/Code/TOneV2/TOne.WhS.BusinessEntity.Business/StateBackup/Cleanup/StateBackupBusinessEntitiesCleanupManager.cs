@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class StateBackupBusinessEntitiesCleanupManager
     {
+        #region Public Methods
+
         public void CleanupGenericRules(IStateBackupCleanupContext context)
         {
             GenericRuleDefinitionManager genericRuleDefManager = new GenericRuleDefinitionManager();
@@ -33,6 +35,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
         }
+
+        public void CleanupRoutingProducts(IStateBackupCleanupContext context)
+        {
+            //TODO: to be implemented by MJA
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void CleanRulesAfterRestore(GenericRuleDefinition genericRuleDefinition, IStateBackupCleanupContext context)
         {
@@ -126,5 +137,7 @@ namespace TOne.WhS.BusinessEntity.Business
             Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
             return Activator.CreateInstance(managerType) as IGenericRuleManager;
         }
+
+        #endregion
     }
 }

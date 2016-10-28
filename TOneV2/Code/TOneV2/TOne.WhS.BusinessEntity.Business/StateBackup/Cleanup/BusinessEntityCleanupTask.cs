@@ -11,8 +11,13 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public override void Cleanup(IStateBackupCleanupContext context)
         {
+            StateBackupBusinessEntitiesCleanupManager manager = new StateBackupBusinessEntitiesCleanupManager();
+
             if (context.SaleZoneIds != null || context.SupplierZoneIds != null)
-                new StateBackupBusinessEntitiesCleanupManager().CleanupGenericRules(context);
+                manager.CleanupGenericRules(context);
+
+            if (context.SaleZoneIds != null)
+                manager.CleanupRoutingProducts(context);
         }
     }
 }
