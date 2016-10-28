@@ -101,6 +101,17 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
             defineMenuActions();
         }
 
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Rule",
+                clicked: openRouteRuleEditor,
+            }
+            ];
+        }
+        function openRouteRuleEditor(dataItem) {
+            WhS_Routing_RouteRuleService.editRouteRule(dataItem.ExecutedRuleId);
+        }
+
         function setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail) {
             rpRouteDetail.RouteOptionsReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -121,18 +132,6 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
             });
 
             return rpRouteDetail.RouteOptionsLoadDeferred.promise;
-        }
-
-        function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Rule",
-                clicked: openRouteRuleEditor,
-            }
-            ];
-        }
-
-        function openRouteRuleEditor(dataItem) {
-            WhS_Routing_RouteRuleService.editRouteRule(dataItem.ExecutedRuleId);
         }
 
         function initDrillDownDefinitions() {
