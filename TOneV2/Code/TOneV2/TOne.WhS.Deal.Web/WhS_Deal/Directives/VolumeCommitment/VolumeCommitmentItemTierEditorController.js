@@ -53,7 +53,7 @@
             $scope.scopeModel.disabelIsLastTier = function () {
                 if (!isEditMode && tiers.length == 0 )
                     return true ;
-                if (isEditMode && tiers.length == 1 )
+                if (isEditMode && tiers.length == 1 && $scope.scopeModel.upToVolume!=undefined)
                     return true ;
                 else
                     return getNextTier() != undefined;
@@ -72,6 +72,12 @@
             $scope.scopeModel.disabelAddException = function () {
                 return getContext().getExceptionsZoneIds()!= undefined ? getContext().getExceptionsZoneIds().length == getContext().getSelectedZonesIds().length : false;
             }
+
+            $scope.scopeModel.exceptionGridMenuActions = [
+           {
+               name: "Edit",
+               clicked: editVolumeCommitmentItemTierException
+           }];
         }
 
         function load() {
@@ -95,28 +101,44 @@
         {
             var currentContext = context;
 
-            currentContext.getExceptionsZoneIds = function () {
-                var zonesIds;
-                var exceptions = $scope.scopeModel.exceptions;
-                if(exceptions.length == 0 )
-                    return zonesIds;
-                zonesIds = [];
-                for (var i = 0; i < exceptions.length; i++) {
-                    zonesIds =  zonesIds.concat(exceptions[i].ZoneIds);
-
-                }
-                return zonesIds;
-
-            }
-           
+            currentContext.getExceptionsZoneIds = function (exzoneIds) {
+                return getSelectedZonesIdsFromTiers(exzoneIds)
+            };           
             return currentContext;
         }
+
+        function getSelectedZonesIdsFromTiers(includedIds) {
+            var ids = getTierUsedZonesIds();
+            var filterdIds;
+            if (ids != undefined) {
+                filterdIds = [];
+                for (var x = 0; x < ids.length; x++) {
+                    if (includedIds != undefined && includedIds.indexOf(ids[x]) < 0)
+                        filterdIds.push(ids[x]);
+                    else if (includedIds == undefined)
+                        filterdIds.push(ids[x]);
+                }
+            }
+            return filterdIds;
+        };
+
+        function getTierUsedZonesIds() {
+            var zonesIds;
+            var items = $scope.scopeModel.exceptions;
+            if (items.length > 0) {
+                zonesIds = [];
+                for (var i = 0; i < items.length; i++) {
+                    zonesIds = zonesIds.concat(items[i].ZoneIds);
+                }
+            }
+            return zonesIds;
+        };
       
         function setTitle() {
             if (isEditMode )
-                $scope.title = 'Edit Tier';
-            else
-                $scope.title = 'Add Tier';
+                $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemTierEntity.tierName, 'Volume Commitment Item Tier');
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment Item Tier');
         }
 
         function loadStaticData() {
@@ -147,7 +169,7 @@
                 $scope.onVolumeCommitmentItemTierAdded(parameterObj);
             }
             $scope.modalContext.closeModal();
-        }
+        };
 
         function updateVolumeCommitmentItemTier() {
             var parameterObj = builVolumeCommitmentItemTierObjFromScope();
@@ -158,11 +180,22 @@
         }
 
 
+        function editVolumeCommitmentItemTierException(dataItem) {
+            var onVolumeCommitmentItemTierExRateUpdated = function (updatedItem) {
+                var index = $scope.scopeModel.exceptions.indexOf(dataItem);
+                $scope.scopeModel.exceptions[index] = updatedItem;
+            };
+            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem, onVolumeCommitmentItemTierExRateUpdated,getContext());
+        };
+
         function buildExceptionZoneRatesDataSource(exceptionZoneRates) {
             for (var i = 0 ; i < exceptionZoneRates.length ; i++) {
-                var obj = exceptionZoneRates[i];
-                obj.ZoneNames = getContext().getZonesNames(exceptionZoneRates[i].ZoneIds);
-                $scope.scopeModel.exceptions.push(obj);
+                var obj = filterExceptionZoneRatesByZonesIds(exceptionZoneRates[i], getContext().getSelectedZonesIds());
+                if (obj && obj.ZoneIds) {
+                    obj.ZoneNames = getContext().getZonesNames(obj.ZoneIds);
+                    $scope.scopeModel.exceptions.push(obj);
+                }
+              
             }
         }
         function getPeriousTier() {
@@ -192,6 +225,24 @@
                    arr.push(tiers[i]);
             }
             return arr;
+        }
+
+        function filterExceptionZoneRatesByZonesIds(excep, ids) {
+            var obj = new Object();
+            if (ids == undefined)
+                return obj;
+            var zoneIds =  [];
+            for (var i = 0 ; i < excep.ZoneIds.length ; i++) {
+                if (ids.indexOf(excep.ZoneIds[i]) > -1)
+                    zoneIds.push(excep.ZoneIds[i]);
+            }           
+            if (zoneIds == 0)
+                return obj;
+            else {
+                obj.ZoneIds = zoneIds;
+                obj.Rate = excep.Rate;
+            }
+            return obj;
         }
 
     }

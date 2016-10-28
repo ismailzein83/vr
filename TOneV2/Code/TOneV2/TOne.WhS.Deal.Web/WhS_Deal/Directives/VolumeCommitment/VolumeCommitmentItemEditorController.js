@@ -42,13 +42,17 @@
             $scope.scopeModel.isValid = function () {
                 if ($scope.scopeModel.tiers.length== 0)
                     return "You Should add at least one tier.";
+                if (!hasNotLastTierRecord() && $scope.scopeModel.tiers.length == 1 )
+                    return "invalide data first tier can not have unknown up to volume.";
                 if (hasNotLastTierRecord())
                     return "At least one record  should be marked as last tier.";
                 return null;
             }
             $scope.scopeModel.removeTier = function (dataItem) {
                 var index = $scope.scopeModel.tiers.indexOf(dataItem);
-                $scope.scopeModel.tiers.splice(index, 1);
+               // $scope.scopeModel.tiers.splice(index, 1);
+                reorderAllTier(index)
+
             }
             $scope.scopeModel.disabelTierAdd = function () {
                 return !hasNotLastTierRecord();
@@ -207,6 +211,39 @@
            
             WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext());
         };
+
+        function reorderAllTier(index) {
+            if (index + 1 == $scope.scopeModel.tiers.length) {
+                $scope.scopeModel.tiers.splice(index, 1);
+                return;
+            }
+            var newTiersArray = [];
+            for (var i = 0 ; i < $scope.scopeModel.tiers.length; i++) {
+                var tier = $scope.scopeModel.tiers[i];
+                if (i != index) {
+                    var obj = {
+                        UpToVolume: tier.UpToVolume,
+                        DefaultRate: tier.DefaultRate,
+                        RetroActiveFromTierNumber: (tier.RetroActiveFromTierNumber != index) ? tier.RetroActiveFromTierNumber : undefined,
+                        RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
+                        RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
+                        ExceptionZoneRates: tier.ExceptionZoneRates
+                    }
+                    newTiersArray.push(obj);
+                };
+            };
+            rebuildTier(newTiersArray);
+        }
+
+        function rebuildTier(array) {
+            for (var j = 0 ; j < array.length; j++) {
+                var tier = array[j];
+                tier.tierId = j;
+                tier.tierName = 'Tier ' + parseInt(j + 1);
+                tier.FromVol = j == 0 ? 0 : array[j - 1].UpToVolume;
+            };
+            $scope.scopeModel.tiers = array;
+        }
 
     }
     appControllers.controller('WhS_Deal_VolumeCommitmentItemEditorController', VolumeCommitmentItemEditorController);
