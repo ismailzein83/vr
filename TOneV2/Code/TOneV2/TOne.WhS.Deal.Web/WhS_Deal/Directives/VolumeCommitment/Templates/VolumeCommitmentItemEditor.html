@@ -13,7 +13,7 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-button type="Add" data-onclick="scopeModel.addTier" standalone></vr-button>
+                            <vr-button type="Add" data-onclick="scopeModel.addTier" standalone vr-disabled="scopeModel.disabelTierAdd()"></vr-button>
 
                             <vr-validator validate="scopeModel.isValid()">
                                 <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="scopeModel.tierGridMenuActions" maxheight="300px"

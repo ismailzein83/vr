@@ -214,7 +214,14 @@
                                 if (item != undefined)
                                 {
                                     payload.selectedIds = item.ZoneIds;
+                                    payload.filter = {
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds)
+                                    };
                                 }
+                                else
+                                    payload.filter = {
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems()
+                                    };
                                 break;
                             case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
                                 var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
@@ -223,7 +230,14 @@
                                 }
                                 if (item != undefined) {
                                     payload.selectedIds = item.ZoneIds;
+                                    payload.filter = {
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds)
+                                    };
                                 }
+                                else
+                                    payload.filter = {
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems()
+                                    };
                                 break;
                         }
                         return payload;
@@ -246,10 +260,35 @@
                         return idName;
                     }
                 }
-
-
+                
             };
             return context;
+        }
+        function getSelectedZonesIdsFromItems(includedIds)
+        {
+            var ids = getUsedZonesIds();
+            var filterdIds;
+            if (ids != undefined) {
+                filterdIds = [];
+                for (var x = 0; x < ids.length; x++) {
+                    if (includedIds != undefined && includedIds.indexOf(ids[x]) < 0)
+                        filterdIds.push(ids[x]);
+                    else if (includedIds == undefined)
+                        filterdIds.push(ids[x]);
+                }
+            }
+            return filterdIds;
+        }
+        function getUsedZonesIds(){
+            var zonesIds;
+            var items = volumeCommitmenetItemsAPI.getData();
+            if (items.length > 0) {
+                zonesIds = [];
+                for (var i = 0; i < items.length; i++) {
+                    zonesIds = zonesIds.concat(items[i].ZoneIds);
+                }
+            }
+            return zonesIds;
         }
     }
 

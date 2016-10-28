@@ -50,6 +50,9 @@
                 var index = $scope.scopeModel.tiers.indexOf(dataItem);
                 $scope.scopeModel.tiers.splice(index, 1);
             }
+            $scope.scopeModel.disabelTierAdd = function () {
+                return !hasNotLastTierRecord();
+            }
             $scope.scopeModel.onZoneSelectorReady = function(api)
             {
                 zoneDirectiveAPI = api;
