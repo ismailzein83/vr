@@ -176,7 +176,9 @@
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-inbound-management.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\vr-whs-deal-swapdealanalysis-outbound-management.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\Templates\VolumeCommitmentItemsManagement.html" />
+    <Content Include="WhS_Deal\Directives\VolumeCommitment\Templates\VolumeCommitmentItemTierExRateEditor.html" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\Templates\VolumeCommitmentTemplate.html" />
+    <Content Include="WhS_Deal\Directives\VolumeCommitment\VolumeCommitmentItemTierExRateEditorController.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volcommitmenttype-selector.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volumecommitment-grid.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volumecommitment-items.js" />

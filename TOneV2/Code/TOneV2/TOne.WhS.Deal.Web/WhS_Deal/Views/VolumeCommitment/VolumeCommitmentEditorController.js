@@ -228,7 +228,26 @@
                         }
                         return payload;
                     }
+                },
+                getZoneIdAttName:function()
+                {
+                    if($scope.scopeModel.selectedVolumeCommitmentType !=undefined)
+                    {
+                        var idName;
+                        switch($scope.scopeModel.selectedVolumeCommitmentType.value)
+                        {
+                            case WhS_Deal_VolumeCommitmentTypeEnum.Buy.value: 
+                                idName = 'SupplierZoneId'
+                                break;
+                            case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
+                                idName = 'SaleZoneId'
+                                break;
+                        }
+                        return idName;
+                    }
                 }
+
+
             };
             return context;
         }

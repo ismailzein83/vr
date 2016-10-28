@@ -14,7 +14,7 @@ namespace TOne.WhS.Deal.Entities
 
         public Decimal DefaultRate { get; set; }
 
-        public VolCommitmentDealItemTierZoneRate ExceptionZoneRates { get; set; }
+        public IEnumerable<VolCommitmentDealItemTierZoneRate> ExceptionZoneRates { get; set; }
     }
 
     public class VolCommitmentDealItemTierZoneRate

@@ -8,7 +8,7 @@
                             <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <span vr-loader="scopeModel.isLoadingDirective">
-                            <vr-directivewrapper directive="scopeModel.zoneSelector" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
+                            <vr-directivewrapper directive="scopeModel.zoneSelector" selectedvalues="scopeModel.selectedZones" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
                         </span>
                     </vr-row>
                     <vr-row>
@@ -16,14 +16,14 @@
                             <vr-button type="Add" data-onclick="scopeModel.addTier" standalone></vr-button>
 
                             <vr-validator validate="scopeModel.isValid()">
-                                <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                                <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="scopeModel.tierGridMenuActions" maxheight="300px"
                                              on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeTier" hidegridmenu>
                                     <vr-datagridcolumn headertext="'Tier name'" field="'tierName'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'From'" field="'FromVol'"  type="'Number'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'From'" field="'FromVol'" type="'Number'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'To'" field="'UpToVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Rate'"  field="'DefaultRate'" type="'Number'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Retro Active From'" field="'RetroActiveFromTier'"  disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Retro Active Volume'" field="'RetroActiveVolume'" type="'Number'"  disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Rate'" field="'DefaultRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Retro Active Volume'" field="'RetroActiveVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Retro Active From'" field="'RetroActiveFromTier'" disablesorting></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>

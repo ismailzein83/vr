@@ -24,7 +24,7 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTy
 		var carrierAccountSelectorAPI;
 		var carrierAccountReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var analysisTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		//var analysisTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 		function initializeController()
 		{
@@ -37,11 +37,11 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTy
 				carrierAccountReadyDeferred.resolve();
 			};
 
-			$scope.scopeModel.onAnalysisTypeSelectorReady = function (api) {
-				analysisTypeSelectorReadyDeferred.resolve();
-			};
+			//$scope.scopeModel.onAnalysisTypeSelectorReady = function (api) {
+			//	analysisTypeSelectorReadyDeferred.resolve();
+			//};
 
-			UtilsService.waitMultiplePromises([carrierAccountReadyDeferred.promise, analysisTypeSelectorReadyDeferred.promise]).then(function () {
+			UtilsService.waitMultiplePromises([carrierAccountReadyDeferred.promise]).then(function () {
 				defineAPI();
 			});
 		}

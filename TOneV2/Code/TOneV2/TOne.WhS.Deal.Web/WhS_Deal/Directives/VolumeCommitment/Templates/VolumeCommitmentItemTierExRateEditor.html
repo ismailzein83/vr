@@ -1,0 +1,21 @@
+﻿<div vr-modalcontent ng-controller="WhS_Deal_VolumeCommitmentItemTierExRateEditorController" width="'30%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.rate" label="Rate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <span vr-loader="scopeModel.isLoadingDirective">
+                    <vr-directivewrapper directive="scopeModel.zoneSelector" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="6" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
+                </span>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

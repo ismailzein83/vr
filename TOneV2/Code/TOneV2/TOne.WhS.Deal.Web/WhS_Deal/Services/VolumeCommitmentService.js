@@ -11,7 +11,9 @@
             addVolumeCommitmentItem: addVolumeCommitmentItem,
             editVolumeCommitmentItem: editVolumeCommitmentItem,
             addVolumeCommitmentItemTier: addVolumeCommitmentItemTier,
-            editVolumeCommitmentItemTier: editVolumeCommitmentItemTier
+            editVolumeCommitmentItemTier: editVolumeCommitmentItemTier,
+            addVolumeCommitmentItemTierExRate: addVolumeCommitmentItemTierExRate,
+            editVolumeCommitmentItemTierExRate: editVolumeCommitmentItemTierExRate
         });
 
         function addVolumeCommitment(onVolumeCommitmentAdded) {
@@ -67,7 +69,7 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded,tiers) {
+        function addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, tiers, context) {
             var settings = {
             };
 
@@ -75,13 +77,14 @@
                 modalScope.onVolumeCommitmentItemTierAdded = onVolumeCommitmentItemTierAdded;
             };
             var parameters = {
-                tiers: tiers
+                tiers: tiers,
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemtierEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemTierUpdated, tiers) {
+        function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemTierUpdated, tiers, context) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
@@ -89,11 +92,42 @@
             };
             var parameters = {
                 volumeCommitmentItemTierEntity: volumeCommitmentItemTierEntity,
-                tiers: tiers
+                tiers: tiers,
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierEditor.html', parameters, settings);
         }
+
+        function addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded,context) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onVolumeCommitmentItemTierExRateAdded = onVolumeCommitmentItemTierExRateAdded;
+            };
+            var parameters = {
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierExRateEditor.html', parameters, settings);
+        }
+
+        function editVolumeCommitmentItemTierExRate(exRateEntity, onVolumeCommitmentItemTierExRateUpdated, context) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onVolumeCommitmentItemTierExRateUpdated = onVolumeCommitmentItemTierExRateUpdated;
+            };
+            var parameters = {
+                exRateEntity: exRateEntity,
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierExRateEditor.html', parameters, settings);
+        }
+
     }
 
     appControllers.service('WhS_Deal_VolumeCommitmentService', VolumeCommitmentService);
