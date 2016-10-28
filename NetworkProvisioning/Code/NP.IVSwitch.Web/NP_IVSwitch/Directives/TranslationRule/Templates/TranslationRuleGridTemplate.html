@@ -1,0 +1,13 @@
+﻿ 
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.translationRule"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.TranslationRuleId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.TranslationRuleId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'DNIS Pattern'" field="'Entity.DNIS_Pattern'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'CLI Pattern'" field="'Entity.CLI_Pattern'"></vr-datagridcolumn>
+
+</vr-datagrid>

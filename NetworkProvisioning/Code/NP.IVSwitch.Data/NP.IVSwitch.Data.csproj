@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
+    <Compile Include="ITranslationRuleDataManager.cs" />
     <Compile Include="IVSwitchDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

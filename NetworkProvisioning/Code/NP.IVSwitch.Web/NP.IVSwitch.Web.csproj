@@ -105,6 +105,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -116,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TranslationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,14 +137,17 @@
       <Name>NP.IVSwitch.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="NP_IVSwitch\Directives\" />
-    <Folder Include="NP_IVSwitch\Services\APIServices\" />
-    <Folder Include="NP_IVSwitch\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Services\APIServices\TranslationRuleAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\TranslationRuleService.js" />
+    <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />
+    <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagement.html" />
+    <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
