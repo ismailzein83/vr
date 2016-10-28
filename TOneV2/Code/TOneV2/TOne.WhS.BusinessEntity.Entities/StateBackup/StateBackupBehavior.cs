@@ -9,5 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public abstract class StateBackupBehavior
     {
         public abstract string GetDescription(IStateBackupContext context);
+
+        //public abstract bool IsMatch(IStateBackupContext context, object filter);
     }
 }

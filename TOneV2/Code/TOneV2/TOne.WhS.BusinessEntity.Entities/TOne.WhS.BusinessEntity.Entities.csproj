@@ -193,10 +193,12 @@
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleEntityService.cs" />
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
+    <Compile Include="StateBackup\Filters\SupplierStateBackupFilter.cs" />
     <Compile Include="StateBackup\IStateBackupContext.cs" />
     <Compile Include="StateBackup\StateBackup.cs" />
     <Compile Include="StateBackup\StateBackupAllSaleEntities.cs" />
     <Compile Include="StateBackup\StateBackupBehavior.cs" />
+    <Compile Include="StateBackup\StateBackupDetail.cs" />
     <Compile Include="StateBackup\StateBackupQuery.cs" />
     <Compile Include="StateBackup\StateBackupSupplier.cs" />
     <Compile Include="StateBackup\StateBackupSaleEntity.cs" />
@@ -254,6 +256,7 @@
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

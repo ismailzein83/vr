@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("72d531f3-63b9-4a89-85f8-ab667e2759ad"); }
         }
 
         public int SellingNumberPlanId { get; set; }

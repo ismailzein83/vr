@@ -8,10 +8,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class StateBackup
     {
-        public long StateBackupId { get; set; }
+        public Guid BackupTypeConfigId { get; set; }
 
-        //TODO: to be removed
-        public String Description { get; set; }
+        public long StateBackupId { get; set; }
 
         public StateBackupType Info { get; set; }
 
