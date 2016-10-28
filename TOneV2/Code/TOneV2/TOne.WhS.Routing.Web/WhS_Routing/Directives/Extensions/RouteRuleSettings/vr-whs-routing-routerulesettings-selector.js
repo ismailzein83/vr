@@ -1,4 +1,5 @@
-﻿'use strict';
+﻿
+'use strict';
 
 app.directive('vrWhsRoutingRouterulesettingsSelector', ['WhS_Routing_RouteRuleAPIService', 'UtilsService', 'VRUIUtilsService',
 
@@ -63,6 +64,18 @@ app.directive('vrWhsRoutingRouterulesettingsSelector', ['WhS_Routing_RouteRuleAP
                     return WhS_Routing_RouteRuleAPIService.GetRouteRuleSettingsTemplates().then(function (response) {
                         selectorAPI.clearDataSource();
 
+                        //Sorting RouteRuleSettingsTemplates by DisplayOrder
+                        response.sort(function (a, b) {
+
+                            if (a.DisplayOrder == undefined)
+                                a.DisplayOrder = Math.pow(2, 53);
+
+                            if (b.DisplayOrder == undefined)
+                                b.DisplayOrder = Math.pow(2, 53);
+
+                            return parseInt(a.DisplayOrder) - parseInt(b.DisplayOrder);
+                        });
+
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
@@ -85,15 +98,18 @@ app.directive('vrWhsRoutingRouterulesettingsSelector', ['WhS_Routing_RouteRuleAP
         }
 
         function getTemplate(attrs) {
-
+            var multipleselection = "";
             var label = "Rule Type";
-
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = "ismultipleselection";
+                label = "Rule Types";
+            }
             var hideremoveicon;
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
-            return '<vr-select datatextfield="Title" datavaluefield="StyleDefinitionId" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
+            return '<vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" isrequired="ctrl.isrequired" label="' + label +
+                       '" datasource="ctrl.datasource" ' + multipleselection + '  on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                    '</vr-select>'
         }

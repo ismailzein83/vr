@@ -202,6 +202,7 @@ namespace TOne.WhS.Routing.Business
 			{
 				RoutingProductId = rpRoute.RoutingProductId,
 				SaleZoneId = rpRoute.SaleZoneId,
+                SaleZoneServiceIds = rpRoute.SaleZoneServiceIds,
 				RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
 				SaleZoneName = _saleZoneManager.GetSaleZoneName(rpRoute.SaleZoneId),
 				IsBlocked = rpRoute.IsBlocked,

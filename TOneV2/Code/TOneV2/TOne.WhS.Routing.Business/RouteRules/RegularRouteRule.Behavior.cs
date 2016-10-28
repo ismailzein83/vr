@@ -159,7 +159,7 @@ namespace TOne.WhS.Routing.Business
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                             {
                                 var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
-                                if (!FilterOption(supplierCodeMatch, null, target, option))
+                                if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
                                     context.TryAddSupplierZoneOption(option);
                             }
                         }
@@ -174,7 +174,7 @@ namespace TOne.WhS.Routing.Business
                     foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                     {
                         var option = CreateOption(target, supplierCodeMatch, null);
-                        if (!FilterOption(supplierCodeMatch, null, target, option))
+                        if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
                             context.TryAddSupplierZoneOption(option);
                     }
                 }

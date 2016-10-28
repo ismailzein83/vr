@@ -23,6 +23,12 @@
             });
         }
 
+        function GetRoutingProductEditorRuntime(routingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetRoutingProductEditorRuntime"), {
+                routingProductId: routingProductId
+            });
+        }
+
         function GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlan) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetRoutingProductsInfoBySellingNumberPlan"), {
                 sellingNumberPlan: sellingNumberPlan
@@ -57,6 +63,7 @@
             GetFilteredRoutingProducts: GetFilteredRoutingProducts,
             GetRoutingProductInfo: GetRoutingProductInfo,
             GetRoutingProduct: GetRoutingProduct,
+            GetRoutingProductEditorRuntime: GetRoutingProductEditorRuntime,
             GetRoutingProductsInfoBySellingNumberPlan: GetRoutingProductsInfoBySellingNumberPlan,
             AddRoutingProduct: AddRoutingProduct,
             UpdateRoutingProduct: UpdateRoutingProduct,

@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteOptionRuleExecutionContext : IRouteOptionRuleExecutionContext
     {
-        public string CustomerServiceIds { get; set; }
+        public string SaleZoneServiceIds { get; set; }
 
         public RouteRule RouteRule{ get; set; }
     }

@@ -55,7 +55,7 @@ namespace TOne.WhS.Routing.Business
                     if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
                         return false;
 
-                    if (input.Query.RouteRuleSettingsConfigId != default(Guid) && !CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigId))
+                    if (input.Query.RouteRuleSettingsConfigIds != null && !CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigIds))
                         return false;
 
                     if (input.Query.EffectiveOn.HasValue && (routeRule.BeginEffectiveTime > input.Query.EffectiveOn || (routeRule.EndEffectiveTime.HasValue && routeRule.EndEffectiveTime <= input.Query.EffectiveOn)))
@@ -200,9 +200,9 @@ namespace TOne.WhS.Routing.Business
 
             return false;
         }
-        private bool CheckIfSameRouteRuleSettingsConfigId(RouteRule routeRule, Guid RouteRuleSettingsConfigId)
+        private bool CheckIfSameRouteRuleSettingsConfigId(RouteRule routeRule, List<Guid> RouteRuleSettingsConfigIds)
         {
-            if (routeRule.Settings.ConfigId == RouteRuleSettingsConfigId)
+            if (RouteRuleSettingsConfigIds.Contains(routeRule.Settings.ConfigId))
                 return true;
 
             return false;

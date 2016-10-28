@@ -34,15 +34,35 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<RouteOptionRuleDetail> GetFilteredRouteOptionRules(Vanrise.Entities.DataRetrievalInput<RouteOptionRuleQuery> input)
         {
             var routeOptionRules = base.GetAllRules();
+            string ruleNameLower = !string.IsNullOrEmpty(input.Query.Name) ? input.Query.Name.ToLower() : null;
             Func<RouteOptionRule, bool> filterExpression = (routeOptionRule) =>
-                (input.Query.RoutingProductId == null || routeOptionRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
-                 && (input.Query.Code == null || this.CheckIfCodeCriteriaSettingsContains(routeOptionRule, input.Query.Code))
-                 && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeOptionRule.Name) && routeOptionRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
-                 && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeOptionRule, input.Query.CustomerIds))
-                 && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeOptionRule, input.Query.SaleZoneIds))
-                 && (input.Query.RouteOptionRuleSettingsConfigId == Guid.Empty || this.CheckIfSameRouteOptionRuleSettingsConfigId(routeOptionRule, input.Query.RouteOptionRuleSettingsConfigId))
-                 && (!input.Query.EffectiveOn.HasValue || routeOptionRule.BeginEffectiveTime <= input.Query.EffectiveOn)
-                 && (!input.Query.EffectiveOn.HasValue || !routeOptionRule.EndEffectiveTime.HasValue || routeOptionRule.EndEffectiveTime > input.Query.EffectiveOn);
+            {
+                if (!input.Query.RoutingProductId.HasValue && routeOptionRule.Criteria.RoutingProductId.HasValue)
+                    return false;
+
+                if (input.Query.RoutingProductId.HasValue && (!routeOptionRule.Criteria.RoutingProductId.HasValue || routeOptionRule.Criteria.RoutingProductId.Value != input.Query.RoutingProductId.Value))
+                    return false;
+
+                if (!string.IsNullOrEmpty(ruleNameLower) && (string.IsNullOrEmpty(routeOptionRule.Name) || !routeOptionRule.Name.ToLower().Contains(ruleNameLower)))
+                    return false;
+
+                if (!string.IsNullOrEmpty(input.Query.Code) && !CheckIfCodeCriteriaSettingsContains(routeOptionRule, input.Query.Code))
+                    return false;
+
+                if (input.Query.CustomerIds != null && !CheckIfCustomerSettingsContains(routeOptionRule, input.Query.CustomerIds))
+                    return false;
+
+                if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeOptionRule, input.Query.SaleZoneIds))
+                    return false;
+
+                if (input.Query.RouteOptionRuleSettingsConfigIds != null && !CheckIfSameRouteOptionRuleSettingsConfigId(routeOptionRule, input.Query.RouteOptionRuleSettingsConfigIds))
+                    return false;
+
+                if (input.Query.EffectiveOn.HasValue && (routeOptionRule.BeginEffectiveTime > input.Query.EffectiveOn || (routeOptionRule.EndEffectiveTime.HasValue && routeOptionRule.EndEffectiveTime <= input.Query.EffectiveOn)))
+                    return false;
+
+                return true;
+            };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeOptionRules.ToBigResult(input, filterExpression, MapToDetails));
         }
@@ -198,9 +218,9 @@ namespace TOne.WhS.Routing.Business
 
             return false;
         }
-        private bool CheckIfSameRouteOptionRuleSettingsConfigId(RouteOptionRule routeOptionRule, Guid RouteRuleSettingsConfigId)
+        private bool CheckIfSameRouteOptionRuleSettingsConfigId(RouteOptionRule routeOptionRule, List<Guid> RouteOptionRuleSettingsConfigIds)
         {
-            if (routeOptionRule.Settings.ConfigId == RouteRuleSettingsConfigId)
+            if (RouteOptionRuleSettingsConfigIds.Contains(routeOptionRule.Settings.ConfigId))
                 return true;
 
             return false;

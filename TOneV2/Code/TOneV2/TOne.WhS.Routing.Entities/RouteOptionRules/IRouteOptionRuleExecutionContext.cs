@@ -8,7 +8,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public interface IRouteOptionRuleExecutionContext
     {
-        string CustomerServiceIds { get; set; }
+        string SaleZoneServiceIds { get; set; }
         RouteRule RouteRule { get; set; }
     }
 }

@@ -163,6 +163,42 @@ namespace TOne.WhS.BusinessEntity.Business
             return allRoutingProducts.GetRecord(routingProductId);
         }
 
+        public RoutingProductEditorRuntime GetRoutingProductEditorRuntime(int routingProductId)
+        {
+            RoutingProductEditorRuntime routingProductEditorRuntime = new RoutingProductEditorRuntime();
+
+            routingProductEditorRuntime.Entity = GetRoutingProduct(routingProductId);
+
+            var zoneServices = routingProductEditorRuntime.Entity.Settings.ZoneServices;
+            if (zoneServices == null)
+                return routingProductEditorRuntime;
+            HashSet<long> zoneIds;
+            HashSet<int> serviceIds;
+            GetZoneServicesData(zoneServices, out zoneIds, out serviceIds);
+
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            routingProductEditorRuntime.ZoneNames = saleZoneManager.GetSaleZonesNames(zoneIds);
+
+            ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+            routingProductEditorRuntime.ServiceNames = zoneServiceConfigManager.GetZoneServicesNamesDict(serviceIds);
+
+            return routingProductEditorRuntime;
+        }
+
+        private void GetZoneServicesData(List<RoutingProductZoneService> zoneServices, out HashSet<long> zoneIds, out HashSet<int> serviceIds)
+        {
+            List<long> tempZoneIds = new List<long>();
+            List<int> tempServiceIds = new List<int>();
+
+            foreach (RoutingProductZoneService zoneService in zoneServices)
+            {
+                tempZoneIds.AddRange(zoneService.ZoneIds);
+                tempServiceIds.AddRange(zoneService.ServiceIds);
+            }
+            zoneIds = tempZoneIds.ToHashSet<long>();
+            serviceIds = tempServiceIds.ToHashSet<int>();
+        }
+
         public HashSet<long> GetFilteredZoneIds(int routingProductId)
         {
             string cacheName = String.Format("GetFilteredZoneIds_{0}", routingProductId);
@@ -223,6 +259,27 @@ namespace TOne.WhS.BusinessEntity.Business
                    IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
                    IEnumerable<RoutingProduct> routingProducts = dataManager.GetRoutingProducts();
                    return routingProducts.ToDictionary(kvp => kvp.RoutingProductId, kvp => kvp);
+               });
+        }
+
+        public Dictionary<int, RoutingProduct> GetAllRoutingProductsByIds(IEnumerable<int> routingProductIds)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProductsByIds",
+               () =>
+               {
+                   Dictionary<int, RoutingProduct> result = new Dictionary<int, RoutingProduct>();
+
+                   var routingProducts = GetAllRoutingProducts();
+                   if (routingProducts != null)
+                   {
+                       var matchingRoutingProducts = routingProducts.Where(x => routingProductIds.Contains(x.Key));
+
+                       if (matchingRoutingProducts != null)
+                       {
+                           result = matchingRoutingProducts.ToDictionary(itm => itm.Key, itm => itm.Value);
+                       }
+                   }
+                   return result;
                });
         }
 
@@ -354,7 +411,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SellingNumberPlan = sellingNumberPlan != null ? sellingNumberPlan.Name : null
             };
         }
-        
+
         #endregion
 
         #region Private Classes

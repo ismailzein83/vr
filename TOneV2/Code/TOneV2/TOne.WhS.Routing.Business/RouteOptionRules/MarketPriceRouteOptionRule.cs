@@ -30,10 +30,10 @@ namespace TOne.WhS.Routing.Business
 
             MarketPrice tempMarketPrice;
 
-            if (context.CustomerServiceIds == null)
+            if (context.SaleZoneServiceIds == null)
                 return;
 
-            if (MarketPrices.TryGetValue(context.CustomerServiceIds, out tempMarketPrice))
+            if (MarketPrices.TryGetValue(context.SaleZoneServiceIds, out tempMarketPrice))
             {
                 if(target.SupplierRate < tempMarketPrice.ConvertedMinimum || target.SupplierRate > tempMarketPrice.ConvertedMaximum)
                     target.FilterOption = true;

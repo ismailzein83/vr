@@ -20,6 +20,6 @@ namespace TOne.WhS.Routing.Entities
 
         public DateTime? EffectiveOn { get; set; }
 
-        public Guid RouteRuleSettingsConfigId { get; set; }
+        public List<Guid> RouteRuleSettingsConfigIds { get; set; }
     }
 }

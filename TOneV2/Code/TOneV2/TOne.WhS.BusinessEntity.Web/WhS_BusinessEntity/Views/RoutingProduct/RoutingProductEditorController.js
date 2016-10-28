@@ -3,20 +3,28 @@
     "use strict";
 
     routingProductEditorController.$inject = ['$scope', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_RoutingProductSaleZoneRelationTypeEnum', 'WhS_BE_RoutingProductSupplierRelationTypeEnum',
-        'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
+        'WhS_BE_RoutingProductZoneServiceService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
     function routingProductEditorController($scope, WhS_BE_RoutingProductAPIService, WhS_BE_RoutingProductSaleZoneRelationTypeEnum, WhS_BE_RoutingProductSupplierRelationTypeEnum,
-        UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+        WhS_BE_RoutingProductZoneServiceService, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
 
         var isEditMode;
         var routingProductId
         var routingProductEntity;
+        var routingProductEditorRuntime, zoneNamesDict, serviceNamesDict;
 
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var sellingNumberPlanSelectionChangedPromiseDeferred;
+
+        var zoneServiceAPI;
+        var zoneServiceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var routingProductZoneServiceGridAPI;
+        var routingProductZoneServiceGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -43,17 +51,24 @@
                     return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
             }
             $scope.scopeModel = {}
+            $scope.scopeModel.routingProductZoneServices = [];
+
             $scope.scopeModel.onSellingNumberPlansSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
             }
-
+            $scope.scopeModel.onZoneServiceSelectorReady = function (api) {
+                zoneServiceAPI = api;
+                zoneServiceSelectorReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.onSaleZoneSelectorReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-
             };
-
+            $scope.scopeModel.onRoutingProductZoneServiceGridReady = function (api) {
+                routingProductZoneServiceGridAPI = api;
+                routingProductZoneServiceGridReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
@@ -63,27 +78,60 @@
                 var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
 
                 if (selectedSellingNumberPlanId && saleZoneDirectiveAPI) {
+
                     var payload = {};
                     payload.selectedIds = routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.Zones ? getSaleZoneSelectorPayload() : undefined;
                     payload.sellingNumberPlanId = selectedSellingNumberPlanId;
-                    saleZoneDirectiveAPI.load(payload);
+                    //saleZoneDirectiveAPI.load(payload);
+                    VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, sellingNumberPlanSelectionChangedPromiseDeferred);
                 }
             }
-
             $scope.scopeModel.onSaleZoneRelationTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedSaleZones != undefined && $scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones) {
                     $scope.scopeModel.selectedSaleZones.length = 0;
                 }
 
                 $scope.scopeModel.showSaleZoneSelector = ($scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
+                $scope.scopeModel.routingProductZoneServices = [];
             }
-
             $scope.scopeModel.onSupplierRelationTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedSuppliers != undefined && $scope.scopeModel.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.AllSuppliers) {
                     $scope.scopeModel.selectedSuppliers.length = 0;
                 }
 
                 $scope.scopeModel.showSupplierSelector = ($scope.scopeModel.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.SpecificSuppliers);
+            }
+
+            $scope.scopeModel.onAddRoutingProductZoneService = function () {
+
+                var onRoutingProductZoneServiceAdded = function (addedRoutingProductZoneService) {
+                    $scope.scopeModel.routingProductZoneServices.push(addedRoutingProductZoneService);
+                };
+
+                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                var availableZonesIds = getAvailableZoneIds();
+                var excludedZoneIds = getExcludedZoneIds();
+
+                WhS_BE_RoutingProductZoneServiceService.addRoutingProductZoneService(selectedSellingNumberPlanId, availableZonesIds, excludedZoneIds, onRoutingProductZoneServiceAdded);
+            };
+
+            $scope.scopeModel.onSelectSaleZone = function (selectedSaleZone) {
+                if (zoneNamesDict == undefined)
+                    zoneNamesDict = {};
+
+                zoneNamesDict[selectedSaleZone.SaleZoneId] = selectedSaleZone.Name;
+            }
+            $scope.scopeModel.onDeselectSaleZone = function (deselectedSaleZone) {
+                editRoutingProductZoneServiceObj(deselectedSaleZone.SaleZoneId);
+            }
+
+            $scope.scopeModel.onRemoveRoutingProductZoneService = function (zoneService) {
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
+                        $scope.scopeModel.routingProductZoneServices.splice(index, 1);
+                    }
+                });
             }
 
             $scope.scopeModel.validateSellingNumberPlan = function () {
@@ -104,6 +152,28 @@
                 $scope.modalContext.closeModal()
             };
 
+            defineMenuActions();
+
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions = [{
+                    name: "Edit",
+                    clicked: editZoneService,
+                }];
+            }
+            function editZoneService(zoneService) {
+
+                var onRoutingProductZoneServiceUpdated = function (updatedRoutingProductZoneService) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
+                    $scope.scopeModel.routingProductZoneServices[index] = updatedRoutingProductZoneService;
+                };
+
+                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                var availableZonesIds = getAvailableZoneIds();
+                var excludedZoneIds = getExcludedZoneIds();
+
+                WhS_BE_RoutingProductZoneServiceService.editRoutingProductZoneService(zoneService, selectedSellingNumberPlanId, availableZonesIds, excludedZoneIds, onRoutingProductZoneServiceUpdated);
+            }
+
             function getSaleZoneSelectorPayload() {
                 var zoneIds = [];
 
@@ -112,6 +182,30 @@
                 }
 
                 return zoneIds;
+            }
+            function getAvailableZoneIds() {
+                var availableZoneIds;
+                if ($scope.scopeModel.selectedSaleZones != undefined) {
+                    availableZoneIds = [];
+                    for (var i = 0; i < $scope.scopeModel.selectedSaleZones.length; i++) {
+                        availableZoneIds.push($scope.scopeModel.selectedSaleZones[i].SaleZoneId);
+                    }
+                }
+                return availableZoneIds;
+            }
+            function getExcludedZoneIds() {
+                var zoneServices = $scope.scopeModel.routingProductZoneServices;
+                if (zoneServices.length == 0)
+                    return;
+
+                var excludedZoneIds = [];
+                for (var i = 0; i < zoneServices.length; i++) {
+                    var currentZoneService = zoneServices[i];
+                    for (var index = 0; index < currentZoneService.ZoneIds.length; index++) {
+                        excludedZoneIds.push(currentZoneService.ZoneIds[index]);
+                    }
+                }
+                return excludedZoneIds;
             }
         }
         function load() {
@@ -134,14 +228,18 @@
         }
 
         function getRoutingProduct() {
-            return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (routingProduct) {
-                routingProductEntity = routingProduct;
+            return WhS_BE_RoutingProductAPIService.GetRoutingProductEditorRuntime(routingProductId).then(function (routingProductEditorRuntime) {
+                routingProductEditorRuntime = routingProductEditorRuntime;
+
+                routingProductEntity = routingProductEditorRuntime.Entity;
+                zoneNamesDict = routingProductEditorRuntime.ZoneNames,
+                serviceNamesDict = routingProductEditorRuntime.ServiceNames
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSellingNumberPlanSelector, loadSaleZoneRelationTypes,
-                        loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSellingNumberPlanSelector, loadServiceZoneConfigSelector, loadSaleZoneRelationTypes, loadSaleZoneSelector,
+                        loadRoutingProductZoneServicesGrid, loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
                         .catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                         })
@@ -166,6 +264,21 @@
                 });
             return sellingNumberPlanLoadPromiseDeferred.promise;
         }
+        function loadServiceZoneConfigSelector() {
+            var serviceZoneConfigLoadDeferred = UtilsService.createPromiseDeferred();
+
+            zoneServiceSelectorReadyPromiseDeferred.promise.then(function () {
+
+                var payload;
+                if (routingProductEntity != undefined && routingProductEntity.Settings != undefined) {
+                    payload = { selectedIds: routingProductEntity.Settings.DefaultServiceIds };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(zoneServiceAPI, payload, serviceZoneConfigLoadDeferred);
+            });
+
+            return serviceZoneConfigLoadDeferred.promise;
+        }
         function loadSaleZoneRelationTypes() {
             $scope.scopeModel.saleZoneRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum);
 
@@ -173,6 +286,34 @@
                 $scope.scopeModel.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum, 'value', routingProductEntity.Settings.ZoneRelationType);
             else
                 $scope.scopeModel.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum, 'value', WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones.value);
+        }
+        function loadSaleZoneSelector() {
+            if (!isEditMode)
+                return;
+
+            if (sellingNumberPlanSelectionChangedPromiseDeferred == undefined)
+                sellingNumberPlanSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            return sellingNumberPlanSelectionChangedPromiseDeferred.promise;
+        }
+
+        function loadRoutingProductZoneServicesGrid() {
+            var routingProductZoneServicesGridLoadDeferred = UtilsService.createPromiseDeferred();
+
+            routingProductZoneServiceGridReadyPromiseDeferred.promise.then(function () {
+
+                if (routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.ZoneServices) {
+                    var zoneServices = routingProductEntity.Settings.ZoneServices;
+                    for (var i = 0; i < zoneServices.length; i++) {
+                        var currentZoneService = zoneServices[i];
+                        extendRoutingProductZoneServiceObj(currentZoneService);
+                        $scope.scopeModel.routingProductZoneServices.push(currentZoneService);
+                    }
+                }
+                routingProductZoneServicesGridLoadDeferred.resolve();
+            });
+
+            return routingProductZoneServicesGridLoadDeferred.promise;
         }
         function loadSupplierRelationTypes() {
             $scope.scopeModel.supplierRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum);
@@ -213,6 +354,47 @@
             $scope.scopeModel.routingProductName = routingProductEntity.Name;
         }
 
+        function extendRoutingProductZoneServiceObj(zoneService) {
+
+            zoneService.ZoneNames = buildNamesFromIds(zoneService.ZoneIds, zoneNamesDict);
+            zoneService.ServiceNames = buildNamesFromIds(zoneService.ServiceIds, serviceNamesDict);
+        }
+
+        function editRoutingProductZoneServiceObj(saleZoneId) {
+            var zoneServices = $scope.scopeModel.routingProductZoneServices;
+
+            for (var i = 0; i < zoneServices.length; i++) {
+                var currentZoneService = zoneServices[i];
+                for (var index = 0; index < currentZoneService.ZoneIds.length; index++) {
+                    var zoneId = currentZoneService.ZoneIds[index];
+                    if (zoneId == saleZoneId) {
+                        currentZoneService.ZoneIds.splice(index, 1);
+
+                        //Removing item/GridRow
+                        if (currentZoneService.ZoneIds.length == 0) {
+                            var indexToBeRemoved = i;
+                            $scope.scopeModel.routingProductZoneServices.splice(indexToBeRemoved, 1);
+                            return;
+                        }
+
+                        currentZoneService.ZoneNames = buildNamesFromIds(currentZoneService.ZoneIds, zoneNamesDict);
+                        var indexToBeRemoved = i;
+                        $scope.scopeModel.routingProductZoneServices[indexToBeRemoved] = currentZoneService;
+                        return;
+                    }
+                }
+            }
+        }
+
+        function buildNamesFromIds(listOfIds, namesDict) {
+
+            var names = [];
+            for (var i = 0; i < listOfIds.length; i++) {
+                names.push(namesDict[listOfIds[i]]);
+            }
+            return names.join(", ");
+        }
+
         function insertRoutingProduct() {
             $scope.scopeModel.isLoading = true;
             return WhS_BE_RoutingProductAPIService.AddRoutingProduct(buildRoutingProductObjFromScope())
@@ -249,8 +431,10 @@
                 RoutingProductId: (routingProductId != null) ? routingProductId : 0,
                 Name: $scope.scopeModel.routingProductName,
                 Settings: {
+                    DefaultServiceIds: zoneServiceAPI.getSelectedIds().sort(),
                     ZoneRelationType: $scope.scopeModel.selectedSaleZoneRelationType.value,
                     Zones: buildRoutingProductZoneObj(),
+                    ZoneServices: buildRoutingProductZoneServiceObj(),
                     SupplierRelationType: $scope.scopeModel.selectedSupplierRelationType.value,
                     Suppliers: buildRoutingProductSupplierObj()
                 }
@@ -276,6 +460,21 @@
             }
 
             return routingProductZones;
+        }
+        function buildRoutingProductZoneServiceObj() {
+            var routingProductZoneServices;
+
+            if ($scope.scopeModel.routingProductZoneServices.length > 0) {
+                routingProductZoneServices = [];
+                for (var i = 0; i < $scope.scopeModel.routingProductZoneServices.length; i++) {
+                    var currentItem = $scope.scopeModel.routingProductZoneServices[i];
+                    routingProductZoneServices.push({
+                        ZoneIds: currentItem.ZoneIds,
+                        ServiceIds: currentItem.ServiceIds
+                    });
+                }
+            }
+            return routingProductZoneServices;
         }
         function buildRoutingProductSupplierObj() {
             var routingProductSuppliers = undefined;

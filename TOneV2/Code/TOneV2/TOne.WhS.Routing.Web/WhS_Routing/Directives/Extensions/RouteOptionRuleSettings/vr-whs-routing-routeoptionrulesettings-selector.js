@@ -85,15 +85,19 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsSelector', ['WhS_Routing_Route
         }
 
         function getTemplate(attrs) {
-
             var label = "Option Rule Type";
+            var multipleselection = "";
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = "ismultipleselection";
+                label = "Option Rule Types";
+            }
 
             var hideremoveicon;
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
-            return '<vr-select datatextfield="Title" datavaluefield="StyleDefinitionId" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
+            return '<vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" isrequired="ctrl.isrequired" label="' + label +
+                       '" datasource="ctrl.datasource" ' + multipleselection + ' on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                    '</vr-select>'
         }

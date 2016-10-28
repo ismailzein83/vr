@@ -24,6 +24,7 @@ namespace TOne.WhS.Routing.Business
         }
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { private get; set; }
+        public HashSet<int> SaleZoneServiceIds { get; set; }
 
 
         public RPRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
@@ -45,10 +46,10 @@ namespace TOne.WhS.Routing.Business
             if (routeOptionRule != null)
             {
                 optionTarget.ExecutedRuleId = routeOptionRule.RuleId;
-                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext();
+                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { SaleZoneServiceIds = string.Join<int>(",", SaleZoneServiceIds.ToList()), RouteRule = _routeRule };
                 routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, optionTarget);
 
-                if (optionTarget.BlockOption && !_addBlockedOptions)
+                if ((optionTarget.BlockOption && !_addBlockedOptions) || optionTarget.FilterOption)
                     return false;
             }
             _supplierZoneOptions.Add(optionTarget);

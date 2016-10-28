@@ -1,1 +1,31 @@
-﻿
+﻿<div vr-modalcontent ng-controller="WhS_BE_RoutingProductZoneEditorController" width="'45%'" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRObjectVariableEditor">
+
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady"
+                                                 selectedvalues="scopeModel.selectedSaleZones"
+                                                 isrequired="true"
+                                                 ismultipleselection>
+                    </vr-whs-be-salezone-selector>
+                </vr-columns>
+                <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceSelectorReady"
+                                                        selectedvalues="scopeModel.selectedServices"
+                                                        normal-col-num="6"
+                                                        isrequired="true"
+                                                        ismultipleselection>
+                </vr-whs-be-zone-service-config-selector>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRObjectVariableEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

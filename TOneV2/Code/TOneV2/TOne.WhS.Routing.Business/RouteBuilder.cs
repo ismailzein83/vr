@@ -88,22 +88,27 @@ namespace TOne.WhS.Routing.Business
         {
             List<RPRoute> routes = new List<RPRoute>();
 
-            if (context.RoutingProductIds != null)
+            if (context.RoutingProducts != null)
             {
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
-                foreach (var routingProductId in context.RoutingProductIds)
+                foreach (var routingProduct in context.RoutingProducts)
                 {
                     RouteRuleTarget routeRuleTarget = new RouteRuleTarget
                     {
-                        RoutingProductId = routingProductId,
+                        RoutingProductId = routingProduct.RoutingProductId,
                         SaleZoneId = saleZoneId,
                         EffectiveOn = context.EntitiesEffectiveOn,
                         IsEffectiveInFuture = context.EntitiesEffectiveInFuture
                     };
-                    var routeRule = GetRouteRule(routeRuleTarget, routingProductId);
+                    if (routingProduct.Settings == null)
+                        throw new NullReferenceException(string.Format("routingProduct.Settings of Routing Product Id: {0}", routingProduct.RoutingProductId));
+
+                    HashSet<int> saleZoneServiceIds = routingProduct.Settings.GetZoneServices(saleZoneId);
+
+                    var routeRule = GetRouteRule(routeRuleTarget, routingProduct.RoutingProductId);
                     if (routeRule != null)
                     {
-                        RPRoute route = ExecuteRule(routingProductId, saleZoneId, context, routeRuleTarget, routeRule, includeBlockedSupplierZones);
+                        RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, includeBlockedSupplierZones);
                         routes.Add(route);
                     }
                     //Removed after discussion with Sari
@@ -251,17 +256,19 @@ namespace TOne.WhS.Routing.Business
             return false;
         }
 
-        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, bool includeBlockedSupplierZones)
+        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, bool includeBlockedSupplierZones)
         {
             RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchesBySupplier = context.SupplierCodeMatchesBySupplier;
+            routeRuleExecutionContext.SaleZoneServiceIds = saleZoneServiceIds;
 
             routeRule.Settings.CreateSupplierZoneOptionsForRP(routeRuleExecutionContext, routeRuleTarget);
             RPRoute route = new RPRoute
             {
                 RoutingProductId = routingProductId,
                 SaleZoneId = saleZoneId,
+                SaleZoneServiceIds = saleZoneServiceIds,
                 ExecutedRuleId = routeRule.RuleId,
                 IsBlocked = routeRuleTarget.BlockRoute,
                 OptionsDetailsBySupplier = new Dictionary<int, RPRouteOptionSupplier>(),
@@ -329,7 +336,21 @@ namespace TOne.WhS.Routing.Business
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
                     routeRule.Settings.ApplyRuleToRPOptions(routeRuleExecutionContext, ref rpRouteOptionsAsEnumerable);
                     if (rpRouteOptionsAsEnumerable != null && rpRouteOptionsAsEnumerable.ToList().Count > 0)
+                    {
+                        if (!includeBlockedSupplierZones)
+                        {
+                            IEnumerable<RPRouteOption> unblockedRouteOptions = rpRouteOptionsAsEnumerable.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
+                            IEnumerable<RPRouteOption> blockedRouteOptions = rpRouteOptionsAsEnumerable.FindAllRecords(itm => itm.SupplierStatus == SupplierStatus.Block);
+
+                            if (unblockedRouteOptions == null)
+                                rpRouteOptionsAsEnumerable = blockedRouteOptions;
+                            else if (blockedRouteOptions == null)
+                                rpRouteOptionsAsEnumerable = unblockedRouteOptions;
+                            else
+                                rpRouteOptionsAsEnumerable = unblockedRouteOptions.Union(blockedRouteOptions);
+                        }
                         route.RPOptionsByPolicy.Add(supplierZoneToRPOptionPolicy.ConfigId, rpRouteOptionsAsEnumerable);
+                    }
                 }
             }
             return route;

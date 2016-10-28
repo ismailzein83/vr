@@ -14,12 +14,15 @@
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
                     </vr-row>
+                    <vr-row>
+                        <vr-whs-be-zone-service-config-selector normal-col-num="6" on-ready="scopeModel.onZoneServiceSelectorReady" isrequired="true" ismultipleselection></vr-whs-be-zone-service-config-selector>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'" ng-show="scopeModel.selectedSellingNumberPlan">
+                    
                     <vr-row vr-loader="scopeModel.isLoadingSaleZonesSelector">
-
                         <vr-validator validate="scopeModel.validateSellingNumberPlan()">
-                            <div>
+
                                 <vr-columns width="1/2row">
                                     <vr-select datatextfield="description" datavaluefield="value" onselectionchanged="scopeModel.onSaleZoneRelationTypeSelectionChanged" label="Sale Zones"
                                                datasource="scopeModel.saleZoneRelationType" selectedvalues="scopeModel.selectedSaleZoneRelationType" hideremoveicon>
@@ -28,15 +31,35 @@
                                 <vr-columns width="1/2row" ng-show="scopeModel.showSaleZoneSelector">
                                     <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady"
                                                                  selectedvalues="scopeModel.selectedSaleZones"
+                                                                 onselectitem="scopeModel.onSelectSaleZone"
+                                                                 ondeselectitem="scopeModel.onDeselectSaleZone"
                                                                  isdisabled="!scopeModel.selectedSellingNumberPlan"
                                                                  isrequired="scopeModel.showSaleZoneSelector"
                                                                  ismultipleselection>
                                     </vr-whs-be-salezone-selector>
                                 </vr-columns>
-                            </div>
-                        </vr-validator>
 
+                        </vr-validator>
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow" simplecol>
+                            <vr-button type="Add" data-onclick="scopeModel.onAddRoutingProductZoneService" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-datagrid on-ready="scopeModel.onRoutingProductZoneServiceGridReady"
+                                         datasource="scopeModel.routingProductZoneServices"
+                                         ondeleterow="scopeModel.onRemoveRoutingProductZoneService"
+                                         menuactions="scopeModel.menuActions"
+                                         hidegridmenu>
+
+                                <vr-datagridcolumn headertext="'Zones'" type="'Text'" field="'ZoneNames'" widthfactor="2" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Services'" type="'Text'" field="'ServiceNames'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+
                 </vr-tab>
                 <vr-tab header="'Suppliers'">
                     <vr-row>

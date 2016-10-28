@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public interface IBuildRoutingProductRoutesContext
     {
-        IEnumerable<int> RoutingProductIds { get; }
+        IEnumerable<RoutingProduct> RoutingProducts { get; }
 
         List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; }
 

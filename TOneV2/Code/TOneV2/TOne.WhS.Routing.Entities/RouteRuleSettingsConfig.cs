@@ -10,8 +10,13 @@ namespace TOne.WhS.Routing.Entities
     public class RouteRuleSettingsConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "WhS_Routing_RouteRuleSettingsType";
+
         public string Editor { get; set; }
+
         public int? Priority { get; set; }
+
         public string CssClass { get; set; }
+
+        public int? DisplayOrder { get; set; }
     }
 }

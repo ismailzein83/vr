@@ -47,6 +47,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return _manager.GetRoutingProduct(routingProductId);
         }
 
+        [HttpGet]
+        [Route("GetRoutingProductEditorRuntime")]
+        public RoutingProductEditorRuntime GetRoutingProductEditorRuntime(int routingProductId)
+        {
+            return _manager.GetRoutingProductEditorRuntime(routingProductId);
+        }
+
         [HttpPost]
         [Route("AddRoutingProduct")]
         public TOne.Entities.InsertOperationOutput<RoutingProductDetail> AddRoutingProduct(RoutingProduct routingProduct)

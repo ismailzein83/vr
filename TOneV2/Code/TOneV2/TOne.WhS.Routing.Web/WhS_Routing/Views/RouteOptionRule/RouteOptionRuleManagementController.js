@@ -61,7 +61,7 @@
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,
-                    RouteOptionRuleSettingsConfigId: routeOptionRuleTypeSelectorAPI.getSelectedIds()
+                    RouteOptionRuleSettingsConfigIds: routeOptionRuleTypeSelectorAPI.getSelectedIds()
                 };
                 return query;
             }

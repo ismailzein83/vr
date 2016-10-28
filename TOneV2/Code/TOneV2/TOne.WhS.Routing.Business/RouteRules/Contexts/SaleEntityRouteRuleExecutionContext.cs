@@ -118,7 +118,7 @@ namespace TOne.WhS.Routing.Business
             if (routeOptionRule != null)
             {
                 targetOption.ExecutedRuleId = routeOptionRule.RuleId;
-                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { CustomerServiceIds = CustomerServiceIds, RouteRule = routeRule };
+                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { SaleZoneServiceIds = CustomerServiceIds, RouteRule = routeRule };
                 routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, targetOption);
             }
 

@@ -10,8 +10,9 @@ namespace TOne.WhS.Routing.Entities
     {
         RouteRule RouteRule { get; }
 
-        bool TryAddSupplierZoneOption(RouteOptionRuleTarget optionTarget);
+        HashSet<int> SaleZoneServiceIds { get; set; }
 
+        bool TryAddSupplierZoneOption(RouteOptionRuleTarget optionTarget);
 
         List<SupplierCodeMatchWithRate> GetSupplierCodeMatches(int supplierId);
 

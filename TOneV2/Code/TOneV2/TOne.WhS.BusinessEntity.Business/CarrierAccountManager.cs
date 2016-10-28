@@ -665,7 +665,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if ((carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange) && carrierAccount.SupplierSettings != null && carrierAccount.SupplierSettings.DefaultServices.Count > 0)
             {
                 carrierAccountDetail.Services = carrierAccount.SupplierSettings.DefaultServices.Select(x => x.ServiceId).ToList();
-                carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GeZoneServicesNames(carrierAccountDetail.Services);
+                carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GetZoneServicesNames(carrierAccountDetail.Services);
             }
 
 

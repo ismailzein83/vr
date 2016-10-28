@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.Data.SQL
         //    RPRouteOptionSupplierZone dummyRPRouteOptionSupplierZone = new RPRouteOptionSupplierZone();
         //}
 
-        readonly string[] columns = { "RoutingProductId", "SaleZoneId", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
+        readonly string[] columns = { "RoutingProductId", "SaleZoneId", "SaleZoneServices", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
         public void ApplyProductRouteForDB(object preparedProductRoute)
         {
             InsertBulkToTable(preparedProductRoute as BaseBulkInsertInfo);
@@ -49,10 +49,11 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             string optionsDetailsBySupplier = Vanrise.Common.Serializer.Serialize(record.OptionsDetailsBySupplier, true);
             string rpOptionsByPolicy = Vanrise.Common.Serializer.Serialize(record.RPOptionsByPolicy, true);
+            string saleZoneServices = (record.SaleZoneServiceIds != null && record.SaleZoneServiceIds.Count > 0) ? string.Join(",", record.SaleZoneServiceIds) : null;
 
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.RoutingProductId, record.SaleZoneId, record.ExecutedRuleId,
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.RoutingProductId, record.SaleZoneId, saleZoneServices, record.ExecutedRuleId,
                 optionsDetailsBySupplier, rpOptionsByPolicy, record.IsBlocked ? 1 : 0);
         }
 
@@ -151,10 +152,13 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private RPRoute RPRouteMapper(IDataReader reader)
         {
+            string saleZoneServices = (reader["SaleZoneServices"] as string);
+
             return new RPRoute()
             {
                 RoutingProductId = (int)reader["RoutingProductId"],
                 SaleZoneId = (long)reader["SaleZoneId"],
+                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServices) ? new HashSet<int>(saleZoneServices.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
                 OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(reader["OptionsDetailsBySupplier"].ToString()) : null,
@@ -187,6 +191,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                        BEGIN
                                                             SELECT TOP #LimitResult# [RoutingProductId]
                                                                   ,[SaleZoneId]
+                                                                  ,[SaleZoneServices]
                                                                   ,[ExecutedRuleId]
                                                                   ,[OptionsDetailsBySupplier]
                                                                   ,[OptionsByPolicy]
@@ -205,6 +210,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private const string query_GetRPRoutesByRPZones = @"SELECT pr.[RoutingProductId],
                                                                 pr.[SaleZoneId],
+                                                                pr.[SaleZoneServices],
                                                                 pr.[ExecutedRuleId],
                                                                 pr.[OptionsDetailsBySupplier],
                                                                 pr.[OptionsByPolicy],

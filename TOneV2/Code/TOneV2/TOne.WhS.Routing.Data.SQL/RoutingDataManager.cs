@@ -204,6 +204,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     Create Table ProductRoute(
                                                         RoutingProductId int Not Null,
                                                         SaleZoneId bigint Not Null,
+                                                        SaleZoneServices varchar(max) NULL,
                                                         ExecutedRuleId int Null,
                                                         OptionsDetailsBySupplier nvarchar(max) NULL,
                                                         OptionsByPolicy nvarchar(max) NULL,

@@ -20,6 +20,15 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SellingNumberPlanId { get; set; }
     }
 
+    public class RoutingProductEditorRuntime
+    {
+        public RoutingProduct Entity { get; set; }
+
+        public Dictionary<long, string> ZoneNames { get; set; }
+
+        public Dictionary<int, string> ServiceNames { get; set; }
+    }
+
     public class RoutingProductToEdit : BaseRoutingProduct
     {
 

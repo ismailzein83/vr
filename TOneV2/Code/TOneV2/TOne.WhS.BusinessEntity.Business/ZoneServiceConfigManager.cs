@@ -104,12 +104,21 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZoneServiceConfigs.FindAllRecords(filterExpression);
         }
 
-        public string GeZoneServicesNames(List<int> services)
+        public string GetZoneServicesNames(List<int> services)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x=>services.Contains(x.Key));
             if (allZoneServiceConfigs == null)
                 return null;
             return String.Join(",", allZoneServiceConfigs.Select(x => x.Value.Symbol).ToList());
+        }
+
+        public Dictionary<int, string> GetZoneServicesNamesDict(IEnumerable<int> services)
+        {
+            var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x => services.Contains(x.Key));
+            if (allZoneServiceConfigs == null)
+                return null;
+
+            return allZoneServiceConfigs.ToDictionary(x => x.Key, x => x.Value.Symbol);
         }
 
         public ZoneServiceConfig GetZoneServiceConfig(int ZoneServiceConfigId)

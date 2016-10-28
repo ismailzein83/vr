@@ -58,7 +58,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                 {
                     var option = CreateOption(target, supplierCodeMatch);
-                    if (!FilterOption(supplierCodeMatch, null, target, option))
+                    if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
                         context.TryAddSupplierZoneOption(option);
                 }
             }
