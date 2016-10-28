@@ -22,15 +22,12 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
-                        </vr-columns>
                         <span vr-loader="scopeModel.isLoadingDirective">
                             <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true"></vr-directivewrapper>
                         </span>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
+                        </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="2/3row">

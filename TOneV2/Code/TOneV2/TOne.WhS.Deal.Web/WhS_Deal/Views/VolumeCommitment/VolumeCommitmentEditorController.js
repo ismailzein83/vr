@@ -81,7 +81,7 @@
             });
         };
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGracePeriod, loadCarrierAccountSelector, loadVolumeCommitmenetItems]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierAccountSelector, loadVolumeCommitmenetItems]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -104,15 +104,7 @@
             $scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         };
-        function loadGracePeriod() {
-            if (volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings.GracePeriod != undefined) {
-                $scope.scopeModel.gracePeriod = volumeCommitmentEntity.Settings.GracePeriod;
-                return;
-            }
-            return WhS_Deal_DealAPIService.GetSwapDealSettingData().then(function (response) {
-                $scope.scopeModel.gracePeriod = response.GracePeriod;
-            });
-        };
+        
         function loadCarrierAccountSelector() {
             if (volumeCommitmentEntity == undefined)
                 return;

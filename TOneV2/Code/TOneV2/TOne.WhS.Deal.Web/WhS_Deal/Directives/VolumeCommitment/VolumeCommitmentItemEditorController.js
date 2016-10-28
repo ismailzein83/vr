@@ -171,7 +171,8 @@
                 RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
                 RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
                 RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
-                ExceptionZoneRates: tier.ExceptionZoneRates
+                ExceptionZoneRates: tier.ExceptionZoneRates,
+                HasException: tier.ExceptionZoneRates!= undefined && tier.ExceptionZoneRates.length > 0
             };
         }
         function hasNotLastTierRecord() {
@@ -227,7 +228,8 @@
                         RetroActiveFromTierNumber: (tier.RetroActiveFromTierNumber != index) ? tier.RetroActiveFromTierNumber : undefined,
                         RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
                         RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
-                        ExceptionZoneRates: tier.ExceptionZoneRates
+                        ExceptionZoneRates: tier.ExceptionZoneRates,
+                        HasException: tier.ExceptionZoneRates!= undefined && tier.ExceptionZoneRates.length > 0
                     }
                     newTiersArray.push(obj);
                 };
