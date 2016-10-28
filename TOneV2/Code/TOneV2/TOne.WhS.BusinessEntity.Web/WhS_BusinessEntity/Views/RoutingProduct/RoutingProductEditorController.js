@@ -11,7 +11,6 @@
         var isEditMode;
         var routingProductId
         var routingProductEntity;
-       // var routingProductEditorRuntime,
         var zoneNamesDict, serviceNamesDict;
 
         var sellingNumberPlanDirectiveAPI;
@@ -20,6 +19,8 @@
 
         var zoneServiceAPI;
         var zoneServiceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var saleZoneRelationTypeSelectionChangedPromiseDeferred;
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -30,7 +31,7 @@
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var saleZoneRelationTypeSelectionReadyDeferred;
+
         loadParameters();
         defineScope();
         load();
@@ -89,18 +90,16 @@
                 }
             }
             $scope.scopeModel.onSaleZoneRelationTypeSelectionChanged = function () {
-                if (saleZoneRelationTypeSelectionReadyDeferred != undefined)
-                    saleZoneRelationTypeSelectionReadyDeferred.resolve();
-                else
-                {
+                $scope.scopeModel.showSaleZoneSelector = ($scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
+
+                if (saleZoneRelationTypeSelectionChangedPromiseDeferred != undefined)
+                    saleZoneRelationTypeSelectionChangedPromiseDeferred.resolve();
+                else {
                     if ($scope.scopeModel.selectedSaleZones != undefined && $scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones) {
                         $scope.scopeModel.selectedSaleZones.length = 0;
                     }
-
-                    $scope.scopeModel.showSaleZoneSelector = ($scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
                     $scope.scopeModel.routingProductZoneServices = [];
                 }
-              
             }
             $scope.scopeModel.onSupplierRelationTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedSuppliers != undefined && $scope.scopeModel.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.AllSuppliers) {
@@ -237,7 +236,7 @@
 
         function getRoutingProduct() {
             return WhS_BE_RoutingProductAPIService.GetRoutingProductEditorRuntime(routingProductId).then(function (routingProductEditorRuntime) {
-               // this.routingProductEditorRuntime = routingProductEditorRuntime;
+                // this.routingProductEditorRuntime = routingProductEditorRuntime;
 
                 routingProductEntity = routingProductEditorRuntime.Entity;
                 zoneNamesDict = routingProductEditorRuntime.ZoneNames,
@@ -246,8 +245,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSellingNumberPlanSelector, loadServiceZoneConfigSelector, loadSaleZoneRelationTypes, loadSaleZoneSelector,
-                         loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection, loadRoutingProductZoneServicesGrid])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadSellingNumberPlanSelector, loadServiceZoneConfigSelector, loadSaleZoneRelationTypes, loadSaleZoneSelector,
+                         loadRoutingProductZoneServicesGrid, loadSupplierRelationTypes, loadSupplierSelector])
                         .catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                         })
@@ -258,6 +257,12 @@
 
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(routingProductEntity ? routingProductEntity.Name : null, 'Routing Product') : UtilsService.buildTitleForAddEditor('Routing Product');
+        }
+        function loadStaticSection() {
+            if (routingProductEntity == undefined)
+                return;
+
+            $scope.scopeModel.routingProductName = routingProductEntity.Name;
         }
         function loadSellingNumberPlanSelector() {
             var sellingNumberPlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -304,26 +309,24 @@
 
             return sellingNumberPlanSelectionChangedPromiseDeferred.promise;
         }
-
         function loadRoutingProductZoneServicesGrid() {
-            if (routingProductEntity.Settings.ZoneServices != undefined)
-            {
-                saleZoneRelationTypeSelectionReadyDeferred = UtilsService.createPromiseDeferred();
-            }
-            return UtilsService.waitMultiplePromises([saleZoneRelationTypeSelectionReadyDeferred.promise, routingProductZoneServiceGridReadyPromiseDeferred.promise]).then(function () {
-                saleZoneRelationTypeSelectionReadyDeferred = undefined;
-                if (routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.ZoneServices) {
-                    var zoneServices = routingProductEntity.Settings.ZoneServices;
-                    for (var i = 0; i < zoneServices.length; i++) {
-                        var currentZoneService = zoneServices[i];
-                        extendRoutingProductZoneServiceObj(currentZoneService);
-                        $scope.scopeModel.routingProductZoneServices.push(currentZoneService);
-                    }
+            if (!isEditMode || !routingProductEntity || !routingProductEntity.Settings || !routingProductEntity.Settings.ZoneServices)
+                return;
+
+            saleZoneRelationTypeSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            return UtilsService.waitMultiplePromises([saleZoneRelationTypeSelectionChangedPromiseDeferred.promise, routingProductZoneServiceGridReadyPromiseDeferred.promise]).then(function () {
+
+                saleZoneRelationTypeSelectionChangedPromiseDeferred = undefined;
+
+                var zoneServices = routingProductEntity.Settings.ZoneServices;
+                for (var i = 0; i < zoneServices.length; i++) {
+                    var currentZoneService = zoneServices[i];
+                    extendRoutingProductZoneServiceObj(currentZoneService);
+                    $scope.scopeModel.routingProductZoneServices.push(currentZoneService);
                 }
             });
-           
         }
-
         function loadSupplierRelationTypes() {
             $scope.scopeModel.supplierRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum);
 
@@ -356,19 +359,12 @@
 
             return carrierAccountLoadPromiseDeferred.promise;
         }
-        function loadStaticSection() {
-            if (routingProductEntity == undefined)
-                return;
-
-            $scope.scopeModel.routingProductName = routingProductEntity.Name;
-        }
 
         function extendRoutingProductZoneServiceObj(zoneService) {
 
             zoneService.ZoneNames = buildNamesFromIds(zoneService.ZoneIds, zoneNamesDict);
             zoneService.ServiceNames = buildNamesFromIds(zoneService.ServiceIds, serviceNamesDict);
         }
-
         function editRoutingProductZoneServiceObj(saleZoneId) {
             var zoneServices = $scope.scopeModel.routingProductZoneServices;
 
@@ -394,7 +390,6 @@
                 }
             }
         }
-
         function buildNamesFromIds(listOfIds, namesDict) {
 
             var names = [];
