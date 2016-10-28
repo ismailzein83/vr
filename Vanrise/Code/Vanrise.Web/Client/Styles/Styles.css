@@ -1889,6 +1889,10 @@ vr-button[class*="divDisabled"] > div{
     pointer-events: none;
     opacity: 0.5;
 }
+vr-switch[class*="divDisabled"] .switch {
+    pointer-events: none;
+    opacity: 0.5;
+}
 /**************START Pagination*********/
 
 .pagination {
