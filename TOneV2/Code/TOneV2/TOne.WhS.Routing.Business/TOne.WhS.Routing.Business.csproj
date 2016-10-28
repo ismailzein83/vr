@@ -92,6 +92,7 @@
     <Compile Include="RouteRules\LCRRouteRule.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\ExcludedOptions.cs" />
     <Compile Include="RouteRules\Orders\OptionOrderByService.cs" />
+    <Compile Include="RoutingOptimizationManager.cs" />
     <Compile Include="TrafficStatsQualityMeasure\TrafficStatsQualityMeasureManager.cs" />
     <Compile Include="RouteOptionRuleManager.cs" />
     <Compile Include="RouteRuleManager.cs" />
