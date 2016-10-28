@@ -11,9 +11,9 @@ using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class GenericRuleCleanupManager
+    public class StateBackupBusinessEntitiesCleanupManager
     {
-        public void Cleanup(Dictionary<CleanupDataType, object> data)
+        public void CleanupGenericRules(IStateBackupCleanupContext context)
         {
             GenericRuleDefinitionManager genericRuleDefManager = new GenericRuleDefinitionManager();
             IEnumerable<GenericRuleDefinition> ruleDefinitions = genericRuleDefManager.GetGenericRulesDefinitons();
@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         if (IsFieldTypeTargetForCleanUp(field.FieldType))
                         {
-                            CleanRulesAfterRestore(ruleDef, data);
+                            CleanRulesAfterRestore(ruleDef, context);
                             break;
                         }
                     }
@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        private void CleanRulesAfterRestore(GenericRuleDefinition genericRuleDefinition, Dictionary<CleanupDataType, object> data)
+        private void CleanRulesAfterRestore(GenericRuleDefinition genericRuleDefinition, IStateBackupCleanupContext context)
         {
             IGenericRuleManager manager = GetManager(genericRuleDefinition.GenericRuleDefinitionId);
             IEnumerable<GenericRule> genericRules = manager.GetGenericRulesByDefinitionId(genericRuleDefinition.GenericRuleDefinitionId);
@@ -55,17 +55,10 @@ namespace TOne.WhS.BusinessEntity.Business
                                 {
                                     FieldBusinessEntityType businessEntityType = criteriaDefinitionField.FieldType as FieldBusinessEntityType;
 
-                                    if (data.ContainsKey(CleanupDataType.SaleZone) && IsFieldofTypeSaleZone(businessEntityType))
-                                    {
-                                        IEnumerable<long> deletedSaleZoneIds = data[CleanupDataType.SaleZone] as IEnumerable<long>;
-                                        ProcessSaleZoneFields(deletedSaleZoneIds, rule, manager, businessEntitiesValues);
-                                    }
-
-                                    else if (data.ContainsKey(CleanupDataType.SupplierZone) && IsFieldofTypeSupplierZone(businessEntityType))
-                                    {
-                                        IEnumerable<long> deletedSupplierZoneIds = data[CleanupDataType.SupplierZone] as IEnumerable<long>;
-                                        ProcessSupplierZoneFields(deletedSupplierZoneIds, rule, manager, businessEntitiesValues);
-                                    }
+                                    if (context.SaleZoneIds != null && IsFieldofTypeSaleZone(businessEntityType))
+                                        ProcessSaleZoneFields(context.SaleZoneIds, rule, manager, businessEntitiesValues);
+                                    else if (context.SupplierZoneIds != null && IsFieldofTypeSupplierZone(businessEntityType))
+                                        ProcessSupplierZoneFields(context.SupplierZoneIds, rule, manager, businessEntitiesValues);
                                 }
                             }
                         }

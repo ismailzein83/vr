@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum CleanupDataType { SaleZone = 1, SupplierZone = 2}
-
-    public abstract class CleanupTask
+    public interface IStateBackupCleanupContext
     {
-        public abstract void Cleanup(Dictionary<CleanupDataType, object> data);
+        IEnumerable<long> SaleZoneIds { get; set; }
+
+        IEnumerable<long> SupplierZoneIds { get; set; }
     }
 }

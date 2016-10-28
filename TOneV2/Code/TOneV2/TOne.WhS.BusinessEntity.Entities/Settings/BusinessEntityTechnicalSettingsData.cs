@@ -10,6 +10,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class BusinessEntityTechnicalSettingsData : SettingData
     {
         public const string BusinessEntityTechnicalSettings = "WhS_BE_TechnicalSettings";
+
         public RateTypeConfiguration RateTypeConfiguration { get; set; }
+
+        public IEnumerable<StateBackupCleanupTask> Tasks { get; set; }
     }
 }

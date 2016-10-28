@@ -193,10 +193,10 @@
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleEntityService.cs" />
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
-    <Compile Include="StateBackup\CleanupTask.cs" />
+    <Compile Include="StateBackup\IStateBackupCleanupContext.cs" />
+    <Compile Include="StateBackup\StateBackupCleanupTask.cs" />
     <Compile Include="StateBackup\Filters\SupplierStateBackupFilter.cs" />
     <Compile Include="StateBackup\IStateBackupContext.cs" />
-    <Compile Include="StateBackup\Settings\CleanupSettings.cs" />
     <Compile Include="StateBackup\StateBackup.cs" />
     <Compile Include="StateBackup\StateBackupAllSaleEntities.cs" />
     <Compile Include="StateBackup\StateBackupBehavior.cs" />

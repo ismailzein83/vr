@@ -7,15 +7,17 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Business.Extensions
 {
-    public class RouteRuleCleanupTask : CleanupTask
+    public class RouteRuleCleanupTask : StateBackupCleanupTask
     {
-        public override void Cleanup(Dictionary<CleanupDataType, object> data)
+        public override void Cleanup(IStateBackupCleanupContext context)
         {
-            if(data.ContainsKey(CleanupDataType.SaleZone))
-                new RouteRuleCleanupManager().Cleanup(data);
+            StateBackupRoutingCleanupManager manager = new StateBackupRoutingCleanupManager();
+            
+            if(context.SaleZoneIds != null)
+                manager.CleanupRouteRules(context);
 
-            if (data.ContainsKey(CleanupDataType.SaleZone) || data.ContainsKey(CleanupDataType.SupplierZone))
-                new RouteOptionRuleCleanupManager().Cleanup(data);
+            if (context.SaleZoneIds != null || context.SupplierZoneIds != null)
+                manager.CleanupRouteOptionRules(context);
         }
     }
 }

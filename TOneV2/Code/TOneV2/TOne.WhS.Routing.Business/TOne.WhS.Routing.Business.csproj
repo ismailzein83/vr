@@ -84,9 +84,8 @@
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerRouteManager.cs" />
-    <Compile Include="Extensions\RouteOptionRuleCleanupManager.cs" />
     <Compile Include="Extensions\RouteRuleCleanupTask.cs" />
-    <Compile Include="Extensions\RouteRuleCleanupManager.cs" />
+    <Compile Include="Extensions\StateBackupRoutingCleanupManager.cs" />
     <Compile Include="Extensions\RouteSyncReader.cs" />
     <Compile Include="RouteOptionRules\MarketPriceRouteOptionRule.cs" />
     <Compile Include="RouteRules\Filters\RateOptionFilter.cs" />

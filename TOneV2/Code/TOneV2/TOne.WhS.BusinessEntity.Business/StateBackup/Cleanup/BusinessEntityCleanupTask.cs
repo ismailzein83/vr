@@ -7,12 +7,12 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class BusinessEntityCleanupTask : CleanupTask
+    public class BusinessEntityCleanupTask : StateBackupCleanupTask
     {
-        public override void Cleanup(Dictionary<CleanupDataType, object> data)
+        public override void Cleanup(IStateBackupCleanupContext context)
         {
-            if (data.ContainsKey(CleanupDataType.SaleZone) || data.ContainsKey(CleanupDataType.SupplierZone))
-                new GenericRuleCleanupManager().Cleanup(data);
+            if (context.SaleZoneIds != null || context.SupplierZoneIds != null)
+                new StateBackupBusinessEntitiesCleanupManager().CleanupGenericRules(context);
         }
     }
 }
