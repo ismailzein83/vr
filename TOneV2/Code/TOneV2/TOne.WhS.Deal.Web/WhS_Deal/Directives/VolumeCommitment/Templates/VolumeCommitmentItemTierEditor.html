@@ -5,7 +5,7 @@
                 <vr-tab header="'General'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                                <vr-switch value="scopeModel.isLastTier" label="Is Last Tier" onvaluechanged="scopeModel.resetUpToVolume" vr-disabled="scopeModel.disabelIsLastTier()"></vr-switch>
+                                <vr-switch value="scopeModel.isLastTier" label="Last Tier" onvaluechanged="scopeModel.resetUpToVolume" vr-disabled="scopeModel.disabelIsLastTier()"></vr-switch>
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <span vr-disabled="scopeModel.isLastTier">
@@ -29,7 +29,7 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-button type="Add" data-onclick="scopeModel.addException" standalone vr-disabled="scopeModel.disabelAddException()"></vr-button>
-                            <vr-datagrid datasource="scopeModel.exceptions" norowhighlightonclick="true" menuactions="scopeModel.tierGridMenuActions" maxheight="300px"
+                            <vr-datagrid datasource="scopeModel.exceptions" norowhighlightonclick="true" menuactions="scopeModel.exceptionGridMenuActions" maxheight="300px"
                                          on-ready="onGridReady" ondeleterow="scopeModel.removeException" hidegridmenu>
                                 <vr-datagridcolumn headertext="'Zones'" field="'ZoneNames'" widthfactor="7" disablesorting></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Rate'" field="'Rate'" widthfactor="3" disablesorting type="'Number'"></vr-datagridcolumn>

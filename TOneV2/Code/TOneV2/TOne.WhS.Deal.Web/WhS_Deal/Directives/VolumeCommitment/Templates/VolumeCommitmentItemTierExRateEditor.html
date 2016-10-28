@@ -2,12 +2,13 @@
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formEditor">
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.rate" label="Rate" type="number" isrequired="true"></vr-textbox>
-                </vr-columns>
                 <span vr-loader="scopeModel.isLoadingDirective">
                     <vr-directivewrapper directive="scopeModel.zoneSelector" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="6" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
                 </span>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.rate" label="Rate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

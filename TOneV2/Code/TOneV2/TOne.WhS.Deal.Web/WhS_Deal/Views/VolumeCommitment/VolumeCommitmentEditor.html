@@ -28,21 +28,17 @@
                         <vr-columns width="1/3row">
                             <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
                         </vr-columns>
+                        <span vr-loader="scopeModel.isLoadingDirective">
+                            <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true"></vr-directivewrapper>
+                        </span>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="2/3row">
                             <vr-textarea label="Description" value="scopeModel.description" isrequired="true"></vr-textarea>
                         </vr-columns>
-                        
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Details'">
-                    <vr-row>
-                        <span vr-loader="scopeModel.isLoadingDirective">
-                            <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ></vr-directivewrapper>
-                        </span>
-
-                    </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow" ng-show="scopeModel.selectedVolumeCommitmentType !=undefined">
                             <vr-whs-deal-volumecommitment-items on-ready="scopeModel.onVolumeCommitmenetItemsReady"></vr-whs-deal-volumecommitment-items>

@@ -67,16 +67,19 @@
         }
 
         function loadStaticData() {
-           
+            if (exRateEntity == undefined)
+                return;
+            $scope.scopeModel.rate = exRateEntity.Rate;
         }
     
         function loadZoneSection() {
             var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
             zoneReadyPromiseDeferred.promise.then(function () {
                 var payload = context != undefined ? context.getZoneSelectorPayload(exRateEntity) : undefined;
+                var excZoneIds = exRateEntity != undefined ? exRateEntity.ZoneIds : undefined;
                 payload.filter = {
                     AvailableZoneIds: context.getSelectedZonesIds(),
-                    ExcludedZoneIds: context.getExceptionsZoneIds()
+                    ExcludedZoneIds: context.getExceptionsZoneIds(excZoneIds)
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
             });
