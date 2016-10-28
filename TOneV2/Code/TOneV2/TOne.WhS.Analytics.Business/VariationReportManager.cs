@@ -22,7 +22,10 @@ namespace TOne.WhS.Analytics.Business
             ValidateVariationReportQuery(input.Query);
 
            
-            return BigDataManager.Instance.RetrieveData(input, new VariationReportRequestHandler(input.Query));
+            return BigDataManager.Instance.RetrieveData(input, new VariationReportRequestHandler()
+            {
+             Query = input.Query   
+            });
         }
 
         #endregion
@@ -33,25 +36,20 @@ namespace TOne.WhS.Analytics.Business
         {
             #region Fields / Constructors
 
-            VariationReportQuery _query;
-            CarrierAccountManager _carrierAccountManager;
-            CarrierProfileManager _carrierProfileManager;
-            SaleZoneManager _saleZoneManager;
-            List<TimePeriod> _timePeriods;
+            public VariationReportQuery Query { get; set; }
+            public CarrierAccountManager CarrierAccountManager  = new CarrierAccountManager();
+            public CarrierProfileManager CarrierProfileManager = new CarrierProfileManager();
+            public SaleZoneManager SaleZoneManager = new SaleZoneManager();
+            public List<TimePeriod> TimePeriods;
 
-            public VariationReportRequestHandler(VariationReportQuery query)
+            public VariationReportRequestHandler()
             {
-                _query = query;
-                _carrierAccountManager = new CarrierAccountManager();
-                _carrierProfileManager = new CarrierProfileManager();
-                _saleZoneManager = new SaleZoneManager();
-                _timePeriods = GetTimePeriods();
             }
 
             #endregion
 
             protected override BigResult<VariationReportRecord> AllRecordsToBigResult(DataRetrievalInput<VariationReportQuery> input, IEnumerable<VariationReportRecord> allRecords)
-            {
+            {          
                 var variationReportBigResult = new VariationReportBigResult();
 
                 if (input.Query.ParentDimensions == null)
@@ -64,7 +62,7 @@ namespace TOne.WhS.Analytics.Business
                 variationReportBigResult.TotalCount = bigResult.TotalCount;
 
                 variationReportBigResult.DimensionTitle = GetDimensionTitle();
-                variationReportBigResult.TimePeriods = _timePeriods;
+                variationReportBigResult.TimePeriods = TimePeriods;
                 variationReportBigResult.DrillDownDimensions = GetDrillDownDimensions();
 
                 return variationReportBigResult;
@@ -72,8 +70,10 @@ namespace TOne.WhS.Analytics.Business
 
             public override IEnumerable<VariationReportRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
             {
+                Query = input.Query;
+                TimePeriods = GetTimePeriods();
                 IVariationReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IVariationReportDataManager>();
-                return dataManager.GetFilteredVariationReportRecords(input, _timePeriods);
+                return dataManager.GetFilteredVariationReportRecords(input, TimePeriods);
             }
 
             protected override ResultProcessingHandler<VariationReportRecord> GetResultProcessingHandler(DataRetrievalInput<VariationReportQuery> input, BigResult<VariationReportRecord> bigResult)
@@ -89,17 +89,17 @@ namespace TOne.WhS.Analytics.Business
             {
                 SetVariationReportRecordDimension(entity);
 
-                switch (_query.ReportType)
+                switch (Query.ReportType)
                 {
                     case VariationReportType.TopDestinationMinutes:
                     case VariationReportType.TopDestinationAmount:
                     case VariationReportType.TopDestinationProfit:
-                        entity.DimensionName = _saleZoneManager.GetSaleZoneName((long)entity.DimensionId);
+                        entity.DimensionName = SaleZoneManager.GetSaleZoneName((long)entity.DimensionId);
                         break;
                     default:
-                        entity.DimensionName = (_query.GroupByProfile) ?
-                            _carrierProfileManager.GetCarrierProfileName((int)entity.DimensionId) :
-                            _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
+                        entity.DimensionName = (Query.GroupByProfile) ?
+                            CarrierProfileManager.GetCarrierProfileName((int)entity.DimensionId) :
+                            CarrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
                         break;
                 }
 
@@ -114,7 +114,7 @@ namespace TOne.WhS.Analytics.Business
             string GetDimensionTitle()
             {
                 string dimensionTitle = null;
-                switch (_query.ReportType)
+                switch (Query.ReportType)
                 {
                     case VariationReportType.InBoundMinutes:
                     case VariationReportType.InBoundAmount:
@@ -148,15 +148,15 @@ namespace TOne.WhS.Analytics.Business
             {
                 var timePeriods = new List<TimePeriod>();
 
-                DateTime toDate = _query.ToDate.Date.AddDays(1); // Ignore ToDate's time and add 1 day to include it in the result
+                DateTime toDate = Query.ToDate.Date.AddDays(1); // Ignore ToDate's time and add 1 day to include it in the result
                 string dateFormat = "dd/MM/yyyy";
 
-                for (int i = 0; i < _query.NumberOfPeriods; i++)
+                for (int i = 0; i < Query.NumberOfPeriods; i++)
                 {
                     DateTime fromDate = GetFromDate(toDate);
                     timePeriods.Add(new TimePeriod()
                     {
-                        PeriodDescription = (_query.TimePeriod == VariationReportTimePeriod.Daily) ?
+                        PeriodDescription = (Query.TimePeriod == VariationReportTimePeriod.Daily) ?
                             fromDate.ToString(dateFormat) : String.Format("{0} - {1}", fromDate.ToString(dateFormat), toDate.AddDays(-1).ToString(dateFormat)),
                         From = fromDate,
                         To = toDate
@@ -170,7 +170,7 @@ namespace TOne.WhS.Analytics.Business
             DateTime GetFromDate(DateTime toDate)
             {
                 var fromDate = new DateTime();
-                switch (_query.TimePeriod)
+                switch (Query.TimePeriod)
                 {
                     case VariationReportTimePeriod.Daily:
                         fromDate = toDate.AddDays(-1);
@@ -189,7 +189,7 @@ namespace TOne.WhS.Analytics.Business
 
             void SetVariationReportRecordDimension(VariationReportRecord variationReportRecord)
             {
-                switch (_query.ReportType)
+                switch (Query.ReportType)
                 {
                     case VariationReportType.InBoundMinutes:
                     case VariationReportType.InBoundAmount:
@@ -223,7 +223,7 @@ namespace TOne.WhS.Analytics.Business
             List<VariationReportDimension> GetDrillDownDimensions()
             {
                 var drillDownDimensions = new List<VariationReportDimension>();
-                switch (_query.ReportType)
+                switch (Query.ReportType)
                 {
                     case VariationReportType.InOutBoundMinutes:
                     case VariationReportType.InOutBoundAmount:
@@ -239,20 +239,20 @@ namespace TOne.WhS.Analytics.Business
                     case VariationReportType.InBoundAmount:
                     case VariationReportType.OutBoundMinutes:
                     case VariationReportType.OutBoundAmount:
-                        if (_query.ParentDimensions == null)
+                        if (Query.ParentDimensions == null)
                             drillDownDimensions.Add(VariationReportDimension.Zone);
                         break;
 
                     case VariationReportType.TopDestinationMinutes:
                     case VariationReportType.TopDestinationAmount:
-                        if (_query.ParentDimensions == null)
+                        if (Query.ParentDimensions == null)
                         {
                             drillDownDimensions.Add(VariationReportDimension.Customer);
                             drillDownDimensions.Add(VariationReportDimension.Supplier);
                         }
                         else
                         {
-                            ParentDimension directParentDimension = _query.ParentDimensions.ElementAt(_query.ParentDimensions.Count() - 1);
+                            ParentDimension directParentDimension = Query.ParentDimensions.ElementAt(Query.ParentDimensions.Count() - 1);
                             if (directParentDimension.Dimension == VariationReportDimension.Customer)
                                 drillDownDimensions.Add(VariationReportDimension.Supplier);
                         }

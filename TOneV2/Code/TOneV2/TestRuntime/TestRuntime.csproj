@@ -686,6 +686,18 @@
       <Project>{244516F9-E7B8-47D0-B3AF-EC24631BA485}</Project>
       <Name>TOne.LCRProcess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Business\TOne.WhS.Analytics.Business.csproj">
+      <Project>{ed3ad820-6c97-440e-a309-0ec0391b732a}</Project>
+      <Name>TOne.WhS.Analytics.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Data.SQL\TOne.WhS.Analytics.Data.SQL.csproj">
+      <Project>{ae6c988e-a806-4224-ace0-342f640905c6}</Project>
+      <Name>TOne.WhS.Analytics.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Analytics.Entities\TOne.WhS.Analytics.Entities.csproj">
+      <Project>{a02259d1-ff3a-4b00-82f9-4992a9347d31}</Project>
+      <Name>TOne.WhS.Analytics.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>
