@@ -13,27 +13,64 @@ namespace Vanrise.Common.Business
         #region Public Methods
         public void SendMail(Guid mailMessageTemplateId, Dictionary<string, dynamic> objects)
         {
-            VRMailMessageTemplate mailMessageTemplate = GetMailMessageTemplate(mailMessageTemplateId);
-            SendMail(mailMessageTemplate, objects);
+            var evaluatedMailTemplate = EvaluateMailTemplate(mailMessageTemplateId, objects);
+            SendMail(evaluatedMailTemplate.To, evaluatedMailTemplate.CC, evaluatedMailTemplate.Subject, evaluatedMailTemplate.Body);           
         }
-        #endregion
 
-
-        #region Private Methods
-        private void SendMail(VRMailMessageTemplate mailMessageTemplate, Dictionary<string, dynamic> objects)
+        public VRMailEvaluatedTemplate EvaluateMailTemplate(Guid mailMessageTemplateId, Dictionary<string, dynamic> objects)
         {
+            VRMailMessageTemplate mailMessageTemplate = GetMailMessageTemplate(mailMessageTemplateId);
+
             var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
 
             //Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
 
             var mailContext = new VRMailContext(mailMessageType, objects);
-            string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
-            string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
-            string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
-            string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
 
-            SendMail(to, cc, subject, body);
+
+            return new VRMailEvaluatedTemplate
+            {
+                To = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext),
+                CC = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext),
+                Subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext),
+                Body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext)
+            };
         }
+        
+        public SmtpClient GetSMTPClient(EmailSettingData emailSettingData)
+        {
+            SmtpClient client = new SmtpClient();
+            client.Port = emailSettingData.Port;
+            client.Host = emailSettingData.Host;
+            client.Timeout = emailSettingData.Timeout;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential(emailSettingData.SenderEmail, emailSettingData.SenderPassword);
+            client.EnableSsl = emailSettingData.EnabelSsl;
+            return client;
+        }
+
+
+        #endregion
+
+
+        #region Private Methods
+        //private void SendMail(VRMailMessageTemplate mailMessageTemplate, Dictionary<string, dynamic> objects)
+        //{
+        //    var mailMessageType = GetMailMessageType(mailMessageTemplate.VRMailMessageTypeId);
+
+        //    //Dictionary<string, dynamic> variableValuesObj = new VRObjectManager().EvaluateVariables(mailMessageTemplate.Settings.Variables, objects, mailMessageType.Settings.Objects);
+
+        //    var mailContext = new VRMailContext(mailMessageType, objects);
+        //    string to = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext);
+        //    string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
+        //    string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
+        //    string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
+            
+        //    SendMail(to, cc, subject, body);
+        //}
+
+        
 
         public void SendMail(string to, string cc, string subject, string body)
         {
@@ -63,15 +100,8 @@ namespace Vanrise.Common.Business
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
 
-            SmtpClient client = new SmtpClient();
-            client.Port = emailSettingData.Port;
-            client.Host = emailSettingData.Host;
-            client.Timeout = emailSettingData.Timeout;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new System.Net.NetworkCredential(emailSettingData.SenderEmail, emailSettingData.SenderPassword);
-            client.EnableSsl = emailSettingData.EnabelSsl;
-
+            SmtpClient client = GetSMTPClient(emailSettingData);
+            
             client.Send(mailMessage);
         }
 
