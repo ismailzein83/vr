@@ -85,8 +85,9 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsSelector', ['WhS_Routing_Route
         }
 
         function getTemplate(attrs) {
-            var label = "Option Rule Type";
             var multipleselection = "";
+            var label = "Option Rule Type";
+
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
                 label = "Option Rule Types";

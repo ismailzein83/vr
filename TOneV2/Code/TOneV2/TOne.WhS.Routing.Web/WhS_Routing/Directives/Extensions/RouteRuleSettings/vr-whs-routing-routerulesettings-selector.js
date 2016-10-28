@@ -100,10 +100,12 @@ app.directive('vrWhsRoutingRouterulesettingsSelector', ['WhS_Routing_RouteRuleAP
         function getTemplate(attrs) {
             var multipleselection = "";
             var label = "Rule Type";
+
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
                 label = "Rule Types";
             }
+
             var hideremoveicon;
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
