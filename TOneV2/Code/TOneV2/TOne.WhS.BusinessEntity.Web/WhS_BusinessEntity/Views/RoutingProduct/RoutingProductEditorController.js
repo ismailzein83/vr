@@ -47,12 +47,7 @@
             $scope.isEditMode = isEditMode;
         }
         function defineScope() {
-            $scope.hasSaveRoutingProductPermission = function () {
-                if (isEditMode)
-                    return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
-                else
-                    return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
-            }
+
             $scope.scopeModel = {}
             $scope.scopeModel.routingProductZoneServices = [];
 
@@ -85,7 +80,6 @@
                     var payload = {};
                     payload.selectedIds = routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.Zones ? getSaleZoneSelectorPayload() : undefined;
                     payload.sellingNumberPlanId = selectedSellingNumberPlanId;
-                    //saleZoneDirectiveAPI.load(payload);
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, sellingNumberPlanSelectionChangedPromiseDeferred);
                 }
             }
@@ -98,6 +92,7 @@
                     if ($scope.scopeModel.selectedSaleZones != undefined && $scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones) {
                         $scope.scopeModel.selectedSaleZones.length = 0;
                     }
+
                     $scope.scopeModel.routingProductZoneServices = [];
                 }
             }
@@ -121,6 +116,14 @@
 
                 WhS_BE_RoutingProductZoneServiceService.addRoutingProductZoneService(selectedSellingNumberPlanId, availableZonesIds, excludedZoneIds, onRoutingProductZoneServiceAdded);
             };
+            $scope.scopeModel.onRemoveRoutingProductZoneService = function (zoneService) {
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
+                        $scope.scopeModel.routingProductZoneServices.splice(index, 1);
+                    }
+                });
+            }
 
             $scope.scopeModel.onSelectSaleZone = function (selectedSaleZone) {
                 if (zoneNamesDict == undefined)
@@ -130,15 +133,6 @@
             }
             $scope.scopeModel.onDeselectSaleZone = function (deselectedSaleZone) {
                 editRoutingProductZoneServiceObj(deselectedSaleZone.SaleZoneId);
-            }
-
-            $scope.scopeModel.onRemoveRoutingProductZoneService = function (zoneService) {
-                VRNotificationService.showConfirmation().then(function (confirmed) {
-                    if (confirmed) {
-                        var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
-                        $scope.scopeModel.routingProductZoneServices.splice(index, 1);
-                    }
-                });
             }
 
             $scope.scopeModel.validateSellingNumberPlan = function () {
@@ -154,6 +148,13 @@
                     return insertRoutingProduct();
                 }
             };
+
+            $scope.hasSaveRoutingProductPermission = function () {
+                if (isEditMode)
+                    return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
+                else
+                    return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
+            }
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -192,7 +193,7 @@
             }
             function getAvailableZoneIds() {
                 var availableZoneIds;
-                if ($scope.scopeModel.selectedSaleZones != undefined) {
+                if ($scope.scopeModel.selectedSaleZones != undefined && $scope.scopeModel.selectedSaleZones.length > 0) {
                     availableZoneIds = [];
                     for (var i = 0; i < $scope.scopeModel.selectedSaleZones.length; i++) {
                         availableZoneIds.push($scope.scopeModel.selectedSaleZones[i].SaleZoneId);
