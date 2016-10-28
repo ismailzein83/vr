@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object stateBackupId;
-                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert", out stateBackupId, "Descriptions", Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
+                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert", out stateBackupId, Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
                 string backupCommand = _stateBackupBehavior.GetBackupCommands((long)stateBackupId);
                 ExecuteNonQueryText(backupCommand, null);
                 scope.Complete();
@@ -119,7 +119,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             StateBackup stateBackup = new StateBackup
            {
                StateBackupId = (long)reader["ID"],
-               Description = reader["Description"] as string,
                Info = Vanrise.Common.Serializer.Deserialize<StateBackupType>(reader["Info"] as string),
                BackupDate = GetReaderValue<DateTime>(reader, "BackupDate"),
                RestoreDate = GetReaderValue<DateTime?>(reader, "RestoreDate")
