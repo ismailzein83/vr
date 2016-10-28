@@ -11,7 +11,8 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public override void Cleanup(Dictionary<CleanupDataType, object> data)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(CleanupDataType.SaleZone) || data.ContainsKey(CleanupDataType.SupplierZone))
+                new GenericRuleCleanupManager().Cleanup(data);
         }
     }
 }

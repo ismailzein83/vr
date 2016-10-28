@@ -11,7 +11,11 @@ namespace TOne.WhS.Routing.Business.Extensions
     {
         public override void Cleanup(Dictionary<CleanupDataType, object> data)
         {
-            throw new NotImplementedException();
+            if(data.ContainsKey(CleanupDataType.SaleZone))
+                new RouteRuleCleanupManager().Cleanup(data);
+
+            if (data.ContainsKey(CleanupDataType.SaleZone) || data.ContainsKey(CleanupDataType.SupplierZone))
+                new RouteOptionRuleCleanupManager().Cleanup(data);
         }
     }
 }
