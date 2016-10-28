@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
 using TOne.WhS.Analytics.Entities.BillingReport.RoutingAnalysis;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -14,6 +16,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             #region BillingStats
             List<long> topZoneIds = new List<long>();
@@ -146,6 +149,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 if (result != null)
                     foreach (var analyticRecord in result.Data)
                     {
+                        CarrierAccount supplier = new CarrierAccount();
                         RoutingAnalysisFormatted routingAnalysis = new RoutingAnalysisFormatted();
 
                         var zoneValue = analyticRecord.DimensionValues[0];
@@ -154,52 +158,58 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                         var supplierValue = analyticRecord.DimensionValues[1];
                         if (supplierValue != null)
+                        {
+                            supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
                             routingAnalysis.Supplier = supplierValue.Name;
+                        }
 
-                        MeasureValue duration;
-                        analyticRecord.MeasureValues.TryGetValue("DurationNet", out duration);
-                        routingAnalysis.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
-                        routingAnalysis.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Duration);
+                        if (supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !supplier.IsDeleted)
+                        {
+                            MeasureValue duration;
+                            analyticRecord.MeasureValues.TryGetValue("DurationNet", out duration);
+                            routingAnalysis.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
+                            routingAnalysis.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Duration);
 
-                        MeasureValue saleNet;
-                        analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out saleNet);
-                        routingAnalysis.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
-                        routingAnalysis.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.SaleNet);
-
-
-                        MeasureValue costNet;
-                        analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out costNet);
-                        routingAnalysis.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
-                        routingAnalysis.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.CostNet);
+                            MeasureValue saleNet;
+                            analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out saleNet);
+                            routingAnalysis.SaleNet = Convert.ToDouble(saleNet.Value ?? 0.0);
+                            routingAnalysis.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.SaleNet);
 
 
-                        MeasureValue profit;
-                        analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
-                        routingAnalysis.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                        routingAnalysis.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Profit);
+                            MeasureValue costNet;
+                            analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out costNet);
+                            routingAnalysis.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
+                            routingAnalysis.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.CostNet);
 
-                        routingAnalysis.AVGCost = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
-                            ? 0
-                            : (routingAnalysis.CostNet / (double)routingAnalysis.Duration);
-                        routingAnalysis.AVGCostFormatted = routingAnalysis.AVGCost == 0
-                            ? "0"
-                            : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
 
-                        routingAnalysis.AVGSale = (routingAnalysis.Duration == 0 || routingAnalysis.SaleNet == 0)
-                            ? 0
-                            : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
-                        routingAnalysis.AVGSaleFormatted = routingAnalysis.AVGSale == 0
-                            ? "0"
-                            : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGSale);
+                            MeasureValue profit;
+                            analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                            routingAnalysis.Profit = Convert.ToDouble(profit.Value ?? 0.0);
+                            routingAnalysis.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Profit);
 
-                        if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
-                            routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
-                        listRoutingAnalysisFormatteds.Add(routingAnalysis);
+                            routingAnalysis.AVGCost = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
+                                ? 0
+                                : (routingAnalysis.CostNet / (double)routingAnalysis.Duration);
+                            routingAnalysis.AVGCostFormatted = routingAnalysis.AVGCost == 0
+                                ? "0"
+                                : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
 
-                        TotalDuration += routingAnalysis.Duration;
-                        TotalCost += routingAnalysis.CostNet;
-                        TotalSale += routingAnalysis.SaleNet;
-                        TotalProfit += routingAnalysis.SaleNet - routingAnalysis.CostNet;
+                            routingAnalysis.AVGSale = (routingAnalysis.Duration == 0 || routingAnalysis.SaleNet == 0)
+                                ? 0
+                                : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
+                            routingAnalysis.AVGSaleFormatted = routingAnalysis.AVGSale == 0
+                                ? "0"
+                                : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGSale);
+
+                            if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
+                                routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
+                            listRoutingAnalysisFormatteds.Add(routingAnalysis);
+
+                            TotalDuration += routingAnalysis.Duration;
+                            TotalCost += routingAnalysis.CostNet;
+                            TotalSale += routingAnalysis.SaleNet;
+                            TotalProfit += routingAnalysis.SaleNet - routingAnalysis.CostNet;
+                        }
                  }
 
                 parameters.TotalDuration = TotalDuration;
@@ -212,6 +222,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 if (result != null)
                     foreach (var analyticRecord in result.Data)
                     {
+                        CarrierAccount supplier = new CarrierAccount();
                         RoutingAnalysisFormatted routingAnalysis;
                         string zoneName = "", supplierName = "";
                         var zoneValue = analyticRecord.DimensionValues[0];
@@ -220,19 +231,26 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                         var supplierValue = analyticRecord.DimensionValues[1];
                         if (supplierValue != null)
-                            supplierName = supplierValue.Name;
-                        routingAnalysisFormatteds.TryGetValue(zoneName + supplierName, out routingAnalysis);
-                        if (routingAnalysis != null)
                         {
-                            MeasureValue asrMeasure;
-                            analyticRecord.MeasureValues.TryGetValue("ASR", out asrMeasure);
-                            routingAnalysis.ASR = Convert.ToDecimal(asrMeasure.Value ?? 0.0);
-                            routingAnalysis.ASRFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ASR);
+                            supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
+                            supplierName = supplierValue.Name;
+                        }
 
-                            MeasureValue acdMeasure;
-                            analyticRecord.MeasureValues.TryGetValue("ACD", out acdMeasure);
-                            routingAnalysis.ACD = Convert.ToDecimal(acdMeasure.Value ?? 0.0);
-                            routingAnalysis.ACDFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ACD);
+                        if (supplier != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !supplier.IsDeleted)
+                        {
+                            routingAnalysisFormatteds.TryGetValue(zoneName + supplierName, out routingAnalysis);
+                            if (routingAnalysis != null)
+                            {
+                                MeasureValue asrMeasure;
+                                analyticRecord.MeasureValues.TryGetValue("ASR", out asrMeasure);
+                                routingAnalysis.ASR = Convert.ToDecimal(asrMeasure.Value ?? 0.0);
+                                routingAnalysis.ASRFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ASR);
+
+                                MeasureValue acdMeasure;
+                                analyticRecord.MeasureValues.TryGetValue("ACD", out acdMeasure);
+                                routingAnalysis.ACD = Convert.ToDecimal(acdMeasure.Value ?? 0.0);
+                                routingAnalysis.ACDFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ACD);
+                            }
                         }
                     }
 

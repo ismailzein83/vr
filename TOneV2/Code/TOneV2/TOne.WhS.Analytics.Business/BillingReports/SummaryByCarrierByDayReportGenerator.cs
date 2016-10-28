@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -13,6 +15,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
             List<string> listGrouping = new List<string>();
             listGrouping.Add("Day");
 
@@ -80,6 +84,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if(result != null)
             foreach (var analyticRecord in result.Data)
             {
+                CarrierAccount carrier = new CarrierAccount();
+
                 SummaryByCarrier carrierSummary = new SummaryByCarrier();
 
                 var dayValue = analyticRecord.DimensionValues[0];
@@ -89,36 +95,39 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                 var carrierValue = analyticRecord.DimensionValues[1];
                 if (carrierValue != null)
+                {
+                    carrier = carrierAccountManager.GetCarrierAccount((int)carrierValue.Value);
                     carrierSummary.Carrier = carrierValue.Name;
+                }
 
-                MeasureValue calls;
+                if (carrier != null && carrier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !carrier.IsDeleted)
+                {
+                    MeasureValue calls;
 
-                analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
-                carrierSummary.Attempts = Convert.ToInt32(calls.Value ?? 0.0);
+                    analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
+                    carrierSummary.Attempts = Convert.ToInt32(calls.Value ?? 0.0);
 
-                carrierSummary.AttemptsFormatted = ReportHelpers.FormatNumber(carrierSummary.Attempts);
-
-
-                MeasureValue durationNet;
-                analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
-                carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
-                carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.DurationNet);
+                    carrierSummary.AttemptsFormatted = ReportHelpers.FormatNumber(carrierSummary.Attempts);
 
 
-                MeasureValue duration;
-                analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
-                carrierSummary.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
-                carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Duration);
+                    MeasureValue durationNet;
+                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                    carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
+                    carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.DurationNet);
 
-                MeasureValue net;
-                analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
-                carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
-                carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
 
-                
-        
+                    MeasureValue duration;
+                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
+                    carrierSummary.Duration = Convert.ToDecimal(duration.Value ?? 0.0);
+                    carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Duration);
 
-                listCarrierSummary.Add(carrierSummary);
+                    MeasureValue net;
+                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
+                    carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
+                    carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
+
+                    listCarrierSummary.Add(carrierSummary);
+                }
             }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();

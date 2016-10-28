@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Analytics.Entities.BillingReport;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -119,14 +120,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (zoneValue != null)
                         detailedBillingByZone.Zone = zoneValue.Name;
 
-                    bool isDeleted = false;
+                    CarrierAccount carrierAccount = new CarrierAccount();
 
                     if (parameters.IsCost)
                     {
                         if (parameters.GroupBySupplier)
                         {
                             var supplierValue = analyticRecord.DimensionValues[1];
-                            isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
+                            carrierAccount = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
                             if (supplierValue != null)
                                 detailedBillingByZone.SupplierID = supplierValue.Name;
                         }
@@ -134,11 +135,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                     {
                         var customerValue = analyticRecord.DimensionValues[1];
-                        isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
+                        carrierAccount = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         if (customerValue != null)
                             detailedBillingByZone.CustomerID = customerValue.Name;
                     }
-                    if (!isDeleted)
+                    if (carrierAccount != null && carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
+                        !carrierAccount.IsDeleted)
                     {
                         MeasureValue durationNet;
                         analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);

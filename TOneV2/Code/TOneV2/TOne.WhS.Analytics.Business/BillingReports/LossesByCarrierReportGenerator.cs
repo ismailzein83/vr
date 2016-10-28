@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -13,6 +15,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
@@ -57,12 +60,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    
+   
                     LossesByCarrier lossesByCarrier = new LossesByCarrier();
+                    CarrierAccount customer = new CarrierAccount();
+                    CarrierAccount supplier = new CarrierAccount();
 
                     var supplierValue = analyticRecord.DimensionValues[0];
                     if (supplierValue != null)
+                    {
+                        supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
                         lossesByCarrier.SupplierName = supplierValue.Name;
+                    }
 
                     var saleZoneValue = analyticRecord.DimensionValues[1];
                     if (saleZoneValue != null)
@@ -74,33 +82,41 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     var customerValue = analyticRecord.DimensionValues[3];
                     if (customerValue != null)
+                    {
+                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         lossesByCarrier.CustomerName = customerValue.Name;
+                    }
 
-                    MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    if (supplier != null && customer != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
+                        customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
+                        !supplier.IsDeleted && !customer.IsDeleted)
+                    {
+                        MeasureValue saleNet;
+                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
-                    lossesByCarrier.SaleNet =  Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    lossesByCarrier.SaleNetFormatted = lossesByCarrier.SaleNet == 0 ? "" :
-                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet);
+                        lossesByCarrier.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
+                        lossesByCarrier.SaleNetFormatted = lossesByCarrier.SaleNet == 0 ? "" :
+                            ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet);
 
-                    MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                    lossesByCarrier.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
-                    lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
-                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.CostNet);
+                        MeasureValue costNet;
+                        analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                        lossesByCarrier.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
+                        lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
+                            ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.CostNet);
 
-                    MeasureValue DurationNet;
-                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out DurationNet);
-                    lossesByCarrier.Duration = Convert.ToDecimal(DurationNet.Value ?? 0.0);
-                    lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
-                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.Duration);
-              
-                    lossesByCarrier.Margin =
-                        ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
+                        MeasureValue DurationNet;
+                        analyticRecord.MeasureValues.TryGetValue("DurationNet", out DurationNet);
+                        lossesByCarrier.Duration = Convert.ToDecimal(DurationNet.Value ?? 0.0);
+                        lossesByCarrier.DurationFormatted = lossesByCarrier.Duration == 0 ? "" :
+                            ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.Duration);
 
-                    lossesByCarrier.Percentage = (lossesByCarrier.SaleNet != 0.0) ? ReportHelpers.FormatNumberPercentage(1 - lossesByCarrier.CostNet / lossesByCarrier.SaleNet) : "0%";
-                    if ((lossesByCarrier.SaleNet - lossesByCarrier.CostNet)/lossesByCarrier.SaleNet*100 < parameters.Margin)
-                    listLossesByCarrier.Add(lossesByCarrier);
+                        lossesByCarrier.Margin =
+                            ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet - lossesByCarrier.CostNet);
+
+                        lossesByCarrier.Percentage = (lossesByCarrier.SaleNet != 0.0) ? ReportHelpers.FormatNumberPercentage(1 - lossesByCarrier.CostNet / lossesByCarrier.SaleNet) : "0%";
+                        if ((lossesByCarrier.SaleNet - lossesByCarrier.CostNet) / lossesByCarrier.SaleNet * 100 < parameters.Margin)
+                            listLossesByCarrier.Add(lossesByCarrier);
+                    }
                 }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();

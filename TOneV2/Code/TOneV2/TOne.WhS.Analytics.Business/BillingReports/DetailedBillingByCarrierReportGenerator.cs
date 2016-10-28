@@ -60,22 +60,27 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 foreach (var analyticRecord in result.Data)
                 {
                     CarrierSummaryFormatted carrierSummary = new CarrierSummaryFormatted();
-
-                    bool isDeleted = false;
+                    CarrierAccount customer = new CarrierAccount();
+                    CarrierAccount supplier = new CarrierAccount();
 
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
                     {
-                        isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
+                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         carrierSummary.Customer = customerValue.Name;
                     }
 
-                    if (!isDeleted)
+                    var supplierValue = analyticRecord.DimensionValues[1];
+                    if (supplierValue != null)
                     {
-                        var supplierValue = analyticRecord.DimensionValues[1];
-                        if (supplierValue != null)
-                            carrierSummary.Supplier = supplierValue.Name;
+                        supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
+                        carrierSummary.Supplier = supplierValue.Name;
+                    }
 
+                    if (supplier != null && customer != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
+                        customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
+                        !supplier.IsDeleted && !customer.IsDeleted)
+                    {
                         var saleZoneValue = analyticRecord.DimensionValues[2];
                         if (saleZoneValue != null)
                             carrierSummary.SaleZoneName = saleZoneValue.Name;
