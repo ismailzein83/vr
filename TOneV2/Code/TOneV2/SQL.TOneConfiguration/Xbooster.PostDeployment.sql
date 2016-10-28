@@ -102,3 +102,18 @@ end
 
 GO
 Delete from [runtime].[SchedulerTaskActionType] where Id='0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9' --Exchange Rate
+
+
+--update permission to existing users.GO
+update	p
+set 	p.EntityId= bem.Id
+from	[sec].[Permission] p
+		inner join [sec].[BusinessEntityModule] bem on p.EntityId=bem.OldId
+where	ISNUMERIC(p.EntityId)>0 and p.EntityType=0
+GO
+update	p
+set 	p.EntityId= bem.Id
+from	[sec].[Permission] p
+		inner join [sec].[BusinessEntity] bem on p.EntityId=bem.OldId
+where	ISNUMERIC(p.EntityId)>0 and p.EntityType=1
+GO
