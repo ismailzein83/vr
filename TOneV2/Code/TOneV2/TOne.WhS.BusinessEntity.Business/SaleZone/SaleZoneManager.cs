@@ -127,10 +127,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
                     return false;
 
-                if (filter.AvailableZoneIds != null && !filter.AvailableZoneIds.Contains(zone.SaleZoneId))
+                if (filter.AvailableZoneIds != null && filter.AvailableZoneIds.Count() > 0 && !filter.AvailableZoneIds.Contains(zone.SaleZoneId))
                     return false;
 
-                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
+                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Count() > 0 && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
                     return false;
 
                 return true;
