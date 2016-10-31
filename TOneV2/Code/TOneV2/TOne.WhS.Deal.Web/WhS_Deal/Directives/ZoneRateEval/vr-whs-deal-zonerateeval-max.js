@@ -31,16 +31,11 @@ app.directive('vrWhsDealZonerateevalMax', [function () {
 			var api = {};
 
 			api.load = function (payload) {
-				if (payload != undefined) {
-					$scope.scopeModel.maxRate = payload.MaxRate;
-				}
+				
 			};
 
 			api.getData = function () {
-				return {
-					$type: null,
-					MaxRate: $scope.scopeModel.maxRate
-				};
+				
 			};
 
 			if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')

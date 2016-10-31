@@ -31,16 +31,11 @@ app.directive('vrWhsDealZonerateevalAvg', [function () {
 			var api = {};
 
 			api.load = function (payload) {
-				if (payload != undefined) {
-					$scope.scopeModel.avgRate = payload.AvgRate;
-				}
+				
 			};
 
 			api.getData = function () {
-				return {
-					$type: null,
-					AvgRate: $scope.scopeModel.avgRate
-				};
+				
 			};
 
 			if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
