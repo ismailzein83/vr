@@ -116,6 +116,7 @@
     <Compile Include="SwitchMigration\SwitchContext.cs" />
     <Compile Include="SwitchMigration\SwitchLogger.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRules.cs" />
+    <Compile Include="SwitchMigration\SwitchRulesMigrator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">

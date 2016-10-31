@@ -74,8 +74,15 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Transformation.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
@@ -102,6 +109,7 @@
     <Compile Include="Common\Migrator.cs" />
     <Compile Include="Migrators\Rules\MarketPriceRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\CommissionRuleMigrator.cs" />
+    <Compile Include="Migrators\Rules\SwitchRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\TariffRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\TodRuleMigrator.cs" />
     <Compile Include="Migrators\VRTimeZoneMigrator.cs" />
@@ -135,6 +143,7 @@
     <Compile Include="Migrators\Rules\RouteBlockRuleMigrator.cs" />
     <Compile Include="SwitchMigration\ISwitchParser.cs" />
     <Compile Include="SwitchMigration\MVTSSwitchMigrationParser.cs" />
+    <Compile Include="SwitchMigration\MVTSSwitchMigrator.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRulesManager.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRulesMigrator.cs" />
     <Compile Include="SwitchMigration\SwitchMigrationParser.cs" />

@@ -20,7 +20,7 @@ namespace TOne.WhS.DBSync.Business
     public class RuleMigrator : Migrator<SourceRule, Rule>
     {
         readonly RulesDBSyncDataManager _dbSyncDataManager;
-        RuleBaseMigrator _routeRuleBaseMigrator;
+        RuleBaseMigrator _rulesBaseMigrator;
         CurrencySettingData _currencySettingData;
         internal static DateTime s_defaultRuleBED = DateTime.Parse("2000-01-01");
         public RuleMigrator(MigrationContext context)
@@ -59,31 +59,37 @@ namespace TOne.WhS.DBSync.Business
                 switch (ruleEntitiesEnum)
                 {
                     case RuleEntitiesEnum.RouteOverride:
-                        _routeRuleBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
+                        _rulesBaseMigrator = new RouteOverrideRuleMigrator(ruleContext);
                         break;
                     case RuleEntitiesEnum.RouteOptionBlock:
-                        _routeRuleBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
+                        _rulesBaseMigrator = new RouteOptionBlockRuleMigrator(ruleContext);
                         break;
                     case RuleEntitiesEnum.Commission:
-                        _routeRuleBaseMigrator = new CommissionRuleMigrator(ruleContext);
+                        _rulesBaseMigrator = new CommissionRuleMigrator(ruleContext);
                         break;
                     case RuleEntitiesEnum.SaleMarketPrice:
-                        _routeRuleBaseMigrator = new MarketPriceRuleMigrator(ruleContext);
+                        _rulesBaseMigrator = new MarketPriceRuleMigrator(ruleContext);
                         break;
                     case RuleEntitiesEnum.RouteBlock:
-                        _routeRuleBaseMigrator = new RouteBlockRuleMigrator(ruleContext);
+                        _rulesBaseMigrator = new RouteBlockRuleMigrator(ruleContext);
                         break;
                     case RuleEntitiesEnum.Tariff:
-                        _routeRuleBaseMigrator = new TariffRuleMigrator(ruleContext);
+                        _rulesBaseMigrator = new TariffRuleMigrator(ruleContext);
+                        break;
+                    case RuleEntitiesEnum.Tod:
+                        _rulesBaseMigrator = new CommissionRuleMigrator(ruleContext);
+                        break;
+                    case RuleEntitiesEnum.SwitchRules:
+                        _rulesBaseMigrator = new SwitchRuleMigrator(ruleContext);
                         break;
                     default:
-                        _routeRuleBaseMigrator = null;
+                        _rulesBaseMigrator = null;
                         break;
                 }
-                if (_routeRuleBaseMigrator != null)
+                if (_rulesBaseMigrator != null)
                 {
-                    routeRules.AddRange(_routeRuleBaseMigrator.GetSourceRules());
-                    _routeRuleBaseMigrator.WriteFaildRowsLog();
+                    routeRules.AddRange(_rulesBaseMigrator.GetSourceRules());
+                    _rulesBaseMigrator.WriteFaildRowsLog();
                 }
             }
 

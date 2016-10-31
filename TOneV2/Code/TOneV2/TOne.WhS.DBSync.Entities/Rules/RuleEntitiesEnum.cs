@@ -14,6 +14,7 @@ namespace TOne.WhS.DBSync.Entities
         Commission,
         SaleMarketPrice,
         RouteBlock,
-        Tod
+        Tod,
+        SwitchRules
     }
 }
