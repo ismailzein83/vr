@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (backupData.OwnerType == SalePriceListOwnerType.Customer)
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return String.Format("Backup from Selling Rates for {0} customer",carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
+                return String.Format("Backup from Selling Rates for {0} customer", carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
             }
             else
             {
@@ -29,7 +29,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool IsMatch(IStateBackupContext context, object filter)
         {
-            throw new NotImplementedException();
+            if (context.Data == null)
+                return false;
+
+            StateBackupSaleEntity backupData = context.Data as StateBackupSaleEntity;
+            SaleEntityStateBackupFilter filterData = filter as SaleEntityStateBackupFilter;
+
+            if (filterData.OwnerIds == null && filterData.OwnerType.HasValue)
+                return filterData.OwnerType == backupData.OwnerType;
+
+            else if (!filterData.OwnerType.HasValue)
+                return true;
+
+            return filterData.OwnerIds.Contains(backupData.OwnerId);
         }
     }
 }

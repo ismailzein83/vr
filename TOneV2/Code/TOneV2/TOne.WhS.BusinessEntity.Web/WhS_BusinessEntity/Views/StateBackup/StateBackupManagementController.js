@@ -7,7 +7,7 @@
     function StateBackupManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_StateBackupAPIService) {
         var gridAPI;
         var stateBackupTypesDirectiveAPI;
-        var stateBackupTypesDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var stateBackupTypesDirectiveReadyPromiseDeferred;
 
         defineScope();
         load();
@@ -29,16 +29,16 @@
 
             $scope.onStateBackupTypesDirectiveReady = function (api) {
                 stateBackupTypesDirectiveAPI = api;
-                //var setLoader = function (value) {
-                //    $scope.isLoadingAction = value;
-                //};
+                var setLoader = function (value) {
+                    $scope.scopeModel.isGettingData = value;
+                };
 
-                //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stateBackupTypesDirectiveAPI, undefined, setLoader, stateBackupTypesDirectiveReadyPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stateBackupTypesDirectiveAPI, undefined, setLoader, stateBackupTypesDirectiveReadyPromiseDeferred);
             }
         }
 
         function load() {
-            $scope.isGettingData = true;
+            $scope.scopeModel.isGettingData = true;
             loadAllControls();
         }
 
@@ -49,13 +49,12 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isGettingData = false;
+                  $scope.scopeModel.isGettingData = false;
               });
         }
 
 
         function loadStateBackupsTypes() {
-            var promises = [];
 
             var loadStateBackupTypesPromise = WhS_BE_StateBackupAPIService.GetStateBackupTypes().then(function (response) {
                 angular.forEach(response, function (item) {
@@ -63,29 +62,17 @@
                 });
             });
 
-            promises.push(loadStateBackupTypesPromise);
-
-            var loadStateBackupDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadStateBackupDirectivePromiseDeferred.promise);
-
-
-            var setLoader = function (value) {
-                $scope.isLoadingAction = value;
-            };
-
-            stateBackupTypesDirectiveReadyPromiseDeferred.promise.then(function () {
-                stateBackupTypesDirectiveReadyPromiseDeferred = undefined;
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stateBackupTypesDirectiveAPI, undefined, setLoader, loadStateBackupDirectivePromiseDeferred);
-            });
-
-            return UtilsService.waitMultiplePromises(promises);
+            return loadStateBackupTypesPromise;
         }
 
 
         function setFilterObject() {
             filter = {
+                BackupTypeFilterConfigId: $scope.scopeModel.selectedStateBackupType != undefined ? $scope.scopeModel.selectedStateBackupType.ExtensionConfigurationId : undefined,
+                BackupTypeFilterObject: stateBackupTypesDirectiveAPI != undefined ? stateBackupTypesDirectiveAPI.getData() : undefined,
+                From: $scope.scopeModel.fromBackupDate,
+                To: $scope.scopeModel.toBackupDate
             };
-
         }
 
     }

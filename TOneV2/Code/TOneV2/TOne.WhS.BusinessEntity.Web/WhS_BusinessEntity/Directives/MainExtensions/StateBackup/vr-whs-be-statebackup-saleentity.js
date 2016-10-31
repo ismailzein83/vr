@@ -90,16 +90,22 @@ app.directive("vrWhsBeStatebackupSaleentity", ['UtilsService', 'VRUIUtilsService
                 var api = {};
 
                 api.getData = function () {
-                    var BackupTypeFilterObject = {};
                     var ownerType = ownerTypeSelectorAPI.getSelectedIds();
 
                     if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-                        BackupTypeFilterObject.SellingProductIds = sellingProductSelectorAPI.getSelectedIds()
+                        return {
+                            $type: "TOne.WhS.BusinessEntity.Entities.SaleEntityStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
+                            OwnerType: ownerType,
+                            OwnerIds: sellingProductSelectorAPI.getSelectedIds()
+                        }
 
                     else
-                        BackupTypeFilterObject.SellingNumberPlanIds = carrierAccountSelectorAPI.getSelectedIds()
+                        return {
+                            $type: "TOne.WhS.BusinessEntity.Entities.SaleEntityStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
+                            OwnerType: ownerType,
+                            OwnerIds: carrierAccountSelectorAPI.getSelectedIds()
+                        }
 
-                    return BackupTypeFilterObject;
                 };
 
                 api.load = function (payload) {

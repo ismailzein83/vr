@@ -10,6 +10,7 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "StateBackup")]
     public class WhSBE_StateBackupController : BaseAPIController
     {

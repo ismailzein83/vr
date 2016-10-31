@@ -45,10 +45,10 @@ app.directive("vrWhsBeStatebackupSupplier", ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.getData = function () {
-                    var supplierData = {
+                    return {
+                        $type: "TOne.WhS.BusinessEntity.Entities.SupplierStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
                         SupplierIds : supplierSelectorAPI.getSelectedIds()
                 };
-                return supplierData;
             };
 
             api.load = function (payload) {

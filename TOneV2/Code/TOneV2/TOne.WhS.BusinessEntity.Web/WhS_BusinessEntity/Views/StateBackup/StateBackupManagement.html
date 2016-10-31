@@ -1,22 +1,22 @@
-﻿<vr-panel ng-controller="WhS_BE_StateBackupManagementController" vr-loader="isGettingData">
+﻿<vr-panel ng-controller="WhS_BE_StateBackupManagementController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isGettingData">
             <vr-row removeline>
 
                 <vr-columns width="normal">
-                    <vr-select label="Type" datatextfield="Type" datavaluefield="StateBackupId"
+                    <vr-select label="Type" datatextfield="Title" datavaluefield="ExtensionConfigurationId"
                                datasource="scopeModel.stateBackupTypes" selectedvalues="scopeModel.selectedStateBackupType">
                     </vr-select>
                 </vr-columns>
 
-                <vr-columns width="fullrow" ng-if="scopeModel.selectedStateBackupType">
+                <span ng-if="scopeModel.selectedStateBackupType">
                     <vr-directivewrapper directive="scopeModel.selectedStateBackupType.FilterEditor" on-ready="onStateBackupTypesDirectiveReady"></vr-directivewrapper>
+                </span>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="From" value="scopeModel.fromBackupDate" isrequired></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="From" value="fromBackupDate"></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="To" value="toBackupDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="To" value="scopeModel.toBackupDate"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </div>

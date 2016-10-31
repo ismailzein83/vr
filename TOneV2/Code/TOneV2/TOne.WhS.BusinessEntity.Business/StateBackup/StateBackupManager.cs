@@ -99,7 +99,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     StateBackupTypeConfig config = this.BackupTypeConfigurations[entity.Info.ConfigId];
                     StateBackupContext context = new StateBackupContext() { Data = entity.Info };
-                    if (config.Behavior.IsMatch(context, BackupTypeFilterObject))
+
+                    if (BackupTypeFilterObject == null || config.Behavior.IsMatch(context, BackupTypeFilterObject))
                         filteredResult.Add(entity);
                 }
 

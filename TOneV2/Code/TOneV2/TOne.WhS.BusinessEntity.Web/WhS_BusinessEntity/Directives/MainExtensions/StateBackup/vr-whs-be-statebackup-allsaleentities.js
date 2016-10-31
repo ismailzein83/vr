@@ -45,8 +45,8 @@ app.directive("vrWhsBeStatebackupAllsaleentities", ['UtilsService', 'VRUIUtilsSe
                 var api = {};
 
                 api.getData = function () {
-                    return backupTypeFilterObject = {
-                        $type: 'TOne.WhS.BusinessEntity.Entities.AllSaleEntitiesStateBackupFilter, TOne.WhS.BusinessEntity.Entities',
+                    return {
+                        $type : "TOne.WhS.BusinessEntity.Entities.AllSaleEntitiesStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
                         SellingNumberPlanIds: sellingNumberPlanSelectorAPI.getSelectedIds()
                     }
                 };

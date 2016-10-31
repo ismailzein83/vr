@@ -22,7 +22,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool IsMatch(IStateBackupContext context, object filter)
         {
-            throw new NotImplementedException();
+            if (context.Data == null)
+                return false;
+
+            StateBackupAllSaleEntities backupData = context.Data as StateBackupAllSaleEntities;
+            AllSaleEntitiesStateBackupFilter filterData = filter as AllSaleEntitiesStateBackupFilter;
+            
+            if (filterData.SellingNumberPlanIds == null)
+                return true;
+
+            return filterData.SellingNumberPlanIds.Contains(backupData.SellingNumberPlanId);
         }
     }
 }

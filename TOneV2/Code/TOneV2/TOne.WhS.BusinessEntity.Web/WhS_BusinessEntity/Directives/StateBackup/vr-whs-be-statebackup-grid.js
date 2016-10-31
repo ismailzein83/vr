@@ -69,7 +69,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
             }];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.RestoreDate == null)
+                if (dataItem.Entity.RestoreDate == null)
                     return menuActions;
             };
         }
@@ -81,7 +81,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
             }
             return VRNotificationService.showConfirmation().then(function (result) {
                 if (result) {
-                    return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.StateBackupId).then(function (response) {
+                    return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.Entity.StateBackupId).then(function (response) {
                         if (VRNotificationService.notifyOnItemUpdated("State Backup", response, ""))
                             onStateBackupRestored(response.UpdatedObject);
                     });

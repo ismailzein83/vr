@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<StateBackup> GetFilteredStateBackups(StateBackupQuery input)
         {
-            return GetItemsSP("[TOneWhS_BE].[sp_StateBackup_GetFiltered]", StateBackupMapper);
+            return GetItemsSP("[TOneWhS_BE].[sp_StateBackup_GetFiltered]", StateBackupMapper, input.BackupTypeFilterConfigId, input.From, input.To);
         }
 
         public void BackupData(StateBackupType backupType)
@@ -119,6 +119,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             StateBackup stateBackup = new StateBackup
            {
                StateBackupId = (long)reader["ID"],
+               BackupTypeConfigId = GetReaderValue<Guid>(reader, "ConfigID"),
                Info = Vanrise.Common.Serializer.Deserialize<StateBackupType>(reader["Info"] as string),
                BackupDate = GetReaderValue<DateTime>(reader, "BackupDate"),
                RestoreDate = GetReaderValue<DateTime?>(reader, "RestoreDate")

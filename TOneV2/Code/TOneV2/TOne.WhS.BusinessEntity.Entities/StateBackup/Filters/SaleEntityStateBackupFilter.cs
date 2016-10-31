@@ -10,6 +10,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public IEnumerable<int> OwnerIds { get; set; }
 
-        public SalePriceListOwnerType OwnerType { get; set; }
+        public SalePriceListOwnerType? OwnerType { get; set; }
     }
 }
