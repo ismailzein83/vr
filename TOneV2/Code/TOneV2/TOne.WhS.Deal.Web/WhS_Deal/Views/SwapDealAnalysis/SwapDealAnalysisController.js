@@ -55,6 +55,15 @@
 				resultReadyDeferred.resolve();
 			};
 
+			$scope.scopeModel.validateOutboundTab = function () {
+				if (settingsAPI == undefined || settingsAPI.getCarrierAccountId() == undefined) {
+					$scope.scopeModel.isOutboundTabVisible = false;
+					return 'Select a carrier';
+				}
+				$scope.scopeModel.isOutboundTabVisible = true;
+				return null;
+			};
+
 			$scope.scopeModel.close = function () {
 				$scope.modalContext.closeModal();
 			};

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_SwapDealAnalysisSettingsService', 'UtilsService', function (WhS_Deal_SwapDealAnalysisSettingsService, UtilsService) {
+app.directive('vrWhsDealSwapdealanalysisSettingsOutboundEditor', ['WhS_Deal_SwapDealAnalysisSettingsService', 'UtilsService', function (WhS_Deal_SwapDealAnalysisSettingsService, UtilsService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -54,7 +54,6 @@ app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_Swap
 
 			defineMenuActions();
 		}
-
 		function defineAPI() {
 			var api = {};
 
@@ -114,7 +113,10 @@ app.directive('vrWhsDealSwapdealanalysisOutboundSettingsEditor', ['WhS_Deal_Swap
 				if (updatedRateCalcMethod != undefined) {
 					var rateCalcMethods = getRateCalcMethods();
 					var updatedRateCalcMethodIndex = UtilsService.getItemIndexByVal(rateCalcMethods, updatedRateCalcMethod.CalculationMethodId, 'CalculationMethodId');
-					$scope.scopeModel.rateCalcMethods[updatedRateCalcMethodIndex] = { Entity: updatedRateCalcMethod };
+					$scope.scopeModel.rateCalcMethods[updatedRateCalcMethodIndex] = {
+						isSelected: rateCalcMethod.isSelected,
+						Entity: updatedRateCalcMethod
+					};
 				}
 			};
 			WhS_Deal_SwapDealAnalysisSettingsService.editOutboundRateCalcMethod(rateCalcMethod.Entity.CalculationMethodId, rateCalcMethod.Entity, onRateCalcMethodUpdated);

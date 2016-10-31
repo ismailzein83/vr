@@ -5,8 +5,10 @@
 				<vr-tab header="'Settings'">
 					<vr-whs-deal-swapdealanalysis-settings on-ready="scopeModel.onSettingsReady" normal-col-num="4"></vr-whs-deal-swapdealanalysis-settings>
 				</vr-tab>
-				<vr-tab header="'Outbound Traffic'">
-					<vr-whs-deal-swapdealanalysis-outbound-management on-ready="scopeModel.onOutboundManagementReady"></vr-whs-deal-swapdealanalysis-outbound-management>
+				<vr-tab header="'Outbound Traffic'" ng-show="scopeModel.isOutboundTabVisible">
+					<vr-validator validate="scopeModel.validateOutboundTab()">
+						<vr-whs-deal-swapdealanalysis-outbound-management on-ready="scopeModel.onOutboundManagementReady"></vr-whs-deal-swapdealanalysis-outbound-management>
+					</vr-validator>
 				</vr-tab>
 			</vr-tabs>
 			<vr-whs-deal-swapdealanalysis-result on-ready="scopeModel.onResultReady" normal-col-num="3"></vr-whs-deal-swapdealanalysis-result>

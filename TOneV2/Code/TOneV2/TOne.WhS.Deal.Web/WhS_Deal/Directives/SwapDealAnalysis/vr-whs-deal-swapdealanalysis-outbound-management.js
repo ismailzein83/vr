@@ -54,6 +54,12 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 				$scope.scopeModel.outbounds.splice($scope.scopeModel.outbounds.indexOf(outbound), 1);
 			};
 
+			$scope.scopeModel.validateOutbounds = function () {
+				if ($scope.scopeModel.outbounds.length == 0)
+					return 'Add at least 1 outbound';
+				return null;
+			};
+
 			defineMenuActions();
 		}
 

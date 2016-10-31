@@ -1,16 +1,18 @@
 ﻿<vr-row>
 	<vr-columns width="fullrow">
 		<vr-button type="Add" data-onclick="scopeModel.addOutbound" standalone="true"></vr-button>
-		<vr-datagrid on-ready="scopeModel.onGridReady"
-					 datasource="scopeModel.outbounds"
-					 menuactions="scopeModel.menuActions"
-					 ondeleterow="scopeModel.removeOutbound"
-					 hidegridmenu="true"
-					 maxheight="300px"
-					 norowhighlightonclick="true">
-			<vr-datagridcolumn headertext="'Group Name'" field="'GroupName'" disablesorting></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Volume'" field="'Volume'" summaryfield="'TotalOutVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'Deal Rate'" field="'DealRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-		</vr-datagrid>
+		<vr-validator validate="scopeModel.validateOutbounds()">
+			<vr-datagrid on-ready="scopeModel.onGridReady"
+						 datasource="scopeModel.outbounds"
+						 menuactions="scopeModel.menuActions"
+						 ondeleterow="scopeModel.removeOutbound"
+						 hidegridmenu="true"
+						 maxheight="300px"
+						 norowhighlightonclick="true">
+				<vr-datagridcolumn headertext="'Group Name'" field="'GroupName'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Volume'" field="'Volume'" summaryfield="'TotalOutVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Deal Rate'" field="'DealRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+			</vr-datagrid>
+		</vr-validator>
 	</vr-columns>
 </vr-row>

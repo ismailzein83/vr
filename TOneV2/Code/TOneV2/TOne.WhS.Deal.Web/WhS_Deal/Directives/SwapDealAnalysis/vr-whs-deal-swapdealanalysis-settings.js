@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTypeEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_Deal_SwapDealAnalysisTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', function (WhS_Deal_SwapDealAnalysisTypeEnum, UtilsService, VRUIUtilsService, VRValidationService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -40,6 +40,10 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTy
 			//$scope.scopeModel.onAnalysisTypeSelectorReady = function (api) {
 			//	analysisTypeSelectorReadyDeferred.resolve();
 			//};
+
+			$scope.scopeModel.validateTimeRange = function () {
+				return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+			};
 
 			UtilsService.waitMultiplePromises([carrierAccountReadyDeferred.promise]).then(function () {
 				defineAPI();
