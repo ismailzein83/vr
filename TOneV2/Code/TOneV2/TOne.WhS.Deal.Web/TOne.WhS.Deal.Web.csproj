@@ -160,10 +160,14 @@
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\CustomersOutboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\FixedOutboundRateCalcMethodEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\FixedOutboundRateCalcMethodItemEditorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\SuppliersOutboundRateCalcMethodEditorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\SuppliersOutboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-customers-editor.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-customers-itemeditor.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-itemeditor.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-fixed-editor.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-suppliers-editor.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\vr-whs-deal-swapdealanalysis-ratecalcmethod-outbound-suppliers-itemeditor.js" />
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\Templates\SwapDealAnalysisInboundSettingsEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\Templates\SwapDealAnalysisOutboundSettingsEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\Templates\SwapDealSettingsEditorTemplate.html" />

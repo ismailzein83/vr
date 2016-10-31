@@ -1,9 +1,19 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-row>
+	<vr-columns width="fullrow">
+		<vr-button type="Add" data-onclick="scopeModel.addRateCalcMethod" standalone="true"></vr-button>
+		<vr-validator validate="scopeModel.validateRateCalcMethods()">
+			<vr-datagrid on-ready="scopeModel.onGridReady"
+						 datasource="scopeModel.rateCalcMethods"
+						 menuactions="scopeModel.menuActions"
+						 ondeleterow="scopeModel.removeRateCalcMethod"
+						 hidegridmenu="true"
+						 maxheight="300px"
+						 norowhighlightonclick="true">
+				<vr-datagridcolumn widthfactor="1" disablesorting="true">
+					<vr-check value="dataItem.isSelected"></vr-check>
+				</vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Rate Calc Method'" field="'Entity.Title'" disablesorting="true"></vr-datagridcolumn>
+			</vr-datagrid>
+		</vr-validator>
+	</vr-columns>
+</vr-row>

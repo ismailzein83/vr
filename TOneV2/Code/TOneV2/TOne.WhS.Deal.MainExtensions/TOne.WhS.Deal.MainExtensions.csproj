@@ -46,8 +46,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundItemRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundItemRateFixed.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundItemRateSuppliers.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundRateFixed.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundRateSuppliers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">

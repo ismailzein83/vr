@@ -90,10 +90,7 @@
 				var setLoader = function (value) {
 					$scope.scopeModel.isLoading = value;
 				};
-				var payload;
-				if (outboundEntity != undefined)
-					payload = outboundEntity.ItemCalculationMethod;
-				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
+				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
 			};
 
 			$scope.scopeModel.save = function () {
@@ -115,7 +112,9 @@
 		}
 
 		function loadAllControls() {
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadSupplierZoneSection, loadRateCalcMethodSelector, loadDirective]).catch(function (error) {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadSupplierZoneSection, loadRateCalcMethodSelector, loadDirective]).then(function () {
+				outboundEntity = undefined;
+			}).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
 				$scope.scopeModel.isLoading = false;

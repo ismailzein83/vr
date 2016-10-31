@@ -24,8 +24,16 @@ app.directive('vrWhsDealSwapdealSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 		var outboundSettingsEditorAPI;
 		var outboundSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
+		//var inboundSettingsEditorAPI;
+		//var inboundSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
 		function initializeController() {
 			$scope.scopeModel = {};
+
+			//$scope.scopeModel.onInboundSettingsEditorReady = function (api) {
+			//	inboundSettingsEditorAPI = api;
+			//	inboundSettingsEditorReadyDeferred.resolve();
+			//};
 
 			$scope.scopeModel.onOutboundSettingsEditorReady = function (api) {
 				outboundSettingsEditorAPI = api;
