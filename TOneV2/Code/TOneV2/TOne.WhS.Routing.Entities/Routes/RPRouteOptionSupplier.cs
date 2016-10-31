@@ -36,5 +36,7 @@ namespace TOne.WhS.Routing.Entities
         public int NumberOfUnblockedZones { get; set; }
 
         public decimal? Percentage { get; set; }
+
+        public int SupplierServiceWeight { get; set; }
     }
 }
