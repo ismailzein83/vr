@@ -153,7 +153,9 @@
     <Content Include="WhS_Deal\Constant\DealContractTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ModuleConfig.js" />
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
+    <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
+    <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\CustomersOutboundRateCalcMethodEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\CustomersOutboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Outbound\RateCalcMethod\Templates\FixedOutboundRateCalcMethodEditorTemplate.html" />
@@ -189,6 +191,12 @@
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volcommitmenttype-selector.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volumecommitment-grid.js" />
     <Content Include="WhS_Deal\Directives\VolumeCommitment\vr-whs-deal-volumecommitment-items.js" />
+    <Content Include="WhS_Deal\Directives\ZoneRateEval\Templates\AvgZoneRateEvalTemplate.html" />
+    <Content Include="WhS_Deal\Directives\ZoneRateEval\Templates\MaxZoneRateEvalTemplate.html" />
+    <Content Include="WhS_Deal\Directives\ZoneRateEval\Templates\TrafficZoneRateEvalTemplate.html" />
+    <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-avg.js" />
+    <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-max.js" />
+    <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-traffic.js" />
     <Content Include="WhS_Deal\Services\APIServices\DealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAnalysisAPIService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisService.js" />

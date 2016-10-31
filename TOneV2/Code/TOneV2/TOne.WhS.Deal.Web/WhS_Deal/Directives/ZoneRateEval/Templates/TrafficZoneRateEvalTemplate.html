@@ -1,0 +1,14 @@
+﻿<vr-columns colnum="{{trafficCtrl.normalColNum}}">
+	<vr-textbox type="number" label="Last" value="scopeModel.last" minvalue="0" isrequired="true"></vr-textbox>
+</vr-columns>
+<vr-columns colnum="{{trafficCtrl.normalColNum}}">
+	<vr-select on-ready="scopeModel.onTimePeriodSelectorReady"
+			   label="Time Period"
+			   datasource="scopeModel.timePeriods"
+			   datavaluefield="value"
+			   datatextfield="description"
+			   selectedvalues="scopeModel.selectedTimePeriod"
+			   isrequired="true"
+			   hideremoveicon="true">
+	</vr-select>
+</vr-columns>

@@ -1,4 +1,4 @@
-﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+﻿<vr-columns colnum="{{customersCtrl.normalColNum}}">
 	<vr-select on-ready="scopeModel.onCarrierFilterSelectorReady"
 			   label="Customers"
 			   datasource="scopeModel.carrierFilters"
@@ -11,8 +11,24 @@
 </vr-columns>
 <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCustomerSelectorReady"
 								   getcustomers="true"
-								   normal-col-num="{{ctrl.normalColNum}}"
+								   ismultipleselection="true"
+								   normal-col-num="{{customersCtrl.normalColNum}}"
 								   ng-show="scopeModel.areCustomersRequired()"
 								   isrequired="scopeModel.areCustomersRequired()"
 								   hideremoveicon="scopeModel.areCustomersRequired()">
 </vr-whs-be-carrieraccount-selector>
+<vr-columns colnum="{{customersCtrl.normalColNum}}">
+	<vr-select on-ready="scopeModel.onZoneRateEvalSelectorReady"
+			   label="Zone Rate Evaluation"
+			   datasource="scopeModel.zoneRateEvals"
+			   datavaluefield="value"
+			   datatextfield="description"
+			   selectedvalues="scopeModel.selectedZoneRateEval"
+			   isrequired="true"
+			   hideremoveicon="true">
+	</vr-select>
+</vr-columns>
+<vr-directivewrapper directive="scopeModel.selectedZoneRateEval.directive"
+					 on-ready="scopeModel.onDirectiveReady"
+					 normal-col-num="{{customersCtrl.normalColNum}}">
+</vr-directivewrapper>
