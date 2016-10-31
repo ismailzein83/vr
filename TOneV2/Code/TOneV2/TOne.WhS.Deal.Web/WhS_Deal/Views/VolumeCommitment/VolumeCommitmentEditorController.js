@@ -160,7 +160,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         };
-
         function buildVolumeCommitmentObjFromScope() {
             var obj = {
                 DealId: dealId,

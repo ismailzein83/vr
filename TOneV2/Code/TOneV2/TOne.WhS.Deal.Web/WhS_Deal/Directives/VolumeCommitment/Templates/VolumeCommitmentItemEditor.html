@@ -8,7 +8,7 @@
                             <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <span vr-loader="scopeModel.isLoadingDirective">
-                            <vr-directivewrapper directive="scopeModel.zoneSelector" selectedvalues="scopeModel.selectedZones" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
+                            <vr-directivewrapper directive="scopeModel.zoneSelector" selectedvalues="scopeModel.selectedZones" onblurdropdown="scopeModel.onZoneSelectorSelection" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
                         </span>
                     </vr-row>
                     <vr-row>

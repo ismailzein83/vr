@@ -8,6 +8,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
+                onblurdropdown:'=',
                 isrequired: "=",
                 supplierid: "=",
                 selectedvalues: '=',
@@ -58,7 +59,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                    + ' </span>'
                    + '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                    + '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
-                   + 'isrequired="ctrl.isrequired" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" entityName="Supplier Zone"></vr-select>'
+                   + 'isrequired="ctrl.isrequired" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" entityName="Supplier Zone"></vr-select>'
                    + '</vr-columns>'
         }
 

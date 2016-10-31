@@ -1,4 +1,4 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     'use strict';
 
@@ -11,7 +11,8 @@
         var isEditMode;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var zoneDirectiveAPI;
-
+        var zoneSelectionPromise;
+        var zoneLoaded;
         $scope.scopeModel = {};
         loadParameters();
         defineScope();
@@ -50,10 +51,15 @@
             }
             $scope.scopeModel.removeTier = function (dataItem) {
                 var index = $scope.scopeModel.tiers.indexOf(dataItem);
-               // $scope.scopeModel.tiers.splice(index, 1);
-                reorderAllTier(index)
+                reorderAllTier(index);
+            };
 
-            }
+            $scope.scopeModel.onZoneSelectorSelection = function () {
+                if (zoneLoaded) {
+                    rebulidTiers($scope.scopeModel.tiers);
+                };
+            };
+
             $scope.scopeModel.disabelTierAdd = function () {
                 return !hasNotLastTierRecord();
             }
@@ -105,20 +111,33 @@
                         names.push(zone.Name);
                 }
                 return names.join(",");
-            }
+            };
+
+
 
             return currentContext;
         }
 
         function loadZoneSection() {
-            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            zoneReadyPromiseDeferred.promise.then(function () {
-                var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
-                VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
-            });
+            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
+            var payload;
+            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.ZoneIds != undefined) {
+                payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
+                zoneSelectionPromise = UtilsService.createPromiseDeferred();
+            }
+            zoneReadyPromiseDeferred.promise.then(function () {              
+                VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred)
+                loadZonePromiseDeferred.promise.then(function () {
+                    rebulidTiers(volumeCommitmentItemEntity.Tiers);
+                    zoneLoaded = true;
+                });
+            });           
             return loadZonePromiseDeferred.promise;
+
+
         }
+
 
         function setTitle() {
             if (isEditMode && volumeCommitmentItemEntity != undefined)
@@ -129,15 +148,7 @@
 
         function loadStaticData() {
             if (volumeCommitmentItemEntity != undefined) {
-                $scope.scopeModel.name = volumeCommitmentItemEntity.Name;
-
-                if (volumeCommitmentItemEntity.Tiers != undefined && volumeCommitmentItemEntity.Tiers.length > 0) {
-                    for (var i = 0; i < volumeCommitmentItemEntity.Tiers.length; i++) {
-                        var tier = volumeCommitmentItemEntity.Tiers[i];
-                        var obj = bulidTierObject(tier,i)
-                        $scope.scopeModel.tiers.push(obj);
-                    }
-                }
+                $scope.scopeModel.name = volumeCommitmentItemEntity.Name;               
             }
         }
     
@@ -161,7 +172,8 @@
                 Tiers: tiers
             };
         }
-        function bulidTierObject(tier , index) {
+
+        function bulidTierObject(tier, index, hasException) {
             return {
                 tierId: index,
                 tierName: 'Tier ' + parseInt(index + 1),
@@ -172,9 +184,10 @@
                 RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
                 RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
                 ExceptionZoneRates: tier.ExceptionZoneRates,
-                HasException: tier.ExceptionZoneRates!= undefined && tier.ExceptionZoneRates.length > 0
+                HasException: (hasException != undefined) ? hasException : tier.ExceptionZoneRates != undefined && tier.ExceptionZoneRates.length > 0
             };
-        }
+        };
+
         function hasNotLastTierRecord() {
             for (var i = 0; i < $scope.scopeModel.tiers.length; i++) {
                 var tier = $scope.scopeModel.tiers[i];
@@ -183,12 +196,13 @@
             return true;
 
         }
+
         function addVolumeCommitmentItem() {
             var parameterObj = builVolumeCommitmentItemObjFromScope();
             if ($scope.onVolumeCommitmentItemAdded != undefined) {
                 $scope.onVolumeCommitmentItemAdded(parameterObj);
             }
-            $scope.modalContext.closeModal();
+            $scope.modalContext.closeModal();                
         }
 
         function updateVolumeCommitmentItem() {
@@ -209,9 +223,24 @@
                     $scope.scopeModel.tiers[nextindex] = bulidTierObject($scope.scopeModel.tiers[nextindex], nextindex);
                 }
             };
-           
             WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext());
         };
+
+        function findExceptionZoneIds(exrates) {
+            var newexrates = []
+            var allselectedzoneids = $scope.scopeModel.selectedZones;
+            if (allselectedzoneids == undefined || allselectedzoneids.length==0)
+                return newexrates;
+            for (var i = 0 ; i < exrates.length; i++) {
+                if (exrates[i].ZoneIds.some(containesInZonesIds)) {
+                    newexrates[newexrates.length] = {
+                        Rate: exrates[i].Rate,
+                        ZoneIds: exrates[i].ZoneIds.filter(containesInZonesIds)
+                    }
+                }
+            };
+            return newexrates;
+        }
 
         function reorderAllTier(index) {
             if (index + 1 == $scope.scopeModel.tiers.length) {
@@ -229,14 +258,32 @@
                         RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
                         RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
                         ExceptionZoneRates: tier.ExceptionZoneRates,
-                        HasException: tier.ExceptionZoneRates!= undefined && tier.ExceptionZoneRates.length > 0
-                    }
-                    newTiersArray.push(obj);
-                };
+                        HasException: tier.ExceptionZoneRates!= undefined && tier.ExceptionZoneRates.length > 0 
+                }
+                newTiersArray.push(obj);
             };
-            rebuildTier(newTiersArray);
-        }
+         };
+           rebuildTier(newTiersArray);
+        };
 
+        function rebulidTiers(tiers) {
+            var newTiersArray = [];
+            for (var i = 0 ; i < tiers.length; i++) {
+                var tier = tiers[i];
+                var obj = {
+                    UpToVolume: tier.UpToVolume,
+                    DefaultRate: tier.DefaultRate,
+                    RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
+                    RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
+                    RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
+                    ExceptionZoneRates: findExceptionZoneIds(tier.ExceptionZoneRates),
+                    HasException: findExceptionZoneIds(tier.ExceptionZoneRates).length > 0 
+                }
+                newTiersArray.push(obj);
+            };            
+            rebuildTier(newTiersArray);
+        };
+    
         function rebuildTier(array) {
             for (var j = 0 ; j < array.length; j++) {
                 var tier = array[j];
@@ -245,9 +292,12 @@
                 tier.FromVol = j == 0 ? 0 : array[j - 1].UpToVolume;
             };
             $scope.scopeModel.tiers = array;
-        }
+        };
 
+        function containesInZonesIds(element, index, array) {
+            return zoneDirectiveAPI.getSelectedIds().indexOf(element) > -1;
+        };
     }
-    appControllers.controller('WhS_Deal_VolumeCommitmentItemEditorController', VolumeCommitmentItemEditorController);
+    app.controller('WhS_Deal_VolumeCommitmentItemEditorController', VolumeCommitmentItemEditorController);
 
-})(appControllers);
+})(app);

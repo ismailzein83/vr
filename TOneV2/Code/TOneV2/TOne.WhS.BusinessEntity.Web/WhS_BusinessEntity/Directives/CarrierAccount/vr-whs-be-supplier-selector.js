@@ -8,7 +8,8 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
                 onReady: '=',
                 ismultipleselection: '@',
                 normalColNum: '@',
-                isrequired:"="
+                isrequired: "=",
+                hideremoveicon:"@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -48,7 +49,7 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
 
 
             return '<vr-whs-be-carrieraccount-selector normal-col-num="{{ctrl.normalColNum}}" getsuppliers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector>'
+                multipleselection + ' isrequired="ctrl.isrequired" hideremoveicon="ctrl.hideremoveicon"></vr-whs-be-carrieraccount-selector>'
         }
 
         function supplierSelector(ctrl, $scope) {

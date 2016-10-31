@@ -8,7 +8,8 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
                 onReady: '=',
                 ismultipleselection: '@',
                 isrequired: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                hideremoveicon:"@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -49,7 +50,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
 
 
             return '<vr-whs-be-carrieraccount-selector  normal-col-num="{{ctrl.normalColNum}}"   getcustomers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector>'
+                multipleselection + ' isrequired="ctrl.isrequired"  hideremoveicon="ctrl.hideremoveicon"></vr-whs-be-carrieraccount-selector>'
         }
 
         function customerSelector(ctrl, $scope) {

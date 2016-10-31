@@ -8,6 +8,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
+                onblurdropdown: '=',
                 isrequired: "=",
                 isdisabled: "=",
                 selectedvalues: '=',
@@ -54,6 +55,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
+                   + '  onblurdropdown="ctrl.onblurdropdown" '
                    + '  datasource="ctrl.search"'
                    + '  datavaluefield="SaleZoneId"'
                    + '  datatextfield="Name"'
