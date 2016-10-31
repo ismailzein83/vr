@@ -289,7 +289,8 @@ namespace TOne.WhS.Routing.Business
                             SupplierZones = new List<RPRouteOptionSupplierZone>(),
                             NumberOfBlockedZones = 0,
                             NumberOfUnblockedZones = 0,
-                            Percentage = routeOptionRuleTarget.Percentage
+                            Percentage = routeOptionRuleTarget.Percentage,
+                            SupplierServiceWeight = routeOptionRuleTarget.SupplierServiceWeight
                         };
 
                         route.OptionsDetailsBySupplier.Add(routeOptionRuleTarget.SupplierId, optionSupplierDetails);
@@ -330,7 +331,8 @@ namespace TOne.WhS.Routing.Business
                                 SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate,
                                 SaleZoneId = saleZoneId,
                                 SupplierStatus = item.SupplierStatus,
-                                Percentage = item.Percentage
+                                Percentage = item.Percentage,
+                                SupplierServiceWeight = item.SupplierServiceWeight
                             });
                     }
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
