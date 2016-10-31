@@ -94,10 +94,10 @@
         function setTitle() {
             if (isEditMode) {
                 var partUniqueName = (accountPartDefinitionEntity != undefined) ? accountPartDefinitionEntity.Name : undefined;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(partUniqueName, 'Account Part Definition');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(partUniqueName, 'Account Section Definition');
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor('Account Part Definition');
+                $scope.title = UtilsService.buildTitleForAddEditor('Account Section Definition');
             }
         }
 
@@ -107,7 +107,7 @@
             var accountPartDefinitionObj = buildAccountPartDefinitionObjFromScope();
 
             return Retail_BE_AccountPartDefinitionAPIService.UpdateAccountPartDefinition(accountPartDefinitionObj).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('Account Part Definition', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemUpdated('Account Section Definition', response, 'Name')) {
                     if ($scope.onAccountPartDefinitionUpdated != undefined) {
                         $scope.onAccountPartDefinitionUpdated(response.UpdatedObject);
                     }
@@ -126,7 +126,7 @@
             var accountPartDefinitionObj = buildAccountPartDefinitionObjFromScope();
 
             return Retail_BE_AccountPartDefinitionAPIService.AddAccountPartDefinition(accountPartDefinitionObj).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Account Part Definition', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemAdded('Account Section Definition', response, 'Name')) {
                     if ($scope.onAccountPartDefinitionAdded != undefined)
                         $scope.onAccountPartDefinitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
