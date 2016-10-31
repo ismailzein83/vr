@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundItemRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundItemRateFixed.cs" />
+    <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutboundRateFixed.cs" />
   </ItemGroup>
   <ItemGroup>

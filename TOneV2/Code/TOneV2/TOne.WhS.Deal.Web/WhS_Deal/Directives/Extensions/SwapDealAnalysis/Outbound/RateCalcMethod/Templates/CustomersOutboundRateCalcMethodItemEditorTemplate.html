@@ -1,0 +1,18 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+	<vr-select on-ready="scopeModel.onCarrierFilterSelectorReady"
+			   label="Customers"
+			   datasource="scopeModel.carrierFilters"
+			   datavaluefield="value"
+			   datatextfield="description"
+			   selectedvalues="scopeModel.selectedCarrierFilter"
+			   isrequired="true"
+			   hideremoveicon="true">
+	</vr-select>
+</vr-columns>
+<vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCustomerSelectorReady"
+								   getcustomers="true"
+								   normal-col-num="{{ctrl.normalColNum}}"
+								   ng-show="scopeModel.areCustomersRequired()"
+								   isrequired="scopeModel.areCustomersRequired()"
+								   hideremoveicon="scopeModel.areCustomersRequired()">
+</vr-whs-be-carrieraccount-selector>
