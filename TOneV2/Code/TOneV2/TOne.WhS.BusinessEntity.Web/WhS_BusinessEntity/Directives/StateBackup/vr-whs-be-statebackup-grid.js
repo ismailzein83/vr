@@ -83,7 +83,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
             var onStateBackupRestored = function (stateBackup) {
                 return gridAPI.retrieveData(gquery);
             }
-            return VRNotificationService.showConfirmation("Are you sure you want to restore the corresponding backup").then(function (result) {
+            return VRNotificationService.showConfirmation("Are you sure you want to restore the selected backup").then(function (result) {
                 if (result) {
                     ctrl.isRestoring = true;
                     return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.Entity.StateBackupId).then(function (response) {

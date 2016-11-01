@@ -57,9 +57,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
                                             SELECT sp.[ID], sp.[OwnerType], sp.[OwnerID], sp.[CurrencyID], sp.[EffectiveOn], sp.[SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SalePriceList]
-                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleRate sr WITH (NOLOCK) on sp.ID = sr.PriceListID 
-                                            Inner join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on sr.ZoneID = sz.ID
-                                            Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
+                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].CarrierAccount ca WITH (NOLOCK) on sp.OwnerID = ca.ID
+											Inner Join [TOneWhS_BE].SellingNumberPlan np on ca.SellingNumberPlanID=np.ID
+                                            Where ca.SellingNumberPlanID = {2} and sp.OwnerType=1  Union SELECT sp.[ID], sp.[OwnerType], sp.[OwnerID], sp.[CurrencyID], sp.[EffectiveOn], sp.[SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SalePriceList]
+                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].SellingProduct sellp WITH (NOLOCK) on sp.OwnerID = sellp.ID
+											Inner Join [TOneWhS_BE].SellingNumberPlan np on sellp.SellingNumberPlanID=np.ID
+                                            Where sellp.SellingNumberPlanID = {2} and sp.OwnerType=0 ", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
 
 

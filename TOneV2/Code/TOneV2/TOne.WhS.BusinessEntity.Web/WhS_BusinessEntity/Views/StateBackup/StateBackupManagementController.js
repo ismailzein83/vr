@@ -16,6 +16,8 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.stateBackupTypes = [];
+            $scope.scopeModel.fromBackupDate = new Date();
+
             $scope.searchClicked = function () {
 
                 setFilterObject();
