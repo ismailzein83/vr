@@ -47,8 +47,13 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                 };
 
                 ctrl.removeItem = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            var index = ctrl.datasource.indexOf(dataItem);
+                            ctrl.datasource.splice(index, 1);
+                        }
+                    });
+                    
                 }
                 defineMenuActions();
                 defineAPI();

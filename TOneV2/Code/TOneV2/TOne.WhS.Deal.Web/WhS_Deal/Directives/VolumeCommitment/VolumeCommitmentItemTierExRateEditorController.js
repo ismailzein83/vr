@@ -1,4 +1,4 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     'use strict';
 
@@ -111,6 +111,6 @@
         }
 
     }
-    appControllers.controller('WhS_Deal_VolumeCommitmentItemTierExRateEditorController', VolumeCommitmentItemTierExRateEditorController);
+    app.controller('WhS_Deal_VolumeCommitmentItemTierExRateEditorController', VolumeCommitmentItemTierExRateEditorController);
 
-})(appControllers);
+})(app);

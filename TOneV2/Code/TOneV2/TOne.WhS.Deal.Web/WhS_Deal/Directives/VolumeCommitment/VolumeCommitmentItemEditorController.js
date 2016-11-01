@@ -50,12 +50,12 @@
             }
             $scope.scopeModel.removeTier = function (dataItem) {
                 var index = $scope.scopeModel.tiers.indexOf(dataItem);
-                reorderAllTier(index);
+                reorderAllTiersAfterRemove(index);
             };
 
             $scope.scopeModel.onZoneSelectorSelection = function () {
                 if (zoneLoaded) {
-                    rebulidTiers($scope.scopeModel.tiers);
+                    bulidTiersData($scope.scopeModel.tiers);
                 };
             };
 
@@ -125,7 +125,7 @@
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred)
                 loadZonePromiseDeferred.promise.then(function () {
                     if (volumeCommitmentItemEntity!=undefined)
-                     rebulidTiers(volumeCommitmentItemEntity.Tiers);
+                        bulidTiersData(volumeCommitmentItemEntity.Tiers);
                     zoneLoaded = true;
                 });
             });           
@@ -238,7 +238,30 @@
             return newexrates;
         }
 
-        function reorderAllTier(index) {
+        function bulidTiersData(tiers) {
+            var newTiersArray = [];
+            for (var i = 0 ; i < tiers.length; i++) {
+                var tier = tiers[i];
+                var tierExceptions = findExceptionZoneIds(tier.ExceptionZoneRates);
+                var obj = {
+                    tierId : i,
+                    tierName :'Tier ' + parseInt(i + 1),
+                    FromVol: i == 0 ? 0 : tiers[i - 1].UpToVolume,
+                    UpToVolume: tier.UpToVolume,
+                    DefaultRate: tier.DefaultRate,
+                    RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
+                    RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
+                    RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
+                    ExceptionZoneRates: tierExceptions,
+                    HasException: tierExceptions.length > 0
+                }
+                newTiersArray.push(obj);
+            };            
+            $scope.scopeModel.tiers = newTiersArray ;
+        };
+    
+
+        function reorderAllTiersAfterRemove(index) {
             if (index + 1 == $scope.scopeModel.tiers.length) {
                 $scope.scopeModel.tiers.splice(index, 1);
                 return;
@@ -254,33 +277,15 @@
                         RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
                         RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined && tier.RetroActiveFromTierNumber != index) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
                         ExceptionZoneRates: tier.ExceptionZoneRates,
-                        HasException: tier.ExceptionZoneRates!= undefined && tier.ExceptionZoneRates.length > 0 
-                }
-                newTiersArray.push(obj);
+                        HasException: tier.ExceptionZoneRates != undefined && tier.ExceptionZoneRates.length > 0
+                    }
+                    newTiersArray.push(obj);
+                };
             };
-         };
-           rebuildTier(newTiersArray);
+            rebuildTiersArray(newTiersArray);
         };
 
-        function rebulidTiers(tiers) {
-            var newTiersArray = [];
-            for (var i = 0 ; i < tiers.length; i++) {
-                var tier = tiers[i];
-                var obj = {
-                    UpToVolume: tier.UpToVolume,
-                    DefaultRate: tier.DefaultRate,
-                    RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
-                    RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
-                    RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
-                    ExceptionZoneRates: findExceptionZoneIds(tier.ExceptionZoneRates),
-                    HasException: findExceptionZoneIds(tier.ExceptionZoneRates).length > 0 
-                }
-                newTiersArray.push(obj);
-            };            
-            rebuildTier(newTiersArray);
-        };
-    
-        function rebuildTier(array) {
+        function rebuildTiersArray(array) {
             for (var j = 0 ; j < array.length; j++) {
                 var tier = array[j];
                 tier.tierId = j;
@@ -289,6 +294,7 @@
             };
             $scope.scopeModel.tiers = array;
         };
+
 
         function containesInZonesIds(element, index, array) {
             return zoneDirectiveAPI.getSelectedIds().indexOf(element) > -1;
