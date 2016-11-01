@@ -31,7 +31,10 @@
 			$scope.scopeModel.onSelectionChanged = function () {
 				if ($scope.scopeModel.selectedCustomerSelectionType == undefined)
 					return;
-				$scope.scopeModel.showGrid = ($scope.scopeModel.selectedCustomerSelectionType.value != WhS_Sales_CustomerSelectionTypeEnum.All.value)
+				if ($scope.scopeModel.selectedCustomerSelectionType.value != WhS_Sales_CustomerSelectionTypeEnum.All.value)
+					return;
+				for (var i = 0; i < $scope.scopeModel.customers.length; i++)
+					$scope.scopeModel.customers[i].isSelected = true;
 			};
 
 			$scope.scopeModel.save = function () {
@@ -60,11 +63,14 @@
 			});
 		}
 		function loadAllControls() {
-			return UtilsService.waitMultipleAsyncOperations([loadGrid]).catch(function (error) {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadGrid]).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
 				$scope.scopeModel.isLoading = false;
 			});
+		}
+		function setTitle() {
+			$scope.title = 'Bulk Mail';
 		}
 		function loadGrid() {
 			return WhS_BE_CustomerSellingProductAPIService.GetCustomerNamesBySellingProductId(sellingProductId).then(function (response) {
