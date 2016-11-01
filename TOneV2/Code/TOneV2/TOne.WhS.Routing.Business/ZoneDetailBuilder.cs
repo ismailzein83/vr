@@ -156,7 +156,8 @@ namespace TOne.WhS.Routing.Business
 
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
-                        List<ZoneService> exactSupplierZoneServices = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                        SupplierEntityService supplierEntityService = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                        List<ZoneService> exactSupplierZoneServices = supplierEntityService.Services;
                         IEnumerable<ZoneServiceConfig> supplierZoneServicesWithChildren = zoneServiceConfigManager.GetDistinctZoneServiceConfigsWithChildren(exactSupplierZoneServices.Select(itm => itm.ServiceId));
 
                         var output = dataTransformer.ExecuteDataTransformation(supplierTransformationId, (context) =>

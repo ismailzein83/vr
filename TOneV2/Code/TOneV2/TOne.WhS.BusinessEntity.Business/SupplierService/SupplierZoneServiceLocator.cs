@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -23,26 +24,39 @@ namespace TOne.WhS.BusinessEntity.Business
             _carrierAccountManager = new CarrierAccountManager();
         }
 
-        public List<ZoneService> GetSupplierZoneServices(int supplierId, long supplierZoneId)
+        public SupplierEntityService GetSupplierZoneServices(int supplierId, long supplierZoneId)
         {
             SupplierZoneService supplierZoneService;
             Dictionary<int, ZoneService> servicesAndChildServices = new Dictionary<int, ZoneService>();
 
             if (HasSupplierZoneServices(supplierId, supplierZoneId, out supplierZoneService))
             {
-                // Supplier Zone has Services
-                return supplierZoneService.EffectiveServices;
+                return new SupplierEntityService()
+                {
+                    Source = SupplierEntityServiceSource.SupplierZone,
+                    Services = supplierZoneService.EffectiveServices,
+                    BED = supplierZoneService.BED,
+                    EED = supplierZoneService.EED
+                };
             }
             else
             {
-                //Get default supplier services
-                return GetDefaultSupplierServices(supplierId);
+                List<ZoneService> defaultServices = GetDefaultSupplierServices(supplierId);
+                //SupplierDefaultService defaultService = GetDefaultSupplierServices(supplierId);
+                return new SupplierEntityService()
+                {
+                    Source = SupplierEntityServiceSource.Supplier,
+                    Services = defaultServices,
+                    //BED = defaultService.BED,
+                    //EED = defaultService.EED
+                };
             }
         }
         #endregion
 
 
         #region Private Methods
+        
         private bool HasSupplierZoneServices(int supplierId, long supplierZoneId, out SupplierZoneService supplierZoneService)
         {
             supplierZoneService = null;
@@ -53,8 +67,20 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return false;
         }
+
+        private SupplierDefaultService GetDefaultSupplierServicesNew(int supplierId)
+        {
+            var defaultService = _reader.GetSupplierDefaultService(supplierId);
+            if (defaultService == null)
+                throw new DataIntegrityValidationException(string.Format("No default services set for Supplier with id {0}", supplierId));
+
+            return defaultService;
+
+        }
+
         private List<ZoneService> GetDefaultSupplierServices(int supplierId)
         {
+            //TODO: MJA remove this method and use the new one after renaming it
             CarrierAccount supplierAccount = _carrierAccountManager.GetCarrierAccount(supplierId);
 
             if (supplierAccount.SupplierSettings == null)
@@ -68,6 +94,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return supplierAccount.SupplierSettings.DefaultServices;
         }
+
         #endregion
     }
 }

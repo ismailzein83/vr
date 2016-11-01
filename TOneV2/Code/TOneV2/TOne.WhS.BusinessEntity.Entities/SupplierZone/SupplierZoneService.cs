@@ -16,12 +16,45 @@ namespace TOne.WhS.BusinessEntity.Entities
         [Description("Deleted")]
         Deleted = 2,
     }
+
+    public enum SupplierEntityServiceSource : byte { Supplier, SupplierZone }
+
+    public class SupplierEntityService
+    {
+        public List<ZoneService> Services { get; set; }
+
+        public SupplierEntityServiceSource Source { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+    }
+
     public class SupplierZoneService
     {
         public long SupplierZoneServiceId { get; set; }
 
         public long ZoneId { get; set; }
 
+        public int PriceListId { get; set; }
+
+        public List<ZoneService> ReceivedServices { get; set; }
+
+        public List<ZoneService> EffectiveServices { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+
+        public string SourceId { get; set; }
+
+    }
+
+    public class SupplierDefaultService
+    {
+        public long SupplierZoneServiceId { get; set; }
+
+        //TODO: to be removed and Supplier Price List Id to add
         public int PriceListId { get; set; }
 
         public List<ZoneService> ReceivedServices { get; set; }

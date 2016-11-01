@@ -12,14 +12,26 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierZoneServiceReadAllNoCache : ISupplierZoneServiceReader
     {
         #region ctor/Local Variables
+
         Dictionary<int, SupplierZoneServicesByZone> _allSupplierZoneServicesBySupplier;
+        Dictionary<int, SupplierDefaultService> _allSupplierDefaultServicesBySupplier;
+        
         #endregion
 
 
         #region Public Methods
         public SupplierZoneServiceReadAllNoCache(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
+            _allSupplierDefaultServicesBySupplier = GetAllSupplierDefaultServicesBySupplier(supplierInfos, effectiveOn, isEffectiveInFuture);
             _allSupplierZoneServicesBySupplier = GetAllSupplierZoneServicesBySupplier(supplierInfos, effectiveOn, isEffectiveInFuture);
+        }
+
+        public SupplierDefaultService GetSupplierDefaultService(int supplierId)
+        {
+            if (_allSupplierDefaultServicesBySupplier == null)
+                return null;
+
+            return _allSupplierDefaultServicesBySupplier.GetRecord(supplierId);
         }
 
         public SupplierZoneServicesByZone GetSupplierZoneServicesByZone(int supplierId)
@@ -29,10 +41,28 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return _allSupplierZoneServicesBySupplier.GetRecord(supplierId);
         }
+
         #endregion
 
-
         #region Private Methods
+
+        private Dictionary<int, SupplierDefaultService> GetAllSupplierDefaultServicesBySupplier(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            Dictionary<int, SupplierDefaultService> result = new Dictionary<int, SupplierDefaultService>();
+
+            ISupplierZoneServiceDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            List<SupplierDefaultService> supplierDefaultServices = _dataManager.GetEffectiveSupplierDefaultServicesBySuppliers(supplierInfos, effectiveOn, isEffectiveInFuture);
+
+            SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
+            foreach (SupplierDefaultService supplierDefaultService in supplierDefaultServices)
+            {
+                SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierDefaultService.PriceListId);
+                result.Add(supplierPriceList.SupplierId, supplierDefaultService);
+            }
+
+            return result;
+        }
+
         private Dictionary<int, SupplierZoneServicesByZone> GetAllSupplierZoneServicesBySupplier(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             Dictionary<int, SupplierZoneServicesByZone> result = new Dictionary<int, SupplierZoneServicesByZone>();
@@ -62,6 +92,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return result;
         }
+
         #endregion
     }
 }

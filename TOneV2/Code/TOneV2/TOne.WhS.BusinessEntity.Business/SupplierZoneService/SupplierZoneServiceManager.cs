@@ -74,6 +74,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<SupplierZoneService> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
             {
+                //TODO: MJA get all zones effective for this supplier as per query
+                //Next for each supplier zone use the locator to read supplier entity service and return it to client side
                 ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
                 return dataManager.GetFilteredSupplierZoneServices(input.Query);
             }

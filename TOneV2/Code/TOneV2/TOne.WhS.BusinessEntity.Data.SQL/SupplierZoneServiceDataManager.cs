@@ -26,11 +26,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
        
         public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
+            //TODO: MJA get only the ones with zone id not null
             return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServices_GetByDate", SupplierZoneServiceMapper, supplierId, minimumDate);
         }
 
         public IEnumerable<SupplierZoneService> GetFilteredSupplierZoneServices(SupplierZoneServiceQuery query)
         {
+            //TODO: MJA should be removed
             string zonesids = null;
             if (query.ZoneIds != null && query.ZoneIds.Count() > 0)
                 zonesids = string.Join<int>(",", query.ZoneIds);
@@ -40,6 +42,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public List<SupplierZoneService> GetEffectiveSupplierZoneServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
+            //TODO: MJA the same but get all records with Zone Id NOT equal to null
             DataTable supplierZoneServicesOwners = BuildRoutingSupplierInfoTable(supplierInfos);
             return GetItemsSPCmd("TOneWhS_BE.sp_SupplierZoneService_GetEffectiveZoneServicesBySuppliers", SupplierZoneServiceMapper, (cmd) =>
             {
@@ -49,6 +52,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
+        }
+
+        public List<SupplierDefaultService> GetEffectiveSupplierDefaultServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            return new List<SupplierDefaultService>();
+            //TODO: MJA the same but get all records with Zone Id equal to null
+
+            //DataTable supplierZoneServicesOwners = BuildRoutingSupplierInfoTable(supplierInfos);
+            //return GetItemsSPCmd("TOneWhS_BE.sp_SupplierZoneService_GetEffectiveZoneServicesBySuppliers", SupplierZoneServiceMapper, (cmd) =>
+            //{
+            //    var dtPrm = new SqlParameter("@SupplierZoneServicesOwners", SqlDbType.Structured);
+            //    dtPrm.Value = supplierZoneServicesOwners;
+            //    cmd.Parameters.Add(dtPrm);
+            //    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+            //    cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+            //});
         }
 
         internal static DataTable BuildRoutingSupplierInfoTable(IEnumerable<RoutingSupplierInfo> supplierInfos)

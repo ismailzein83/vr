@@ -9,6 +9,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public interface ISupplierZoneServiceReader
     {
+        SupplierDefaultService GetSupplierDefaultService(int supplierId);
+
         SupplierZoneServicesByZone GetSupplierZoneServicesByZone(int supplierId);
     }
 
