@@ -22,7 +22,7 @@
 </vr-row>
 <vr-row>
     <vr-column width="fullrow" vr-loader="scopeModel.isLoading">
-        <vr-datagrid datasource="scopeModel.filterdCarrierMappings"
+        <!--<vr-datagrid datasource="scopeModel.filterdCarrierMappings"
                      loadmoredata="scopeModel.loadMoreData" maxheight="250px" on-ready="scopeModel.onGridReady">
 
             <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
@@ -33,7 +33,7 @@
             <vr-datagridcolumn headertext="'Supplier Mapping'" disablesorting>
                 <vr-textbox type="text" tonextinput value="dataItem.SupplierMapping"></vr-textbox>
             </vr-datagridcolumn>
-        </vr-datagrid>
-
+        </vr-datagrid>-->
+        <whs-routesync-carrieraccountmapping-grid on-ready="scopeModel.onGridReady" mapping-columns="scopeModel.mappingColumns"></whs-routesync-carrieraccountmapping-grid>
     </vr-column>
 </vr-row>
