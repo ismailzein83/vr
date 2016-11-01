@@ -9,7 +9,7 @@ namespace TOne.WhS.DBSync.Business
 {
     public class MVTSSwitchMigrator : SwitchRulesMigrator
     {
-        public override IEnumerable<SourceRule> GetSourceRules()
+        public override void Execute()
         {
             throw new NotImplementedException();
         }
