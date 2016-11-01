@@ -45,6 +45,11 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCustomerSellingProduct']));
         }
 
+        function GetCustomerNamesBySellingProductId(sellingProductId) {
+        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerNamesBySellingProductId"), {
+        		sellingProductId: sellingProductId
+        	});
+        }
 
         return ({
             GetFilteredCustomerSellingProducts: GetFilteredCustomerSellingProducts,
@@ -54,7 +59,8 @@
             UpdateCustomerSellingProduct: UpdateCustomerSellingProduct,
             IsCustomerAssignedToSellingProduct: IsCustomerAssignedToSellingProduct,
             HasUpdateCustomerSellingProductPermission: HasUpdateCustomerSellingProductPermission,
-            HasAddCustomerSellingProductPermission: HasAddCustomerSellingProductPermission
+            HasAddCustomerSellingProductPermission: HasAddCustomerSellingProductPermission,
+            GetCustomerNamesBySellingProductId: GetCustomerNamesBySellingProductId
         });
     }
 

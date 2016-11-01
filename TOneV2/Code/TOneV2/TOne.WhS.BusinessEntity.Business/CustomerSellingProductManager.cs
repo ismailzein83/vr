@@ -238,6 +238,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return sellingProductId;
         }
+
+		public IEnumerable<string> GetCustomerNamesBySellingProductId(int sellingProductId)
+		{
+			Dictionary<int, CustomerSellingProduct> data = GetCachedCustomerSellingProducts();
+			IEnumerable<CustomerSellingProduct> dataBySellingProductId = data.Values.FindAllRecords(x => x.SellingProductId == sellingProductId);
+			if (dataBySellingProductId == null)
+				return null;
+			IEnumerable<int> customerIds = dataBySellingProductId.MapRecords(x => x.CustomerId).Distinct();
+			var carrierAccountManager = new CarrierAccountManager();
+			var customerNames = new List<string>();
+			foreach (int customerId in customerIds)
+				customerNames.Add(carrierAccountManager.GetCarrierAccountName(customerId));
+			return customerNames;
+		}
+
         #endregion
 
         #region Validation Methods
