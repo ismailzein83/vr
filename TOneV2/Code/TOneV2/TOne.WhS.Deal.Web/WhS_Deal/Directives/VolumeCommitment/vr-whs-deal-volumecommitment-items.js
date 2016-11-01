@@ -82,6 +82,8 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                                 ctrl.datasource.push({ Entity: volumeCommitmentItem });
                             }
                         }
+                        else
+                            ctrl.datasource.length = 0;
                     }
                 }
 

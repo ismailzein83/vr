@@ -14,8 +14,9 @@
         var carrierAccountSelectorReadyDeferred;
 
         var volumeCommitmenetItemsAPI;
-        var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();;
+        var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var carrierAccountSelectedPromise;
 
         loadParameters();
         defineScope();
@@ -28,18 +29,44 @@
                 dealId = parameters.dealId;
 
             isEditMode = (dealId != undefined);
+            
         };
 
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
+
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value };
                 var payload;
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountSelectorAPI, payload, setLoader, carrierAccountSelectorReadyDeferred);
+                var payload = { context: getContext() };
+                volumeCommitmenetItemsAPI.load(payload);
+                if (!carrierAccountSelectedPromise)
+                    $scope.scopeModel.description = undefined;
             };
+
+            $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
+                var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
+                if (carrierAccountInfo != undefined) {                   
+                    if (carrierAccountSelectedPromise != undefined) 
+                        carrierAccountSelectedPromise.resolve();
+                    else {
+                        var payload = { context: getContext() };
+                        volumeCommitmenetItemsAPI.load(payload);
+                        updateDescription()
+                    }
+                }
+            };
+
+            function updateDescription() {
+                setTimeout(function () {
+                    $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(new Date());
+                });
+            }
 
             $scope.scopeModel.onVolumeCommitmenetItemsReady = function (api) {
                 volumeCommitmenetItemsAPI = api;
@@ -53,6 +80,7 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+
             $scope.scopeModel.validateDatesRange = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
@@ -81,7 +109,7 @@
             });
         };
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierAccountSelector, loadVolumeCommitmenetItems]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierAccountDealItemsSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -105,33 +133,57 @@
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         };
         
-        function loadCarrierAccountSelector() {
+        function loadCarrierAccountDealItemsSection() {
             if (volumeCommitmentEntity == undefined)
                 return;
+
+            var promises = [];
+
             carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(carrierAccountSelectorLoadDeferred.promise);
 
+            var payload;
+            if (volumeCommitmentEntity != undefined &&  volumeCommitmentEntity.Settings != undefined) {
+                payload = { selectedIds: volumeCommitmentEntity.Settings.CarrierAccountId };
+                carrierAccountSelectedPromise = UtilsService.createPromiseDeferred();
+
+            }
             carrierAccountSelectorReadyDeferred.promise.then(function () {
                 carrierAccountSelectorReadyDeferred = undefined;
-                var payload = (volumeCommitmentEntity != undefined) ? { selectedIds: volumeCommitmentEntity.Settings.CarrierAccountId } : undefined;
                 VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
             });
 
-            return carrierAccountSelectorLoadDeferred.promise;
-        };
-        function loadVolumeCommitmenetItems() {
-            var volumeCommitmenetItemsLoadDeferred = UtilsService.createPromiseDeferred();
+            if (volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined && volumeCommitmentEntity.Settings.Items.length > 0) {
+               
+                var volumeCommitmenetItemsLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(volumeCommitmenetItemsLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([volumeCommitmenetItemsReadyDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
 
-            volumeCommitmenetItemsReadyDeferred.promise.then(function () {
-                var payload = { context: getContext() }
-                if (volumeCommitmentEntity != undefined) {
-                    payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
-                }
-                VRUIUtilsService.callDirectiveLoad(volumeCommitmenetItemsAPI, payload, volumeCommitmenetItemsLoadDeferred);
-            });
+                    var payload = { context: getContext() }
+                    if (volumeCommitmentEntity != undefined) {
+                        payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(volumeCommitmenetItemsAPI, payload, volumeCommitmenetItemsLoadDeferred);
 
-            return volumeCommitmenetItemsLoadDeferred.promise;
+                    carrierAccountSelectedPromise = undefined;
+                });
+            }
+            return UtilsService.waitMultiplePromises(promises);
         };
+
+        //function loadVolumeCommitmenetItems() {
+        //    var volumeCommitmenetItemsLoadDeferred = UtilsService.createPromiseDeferred();
+
+        //    volumeCommitmenetItemsReadyDeferred.promise.then(function () {
+        //        var payload = { context: getContext() }
+        //        if (volumeCommitmentEntity != undefined) {
+        //            payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
+        //        }
+        //        VRUIUtilsService.callDirectiveLoad(volumeCommitmenetItemsAPI, payload, volumeCommitmenetItemsLoadDeferred);
+        //    });
+        //    return volumeCommitmenetItemsLoadDeferred.promise;
+        //};
         function insertVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
             return WhS_Deal_DealAPIService.AddDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {

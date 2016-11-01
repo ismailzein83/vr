@@ -26,12 +26,19 @@
                 typeApi.load();
             };            
             $scope.scopeModel.onSupplierDirectiveReady = function (api) {
+                $scope.scopeModel.isLoading = true;
                 supplierApi = api;
-                supplierApi.load();
+                supplierApi.load().finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+               
             };
             $scope.scopeModel.onCustomerDirectiveReady = function (api) {
+                $scope.scopeModel.isLoading = true;
                 customerApi = api;
-                customerApi.load();
+                customerApi.load().finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });                
             };
 
             $scope.scopeModel.addVolumeCommitment = addVolumeCommitment;

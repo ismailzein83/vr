@@ -12,7 +12,7 @@ namespace TOne.WhS.Deal.Entities
 
         public List<int> CarrierAccountIds { get; set; }
 
-        public List<VolCommitmentDealType> Types { get; set; }
+        public VolCommitmentDealType? Type { get; set; }
 
     }
 }

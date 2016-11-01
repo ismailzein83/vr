@@ -46,11 +46,10 @@ namespace TOne.WhS.Deal.Business
             {
                 if (input.Query.Name != null && !deal.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
+                if (input.Query.Type.HasValue && input.Query.Type.Value != (deal.Settings as VolCommitmentDealSettings).DealType)
+                    return false;
                 if (input.Query.CarrierAccountIds != null && !input.Query.CarrierAccountIds.Contains((deal.Settings as VolCommitmentDealSettings).CarrierAccountId))
                     return false;
-                if (input.Query.Types != null && !input.Query.Types.Contains((deal.Settings as VolCommitmentDealSettings).DealType))
-                    return false;
-
                 return true;
             };
 
@@ -80,7 +79,7 @@ namespace TOne.WhS.Deal.Business
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 deal.DealId = insertedId;
-                insertOperationOutput.InsertedObject = DealDefinitionDetailMapper(deal);
+                insertOperationOutput.InsertedObject = deal.Settings.ConfigId == Deal.Entities.SwapDealSettings.SwapDealSettingsConfigId ?  DealDefinitionDetailMapper(deal) : VolCommitmentDetailMapper(deal);
             }
             else
             {
@@ -105,7 +104,7 @@ namespace TOne.WhS.Deal.Business
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = DealDefinitionDetailMapper(this.GetDeal(deal.DealId));
+                updateOperationOutput.UpdatedObject = deal.Settings.ConfigId == Deal.Entities.SwapDealSettings.SwapDealSettingsConfigId ? DealDefinitionDetailMapper(this.GetDeal(deal.DealId)) : VolCommitmentDetailMapper(this.GetDeal(deal.DealId));
             }
             else
             {
@@ -215,8 +214,8 @@ namespace TOne.WhS.Deal.Business
             int carrierAccountId = settings.CarrierAccountId;
 
             detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
-            detail.TypeDetail = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
-            detail.IsEffective = settings.BeginDate <= DateTime.Now && settings.EndDate >= DateTime.Now;
+            detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
+            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
             return detail;
         }
         #endregion

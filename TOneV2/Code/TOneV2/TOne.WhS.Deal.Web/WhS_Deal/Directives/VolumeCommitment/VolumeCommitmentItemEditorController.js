@@ -11,7 +11,6 @@
         var isEditMode;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var zoneDirectiveAPI;
-        var zoneSelectionPromise;
         var zoneLoaded;
         $scope.scopeModel = {};
         loadParameters();
@@ -121,15 +120,12 @@
         function loadZoneSection() {
 
             var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
-            var payload;
-            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.ZoneIds != undefined) {
-                payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
-                zoneSelectionPromise = UtilsService.createPromiseDeferred();
-            }
+            var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;          
             zoneReadyPromiseDeferred.promise.then(function () {              
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred)
                 loadZonePromiseDeferred.promise.then(function () {
-                    rebulidTiers(volumeCommitmentItemEntity.Tiers);
+                    if (volumeCommitmentItemEntity!=undefined)
+                     rebulidTiers(volumeCommitmentItemEntity.Tiers);
                     zoneLoaded = true;
                 });
             });           

@@ -4,15 +4,18 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-select label="Type"
-                                       datasource="scopeModel.volumeCommitmentTypes"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       selectedvalues="scopeModel.selectedVolumeCommitmentType"
-                                       isrequired="true"
-                                       hideremoveicon="true">
-                            </vr-select>
+                        <vr-columns width="1/3row"vr-disable="scopeModel.disabelType">
+                            <span vr-disabled="scopeModel.disabelType">
+                                <vr-select label="Type"
+                                           datasource="scopeModel.volumeCommitmentTypes"
+                                           datavaluefield="value"
+                                           datatextfield="description"
+                                           selectedvalues="scopeModel.selectedVolumeCommitmentType"
+                                           isrequired="true"
+                                           hideremoveicon="true">
+                                </vr-select>
+                            </span>
+                            
                         </vr-columns>
                         <vr-columns width="1/3row">
                             <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()"></vr-datetimepicker>
@@ -22,8 +25,8 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <span vr-loader="scopeModel.isLoadingDirective">
-                            <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" hideremoveicon on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true"></vr-directivewrapper>
+                        <span vr-loader="scopeModel.isLoadingDirective" vr-disabled="scopeModel.disabelType">
+                            <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" selectedvalues="scopeModel.carrierAccount" hideremoveicon on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" onselectionchanged="scopeModel.onCarrierAccountSelectionChanged"></vr-directivewrapper>
                         </span>
                         <vr-columns width="1/3row">
                             <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
