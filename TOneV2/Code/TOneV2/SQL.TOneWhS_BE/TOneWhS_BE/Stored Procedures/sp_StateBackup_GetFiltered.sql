@@ -9,7 +9,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_StateBackup_GetFiltered]
 @To DateTime
 AS
 BEGIN
-	SELECT	[ID], ConfigID, [Info], [BackupDate], [RestoreDate]
+	SELECT	[ID], [ConfigID], [Info], [BackupDate], [RestoreDate], [BackupByUserID], [RestoredByUserID]
     FROM [TOneV2_Dev].[TOneWhS_BE].[StateBackup] with(nolock)
 	Where (@ConfigID is null or ConfigID = @ConfigID) and (@From is null or BackupDate >= @From) and 
 		  (@To is null or BackupDate <= @To)
