@@ -85,9 +85,11 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
             }
             return VRNotificationService.showConfirmation("Are you sure you want to restore the corresponding backup").then(function (result) {
                 if (result) {
+                    ctrl.isRestoring = true;
                     return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.Entity.StateBackupId).then(function (response) {
                         if (VRNotificationService.notifyOnItemUpdated("State Backup", response, ""))
                             onStateBackupRestored(response.UpdatedObject);
+                            ctrl.isRestoring = false;
                     });
                 }
             });
