@@ -69,6 +69,7 @@ namespace TOne.WhS.Routing.Business
         #endregion
 
         #region private methods
+
         private RouteRuleDataTransformation GetRouteRuleDataTransformation()
         {
             RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();
@@ -90,14 +91,15 @@ namespace TOne.WhS.Routing.Business
             return routeTechnicalSettingData;
         }
 
-        private RouteBuildConfiguration GetRouteBuildConfiguration()
+        private RouteSettingsData GetRouteSettingData()
         {
-            RouteSettingsData routeSettingsData = GetRouteSettingData();
+            SettingManager settingManager = new SettingManager();
+            RouteSettingsData routeSettingsData = settingManager.GetSetting<RouteSettingsData>(Constants.RouteSettings);
 
-            if (routeSettingsData.RouteBuildConfiguration == null)
-                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration");
+            if (routeSettingsData == null)
+                throw new NullReferenceException("routeSettingsData");
 
-            return routeSettingsData.RouteBuildConfiguration;
+            return routeSettingsData;
         }
 
         private RouteDatabasesToKeep GetRouteDatabasesToKeep()
@@ -110,15 +112,14 @@ namespace TOne.WhS.Routing.Business
             return routeSettingsData.RouteDatabasesToKeep;
         }
 
-        private RouteSettingsData GetRouteSettingData()
+        private RouteBuildConfiguration GetRouteBuildConfiguration()
         {
-            SettingManager settingManager = new SettingManager();
-            RouteSettingsData routeSettingsData = settingManager.GetSetting<RouteSettingsData>(Constants.RouteSettings);
+            RouteSettingsData routeSettingsData = GetRouteSettingData();
 
-            if (routeSettingsData == null)
-                throw new NullReferenceException("routeSettingsData");
+            if (routeSettingsData.RouteBuildConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration");
 
-            return routeSettingsData;
+            return routeSettingsData.RouteBuildConfiguration;
         }
 
         private CustomerRouteBuildConfiguration GetCustomerRouteBuildConfiguration()
