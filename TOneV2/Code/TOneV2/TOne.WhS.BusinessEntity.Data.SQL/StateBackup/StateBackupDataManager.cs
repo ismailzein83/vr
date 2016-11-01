@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object stateBackupId;
-                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert", out stateBackupId, backupType.ConfigId, Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now);
+                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert", out stateBackupId, backupType.ConfigId, Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now, backupType.UserId);
                 string backupCommand = _stateBackupBehavior.GetBackupCommands((long)stateBackupId);
                 ExecuteNonQueryText(backupCommand, null);
                 scope.Complete();
@@ -56,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         }
 
-        public bool RestoreData(long stateBackupId)
+        public bool RestoreData(long stateBackupId, int userId)
         {
 
             StateBackup stateBackup = GetItemSP("TOneWhS_BE.sp_StateBackup_GetById", StateBackupMapper, stateBackupId);
@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Update", stateBackupId, DateTime.Now);
+                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Update", stateBackupId, DateTime.Now, userId);
 
                 string restoreCommand = _stateBackupBehavior.GetRestoreCommands(stateBackup.StateBackupId);
                 ExecuteNonQueryText(restoreCommand, null);
@@ -122,7 +122,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                BackupTypeConfigId = GetReaderValue<Guid>(reader, "ConfigID"),
                Info = Vanrise.Common.Serializer.Deserialize<StateBackupType>(reader["Info"] as string),
                BackupDate = GetReaderValue<DateTime>(reader, "BackupDate"),
-               RestoreDate = GetReaderValue<DateTime?>(reader, "RestoreDate")
+               RestoreDate = GetReaderValue<DateTime?>(reader, "RestoreDate"),
+               BackupByUserId = (int)reader["BackupByUserID"],
+               RestoredByByUserId = GetReaderValue<int?>(reader, "RestoredByUserID")
            };
 
             return stateBackup;

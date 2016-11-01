@@ -17,5 +17,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BackupDate { get; set; }
 
         public DateTime? RestoreDate { get; set; }
+
+        public int BackupByUserId { get; set; }
+
+        public int? RestoredByByUserId { get; set; }
     }
 }

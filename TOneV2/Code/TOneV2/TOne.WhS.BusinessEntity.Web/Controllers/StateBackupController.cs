@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "StateBackup")]
-    public class WhSBE_StateBackupController : BaseAPIController
+    public class StateBackupController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredStateBackups")]

@@ -18,13 +18,18 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<int> SupplierId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> UserId { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int supplierId = this.SupplierId.Get(context);
+            int userId = this.UserId.Get(context);
 
             StateBackupSupplier backupSupplier = new StateBackupSupplier()
             {
-                SupplierId = supplierId
+                SupplierId = supplierId,
+                UserId = userId
             };
 
             StateBackupManager manager = new StateBackupManager();

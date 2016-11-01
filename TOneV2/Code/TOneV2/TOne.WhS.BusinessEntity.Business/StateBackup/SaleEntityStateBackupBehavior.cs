@@ -18,12 +18,12 @@ namespace TOne.WhS.BusinessEntity.Business
             if (backupData.OwnerType == SalePriceListOwnerType.Customer)
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return String.Format("Backup from Selling Rates for {0} customer", carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
+                return String.Format("Backup for customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
             }
             else
             {
                 SellingProductManager sellingProductManager = new SellingProductManager();
-                return string.Format("Backup from Selling Rates for {0} selling product", sellingProductManager.GetSellingProductName(backupData.OwnerId));
+                return string.Format("Backup for selling product {0}", sellingProductManager.GetSellingProductName(backupData.OwnerId));
             }
         }
 

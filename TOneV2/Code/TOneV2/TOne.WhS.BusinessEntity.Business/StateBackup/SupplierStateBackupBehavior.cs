@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Business
             StateBackupSupplier backupData = context.Data as StateBackupSupplier;
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            return String.Format("Backup from Supplier for {0} supplier", carrierAccountManager.GetCarrierAccountName(backupData.SupplierId));
+            return String.Format("Backup for Supplier {0}", carrierAccountManager.GetCarrierAccountName(backupData.SupplierId));
         }
 
         public override bool IsMatch(IStateBackupContext context, object filter)

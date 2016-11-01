@@ -17,13 +17,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> UserId { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
+            int userId = this.UserId.Get(context);
+
 
             StateBackupAllSaleEntities backupAllCustomers = new StateBackupAllSaleEntities()
             {
-                SellingNumberPlanId = sellingNumberPlanId
+                SellingNumberPlanId = sellingNumberPlanId,
+                UserId = userId
             };
 
             StateBackupManager manager = new StateBackupManager();

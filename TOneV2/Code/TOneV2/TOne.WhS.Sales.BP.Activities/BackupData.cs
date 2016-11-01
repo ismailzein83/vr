@@ -20,16 +20,22 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> UserId { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             int ownerId = this.OwnerId.Get(context);
+            int userId = this.UserId.Get(context);
+
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
 
 
             StateBackupSaleEntity backupCustomer = new StateBackupSaleEntity()
             {
                 OwnerId = ownerId,
-                OwnerType = ownerType
+                OwnerType = ownerType,
+                UserId = userId
             };
 
             StateBackupManager manager = new StateBackupManager();

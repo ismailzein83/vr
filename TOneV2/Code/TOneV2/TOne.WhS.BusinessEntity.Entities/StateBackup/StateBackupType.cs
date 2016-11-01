@@ -9,5 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public abstract class StateBackupType
     {
         public abstract Guid ConfigId { get; }
+
+        public int UserId { get; set; }
     }
 }

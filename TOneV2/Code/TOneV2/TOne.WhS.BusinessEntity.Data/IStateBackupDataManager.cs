@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         void BackupData(StateBackupType backupType);
 
-        bool RestoreData(long stateBackupId);
+        bool RestoreData(long stateBackupId, int userId);
 
         IEnumerable<StateBackup> GetFilteredStateBackups(StateBackupQuery input);
 

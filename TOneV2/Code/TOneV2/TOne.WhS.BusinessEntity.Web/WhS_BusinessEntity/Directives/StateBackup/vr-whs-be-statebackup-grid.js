@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
     function StateBackupsGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gquery;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -43,7 +44,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+                        gquery = query;
                         return gridAPI.retrieveData(query);
                     }
                    
@@ -65,7 +66,8 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
         function defineMenuActions() {
             var menuActions = [{
                 name: "Restore",
-                clicked: restoreStateBackup
+                clicked: restoreStateBackup,
+                haspermission: hasRestorePermission
             }];
 
             $scope.gridMenuActions = function (dataItem) {
@@ -74,12 +76,14 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
             };
         }
 
-
+        function hasRestorePermission() {
+            return WhS_BE_StateBackupAPIService.HasRestoreDataPermission();
+        }
         function restoreStateBackup(stateBackupObject) {
             var onStateBackupRestored = function (stateBackup) {
-                gridAPI.itemUpdated(stateBackup);
+                return gridAPI.retrieveData(gquery);
             }
-            return VRNotificationService.showConfirmation().then(function (result) {
+            return VRNotificationService.showConfirmation("Are you sure you want to restore the corresponding backup").then(function (result) {
                 if (result) {
                     return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.Entity.StateBackupId).then(function (response) {
                         if (VRNotificationService.notifyOnItemUpdated("State Backup", response, ""))

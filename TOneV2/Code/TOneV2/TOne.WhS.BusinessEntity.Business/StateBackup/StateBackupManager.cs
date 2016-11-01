@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -13,15 +14,19 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
+ 
         public Vanrise.Entities.IDataRetrievalResult<StateBackupDetail> GetFilteredStateBackups(Vanrise.Entities.DataRetrievalInput<StateBackupQuery> input)
         {
             ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
             Dictionary<Guid, StateBackupTypeConfig> backupTypeConfigurations = extensionConfigurationManager.GetExtensionConfigurationsByType<StateBackupTypeConfig>(StateBackupTypeConfig.EXTENSION_TYPE);
 
+            UserManager userManager = new UserManager();
+
             return BigDataManager.Instance.RetrieveData(input, new StateBackupRequestHandler()
                 {
                     BackupTypeFilterObject = input.Query.BackupTypeFilterObject,
-                    BackupTypeConfigurations = backupTypeConfigurations
+                    BackupTypeConfigurations = backupTypeConfigurations,
+                    UserManager = userManager
                 }
                 );
         }
@@ -45,8 +50,9 @@ namespace TOne.WhS.BusinessEntity.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
+            SecurityContext securityContext = new SecurityContext();
             IStateBackupDataManager dataManager = BEDataManagerFactory.GetDataManager<IStateBackupDataManager>();
-            bool updateActionSucc = dataManager.RestoreData(stateBackupId);
+            bool updateActionSucc = dataManager.RestoreData(stateBackupId, securityContext.GetLoggedInUserId());
             if (updateActionSucc)
             {
                 StateBackup stateBackup = dataManager.GetStateBackup(stateBackupId);
@@ -75,6 +81,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public Dictionary<Guid, StateBackupTypeConfig> BackupTypeConfigurations { get; set; }
 
+            public UserManager UserManager { get; set; }
+
             public override StateBackupDetail EntityDetailMapper(StateBackup entity)
             {
                 StateBackupTypeConfig config = this.BackupTypeConfigurations[entity.Info.ConfigId];
@@ -84,7 +92,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     Entity = entity,
                     Description = config.Behavior.GetDescription(context),
-                    Type = config.Title
+                    Type = config.Title,
+                    BackupByUsername = UserManager.GetUserName(entity.BackupByUserId),
+                    RestoredByUsername = entity.RestoredByByUserId.HasValue ?  UserManager.GetUserName(entity.RestoredByByUserId.Value) : null
                 };
             }
 

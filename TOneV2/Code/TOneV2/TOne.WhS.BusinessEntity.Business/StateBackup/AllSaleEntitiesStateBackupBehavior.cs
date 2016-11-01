@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Business
             StateBackupAllSaleEntities backupData = context.Data as StateBackupAllSaleEntities;
             SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
 
-            return string.Format("Backup from Numbering Plan for {0} selling number plan", sellingNumberPlanManager.GetSellingNumberPlanName(backupData.SellingNumberPlanId));
+            return string.Format("Backup for Numbering Plan {0}", sellingNumberPlanManager.GetSellingNumberPlanName(backupData.SellingNumberPlanId));
         }
 
         public override bool IsMatch(IStateBackupContext context, object filter)

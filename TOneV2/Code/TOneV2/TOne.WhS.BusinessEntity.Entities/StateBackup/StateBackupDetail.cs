@@ -9,9 +9,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class StateBackupDetail
     {
         public StateBackup Entity { get; set; }
-
         public String Type { get; set; }
-
         public String Description { get; set; }
+        public string BackupByUsername { get; set; }
+        public string RestoredByUsername { get; set; }
     }
 }
