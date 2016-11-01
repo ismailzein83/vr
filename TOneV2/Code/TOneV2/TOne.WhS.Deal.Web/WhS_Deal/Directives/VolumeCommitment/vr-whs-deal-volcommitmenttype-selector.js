@@ -72,7 +72,7 @@ app.directive('vrWhsDealVolcommitmenttypeSelector', ['UtilsService', '$compile',
 
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + disabled + '  > <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="description" datavaluefield="value"'
-                   + 'entityname="Routing Status" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
+                   + 'entityname="Type" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
 
         }
         function directiveCtor(ctrl, $scope, $attrs) {

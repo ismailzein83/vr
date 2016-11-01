@@ -17,7 +17,7 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentTemplate.html'
+            templateUrl: '/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentGridTemplate.html'
         };
 
         function VolumeCommitmentGrid($scope, ctrl, $attrs) {

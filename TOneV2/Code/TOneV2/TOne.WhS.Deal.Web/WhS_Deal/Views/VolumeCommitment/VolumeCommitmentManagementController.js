@@ -2,11 +2,13 @@
 
     "use strict";
 
-    volumeCommitmentManagementController.$inject = ["$scope", "WhS_Deal_VolumeCommitmentService", "UtilsService", "VRUIUtilsService", "VRNotificationService"];
+    volumeCommitmentManagementController.$inject = ["$scope", "WhS_Deal_VolumeCommitmentService", "UtilsService", "VRUIUtilsService", "VRNotificationService","WhS_Deal_VolumeCommitmentTypeEnum"];
 
-    function volumeCommitmentManagementController($scope, WhS_Deal_VolumeCommitmentService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function volumeCommitmentManagementController($scope, WhS_Deal_VolumeCommitmentService, UtilsService, VRUIUtilsService, VRNotificationService,WhS_Deal_VolumeCommitmentTypeEnum) {
         var gridAPI;
-
+        var supplierApi;
+        var customerApi;
+        var typeApi;
         defineScope();
         load();
 
@@ -16,16 +18,30 @@
                 gridAPI = api;
                 api.load(getFilterObject());
             };
-            $scope.searchClicked = function () {
+            $scope.scopeModel.searchClicked = function () {
                 return gridAPI.load(getFilterObject());
             };
-            $scope.AddVolumeCommitment = AddVolumeCommitment;
+            $scope.scopeModel.onVolCommitmentTypeDirectiveReady = function (api) {
+                typeApi = api;
+                typeApi.load();
+            };            
+            $scope.scopeModel.onSupplierDirectiveReady = function (api) {
+                supplierApi = api;
+                supplierApi.load();
+            };
+            $scope.scopeModel.onCustomerDirectiveReady = function (api) {
+                customerApi = api;
+                customerApi.load();
+            };
+
+            $scope.scopeModel.addVolumeCommitment = addVolumeCommitment;
         }
 
         function load() {
+
         }
 
-        function AddVolumeCommitment() {
+        function addVolumeCommitment() {
             var onVolumeCommitmentAdded = function (addedItem) {
                 gridAPI.onVolumeCommitmentAdded(addedItem);
             };
@@ -33,9 +49,15 @@
         }
 
         function getFilterObject() {
-            return {
+            var filter = {
                 Name: $scope.scopeModel.description
             };
+
+            if (typeApi.getSelectedIds() != undefined) {
+                filter.Type = typeApi.getSelectedIds();
+                filter.CarrierAccountIds = typeApi.getSelectedIds() == WhS_Deal_VolumeCommitmentTypeEnum.Buy.value ? supplierApi.getSelectedIds() : customerApi.getSelectedIds();
+            }
+            return filter;
         }
     }
 

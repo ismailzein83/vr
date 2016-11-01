@@ -1,17 +1,20 @@
 ﻿<vr-panel ng-controller="WhS_Deal_VolumeCommitmentManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
-            <vr-row removeline>                
+            <vr-row removeline>
+                <vr-whs-deal-volcommitmenttype-selector normal-col-num="2" selectedvalues="scopeModel.Type" on-ready="scopeModel.onVolCommitmentTypeDirectiveReady"> </vr-whs-deal-volcommitmenttype-selector>
+                <vr-whs-be-supplier-selector normal-col-num="2" ng-if="scopeModel.Type && scopeModel.Type.value == 0 " ismultipleselection on-ready="scopeModel.onSupplierDirectiveReady"></vr-whs-be-supplier-selector>
+                <vr-whs-be-customer-selector normal-col-num="2" ng-if="scopeModel.Type && scopeModel.Type.value == 1 " ismultipleselection on-ready="scopeModel.onCustomerDirectiveReady"></vr-whs-be-customer-selector>
                 <vr-columns width="normal">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
-            </vr-row>
+               </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddVolumeCommitment"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addVolumeCommitment"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
