@@ -40,6 +40,12 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionRuleSettingsTemplates"));
         }
 
+        function GetRouteOptionRuleSettingsTemplatesByProcessType(routingProcessType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionRuleSettingsTemplatesByProcessType"), {
+                routingProcessType: routingProcessType
+            });
+        }
+
         function HasAddRulePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Routing_ModuleConfig.moduleName, controllerName, ['AddRule']));
         }
@@ -60,6 +66,7 @@
             UpdateRule: UpdateRule,
             DeleteRule: DeleteRule,
             GetRouteOptionRuleSettingsTemplates: GetRouteOptionRuleSettingsTemplates,
+            GetRouteOptionRuleSettingsTemplatesByProcessType: GetRouteOptionRuleSettingsTemplatesByProcessType,
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
             HasDeleteRulePermission: HasDeleteRulePermission

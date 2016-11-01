@@ -84,7 +84,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
             List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
-            RouteBuilder builder = new RouteBuilder();
+            RouteBuilder builder = new RouteBuilder(RoutingProcessType.CustomerRoute);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;

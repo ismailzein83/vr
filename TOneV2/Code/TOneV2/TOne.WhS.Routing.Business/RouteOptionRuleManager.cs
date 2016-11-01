@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
 
-namespace TOne.WhS.Routing.Business 
+namespace TOne.WhS.Routing.Business
 {
     public class RouteOptionRuleManager : Vanrise.Rules.RuleManager<RouteOptionRule, RouteOptionRuleDetail>
     {
@@ -83,50 +80,76 @@ namespace TOne.WhS.Routing.Business
             return routeOptionRuleEditorRuntime;
         }
 
-        public RouteOptionRule GetMatchRule(RouteOptionRuleTarget target)
+        public Vanrise.Rules.RuleTree[] GetRuleTreesByPriorityForCustomerRoutes()
         {
-            var ruleTrees = GetRuleTreesByPriority();
-            if (ruleTrees != null)
-            {
-                foreach (var ruleTree in ruleTrees)
-                {
-                    var matchRule = ruleTree.GetMatchRule(target) as RouteOptionRule;
-                    if (matchRule != null)
-                        return matchRule;
-                }
-            }
-            return null;
-        }
-
-        public Vanrise.Rules.RuleTree[] GetRuleTreesByPriority()
-        {
-            return GetCachedOrCreate("GetRuleTreesByPriority",
+            return GetCachedOrCreate("GetRuleTreesByPriorityForCustomerRoutes",
                 () =>
                 {
-                    List<Vanrise.Rules.RuleTree> ruleTrees = new List<Vanrise.Rules.RuleTree>();
-                    var structureBehaviors = GetRuleStructureBehaviors();
-                    var routeOptionRuleTypes = GetRouteOptionRuleTypesTemplates();
-
-                    int? currentPriority = null;
-                    List<Vanrise.Rules.BaseRule> currentRules = null;
-                    foreach (var ruleType in routeOptionRuleTypes.OrderBy(itm => GetRuleTypePriority(itm)))
+                    return BuildRuleTree((allRouteOptionRuleConfig) =>
                     {
-                        int priority = GetRuleTypePriority(ruleType);
-                        if (currentPriority == null || currentPriority.Value != priority)
+                        List<RouteOptionRuleConfig> results = new List<RouteOptionRuleConfig>();
+                        RouteOptionRuleTypeConfiguration routeOptionRuleTypeConfiguration;
+                        Dictionary<Guid, RouteOptionRuleTypeConfiguration> routeOptionRuleTypeConfigurationDic = new ConfigManager().GetRouteOptionRuleTypeConfigurationForCustomerRoutes();
+
+                        foreach (var itm in allRouteOptionRuleConfig)
                         {
-                            if (currentRules != null && currentRules.Count > 0)
-                                ruleTrees.Add(new Vanrise.Rules.RuleTree(currentRules, structureBehaviors));
-                            currentPriority = priority;
-                            currentRules = new List<Vanrise.Rules.BaseRule>();
+                            routeOptionRuleTypeConfiguration = routeOptionRuleTypeConfigurationDic.GetRecord(itm.ExtensionConfigurationId);
+                            if (!itm.CanExcludeFromRouteBuildProcess || (routeOptionRuleTypeConfiguration != null && !routeOptionRuleTypeConfiguration.IsExcluded))
+                                results.Add(itm);
                         }
-                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId);
-                        if (ruleTypeRules != null)
-                            currentRules.AddRange(ruleTypeRules);
-                    }
+                        return results;
+                    });
+                });
+        }
+
+        public Vanrise.Rules.RuleTree[] GetRuleTreesByPriorityForProductRoutes()
+        {
+            return GetCachedOrCreate("GetRuleTreesByPriorityForProductRoutes",
+                () =>
+                {
+                    return BuildRuleTree((allRouteOptionRuleConfig) =>
+                    {
+                        List<RouteOptionRuleConfig> results = new List<RouteOptionRuleConfig>();
+                        RouteOptionRuleTypeConfiguration routeOptionRuleTypeConfiguration;
+                        Dictionary<Guid, RouteOptionRuleTypeConfiguration> routeOptionRuleTypeConfigurationDic = new ConfigManager().GetRouteOptionRuleTypeConfigurationForProductRoutes();
+
+                        foreach (var itm in allRouteOptionRuleConfig)
+                        {
+                            routeOptionRuleTypeConfiguration = routeOptionRuleTypeConfigurationDic.GetRecord(itm.ExtensionConfigurationId);
+                            if (!itm.CanExcludeFromProductCostProcess || (routeOptionRuleTypeConfiguration != null && !routeOptionRuleTypeConfiguration.IsExcluded))
+                                results.Add(itm);
+                        }
+                        return results;
+                    });
+                });
+        }
+
+        private Vanrise.Rules.RuleTree[] BuildRuleTree(Func<IEnumerable<RouteOptionRuleConfig>, IEnumerable<RouteOptionRuleConfig>> GetIncludedRouteOptionRuleTypes)
+        {
+            List<Vanrise.Rules.RuleTree> ruleTrees = new List<Vanrise.Rules.RuleTree>();
+            var structureBehaviors = GetRuleStructureBehaviors();
+            var routeOptionRuleTypes = GetRouteOptionRuleTypesTemplates();
+            IEnumerable<RouteOptionRuleConfig> includedRouteOptionRuleTypes = GetIncludedRouteOptionRuleTypes(routeOptionRuleTypes);
+
+            int? currentPriority = null;
+            List<Vanrise.Rules.BaseRule> currentRules = null;
+            foreach (var ruleType in includedRouteOptionRuleTypes.OrderBy(itm => GetRuleTypePriority(itm)))
+            {
+                int priority = GetRuleTypePriority(ruleType);
+                if (currentPriority == null || currentPriority.Value != priority)
+                {
                     if (currentRules != null && currentRules.Count > 0)
                         ruleTrees.Add(new Vanrise.Rules.RuleTree(currentRules, structureBehaviors));
-                    return ruleTrees.ToArray();
-                });
+                    currentPriority = priority;
+                    currentRules = new List<Vanrise.Rules.BaseRule>();
+                }
+                var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId);
+                if (ruleTypeRules != null)
+                    currentRules.AddRange(ruleTypeRules);
+            }
+            if (currentRules != null && currentRules.Count > 0)
+                ruleTrees.Add(new Vanrise.Rules.RuleTree(currentRules, structureBehaviors));
+            return ruleTrees.ToArray();
         }
 
         public IEnumerable<RouteOptionRuleConfig> GetRouteOptionRuleTypesTemplates()
@@ -161,6 +184,46 @@ namespace TOne.WhS.Routing.Business
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurationsByType<RouteOptionRuleConfig>(RouteOptionRuleConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<ProcessRouteOptionRuleConfig> GetRouteOptionRuleSettingsTemplatesByProcessType(RoutingProcessType routingProcessType)
+        {
+            List<ProcessRouteOptionRuleConfig> results = new List<ProcessRouteOptionRuleConfig>();
+
+            IEnumerable<RouteOptionRuleConfig> allRouteOptionRuleConfig = GetRouteOptionRuleTypesTemplates();
+
+            if (allRouteOptionRuleConfig == null)
+                return null;
+
+            switch (routingProcessType)
+            {
+                case RoutingProcessType.CustomerRoute:
+                    foreach (var itm in allRouteOptionRuleConfig)
+                    {
+                        results.Add(new ProcessRouteOptionRuleConfig
+                        {
+                            ExtensionConfigurationId = itm.ExtensionConfigurationId,
+                            Title = itm.Title,
+                            CanExclude = itm.CanExcludeFromRouteBuildProcess
+                        });
+                    }
+                    break;
+
+                case RoutingProcessType.RoutingProductRoute:
+                    foreach (var itm in allRouteOptionRuleConfig)
+                    {
+                        results.Add(new ProcessRouteOptionRuleConfig
+                        {
+                            ExtensionConfigurationId = itm.ExtensionConfigurationId,
+                            Title = itm.Title,
+                            CanExclude = itm.CanExcludeFromProductCostProcess
+                        });
+                    }
+                    break;
+
+                default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", routingProcessType));
+            }
+            return results;
         }
 
         #endregion

@@ -13,6 +13,15 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteBuilder
     {
+        public RouteBuilder(RoutingProcessType processType)
+        {
+            switch (processType)
+            {
+                case RoutingProcessType.CustomerRoute: _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriorityForCustomerRoutes(); break;
+                case RoutingProcessType.RoutingProductRoute: _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriorityForProductRoutes(); break;
+                default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", processType));
+            }
+        }
         #region Public Methods
 
         public IEnumerable<CarrierAccount> GetCustomersForRouting()
@@ -27,7 +36,7 @@ namespace TOne.WhS.Routing.Business
 
         Vanrise.Rules.RuleTree[] _ruleTreesForCustomerRoutes;
         Dictionary<int, Vanrise.Rules.RuleTree[]> _ruleTreesForRoutingProducts = new Dictionary<int, Vanrise.Rules.RuleTree[]>();
-        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriority();
+        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions;
         private Dictionary<int, CarrierAccount> _carrierAccounts;
 
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<SellingProductRoute> sellingProductRoutes)

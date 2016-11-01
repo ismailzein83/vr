@@ -16,7 +16,8 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
             onblurdropdown:"=",
             hideremoveicon: '@',
             normalColNum: '@',
-            customvalidate: '='
+            customvalidate: '=',
+            label: '@'
         },
         controller: function ($scope, $element, $attrs) {
         
@@ -64,6 +65,10 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
         if (attrs.ismultipleselection != undefined) {
             label = "Zone Services";
             multipleselection = "ismultipleselection";
+        }
+
+        if (attrs.label) {
+            label = attrs.label;
         }
 
         var addCliked = '';

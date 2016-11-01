@@ -86,7 +86,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         if (matchingRoutingProducts != null)
                         {
                             BuildRoutingProductRoutesContext routingProductContext = new BuildRoutingProductRoutesContext(preparedRPCodeMatch, matchingRoutingProducts.Values, inputArgument.SupplierZoneRPOptionPolicies, inputArgument.EffectiveDate, inputArgument.IsFuture);
-                            RouteBuilder builder = new RouteBuilder();
+                            RouteBuilder builder = new RouteBuilder(RoutingProcessType.RoutingProductRoute);
                             IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId, inputArgument.IncludeBlockedSupplierZones);
 
                             productRoutesBatch.RPRoutes.AddRange(productRoutes);

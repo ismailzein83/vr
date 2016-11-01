@@ -35,6 +35,14 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetRouteOptionRuleSettingsTemplatesByProcessType")]
+        public IEnumerable<ProcessRouteOptionRuleConfig> GetRouteOptionRuleSettingsTemplatesByProcessType(RoutingProcessType routingProcessType)
+        {
+            RouteOptionRuleManager manager = new RouteOptionRuleManager();
+            return manager.GetRouteOptionRuleSettingsTemplatesByProcessType(routingProcessType);
+        }
+
+        [HttpGet]
         [Route("GetRuleEditorRuntime")]
         public RouteOptionRuleEditorRuntime GetRuleEditorRuntime(int ruleId)
         {

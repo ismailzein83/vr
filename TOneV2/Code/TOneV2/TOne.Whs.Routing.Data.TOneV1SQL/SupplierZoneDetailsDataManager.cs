@@ -20,7 +20,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
     {
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
-        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriority();
+        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriorityForCustomerRoutes();
         Guid blockedRuleConfigId = new Guid("5a998636-0de9-4654-b430-c24805dd78d9");
 
         readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight" };

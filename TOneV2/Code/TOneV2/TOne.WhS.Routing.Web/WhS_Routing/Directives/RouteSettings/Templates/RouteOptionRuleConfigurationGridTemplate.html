@@ -1,0 +1,9 @@
+﻿<vr-datagrid datasource="scopeModel.routeOptionRuleSettings"
+             on-ready="scopeModel.onGridReady"
+             hidegridmenu>
+
+    <vr-datagridcolumn headertext="'Rule Type'" field="'Title'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Is Excluded'">
+        <vr-switch value="dataItem.IsExcluded" vr-disabled="dataItem.IsExcludedDisabled"></vr-switch>
+    </vr-datagridcolumn>
+</vr-datagrid>

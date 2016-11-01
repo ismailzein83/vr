@@ -10,12 +10,14 @@
 
                         <span vr-disabled="isEditMode">
                             <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModel.onSellingNumberPlanSelectionChanged"
-                                                                  selectedvalues="scopeModel.selectedSellingNumberPlan" normal-col-num="6" isrequired="true">
+                                                                  selectedvalues="scopeModel.selectedSellingNumberPlan" normal-col-num="6" isrequired="true" >
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
                     </vr-row>
                     <vr-row>
-                        <vr-whs-be-zone-service-config-selector normal-col-num="6" on-ready="scopeModel.onZoneServiceSelectorReady" isrequired="true" ismultipleselection></vr-whs-be-zone-service-config-selector>
+                        <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceSelectorReady" label="Default Zone Services"
+                                                                normal-col-num="6" isrequired="true" ismultipleselection>
+                        </vr-whs-be-zone-service-config-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'" ng-show="scopeModel.selectedSellingNumberPlan">

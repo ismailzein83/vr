@@ -158,6 +158,7 @@
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
     <Content Include="WhS_Routing\Constant\OrderTypeEnum.js" />
+    <Content Include="WhS_Routing\Constant\RouteOptionRuleSettingsTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteStatusEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
@@ -207,6 +208,10 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-selector.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationGridTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration-grid.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration.js" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealCompletionProgressRoutingOptimizerItemSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealProfitRoutingOptimizerItemSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\MarginRoutingOptimizerItemSettingsTemplate.html" />

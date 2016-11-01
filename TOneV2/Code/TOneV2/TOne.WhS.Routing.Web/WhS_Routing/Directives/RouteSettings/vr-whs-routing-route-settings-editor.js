@@ -36,45 +36,54 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
             var customerRouteSettingsAPI;
             var customerRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var routeOptionRuleConfigurationAPI;
+            var routeOptionRuleConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.scopeModel = {};
-
-            $scope.scopeModel.onCustomerRouteDatabaseConfigurationReady = function (api) {
-                customerRouteDatabaseConfigurationAPI = api;
-                customerRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
-            }
-            $scope.scopeModel.onProductRouteDatabaseConfigurationReady = function (api) {
-                productRouteDatabaseConfigurationAPI = api;
-                productRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
-            }
-            $scope.scopeModel.onSubProcessSettingsReady = function (api) {
-                subProcessSettingsAPI = api;
-                subProcessSettingsReadyPromiseDeferred.resolve();
-            }
-
-            $scope.scopeModel.onCustomerRouteSettingsReady = function (api) {
-                customerRouteSettingsAPI = api;
-                customerRouteSettingsReadyPromiseDeferred.resolve();
-            }
 
             function initializeController() {
+                $scope.scopeModel = {};
+
+                $scope.scopeModel.onCustomerRouteDatabaseConfigurationReady = function (api) {
+                    customerRouteDatabaseConfigurationAPI = api;
+                    customerRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
+                }
+                $scope.scopeModel.onProductRouteDatabaseConfigurationReady = function (api) {
+                    productRouteDatabaseConfigurationAPI = api;
+                    productRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
+                }
+                $scope.scopeModel.onSubProcessSettingsReady = function (api) {
+                    subProcessSettingsAPI = api;
+                    subProcessSettingsReadyPromiseDeferred.resolve();
+                }
+                $scope.scopeModel.onCustomerRouteSettingsReady = function (api) {
+                    customerRouteSettingsAPI = api;
+                    customerRouteSettingsReadyPromiseDeferred.resolve();
+                }
+                $scope.scopeModel.onRouteOptionRuleConfigurationReady = function (api) {
+                    routeOptionRuleConfigurationAPI = api;
+                    routeOptionRuleConfigurationReadyPromiseDeferred.resolve();
+                }
+
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
                     var customerRoutePayload;
                     var productRoutePayload;
                     var subProcessSettingsPayload;
                     var customerRouteSettingsPayload;
+                    var routeOptionRuleConfiguration;
 
                     if (payload != undefined && payload.data != undefined) {
                         customerRoutePayload = payload.data.RouteDatabasesToKeep.CustomerRouteConfiguration;
                         productRoutePayload = payload.data.RouteDatabasesToKeep.ProductRouteConfiguration;
                         subProcessSettingsPayload = payload.data.SubProcessSettings;
                         customerRouteSettingsPayload = payload.data.RouteBuildConfiguration;
+                        routeOptionRuleConfiguration = payload.data.RouteOptionRuleConfiguration;
                     }
 
 
@@ -110,6 +119,14 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         });
                     promises.push(customerRouteSettingsConfigurationLoadPromiseDeferred.promise);
 
+                    //Loading Route Option Rule Configuration
+                    var routeOptionRuleConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    routeOptionRuleConfigurationReadyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(routeOptionRuleConfigurationAPI, routeOptionRuleConfiguration, routeOptionRuleConfigurationLoadPromiseDeferred);
+                        });
+                    promises.push(routeOptionRuleConfigurationLoadPromiseDeferred.promise);
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 }
@@ -122,7 +139,8 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                             ProductRouteConfiguration: productRouteDatabaseConfigurationAPI.getData()
                         },
                         SubProcessSettings: subProcessSettingsAPI.getData(),
-                        RouteBuildConfiguration: customerRouteSettingsAPI.getData()
+                        RouteBuildConfiguration: customerRouteSettingsAPI.getData(),
+                        RouteOptionRuleConfiguration: routeOptionRuleConfigurationAPI.getData()
                     };
                 }
 

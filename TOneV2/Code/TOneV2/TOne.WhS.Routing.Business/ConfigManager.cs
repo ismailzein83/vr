@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common.Business;
 
@@ -21,6 +22,27 @@ namespace TOne.WhS.Routing.Business
         {
             return GetProductRouteBuildConfiguration().AddBlockedOptions;
         }
+
+        public Dictionary<Guid, RouteOptionRuleTypeConfiguration> GetRouteOptionRuleTypeConfigurationForCustomerRoutes()
+        {
+            CustomerRouteOptionRuleTypeConfiguration customerRouteOptionRuleTypeConfiguration = GetCustomerRouteOptionRuleTypeConfiguration();
+
+            if (customerRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration == null)
+                throw new NullReferenceException("customerRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration");
+
+            return customerRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration;
+        }
+
+        public Dictionary<Guid, RouteOptionRuleTypeConfiguration> GetRouteOptionRuleTypeConfigurationForProductRoutes()
+        {
+            ProductRouteOptionRuleTypeConfiguration productRouteOptionRuleTypeConfiguration = GetProductRouteOptionRuleTypeConfiguration();
+
+            if (productRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration == null)
+                throw new NullReferenceException("productRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration");
+
+            return productRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration;
+        }
+
 
         public SubProcessSettings GetSubProcessSettings()
         {
@@ -142,6 +164,35 @@ namespace TOne.WhS.Routing.Business
             return routeBuildConfiguration.ProductRoute;
         }
 
+        private RouteOptionRuleConfiguration GetRouteOptionRuleConfiguration()
+        {
+            RouteSettingsData routeSettingsData = GetRouteSettingData();
+
+            if (routeSettingsData.RouteOptionRuleConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.RouteOptionRuleConfiguration");
+
+            return routeSettingsData.RouteOptionRuleConfiguration;
+        }
+
+        private CustomerRouteOptionRuleTypeConfiguration GetCustomerRouteOptionRuleTypeConfiguration()
+        {
+            RouteOptionRuleConfiguration routeOptionRuleConfiguration = GetRouteOptionRuleConfiguration();
+
+            if (routeOptionRuleConfiguration.CustomerRouteOptionRuleTypeConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.CustomerRouteOptionRuleTypeConfiguration");
+
+            return routeOptionRuleConfiguration.CustomerRouteOptionRuleTypeConfiguration;
+        }
+
+        private ProductRouteOptionRuleTypeConfiguration GetProductRouteOptionRuleTypeConfiguration()
+        {
+            RouteOptionRuleConfiguration routeOptionRuleConfiguration = GetRouteOptionRuleConfiguration();
+
+            if (routeOptionRuleConfiguration.ProductRouteOptionRuleTypeConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.ProductRouteOptionRuleTypeConfiguration");
+
+            return routeOptionRuleConfiguration.ProductRouteOptionRuleTypeConfiguration;
+        }
 
         #endregion
     }
