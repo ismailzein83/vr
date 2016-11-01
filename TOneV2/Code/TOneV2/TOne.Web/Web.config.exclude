@@ -75,7 +75,9 @@
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-    
+
+    <add key="StateBackupDatabase" value="TOneV2_Dev_Backup"/>
+
   </appSettings>
   <system.web>
     <httpHandlers>
