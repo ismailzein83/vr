@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public enum VolCommitmentDealType { Buy = 0, Sell = 1 }
+    public enum VolCommitmentDealType {
+
+        [Description("Buy")]
+        Buy = 0,
+
+        [Description("Sell")]
+        Sell = 1
+    }
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");

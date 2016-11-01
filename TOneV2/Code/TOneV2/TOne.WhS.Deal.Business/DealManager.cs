@@ -8,8 +8,11 @@ using Vanrise.Entities;
 using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Data;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
 using TOne.WhS.Deal.Entities.Settings;
+using System.ComponentModel;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -51,7 +54,7 @@ namespace TOne.WhS.Deal.Business
                 return true;
             };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDefinitionDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, VolCommitmentDetailMapper));
         }
 
 
@@ -199,6 +202,22 @@ namespace TOne.WhS.Deal.Business
             {
                 Entity = deal,
             };
+        }
+
+        DealDefinitionDetail VolCommitmentDetailMapper(DealDefinition deal)
+        {
+            VolCommitmentDetail detail = new VolCommitmentDetail() 
+            {
+                Entity = deal,
+            };
+
+            VolCommitmentDealSettings settings = deal.Settings as VolCommitmentDealSettings;
+            int carrierAccountId = settings.CarrierAccountId;
+
+            detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
+            detail.TypeDetail = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
+            detail.IsEffective = settings.BeginDate <= DateTime.Now && settings.EndDate >= DateTime.Now;
+            return detail;
         }
         #endregion
     }
