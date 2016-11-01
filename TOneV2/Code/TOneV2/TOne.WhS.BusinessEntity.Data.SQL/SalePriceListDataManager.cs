@@ -83,9 +83,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
         {
-            return String.Format(@"Delete sp FROM [TOneWhS_BE].[SalePriceList] sp Inner Join [TOneWhS_BE].SaleRate sr on sp.ID = sr.PriceListID 
-                                            Inner join [TOneWhS_BE].SaleZone sz on sr.ZoneID = sz.ID
-                                            Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
+            return String.Format(@"Delete FROM [TOneWhS_BE].[SalePriceList] where ID in (SELECT sp.[ID] FROM [TOneWhS_BE].[SalePriceList]
+                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].CarrierAccount ca WITH (NOLOCK) on sp.OwnerID = ca.ID
+											Inner Join [TOneWhS_BE].SellingNumberPlan np on ca.SellingNumberPlanID=np.ID
+                                            Where ca.SellingNumberPlanID = {0} and sp.OwnerType=1  Union SELECT sp.[ID] FROM [TOneWhS_BE].[SalePriceList]
+                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].SellingProduct sellp WITH (NOLOCK) on sp.OwnerID = sellp.ID
+											Inner Join [TOneWhS_BE].SellingNumberPlan np on sellp.SellingNumberPlanID=np.ID
+                                            Where sellp.SellingNumberPlanID = {0} and sp.OwnerType=0)", sellingNumberPlanId);
         }
 
         public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
