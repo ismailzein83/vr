@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Routing.Business.RouteRules;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
@@ -13,15 +10,27 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteBuilder
     {
+        #region Variables/Ctor
+
+        Vanrise.Rules.RuleTree[] _ruleTreesForCustomerRoutes;
+        Dictionary<int, Vanrise.Rules.RuleTree[]> _ruleTreesForRoutingProducts = new Dictionary<int, Vanrise.Rules.RuleTree[]>();
+        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions;
+        private Dictionary<int, CarrierAccount> _carrierAccounts;
+
         public RouteBuilder(RoutingProcessType processType)
         {
             switch (processType)
             {
                 case RoutingProcessType.CustomerRoute: _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriorityForCustomerRoutes(); break;
+
                 case RoutingProcessType.RoutingProductRoute: _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriorityForProductRoutes(); break;
+
                 default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", processType));
             }
         }
+
+        #endregion
+
         #region Public Methods
 
         public IEnumerable<CarrierAccount> GetCustomersForRouting()
@@ -34,10 +43,6 @@ namespace TOne.WhS.Routing.Business
             throw new NotImplementedException();
         }
 
-        Vanrise.Rules.RuleTree[] _ruleTreesForCustomerRoutes;
-        Dictionary<int, Vanrise.Rules.RuleTree[]> _ruleTreesForRoutingProducts = new Dictionary<int, Vanrise.Rules.RuleTree[]>();
-        Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions;
-        private Dictionary<int, CarrierAccount> _carrierAccounts;
 
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<SellingProductRoute> sellingProductRoutes)
         {
