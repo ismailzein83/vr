@@ -209,7 +209,9 @@
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
     <Content Include="WhS_Deal\Services\VolumeCommitmentService.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\InboundRateCalcMethodEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\OutboundRateCalcMethodEditorController.js" />
+    <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\Templates\InboundRateCalcMethodEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\Templates\OutboundRateCalcMethodEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysis\InboundEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysis\InboundEditorController.js" />
