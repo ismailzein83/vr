@@ -41,23 +41,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             StringBuilder restoreCommands = new StringBuilder();
 
             SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
-            SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
-            SaleCodeDataManager saleCodeDataManager = new SaleCodeDataManager();
             SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
             SaleEntityServiceDataManager saleEntityServiceDataManager = new SaleEntityServiceDataManager();
             SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
 
             restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
-            restoreCommands.AppendLine(saleCodeDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
             restoreCommands.AppendLine(saleEntityServiceDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
-            restoreCommands.AppendLine(saleZoneDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
             restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
 
 
             restoreCommands.AppendLine(salePriceListDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
-            restoreCommands.AppendLine(saleZoneDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
-            restoreCommands.AppendLine(saleCodeDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleRateDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleEntityServiceDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));

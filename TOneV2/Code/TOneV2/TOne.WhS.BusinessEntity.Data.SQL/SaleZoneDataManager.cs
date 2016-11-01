@@ -108,14 +108,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return String.Format(@"DELETE FROM [TOneWhS_BE].[SaleZone] Where SellingNumberPlanID = {0}", sellingNumberPlanId);
         }
 
-
-        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
-        {
-            return String.Format(@"DELETE sz FROM [TOneWhS_BE].[SaleRate] sr  Inner Join [TOneWhS_BE].[SalePriceList] pl  on sr.PriceListID = pl.ID
-                                          Inner Join [TOneWhS_BE].[SaleZone] sz on sr.ZoneID = sz.ID 
-                                          Where pl.OwnerId = {0} and pl.OwnerType = {1}", ownerId, ownerType);
-        }
-
         #endregion
     }
 }
