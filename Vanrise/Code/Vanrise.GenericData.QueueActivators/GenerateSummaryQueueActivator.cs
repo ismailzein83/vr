@@ -53,7 +53,7 @@ namespace Vanrise.GenericData.QueueActivators
         {
             var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
             var allSummaryBatches = new ConcurrentDictionary<DateTime, ConcurrentDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
-            ConcurrentDictionary<DateTime, List<StagingSummaryRecord>> stagingSummaryRecordDict = new ConcurrentDictionary<DateTime, List<StagingSummaryRecord>>();
+            ConcurrentDictionary<DateTime, List<GenericSummaryRecordBatch>> genericSummaryRecordBatchDict = new ConcurrentDictionary<DateTime, List<GenericSummaryRecordBatch>>();
 
             context.DoWhilePreviousRunning(() =>
             {
@@ -86,7 +86,7 @@ namespace Vanrise.GenericData.QueueActivators
 
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
 
-            var dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+            object dbApplyStream = null;
 
             //Store Summary Batches for finalization step
             foreach (var summaryBatchEntry in allSummaryBatches)
@@ -98,40 +98,58 @@ namespace Vanrise.GenericData.QueueActivators
                     Items = summaryItems.Select(summaryItemInProcess => summaryItemInProcess.SummaryItem).ToList(),
                     SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId
                 };
-                byte[] serializedBatch = genericSummaryBatch.Serialize();
-
-                StagingSummaryRecord obj = new StagingSummaryRecord()
-                {
-                    ProcessInstanceId = context.ProcessInstanceId,
-                    Data = serializedBatch,
-                    BatchStart = summaryBatchEntry.Key,
-                    StageName = context.CurrentStageName,
-                };
-
 
                 if (context.To >= summaryItems.First().SummaryItem.BatchEnd && context.From <= summaryBatchEntry.Key)
                 {
-                    List<StagingSummaryRecord> stagingSummaryRecords;
-                    if (!stagingSummaryRecordDict.TryGetValue(summaryBatchEntry.Key, out stagingSummaryRecords))
+                    List<GenericSummaryRecordBatch> genericSummaryRecords;
+                    if (!genericSummaryRecordBatchDict.TryGetValue(summaryBatchEntry.Key, out genericSummaryRecords))
                     {
-                        stagingSummaryRecords = new List<StagingSummaryRecord>();
-                        stagingSummaryRecordDict.TryAdd(summaryBatchEntry.Key, stagingSummaryRecords);
+                        genericSummaryRecords = new List<GenericSummaryRecordBatch>();
+                        genericSummaryRecordBatchDict.TryAdd(summaryBatchEntry.Key, genericSummaryRecords);
                     }
-                    stagingSummaryRecords.Add(obj);
+                    genericSummaryRecords.Add(genericSummaryBatch);
                 }
                 else
+                {
+                    byte[] serializedBatch = genericSummaryBatch.Serialize();
+
+                    StagingSummaryRecord obj = new StagingSummaryRecord()
+                    {
+                        ProcessInstanceId = context.ProcessInstanceId,
+                        Data = serializedBatch,
+                        BatchStart = summaryBatchEntry.Key,
+                        StageName = context.CurrentStageName,
+                    };
+
+                    if (dbApplyStream == null)
+                        dbApplyStream = dataManager.InitialiazeStreamForDBApply();
                     dataManager.WriteRecordToStream(obj, dbApplyStream);
+                }
             }
-
-            if (stagingSummaryRecordDict.Count > 0)
+            List<Task> runningTasks = new List<Task>();
+            if (genericSummaryRecordBatchDict.Count > 0)
             {
-                StartEnqueuingBatches(context, stagingSummaryRecordDict, transformationManager);
+                Task loadDataTask = new Task(() =>
+                {
+                    StartEnqueuingBatches(context, genericSummaryRecordBatchDict, transformationManager);
+                });
+                loadDataTask.Start();
+                runningTasks.Add(loadDataTask);
             }
 
-            var streamReadyToApply = dataManager.FinishDBApplyStream(dbApplyStream);
-            dataManager.ApplyStreamToDB(streamReadyToApply);
+            if (dbApplyStream != null)
+            {
+                Task applyDataTask = new Task(() =>
+                {
+                    var streamReadyToApply = dataManager.FinishDBApplyStream(dbApplyStream);
+                    dataManager.ApplyStreamToDB(streamReadyToApply);
+                });
+                applyDataTask.Start();
+                runningTasks.Add(applyDataTask);
+            }
+            if (runningTasks.Count > 0)
+                Task.WaitAll(runningTasks.ToArray());
         }
-
 
         void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
@@ -148,124 +166,131 @@ namespace Vanrise.GenericData.QueueActivators
 
             Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
             AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
-            StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus, stageBatchRecord);
-
-            PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus);
-        }
-
-
-        private static void StartEnqueuingBatches(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, ConcurrentDictionary<DateTime, List<StagingSummaryRecord>> stagingSummaryRecordDict, GenericSummaryTransformationManager transformationManager)
-        {
             Task loadDataTask = new Task(() =>
             {
-                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Loading Batches");
-                DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-                var recordStorageDataManager = dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId);
-                if (recordStorageDataManager == null)
-                    throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
-
-                AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
-                foreach (KeyValuePair<DateTime, List<StagingSummaryRecord>> item in stagingSummaryRecordDict)
-                {
-                    Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
-                    foreach (StagingSummaryRecord stagingSummaryRecord in item.Value)
-                    {
-                        GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
-                        genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
-                        queueLoadedBatches.Enqueue(genericSummaryRecordBatch);
-                    }
-                    PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus);
-                }
-                loadBatchStatus.IsComplete = true;
-                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading Batches");
+                StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus, stageBatchRecord);
             });
             loadDataTask.Start();
+
+            PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName);
         }
 
-        private static void PrepareAndInsertBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning, GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus)
+        private static void StartEnqueuingBatches(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, ConcurrentDictionary<DateTime, List<GenericSummaryRecordBatch>> genericSummaryRecordBatchDict, GenericSummaryTransformationManager transformationManager)
+        {
+            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Loading Batches for Stage {0}", context.CurrentStageName));
+            DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+            var recordStorageDataManager = dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId);
+            if (recordStorageDataManager == null)
+                throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
+
+            AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
+            List<Task> runningTasks = new List<Task>();
+            foreach (KeyValuePair<DateTime, List<GenericSummaryRecordBatch>> genericSummaryRecordBatch in genericSummaryRecordBatchDict)
+            {
+                Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
+                foreach (GenericSummaryRecordBatch genericSummaryRecordBatchItem in genericSummaryRecordBatch.Value)
+                {
+                    queueLoadedBatches.Enqueue(genericSummaryRecordBatchItem);
+                }
+                Task prepareAndInsertTask = new Task(() =>
+                {
+                    PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName);
+                });
+                prepareAndInsertTask.Start();
+                runningTasks.Add(prepareAndInsertTask);
+            }
+            loadBatchStatus.IsComplete = true;
+            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
+            Task.WaitAll(runningTasks.ToArray());
+        }
+
+        private static void PrepareAndInsertBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
+            GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
+            Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName)
         {
             Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches = new Queueing.MemoryQueue<List<GenericSummaryRecordBatch>>();
             AsyncActivityStatus prepareBatchStatus = new AsyncActivityStatus();
-            StartPreparingBatches(writeTrackingMessage, doWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus);
-
-            StartInsertingBatches(writeTrackingMessage, doWhilePreviousRunning, transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus);
+            Task prepareBatchTask = new Task(() =>
+                {
+                    StartPreparingBatches(writeTrackingMessage, doWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus, currentStageName);
+                });
+            prepareBatchTask.Start();
+            StartInsertingBatches(writeTrackingMessage, doWhilePreviousRunning, transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus, currentStageName);
         }
 
         private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
         {
-            Task loadDataTask = new Task(() =>
+
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+            try
             {
-                IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
-                try
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Loading Batches for Stage {0}", context.CurrentStageName));
+                dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, (stagingSummaryRecord) =>
                 {
-                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Loading Batches");
-                    dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, (stagingSummaryRecord) =>
-                    {
-                        GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
-                        genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
-                        queueLoadedBatches.Enqueue(genericSummaryRecordBatch);
-                    });
-                }
-                finally
-                {
-                    dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart);
-                    loadBatchStatus.IsComplete = true;
-                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading Batches");
-                }
-            });
-            loadDataTask.Start();
+                    GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
+                    genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
+                    queueLoadedBatches.Enqueue(genericSummaryRecordBatch);
+                });
+            }
+            finally
+            {
+                dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart);
+                loadBatchStatus.IsComplete = true;
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
+            }
+
         }
 
-        private static void StartPreparingBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        private static void StartPreparingBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
+            Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus,
+            Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus, string currentStageName)
         {
             List<GenericSummaryRecordBatch> batches = null;
             DateTime batchStart = default(DateTime);
 
-            Task prepareDataTask = new Task(() =>
+            try
             {
-                try
+                writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Preparing Batches for Stage {0}", currentStageName));
+                doWhilePreviousRunning(loadBatchStatus, () =>
                 {
-                    writeTrackingMessage(LogEntryType.Information, "Start Preparing Batches");
-                    doWhilePreviousRunning(loadBatchStatus, () =>
+                    bool hasItem = false;
+                    do
                     {
-                        bool hasItem = false;
-                        do
+                        hasItem = queueLoadedBatches.TryDequeue((item) =>
                         {
-                            hasItem = queueLoadedBatches.TryDequeue((item) =>
+                            GenericSummaryRecordBatch genericSummaryRecordBatch = item as GenericSummaryRecordBatch;
+                            if (genericSummaryRecordBatch == null)
+                                throw new Exception(String.Format("item should be of type 'GenericSummaryRecordBatch' and not of type '{0}'", item.GetType()));
+
+                            if (genericSummaryRecordBatch.BatchStart != batchStart)
                             {
-                                GenericSummaryRecordBatch genericSummaryRecordBatch = item as GenericSummaryRecordBatch;
-                                if (genericSummaryRecordBatch == null)
-                                    throw new Exception(String.Format("item should be of type 'GenericSummaryRecordBatch' and not of type '{0}'", item.GetType()));
-
-                                if (genericSummaryRecordBatch.BatchStart != batchStart)
+                                if (batches != null)
                                 {
-                                    if (batches != null)
-                                    {
-                                        queuePreparedBatches.Enqueue(batches);
-                                    }
-                                    batches = new List<GenericSummaryRecordBatch>();
+                                    queuePreparedBatches.Enqueue(batches);
                                 }
-                                batches.Add(genericSummaryRecordBatch);
-                                batchStart = genericSummaryRecordBatch.BatchStart;
-                            });
-                        } while (!loadBatchStatus.IsComplete || hasItem);
-                    });
-                }
-                finally
-                {
-                    if (batches != null && batches.Count > 0)
-                        queuePreparedBatches.Enqueue(batches);
+                                batches = new List<GenericSummaryRecordBatch>();
+                            }
+                            batches.Add(genericSummaryRecordBatch);
+                            batchStart = genericSummaryRecordBatch.BatchStart;
+                        });
+                    } while (!loadBatchStatus.IsComplete || hasItem);
+                });
+            }
+            finally
+            {
+                if (batches != null && batches.Count > 0)
+                    queuePreparedBatches.Enqueue(batches);
 
-                    prepareBatchStatus.IsComplete = true;
-                    writeTrackingMessage(LogEntryType.Information, "Finish Preparing Batches");
-                }
-            });
-            prepareDataTask.Start();
+                prepareBatchStatus.IsComplete = true;
+                writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Preparing Batches for Stage {0}", currentStageName));
+            }
         }
 
-        private static void StartInsertingBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning, GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus)
+        private static void StartInsertingBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
+            GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
+            Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus, string currentStageName)
         {
-            writeTrackingMessage(LogEntryType.Information, "Start Inserting Batches");
+            writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             bool hasItem = false;
             doWhilePreviousRunning(prepareBatchStatus, () =>
@@ -290,7 +315,7 @@ namespace Vanrise.GenericData.QueueActivators
                     });
                 } while (!prepareBatchStatus.IsComplete || hasItem);
             });
-            writeTrackingMessage(LogEntryType.Information, "Finish Inserting Batches");
+            writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
         }
 
         List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
