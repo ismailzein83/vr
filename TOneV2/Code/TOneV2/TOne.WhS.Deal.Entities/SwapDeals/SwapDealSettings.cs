@@ -46,6 +46,10 @@ namespace TOne.WhS.Deal.Entities
 
         public List<SwapDealInbound> Inbounds { get; set; }
 
+        public int? Difference { set; get; }
+
         public List<SwapDealOutbound> Outbounds { get; set; }
+
+        public int GracePeriod { get; set; }
     }
 }

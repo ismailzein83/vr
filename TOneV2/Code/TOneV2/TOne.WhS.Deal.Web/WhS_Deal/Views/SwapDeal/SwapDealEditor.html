@@ -4,7 +4,7 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-whs-be-carrieraccount-selector selectedvalues="scopeModel.carrierAcount" on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" getexchangecarriers
+                        <vr-whs-be-carrieraccount-selector selectedvalues="scopeModel.carrierAccount" on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" getexchangecarriers
                                                            isrequired="true" hideremoveicon="true" onselectionchanged="scopeModel.onCarrierAccountSelectionChanged"></vr-whs-be-carrieraccount-selector>
 
                         <vr-columns width="1/3row">
@@ -37,16 +37,17 @@
                             <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" isrequired="true"></vr-textbox>
+                            <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" decimalprecision="0" isrequired="true" customvalidate="scopeModel.validateGracePeriod()"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" ng-if="scopeModel.selectedContractType && (scopeModel.selectedContractType.value == 0 || scopeModel.selectedContractType.value == 1 ) ">
+                            <vr-textbox type="number" minvalue="0" maxvalue="100" value="scopeModel.difference" label="Difference %" isrequired="true">  </vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="2/3row">
+                        <vr-columns width="fullrow">
                             <vr-textbox label="Description" value="scopeModel.description" isrequired="true"></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
-                        </vr-columns>
+                        
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Selling Part'" vr-loader="scopeModel.isLoadingInbound">

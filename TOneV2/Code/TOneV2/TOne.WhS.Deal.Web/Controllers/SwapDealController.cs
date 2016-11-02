@@ -12,10 +12,10 @@ using TOne.WhS.Deal.Entities.Settings;
 namespace TOne.WhS.Deal.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "DealDefinition")]
-    public class DealDefinitionController : Vanrise.Web.Base.BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "SwapDeal")]
+    public class SwapDealController : Vanrise.Web.Base.BaseAPIController
     {
-        DealManager _manager = new DealManager();
+        SwapDealManager _manager = new SwapDealManager();
 
         [HttpPost]
         [Route("GetFilteredSwapDeals")]
@@ -23,14 +23,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredSwapDeals(input));
         }
-
-        [HttpPost]
-        [Route("GetFilteredVolCommitmentDeals")]
-        public object GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredVolCommitmentDeals(input));
-        }
-
+        
         [HttpGet]
         [Route("GetDeal")]
         public DealDefinition GetDeal(int dealId)
@@ -55,7 +48,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetSwapDealSettingData")]
         public SwapDealSettingData GetSwapDealSettingData()
         {
-            return _manager.GetSwapDealSettingData();
+            return  _manager.GetSwapDealSettingData();
         }
     }
 }

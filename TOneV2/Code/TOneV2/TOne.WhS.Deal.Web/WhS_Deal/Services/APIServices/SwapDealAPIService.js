@@ -1,17 +1,14 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     'use strict';
 
-    DealAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig', 'SecurityService'];
+    SwapDealAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig', 'SecurityService'];
 
-    function DealAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig, SecurityService) {
-        var controllerName = 'DealDefinition';
+    function SwapDealAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig, SecurityService) {
+        var controllerName = 'SwapDeal';
 
         function GetFilteredSwapDeals(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredSwapDeals'), input);
-        }
-        function GetFilteredVolCommitmentDeals(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredVolCommitmentDeals'), input);
         }
         function GetDeal(dealId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetDeal'), {
@@ -37,7 +34,6 @@
         }
         return ({
             GetFilteredSwapDeals: GetFilteredSwapDeals,
-            GetFilteredVolCommitmentDeals:GetFilteredVolCommitmentDeals,
             GetDeal: GetDeal,
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,
@@ -47,6 +43,6 @@
         });
     }
 
-    appControllers.service('WhS_Deal_DealAPIService', DealAPIService);
+    app.service('WhS_Deal_SwapDealAPIService', SwapDealAPIService);
 
-})(appControllers);
+})(app);

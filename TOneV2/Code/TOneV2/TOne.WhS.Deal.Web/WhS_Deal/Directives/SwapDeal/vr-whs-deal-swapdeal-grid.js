@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealGridDirective.$inject = ['WhS_Deal_DealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService'];
+    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService'];
 
-    function SwapDealGridDirective(WhS_Deal_DealAPIService, WhS_Deal_SwapDealService, VRNotificationService) {
+    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -35,7 +35,7 @@
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_Deal_DealAPIService.GetFilteredSwapDeals(dataRetrievalInput).then(function (response) {
+                    return WhS_Deal_SwapDealAPIService.GetFilteredSwapDeals(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

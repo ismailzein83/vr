@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_DealAPIService', 'WhS_Deal_VolumeCommitmentService', 'VRNotificationService'];
+    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService', 'WhS_Deal_VolumeCommitmentService', 'VRNotificationService'];
 
-    function VolumeCommitmentGridDirective(WhS_Deal_DealAPIService, WhS_Deal_VolumeCommitmentService, VRNotificationService) {
+    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_VolumeCommitmentService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -36,7 +36,7 @@
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_Deal_DealAPIService.GetFilteredVolCommitmentDeals(dataRetrievalInput).then(function (response) {
+                    return WhS_Deal_VolCommitmentDealAPIService.GetFilteredVolCommitmentDeals(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

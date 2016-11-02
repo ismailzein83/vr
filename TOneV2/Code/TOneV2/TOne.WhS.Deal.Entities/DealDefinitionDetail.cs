@@ -9,5 +9,10 @@ namespace TOne.WhS.Deal.Entities
     public class DealDefinitionDetail 
     {
         public DealDefinition Entity { set; get; }
+
+        public string CarrierAccountName { get; set; }
+
+
+        public bool IsEffective { get; set; }
     }
 }

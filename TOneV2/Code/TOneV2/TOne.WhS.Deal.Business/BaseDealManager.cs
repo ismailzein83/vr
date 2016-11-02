@@ -16,46 +16,10 @@ using System.ComponentModel;
 
 namespace TOne.WhS.Deal.Business
 {
-    public class DealManager
+    public abstract class BaseDealManager
     {
 
         #region Public Methods
-
-        public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
-        {
-            var cachedEntities = this.GetCachedSwapDeals();
-            Func<DealDefinition, bool> filterExpression = (deal) =>
-            {
-                if (input.Query.Name != null && !deal.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                    return false;
-                if (input.Query.CarrierAccountIds != null && !input.Query.CarrierAccountIds.Contains((deal.Settings as SwapDealSettings).CarrierAccountId))
-                    return false;
-
-                return true;
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDefinitionDetailMapper));
-        }
-
-
-
-        public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
-        {
-            var cachedEntities = this.GetCachedVolCommitmentDeals();
-            Func<DealDefinition, bool> filterExpression = (deal) =>
-            {
-                if (input.Query.Name != null && !deal.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                    return false;
-                if (input.Query.Type.HasValue && input.Query.Type.Value != (deal.Settings as VolCommitmentDealSettings).DealType)
-                    return false;
-                if (input.Query.CarrierAccountIds != null && !input.Query.CarrierAccountIds.Contains((deal.Settings as VolCommitmentDealSettings).CarrierAccountId))
-                    return false;
-                return true;
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, VolCommitmentDetailMapper));
-        }
-
 
         public DealDefinition GetDeal(int dealId)
         {
@@ -79,7 +43,7 @@ namespace TOne.WhS.Deal.Business
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 deal.DealId = insertedId;
-                insertOperationOutput.InsertedObject = deal.Settings.ConfigId == Deal.Entities.SwapDealSettings.SwapDealSettingsConfigId ?  DealDefinitionDetailMapper(deal) : VolCommitmentDetailMapper(deal);
+                insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal) ;
             }
             else
             {
@@ -104,7 +68,7 @@ namespace TOne.WhS.Deal.Business
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = deal.Settings.ConfigId == Deal.Entities.SwapDealSettings.SwapDealSettingsConfigId ? DealDefinitionDetailMapper(this.GetDeal(deal.DealId)) : VolCommitmentDetailMapper(this.GetDeal(deal.DealId));
+                updateOperationOutput.UpdatedObject = DealDeinitionDetailMapper(this.GetDeal(deal.DealId)) ;
             }
             else
             {
@@ -115,22 +79,23 @@ namespace TOne.WhS.Deal.Business
         }
 
 
-        public SwapDealSettingData GetSwapDealSettingData()
-        {
-            var settingManager = new SettingManager();
-            Setting setting = settingManager.GetSettingByType(Constants.SwapDealSettings);
-            if (setting == null)
-                throw new NullReferenceException("setting");
-            if (setting.Data == null)
-                throw new NullReferenceException("setting.Data");
-            var swapDealAnalysisSettingData = setting.Data as SwapDealSettingData;
-            if (swapDealAnalysisSettingData == null)
-                throw new NullReferenceException("swapDealAnalysisSettingData");
-            return swapDealAnalysisSettingData;
-        }
+        public abstract DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal);
 
         #endregion
 
+        #region Protected Methods
+            protected IEnumerable<DealDefinition> GetCachedSwapDeals()
+            {
+                return this.GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
+            }
+
+            protected IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
+            {
+                return this.GetCachedDealsByConfigId().GetRecord(VolCommitmentDealSettings.VolCommitmentDealSettingsConfigId); ;
+            }
+
+
+        #endregion
         #region Private Classes
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -145,18 +110,10 @@ namespace TOne.WhS.Deal.Business
         }
         #endregion
 
+
+
         #region Private Methods
-        IEnumerable<DealDefinition> GetCachedSwapDeals()
-        {
-            return this.GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
-        }
-
-        IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
-        {
-            return this.GetCachedDealsByConfigId().GetRecord(VolCommitmentDealSettings.VolCommitmentDealSettingsConfigId); ;
-        }
-
-        
+     
 
         Dictionary<Guid,List<DealDefinition>>  GetCachedDealsByConfigId()
         {
@@ -192,32 +149,6 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        #endregion
-
-        #region Mappers
-        DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal)
-        {
-            return new DealDefinitionDetail()
-            {
-                Entity = deal,
-            };
-        }
-
-        DealDefinitionDetail VolCommitmentDetailMapper(DealDefinition deal)
-        {
-            VolCommitmentDetail detail = new VolCommitmentDetail() 
-            {
-                Entity = deal,
-            };
-
-            VolCommitmentDealSettings settings = deal.Settings as VolCommitmentDealSettings;
-            int carrierAccountId = settings.CarrierAccountId;
-
-            detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
-            detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
-            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
-            return detail;
-        }
         #endregion
     }
 }
