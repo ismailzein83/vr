@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             var options = new TransactionOptions
             {
                 IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-                Timeout = TransactionManager.DefaultTimeout
+                Timeout = TransactionManager.MaximumTimeout
             };
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
@@ -65,7 +65,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             var options = new TransactionOptions
             {
                 IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-                Timeout = TransactionManager.DefaultTimeout
+                Timeout = TransactionManager.MaximumTimeout
             };
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
