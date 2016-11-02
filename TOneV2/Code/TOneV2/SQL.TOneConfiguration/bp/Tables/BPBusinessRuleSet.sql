@@ -3,11 +3,13 @@
     [Name]              NVARCHAR (MAX)   NOT NULL,
     [ParentID]          INT              NULL,
     [Details]           NVARCHAR (MAX)   NULL,
-    [timestamp]         ROWVERSION       NOT NULL,
+    [BPDefinitionId]    UNIQUEIDENTIFIER NOT NULL,
     [OldBPDefinitionId] INT              NULL,
-    [BPDefinitionId]    UNIQUEIDENTIFIER NULL,
+    [timestamp]         ROWVERSION       NOT NULL,
     CONSTRAINT [PK_BPBusinessRuleSet] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
