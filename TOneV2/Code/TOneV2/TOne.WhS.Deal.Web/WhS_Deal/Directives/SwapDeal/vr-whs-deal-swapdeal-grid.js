@@ -63,15 +63,18 @@
             function defineMenuActions() {
                 $scope.scopeModel.menuActions = [{
                     name: 'Edit',
-                    clicked: editDeal
+                    clicked: editDeal,
+                    haspermission: hasEditSwapDealPermission
                 }];
-
-                function editDeal(dataItem) {
-                    var onDealUpdated = function (updatedDeal) {
-                        gridAPI.itemUpdated(updatedDeal);
-                    };
-                    WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated);
-                }
+            }
+            function editDeal(dataItem) {
+                var onDealUpdated = function (updatedDeal) {
+                    gridAPI.itemUpdated(updatedDeal);
+                };
+                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated);
+            }
+            function hasEditSwapDealPermission() {
+                return WhS_Deal_SwapDealAPIService.HasEditDealPermission();
             }
         }
     }

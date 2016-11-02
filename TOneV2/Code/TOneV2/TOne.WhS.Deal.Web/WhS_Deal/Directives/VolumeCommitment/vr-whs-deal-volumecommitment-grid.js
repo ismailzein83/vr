@@ -65,14 +65,19 @@
                 $scope.scopeModel.menuActions = [{
                     name: 'Edit',
                     clicked: editVolumeCommitment,
+                    haspermission:hasEditVolCommitmentDealPermission
                 }];
+            }
 
-                function editVolumeCommitment(dataItem) {
-                    var onVolumeCommitmentUpdated = function (updatedVolumeCommitment) {
-                        gridAPI.itemUpdated(updatedVolumeCommitment);
-                    };
-                    WhS_Deal_VolumeCommitmentService.editVolumeCommitment(dataItem.Entity.DealId, onVolumeCommitmentUpdated);
-                }
+            function editVolumeCommitment(dataItem) {
+                var onVolumeCommitmentUpdated = function (updatedVolumeCommitment) {
+                    gridAPI.itemUpdated(updatedVolumeCommitment);
+                };
+                WhS_Deal_VolumeCommitmentService.editVolumeCommitment(dataItem.Entity.DealId, onVolumeCommitmentUpdated);
+            }
+
+            function hasEditVolCommitmentDealPermission() {
+                return WhS_Deal_VolCommitmentDealAPIService.HasEditDealPermission();
             }
         }
     }

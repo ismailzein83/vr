@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	DealAnalysisManagementController.$inject = ['$scope', 'WhS_Deal_SwapDealService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+	DealAnalysisManagementController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-	function DealAnalysisManagementController($scope, WhS_Deal_SwapDealService, UtilsService, VRNotificationService, VRUIUtilsService) {
+	function DealAnalysisManagementController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
 	    var carrierAccountSelectorAPI;
 	    var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,6 +24,9 @@
 			$scope.scopeModel.search = function () {
 			    return gridAPI.load(getFilterObject());
 			};
+			$scope.scopeModel.hasAddSwapDealPermission = function () {
+			    return WhS_Deal_SwapDealAPIService.HasAddDealPermission();
+			}
 			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
 			    carrierAccountSelectorAPI = api;
 			    carrierAccountSelectorReadyDeferred.resolve();

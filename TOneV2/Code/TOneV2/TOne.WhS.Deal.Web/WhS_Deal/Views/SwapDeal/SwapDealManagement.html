@@ -14,7 +14,7 @@
 				<div transclude-to="buttons">
 					<vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
 					<vr-button type="Analyze" data-onclick="scopeModel.analyze"></vr-button>
-                    <vr-button type="Add" data-onclick="scopeModel.add"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddSwapDealPermission"></vr-button>
 				</div>
 			</vr-actionbar>
 		</vr-row>

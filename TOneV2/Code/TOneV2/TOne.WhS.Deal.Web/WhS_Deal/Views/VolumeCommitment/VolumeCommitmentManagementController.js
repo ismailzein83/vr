@@ -2,9 +2,9 @@
 
     "use strict";
 
-    volumeCommitmentManagementController.$inject = ["$scope", "WhS_Deal_VolumeCommitmentService", "UtilsService", "VRUIUtilsService", "VRNotificationService","WhS_Deal_VolumeCommitmentTypeEnum"];
+    volumeCommitmentManagementController.$inject = ["$scope", "WhS_Deal_VolCommitmentDealAPIService", "WhS_Deal_VolumeCommitmentService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_Deal_VolumeCommitmentTypeEnum"];
 
-    function volumeCommitmentManagementController($scope, WhS_Deal_VolumeCommitmentService, UtilsService, VRUIUtilsService, VRNotificationService,WhS_Deal_VolumeCommitmentTypeEnum) {
+    function volumeCommitmentManagementController($scope, WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_VolumeCommitmentService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Deal_VolumeCommitmentTypeEnum) {
         var gridAPI;
         var supplierApi;
         var customerApi;
@@ -24,7 +24,11 @@
             $scope.scopeModel.onVolCommitmentTypeDirectiveReady = function (api) {
                 typeApi = api;
                 typeApi.load();
-            };            
+            };
+            $scope.scopeModel.hasAddVolCommitmentDealPermission = function () {
+                return WhS_Deal_VolCommitmentDealAPIService.HasAddDealPermission();
+            };
+
             $scope.scopeModel.onSupplierDirectiveReady = function (api) {
                 $scope.scopeModel.isLoading = true;
                 supplierApi = api;
