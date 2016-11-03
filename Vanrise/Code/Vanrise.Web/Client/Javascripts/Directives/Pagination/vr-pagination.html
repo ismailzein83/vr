@@ -9,18 +9,15 @@
                 <div style="float: left; ">
                     <vr-select hideremoveicon datasource="pagerCtrl.topCounts" selectedvalues="pagerCtrl.pagersettings.itemsPerPage" data-onselectionchanged="pagerCtrl.pageSizeChanged" nocaret noborder openup></vr-select>
                 </div>
-
-
             </vr-columns>
-            <vr-columns colnum="8" simplecol>
+            <vr-columns colnum="7" simplecol>
                 <div style=" margin-top: 4px;text-align:center " ng-init="pagerCtrl.pagersettings.currentPage = 1" ng-show="pagerCtrl.pagersettings.numberOfPages > 1">
                     <pagination total-items="pagerCtrl.pagersettings.totalDataCount" ng-model="pagerCtrl.pagersettings.currentPage" max-size="10" class="pagination-sm vr-custom-pagination" num-pages="pagerCtrl.pagersettings.numberOfPages"
                                 items-per-page="pagerCtrl.pagersettings.itemsPerPage" direction-links="true" boundary-links="true" rotate="false" ng-change="pagerCtrl.pageChanged()"
                                 previous-text="&lt;" next-text="&gt;" first-text="&lt;&lt;" last-text="&gt;&gt;"></pagination>
                 </div>
             </vr-columns>
-            <vr-columns colnum="2" simplecol>
-               
+            <vr-columns colnum="3" simplecol>
                 <vr-label style="float: right; margin-top: 2px; margin-right: 5px;">
                     <span style="">Total count ({{pagerCtrl.pagersettings.totalDataCount}})</span>
                 </vr-label>
