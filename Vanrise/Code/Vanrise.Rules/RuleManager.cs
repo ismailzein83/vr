@@ -173,6 +173,11 @@ namespace Vanrise.Rules
             return s_cacheManager;
         }
 
+        public void AddRuleCachingExpirationChecker(RuleCachingExpirationChecker ruleCachingExpirationChecker)
+        {
+            GetCacheManager().ruleCachingExpirationCheckerDict.Add(GetRuleTypeId(), ruleCachingExpirationChecker);
+        }
+
         #endregion
 
         #region Private Methods
@@ -202,18 +207,26 @@ namespace Vanrise.Rules
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager<int>
+        public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
         {
             IRuleDataManager _dataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
+            public Dictionary<int, RuleCachingExpirationChecker> ruleCachingExpirationCheckerDict = new Dictionary<int, RuleCachingExpirationChecker>();
 
             protected override bool ShouldSetCacheExpired(int parameter)
             {
                 Object updateHandle;
+
                 _updateHandlesByRuleType.TryGetValue(parameter, out updateHandle);
                 bool isCacheExpired = _dataManager.AreRulesUpdated(parameter, ref updateHandle);
                 _updateHandlesByRuleType.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
-                return isCacheExpired;
+
+                RuleCachingExpirationChecker ruleCachingExpirationChecker;
+                bool isRuleDependenciesCacheExpired= false;
+                if (ruleCachingExpirationCheckerDict.TryGetValue(parameter, out ruleCachingExpirationChecker))
+                    isRuleDependenciesCacheExpired = ruleCachingExpirationChecker.IsRuleDependenciesCacheExpired();
+
+                return isCacheExpired || isRuleDependenciesCacheExpired;
             }
 
             private class RuleTypeUpdateHandle
@@ -224,5 +237,10 @@ namespace Vanrise.Rules
 
         #endregion
 
+    }
+
+    public abstract class RuleCachingExpirationChecker
+    {
+        public abstract bool IsRuleDependenciesCacheExpired();
     }
 }

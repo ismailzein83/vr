@@ -128,9 +128,8 @@ namespace Vanrise.Common.Business
             };
         }
 
-        #region Private Members
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISettingDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
             object _updateHandle;
@@ -140,7 +139,5 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreSettingsUpdated(ref _updateHandle);
             }
         }
-
-        #endregion
     }
 }
