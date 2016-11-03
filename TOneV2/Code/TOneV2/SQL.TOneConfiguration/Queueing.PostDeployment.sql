@@ -44,33 +44,6 @@ set nocount on;
 ---------------------------------------------------------------------------------------------------------------
 end
 
---[queue].[QueueActivatorConfig]--------------------------------------------------------------------
-begin
-set nocount on;
-set identity_insert [queue].[QueueActivatorConfig] on;
-;with cte_data([ID],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Store Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Store Batch Queue Activator" ,"Title" : "Store Batch Queue Activator", "Editor" :"vr-genericdata-queueactivator-storebatch"}'),
-(2,'Transform Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Transform  Batch Queue Activator" ,"Title" : "Transform  Batch Queue Activator", "Editor" :"vr-genericdata-queueactivator-transformbatch"}'),
-(3,'Custom Activator','{ "QueueActivatorConfigId": "7" , "Name": "Custom Activator" ,"Title" : "Custom Activator", "Editor" :"vr-queueing-queueactivator-customactivator"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
-merge	[queue].[QueueActivatorConfig] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);
-set identity_insert [queue].[QueueActivatorConfig] off;
-
-----------------------------------------------------------------------------------------------------
-
-end
-
 --[sec].[SystemAction]------------------------------------------------------------------------------
 begin
 set nocount on;
