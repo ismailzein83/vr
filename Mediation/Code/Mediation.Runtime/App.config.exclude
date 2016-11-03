@@ -102,6 +102,10 @@
     <add key="IsRuntimeService" value="true"/>
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="ExposedConnectionStringNames" value="Mediation_GenericRecord_DBConnString"/>
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>
