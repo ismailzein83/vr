@@ -24,7 +24,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         var gridQuery;
         var gridDrillDownTabs;
 
-        var servicesTab;
         var routingProductTab;
         var otherRatesTab;
 
@@ -65,11 +64,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     decreasedRateDayOffset: decreasedRateDayOffset
                 };
                 WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
-            };
-
-            $scope.onEffectiveServiceClicked = function (dataItem) {
-                if (dataItem.EffectiveServices != null && servicesTab.setTabSelected != undefined)
-                    servicesTab.setTabSelected(dataItem);
             };
 
             $scope.onEffectiveRPClicked = function (dataItem) {
@@ -130,26 +124,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         }
 
         function getGridDrillDownDefinitions() {
-            servicesTab = {
-                title: "Services",
-                directive: "vr-whs-sales-zone-service",
-                loadDirective: function (zoneServiceAPI, zoneItem) {
-                    zoneItem.OwnerId = gridQuery.OwnerId;
-                    zoneItem.context = gridQuery.context;
-                    var zoneServicePayload = {
-                        zoneItem: zoneItem,
-                        settings: {
-                            newServiceDayOffset: newServiceDayOffset
-                        }
-                    };
-                    return zoneServiceAPI.load(zoneServicePayload);
-                }
-            };
             routingProductTab = {
                 title: "Routing Product",
-                directive: "vr-whs-sales-zoneroutingproduct",
+                directive: "vr-whs-sales-routingproduct-zone",
                 loadDirective: function (zoneRoutingProductDirectiveAPI, zoneItem) {
-                    return zoneRoutingProductDirectiveAPI.load(zoneItem);
+                	var payload = { zoneItem: zoneItem };
+                    return zoneRoutingProductDirectiveAPI.load(payload);
                 }
             };
             otherRatesTab = {
@@ -166,7 +146,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return rateTypeGridAPI.loadGrid(query);
                 }
             };
-            return [servicesTab, routingProductTab, otherRatesTab];
+            return [routingProductTab, otherRatesTab];
         }
 
         function defineAPI() {
@@ -289,14 +269,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             zoneItem.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
             zoneItem.onServiceViewerReady = function (api) {
                 zoneItem.serviceViewerAPI = api;
-
-                var serviceViewerPayload;
-                if (zoneItem.EffectiveServices != null) {
-                    serviceViewerPayload = {
-                        selectedIds: UtilsService.getPropValuesFromArray(zoneItem.EffectiveServices, 'ServiceId')
-                    };
-                }
-
+                var serviceViewerPayload = { selectedIds: zoneItem.EffectiveServiceIds };
                 VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
             };
 
@@ -333,6 +306,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             zoneItem.refreshZoneItem = function (zoneItem) {
+
                 var promises = [];
 
                 var saveChangesPromise = saveZoneItemChanges();
@@ -340,6 +314,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 var getZoneItemDeferred = UtilsService.createPromiseDeferred();
                 promises.push(getZoneItemDeferred.promise);
+
+                var loadEffectiveServicesDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadEffectiveServicesDeferred.promise);
 
                 var loadRouteOptionsDeferred = UtilsService.createPromiseDeferred();
                 promises.push(loadRouteOptionsDeferred.promise);
@@ -355,6 +332,21 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         gridZoneItem.CalculatedRate = response.CalculatedRate;
 
                         gridZoneItem.RouteOptions = response.RouteOptions;
+
+                        UtilsService.convertToPromiseIfUndefined(gridZoneItem.RouteOptionsAPI.load(response.RouteOptions)).then(function () {
+                        	loadRouteOptionsDeferred.resolve();
+                        }).catch(function (error) {
+                        	loadRouteOptionsDeferred.reject(error);
+                        });
+
+                        gridZoneItem.EffectiveServiceIds = response.EffectiveServiceIds;
+
+                        var serviceViewerPaylod = { selectedIds: response.EffectiveServiceIds };
+                    	UtilsService.convertToPromiseIfUndefined(gridZoneItem.serviceViewerAPI.load(serviceViewerPaylod)).then(function () {
+                        	loadEffectiveServicesDeferred.resolve();
+                        }).catch(function (error) {
+                        	loadEffectiveServicesDeferred.reject(error);
+                        });
 
                         if (response.Costs != null) {
                             gridZoneItem.Costs = [];

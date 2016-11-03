@@ -1,10 +1,16 @@
-﻿<vr-row>
-    <vr-columns width="normal" ng-show="ctrl.CurrentName">
-        <div><vr-label>Current Routing Product</vr-label></div>
-        <div><vr-label isvalue>{{ctrl.CurrentName}}</vr-label></div>
-    </vr-columns>
+﻿<vr-row vr-loader="ctrl.isLoading">
+	<vr-columns width="normal" ng-show="ctrl.currentName">
+		<div><vr-label>Current Routing Product</vr-label></div>
+		<div><vr-label isvalue>{{ctrl.currentName}}</vr-label></div>
+	</vr-columns>
 
-    <vr-columns width="normal">
-        <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectionChanged"></vr-whs-be-routingproduct-selector>
-    </vr-columns>
+	<vr-columns width="normal" ng-show="ctrl.currentName">
+		<vr-label>Current Services</vr-label>
+		<vr-whs-be-services-viewer on-ready="ctrl.onCurrentServiceViewerReady"></vr-whs-be-services-viewer>
+	</vr-columns>
+
+	<vr-columns width="normal">
+		<vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onSelectionChanged">
+		</vr-whs-be-routingproduct-selector>
+	</vr-columns>
 </vr-row>

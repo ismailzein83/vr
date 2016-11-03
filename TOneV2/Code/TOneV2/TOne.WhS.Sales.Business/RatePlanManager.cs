@@ -82,7 +82,6 @@ namespace TOne.WhS.Sales.Business
 
                 var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId);
                 var rpManager = new ZoneRPManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
-                var serviceManager = new ZoneServiceManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
 
                 foreach (SaleZone zone in zones)
                 {
@@ -106,12 +105,10 @@ namespace TOne.WhS.Sales.Business
                     if (input.Filter.OwnerType == SalePriceListOwnerType.SellingProduct)
                     {
                         rpManager.SetSellingProductZoneRP(zoneItem, input.Filter.OwnerId, zoneDraft);
-                        serviceManager.SetSellingProductZoneService(zoneItem, input.Filter.OwnerId, zoneDraft);
                     }
                     else
                     {
                         rpManager.SetCustomerZoneRP(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
-                        serviceManager.SetCustomerZoneService(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
                     }
 
                     zoneItems.Add(zoneItem);

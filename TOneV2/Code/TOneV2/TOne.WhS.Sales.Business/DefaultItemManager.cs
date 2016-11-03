@@ -10,129 +10,89 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class DefaultItemManager
-    {
-        public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
-        {
-            var defaultItem = new DefaultItem();
+	public class DefaultItemManager
+	{
+		public DefaultItem GetDefaultItem(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+		{
+			var defaultItem = new DefaultItem();
 
-            var rpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveOn));
-            var serviceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadWithCache(effectiveOn));
+			var rpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveOn));
+			var rpManager = new RoutingProductManager();
 
-            SaleEntityZoneRoutingProduct routingProduct;
-            SaleEntityService service;
+			SaleEntityZoneRoutingProduct routingProduct;
+			SaleEntityZoneRoutingProductSource targetRoutingProductSource;
 
-            SaleEntityZoneRoutingProductSource targetRoutingProductSource;
-            SaleEntityServiceSource targetServiceSource;
+			if (ownerType == SalePriceListOwnerType.SellingProduct)
+			{
+				routingProduct = rpLocator.GetSellingProductDefaultRoutingProduct(ownerId);
+				targetRoutingProductSource = SaleEntityZoneRoutingProductSource.ProductDefault;
+			}
+			else
+			{
+				int sellingProductId = GetSellingProductId(ownerId, effectiveOn, false);
+				routingProduct = rpLocator.GetCustomerDefaultRoutingProduct(ownerId, sellingProductId);
+				targetRoutingProductSource = SaleEntityZoneRoutingProductSource.CustomerDefault;
+			}
 
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                routingProduct = rpLocator.GetSellingProductDefaultRoutingProduct(ownerId);
-                service = serviceLocator.GetSellingProductDefaultService(ownerId);
+			SetCurrentRoutingProductProperties(defaultItem, routingProduct, targetRoutingProductSource, rpManager);
+			SetDraft(defaultItem, ownerType, ownerId, rpManager);
 
-                targetRoutingProductSource = SaleEntityZoneRoutingProductSource.ProductDefault;
-                targetServiceSource = SaleEntityServiceSource.ProductDefault;
-            }
-            else
-            {
-                int sellingProductId = GetSellingProductId(ownerId, effectiveOn, false);
-                routingProduct = rpLocator.GetCustomerDefaultRoutingProduct(ownerId, sellingProductId);
-                service = serviceLocator.GetCustomerDefaultService(ownerId, sellingProductId);
+			return defaultItem;
+		}
 
-                targetRoutingProductSource = SaleEntityZoneRoutingProductSource.CustomerDefault;
-                targetServiceSource = SaleEntityServiceSource.CustomerDefault;
-            }
+		public BusinessEntity.Entities.SaleEntityService GetCustomerDefaultInheritedService(GetCustomerDefaultInheritedServiceInput input)
+		{
+			var draftManager = new RatePlanDraftManager();
+			draftManager.SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, input.NewDraft);
 
-            SetCurrentRoutingProductProperties(defaultItem, routingProduct, targetRoutingProductSource);
-            SetCurrentServiceProperties(defaultItem, service, targetServiceSource);
+			var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(SalePriceListOwnerType.Customer, input.CustomerId, input.EffectiveOn, input.NewDraft));
 
-            SetDraft(defaultItem, ownerType, ownerId);
+			var ratePlanManager = new RatePlanManager();
+			int sellingProductId = ratePlanManager.GetSellingProductId(input.CustomerId, input.EffectiveOn, false);
 
-            return defaultItem;
-        }
+			return ratePlanServiceLocator.GetCustomerDefaultService(input.CustomerId, sellingProductId);
+		}
 
-        public BusinessEntity.Entities.SaleEntityService GetCustomerDefaultInheritedService(GetCustomerDefaultInheritedServiceInput input)
-        {
-            var draftManager = new RatePlanDraftManager();
-            draftManager.SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, input.NewDraft);
+		#region Private Methods
 
-            var ratePlanServiceLocator = new SaleEntityServiceLocator(new RatePlanServiceReadWithCache(SalePriceListOwnerType.Customer, input.CustomerId, input.EffectiveOn, input.NewDraft));
+		private void SetCurrentRoutingProductProperties(DefaultItem defaultItem, SaleEntityZoneRoutingProduct routingProduct, SaleEntityZoneRoutingProductSource targetSource, RoutingProductManager rpManager)
+		{
+			if (routingProduct == null)
+				return;
 
-            var ratePlanManager = new RatePlanManager();
-            int sellingProductId = ratePlanManager.GetSellingProductId(input.CustomerId, input.EffectiveOn, false);
+			defaultItem.CurrentRoutingProductId = routingProduct.RoutingProductId;
+			defaultItem.CurrentRoutingProductName = rpManager.GetRoutingProductName(routingProduct.RoutingProductId);
+			defaultItem.CurrentRoutingProductBED = routingProduct.BED;
+			defaultItem.CurrentRoutingProductEED = routingProduct.EED;
+			defaultItem.IsCurrentRoutingProductEditable = routingProduct.Source == targetSource;
 
-            return ratePlanServiceLocator.GetCustomerDefaultService(input.CustomerId, sellingProductId);
-        }
+			defaultItem.CurrentServiceIds = rpManager.GetDefaultServiceIds(routingProduct.RoutingProductId);
+		}
 
-        #region Private Methods
+		private void SetDraft(DefaultItem defaultItem, SalePriceListOwnerType ownerType, int ownerId, RoutingProductManager rpManager)
+		{
+			var draftManager = new RatePlanDraftManager();
+			Changes draft = draftManager.GetDraft(ownerType, ownerId);
 
-        private void SetCurrentRoutingProductProperties(DefaultItem defaultItem, SaleEntityZoneRoutingProduct routingProduct, SaleEntityZoneRoutingProductSource targetSource)
-        {
-            if (routingProduct != null)
-            {
-                var rpManager = new RoutingProductManager();
-                defaultItem.CurrentRoutingProductId = routingProduct.RoutingProductId;
-                defaultItem.CurrentRoutingProductName = rpManager.GetRoutingProductName(routingProduct.RoutingProductId);
-                defaultItem.CurrentRoutingProductBED = routingProduct.BED;
-                defaultItem.CurrentRoutingProductEED = routingProduct.EED;
-                defaultItem.IsCurrentRoutingProductEditable = routingProduct.Source == targetSource;
-            }
-        }
-        private void SetCurrentServiceProperties(DefaultItem defaultItem, SaleEntityService service, SaleEntityServiceSource targetSource)
-        {
-            if (service != null)
-            {
-                defaultItem.CurrentServices = service.Services;
-                defaultItem.CurrentServiceBED = service.BED;
-                defaultItem.CurrentServiceEED = service.EED;
-                defaultItem.IsCurrentServiceEditable = service.Source == targetSource;
-            }
-        }
+			if (draft == null || draft.DefaultChanges == null)
+				return;
 
-        private void SetDraft(DefaultItem defaultItem, SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var draftManager = new RatePlanDraftManager();
-            Changes draft = draftManager.GetDraft(ownerType, ownerId);
+			defaultItem.NewRoutingProduct = draft.DefaultChanges.NewDefaultRoutingProduct;
+			defaultItem.ResetRoutingProduct = draft.DefaultChanges.DefaultRoutingProductChange;
 
-            if (draft == null || draft.DefaultChanges == null)
-                return;
+			if (defaultItem.NewRoutingProduct != null)
+				defaultItem.EffectiveServiceIds = rpManager.GetDefaultServiceIds(defaultItem.NewRoutingProduct.DefaultRoutingProductId);
+		}
 
-            SetDraftRoutingProduct(defaultItem, draft.DefaultChanges.NewDefaultRoutingProduct, draft.DefaultChanges.DefaultRoutingProductChange);
-            SetDraftService(defaultItem, draft.DefaultChanges.NewService, draft.DefaultChanges.ClosedService, draft.DefaultChanges.ResetService);
-        }
-        private void SetDraftRoutingProduct(DefaultItem defaultItem, DraftNewDefaultRoutingProduct newRoutingProduct, DraftChangedDefaultRoutingProduct changedRoutingProduct)
-        {
-            defaultItem.NewRoutingProduct = newRoutingProduct;
-            defaultItem.ChangedRoutingProduct = changedRoutingProduct;
+		private int GetSellingProductId(int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
+		{
+			var customerSellingProductManager = new CustomerSellingProductManager();
+			int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, effectiveOn, isEffectiveInFuture);
+			if (!sellingProductId.HasValue)
+				throw new NullReferenceException("sellingProductId");
+			return sellingProductId.Value;
+		}
 
-            // TODO: Remove the code below
-            if (newRoutingProduct != null)
-            {
-                var rpManager = new RoutingProductManager();
-                defaultItem.NewRoutingProductId = newRoutingProduct.DefaultRoutingProductId;
-                defaultItem.NewRoutingProductName = rpManager.GetRoutingProductName(newRoutingProduct.DefaultRoutingProductId);
-                defaultItem.NewRoutingProductBED = newRoutingProduct.BED;
-                defaultItem.NewRoutingProductEED = newRoutingProduct.EED;
-            }
-            else if (changedRoutingProduct != null)
-                defaultItem.RoutingProductChangeEED = changedRoutingProduct.EED;
-        }
-        private void SetDraftService(DefaultItem defaultItem, DraftNewDefaultService newService, DraftClosedDefaultService closedService, DraftResetDefaultService resetService)
-        {
-            defaultItem.NewService = newService;
-            defaultItem.ClosedService = closedService;
-            defaultItem.ResetService = resetService;
-        }
-
-        private int GetSellingProductId(int customerId, DateTime effectiveOn, bool isEffectiveInFuture)
-        {
-            var customerSellingProductManager = new CustomerSellingProductManager();
-            int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, effectiveOn, isEffectiveInFuture);
-            if (!sellingProductId.HasValue)
-                throw new NullReferenceException("sellingProductId");
-            return sellingProductId.Value;
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

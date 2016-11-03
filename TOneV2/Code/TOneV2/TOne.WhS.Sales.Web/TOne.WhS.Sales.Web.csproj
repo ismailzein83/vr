@@ -192,12 +192,12 @@
     <Content Include="WhS_Sales\Directives\Templates\ZoneRoutingProductTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-avgcostcalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-costcolumns.js" />
-    <Content Include="WhS_Sales\Directives\vr-whs-sales-defaultroutingproduct.js" />
+    <Content Include="WhS_Sales\Directives\vr-whs-sales-routingproduct-default.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-percentagecostcalculation.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-ownertype-selector.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-rateplan-grid.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-routepercentagecostcalculation.js" />
-    <Content Include="WhS_Sales\Directives\vr-whs-sales-zoneroutingproduct.js" />
+    <Content Include="WhS_Sales\Directives\vr-whs-sales-routingproduct-zone.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SellingRuleAPIService.js" />

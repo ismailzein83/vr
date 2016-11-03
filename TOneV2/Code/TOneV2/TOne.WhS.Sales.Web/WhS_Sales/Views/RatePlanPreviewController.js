@@ -15,9 +15,6 @@
         var saleZoneRoutingProductPreviewGridAPI;
         var saleZoneRoutingProductGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var saleZoneServicePreviewGridAPI;
-        var saleZoneServicePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
-
         var currentDefaultServiceViewerAPI;
         var currentDefaultServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -51,11 +48,6 @@
             $scope.scopeModel.onSaleZoneRoutingProductPreviewGridReady = function (api) {
                 saleZoneRoutingProductPreviewGridAPI = api;
                 saleZoneRoutingProductGridReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onSaleZoneServicePreviewGridReady = function (api) {
-                saleZoneServicePreviewGridAPI = api;
-                saleZoneServicePreviewGridReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onCurrentDefaultServiceViewerReady = function (api) {
@@ -99,7 +91,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadSaleZoneServicePreivewGrid]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -253,18 +245,6 @@
             });
 
             return saleZoneRoutingProductGridLoadDeferred.promise;
-        }
-        function loadSaleZoneServicePreivewGrid() {
-            var saleZoneServiceLoadDeferred = UtilsService.createPromiseDeferred();
-
-            saleZoneServicePreviewGridReadyDeferred.promise.then(function () {
-                var saleZoneServicePreivewGridPayload = {
-                    ProcessInstanceId: processInstanceId
-                };
-                VRUIUtilsService.callDirectiveLoad(saleZoneServicePreviewGridAPI, saleZoneServicePreivewGridPayload, saleZoneServiceLoadDeferred);
-            });
-
-            return saleZoneServiceLoadDeferred.promise;
         }
 
         function executeTask(decision) {

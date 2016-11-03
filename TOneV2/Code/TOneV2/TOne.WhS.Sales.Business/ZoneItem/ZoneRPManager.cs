@@ -10,90 +10,86 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ZoneRPManager
-    {
-        #region Fields / Constructors
+	public class ZoneRPManager
+	{
+		#region Fields / Constructors
 
-        private SaleEntityZoneRoutingProductLocator _rpLocator;
-        private SaleEntityZoneRoutingProductLocator _ratePlanRPLocator;
-        private RoutingProductManager _rpManager;
+		private SaleEntityZoneRoutingProductLocator _rpLocator;
+		private SaleEntityZoneRoutingProductLocator _ratePlanRPLocator;
+		private RoutingProductManager _rpManager;
 
-        public ZoneRPManager(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft)
-        {
-            _rpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveOn));
-            _ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanRPReadWithCache(ownerType, ownerId, effectiveOn, draft));
-            _rpManager = new RoutingProductManager();
-        }
-        
-        #endregion
+		public ZoneRPManager(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft)
+		{
+			_rpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveOn));
+			_ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanRPReadWithCache(ownerType, ownerId, effectiveOn, draft));
+			_rpManager = new RoutingProductManager();
+		}
 
-        public void SetSellingProductZoneRP(ZoneItem zoneItem, int sellingProductId, ZoneChanges zoneDraft)
-        {
-            SaleEntityZoneRoutingProduct currentRP = _rpLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneItem.ZoneId);
-            SetZoneCurrentRPProperties(zoneItem, currentRP, SaleEntityZoneRoutingProductSource.ProductZone);
+		#endregion
 
-            SetDraftZoneRP(zoneItem, zoneDraft);
-            SetSellingProductEffectiveZoneRP(zoneItem, sellingProductId);
-        }
+		public void SetSellingProductZoneRP(ZoneItem zoneItem, int sellingProductId, ZoneChanges zoneDraft)
+		{
+			SaleEntityZoneRoutingProduct currentRP = _rpLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneItem.ZoneId);
+			SetZoneCurrentRPProperties(zoneItem, currentRP, SaleEntityZoneRoutingProductSource.ProductZone);
 
-        public void SetCustomerZoneRP(ZoneItem zoneItem, int customerId, int sellingProductId, ZoneChanges zoneDraft)
-        {
-            SaleEntityZoneRoutingProduct currentRP = _rpLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneItem.ZoneId);
-            SetZoneCurrentRPProperties(zoneItem, currentRP, SaleEntityZoneRoutingProductSource.CustomerZone);
+			SetDraftZoneRP(zoneItem, zoneDraft);
+			SetSellingProductEffectiveZoneRP(zoneItem, sellingProductId);
+		}
 
-            SetDraftZoneRP(zoneItem, zoneDraft);
-            SetCustomerEffectiveZoneRP(zoneItem, customerId, sellingProductId);
-        }
+		public void SetCustomerZoneRP(ZoneItem zoneItem, int customerId, int sellingProductId, ZoneChanges zoneDraft)
+		{
+			SaleEntityZoneRoutingProduct currentRP = _rpLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneItem.ZoneId);
+			SetZoneCurrentRPProperties(zoneItem, currentRP, SaleEntityZoneRoutingProductSource.CustomerZone);
 
-        #region Private Methods
+			SetDraftZoneRP(zoneItem, zoneDraft);
+			SetCustomerEffectiveZoneRP(zoneItem, customerId, sellingProductId);
+		}
 
-        private void SetZoneCurrentRPProperties(ZoneItem zoneItem, SaleEntityZoneRoutingProduct currentRP, SaleEntityZoneRoutingProductSource targetSource)
-        {
-            if (currentRP == null)
-                return;
-            zoneItem.CurrentRoutingProductId = currentRP.RoutingProductId;
-            zoneItem.CurrentRoutingProductName = _rpManager.GetRoutingProductName(currentRP.RoutingProductId);
-            zoneItem.CurrentRoutingProductBED = currentRP.BED;
-            zoneItem.CurrentRoutingProductEED = currentRP.EED;
-            zoneItem.IsCurrentRoutingProductEditable = currentRP.Source == targetSource;
-        }
+		#region Private Methods
 
-        private void SetDraftZoneRP(ZoneItem zoneItem, ZoneChanges zoneDraft)
-        {
-            if (zoneDraft == null)
-                return;
-            if (zoneDraft.NewRoutingProduct != null)
-            {
-                zoneItem.NewRoutingProductId = zoneDraft.NewRoutingProduct.ZoneRoutingProductId;
-                zoneItem.NewRoutingProductBED = zoneDraft.NewRoutingProduct.BED;
-                zoneItem.NewRoutingProductEED = zoneDraft.NewRoutingProduct.EED;
-            }
-            else if (zoneDraft.RoutingProductChange != null)
-            {
-                zoneItem.RoutingProductChangeEED = zoneDraft.RoutingProductChange.EED;
-            }
-        }
+		private void SetZoneCurrentRPProperties(ZoneItem zoneItem, SaleEntityZoneRoutingProduct currentRP, SaleEntityZoneRoutingProductSource targetSource)
+		{
+			if (currentRP == null)
+				return;
 
-        private void SetSellingProductEffectiveZoneRP(ZoneItem zoneItem, int sellingProductId)
-        {
-            SaleEntityZoneRoutingProduct ratePlanRP = _ratePlanRPLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneItem.ZoneId);
-            if (ratePlanRP != null)
-                SetEffectiveRPProperties(zoneItem, ratePlanRP);
-        }
+			zoneItem.CurrentRoutingProductId = currentRP.RoutingProductId;
+			zoneItem.CurrentRoutingProductName = _rpManager.GetRoutingProductName(currentRP.RoutingProductId);
+			zoneItem.CurrentRoutingProductBED = currentRP.BED;
+			zoneItem.CurrentRoutingProductEED = currentRP.EED;
+			zoneItem.IsCurrentRoutingProductEditable = currentRP.Source == targetSource;
 
-        private void SetCustomerEffectiveZoneRP(ZoneItem zoneItem, int customerId, int sellingProductId)
-        {
-            SaleEntityZoneRoutingProduct ratePlanRP = _ratePlanRPLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneItem.ZoneId);
-            if (ratePlanRP != null)
-                SetEffectiveRPProperties(zoneItem, ratePlanRP);
-        }
+			zoneItem.CurrentServiceIds = _rpManager.GetZoneServiceIds(currentRP.RoutingProductId, zoneItem.ZoneId);
+		}
 
-        private void SetEffectiveRPProperties(ZoneItem zoneItem, SaleEntityZoneRoutingProduct ratePlanRP)
-        {
-            zoneItem.EffectiveRoutingProductId = ratePlanRP.RoutingProductId;
-            zoneItem.EffectiveRoutingProductName = _rpManager.GetRoutingProductName(ratePlanRP.RoutingProductId);
-        }
-        
-        #endregion
-    }
+		private void SetDraftZoneRP(ZoneItem zoneItem, ZoneChanges zoneDraft)
+		{
+			if (zoneDraft == null)
+				return;
+			zoneItem.NewRoutingProduct = zoneDraft.NewRoutingProduct;
+			zoneItem.ResetRoutingProduct = zoneDraft.RoutingProductChange;
+		}
+
+		private void SetSellingProductEffectiveZoneRP(ZoneItem zoneItem, int sellingProductId)
+		{
+			SaleEntityZoneRoutingProduct ratePlanRP = _ratePlanRPLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneItem.ZoneId);
+			if (ratePlanRP != null)
+				SetEffectiveRPProperties(zoneItem, ratePlanRP);
+		}
+
+		private void SetCustomerEffectiveZoneRP(ZoneItem zoneItem, int customerId, int sellingProductId)
+		{
+			SaleEntityZoneRoutingProduct ratePlanRP = _ratePlanRPLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneItem.ZoneId);
+			if (ratePlanRP != null)
+				SetEffectiveRPProperties(zoneItem, ratePlanRP);
+		}
+
+		private void SetEffectiveRPProperties(ZoneItem zoneItem, SaleEntityZoneRoutingProduct ratePlanRP)
+		{
+			zoneItem.EffectiveRoutingProductId = ratePlanRP.RoutingProductId;
+			zoneItem.EffectiveRoutingProductName = _rpManager.GetRoutingProductName(ratePlanRP.RoutingProductId);
+			zoneItem.EffectiveServiceIds = _rpManager.GetZoneServiceIds(ratePlanRP.RoutingProductId, zoneItem.ZoneId);
+		}
+
+		#endregion
+	}
 }

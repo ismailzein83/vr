@@ -197,30 +197,15 @@
             };
 
             $scope.defaultItemTabs = [{
-                title: "Default Services",
-                directive: "vr-whs-sales-default-service",
+                title: "Default Routing Product",
+                directive: "vr-whs-sales-routingproduct-default",
                 loadDirective: function (api)
                 {
-                    defaultItem.context = {};
-                    defaultItem.context.getNewDraft = getNewDraft;
-                    defaultItem.context.saveDraft = saveDraft;
-                    defaultItem.context.loadGrid = loadGrid;
-
-                    var defaultServicePayload = {
-                        defaultItem: defaultItem,
-                        settings: {
-                            newServiceDayOffset: ratePlanSettingsData.NewServiceDayOffset
-                        }
-                    };
-
-                    return api.load(defaultServicePayload);
-                }
-            }, {
-                title: "Default Routing Product",
-                directive: "vr-whs-sales-defaultroutingproduct",
-                loadDirective: function (api) {
-                    defaultItem.onChange = onDefaultItemChanged;
-                    return api.load(defaultItem);
+                	var defaultPayload = {};
+                	defaultPayload.defaultItem = defaultItem;
+                	defaultPayload.context = {};
+                	defaultPayload.context.saveDraft = saveDraft;
+                	return api.load(defaultPayload);
                 }
             }];
 
@@ -813,11 +798,6 @@
             return defaultDraft;
         }
 
-        // TODO: Remove
-        function onDefaultItemChanged()
-        {
-            return saveDraft(true);
-        }
         function onCustomerChanged(selectedCarrierAccountId) {
             var promises = [];
 

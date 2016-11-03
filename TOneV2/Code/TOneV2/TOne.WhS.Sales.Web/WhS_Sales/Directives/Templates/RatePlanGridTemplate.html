@@ -29,7 +29,7 @@
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Services'" disablesorting="true">
-                <span ng-click="viewScope.onEffectiveServiceClicked(dataItem)"><vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer></span>
+                <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn ng-repeat="method in costCalculationMethods"

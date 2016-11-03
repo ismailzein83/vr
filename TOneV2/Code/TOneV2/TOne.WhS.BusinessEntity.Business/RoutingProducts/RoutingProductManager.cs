@@ -306,6 +306,26 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
+		public IEnumerable<int> GetDefaultServiceIds(int routingProductId)
+		{
+			RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
+			if (routingProduct == null)
+				return null;
+			if (routingProduct.Settings == null)
+				throw new NullReferenceException("routingProduct.Settings");
+			return routingProduct.Settings.DefaultServiceIds;
+		}
+
+		public IEnumerable<int> GetZoneServiceIds(int routingProductId, long zoneId)
+		{
+			RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
+			if (routingProduct == null)
+				return null;
+			if (routingProduct.Settings == null)
+				throw new NullReferenceException("routingProduct.Settings");
+			return routingProduct.Settings.GetZoneServices(zoneId);
+		}
+
         #endregion
 
         #region Validation Methods

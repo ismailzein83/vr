@@ -69,10 +69,8 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? CurrentRoutingProductBED { get; set; }
         public DateTime? CurrentRoutingProductEED { get; set; }
         public bool? IsCurrentRoutingProductEditable { get; set; }
-        public int? NewRoutingProductId { get; set; }
-        public DateTime? NewRoutingProductBED { get; set; }
-        public DateTime? NewRoutingProductEED { get; set; }
-        public DateTime? RoutingProductChangeEED { get; set; }
+		public DraftNewSaleZoneRoutingProduct NewRoutingProduct { get; set; }
+		public DraftChangedSaleZoneRoutingProduct ResetRoutingProduct { get; set; }
         public int EffectiveRoutingProductId { get; set; }
         public string EffectiveRoutingProductName { get; set; }
         #endregion
@@ -83,16 +81,18 @@ namespace TOne.WhS.Sales.Entities
         #endregion
 
         #region Service
-        public int? CurrentServiceId { get; set; }
-        public List<ZoneService> CurrentServices { get; set; }
-        public DateTime? CurrentServiceBED { get; set; }
-        public DateTime? CurrentServiceEED { get; set; }
-        public bool? IsCurrentServiceEditable { get; set; }
-        public DraftNewZoneService NewService { get; set; }
-        public DraftClosedZoneService ClosedService { get; set; }
-        public DraftResetZoneService ResetService { get; set; }
-        public IEnumerable<ZoneService> EffectiveServices { get; set; }
-        #endregion
+		public IEnumerable<int> CurrentServiceIds { get; set; }
+		public IEnumerable<int> EffectiveServiceIds { get; set; }
+		public int? CurrentServiceId { get; set; }
+		public List<ZoneService> CurrentServices { get; set; }
+		public DateTime? CurrentServiceBED { get; set; }
+		public DateTime? CurrentServiceEED { get; set; }
+		public bool? IsCurrentServiceEditable { get; set; }
+		public DraftNewZoneService NewService { get; set; }
+		public DraftClosedZoneService ClosedService { get; set; }
+		public DraftResetZoneService ResetService { get; set; }
+		public IEnumerable<ZoneService> EffectiveServices { get; set; }
+		#endregion
     }
 
     public class OtherRate
