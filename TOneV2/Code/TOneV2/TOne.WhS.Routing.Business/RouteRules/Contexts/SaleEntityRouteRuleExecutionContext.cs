@@ -27,8 +27,8 @@ namespace TOne.WhS.Routing.Business
             }
         }
         public int? NumberOfOptions { get; internal set; }
-        public HashSet<int> CustomerServiceIdHashSet { get; internal set; }
-        public string CustomerServiceIds { get; internal set; }
+        public HashSet<int> SaleZoneServiceList { get; internal set; }
+        public string SaleZoneServiceIds { get; internal set; }
 
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchWithRateBySupplier SupplierCodeMatchBySupplier { private get; set; }
@@ -118,7 +118,7 @@ namespace TOne.WhS.Routing.Business
             if (routeOptionRule != null)
             {
                 targetOption.ExecutedRuleId = routeOptionRule.RuleId;
-                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { SaleZoneServiceIds = CustomerServiceIds, RouteRule = routeRule };
+                RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { SaleZoneServiceIds = SaleZoneServiceIds, RouteRule = routeRule };
                 routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, targetOption);
             }
 

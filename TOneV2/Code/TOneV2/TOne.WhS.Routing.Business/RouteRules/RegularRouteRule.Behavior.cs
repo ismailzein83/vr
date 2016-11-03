@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Business
     {
         #region Central Execution
 
-        private CorrespondentType? _correspondentType;
+        //private CorrespondentType? _correspondentType;
 
         public override bool UseOrderedExecution
         {
@@ -23,63 +23,63 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        public override CorrespondentType CorrespondentType
-        {
-            get
-            {
-                if (!_correspondentType.HasValue)
-                {
-                    if (AreOptionsExist() && !AreOptionsOrdered())
-                        _correspondentType = CorrespondentType.Override;
+        //public override CorrespondentType CorrespondentType
+        //{
+        //    get
+        //    {
+        //        if (!_correspondentType.HasValue)
+        //        {
+        //            if (AreOptionsExist() && !AreOptionsOrdered())
+        //                _correspondentType = CorrespondentType.Override;
 
-                    else if (!AreOptionsExist() && AreOptionsOnlyOrderByType<OptionOrderByRate>() && AreOptionsFilteredByTypes<RateOptionFilter, ServiceOptionFilter>())
-                        _correspondentType = CorrespondentType.LCR;
+        //            else if (!AreOptionsExist() && AreOptionsOnlyOrderByType<OptionOrderByRate>() && AreOptionsFilteredByTypes<RateOptionFilter, ServiceOptionFilter>())
+        //                _correspondentType = CorrespondentType.LCR;
 
-                    else _correspondentType = CorrespondentType.Other;
-                }
-                return _correspondentType.Value;
-            }
-        }
+        //            else _correspondentType = CorrespondentType.Other;
+        //        }
+        //        return _correspondentType.Value;
+        //    }
+        //}
 
-        private bool AreOptionsExist()
-        {
-            if (OptionsSettingsGroup != null)
-                return true;
-            return false;
-        }
+        //private bool AreOptionsExist()
+        //{
+        //    if (OptionsSettingsGroup != null)
+        //        return true;
+        //    return false;
+        //}
 
-        private bool AreOptionsOrdered()
-        {
-            if (OptionOrderSettings != null && OptionOrderSettings.Count > 0)
-                return true;
-            return false;
-        }
+        //private bool AreOptionsOrdered()
+        //{
+        //    if (OptionOrderSettings != null && OptionOrderSettings.Count > 0)
+        //        return true;
+        //    return false;
+        //}
 
-        private bool AreOptionsOnlyOrderByType<T>()
-        {
-            if (OptionOrderSettings != null && OptionOrderSettings.Count == 1 && OptionOrderSettings.First() is T)
-                return true;
-            return false;
-        }
+        //private bool AreOptionsOnlyOrderByType<T>()
+        //{
+        //    if (OptionOrderSettings != null && OptionOrderSettings.Count == 1 && OptionOrderSettings.First() is T)
+        //        return true;
+        //    return false;
+        //}
 
-        private bool AreOptionsFilteredByTypes<T, Q>()
-        {
-            bool isFilteredByT = false;
-            bool isFilteredByQ = false;
-            if (OptionFilters != null && OptionFilters.Count >= 2)
-            {
-                foreach (RouteOptionFilterSettings item in OptionFilters)
-                {
-                    if (item is T)
-                        isFilteredByT = true;
-                    if (item is Q)
-                        isFilteredByQ = true;
-                    if (isFilteredByT && isFilteredByQ)
-                        return true;
-                }
-            }
-            return false;
-        }
+        //private bool AreOptionsFilteredByTypes<T, Q>()
+        //{
+        //    bool isFilteredByT = false;
+        //    bool isFilteredByQ = false;
+        //    if (OptionFilters != null && OptionFilters.Count >= 2)
+        //    {
+        //        foreach (RouteOptionFilterSettings item in OptionFilters)
+        //        {
+        //            if (item is T)
+        //                isFilteredByT = true;
+        //            if (item is Q)
+        //                isFilteredByQ = true;
+        //            if (isFilteredByT && isFilteredByQ)
+        //                return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         #endregion
 
@@ -97,7 +97,7 @@ namespace TOne.WhS.Routing.Business
 
         public override bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)
         {
-            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option);
+            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option);
         }
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)

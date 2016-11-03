@@ -107,7 +107,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
             CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
 
-            int customerServiceFlag = GetServiceFlag(record.CustomerServiceIds, _allZoneServiceConfigs);
+            int customerServiceFlag = GetServiceFlag(record.SaleZoneServiceIds, _allZoneServiceConfigs);
             DateTime now = DateTime.Now;
             bool hasOptionBlock = false;
 

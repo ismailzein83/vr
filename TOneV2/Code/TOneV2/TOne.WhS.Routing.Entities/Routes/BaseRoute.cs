@@ -14,7 +14,7 @@ namespace TOne.WhS.Routing.Entities
 
         public Decimal Rate { get; set; }
 
-        public HashSet<int> CustomerServiceIds { get; set; }
+        public HashSet<int> SaleZoneServiceIds { get; set; }
 
         public bool IsBlocked { get; set; }
 

@@ -176,6 +176,21 @@ namespace TOne.WhS.Routing.Business
 			return filteredConfigs.OrderBy(x => x.Title);
 		}
 
+        public HashSet<int> GetSaleZoneServices(int routingProductId, long saleZoneId)
+        {
+            RoutingProductManager routingProductManager = new RoutingProductManager();
+
+            RoutingProduct routingProduct = routingProductManager.GetRoutingProduct(routingProductId);
+
+            if (routingProduct == null)
+                throw new NullReferenceException(string.Format("routingProduct of Routing Product Id: {0}", routingProductId));
+
+            if (routingProduct.Settings == null)
+                throw new NullReferenceException(string.Format("routingProduct.Settings of Routing Product Id: {0}", routingProductId));
+
+            return routingProduct.Settings.GetZoneServices(saleZoneId);
+        }
+
 		#endregion
 
 		#region Private Members

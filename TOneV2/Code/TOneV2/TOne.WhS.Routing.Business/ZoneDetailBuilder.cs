@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
+using Vanrise.Common;
 using Vanrise.GenericData.Transformation;
 
 namespace TOne.WhS.Routing.Business
@@ -23,6 +21,11 @@ namespace TOne.WhS.Routing.Business
 
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             List<RoutingCustomerInfoDetails> customerInfoDetails = new List<RoutingCustomerInfoDetails>();
+
+            //SaleZone Services variables
+            bool isZoneServicesExplicitOnCustomer = ConfigurationManager.AppSettings["TOneWhS_Routing_ZoneServicesExplicitOnCustomer"] == "true";
+            SaleEntityServiceLocator customerServiceLocator = null;
+            HashSet<int> saleZoneServices = null;
 
             foreach (RoutingCustomerInfo customerInfo in customerInfos)
             {
@@ -41,10 +44,13 @@ namespace TOne.WhS.Routing.Business
 
             SaleEntityZoneRoutingProductLocator customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerInfos, effectiveOn, isEffectiveInFuture));
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
-            SaleEntityServiceLocator customerServiceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
+
+            if (isZoneServicesExplicitOnCustomer)
+            {
+                customerServiceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
+            }
 
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
-
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
@@ -59,6 +65,8 @@ namespace TOne.WhS.Routing.Business
             DataTransformer dataTransformer = new DataTransformer();
             var carrierAccountManager = new CarrierAccountManager();
 
+            RPRouteManager rpRouteManager = new RPRouteManager();
+
             foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
                 int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerInfo.CustomerId, CarrierAccountType.Customer);
@@ -72,16 +80,33 @@ namespace TOne.WhS.Routing.Business
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)
                     {
-                        SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
+                        var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
-                        if (customerService == null)
-                            throw new NullReferenceException(string.Format("customerService. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+                        if (isZoneServicesExplicitOnCustomer)
+                        {
+                            SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
-                        if (customerService.Services == null)
-                            throw new NullReferenceException(string.Format("customerService.Services. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+                            if (customerService == null)
+                                throw new NullReferenceException(string.Format("customerService. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
 
-                        if (customerService.Services.Count == 0)
-                            throw new Exception(string.Format("customerService.Services count is 0. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+                            if (customerService.Services == null)
+                                throw new NullReferenceException(string.Format("customerService.Services. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+
+                            if (customerService.Services.Count == 0)
+                                throw new Exception(string.Format("customerService.Services count is 0. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+
+                            saleZoneServices = customerService.Services.Select(itm => itm.ServiceId).ToHashSet();
+                        }
+                        else
+                        {
+                            if (customerZoneRoutingProduct == null)
+                                throw new NullReferenceException(string.Format("customerZoneRoutingProduct for CustomerId: {0}", customerInfo.CustomerId));
+
+                            saleZoneServices = rpRouteManager.GetSaleZoneServices(customerZoneRoutingProduct.RoutingProductId, customerZone.SaleZoneId);
+
+                            if (saleZoneServices == null || saleZoneServices.Count() == 0)
+                                throw new NullReferenceException(string.Format("saleZoneServices for RoutingProductId: {0}, saleZoneId: {1}", customerZoneRoutingProduct.RoutingProductId, customerZone.SaleZoneId));
+                        }
 
                         var output = dataTransformer.ExecuteDataTransformation(customerTransformationId, (context) =>
                         {
@@ -97,7 +122,6 @@ namespace TOne.WhS.Routing.Business
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
 
                         rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
-                        var customerZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
@@ -108,7 +132,7 @@ namespace TOne.WhS.Routing.Business
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
-                            CustomerServiceIds = customerService != null ? new HashSet<int>(customerService.Services.Select(itm => itm.ServiceId)) : null
+                            SaleZoneServiceIds = saleZoneServices
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
@@ -184,7 +208,7 @@ namespace TOne.WhS.Routing.Business
                         };
                         if (supplierZoneDetail.ExactSupplierServiceIds != null)
                             supplierZoneDetail.SupplierServiceWeight = exactSupplierZoneServices != null ? zoneServiceConfigManager.GetAllZoneServicesByIds(supplierZoneDetail.ExactSupplierServiceIds).Sum(itm => itm.Settings.Weight) : 0;
-                        
+
                         onSupplierZoneDetailAvailable(supplierZoneDetail);
                     }
                 }

@@ -49,7 +49,7 @@ namespace TOne.WhS.Routing.Business
 
         public override bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
-            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option);
+            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option);
         }
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)

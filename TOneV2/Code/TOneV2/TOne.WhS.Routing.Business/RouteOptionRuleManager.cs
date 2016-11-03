@@ -5,13 +5,23 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Rules;
 
 namespace TOne.WhS.Routing.Business
 {
     public class RouteOptionRuleManager : Vanrise.Rules.RuleManager<RouteOptionRule, RouteOptionRuleDetail>
     {
-        #region Public Methods
+        #region Variables/Ctor
 
+        static RouteOptionRuleManager()
+        {
+            RouteOptionRuleManager instance = new RouteOptionRuleManager();
+            instance.AddRuleCachingExpirationChecker(new RouteOptionRuleCachingExpirationChecker());
+        }
+
+        #endregion
+
+        #region Public Methods
         public override bool ValidateBeforeAdd(RouteOptionRule rule)
         {
             Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
@@ -228,7 +238,6 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
 
-
         #region Private Methods
 
         private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
@@ -290,5 +299,15 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
+    }
+
+    public class RouteOptionRuleCachingExpirationChecker : RuleCachingExpirationChecker
+    {
+        DateTime? _dataRecordTypeCacheLastCheck;
+
+        public override bool IsRuleDependenciesCacheExpired()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _dataRecordTypeCacheLastCheck);
+        }
     }
 }

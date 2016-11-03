@@ -180,15 +180,15 @@ namespace TOne.WhS.Routing.Business
             routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
-            routeRuleExecutionContext.CustomerServiceIdHashSet = customerZoneDetail.CustomerServiceIds;//used for service matching
-            routeRuleExecutionContext.CustomerServiceIds = customerZoneDetail.CustomerServiceIds != null ? string.Join(",", customerZoneDetail.CustomerServiceIds) : null;// used for market price
+            routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetail.SaleZoneServiceIds;//used for service matching
+            routeRuleExecutionContext.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds != null ? string.Join(",", customerZoneDetail.SaleZoneServiceIds) : null;// used for market price
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
             route.SaleZoneId = saleCodeMatch.SaleZoneId;
             route.ExecutedRuleId = routeRule.RuleId;
             route.Rate = customerZoneDetail.EffectiveRateValue;
-            route.CustomerServiceIds = customerZoneDetail.CustomerServiceIds;
+            route.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds;
             route.CorrespondentType = routeRule.CorrespondentType;
 
             if (routeRule.Settings.UseOrderedExecution)

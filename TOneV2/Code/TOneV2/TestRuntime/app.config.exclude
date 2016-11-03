@@ -165,6 +165,9 @@
     <add key="TOneV1RoutingDBConnStringKey" value="TOneV1RoutingDBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="StateBackupDatabase" value="TOne_Configuration_StateBackup"/>
+
+    <!--Only enabled for SaleZone services explicitly defined on customer-->
+    <add key="TOneWhS_Routing_ZoneServicesExplicitOnCustomer" value="false"/>
   </appSettings>
   <system.codedom>
     <compilers>
