@@ -21,9 +21,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierZonesServicesEffectiveAfter(supplierId, minimumDate);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<SupplierZoneServiceDetail> GetFilteredSupplierZoneServices(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SupplierEntityServiceDetail> GetFilteredSupplierZoneServices(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new SupplierZoneServiceRequestHandler());
+        }
+
+
+        public SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
+        {
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.GetSupplierDefaultServiceBySupplier(supplierId, effectiveOn);
         }
 
         public long ReserveIDRange(int numberOfIDs)
@@ -48,36 +55,40 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #region Private Methods
-        private SupplierZoneServiceDetail SupplierZoneServiceDetailMapper(SupplierZoneService supplierZoneService)
+        private SupplierEntityServiceDetail SupplierEntityServiceDetailMapper(SupplierEntityService supplierEntityService)
         {
-            SupplierZoneServiceDetail detail = new SupplierZoneServiceDetail()
+            SupplierEntityServiceDetail detail = new SupplierEntityServiceDetail()
             {
-                Entity = supplierZoneService
+                Entity = supplierEntityService
+               
             };
-
-            SupplierZone supplierZone = new SupplierZoneManager().GetSupplierZone(supplierZoneService.ZoneId);
-            if (supplierZone == null)
-                throw new NullReferenceException();
-
-            detail.SupplierZoneName = supplierZone.Name;
-            detail.Services = supplierZoneService.EffectiveServices.Select(x => x.ServiceId).ToList();         
 
             return detail;
         }
-        private class SupplierZoneServiceRequestHandler : BigDataRequestHandler<SupplierZoneServiceQuery, SupplierZoneService, SupplierZoneServiceDetail>
+        private class SupplierZoneServiceRequestHandler : BigDataRequestHandler<SupplierZoneServiceQuery, SupplierEntityServiceDetail, SupplierEntityServiceDetail>
         {
-            public override SupplierZoneServiceDetail EntityDetailMapper(SupplierZoneService entity)
+            public override SupplierEntityServiceDetail EntityDetailMapper(SupplierEntityServiceDetail entity)
             {
-                SupplierZoneServiceManager manager = new SupplierZoneServiceManager();
-                return manager.SupplierZoneServiceDetailMapper(entity);
+                return entity;
             }
 
-            public override IEnumerable<SupplierZoneService> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
+            public override IEnumerable<SupplierEntityServiceDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
             {
-                //TODO: MJA get all zones effective for this supplier as per query
-                //Next for each supplier zone use the locator to read supplier entity service and return it to client side
-                ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-                return dataManager.GetFilteredSupplierZoneServices(input.Query);
+                SupplierZoneManager zoneManager = new SupplierZoneManager();
+                List<SupplierZone> supplierZones = zoneManager.GetSupplierZones(input.Query.SupplierId, input.Query.EffectiveOn);
+
+                SupplierZoneServiceLocator zoneServiceLocator = new SupplierZoneServiceLocator(new SupplierZoneServiceReadAllWithCache(input.Query.EffectiveOn));
+                
+                List<SupplierEntityServiceDetail> supplierEntityServices = new List<SupplierEntityServiceDetail>();
+               
+                foreach (SupplierZone supplierZone in supplierZones)
+                {
+                    SupplierEntityServiceDetail supplierEntityServiceDetail = new SupplierEntityServiceDetail();
+                     supplierEntityServiceDetail.Entity =  zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId);
+                     supplierEntityServiceDetail.ZoneName = supplierZone.Name;
+
+                }
+                return supplierEntityServices;
             }
         }
         #endregion

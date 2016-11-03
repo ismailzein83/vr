@@ -26,18 +26,53 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
        
         public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
-            //TODO: MJA get only the ones with zone id not null
             return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServices_GetByDate", SupplierZoneServiceMapper, supplierId, minimumDate);
         }
 
-        public IEnumerable<SupplierZoneService> GetFilteredSupplierZoneServices(SupplierZoneServiceQuery query)
-        {
-            //TODO: MJA should be removed
-            string zonesids = null;
-            if (query.ZoneIds != null && query.ZoneIds.Count() > 0)
-                zonesids = string.Join<int>(",", query.ZoneIds);
 
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierZoneService_GetFiltered]", SupplierZoneServiceMapper, query.SupplierId, zonesids, query.EffectiveOn);
+        public SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
+        {
+            return GetItemSP("TOneWhS_BE.sp_SupplierDefaultService_GetBySupplier", SupplierDefaultServiceMapper, supplierId, effectiveOn);
+        }
+
+        public bool Update(long supplierZoneServiceId, DateTime effectiveDate)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Update", supplierZoneServiceId, effectiveDate);
+            return (recordsEffected > 0);
+        }
+        public bool Insert(SupplierDefaultService supplierZoneService)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Insert", supplierZoneService.SupplierZoneServiceId, supplierZoneService.SupplierId, Vanrise.Common.Serializer.Serialize(supplierZoneService.ReceivedServices, false), Vanrise.Common.Serializer.Serialize(supplierZoneService.EffectiveServices, false), supplierZoneService.BED);
+            return (recordsEffected > 0);
+        }
+
+        public bool AreSupplierZoneServicesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SupplierZoneService", ref updateHandle);
+        }
+
+        public IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesService_GetBySupplier", SupplierZoneServiceMapper, supplierId, effectiveOn);
+        }
+
+        public IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierDefaultService_GetEffectiveDefaultServices", SupplierDefaultServiceMapper, effectiveOn);
+        }
+
+        public List<SupplierDefaultService> GetEffectiveSupplierDefaultServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            //TODO: MJA the same but get all records with Zone Id NOT equal to null
+            DataTable supplierZoneServicesOwners = BuildRoutingSupplierInfoTable(supplierInfos);
+            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierDefaultService_GetEffectiveDefaultServicesBySuppliers", SupplierDefaultServiceMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@SupplierZoneServicesOwners", SqlDbType.Structured);
+                dtPrm.Value = supplierZoneServicesOwners;
+                cmd.Parameters.Add(dtPrm);
+                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+            });
         }
 
         public List<SupplierZoneService> GetEffectiveSupplierZoneServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
@@ -52,22 +87,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
-        }
-
-        public List<SupplierDefaultService> GetEffectiveSupplierDefaultServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
-        {
-            return new List<SupplierDefaultService>();
-            //TODO: MJA the same but get all records with Zone Id equal to null
-
-            //DataTable supplierZoneServicesOwners = BuildRoutingSupplierInfoTable(supplierInfos);
-            //return GetItemsSPCmd("TOneWhS_BE.sp_SupplierZoneService_GetEffectiveZoneServicesBySuppliers", SupplierZoneServiceMapper, (cmd) =>
-            //{
-            //    var dtPrm = new SqlParameter("@SupplierZoneServicesOwners", SqlDbType.Structured);
-            //    dtPrm.Value = supplierZoneServicesOwners;
-            //    cmd.Parameters.Add(dtPrm);
-            //    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
-            //    cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
-            //});
         }
 
         internal static DataTable BuildRoutingSupplierInfoTable(IEnumerable<RoutingSupplierInfo> supplierInfos)
@@ -108,6 +127,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
             };
         }
+
+
+        SupplierDefaultService SupplierDefaultServiceMapper(IDataReader reader)
+        {
+            return new SupplierDefaultService()
+            {
+                SupplierZoneServiceId = (long)reader["ID"],
+                SupplierId = GetReaderValue<int?>(reader, "SupplierID"),
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["ReceivedServicesFlag"] as string),
+                EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["EffectiveServiceFlag"] as string),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+            };
+        }
+
         #endregion
 
 
@@ -118,7 +153,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService] WITH (TABLOCK)
                                             SELECT zs.[ID], zs.[ZoneID], zs.[PriceListID], zs.[ReceivedServicesFlag], zs.[EffectiveServiceFlag], zs.[BED], zs.[EED], zs.[SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierZoneService] zs
                                             WITH (NOLOCK)  Inner Join [TOneWhS_BE].[SupplierZone] sz WITH (NOLOCK)  on sz.ID = zs.ZoneID
-                                            Where sz.SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
+                                            Where sz.SupplierID = {2} and zs.ZoneID is not null", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
@@ -132,9 +167,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string GetDeleteCommandsBySupplierId(int supplierId)
         {
             return String.Format(@"DELETE zs FROM [TOneWhS_BE].[SupplierZoneService] zs Inner Join [TOneWhS_BE].[SupplierZone] sz on sz.ID = zs.ZoneID
-                                            Where sz.SupplierID = {0}", supplierId);
+                                            Where sz.SupplierID = {0} and zs.ZoneID is not null", supplierId);
         }
 
         #endregion
+
+
+
+
+
+
+       
     }
 }

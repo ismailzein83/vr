@@ -41,14 +41,13 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             else
             {
-                List<ZoneService> defaultServices = GetDefaultSupplierServices(supplierId);
-                //SupplierDefaultService defaultService = GetDefaultSupplierServices(supplierId);
+                SupplierDefaultService defaultService = GetDefaultSupplierServices(supplierId);
                 return new SupplierEntityService()
                 {
                     Source = SupplierEntityServiceSource.Supplier,
-                    Services = defaultServices,
-                    //BED = defaultService.BED,
-                    //EED = defaultService.EED
+                    Services = defaultService.EffectiveServices,
+                    BED = defaultService.BED,
+                    EED = defaultService.EED
                 };
             }
         }
@@ -68,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return false;
         }
 
-        private SupplierDefaultService GetDefaultSupplierServicesNew(int supplierId)
+        private SupplierDefaultService GetDefaultSupplierServices(int supplierId)
         {
             var defaultService = _reader.GetSupplierDefaultService(supplierId);
             if (defaultService == null)
@@ -76,23 +75,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return defaultService;
 
-        }
-
-        private List<ZoneService> GetDefaultSupplierServices(int supplierId)
-        {
-            //TODO: MJA remove this method and use the new one after renaming it
-            CarrierAccount supplierAccount = _carrierAccountManager.GetCarrierAccount(supplierId);
-
-            if (supplierAccount.SupplierSettings == null)
-                throw new NullReferenceException(string.Format("supplierAccount.SupplierSettings for Supplier Id: {0}", supplierId));
-
-            if (supplierAccount.SupplierSettings.DefaultServices == null)
-                throw new NullReferenceException(string.Format("supplierAccount.SupplierSettings.DefaultServices for Supplier Id: {0}", supplierId));
-
-            if (supplierAccount.SupplierSettings.DefaultServices.Count == 0)
-                throw new Exception(string.Format("supplierAccount.SupplierSettings.DefaultServices for Supplier Id: {0} count is 0.", supplierId));
-
-            return supplierAccount.SupplierSettings.DefaultServices;
         }
 
         #endregion

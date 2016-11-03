@@ -30,6 +30,14 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EED { get; set; }
     }
 
+
+    public class SupplierEntityServiceDetail
+    {
+        public SupplierEntityService Entity { get; set; }
+        public String ZoneName { get; set; }
+    }
+
+
     public class SupplierZoneService
     {
         public long SupplierZoneServiceId { get; set; }
@@ -37,7 +45,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long ZoneId { get; set; }
 
         public int PriceListId { get; set; }
-
         public List<ZoneService> ReceivedServices { get; set; }
 
         public List<ZoneService> EffectiveServices { get; set; }
@@ -56,6 +63,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         //TODO: to be removed and Supplier Price List Id to add
         public int PriceListId { get; set; }
+
+        public int? SupplierId { get; set; }
 
         public List<ZoneService> ReceivedServices { get; set; }
 
