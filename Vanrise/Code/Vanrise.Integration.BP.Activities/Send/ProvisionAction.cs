@@ -24,6 +24,7 @@ namespace Vanrise.Integration.BP.Activities
 
         [RequiredArgument]
         public InArgument<ActionProvisionerDefinitionSettings> ActionProvisionerDefinition { get; set; }
+        public InOutArgument<List<Object>> ExecutedActionsData { get; set; }
 
         [RequiredArgument]
         public InArgument<ActionProvisioner> ActionProvisioner { get; set; }
@@ -39,10 +40,11 @@ namespace Vanrise.Integration.BP.Activities
             var provisioninigContext = new ActionProvisioningContext
             {
                 DefinitionSettings = this.ActionProvisionerDefinition.Get(context),
-                Entity = this.Entity.Get(context)
+                Entity = this.Entity.Get(context),
+                ExecutedActionsData = this.ExecutedActionsData.Get(context)
             };
             actionProvisioner.Execute(provisioninigContext);
-
+            this.ExecutedActionsData.Set(context, provisioninigContext.ExecutedActionsData);
             if (!provisioninigContext.IsWaitingResponse)
             {
                 var output = provisioninigContext.ExecutionOutput;
@@ -64,6 +66,7 @@ namespace Vanrise.Integration.BP.Activities
             if (output == null)
                 throw new NullReferenceException("output");
             this.ProvisioningOutput.Set(context, output);
+
         }
     }
 }

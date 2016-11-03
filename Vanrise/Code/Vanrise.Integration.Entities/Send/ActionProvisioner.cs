@@ -18,7 +18,7 @@ namespace Vanrise.Integration.Entities
         ActionProvisionerDefinitionSettings DefinitionSettings { get; }
 
         dynamic Entity { get; }
-
+        List<Object> ExecutedActionsData { get; set; }
         ActionProvisioningOutput ExecutionOutput { set; }
 
         bool IsWaitingResponse { set; }

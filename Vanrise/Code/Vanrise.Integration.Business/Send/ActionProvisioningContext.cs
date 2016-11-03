@@ -29,5 +29,12 @@ namespace Vanrise.Integration.Business
             get;
             set;
         }
+
+
+        public List<object> ExecutedActionsData
+        {
+            get;
+            set;
+        }
     }
 }
