@@ -169,6 +169,7 @@
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
+    <Compile Include="Controllers\TelestSwitchController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -237,6 +238,18 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-otherinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeEntitiesInfoPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeOtherInfoPartRuntimeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-activatetelesswitch.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-blocktelesswitch.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-reactivatetelesswitch.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\Templates\ActivateTelesSwitchProvisionerDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\Templates\BlockTelesSwitchProvisionerDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\Templates\ReactivateTelesSwitchProvisionerDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\retail-be-provisioner-runtimesettings-activatetelesswitch.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\retail-be-provisioner-runtimesettings-blocktelesswitch.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\retail-be-provisioner-runtimesettings-reactivatetelesswitch.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\ActivateTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\BlockTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\ReactivateTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />

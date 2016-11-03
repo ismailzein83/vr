@@ -11,6 +11,7 @@ namespace Retail.BusinessEntity.Data
     {
         IEnumerable<Account> GetAccounts();
         bool UpdateStatus(long accountId, Guid statusId);
+        bool UpdateExecutedActions(long accountId, ExecutedActions executedAction);
         bool Insert(Account account, out long insertedId);
 
         bool Update(AccountToEdit account, long? parentId);

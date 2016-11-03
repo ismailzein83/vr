@@ -74,21 +74,21 @@ namespace Retail.BusinessEntity.Business
             Func<StatusChargingSet, bool> filterExpression = x => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
             return DataRetrievalManager.Instance.ProcessResult(input, chargingSets.ToBigResult(input, filterExpression, StatusChargingSetDetailMapper));
         }
-        public bool HasInitialCharging(EntityType entityType, long entityId, Guid statusDefinitionId, out Decimal initialCharge)
-        {
-            StatusChargingSet chargingSet = GetChargingSet(entityType, entityId);
-            if (chargingSet != null)
-            {
-                var statusCharge = chargingSet.Settings.StatusCharges.FirstOrDefault(itm => itm.StatusDefinitionId == statusDefinitionId);
-                if (statusCharge != null)
-                {
-                    initialCharge = statusCharge.InitialCharge;
-                    return true;
-                }
-            }
-            initialCharge = 0;
-            return false;
-        }
+        //public bool HasInitialCharging(EntityType entityType, long entityId, Guid statusDefinitionId, out Decimal initialCharge)
+        //{
+        //    StatusChargingSet chargingSet = GetChargingSet(entityType, entityId);
+        //    if (chargingSet != null)
+        //    {
+        //        var statusCharge = chargingSet.Settings.StatusCharges.FirstOrDefault(itm => itm.StatusDefinitionId == statusDefinitionId);
+        //        if (statusCharge != null)
+        //        {
+        //            initialCharge = statusCharge.InitialCharge;
+        //            return true;
+        //        }
+        //    }
+        //    initialCharge = 0;
+        //    return false;
+        //}
         public IEnumerable<RecurringPeriodConfig> GetRecurringPeriodExtensionConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
@@ -139,15 +139,15 @@ namespace Retail.BusinessEntity.Business
                });
         }
 
-        private StatusChargingSet GetChargingSet(EntityType entityType, long entityId)
-        {
-            switch (entityType)
-            {
-                case EntityType.Account: return GetAccountChargingSet(entityId);
-                case EntityType.AccountService: return GetServiceChargingSet(entityId);
-                default: throw new NotImplementedException(string.Format("entityType '{0}'", entityType));
-            }
-        }
+        //private StatusChargingSet GetChargingSet(EntityType entityType, long entityId)
+        //{
+        //    switch (entityType)
+        //    {
+        //        case EntityType.Account: return GetAccountChargingSet(entityId);
+        //        case EntityType.AccountService: return GetServiceChargingSet(entityId);
+        //        default: throw new NotImplementedException(string.Format("entityType '{0}'", entityType));
+        //    }
+        //}
 
         private StatusChargingSet GetAccountChargingSet(long accountId)
         {
@@ -159,19 +159,19 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
-        private StatusChargingSet GetServiceChargingSet(long accountServiceId)
-        {
-            var accountService = (new AccountServiceManager()).GetAccountService(accountServiceId);
-            if (accountService == null)
-                throw new NullReferenceException(String.Format("accountService '{0}'", accountServiceId));
-            var chargingPolicy = (new ChargingPolicyManager()).GetChargingPolicy(accountService.ServiceChargingPolicyId);
-            if (chargingPolicy == null)
-                throw new NullReferenceException(String.Format("chargingPolicy '{0}'", accountService.ServiceChargingPolicyId));
-            if (chargingPolicy.Settings.StatusChargingSetId.HasValue)
-                return GetChargingSet(chargingPolicy.Settings.StatusChargingSetId.Value);
-            else
-                return null;
-        }
+        //private StatusChargingSet GetServiceChargingSet(long accountServiceId)
+        //{
+        //    var accountService = (new AccountServiceManager()).GetAccountService(accountServiceId);
+        //    if (accountService == null)
+        //        throw new NullReferenceException(String.Format("accountService '{0}'", accountServiceId));
+        //    var chargingPolicy = accountService.ServiceChargingPolicyId.HasValue?(new ChargingPolicyManager()).GetChargingPolicy(accountService.ServiceChargingPolicyId.Value):null;
+        //    if (chargingPolicy == null)
+        //        throw new NullReferenceException(String.Format("chargingPolicy '{0}'", accountService.ServiceChargingPolicyId));
+        //    if (chargingPolicy.Settings.StatusChargingSetId.HasValue)
+        //        return GetChargingSet(chargingPolicy.Settings.StatusChargingSetId.Value);
+        //    else
+        //        return null;
+        //}
 
         #endregion
 

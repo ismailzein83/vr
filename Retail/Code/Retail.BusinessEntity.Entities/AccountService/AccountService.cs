@@ -13,10 +13,10 @@ namespace Retail.BusinessEntity.Entities
         public Guid StatusId { get; set; }
         public Guid ServiceTypeId { get; set; }
 
-        public int ServiceChargingPolicyId { get; set; }
+        public int? ServiceChargingPolicyId { get; set; }
 
         public AccountServiceSettings Settings { get; set; }
 
-        public ExecutedActionsData ExecutedActionsData { get; set; }
+        public ExecutedActions ExecutedActions { get; set; }
     }
 }

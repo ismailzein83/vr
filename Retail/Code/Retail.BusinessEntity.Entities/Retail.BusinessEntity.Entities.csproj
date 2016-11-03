@@ -112,7 +112,7 @@
     <Compile Include="Action\ActionDefinitionInfo.cs" />
     <Compile Include="Action\ActionDefinitionInfoFilter.cs" />
     <Compile Include="Action\ActionDefinitionQuery.cs" />
-    <Compile Include="Action\ExecutedActionsData.cs" />
+    <Compile Include="Action\ExecutedActions.cs" />
     <Compile Include="Action\ProvisionerDefinitionConfig.cs" />
     <Compile Include="Agent\Agent.cs" />
     <Compile Include="Agent\AgentDetail.cs" />

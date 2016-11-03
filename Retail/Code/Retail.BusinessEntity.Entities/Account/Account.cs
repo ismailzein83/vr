@@ -33,7 +33,7 @@ namespace Retail.BusinessEntity.Entities
         public Guid StatusId { get; set; }
         public long? ParentAccountId { get; set; }
         public string SourceId { get; set; }
-        public ExecutedActionsData ExecutedActionsData { get; set; }
+        public ExecutedActions ExecutedActions { get; set; }
 
 
     }

@@ -61,6 +61,11 @@ namespace Retail.BusinessEntity.Data.SQL
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountService_UpdateStatusID", accountServiceId, statusId);
             return (affectedRecords > 0);
         }
+        public bool UpdateExecutedActions(long accountServiceId, ExecutedActions executedAction)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountService_UpdateExecutedActions",accountServiceId, Vanrise.Common.Serializer.Serialize(executedAction));
+            return (affectedRecords > 0);
+        }
         #endregion
 
         #region Private Methods
@@ -75,8 +80,9 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountServiceId = (long)reader["ID"],
                 AccountId = (long)reader["AccountID"],
                 ServiceTypeId = GetReaderValue<Guid>(reader,"ServiceTypeId"),
-                ServiceChargingPolicyId = (int)reader["ServiceChargingPolicyId"],
+                ServiceChargingPolicyId = GetReaderValue<int?>(reader,"ServiceChargingPolicyId"),
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountServiceSettings>(reader["Settings"] as string),
+                ExecutedActions = reader["ExecutedActionsData"] as string != null? Vanrise.Common.Serializer.Deserialize<ExecutedActions>(reader["ExecutedActionsData"] as string):null,
                 StatusId = GetReaderValue<Guid>(reader, "StatusID")
             };
             return accountService;
