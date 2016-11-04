@@ -157,8 +157,10 @@
   <ItemGroup>
     <Content Include="VR_BEBridge\Constants\ModuleConfig.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\Templates\BEReceiveDefinitionFileSourceReadersTemplate.html" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\Templates\BEReceiveDefinitionCRMSourceReadersTemplate.html" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\Templates\BEReceiveDefinitionFTPSourceReadersTemplate.html" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\vr-bebridge-sourcebereaders-file-directive.js" />
+    <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\vr-bebridge-sourcebereaders-crm-directive.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\SourceBEReaders\vr-bebridge-sourcebereaders-ftp-directive.js" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\Templates\BEReceiveDefinitionGridTemplate.html" />
     <Content Include="VR_BEBridge\Directives\BEReceiveDefinition\vr-bebridge-bereceivedefinition-grid.js" />

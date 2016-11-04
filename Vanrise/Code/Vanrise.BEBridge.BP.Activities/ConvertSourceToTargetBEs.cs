@@ -32,20 +32,21 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void DoWork(ConvertSourceToTargetBEsInput inputArgument,
             AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            List<ITargetBE> targetsToInsert = new List<ITargetBE>();
-            List<ITargetBE> targetsToUpdate = new List<ITargetBE>();
-            int totalUpdateBatchConverted = 0;
-            int totalInsertBatchConverted = 0;
+            List<ITargetBE> targetsToInsert;
+            List<ITargetBE> targetsToUpdate;
             int totalUpdateTargets = 0;
             int totalInsertTargets = 0;
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
+
                 bool hasItem = false;
                 do
                 {
                     hasItem = inputArgument.BatchProcessingContextQueue.TryDequeue((batchProcessingContextQueue) =>
                     {
+                        targetsToInsert = new List<ITargetBE>();
+                        targetsToUpdate = new List<ITargetBE>();
                         TargetBEConvertorConvertSourceBEsContext targetBeConvertorContext =
                             new TargetBEConvertorConvertSourceBEsContext();
                         TargetBETryGetExistingContext targetContext = new TargetBETryGetExistingContext();
@@ -55,7 +56,7 @@ namespace Vanrise.BEBridge.BP.Activities
                         inputArgument.TargetConverter.ConvertSourceBEs(targetBeConvertorContext);
                         List<ITargetBE> targetBEs = targetBeConvertorContext.TargetBEs;
                         handle.SharedInstanceData.WriteTrackingMessage(
-                            Vanrise.Entities.LogEntryType.Information, "Targer BEs count {0}.", targetBEs.Count);
+                            Vanrise.Entities.LogEntryType.Information, "Targert BEs count {0}.", targetBEs.Count);
                         foreach (ITargetBE targetBe in targetBEs)
                         {
                             targetContext.SourceBEId = targetBe.SourceBEId;
@@ -83,17 +84,14 @@ namespace Vanrise.BEBridge.BP.Activities
                                 totalInsertTargets++;
                             }
                         }
-                        handle.SharedInstanceData.WriteTrackingMessage(
-                            Vanrise.Entities.LogEntryType.Information,
-                            "{0} Insert Batches converted, {1} Insert Targets", totalInsertBatchConverted,
-                            totalInsertTargets);
-                        handle.SharedInstanceData.WriteTrackingMessage(
-                            Vanrise.Entities.LogEntryType.Information,
-                            "{0} Update Batches converted, {1} Update Targets", totalUpdateBatchConverted,
-                            totalUpdateTargets);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Insert Targets Converted.", totalInsertTargets);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Update Targets Converted.", totalUpdateTargets);
+                        totalUpdateTargets = 0;
+                        totalInsertTargets = 0;
 
                         batchProcessingContextQueue.SetTargetBEs(targetsToInsert, targetsToUpdate);
                         inputArgument.OutputQueue.Enqueue(batchProcessingContextQueue);
+
                     });
                 } while (!ShouldStop(handle) && hasItem);
 

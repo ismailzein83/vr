@@ -49,6 +49,7 @@
     <Compile Include="BEReceiveDefinition\BEReceiveDefinitionQuery.cs" />
     <Compile Include="BEReceiveDefinition\BEReceiveDefinitionSettings.cs" />
     <Compile Include="BEReceiveDefinition\EntitySyncDefinition.cs" />
+    <Compile Include="CRMSourceBatch.cs" />
     <Compile Include="ITargetBE.cs" />
     <Compile Include="FileSourceBatch.cs" />
     <Compile Include="BEReceiveDefinition\SourceBEs\SourceBeReadersConfig.cs" />

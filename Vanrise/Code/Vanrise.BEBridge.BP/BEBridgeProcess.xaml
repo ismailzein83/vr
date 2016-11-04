@@ -37,6 +37,7 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Npgsql</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
@@ -82,6 +83,7 @@
                 <mca:CSharpValue x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">new List&lt;BaseQueue&lt;BatchProcessingContext&gt;&gt;()</mca:CSharpValue>
               </Variable.Default>
             </Variable>
+            <Variable x:TypeArguments="x:Object" Name="readerState" />
           </Sequence.Variables>
           <vbba1:GetBEReceiveDefinition sap2010:WorkflowViewState.IdRef="GetBEReceiveDefinition_1">
             <vbba1:GetBEReceiveDefinition.BEReceiveDefinition>
@@ -135,6 +137,11 @@
                   <mca:CSharpValue x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">queueBatchProcessingContextList</mca:CSharpValue>
                 </InArgument>
               </vbba1:ReadSourceBEs.OutputQueues>
+              <vbba1:ReadSourceBEs.ReaderState>
+                <OutArgument x:TypeArguments="x:Object">
+                  <mca:CSharpReference x:TypeArguments="x:Object">readerState</mca:CSharpReference>
+                </OutArgument>
+              </vbba1:ReadSourceBEs.ReaderState>
               <vbba1:ReadSourceBEs.SourceBatches>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vbe:SourceBatches)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vbe:SourceBatches)">queueSourceBatch</mca:CSharpReference>
@@ -219,10 +226,22 @@
               </ActivityAction>
             </ParallelForEach>
           </Parallel>
+          <vbba1:SaveBPDefinitionState PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveBPDefinitionState_1">
+            <vbba1:SaveBPDefinitionState.BeDefinitionId>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">recieveDefinitionId</mca:CSharpValue>
+              </InArgument>
+            </vbba1:SaveBPDefinitionState.BeDefinitionId>
+            <vbba1:SaveBPDefinitionState.ReaderState>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">readerState</mca:CSharpValue>
+              </InArgument>
+            </vbba1:SaveBPDefinitionState.ReaderState>
+          </vbba1:SaveBPDefinitionState>
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwjQgPiAQ4CAQFDBeABDwIBAkYLRnQDAbQBTQneARQCAQNSEVK0AQIBBFYLYSoDAakBYgttMQMBngFuC3kmAwGTAXoL3QEWAgEJWRFZeQMBrwFeEV5gAwGqAWoRapoBAwGkAWURZXEDAZ8BdhF2iwEDAZkBcRFx5QEDAZQBfw2ZASMCAW+aAQ3cAR8CAQqRARORAYYBAwGMAYIBE4IBYgMBhQGHAROHAZwBAgF+lgETlgF6AgF3jAETjAGAAQIBcJ0BE50BpAECAWikARHaARwCAQupARPIATQCASvJARPZASkCAQy2ARm2AXgCAV6sARmsAeoBAgFUuwEZuwGIAQIBSrEBGbEBoAECAUDAARnAAZABAgE2xQEZxQGKAQIBLNYBGdYBkAECASHRARnRAYABAgEXzAEZzAGYAQIBDQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwnQwP1AQ4CAQFEBfMBDwIBAkcLR3QDAd8BTgnxARQCAQNTEVO0AQIBBFgLYyoDAdIBZAtvMQMBxQFwC3smAwG4AXwL5AEWAgEX5QEL8AEpAgEKWxFbeQMB2QFgEWBgAwHTAWwRbJoBAwHMAWcRZ3EDAcYBeBF4iwEDAb8BcxFz5QEDAbkBgQENoAEjAwGHAaEBDeMBHwIBGOgBEegBYAIBEe0BEe0BWgIBC5gBE5gBhgEDAbABhAEThAFiAwGoAYkBE4kBnAEDAaABnQETnQF6AwGYAY4BE44BZAMBkAGTAROTAYABAwGIAaQBE6QBpAECAX+rARHhARwCARmwARPPATQCATzQARPgASkCARq9ARm9AXgCAXSzARmzAeoBAgFpwgEZwgGIAQIBXrgBGbgBoAECAVPHARnHAZABAgFIzAEZzAGKAQIBPd0BGd0BkAECATHYARnYAYABAgEm0wEZ0wGYAQIBGw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -256,7 +275,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="960,592">
+      <sap2010:ViewStateData Id="SaveBPDefinitionState_1" sap:VirtualizedContainerService.HintSize="938,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="960,654">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -264,7 +284,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="990,742">
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="990,804">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -272,14 +292,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1012,866">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1012,928">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="1052,946" />
+      <sap2010:ViewStateData Id="Vanrise.BEBridge.BP.BEBridgeProcess_1" sap:VirtualizedContainerService.HintSize="1052,1008" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

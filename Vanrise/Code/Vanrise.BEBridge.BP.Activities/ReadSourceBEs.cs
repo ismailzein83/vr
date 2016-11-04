@@ -13,15 +13,16 @@ namespace Vanrise.BEBridge.BP.Activities
     public class ReadSourceBEsInput
     {
         public SourceBEReader SourceReader { get; set; }
-
         public BaseQueue<SourceBatches> SourceBatches { get; set; }
-
         public List<BaseQueue<BatchProcessingContext>> OutputQueues { get; set; }
-
         public Guid BeDefinitionId { get; set; }
     }
 
-    public sealed class ReadSourceBEs : DependentAsyncActivity<ReadSourceBEsInput>
+    public class ReadSourceBEsOutput
+    {
+        public object ReaderState { get; set; }
+    }
+    public sealed class ReadSourceBEs : DependentAsyncActivity<ReadSourceBEsInput, ReadSourceBEsOutput>
     {
         [RequiredArgument]
         public InArgument<SourceBEReader> SourceReader { get; set; }
@@ -31,10 +32,10 @@ namespace Vanrise.BEBridge.BP.Activities
         public InArgument<List<BaseQueue<BatchProcessingContext>>> OutputQueues { get; set; }
         [RequiredArgument]
         public InArgument<Guid> BeDefinitionId { get; set; }
-
-        protected override void DoWork(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        [RequiredArgument]
+        public OutArgument<object> ReaderState { get; set; }
+        protected override ReadSourceBEsOutput DoWorkWithResult(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
             ProcessManager processManager = new ProcessManager();
 
             List<BatchProcessingContext> pendingBatchProcessings = new List<BatchProcessingContext>();
@@ -59,7 +60,6 @@ namespace Vanrise.BEBridge.BP.Activities
             inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
 
             #endregion
-
 
             #region taskCheckPendingBatches thread
 
@@ -89,10 +89,11 @@ namespace Vanrise.BEBridge.BP.Activities
                 System.Threading.Thread.Sleep(250);
             }
 
-            if (sourceBEReaderContext.ReaderState != null)
-                processManager.SaveDefinitionObjectState(handle.SharedInstanceData.InstanceInfo.DefinitionID, inputArgument.BeDefinitionId.ToString(), sourceBEReaderContext.ReaderState);
+            return new ReadSourceBEsOutput
+            {
+                ReaderState = sourceBEReaderContext.ReaderState
+            };
         }
-
         protected override ReadSourceBEsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new ReadSourceBEsInput
@@ -103,12 +104,15 @@ namespace Vanrise.BEBridge.BP.Activities
                 BeDefinitionId = this.BeDefinitionId.Get(context)
             };
         }
-
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.SourceBatches.Get(context) == null)
                 this.SourceBatches.Set(context, new MemoryQueue<SourceBatches>());
             base.OnBeforeExecute(context, handle);
+        }
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ReadSourceBEsOutput result)
+        {
+            this.ReaderState.Set(context, result.ReaderState);
         }
 
         #region Context Implementations
@@ -136,7 +140,6 @@ namespace Vanrise.BEBridge.BP.Activities
         }
 
         #endregion
-
     }
 
 }
