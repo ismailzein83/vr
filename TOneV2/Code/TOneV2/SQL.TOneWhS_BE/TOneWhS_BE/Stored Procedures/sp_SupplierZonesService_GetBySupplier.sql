@@ -19,8 +19,8 @@ BEGIN
 
 	SELECT  [ID],[PriceListID],[ZoneID], [SupplierID],[ReceivedServicesFlag],[EffectiveServiceFlag],[BED],[EED]
 	FROM	[TOneWhS_BE].SupplierZoneService szs WITH(NOLOCK) 
-	Where   BED <= @FromDate 
-			AND	(EED is null or EED > @ToDate)
+	Where   BED <= @ToDate 
+			AND	(EED is null or EED >@FromDate )
 			AND SupplierID = @SupplierId
 			AND ZoneID is not null
 END

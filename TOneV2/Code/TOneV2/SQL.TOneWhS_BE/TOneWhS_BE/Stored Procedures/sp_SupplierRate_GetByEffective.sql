@@ -12,6 +12,6 @@ BEGIN
 
 	SELECT  sr.[ID],sr.Rate,sr.PriceListID,sr.RateTypeID,sr.CurrencyID,sr.ZoneID,sr.BED,sr.EED,sr.Change
 	FROM	[TOneWhS_BE].SupplierRate sr WITH(NOLOCK) 
-	Where	sr.BED <= @FromDate 
-			AND (sr.EED is null or sr.EED > @ToDate)
+	Where	sr.BED <=  @ToDate
+			AND (sr.EED is null or sr.EED > @FromDate)
 END

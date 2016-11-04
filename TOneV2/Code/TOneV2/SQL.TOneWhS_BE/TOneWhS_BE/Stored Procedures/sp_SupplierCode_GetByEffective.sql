@@ -11,6 +11,6 @@ BEGIN
 
        SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED,sc.CodeGroupID,sc.SourceID
        FROM   [TOneWhS_BE].SupplierCode sc WITH(NOLOCK) 
-       Where  sc.BED<=@From 
-			  AND (sc.EED is null or sc.EED > @To)
+       Where  sc.BED<= @To
+			  AND (sc.EED is null or sc.EED >@From )
 END
