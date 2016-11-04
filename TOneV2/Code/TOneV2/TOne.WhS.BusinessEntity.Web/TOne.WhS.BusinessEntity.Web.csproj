@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PrimarySaleEntityEnum.js" />
@@ -225,6 +226,10 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customer-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-activationstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-supplier-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDPNSelectorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDRImportSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-cdpn-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-cdrimport-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />

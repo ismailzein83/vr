@@ -102,6 +102,7 @@
     <Compile Include="Carriers\CarrierProfile\CarrierProfileQuery.cs" />
     <Compile Include="Carriers\CarrierProfile\CarrierProfile.cs" />
     <Compile Include="Carriers\Supplier\SupplierFilterSettings.cs" />
+    <Compile Include="CDRImportSettings\CDRImportSettings.cs" />
     <Compile Include="ChangedEntity.cs" />
     <Compile Include="CodeCriteria\CodeCriteria.cs" />
     <Compile Include="CodeCriteria\CodeCriteriaGroupConfig.cs" />
