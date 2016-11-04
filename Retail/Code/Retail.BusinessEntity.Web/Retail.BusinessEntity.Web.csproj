@@ -223,6 +223,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Agent\Templates\AgentGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Agent\Templates\AgentConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Agent\Templates\AgentSynchronizerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Distributor\retail-be-distributor-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Distributor\retail-be-distributor-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Distributor\retail-be-distributor-grid.js" />

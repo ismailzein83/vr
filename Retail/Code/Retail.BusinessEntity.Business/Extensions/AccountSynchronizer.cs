@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Business
                 SourceAccountData accountData = targetAccount as SourceAccountData;
                 long accountId;
                 accountManager.TryAddAccount(accountData.Account, out accountId);
-                if (accountId > 0)
+                if (accountId > 0 && accountData.IdentificationRulesToInsert != null)
                     foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
                     {
                         mappingRule.Settings.Value = accountId;
