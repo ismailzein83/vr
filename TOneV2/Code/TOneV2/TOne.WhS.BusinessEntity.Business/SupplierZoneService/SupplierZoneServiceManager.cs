@@ -75,20 +75,24 @@ namespace TOne.WhS.BusinessEntity.Business
             public override IEnumerable<SupplierEntityServiceDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
             {
                 SupplierZoneManager zoneManager = new SupplierZoneManager();
-                List<SupplierZone> supplierZones = zoneManager.GetSupplierZones(input.Query.SupplierId, input.Query.EffectiveOn);
+                IEnumerable<SupplierZone> supplierZones = zoneManager.GetSupplierZones(input.Query.SupplierId, input.Query.EffectiveOn);
+
+                if(input.Query.ZoneIds != null)
+                     supplierZones = supplierZones.FindAllRecords(item => input.Query.ZoneIds.Contains(item.SupplierZoneId));
 
                 SupplierZoneServiceLocator zoneServiceLocator = new SupplierZoneServiceLocator(new SupplierZoneServiceReadAllWithCache(input.Query.EffectiveOn));
                 
-                List<SupplierEntityServiceDetail> supplierEntityServices = new List<SupplierEntityServiceDetail>();
+                List<SupplierEntityServiceDetail> supplierEntityServicesDetail = new List<SupplierEntityServiceDetail>();
                
                 foreach (SupplierZone supplierZone in supplierZones)
                 {
                     SupplierEntityServiceDetail supplierEntityServiceDetail = new SupplierEntityServiceDetail();
                      supplierEntityServiceDetail.Entity =  zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId);
                      supplierEntityServiceDetail.ZoneName = supplierZone.Name;
-
+                     supplierEntityServiceDetail.Services = supplierEntityServiceDetail.Entity.Services.Select(x => x.ServiceId).ToList();         
+                    supplierEntityServicesDetail.Add(supplierEntityServiceDetail);
                 }
-                return supplierEntityServices;
+                return supplierEntityServicesDetail;
             }
         }
         #endregion
