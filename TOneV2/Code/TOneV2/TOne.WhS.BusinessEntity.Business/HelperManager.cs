@@ -35,10 +35,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 Func<T, bool> predicate = (itm) =>
                 {
-                    if (itm.BED < bed)
+                    if (itm.BED > bed)
                         return false;
 
-                    if (itm.EED.HasValue && (!eed.HasValue || itm.EED.Value >= eed.Value))
+                    if (itm.EED.HasValue && (!eed.HasValue || itm.EED.Value < eed.Value))
                         return false;
 
                     if (!itm.EED.HasValue && eed.HasValue)
