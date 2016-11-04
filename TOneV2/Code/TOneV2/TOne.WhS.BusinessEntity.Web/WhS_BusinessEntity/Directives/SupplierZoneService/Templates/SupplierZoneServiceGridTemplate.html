@@ -4,9 +4,9 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
               >
-    <!--<vr-datagridcolumn headertext="'ID'" field="'Entity.SupplierZoneServiceId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'"></vr-datagridcolumn>-->
-    <vr-datagridcolumn headertext="'Services'" field="'Entity.Services'" disablesorting>
+    <!--<vr-datagridcolumn headertext="'ID'" field="'Entity.SupplierZoneServiceId'" type="'Text'"></vr-datagridcolumn>-->
+    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Services'" field="'Services'" disablesorting>
         <vr-whs-be-services-viewer on-ready="dataItem.onServiceReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>

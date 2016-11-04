@@ -7,7 +7,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SupplierZoneServiceQuery
     {
        
-        public List<int> ZoneIds { get; set; }
+        public List<long> ZoneIds { get; set; }
         public int SupplierId { get; set; }
         public DateTime EffectiveOn { get; set; }
 

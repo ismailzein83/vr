@@ -35,6 +35,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SupplierEntityService Entity { get; set; }
         public String ZoneName { get; set; }
+        public List<int> Services { get; set; }
     }
 
 
