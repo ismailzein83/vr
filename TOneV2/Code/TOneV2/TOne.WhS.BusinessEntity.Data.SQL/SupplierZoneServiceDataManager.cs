@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 
@@ -51,14 +48,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.IsDataUpdated("TOneWhS_BE.SupplierZoneService", ref updateHandle);
         }
 
-        public IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime effectiveOn)
+        public IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime from, DateTime to)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesService_GetBySupplier", SupplierZoneServiceMapper, supplierId, effectiveOn);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesService_GetBySupplier", SupplierZoneServiceMapper, supplierId, from, to);
         }
 
-        public IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime effectiveOn)
+        public IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime from, DateTime to)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierDefaultService_GetEffectiveDefaultServices", SupplierDefaultServiceMapper, effectiveOn);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierDefaultService_GetEffectiveDefaultServices", SupplierDefaultServiceMapper, from, to);
         }
 
         public List<SupplierDefaultService> GetEffectiveSupplierDefaultServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
@@ -145,7 +142,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #endregion
 
-
         #region State Backup Methods
 
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
@@ -171,12 +167,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-
-
-
-
-
-
-       
     }
 }

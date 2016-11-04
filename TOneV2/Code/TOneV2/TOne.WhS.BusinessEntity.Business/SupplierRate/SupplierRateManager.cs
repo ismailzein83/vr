@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
 
@@ -31,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public SupplierZoneRate GetCachedSupplierZoneRate(int supplierId, long supplierZoneId, DateTime effectiveOn)
         {
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));
-            return supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
+            return supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId, effectiveOn);
         }
         public RateChangeType GetSupplierRateChange(DateTime fromTime, DateTime tillTime, long rateId)
         {

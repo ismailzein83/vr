@@ -311,9 +311,9 @@
                             $scope.scopeModel.automaticPriceListSubjectCode = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.SubjectCode;
                         }
                     }
-                    //if (carrierAccountEntity.SupplierSettings) {
-                    //    $scope.scopeModel.supIncludeProcessingTimeZone = carrierAccountEntity.SupplierSettings.IncludeProcessingTimeZone;
-                    //}
+                    if (carrierAccountEntity.SupplierSettings) {
+                        $scope.scopeModel.supIncludeProcessingTimeZone = carrierAccountEntity.SupplierSettings.IncludeProcessingTimeZone;
+                    }
                 }
             }
         }
@@ -412,7 +412,7 @@
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,
                     TimeZoneId: supplierTimeDirectiveAPI != undefined ? supplierTimeDirectiveAPI.getSelectedIds() : undefined,
                     RoutingStatus: supRoutingStatusSelectorAPI != undefined ? supRoutingStatusSelectorAPI.getSelectedIds() : undefined,
-                    //IncludeProcessingTimeZone: $scope.scopeModel.supIncludeProcessingTimeZone
+                    IncludeProcessingTimeZone: $scope.scopeModel.supIncludeProcessingTimeZone
                 },
                 CustomerSettings: {
                     TimeZoneId: customerTimeDirectiveAPI != undefined ? customerTimeDirectiveAPI.getSelectedIds() : undefined,

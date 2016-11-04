@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierRate : IRate
+    public class SupplierRate : IRate, IBusinessEntity
     {
         public long SupplierRateId { get; set; }
 

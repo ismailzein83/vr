@@ -86,8 +86,10 @@
                             </vr-whs-be-zone-service-config-selector>
                         </span>
                         <vr-columns width="1/2row">
-                            <vr-whs-be-routingstatus-selector hideremoveicon="true" isrequired on-ready="scopeModel.onSupplierRoutingStatusDirectiveReady">
-                            </vr-whs-be-routingstatus-selector>
+                            <vr-whs-be-routingstatus-selector hideremoveicon="true" isrequired on-ready="scopeModel.onSupplierRoutingStatusDirectiveReady"></vr-whs-be-routingstatus-selector>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.supIncludeProcessingTimeZone" label="Processing Time Zone" />
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

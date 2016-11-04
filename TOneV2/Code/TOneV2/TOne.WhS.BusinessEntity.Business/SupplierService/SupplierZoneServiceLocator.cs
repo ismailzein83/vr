@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -24,12 +20,12 @@ namespace TOne.WhS.BusinessEntity.Business
             _carrierAccountManager = new CarrierAccountManager();
         }
 
-        public SupplierEntityService GetSupplierZoneServices(int supplierId, long supplierZoneId)
+        public SupplierEntityService GetSupplierZoneServices(int supplierId, long supplierZoneId, DateTime effectiveOn)
         {
             SupplierZoneService supplierZoneService;
             Dictionary<int, ZoneService> servicesAndChildServices = new Dictionary<int, ZoneService>();
 
-            if (HasSupplierZoneServices(supplierId, supplierZoneId, out supplierZoneService))
+            if (HasSupplierZoneServices(supplierId, supplierZoneId, effectiveOn, out supplierZoneService))
             {
                 return new SupplierEntityService()
                 {
@@ -41,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             else
             {
-                SupplierDefaultService defaultService = GetDefaultSupplierServices(supplierId);
+                SupplierDefaultService defaultService = GetDefaultSupplierServices(supplierId, effectiveOn);
                 return new SupplierEntityService()
                 {
                     Source = SupplierEntityServiceSource.Supplier,
@@ -55,21 +51,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #region Private Methods
-        
-        private bool HasSupplierZoneServices(int supplierId, long supplierZoneId, out SupplierZoneService supplierZoneService)
+
+        private bool HasSupplierZoneServices(int supplierId, long supplierZoneId, DateTime effectiveOn, out SupplierZoneService supplierZoneService)
         {
-            supplierZoneService = null;
-
-            var supplierZoneServices = _reader.GetSupplierZoneServicesByZone(supplierId);
-            if (supplierZoneServices != null && supplierZoneServices.TryGetValue(supplierZoneId, out supplierZoneService))
-                return true;
-
-            return false;
+            supplierZoneService = _reader.GetSupplierZoneServicesByZone(supplierId, supplierZoneId, effectiveOn);
+            return supplierZoneService != null;
         }
 
-        private SupplierDefaultService GetDefaultSupplierServices(int supplierId)
+        private SupplierDefaultService GetDefaultSupplierServices(int supplierId, DateTime effectiveOn)
         {
-            var defaultService = _reader.GetSupplierDefaultService(supplierId);
+            var defaultService = _reader.GetSupplierDefaultService(supplierId, effectiveOn);
             if (defaultService == null)
                 throw new DataIntegrityValidationException(string.Format("No default services set for Supplier with id {0}", supplierId));
 

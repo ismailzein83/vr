@@ -33,9 +33,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByDate", SupplierRateMapper, supplierId, minimumDate);
         }
-        public List<SupplierRate> GetEffectiveSupplierRates(DateTime effectiveDate)
+        public List<SupplierRate> GetEffectiveSupplierRates(DateTime fromDate, DateTime toDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByEffective", SupplierRateMapper, effectiveDate);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetByEffective", SupplierRateMapper, fromDate, toDate);
         }
         public bool AreSupplierRatesUpdated(ref object updateHandle)
         {

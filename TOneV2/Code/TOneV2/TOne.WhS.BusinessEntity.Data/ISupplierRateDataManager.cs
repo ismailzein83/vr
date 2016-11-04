@@ -14,8 +14,8 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SupplierRate> GetEffectiveSupplierRatesBySuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos);
 
-        List<SupplierRate> GetSupplierRatesInBetweenPeriod(DateTime froDateTime, DateTime tillDateTime);
-        List<SupplierRate> GetEffectiveSupplierRates(DateTime effectiveDate);
+        List<SupplierRate> GetSupplierRatesInBetweenPeriod(DateTime fromDateTime, DateTime tillDateTime);
+        List<SupplierRate> GetEffectiveSupplierRates(DateTime fromDate, DateTime toDate);
 
         bool AreSupplierRatesUpdated(ref object updateHandle);
 

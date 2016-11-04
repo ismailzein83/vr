@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
-using Vanrise.Common;
 using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -20,10 +15,10 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetSupplierCodesEffectiveAfter(supplierId, minimumDate);
         }
-        public List<SupplierCode> GetSupplierCodes(DateTime effectiveOn)
+        public List<SupplierCode> GetSupplierCodes(DateTime from, DateTime to)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetSupplierCodes(effectiveOn);
+            return dataManager.GetSupplierCodes(from, to);
         }
         public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo)
         {

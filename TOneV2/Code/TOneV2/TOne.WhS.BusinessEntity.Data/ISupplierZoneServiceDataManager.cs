@@ -23,8 +23,8 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool AreSupplierZoneServicesUpdated(ref object updateHandle);
 
-        IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime _effectiveOn);
+        IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime from, DateTime to);
 
-        IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime _effectiveOn);
+        IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime from, DateTime to);
     }
 }

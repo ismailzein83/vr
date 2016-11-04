@@ -12,4 +12,11 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         DateTime? EED { get; set; }
     }
+
+    public interface IBusinessEntityInfo
+    {
+        DateTime BED { get; set; }
+
+        DateTime? EED { get; set; }
+    }
 }

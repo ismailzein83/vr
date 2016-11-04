@@ -2,7 +2,7 @@
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierCode : ICode
+    public class SupplierCode : ICode, IBusinessEntity
     {
         public long SupplierCodeId { get; set; }
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -15,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         Dictionary<int, SupplierZoneServicesByZone> _allSupplierZoneServicesBySupplier;
         Dictionary<int, SupplierDefaultService> _allSupplierDefaultServicesBySupplier;
-        
+
         #endregion
 
 
@@ -26,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
             _allSupplierZoneServicesBySupplier = GetAllSupplierZoneServicesBySupplier(supplierInfos, effectiveOn, isEffectiveInFuture);
         }
 
-        public SupplierDefaultService GetSupplierDefaultService(int supplierId)
+        public SupplierDefaultService GetSupplierDefaultService(int supplierId, DateTime effectiveOn)
         {
             if (_allSupplierDefaultServicesBySupplier == null)
                 return null;
@@ -34,12 +31,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return _allSupplierDefaultServicesBySupplier.GetRecord(supplierId);
         }
 
-        public SupplierZoneServicesByZone GetSupplierZoneServicesByZone(int supplierId)
+        public SupplierZoneService GetSupplierZoneServicesByZone(int supplierId, long supplierZoneId, DateTime effectiveOn)
         {
             if (_allSupplierZoneServicesBySupplier == null)
                 return null;
 
-            return _allSupplierZoneServicesBySupplier.GetRecord(supplierId);
+            SupplierZoneServicesByZone supplierZoneServicesByZone = _allSupplierZoneServicesBySupplier.GetRecord(supplierId);
+            if (supplierZoneServicesByZone == null)
+                return null;
+
+            return supplierZoneServicesByZone.GetRecord(supplierZoneId);
+
         }
 
         #endregion
@@ -56,8 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             foreach (SupplierDefaultService supplierDefaultService in supplierDefaultServices)
             {
-                SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierDefaultService.PriceListId);
-                result.Add(supplierPriceList.SupplierId, supplierDefaultService);
+                result.Add(supplierDefaultService.SupplierId.Value, supplierDefaultService);
             }
 
             return result;
@@ -77,12 +78,7 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (SupplierZoneService supplierZoneService in supplierZoneServices)
             {
                 SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierZoneService.PriceListId);
-
-                if (!result.TryGetValue(supplierPriceList.SupplierId, out supplierZoneServicesByZone))
-                {
-                    supplierZoneServicesByZone = new SupplierZoneServicesByZone();
-                    result.Add(supplierPriceList.SupplierId, supplierZoneServicesByZone);
-                }
+                supplierZoneServicesByZone = result.GetOrCreateItem(supplierPriceList.SupplierId);
 
                 if (!supplierZoneServicesByZone.TryGetValue(supplierZoneService.ZoneId, out tempSupplierZoneService))
                 {

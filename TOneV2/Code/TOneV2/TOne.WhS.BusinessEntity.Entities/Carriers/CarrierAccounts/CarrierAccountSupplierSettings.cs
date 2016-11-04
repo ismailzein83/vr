@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum RoutingStatus { Enabled=0, BlockedOutBound=1}
+    public enum RoutingStatus { Enabled = 0, BlockedOutBound = 1 }
     public class CarrierAccountSupplierSettings
     {
         public RoutingStatus RoutingStatus { get; set; }
@@ -14,5 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<ZoneService> DefaultServices { get; set; }
 
         public int TimeZoneId { get; set; }
+
+        public bool IncludeProcessingTimeZone { get; set; }
     }
 }

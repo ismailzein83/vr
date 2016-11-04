@@ -176,11 +176,11 @@ namespace TOne.WhS.Routing.Business
 
                 foreach (var supplierZone in supplierZones)
                 {
-                    SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                    SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId, effectiveDate);
 
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
-                        SupplierEntityService supplierEntityService = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId);
+                        SupplierEntityService supplierEntityService = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId, effectiveDate);
                         List<ZoneService> exactSupplierZoneServices = supplierEntityService.Services;
                         IEnumerable<ZoneServiceConfig> supplierZoneServicesWithChildren = zoneServiceConfigManager.GetDistinctZoneServiceConfigsWithChildren(exactSupplierZoneServices.Select(itm => itm.ServiceId));
 

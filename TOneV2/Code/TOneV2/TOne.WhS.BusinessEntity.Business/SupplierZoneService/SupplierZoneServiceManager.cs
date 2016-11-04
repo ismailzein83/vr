@@ -87,7 +87,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 foreach (SupplierZone supplierZone in supplierZones)
                 {
                     SupplierEntityServiceDetail supplierEntityServiceDetail = new SupplierEntityServiceDetail();
-                     supplierEntityServiceDetail.Entity =  zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId);
+                    supplierEntityServiceDetail.Entity = zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId, input.Query.EffectiveOn);
                      supplierEntityServiceDetail.ZoneName = supplierZone.Name;
                      supplierEntityServiceDetail.Services = supplierEntityServiceDetail.Entity.Services.Select(x => x.ServiceId).ToList();         
                     supplierEntityServicesDetail.Add(supplierEntityServiceDetail);

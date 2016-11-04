@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Caching.Runtime;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -78,9 +78,15 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             _effectiveOn = effectiveOn;
         }
-        public SupplierRatesByZone GetSupplierRates(int supplierId)
+        public SupplierRatesByZone GetSupplierRates(int supplierId, DateTime effectiveOn)
         {
-            return GetCachedSupplierRates(supplierId);
+            List<SupplierRatesByZoneInfo> supplierRatesByZoneInfoList = GetCachedSupplierRates(supplierId);
+            SupplierRatesByZoneInfo SupplierRatesByZoneInfo = HelperManager.GetBusinessEntityInfo<SupplierRatesByZoneInfo>(supplierRatesByZoneInfoList, effectiveOn);
+
+            if (SupplierRatesByZoneInfo == null)
+                return null;
+
+            return SupplierRatesByZoneInfo.SupplierRatesByZone;
         }
         #endregion
 
@@ -91,45 +97,69 @@ namespace TOne.WhS.BusinessEntity.Business
             public DateTime EffectiveOn { get; set; }
         }
 
-        SupplierRatesByZone GetCachedSupplierRates(int supplierId)
+        List<SupplierRatesByZoneInfo> GetCachedSupplierRates(int supplierId)
         {
+            DateTimeRange dateTimeRange = HelperManager.GetDateTimeRangeWithOffset(_effectiveOn);
+
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>();
             var cacheName = new GetCachedSupplierRatesCacheName
             {
-                EffectiveOn = _effectiveOn.Date
+                EffectiveOn = dateTimeRange.From
             };
             var ratesBySuppliers = cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-                   List<SupplierRate> supplierRates = dataManager.GetEffectiveSupplierRates(this._effectiveOn);
+                   List<SupplierRate> supplierRates = dataManager.GetEffectiveSupplierRates(dateTimeRange.From, dateTimeRange.To);
 
-                   Dictionary<int, SupplierRatesByZone> result = new Dictionary<int, SupplierRatesByZone>();
+                   Dictionary<int, List<SupplierRatesByZoneInfo>> result = new Dictionary<int, List<SupplierRatesByZoneInfo>>();
+
                    var priceLists = new SupplierPriceListManager().GetCachedPriceLists();
-                   foreach (SupplierRate supplierRate in supplierRates)
+
+                   HelperManager.StructureBusinessEntitiesByDate<SupplierRate>(supplierRates, (matchingSupplierRates, bed, eed) =>
                    {
-                       var cachedRate = cacheManager.CacheAndGetRate(supplierRate);
-                       SupplierPriceList supplierPriceList = priceLists.GetRecord(cachedRate.PriceListId);
-                       if (supplierPriceList == null)
-                           throw new NullReferenceException(String.Format("supplierPriceList '{0}'", cachedRate.PriceListId));
+                       Dictionary<int, SupplierRatesByZone> data = new Dictionary<int, SupplierRatesByZone>();
 
-                       var supplierRatesByZone = result.GetOrCreateItem(supplierPriceList.SupplierId);
-                       var supplierZoneRates = supplierRatesByZone.GetOrCreateItem(cachedRate.ZoneId);
-
-                       if (cachedRate.RateTypeId.HasValue)
+                       foreach (SupplierRate supplierRate in matchingSupplierRates)
                        {
-                           if (supplierZoneRates.RatesByRateType == null)
-                               supplierZoneRates.RatesByRateType = new Dictionary<int, SupplierRate>();
-                           supplierZoneRates.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
+                           var cachedRate = cacheManager.CacheAndGetRate(supplierRate);
+                           SupplierPriceList supplierPriceList = priceLists.GetRecord(cachedRate.PriceListId);
+                           if (supplierPriceList == null)
+                               throw new NullReferenceException(String.Format("supplierPriceList '{0}'", cachedRate.PriceListId));
+
+                           var supplierRatesByZone = data.GetOrCreateItem(supplierPriceList.SupplierId);
+                           var supplierZoneRates = supplierRatesByZone.GetOrCreateItem(cachedRate.ZoneId);
+
+                           if (cachedRate.RateTypeId.HasValue)
+                           {
+                               if (supplierZoneRates.RatesByRateType == null)
+                                   supplierZoneRates.RatesByRateType = new Dictionary<int, SupplierRate>();
+                               supplierZoneRates.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
+                           }
+                           else
+                               supplierZoneRates.Rate = cachedRate;
                        }
-                       else
-                           supplierZoneRates.Rate = cachedRate;
-                   }
+
+                       foreach (KeyValuePair<int, SupplierRatesByZone> item in data)
+                       {
+                           var matchingItem = result.GetOrCreateItem(item.Key);
+                           matchingItem.Add(new SupplierRatesByZoneInfo() { BED = bed, EED = eed, SupplierRatesByZone = item.Value });
+                       }
+                   });
                    return result;
                });
             return ratesBySuppliers.GetRecord(supplierId);
-
         }
+
         #endregion
+
+        private class SupplierRatesByZoneInfo : IBusinessEntityInfo
+        {
+            public DateTime BED { get; set; }
+
+            public DateTime? EED { get; set; }
+
+            public SupplierRatesByZone SupplierRatesByZone { get; set; }
+        }
     }
 }

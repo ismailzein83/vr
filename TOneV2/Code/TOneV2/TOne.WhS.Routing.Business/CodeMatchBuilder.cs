@@ -9,6 +9,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Caching;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -79,14 +80,14 @@ namespace TOne.WhS.Routing.Business
 
         public SupplierCodeMatch GetSupplierCodeMatch(string number, int supplierId, DateTime effectiveOn)
         {
-            SupplierCodeIterator supplierCodeIterator = GetSupplierCodeIterator(supplierId, effectiveOn);
-            if (supplierCodeIterator != null)
-                return supplierCodeIterator.GetCodeMatch(number);
+            SupplierCodeIteratorInfo supplierCodeIteratorInfo = GetSupplierCodeIterator(supplierId, effectiveOn);
+            if (supplierCodeIteratorInfo != null && supplierCodeIteratorInfo.SupplierCodeIterator != null)
+                return supplierCodeIteratorInfo.SupplierCodeIterator.GetCodeMatch(number);
             else
                 return null;
         }
 
-        #endregion 
+        #endregion
 
         #region Private Methods
 
@@ -261,45 +262,61 @@ namespace TOne.WhS.Routing.Business
             public DateTime EffectiveOn { get; set; }
         }
 
-        private SupplierCodeIterator GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
+        private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
         {
-            var cacheName = new GetSupplierCodeIteratorCacheName { SupplierId = supplierId, EffectiveOn = effectiveOn.Date };// String.Concat("GetSupplierCodeIterator_", supplierId, "_", effectiveOn.Date);
+            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId,effectiveOn );
+            return HelperManager.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
+        }
+        private List<SupplierCodeIteratorInfo> GetSupplierCodeIterators(int supplierId,DateTime effectiveOn)
+        {
+            DateTimeRange dateTimeRange = HelperManager.GetDateTimeRangeWithOffset(effectiveOn);
+
+            var cacheName = new GetSupplierCodeIteratorCacheName { SupplierId = supplierId, EffectiveOn = dateTimeRange.From };// String.Concat("GetSupplierCodeIterator_", supplierId, "_", effectiveOn.Date);
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
-            
+
             return cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
-                   Dictionary<int, List<SupplierCode>> codesBySupplier = GetCachedSupplierCodes(effectiveOn);
+                   Dictionary<int, List<SupplierCode>> codesBySupplier = GetCachedSupplierCodes(dateTimeRange.From, dateTimeRange.To);
 
                    var supplierCodes = codesBySupplier.GetRecord(supplierId);
-                   if (supplierCodes != null)
-                   {
-                       return new SupplierCodeIterator()
-                       {
-                           CodeIterator = new CodeIterator<SupplierCode>(supplierCodes),
-                           SupplierId = supplierId
-                       };
-                   }
-                   else
+                   if (supplierCodes == null)
                        return null;
+
+                   List<SupplierCodeIteratorInfo> supplierCodeIterators = new List<SupplierCodeIteratorInfo>();
+
+                   HelperManager.StructureBusinessEntitiesByDate(supplierCodes, (matchingSupplierCodes, bed, eed) =>
+                   {
+                       SupplierCodeIteratorInfo supplierCodeIteratorInfo = new SupplierCodeIteratorInfo()
+                       {
+                           BED = bed,
+                           EED = eed,
+                           SupplierCodeIterator = new SupplierCodeIterator()
+                           {
+                               CodeIterator = new CodeIterator<SupplierCode>(matchingSupplierCodes),
+                               SupplierId = supplierId
+                           }
+                       };
+                       supplierCodeIterators.Add(supplierCodeIteratorInfo);
+                   });
+                   return supplierCodeIterators;
                });
         }
-
 
         private struct GetCachedSupplierCodesCacheName
         {
             public DateTime EffectiveOn { get; set; }
         }
 
-        private Dictionary<int, List<SupplierCode>> GetCachedSupplierCodes(DateTime effectiveOn)
+        private Dictionary<int, List<SupplierCode>> GetCachedSupplierCodes(DateTime from, DateTime to)
         {
-            var cacheName = new GetCachedSupplierCodesCacheName { EffectiveOn = effectiveOn.Date };
+            var cacheName = new GetCachedSupplierCodesCacheName { EffectiveOn = from };
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
             return cacheManager.GetOrCreateObject(cacheName, () =>
              {
                  var rslt = new Dictionary<int, List<SupplierCode>>();
                  SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
-                 List<SupplierCode> allSupplierCodes = supplierCodeManager.GetSupplierCodes(effectiveOn);
+                 List<SupplierCode> allSupplierCodes = supplierCodeManager.GetSupplierCodes(from, to);
                  var zones = new SupplierZoneManager().GetCachedSupplierZones();
                  foreach (var code in allSupplierCodes)
                  {
@@ -311,7 +328,7 @@ namespace TOne.WhS.Routing.Business
              });
         }
 
-        
+
         #endregion
     }
 }

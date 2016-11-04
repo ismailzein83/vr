@@ -1,4 +1,5 @@
-﻿using TOne.WhS.BusinessEntity.Entities;
+﻿using System;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -11,9 +12,9 @@ namespace TOne.WhS.BusinessEntity.Business
             _reader = reader;
         }
 
-        public SupplierZoneRate GetSupplierZoneRate(int supplierId, long supplierZoneId)
+        public SupplierZoneRate GetSupplierZoneRate(int supplierId, long supplierZoneId, DateTime effectiveOn)
         {
-            var supplierRates = _reader.GetSupplierRates(supplierId);
+            var supplierRates = _reader.GetSupplierRates(supplierId, effectiveOn);
             if (supplierRates != null)
             {
                 SupplierZoneRate supplierZoneRate;
