@@ -40,6 +40,36 @@ namespace TOne.WhS.BusinessEntity.Business
             return startingId;
         }
 
+        public bool HasSameServices(List<ZoneService> receivedServices, List<ZoneService> defaultServices)
+        {
+            if (receivedServices.Count != defaultServices.Count)
+                return false;
+            foreach (ZoneService zoneService in receivedServices)
+            {
+                if (!defaultServices.Any(item => item.ServiceId == zoneService.ServiceId))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool Insert(SupplierDefaultService supplierDefaultService)
+        {
+            supplierDefaultService.SupplierZoneServiceId = this.ReserveIDRange(1);
+
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.Insert(supplierDefaultService); 
+
+        }
+
+        public bool CloseOverlappedDefaultService(long supplierZoneServiceId, SupplierDefaultService supplierDefaultService, DateTime effectiveDate)
+        {
+            supplierDefaultService.SupplierZoneServiceId = this.ReserveIDRange(1);
+
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.CloseOverlappedDefaultService(supplierZoneServiceId, supplierDefaultService, effectiveDate);
+        }
+
         public int GetSupplierZoneServiceTypeId()
         {
             return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSupplierZoneServiceType());

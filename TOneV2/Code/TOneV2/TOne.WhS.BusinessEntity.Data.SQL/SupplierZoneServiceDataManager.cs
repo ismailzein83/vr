@@ -29,17 +29,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
         {
-            return GetItemSP("TOneWhS_BE.sp_SupplierDefaultService_GetBySupplier", SupplierDefaultServiceMapper, supplierId, effectiveOn);
+            return GetItemSP("TOneWhS_BE.sp_SupplierZoneService_GetDefaultServiceBySupplier", SupplierDefaultServiceMapper, supplierId, effectiveOn);
         }
 
-        public bool Update(long supplierZoneServiceId, DateTime effectiveDate)
+        public bool CloseOverlappedDefaultService(long existingId, SupplierDefaultService supplierDefaultService, DateTime effectiveDate)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Update", supplierZoneServiceId, effectiveDate);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_CloseOverlappedDefaultService", existingId, supplierDefaultService.SupplierZoneServiceId, supplierDefaultService.SupplierId, Vanrise.Common.Serializer.Serialize(supplierDefaultService.ReceivedServices, false), Vanrise.Common.Serializer.Serialize(supplierDefaultService.EffectiveServices, false), effectiveDate);
             return (recordsEffected > 0);
         }
-        public bool Insert(SupplierDefaultService supplierZoneService)
+        public bool Insert(SupplierDefaultService supplierDefaultService)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Insert", supplierZoneService.SupplierZoneServiceId, supplierZoneService.SupplierId, Vanrise.Common.Serializer.Serialize(supplierZoneService.ReceivedServices, false), Vanrise.Common.Serializer.Serialize(supplierZoneService.EffectiveServices, false), supplierZoneService.BED);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Insert", supplierDefaultService.SupplierZoneServiceId, supplierDefaultService.SupplierId, Vanrise.Common.Serializer.Serialize(supplierDefaultService.ReceivedServices, false), Vanrise.Common.Serializer.Serialize(supplierDefaultService.EffectiveServices, false), supplierDefaultService.BED);
             return (recordsEffected > 0);
         }
 
@@ -55,14 +55,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime from, DateTime to)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierDefaultService_GetEffectiveDefaultServices", SupplierDefaultServiceMapper, from, to);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZoneService_GetEffectiveDefaultServices", SupplierDefaultServiceMapper, from, to);
         }
 
         public List<SupplierDefaultService> GetEffectiveSupplierDefaultServicesBySuppliers(IEnumerable<RoutingSupplierInfo> supplierInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             //TODO: MJA the same but get all records with Zone Id NOT equal to null
             DataTable supplierZoneServicesOwners = BuildRoutingSupplierInfoTable(supplierInfos);
-            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierDefaultService_GetEffectiveDefaultServicesBySuppliers", SupplierDefaultServiceMapper, (cmd) =>
+            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierZoneService_GetEffectiveDefaultServicesBySuppliers", SupplierDefaultServiceMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@SupplierZoneServicesOwners", SqlDbType.Structured);
                 dtPrm.Value = supplierZoneServicesOwners;
@@ -148,15 +148,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService] WITH (TABLOCK)
-                                            SELECT zs.[ID], zs.[ZoneID], zs.[PriceListID], zs.[ReceivedServicesFlag], zs.[EffectiveServiceFlag], zs.[BED], zs.[EED], zs.[SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierZoneService] zs
-                                            WITH (NOLOCK)  Inner Join [TOneWhS_BE].[SupplierZone] sz WITH (NOLOCK)  on sz.ID = zs.ZoneID
-                                            Where sz.SupplierID = {2} and zs.ZoneID is not null", backupDatabase, stateBackupId, supplierId);
+                                            SELECT [ID], [ZoneID], [PriceListID], [SupplierID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierZoneService]
+                                            WITH (NOLOCK) Where SupplierID = {2} and ZoneID is not null", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierZoneService] ([ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID])
-                                            SELECT [ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierZoneService] ([ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID], [SupplierID])
+                                            SELECT [ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID],  [SupplierID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 

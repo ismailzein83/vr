@@ -228,26 +228,24 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
+            bool isDefaultServiceInsertedSuccessfully = true;
 
             if (carrierAccount.AccountType != CarrierAccountType.Customer)
             {
-                ISupplierZoneServiceDataManager zoneServiceDataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
                 SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
-                long supplierZoneServiceId = zoneServiceManager.ReserveIDRange(1);
                 SupplierDefaultService supplierZoneService = new SupplierDefaultService()
                 {
-                    SupplierZoneServiceId = supplierZoneServiceId,
                     EffectiveServices = carrierAccount.SupplierSettings.DefaultServices,
                     ReceivedServices = carrierAccount.SupplierSettings.DefaultServices,
                     BED = DateTime.Today,
                     SupplierId = carrierAccountId
                 };
 
-                zoneServiceDataManager.Insert(supplierZoneService);
+               isDefaultServiceInsertedSuccessfully = zoneServiceManager.Insert(supplierZoneService);
             }
 
 
-            if (insertActionSucc)
+            if (insertActionSucc && isDefaultServiceInsertedSuccessfully)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierAccount.CarrierAccountId = carrierAccountId;
@@ -281,21 +279,17 @@ namespace TOne.WhS.BusinessEntity.Business
             if (supplierZoneService == null)
                 throw new DataIntegrityValidationException(string.Format("Supplier {0} does not have default services", carrierAccount.NameSuffix));
 
-            if(!HasSameServices(supplierZoneService.EffectiveServices, carrierAccount.SupplierSettings.DefaultServices))
+           
+            if(!zoneServiceManager.HasSameServices(supplierZoneService.ReceivedServices, carrierAccount.SupplierSettings.DefaultServices))
             { 
-                ISupplierZoneServiceDataManager zoneServiceDataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-                zoneServiceDataManager.Update(supplierZoneService.SupplierZoneServiceId, DateTime.Today);
-                long supplierZoneServiceId = zoneServiceManager.ReserveIDRange(1);
                 SupplierDefaultService supplierZoneServiceNew = new SupplierDefaultService()
                 {
-                    SupplierZoneServiceId = supplierZoneServiceId,
                     EffectiveServices = carrierAccount.SupplierSettings.DefaultServices,
                     ReceivedServices = carrierAccount.SupplierSettings.DefaultServices,
                     BED = DateTime.Today,
                     SupplierId = carrierAccount.CarrierAccountId
                 };
-
-                zoneServiceDataManager.Insert(supplierZoneServiceNew);
+               zoneServiceManager.CloseOverlappedDefaultService(supplierZoneService.SupplierZoneServiceId, supplierZoneServiceNew, DateTime.Today);
             }
 
             if (updateActionSucc)
@@ -308,19 +302,6 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
-        }
-
-        private bool HasSameServices(List<ZoneService> effectiveServices, List<ZoneService> defaultServices)
-        {
-            if (effectiveServices.Count != defaultServices.Count)
-                return false;
-            foreach (ZoneService zoneService in effectiveServices)
-            {
-                if (!defaultServices.Any(item => item.ServiceId == zoneService.ServiceId))
-                    return false;
-            }
-
-            return true;
         }
 
         public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType = CarrierAccountType.Customer)

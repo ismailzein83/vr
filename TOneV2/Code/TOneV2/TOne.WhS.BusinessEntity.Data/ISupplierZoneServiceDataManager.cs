@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn);
 
-        bool Update(long supplierZoneServiceId, DateTime effectiveDate);
+        bool CloseOverlappedDefaultService(long supplierZoneServiceId, SupplierDefaultService supplierDefaultService, DateTime effectiveDate);
 
         bool Insert(SupplierDefaultService supplierZoneService);
 
