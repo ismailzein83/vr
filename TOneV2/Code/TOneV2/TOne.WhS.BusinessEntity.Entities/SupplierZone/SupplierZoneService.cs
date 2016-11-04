@@ -44,9 +44,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long SupplierZoneServiceId { get; set; }
 
         public long ZoneId { get; set; }
-
         public int PriceListId { get; set; }
 
+        public int SupplierId { get; set; }
         public List<ZoneService> ReceivedServices { get; set; }
 
         public List<ZoneService> EffectiveServices { get; set; }
@@ -65,7 +65,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         //TODO: to be removed and Supplier Price List Id to add
         public int PriceListId { get; set; }
 
-        public int? SupplierId { get; set; }
+        public int SupplierId { get; set; }
 
         public List<ZoneService> ReceivedServices { get; set; }
 

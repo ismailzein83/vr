@@ -118,6 +118,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierZoneServiceId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                SupplierId = GetReaderValue<int>(reader, "SupplierID"),
                 ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["ReceivedServicesFlag"] as string),
                 EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["EffectiveServiceFlag"] as string),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
@@ -131,7 +132,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return new SupplierDefaultService()
             {
                 SupplierZoneServiceId = (long)reader["ID"],
-                SupplierId = GetReaderValue<int?>(reader, "SupplierID"),
+                SupplierId = GetReaderValue<int>(reader, "SupplierID"),
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["ReceivedServicesFlag"] as string),
                 EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<Entities.ZoneService>>(reader["EffectiveServiceFlag"] as string),

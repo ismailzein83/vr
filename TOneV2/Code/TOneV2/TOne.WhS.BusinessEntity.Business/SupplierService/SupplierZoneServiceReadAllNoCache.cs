@@ -58,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             foreach (SupplierDefaultService supplierDefaultService in supplierDefaultServices)
             {
-                result.Add(supplierDefaultService.SupplierId.Value, supplierDefaultService);
+                result.Add(supplierDefaultService.SupplierId, supplierDefaultService);
             }
 
             return result;

@@ -79,11 +79,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     foreach (SupplierDefaultService defaultService in defaultServices)
                     {
-                        List<SupplierDefaultService> supplierDefaultServices = supplierZoneServicesBySupplier.GetOrCreateItem(defaultService.SupplierId.Value);
+                        List<SupplierDefaultService> supplierDefaultServices = supplierZoneServicesBySupplier.GetOrCreateItem(defaultService.SupplierId);
 
                         supplierDefaultService = new SupplierDefaultService()
                         {
-                            SupplierId = defaultService.SupplierId.Value,
+                            SupplierId = defaultService.SupplierId,
                             BED = defaultService.BED,
                             EffectiveServices = defaultService.EffectiveServices,
                             ReceivedServices = defaultService.ReceivedServices

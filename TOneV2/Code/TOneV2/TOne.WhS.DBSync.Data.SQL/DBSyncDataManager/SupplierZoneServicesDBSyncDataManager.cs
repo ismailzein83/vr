@@ -19,13 +19,13 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "ReceivedServicesFlag", "EffectiveServiceFlag", "BED", "EED", "SourceID" };
+        static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "SupplierID", "ReceivedServicesFlag", "EffectiveServiceFlag", "BED", "EED", "SourceID" };
         public void ApplySupplierZoneServicesToTemp(List<SupplierZoneService> supplierZoneServices, long startingId)
         {
             var stream = base.InitializeStreamForBulkInsert();
             foreach (var item in supplierZoneServices)
             {
-                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", startingId++, item.PriceListId, item.ZoneId, Vanrise.Common.Serializer.Serialize(item.ReceivedServices, true), Vanrise.Common.Serializer.Serialize(item.EffectiveServices, true), GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", item.SourceId);
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", startingId++, item.PriceListId, item.ZoneId, item.SupplierId, Vanrise.Common.Serializer.Serialize(item.ReceivedServices, true), Vanrise.Common.Serializer.Serialize(item.EffectiveServices, true), GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", item.SourceId);
             }
             stream.Close();
             StreamBulkInsertInfo streamBulkInsert = new StreamBulkInsertInfo
@@ -37,39 +37,32 @@ namespace TOne.WhS.DBSync.Data.SQL
                 TabLock = true
             };
             base.InsertBulkToTable(streamBulkInsert);
-
-            //DataTable dt = new DataTable();
-            //dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
-            //dt.Columns.Add("ZoneID", typeof(long));
-            //dt.Columns.Add("PriceListID", typeof(int));
-            //dt.Columns.Add("ReceivedServicesFlag", typeof(string));
-            //dt.Columns.Add("EffectiveServiceFlag", typeof(string));
-            //dt.Columns.Add("BED", typeof(DateTime));
-            //dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
-            //dt.Columns.Add("SourceID", typeof(string));
-            //dt.Columns.Add("ID", typeof(long));
-
-            //dt.BeginLoadData();
-            //foreach (var item in supplierZoneServices)
-            //{
-            //    DataRow row = dt.NewRow();
-            //    row["ZoneID"] = item.ZoneId;
-            //    row["PriceListID"] = item.PriceListId;
-            //    row["ReceivedServicesFlag"] = Vanrise.Common.Serializer.Serialize(item.ReceivedServices, true);
-            //    row["EffectiveServiceFlag"] = Vanrise.Common.Serializer.Serialize(item.EffectiveServices, true);
-            //    row["BED"] = item.BED;
-            //    row["EED"] = item.EED.HasValue ? item.EED : (object)DBNull.Value;
-            //    row["SourceID"] = item.SourceId;
-            //    row["ID"] = startingId++;
-            //    dt.Rows.Add(row);
-            //}
-            //dt.EndLoadData();
-            //WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
+
+
+        public void ApplySupplierDefaultServicesToTemp(List<SupplierDefaultService> supplierDefaultServices, long startingId)
+        {
+            var stream = base.InitializeStreamForBulkInsert();
+            foreach (var item in supplierDefaultServices)
+            {
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", startingId++, string.Empty, string.Empty, item.SupplierId, Vanrise.Common.Serializer.Serialize(item.ReceivedServices, true), Vanrise.Common.Serializer.Serialize(item.EffectiveServices, true), GetDateTimeForBCP(item.BED), item.EED.HasValue ? GetDateTimeForBCP(item.EED.Value) : "", item.SourceId);
+            }
+            stream.Close();
+            StreamBulkInsertInfo streamBulkInsert = new StreamBulkInsertInfo
+            {
+                Stream = stream,
+                ColumnNames = s_columns,
+                FieldSeparator = '^',
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables),
+                TabLock = true
+            };
+            base.InsertBulkToTable(streamBulkInsert);
+        }
+
 
         public Dictionary<string, SupplierZoneService> GetSupplierZoneServices(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED] FROM "
+            return GetItemsText("SELECT [ID], [ZoneID], [SupplierID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierZoneServiceMapper, cmd => { }).ToDictionary(x => x.SupplierZoneServiceId.ToString(), x => x);
         }
 
@@ -79,6 +72,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 SupplierZoneServiceId = (long)reader["ID"],
                 ZoneId = (long)reader["ZoneID"],
+                SupplierId = GetReaderValue<int>(reader, "SupplierID"),
                 ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["ReceivedServicesFlag"] as string),
                 EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["EffectiveServiceFlag"] as string),
                 BED = GetReaderValue<DateTime>(reader, "BED"),

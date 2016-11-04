@@ -57,7 +57,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CarrierAccount> GetCarrierAccounts(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[NameSuffix]  ,[AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM"
+            return GetItemsText("SELECT [ID] ,[NameSuffix], SupplierSettings, [AccountType] ,[SellingNumberPlanID],[CarrierProfileId],[SourceID] FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -68,6 +68,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 CarrierAccountId = (int)reader["ID"],
                 NameSuffix = reader["NameSuffix"] as string,
                 AccountType = (CarrierAccountType)GetReaderValue<int>(reader, "AccountType"),
+                SupplierSettings = Vanrise.Common.Serializer.Deserialize<CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
                 SellingNumberPlanId = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
                 CarrierProfileId = (int)reader["CarrierProfileId"],
                 SourceId = reader["SourceID"] as string,
