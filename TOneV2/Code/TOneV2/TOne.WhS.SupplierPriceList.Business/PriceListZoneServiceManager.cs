@@ -12,33 +12,34 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class PriceListZoneServiceManager
     {
-        public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context, IEnumerable<int> importedServiceTypeIds)
+        public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context, IEnumerable<int> importedServiceTypeIds, int supplierId)
         {
-            ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones);
+            ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones, supplierId);
 
             context.NewZonesServices = context.ImportedZones.FindAllRecords(item => item.ImportedZoneServiceGroup != null).SelectMany(itm => itm.ImportedZoneServiceGroup.NewZoneServices);
             context.ChangedZonesServices = context.ExistingZones.SelectMany(item => item.ExistingZonesServices.Where(itm => itm.ChangedZoneService != null).Select(x => x.ChangedZoneService));
         }
 
         private void ProcessCountryZonesServices(IEnumerable<ImportedZone> importedZones, IEnumerable<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<NotImportedZone> notImportedZones)
+            IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<NotImportedZone> notImportedZones, int supplierId)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingZonesServicesByZoneName existingZonesServicesByZoneName = StructureExistingZonesServicesByZoneName(existingZonesServices);
-            ProcessImportedData(importedZones, newAndExistingZones, existingZonesByName, existingZonesServicesByZoneName, pricelistDate);
+            ProcessImportedData(importedZones, newAndExistingZones, existingZonesByName, existingZonesServicesByZoneName, pricelistDate, supplierId);
             ProcessNotImportedData(existingZones, notImportedZones, existingZonesServicesByZoneName);
         }
 
 
         #region Processing Imported Data Methods
 
-        private void ProcessImportedData(IEnumerable<ImportedZone> importedZones, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName, ExistingZonesServicesByZoneName existingZonesServicesByZoneName, DateTime pricelistDate)
+        private void ProcessImportedData(IEnumerable<ImportedZone> importedZones, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName,
+            ExistingZonesServicesByZoneName existingZonesServicesByZoneName, DateTime pricelistDate, int supplierId)
         {
             List<ExistingZoneService> existingZoneServices;
             foreach (ImportedZone importedZone in importedZones)
             {
                 existingZonesServicesByZoneName.TryGetValue(importedZone.ZoneName, out existingZoneServices);
-                ProcessData(importedZone, existingZoneServices, newAndExistingZones, existingZonesByName, pricelistDate);
+                ProcessData(importedZone, existingZoneServices, newAndExistingZones, existingZonesByName, pricelistDate, supplierId);
                 PrepareDataForPreview(importedZone, existingZoneServices);
             }
         }
@@ -103,10 +104,11 @@ namespace TOne.WhS.SupplierPriceList.Business
             };
         }
 
-        private void ProcessData(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName, DateTime pricelistDate)
+        private void ProcessData(ImportedZone importedZone, List<ExistingZoneService> existingZoneServices, ZonesByName newAndExistingZones,
+            ExistingZonesByName existingZonesByName, DateTime pricelistDate, int supplierId)
         {
             if (importedZone.ImportedZoneServiceGroup != null)
-                ProcessCountryZoneServices(importedZone.ImportedZoneServiceGroup, existingZoneServices, newAndExistingZones, existingZonesByName);
+                ProcessCountryZoneServices(importedZone.ImportedZoneServiceGroup, existingZoneServices, newAndExistingZones, existingZonesByName, supplierId);
             else
                 CloseNotImportedZoneServices(existingZoneServices, pricelistDate);
         }
@@ -133,9 +135,10 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
 
-        private void ProcessCountryZoneServices(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
+        private void ProcessCountryZoneServices(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones,
+            ExistingZonesByName existingZonesByName, int supplierId)
         {
-            ProcessImportedZoneService(importedZoneService, existingZonesServices, newAndExistingZones, existingZonesByName);
+            ProcessImportedZoneService(importedZoneService, existingZonesServices, newAndExistingZones, existingZonesByName, supplierId);
         }
 
         #endregion
@@ -203,7 +206,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         #region Private Methods
 
-        private void ProcessImportedZoneService(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> matchExistingZoneServices, ZonesByName newAndExistingZones, ExistingZonesByName existingZonesByName)
+        private void ProcessImportedZoneService(ImportedZoneServiceGroup importedZoneService, List<ExistingZoneService> matchExistingZoneServices, ZonesByName newAndExistingZones,
+            ExistingZonesByName existingZonesByName, int supplierId)
         {
             if (matchExistingZoneServices != null && matchExistingZoneServices.Count() > 0)
             {
@@ -212,13 +216,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (!shouldNotAddZoneService)
                 {
                     importedZoneService.ChangeType = ZoneServiceChangeType.New;
-                    AddImportedZoneService(importedZoneService, newAndExistingZones, existingZonesByName);
+                    AddImportedZoneService(importedZoneService, newAndExistingZones, existingZonesByName, supplierId);
                 }
             }
             else
             {
                 importedZoneService.ChangeType = ZoneServiceChangeType.New;
-                AddImportedZoneService(importedZoneService, newAndExistingZones, existingZonesByName);
+                AddImportedZoneService(importedZoneService, newAndExistingZones, existingZonesByName, supplierId);
             }
         }
 
@@ -303,7 +307,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
 
-        private void AddImportedZoneService(ImportedZoneServiceGroup importedZoneService, ZonesByName newAndExistingZones, ExistingZonesByName existingZones)
+        private void AddImportedZoneService(ImportedZoneServiceGroup importedZoneService, ZonesByName newAndExistingZones, ExistingZonesByName existingZones, int supplierId)
         {
             List<IZone> zones;
             if (!newAndExistingZones.TryGetValue(importedZoneService.ZoneName, out zones))
@@ -320,14 +324,14 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentZoneServiceBED) && importedZoneService.EED.VRGreaterThan(zone.BED))
                 {
-                    AddNewZoneService(importedZoneService, ref currentZoneServiceBED, zone, out shouldAddMoreZoneServices);
+                    AddNewZoneService(importedZoneService, ref currentZoneServiceBED, zone, out shouldAddMoreZoneServices, supplierId);
                     if (!shouldAddMoreZoneServices)
                         break;
                 }
             }
         }
 
-        private void AddNewZoneService(ImportedZoneServiceGroup importedZoneService, ref DateTime currentZoneServiceBED, IZone zone, out bool shouldAddMoreZoneServices)
+        private void AddNewZoneService(ImportedZoneServiceGroup importedZoneService, ref DateTime currentZoneServiceBED, IZone zone, out bool shouldAddMoreZoneServices, int supplierId)
         {
             shouldAddMoreZoneServices = false;
             List<ZoneService> zoneServices = new List<ZoneService>();
@@ -336,6 +340,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             var newZoneService = new NewZoneService
             {
+                SupplierId = supplierId,
                 ZoneServices = zoneServices,
                 Zone = zone,
                 BED = zone.BED > currentZoneServiceBED ? zone.BED : currentZoneServiceBED,

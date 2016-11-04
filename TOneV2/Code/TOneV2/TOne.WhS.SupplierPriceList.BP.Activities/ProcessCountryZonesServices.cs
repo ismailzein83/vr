@@ -15,6 +15,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
 
+        public int SupplierId { get; set; }
+
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
         public IEnumerable<ExistingZoneService> ExistingZonesServices { get; set; }
@@ -41,6 +43,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> SupplierId { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
@@ -91,7 +96,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             };
 
             PriceListZoneServiceManager manager = new PriceListZoneServiceManager();
-            manager.ProcessCountryZonesServices(processCountryZonesServicesContext, inputArgument.ImportedServiceTypeIds);
+            manager.ProcessCountryZonesServices(processCountryZonesServicesContext, inputArgument.ImportedServiceTypeIds, inputArgument.SupplierId);
 
             if ((processCountryZonesServicesContext.NewZonesServices != null && processCountryZonesServicesContext.NewZonesServices.Count() > 0)
                 || (processCountryZonesServicesContext.ChangedZonesServices != null && processCountryZonesServicesContext.ChangedZonesServices.Count() > 0))
@@ -112,6 +117,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             return new ProcessCountryZonesServicesInput()
             {
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
+                SupplierId = this.SupplierId.Get(context),
                 ImportedZones = this.ImportedZones.Get(context),
                 NewAndExistingZones = this.NewAndExistingZones.Get(context),
                 PriceListDate = this.PriceListDate.Get(context),
