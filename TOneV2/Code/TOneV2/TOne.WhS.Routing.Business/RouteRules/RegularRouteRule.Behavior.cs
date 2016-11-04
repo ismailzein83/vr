@@ -102,7 +102,12 @@ namespace TOne.WhS.Routing.Business
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
         {
-            this.ApplyOptionsPercentage<RouteOption>(options);
+            if (this.OptionPercentageSettings != null && options != null)
+            {
+                var activeOptions = options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered);
+                if (activeOptions != null)
+                    this.ApplyOptionsPercentage<RouteOption>(activeOptions);
+            }
         }
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -184,7 +189,13 @@ namespace TOne.WhS.Routing.Business
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
             options = ApplyOptionsOrder(options);
-            ApplyOptionsPercentage(options);
+
+            if (this.OptionPercentageSettings != null && options != null)
+            {
+                var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
+                if (unblockedOptions != null)
+                    ApplyOptionsPercentage(unblockedOptions);
+            }
         }
 
         #endregion

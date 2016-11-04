@@ -30,7 +30,7 @@
                     </vr-row>
                     <vr-row ng-if="scopeModel.showSaleZoneSection">
                         <vr-columns width="fullrow">
-                            <vr-section title="Sale Zone">
+                            <vr-section title="Sale Zone" vr-loader="scopeModel.isLoadingSaleZoneGroup">
                                 <vr-whs-be-salezonegroup on-ready="scopeModel.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
                             </vr-section>
                         </vr-columns>

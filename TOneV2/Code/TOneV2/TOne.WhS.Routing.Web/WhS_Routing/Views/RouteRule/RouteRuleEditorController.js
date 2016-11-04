@@ -71,7 +71,7 @@
                     sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
                     saleZoneFilterSettings: { RoutingProductId: routingProductId },
                 };
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
+                var setLoader = function (value) { setTimeout(function () { $scope.scopeModel.isLoadingSaleZoneGroup = value; UtilsService.safeApply($scope); }) };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
             $scope.scopeModel.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
@@ -105,8 +105,8 @@
 
                 }
                 else {
-                    $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
                     $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
+                    $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
             }
@@ -347,6 +347,7 @@
                 $scope.scopeModel.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
             else
                 $scope.scopeModel.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
+
         }
         function loadSaleZoneGroupSection() {
 
@@ -354,6 +355,7 @@
                 saleZoneGroupSettingsReadyPromiseDeferred = undefined;
                 return;
             }
+
             var promises = [];
 
             if (saleZoneGroupSettingsReadyPromiseDeferred == undefined)
@@ -373,8 +375,10 @@
                     saleZoneGroupPayload.saleZoneGroupSettings = routeRuleEntity.Criteria.SaleZoneGroupSettings
                 }
                 saleZoneGroupSettingsReadyPromiseDeferred = undefined;
+
                 VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
             });
+
             return UtilsService.waitMultiplePromises(promises);
         }
         function loadCodeCriteriaGroupSection() {
@@ -480,7 +484,7 @@
                 Criteria: {
                     RoutingProductId: routingProductId,
                     ExcludedCodes: $scope.scopeModel.excludedCodes,
-                    SaleZoneGroupSettings: $scope.scopeModel.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined,//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
+                    SaleZoneGroupSettings: $scope.scopeModel.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined, //VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData(),
                     CodeCriteriaGroupSettings: $scope.scopeModel.showIncludedCodeSection ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate') : undefined
                 },

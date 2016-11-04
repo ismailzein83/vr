@@ -78,7 +78,7 @@
                     sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
                     saleZoneFilterSettings: { RoutingProductId: routingProductId },
                 };
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
+                var setLoader = function (value) { setTimeout(function () { $scope.scopeModel.isLoadingSaleZoneGroup = value; UtilsService.safeApply($scope); }) };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
             }
             $scope.scopeModel.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
@@ -100,7 +100,7 @@
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionRuleSettingsAPI, routeOptionRuleSettingsPayload, setLoader, routeOptionRuleSettingsReadyPromiseDeferred);
             }
-            
+
             $scope.scopeModel.onRouteOptionRuleCriteriaTypeSelectionChanged = function () {
 
                 if ($scope.scopeModel.selectedRouteOptionRuleCriteriaType == undefined)
@@ -111,8 +111,8 @@
                     $scope.scopeModel.showIncludedCodeSection = false;
                 }
                 else {
-                    $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
                     $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
+                    $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
             }

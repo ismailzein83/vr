@@ -264,23 +264,22 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Dictionary<int, RoutingProduct> GetAllRoutingProductsByIds(IEnumerable<int> routingProductIds)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProductsByIds",
-               () =>
-               {
-                   Dictionary<int, RoutingProduct> result = new Dictionary<int, RoutingProduct>();
+            if (routingProductIds == null)
+                return null;
 
-                   var routingProducts = GetAllRoutingProducts();
-                   if (routingProducts != null)
-                   {
-                       var matchingRoutingProducts = routingProducts.Where(x => routingProductIds.Contains(x.Key));
+            Dictionary<int, RoutingProduct> result = new Dictionary<int, RoutingProduct>();
 
-                       if (matchingRoutingProducts != null)
-                       {
-                           result = matchingRoutingProducts.ToDictionary(itm => itm.Key, itm => itm.Value);
-                       }
-                   }
-                   return result;
-               });
+            var routingProducts = GetAllRoutingProducts();
+            if (routingProducts != null)
+            {
+                var matchingRoutingProducts = routingProducts.FindAllRecords(x => routingProductIds.Contains(x.Key));
+
+                if (matchingRoutingProducts != null)
+                {
+                    result = matchingRoutingProducts.ToDictionary(itm => itm.Key, itm => itm.Value);
+                }
+            }
+            return result;
         }
 
         public HashSet<int> GetRoutingProductIdsBySaleZoneId(long saleZoneId)
@@ -306,25 +305,25 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-		public IEnumerable<int> GetDefaultServiceIds(int routingProductId)
-		{
-			RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
-			if (routingProduct == null)
-				return null;
-			if (routingProduct.Settings == null)
-				throw new NullReferenceException("routingProduct.Settings");
-			return routingProduct.Settings.DefaultServiceIds;
-		}
+        public IEnumerable<int> GetDefaultServiceIds(int routingProductId)
+        {
+            RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
+            if (routingProduct == null)
+                return null;
+            if (routingProduct.Settings == null)
+                throw new NullReferenceException("routingProduct.Settings");
+            return routingProduct.Settings.DefaultServiceIds;
+        }
 
-		public IEnumerable<int> GetZoneServiceIds(int routingProductId, long zoneId)
-		{
-			RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
-			if (routingProduct == null)
-				return null;
-			if (routingProduct.Settings == null)
-				throw new NullReferenceException("routingProduct.Settings");
-			return routingProduct.Settings.GetZoneServices(zoneId);
-		}
+        public IEnumerable<int> GetZoneServiceIds(int routingProductId, long zoneId)
+        {
+            RoutingProduct routingProduct = GetRoutingProduct(routingProductId);
+            if (routingProduct == null)
+                return null;
+            if (routingProduct.Settings == null)
+                throw new NullReferenceException("routingProduct.Settings");
+            return routingProduct.Settings.GetZoneServices(zoneId);
+        }
 
         #endregion
 
