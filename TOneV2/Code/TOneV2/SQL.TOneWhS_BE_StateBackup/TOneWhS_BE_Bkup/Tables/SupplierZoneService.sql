@@ -1,7 +1,8 @@
 ﻿CREATE TABLE [TOneWhS_BE_Bkup].[SupplierZoneService] (
     [ID]                   BIGINT        NOT NULL,
-    [ZoneID]               BIGINT        NOT NULL,
+    [ZoneID]               BIGINT        NULL,
     [PriceListID]          INT           NULL,
+    [SupplierID]           INT           NOT NULL,
     [ReceivedServicesFlag] VARCHAR (MAX) NOT NULL,
     [EffectiveServiceFlag] VARCHAR (MAX) NULL,
     [BED]                  DATETIME      NOT NULL,
@@ -9,6 +10,8 @@
     [SourceID]             VARCHAR (50)  NULL,
     [StateBackupID]        BIGINT        NOT NULL
 );
+
+
 
 
 
