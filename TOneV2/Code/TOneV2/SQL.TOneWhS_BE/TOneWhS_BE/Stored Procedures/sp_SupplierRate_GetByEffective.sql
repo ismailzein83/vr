@@ -1,19 +1,17 @@
 ﻿
 CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierRate_GetByEffective]
-	-- Add the parameters for the stored procedure here
-	@Effective_FromOut DateTime
+	@FromDate_FromOut DateTime,
+	@ToDate_FromOut DateTime
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	
-	DECLARE @Effective DateTime
+	DECLARE @FromDate DateTime
+	DECLARE @ToDate DateTime
 
-	SELECT @Effective = @Effective_FromOut
-	SET NOCOUNT ON;
+	SELECT @FromDate = @FromDate_FromOut
+	SELECT @ToDate = @ToDate_FromOut
 
 	SELECT  sr.[ID],sr.Rate,sr.PriceListID,sr.RateTypeID,sr.CurrencyID,sr.ZoneID,sr.BED,sr.EED,sr.Change
 	FROM	[TOneWhS_BE].SupplierRate sr WITH(NOLOCK) 
-	Where	(sr.BED<=@Effective and (sr.EED is null or sr.EED > @Effective))
-			
+	Where	sr.BED <= @FromDate 
+			AND (sr.EED is null or sr.EED > @ToDate)
 END

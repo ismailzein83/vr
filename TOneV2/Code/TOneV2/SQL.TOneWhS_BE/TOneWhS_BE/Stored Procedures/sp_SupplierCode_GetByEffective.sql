@@ -1,17 +1,16 @@
-﻿
-CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierCode_GetByEffective]
-	@When_FromOut DateTime
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierCode_GetByEffective]
+       @From_FromOut DateTime,
+       @To_FromOut DateTime
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
+       DECLARE @From DateTime
+       DECLARE @To DateTime
 
-	DECLARE @When DateTime
+       SELECT @From = @From_FromOut
+       SELECT @To = @To_FromOut
 
-	SELECT @When = @When_FromOut
-	SET NOCOUNT ON;
-
-	SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED,sc.CodeGroupID,sc.SourceID
-	FROM	[TOneWhS_BE].SupplierCode sc WITH(NOLOCK) 
-	Where	(sc.BED<=@When and (sc.EED is null or sc.EED > @when))
+       SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED,sc.CodeGroupID,sc.SourceID
+       FROM   [TOneWhS_BE].SupplierCode sc WITH(NOLOCK) 
+       Where  sc.BED<=@From 
+			  AND (sc.EED is null or sc.EED > @To)
 END

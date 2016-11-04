@@ -425,5 +425,11 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetById.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZonesService_GetBySupplier.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetEffectiveDefaultServicesBySuppliers.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetEffectiveDefaultServices.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetDefaultServiceBySupplier.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_CloseOverlappedDefaultService.sql" />
   </ItemGroup>
 </Project>
