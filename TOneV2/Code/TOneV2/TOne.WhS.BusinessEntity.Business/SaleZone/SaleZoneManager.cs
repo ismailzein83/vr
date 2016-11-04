@@ -21,9 +21,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
             {
-                DistributedCacher cacher = new DistributedCacher();
-                Func<SaleZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SaleZoneCachedObjectCreationHandler(); };
-                return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SaleZone>>("Distributed_GetAllSaleZones", objectCreationHandler);
+                ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+                IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
+                if (allSaleZones == null)
+                    return null;
+
+                return allSaleZones.ToDictionary(itm => itm.SaleZoneId, itm => itm);
             });
         }
 
@@ -290,19 +293,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name, SellingNumberPlanId = saleZone.SellingNumberPlanId };
         }
 
-
-        private class SaleZoneCachedObjectCreationHandler : CachedObjectCreationHandler<Dictionary<long, SaleZone>>
-        {
-            public override Dictionary<long, SaleZone> CreateObject()
-            {
-                ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-                IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
-                if (allSaleZones == null)
-                    return null;
-
-                return allSaleZones.ToDictionary(itm => itm.SaleZoneId, itm => itm);
-            }
-        }
         #endregion
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

@@ -22,9 +22,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
                () =>
                {
-                   DistributedCacher cacher = new DistributedCacher();
-                   Func<SupplierZoneCachedObjectCreationHandler> objectCreationHandler = () => { return new SupplierZoneCachedObjectCreationHandler(); };
-                   return cacher.GetOrCreateObject<CacheManager, Dictionary<long, SupplierZone>>("Distributed_GetSupplierZones", objectCreationHandler);
+                   ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+                   List<SupplierZone> allSupplierZones = dataManager.GetSupplierZones();
+                   return allSupplierZones.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
                });
         }
 
@@ -74,8 +74,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             Func<SupplierZone, bool> filterExpression = (supplierZone) =>
             {
-				if (filter.CountryIds != null && !filter.CountryIds.Contains(supplierZone.CountryId))
-					return false;
+                if (filter.CountryIds != null && !filter.CountryIds.Contains(supplierZone.CountryId))
+                    return false;
 
                 if (filter.GetEffectiveOnly && (supplierZone.BED > now || (supplierZone.EED.HasValue && supplierZone.EED.Value < now)))
                     return false;
@@ -220,19 +220,6 @@ namespace TOne.WhS.BusinessEntity.Business
             int supplierId = supplierZone.SupplierId;
             supplierZoneDetail.SupplierName = caManager.GetCarrierAccountName(supplierId);
             return supplierZoneDetail;
-        }
-
-        private class SupplierZoneCachedObjectCreationHandler : CachedObjectCreationHandler<Dictionary<long, SupplierZone>>
-        {
-            public override Dictionary<long, SupplierZone> CreateObject()
-            {
-                ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-                List<SupplierZone> allSupplierZones = dataManager.GetSupplierZones();
-                if (allSupplierZones == null)
-                    return null;
-
-                return allSupplierZones.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
-            }
         }
 
         #endregion
