@@ -15,7 +15,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         public override string GetMessage(IRuleTarget target)
         {
             DataByZone zone = (target as DataByZone);
-            return String.Format("EED of the normal rate of zone {0} must be less than or equal to EED ({1}) of the zone", zone.ZoneName, zone.EED);
+            return String.Format("EED of the other rate of zone {0} must be less than or equal to EED ({1}) of the zone", zone.ZoneName, zone.EED);
         }
 
         public override bool ShouldValidate(IRuleTarget target)
