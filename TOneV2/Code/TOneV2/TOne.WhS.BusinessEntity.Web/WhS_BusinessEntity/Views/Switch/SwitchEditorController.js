@@ -26,7 +26,6 @@
 
             isEditMode = (switchId != undefined);
         }
-
         function defineScope() {
             $scope.scopeModel = {};
             $scope.hasSaveSwitchPermission = function () {
@@ -55,7 +54,6 @@
             };
 
         }
-
         function load() {
             $scope.isLoading = true;
 
@@ -71,6 +69,13 @@
             else {
                 loadAllControls();
             }
+        }
+
+        function getSwitch() {
+            return WhS_BE_SwitchAPIService.GetSwitch(switchId).then(function (whsSwitch) {
+                switchEntity = whsSwitch;
+                $scope.scopeModel.switchName = switchEntity.Name;
+            });
         }
 
         function loadAllControls() {
@@ -90,7 +95,6 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('SwitchName');
             }
         }
-
         function loadSwitchSyncSettingsDirective() {
             var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -103,13 +107,6 @@
             });
 
             return switchSyncSettingsDirectiveReadyDeferred.promise;
-        }
-
-        function getSwitch() {
-            return WhS_BE_SwitchAPIService.GetSwitch(switchId).then(function (whsSwitch) {
-                switchEntity = whsSwitch;
-                $scope.scopeModel.switchName = switchEntity.Name;
-            });
         }
 
         function insertSwitch() {
@@ -127,7 +124,6 @@
                 $scope.isLoading = false;
             });
         }
-
         function updateSwitch() {
             $scope.isLoading = true;
             return WhS_BE_SwitchAPIService.UpdateSwitch(buildSwitchObjFromScope())
@@ -155,10 +151,6 @@
             };
             return obj;
         }
-
-        //function getSwitchSettings() {
-        //    return
-        //}
     }
 
     appControllers.controller("WhS_BE_SwitchEditorController", switchEditorController);
