@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="CodeMatchesDataManager.cs" />
     <Compile Include="CodeSaleZoneDataManager.cs" />
+    <Compile Include="CodeZoneMatchDataManager.cs" />
     <Compile Include="CustomerRouteDataManager.cs" />
     <Compile Include="CustomerZoneDetailsDataManager.cs" />
     <Compile Include="MasterDatabaseDataManager.cs" />

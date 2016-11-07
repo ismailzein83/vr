@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ICodeMatchesDataManager.cs" />
     <Compile Include="ICodeSaleZoneDataManager.cs" />
+    <Compile Include="ICodeZoneMatchDataManager.cs" />
     <Compile Include="ICustomerRouteDataManager.cs" />
     <Compile Include="ICustomerZoneDetailsDataManager.cs" />
     <Compile Include="IDataManager.cs" />
