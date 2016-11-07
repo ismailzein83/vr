@@ -9,21 +9,14 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
                 ismultipleselection: '@',
                 selectedvalues: '=',
                 onselectionchanged: '=',
-                onselectitem: '=',
-                ondeselectitem: '=',
                 isrequired: '=',
-                hideremoveicon: '@',
                 normalColNum: '@',
-                customvalidate: '=',
-                label: '@'
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
                 ctrl.datasource = [];
-
-                console.log(ctrl);
-                ctrl.label = 'Customer';
 
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
@@ -36,9 +29,10 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
             controllerAs: 'ctrl',
             bindToController: true,
             templateUrl: function (element, attrs) {
+
                 return "/Client/Modules/WhS_BusinessEntity/Directives/CDRImportSettings/Templates/CDPNSelectorTemplate.html";
             }
-        };
+        }
 
         function CDPNSelectorCtor(ctrl, $scope, attrs) {
 
@@ -71,6 +65,7 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
                 };
 
                 api.getSelectedIds = function () {
+
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
 

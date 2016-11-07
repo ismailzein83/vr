@@ -2,6 +2,7 @@
     <vr-modalbody>
         <vr-form name="formSwitchEditor">
             <vr-tabs>
+
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/2row">
@@ -9,17 +10,25 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+
                 <vr-tab header="'Route Sync'">
-                    <whs-routesync-switchroutesynchronizer-settings on-ready="onSwitchSyncSettingsDirectiveReady" normal-col-num="6"></whs-routesync-switchroutesynchronizer-settings>
+                    <whs-routesync-switchroutesynchronizer-settings on-ready="scopeModel.onSwitchSyncSettingsDirectiveReady" normal-col-num="6"></whs-routesync-switchroutesynchronizer-settings>
                 </vr-tab>
+
+                <vr-tab header="'Configuration'">
+                    <vr-section title="CDR Process Configuration">
+                        <vr-whs-be-switchcdrprocessconfiguration on-ready="scopeModel.onSwitchCDRProcessConfiguration" normal-col-num="4"></vr-whs-be-switchcdrprocessconfiguration>
+                    </vr-section>
+                </vr-tab>
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSwitchEditor" data-onclick="SaveSwitch" haspermission="hasSaveSwitchPermission"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" formname="formSwitchEditor" data-onclick="scopeModel.saveSwitch" haspermission="scopeModel.hasSaveSwitchPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
 

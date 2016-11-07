@@ -1,12 +1,13 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsService', 
+app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService, WhS_BE_PrimarySaleEntityEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -24,54 +25,43 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
         function cdrImportEditorCtor(ctrl, $scope, $attrs) {
 
-            var customerCDPNSelectorAPI;
-            var customerCDPNReadyDeferred = UtilsService.createPromiseDeferred();
+            var switchCDRProcessConfigurationDirectiveAPI;
+            var switchCDRProcessConfigurationDirectiveDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onCustomerCDPNSelectorReady = function (api) {
-                    customerCDPNSelectorAPI = api;
-                    customerCDPNReadyDeferred.resolve();
+                $scope.scopeModel.onSwitchCDRProcessConfiguration = function (api) {
+                    switchCDRProcessConfigurationDirectiveAPI = api;
+                    switchCDRProcessConfigurationDirectiveDeferred.resolve();
                 }
 
-                UtilsService.waitMultiplePromises([customerCDPNReadyDeferred.promise]).then(function () {
+
+                UtilsService.waitMultiplePromises([switchCDRProcessConfigurationDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 })
-                
+
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
-                    var customerCDPNId;
-                    var supplierCDPNId;
-                    var cdpnId;
-                    var saleZoneCDPNId;
-                    var supplierZoneCDPNId;
+                    var switchCDRProcessConfiguration;
 
                     if (payload != undefined && payload.data != undefined) {
-                        customerCDPNId = payload.data.CustomerCDPNId;
-                        supplierCDPNId = payload.data.SupplierCDPNId;
-                        cdpnId = payload.data.CDPNId;
-                        saleZoneCDPNId = payload.data.SaleZoneCDPNId;
-                        supplierZoneCDPNId = payload.data.SupplierZoneCDPNId;
+                        switchCDRProcessConfiguration = payload.data.SwitchCDRProcessConfiguration;
                     }
 
                     var promises = [];
 
-                    //Loading CustomerCDPNSelector
-                    var customerCDPNSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    var customerCDPNSelectorPayload = {
-                        selectedIds: customerCDPNId
+                    //Loading SwitchCDRProcessConfiguration Directive
+                    var switchCDRProcessConfigurationLoadDeferred = UtilsService.createPromiseDeferred();
+                    var switchCDRProcessConfigurationPayload = {
+                        switchCDRProcessConfiguration: switchCDRProcessConfiguration
                     };
-                    VRUIUtilsService.callDirectiveLoad(customerCDPNSelectorAPI, customerCDPNSelectorPayload, customerCDPNSelectorLoadDeferred);
-
-                    promises.push(customerCDPNSelectorLoadDeferred.promise);
+                    VRUIUtilsService.callDirectiveLoad(switchCDRProcessConfigurationDirectiveAPI, switchCDRProcessConfigurationPayload, switchCDRProcessConfigurationLoadDeferred);
+                    promises.push(switchCDRProcessConfigurationLoadDeferred.promise);
 
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -80,11 +70,7 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.CDRImportSettings, TOne.WhS.BusinessEntity.Entities",
-                        CustomerCDPNId: customerCDPNSelectorAPI.getSelectedIds(),
-                        SupplierCDPNId: null,
-                        CDPNId: null,
-                        SaleZoneCDPNId: null,
-                        SupplierZoneCDPNId: null
+                        SwitchCDRProcessConfiguration: switchCDRProcessConfigurationDirectiveAPI.getData()
                     };
                 }
 

@@ -13,6 +13,10 @@
         var switchSyncSettingsDirectiveAPI;
         var switchSyncSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var switchCDRProcessConfigurationDirectiveAPI;
+        var switchCDRProcessConfigurationDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -28,14 +32,14 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.hasSaveSwitchPermission = function () {
+            $scope.scopeModel.hasSaveSwitchPermission = function () {
                 if (isEditMode)
                     return WhS_BE_SwitchAPIService.HasUpdateSwitchPermission();
                 else
                     return WhS_BE_SwitchAPIService.HasAddSwitchPermission();
             }
 
-            $scope.SaveSwitch = function () {
+            $scope.scopeModel.saveSwitch = function () {
                 if (isEditMode) {
                     return updateSwitch();
                 }
@@ -44,15 +48,18 @@
                 }
             };
 
-            $scope.onSwitchSyncSettingsDirectiveReady = function (api) {
+            $scope.scopeModel.onSwitchSyncSettingsDirectiveReady = function (api) {
                 switchSyncSettingsDirectiveAPI = api;
                 switchSyncSettingsDirectiveReadyDeferred.resolve();
             };
+            $scope.scopeModel.onSwitchCDRProcessConfiguration = function (api) {
+                switchCDRProcessConfigurationDirectiveAPI = api;
+                switchCDRProcessConfigurationDirectiveReadyDeferred.resolve();
+            }
 
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
         }
         function load() {
             $scope.isLoading = true;
@@ -79,7 +86,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwitchSyncSettingsDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwitchSyncSettingsDirective, loadSwitchCDRProcessConfigurationDirectiveDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -107,6 +114,23 @@
             });
 
             return switchSyncSettingsDirectiveReadyDeferred.promise;
+        }
+        function loadSwitchCDRProcessConfigurationDirectiveDirective() {
+            var switchCDRProcessConfigurationDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            switchCDRProcessConfigurationDirectiveReadyDeferred.promise.then(function () {
+
+                var switchCDRProcessConfigurationDirectivePayload;
+                if (switchEntity != undefined && switchEntity.Settings != undefined) {
+                    switchCDRProcessConfigurationDirectivePayload = {
+                        switchCDRProcessConfiguration: switchEntity.Settings.SwitchCDRProcessConfiguration
+                    }
+                }
+
+                VRUIUtilsService.callDirectiveLoad(switchCDRProcessConfigurationDirectiveAPI, switchCDRProcessConfigurationDirectivePayload, switchCDRProcessConfigurationDirectiveLoadDeferred);
+            });
+
+            return switchCDRProcessConfigurationDirectiveLoadDeferred.promise;
         }
 
         function insertSwitch() {
@@ -141,12 +165,14 @@
         }
 
         function buildSwitchObjFromScope() {
+
             var obj = {
                 SwitchId: (switchId != null) ? switchId : 0,
                 Name: $scope.scopeModel.switchName,
                 Settings: {
                     $type: "TOne.WhS.BusinessEntity.Entities.SwitchSettings, TOne.WhS.BusinessEntity.Entities",
-                    RouteSynchronizer: switchSyncSettingsDirectiveAPI.getData().SwitchRouteSynchronizer
+                    RouteSynchronizer: switchSyncSettingsDirectiveAPI.getData().SwitchRouteSynchronizer,
+                    SwitchCDRProcessConfiguration: switchCDRProcessConfigurationDirectiveAPI.getData()
                 }
             };
             return obj;

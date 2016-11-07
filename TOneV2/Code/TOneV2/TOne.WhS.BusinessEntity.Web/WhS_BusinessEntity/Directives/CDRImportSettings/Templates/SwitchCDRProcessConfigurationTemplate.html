@@ -1,0 +1,31 @@
+﻿<vr-tabs>
+    <vr-tab header="'General'">
+        <vr-row>
+            <vr-whs-be-cdpn-selector on-ready="scopeModel.onCDPNSelectorReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}"></vr-whs-be-cdpn-selector>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Carrier Account'">
+        <vr-section title="Customer">
+            <vr-row>
+                <vr-whs-be-cdpn-selector on-ready="scopeModel.onCustomerCDPNSelectorReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}"></vr-whs-be-cdpn-selector>
+            </vr-row>
+        </vr-section>
+        <vr-section title="Supplier">
+            <vr-row>
+                <vr-whs-be-cdpn-selector on-ready="scopeModel.onSupplierCDPNSelectorReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}"></vr-whs-be-cdpn-selector>
+            </vr-row>
+        </vr-section>
+    </vr-tab>
+    <vr-tab header="'Zones'">
+        <vr-section title="Sale Zone">
+            <vr-row>
+                <vr-whs-be-cdpn-selector on-ready="scopeModel.onSaleZoneCDPNSelectorReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}"></vr-whs-be-cdpn-selector>
+            </vr-row>
+        </vr-section>
+        <vr-section title="Supplier Zone">
+            <vr-row>
+                <vr-whs-be-cdpn-selector on-ready="scopeModel.onSupplierZoneCDPNSelectorReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}"></vr-whs-be-cdpn-selector>
+            </vr-row>
+        </vr-section>
+    </vr-tab>
+</vr-tabs>

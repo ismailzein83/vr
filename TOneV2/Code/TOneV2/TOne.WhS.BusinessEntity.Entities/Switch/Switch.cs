@@ -32,5 +32,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SwitchSettings
     {
         public SwitchRouteSynchronizer RouteSynchronizer { get; set; }
+
+        public SwitchCDRProcessConfiguration SwitchCDRProcessConfiguration { get; set; }
     }
 }
