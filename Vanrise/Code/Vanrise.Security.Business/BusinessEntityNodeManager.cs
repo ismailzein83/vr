@@ -67,7 +67,7 @@ namespace Vanrise.Security.Business
             {
                 IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
 
-                if (manager.ToggleBreakInheritance(entityId))
+                if (manager.ToggleBreakInheritance(new Guid(entityId)))
                 {
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     _beModuleManager.SetCacheExpired();
@@ -77,7 +77,7 @@ namespace Vanrise.Security.Business
             {
                 IBusinessEntityDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
 
-                if (manager.ToggleBreakInheritance(entityId))
+                if (manager.ToggleBreakInheritance(new Guid(entityId)))
                 {
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     _beManager.SetCacheExpired();

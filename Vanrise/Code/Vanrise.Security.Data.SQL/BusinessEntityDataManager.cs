@@ -21,7 +21,7 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_BusinessEntity_GetAll", EntityMapper);
         }
 
-        public bool ToggleBreakInheritance(string entityId)
+        public bool ToggleBreakInheritance(Guid entityId)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_ToggleBreakInheritance", entityId);
             return (recordesEffected > 0);

@@ -11,7 +11,7 @@ namespace Vanrise.Security.Data
     {
         IEnumerable<Vanrise.Security.Entities.BusinessEntityModule> GetModules();
 
-        bool ToggleBreakInheritance(string entityId);
+        bool ToggleBreakInheritance(Guid entityId);
         bool AddBusinessEntityModule(BusinessEntityModule moduleObject);
         bool UpdateBusinessEntityModule(BusinessEntityModule moduleObject);
         bool UpdateBusinessEntityModuleRank(Guid moduleId, Guid? parentId);
