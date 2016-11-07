@@ -142,7 +142,7 @@ namespace TOne.WhS.DBSync.Business
         {
             get
             {
-                return true;
+                return false;
             }
         }
     }
