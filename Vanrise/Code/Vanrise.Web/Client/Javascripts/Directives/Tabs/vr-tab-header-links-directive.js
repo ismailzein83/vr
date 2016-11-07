@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrTabHeaderLinks', [function () {
+app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -19,6 +19,14 @@ app.directive('vrTabHeaderLinks', [function () {
             ctrl.addChoiceCtrl = function (choiceCtrl) {
                 choiceCtrls.push(choiceCtrl);
                 setDefaultChoiceSeletion();
+            }
+            ctrl.removeTab = function (tabCtrl) {
+                choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
+                UtilsService.safeApply($scope, function () { });
+            };
+
+            ctrl.getTabStyle = function () {
+                return { 'width': 100 / choiceCtrls.length  + '%', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' }
             }
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
@@ -86,7 +94,7 @@ app.directive('vrTabHeaderLinks', [function () {
         bindToController: true,
         compile: function (element, attrs) {
            
-            element.html('<div class="btn-group btn-group-custom vr-tabs"   >' + element.html() + '</div>');
+            element.html('<div class="btn-group btn-group-custom vr-tabs"  >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {

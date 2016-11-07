@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChoicesFilter', [function () {
+app.directive('vrChoicesFilter', ['UtilsService', '$rootScope', function (UtilsService, $rootScope) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -15,10 +15,18 @@ app.directive('vrChoicesFilter', [function () {
             var ctrl = this;
 
             var choiceCtrls = [];
-
+           
             ctrl.addChoiceCtrl = function (choiceCtrl) {
                 choiceCtrls.push(choiceCtrl);
                 setDefaultChoiceSeletion();
+            };
+            ctrl.removeTab = function (tabCtrl) {
+                choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
+                UtilsService.safeApply($scope, function () { });
+            };
+
+            ctrl.getTabStyle = function () {            
+                return { 'width': 100 / choiceCtrls.length + '%', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' }
             }
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
@@ -67,7 +75,7 @@ app.directive('vrChoicesFilter', [function () {
                     triggerSelectionChanged = false;
                 }
             });
-
+           
             var api = {};
             api.selectChoice = function (choiceIndex) {
                 var choiceCtrl = choiceCtrls[choiceIndex];
@@ -86,7 +94,7 @@ app.directive('vrChoicesFilter', [function () {
         bindToController: true,
         compile: function (element, attrs) {
             //var radioclass = (attrs.isradio != undefined) ? " radio-btn-groupe" : "";
-            element.html('<div class="btn-group btn-group-custom vr-tabs vr-choices-filter "   >' + element.html() + '</div>');
+            element.html('<div class="btn-group btn-group-custom vr-tabs vr-choices-filter" >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {

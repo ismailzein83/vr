@@ -1913,12 +1913,22 @@ vr-switch[class*="divDisabled"] .switch {
     border-bottom: 1px solid #ddd !important;
     width: 100%;
     position: relative;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
-    .vr-tabs label {
-        padding: 1px 7px;
-        display: inherit !important;
-    }
+.vr-tabs label {
+    padding: 1px 7px;
+    /*display: inherit !important;*/
+}
+
+.vr-tabs label > span {
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    overflow:hidden;
+}
 
 .vr-datagrid .vr-tabs label {
     padding: 0px 7px;
@@ -1934,6 +1944,7 @@ vr-switch[class*="divDisabled"] .switch {
     background-color: #FFF;
     border-radius: 5px 5px 0px 0px;
     font-weight: bold;
+    height: 26px;
 }
 
 .remove-line {
