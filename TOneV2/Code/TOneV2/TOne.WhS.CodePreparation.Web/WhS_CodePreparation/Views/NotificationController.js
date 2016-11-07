@@ -2,12 +2,12 @@
 
     'use strict';
 
-    EmailController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_CarrierAccountAPIService', 'WhS_Sales_CustomerSelectionTypeEnum', 'BusinessProcess_BPTaskAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    NotificationController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_Sales_CustomerSelectionTypeEnum', 'BusinessProcess_BPTaskAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function EmailController($scope, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountAPIService, WhS_Sales_CustomerSelectionTypeEnum, BusinessProcess_BPTaskAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function NotificationController($scope, WhS_BE_CarrierAccountAPIService, WhS_Sales_CustomerSelectionTypeEnum, BusinessProcess_BPTaskAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var taskId;
-        var sellingProductId;
+        var sellingNumberPlanId;
 
         loadParameters();
         defineScope();
@@ -51,6 +51,7 @@
 
                 return executeTask(customerIds);
             };
+
             $scope.scopeModel.close = function () {
                 return executeTask(undefined);
             };
@@ -58,7 +59,7 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            getSellingProduct().then(function () {
+            getSellingNumberPlanId().then(function () {
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -66,10 +67,10 @@
             });
         }
 
-        function getSellingProduct() {
+        function getSellingNumberPlanId() {
             return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
                 if (response != null && response.TaskData != null) {
-                    sellingProductId = response.TaskData.SellingProductId;
+                    sellingNumberPlanId = response.TaskData.SellingNumberPlanId;
                 }
             });
         }
@@ -80,20 +81,17 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function setTitle() {
             $scope.title = 'Notify Customers';
         }
-
         function loadGrid() {
-            return WhS_BE_CustomerSellingProductAPIService.GetCustomerNamesBySellingProductId(sellingProductId).then(function (response) {
+            return WhS_BE_CarrierAccountAPIService.GetCustomersBySellingNumberPlanId(sellingNumberPlanId).then(function (response) {
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
                         $scope.scopeModel.customers.push(response[i]);
                     }
                 }
             });
-
         }
 
         function executeTask(customerIds) {
@@ -101,7 +99,7 @@
             $scope.scopeModel.isLoading = true;
 
             var executionInformation = {
-                $type: "TOne.WhS.Sales.BP.Arguments.Tasks.EmailTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
+                $type: "TOne.WhS.CodePreparation.BP.Arguments.Tasks.NotificationTaskExecutionInforamtion, TOne.WhS.CodePreparation.BP.Arguments",
                 CustomerIds: customerIds
             };
 
@@ -126,6 +124,6 @@
         }
     }
 
-    appControllers.controller('WhS_Sales_EmailController', EmailController);
+    appControllers.controller('WhS_CP_NotificationController', NotificationController);
 
 })(appControllers);

@@ -188,6 +188,19 @@ namespace TOne.WhS.BusinessEntity.Business
                 return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
+        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingNumberPlanId(int sellingNumberPlanId)
+        {
+            Func<CarrierAccount, bool> filterPredicate = (carr) =>
+                    {
+                        if (carr.AccountType != CarrierAccountType.Supplier && carr.SellingNumberPlanId.Value == sellingNumberPlanId)
+                            return true;
+
+                        return false;
+                    };
+
+            return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
+        }
+
         public IEnumerable<CustomerGroupConfig> GetCustomersGroupTemplates()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();

@@ -157,6 +157,7 @@
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
+    <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\FixedRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginPercentageRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginRateCalculationTemplate.html" />

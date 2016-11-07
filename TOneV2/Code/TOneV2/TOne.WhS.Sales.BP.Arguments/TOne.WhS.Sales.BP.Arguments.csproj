@@ -59,7 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanInput.cs" />
     <Compile Include="Tasks\EmailTaskData.cs" />
-    <Compile Include="Tasks\EmailTaskExecutionInfo.cs" />
+    <Compile Include="Tasks\EmailTaskExecutionInformation.cs" />
     <Compile Include="Tasks\PreviewTaskData.cs" />
     <Compile Include="Tasks\PreviewTaskExecutionInformation.cs" />
   </ItemGroup>

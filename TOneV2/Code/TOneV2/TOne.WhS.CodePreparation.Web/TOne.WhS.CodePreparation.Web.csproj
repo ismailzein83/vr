@@ -206,6 +206,8 @@
     <Content Include="WhS_CodePreparation\Views\Dialogs\NewZoneDialogController.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationPreview.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationPreviewController.js" />
+    <Content Include="WhS_CodePreparation\Views\Notification.html" />
+    <Content Include="WhS_CodePreparation\Views\NotificationController.js" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

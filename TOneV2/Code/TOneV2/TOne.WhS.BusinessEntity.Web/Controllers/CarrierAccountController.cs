@@ -38,6 +38,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetCustomersBySellingNumberPlanId")]
+        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingNumberPlanId(int sellingNumberPlanId)
+        {
+            var manager = new CarrierAccountManager();
+            return manager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
+        }
+
+
+        [HttpGet]
         [Route("GetCarrierAccountInfo")]
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string serializedFilter)
         {

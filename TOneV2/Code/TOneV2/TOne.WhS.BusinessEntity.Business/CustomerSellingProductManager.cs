@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
 
             var allCustomerSellingProducts = GetEffectiveSellingProducts(input.Query.EffectiveDate);
-            
+
             Func<CustomerSellingProduct, bool> filterExpression = (prod) =>
                 {
                     if (input.Query.CustomersIds != null && !input.Query.CustomersIds.Contains(prod.CustomerId))
@@ -61,11 +61,44 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
+        public IEnumerable<CarrierAccountInfo> GetCustomerNamesBySellingProductId(int sellingProductId)
+        {
+            IEnumerable<CustomerSellingProduct> customerSellingProducts = GetCachedCustomerSellingProducts().Values;
+            if(customerSellingProducts != null)
+                customerSellingProducts = customerSellingProducts.FindAllRecords(item => item.SellingProductId == sellingProductId);
+
+            Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsByCustomerId = new Dictionary<int, List<CustomerSellingProduct>>();
+
+            foreach (CustomerSellingProduct item in customerSellingProducts)
+            {
+                List<CustomerSellingProduct> customerSellingProductsTemp = null;
+                customerSellingProductsByCustomerId.TryGetValue(item.CustomerId, out customerSellingProductsTemp);
+                if (customerSellingProductsTemp == null)
+                {
+                    customerSellingProductsTemp = new List<CustomerSellingProduct>();
+                    customerSellingProductsByCustomerId.Add(item.CustomerId, customerSellingProductsTemp);
+                }
+
+                customerSellingProductsTemp.Add(item);
+            }
+
+            Dictionary<int, CustomerSellingProduct> filteredCustomerSellingProducts = new Dictionary<int, CustomerSellingProduct>();
+            DateTime today = DateTime.Today;
+            foreach (KeyValuePair<int, List<CustomerSellingProduct>> kvp in customerSellingProductsByCustomerId)
+            {
+                CustomerSellingProduct effectiveCustomerSellingProduct = kvp.Value.OrderByDescending(x => x.BED).FirstOrDefault(x => today >= x.BED);
+                if (effectiveCustomerSellingProduct != null)
+                    filteredCustomerSellingProducts.Add(effectiveCustomerSellingProduct.CustomerSellingProductId, effectiveCustomerSellingProduct);
+            }
+
+            return filteredCustomerSellingProducts.MapRecords(CarrierAccountInfoMapper, null).OrderBy(x => x.Name);
+        }
+
         private Dictionary<int, CustomerSellingProduct> GetEffectiveSellingProducts(DateTime? effectiveOn)
         {
             var allCustomerSellingProducts = GetCachedCustomerSellingProducts();
 
-           
+
             if (effectiveOn == null)
                 return allCustomerSellingProducts;
 
@@ -239,19 +272,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return sellingProductId;
         }
 
-		public IEnumerable<string> GetCustomerNamesBySellingProductId(int sellingProductId)
-		{
-			Dictionary<int, CustomerSellingProduct> data = GetCachedCustomerSellingProducts();
-			IEnumerable<CustomerSellingProduct> dataBySellingProductId = data.Values.FindAllRecords(x => x.SellingProductId == sellingProductId);
-			if (dataBySellingProductId == null)
-				return null;
-			IEnumerable<int> customerIds = dataBySellingProductId.MapRecords(x => x.CustomerId).Distinct();
-			var carrierAccountManager = new CarrierAccountManager();
-			var customerNames = new List<string>();
-			foreach (int customerId in customerIds)
-				customerNames.Add(carrierAccountManager.GetCarrierAccountName(customerId));
-			return customerNames;
-		}
+       
 
         #endregion
 
@@ -338,7 +359,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer name", Width = 60 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Product Name",Width= 60});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Product Name", Width = 60 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Effective On", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
 
@@ -361,6 +382,17 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Mappers
+
+        private CarrierAccountInfo CarrierAccountInfoMapper(CustomerSellingProduct customerSellingProduct)
+        {
+            return new CarrierAccountInfo()
+            {
+                AccountType = CarrierAccountType.Customer,
+                CarrierAccountId = customerSellingProduct.CustomerId,
+                Name = _carrierAccountManager.GetCarrierAccountName(customerSellingProduct.CustomerId)
+            };
+        }
+
         private CustomerSellingProductDetail CustomerSellingProductDetailMapper(CustomerSellingProduct customerSellingProduct)
         {
             CustomerSellingProductDetail customerSellingProductDetail = new CustomerSellingProductDetail();

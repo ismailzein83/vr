@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
 		[HttpGet]
 		[Route("GetCustomerNamesBySellingProductId")]
-		public IEnumerable<string> GetCustomerNamesBySellingProductId(int sellingProductId)
+		public IEnumerable<CarrierAccountInfo> GetCustomerNamesBySellingProductId(int sellingProductId)
 		{
 			CustomerSellingProductManager manager = new CustomerSellingProductManager();
 			return manager.GetCustomerNamesBySellingProductId(sellingProductId);

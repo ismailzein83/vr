@@ -7,8 +7,8 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.Sales.BP.Arguments.Tasks
 {
-	public class EmailTaskExecutionInfo : BPTaskExecutionInformation
+	public class EmailTaskExecutionInformation : BPTaskExecutionInformation
 	{
-		public bool Decision { get; set; }
+		public IEnumerable<int> CustomerIds { get; set; }
 	}
 }

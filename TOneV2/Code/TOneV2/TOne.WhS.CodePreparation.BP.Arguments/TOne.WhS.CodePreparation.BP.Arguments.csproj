@@ -49,6 +49,8 @@
     <Compile Include="CodePreparationInput.cs" />
     <Compile Include="CodePreparationProcessInput.cs" />
     <Compile Include="CodePreparationProcessOutput.cs" />
+    <Compile Include="Tasks\NotificationTaskData.cs" />
+    <Compile Include="Tasks\NotificationTaskExecutionInforamtion.cs" />
     <Compile Include="Tasks\PreviewTaskData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\PreviewTaskExecutionInformation.cs" />
