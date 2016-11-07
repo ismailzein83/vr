@@ -604,6 +604,10 @@
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Extensions.TelesSwitch\Retail.BusinessEntity.Extensions.TelesSwitch.csproj">
+      <Project>{960f1314-605c-453b-a8b0-2416b345d5f1}</Project>
+      <Name>Retail.BusinessEntity.Extensions.TelesSwitch</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.MainActionBPs.Entities\Retail.BusinessEntity.MainActionBPs.Entities.csproj">
       <Project>{b6e5274a-9455-41e7-a07d-e78731dc1767}</Project>
       <Name>Retail.BusinessEntity.MainActionBPs.Entities</Name>
