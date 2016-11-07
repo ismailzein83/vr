@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountInfo.cs" />
+    <Compile Include="Account\AccountType.cs" />
+    <Compile Include="Account\AccountTypeSettings.cs" />
     <Compile Include="AlertRuleActionExecution\AlertRuleActionExecution.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdAction.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdActionBatch.cs" />
