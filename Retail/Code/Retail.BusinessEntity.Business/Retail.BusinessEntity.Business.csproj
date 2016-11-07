@@ -145,7 +145,6 @@
     <Compile Include="SwitchManager.cs" />
     <Compile Include="PricingEntityCacheManager.cs" />
     <Compile Include="ServiceTypeManager.cs" />
-    <Compile Include="TelestSwitchManager.cs" />
     <Compile Include="ZoneManager.cs" />
     <Compile Include="PackageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

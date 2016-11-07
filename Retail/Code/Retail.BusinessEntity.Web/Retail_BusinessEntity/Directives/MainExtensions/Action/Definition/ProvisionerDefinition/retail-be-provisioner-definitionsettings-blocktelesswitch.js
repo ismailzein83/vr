@@ -48,7 +48,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.BlockTelesSwitchUserProvisionerDefinitionSettings,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.Extensions.TelesSwitch.BlockTelesSwitchUserProvisionerDefinitionSettings,Retail.BusinessEntity.Extensions.TelesSwitch",
                     }
                     return data;
                 }

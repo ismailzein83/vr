@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Business;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Business
+namespace Retail.BusinessEntity.Extensions.TelesSwitch
 {
     public class TelestSwitchManager
     {
@@ -12,7 +13,7 @@ namespace Retail.BusinessEntity.Business
         {
             RequestManager manager = new RequestManager();
             string url = string.Format("https://c5-iot2-prov.teles.de/SIPManagement/rest/v1/domain/vr.rest.ws.de/sub");
-            string data = manager.GetRequest(url,null);
+            string data = manager.GetRequest(url, null);
             return data;
         }
         public object GetGateWays(string domain)

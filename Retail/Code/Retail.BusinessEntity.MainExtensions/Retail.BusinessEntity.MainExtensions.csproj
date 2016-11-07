@@ -77,8 +77,6 @@
   <ItemGroup>
     <Compile Include="AccountParts\AccountPartPersonalInfo.cs" />
     <Compile Include="AccountParts\AccountPartPersonalInfoDefinition.cs" />
-    <Compile Include="BlockTelesSwitchUserProvisionerDefinitionSettings.cs" />
-    <Compile Include="BlockTelesSwitchUserProvisionerRuntimeSettings.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariff.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariffDefinition.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\SingleDurationTariff.cs" />
@@ -95,9 +93,7 @@
     <Compile Include="DurationVolumes\VolumeByDuration.cs" />
     <Compile Include="DurationVolumes\VolumePerUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReactivateTelesSwitchUserProvisionerDefinitionSettings.cs" />
     <Compile Include="RadiusSQLProvisionerRuntimeSetting.cs" />
-    <Compile Include="ReactivateTelesSwitchUserProvisionerRuntimeSettings.cs" />
     <Compile Include="RecurringPeriods\MonthlyRecurringPeriodSettings.cs" />
     <Compile Include="RecurringPeriods\WeeklyRecurringPeriodSettings.cs" />
     <Compile Include="ServicePackageItem\ServicePackageChargingPolicyItem.cs" />
@@ -115,8 +111,6 @@
     <Compile Include="AccountParts\AccountPartResidentialProfile.cs" />
     <Compile Include="AccountParts\AccountPartResidentialProfileDefinition.cs" />
     <Compile Include="RadiusSQLProvisionerDefinitionSetting.cs" />
-    <Compile Include="ActivateTelesSwitchUserProvisionerDefinitionSettings.cs" />
-    <Compile Include="ActivateTelesSwitchUserProvisionerRuntimeSettings.cs" />
     <Compile Include="VRObjectTypes\FinancialRetailAccountPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountObjectType.cs" />
   </ItemGroup>

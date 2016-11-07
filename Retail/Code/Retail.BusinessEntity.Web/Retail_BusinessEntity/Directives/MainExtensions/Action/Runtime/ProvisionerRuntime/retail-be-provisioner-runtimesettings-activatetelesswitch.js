@@ -48,7 +48,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.ActivateTelesSwitchUserProvisionerRuntimeSettings,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.Extensions.TelesSwitch.ActivateTelesSwitchUserProvisionerRuntimeSettings,Retail.BusinessEntity.Extensions.TelesSwitch",
                         Domain:$scope.scopeModel.domain,
                         GateWay: $scope.scopeModel.gateWay,
                         LoginName: $scope.scopeModel.loginName,

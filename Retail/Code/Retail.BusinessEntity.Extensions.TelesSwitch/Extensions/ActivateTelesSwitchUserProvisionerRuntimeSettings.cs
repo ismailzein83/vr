@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
-namespace Retail.BusinessEntity.MainExtensions
+namespace Retail.BusinessEntity.Extensions.TelesSwitch
 {
     public class ActivateTelesSwitchUserProvisionerRuntimeSettings : ActionProvisioner
     {
@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.MainExtensions
         {
             RequestManager manager = new RequestManager();
             string url = String.Format("https://c5-iot2-prov.teles.de/SIPManagement/rest/v1/domain/{0}/user?gateway={1}",this.Domain,this.GateWay);
-            UserName userName = new MainExtensions.UserName
+            UserName userName = new UserName
             {
                 firstName = context.Entity.Name,
                 lastName = context.Entity.Name,

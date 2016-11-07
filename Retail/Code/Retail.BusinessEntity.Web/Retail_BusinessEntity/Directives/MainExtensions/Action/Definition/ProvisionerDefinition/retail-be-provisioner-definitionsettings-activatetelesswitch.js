@@ -68,7 +68,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.ActivateTelesSwitchUserProvisionerDefinitionSettings,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.Extensions.TelesSwitch.ActivateTelesSwitchUserProvisionerDefinitionSettings,Retail.BusinessEntity.Extensions.TelesSwitch",
                         ServiceTypeIds: serviceTypeAPI.getSelectedIds()
                     }
                     return data;

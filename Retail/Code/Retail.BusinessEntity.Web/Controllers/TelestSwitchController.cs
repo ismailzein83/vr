@@ -12,18 +12,18 @@ namespace Retail.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "TelestSwitch")]
     public class TelestSwitchController : BaseAPIController
     {
-        TelestSwitchManager _manager = new TelestSwitchManager();
-        [HttpGet]
-        [Route("GetDomains")]
-        public object GetDomains()
-        {
-            return _manager.GetDomains();
-        }
-        [HttpGet]
-        [Route("GetGateWays")]
-        public object GetGateWays(string domain)
-        {
-            return _manager.GetGateWays(domain);
-        }
+        //TelestSwitchManager _manager = new TelestSwitchManager();
+        //[HttpGet]
+        //[Route("GetDomains")]
+        //public object GetDomains()
+        //{
+        //    return _manager.GetDomains();
+        //}
+        //[HttpGet]
+        //[Route("GetGateWays")]
+        //public object GetGateWays(string domain)
+        //{
+        //    return _manager.GetGateWays(domain);
+        //}
     }
 }
