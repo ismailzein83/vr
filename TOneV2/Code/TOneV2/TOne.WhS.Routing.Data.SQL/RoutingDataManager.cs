@@ -113,6 +113,8 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_RPZonesTableType);
             query.AppendLine(query_RoutingProductTable);
+			query.AppendLine(query_CodeSaleZoneMatchTable);
+			query.AppendLine(query_CodeSupplierZoneMatchTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -184,6 +186,25 @@ namespace TOne.WhS.Routing.Data.SQL
 
                                 ";
 
+		private const string query_CodeSaleZoneMatchTable = @"CREATE TABLE [dbo].[CodeSaleZoneMatch](
+																[Code] [varchar](20) NOT NULL,
+																[SellingNumberPlanID] [int] NOT NULL,
+																[SaleZoneID] [bigint] NOT NULL
+															) ON [PRIMARY]
+															CREATE CLUSTERED INDEX [IX_CodeSaleZoneMatch_Code] ON [dbo].[CodeSaleZoneMatch]
+															(
+																[Code] ASC
+															);";
+
+		private const string query_CodeSupplierZoneMatchTable = @"CREATE TABLE [dbo].[CodeSupplierZoneMatch](
+																	[Code] [varchar](20) NOT NULL,
+																	[SupplierID] [int] NOT NULL,
+																	[SupplierZoneID] [bigint] NOT NULL
+																) ON [PRIMARY]
+																CREATE CLUSTERED INDEX [IX_CodeSupplierZoneMatch_Code] ON [dbo].[CodeSupplierZoneMatch]
+																(
+																	[Code] ASC
+																);";
 
         const string query_TableTypes = @"CREATE TYPE [LongIDType] AS TABLE(
 	                                                    [ID] [bigint] NOT NULL,

@@ -62,6 +62,9 @@
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
@@ -233,6 +236,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCodeMatchesStatus</mca:CSharpValue>
           </InArgument>
         </twrba1:PrepareCodeMatchesForApply.PreviousActivityStatus>
+        <twrba1:PrepareCodeMatchesForApply.ShouldApplyCodeZoneMatch>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.ShouldApplyCodeZoneMatch</mca:CSharpValue>
+          </InArgument>
+        </twrba1:PrepareCodeMatchesForApply.ShouldApplyCodeZoneMatch>
         <twrba1:PrepareCodeMatchesForApply.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareCodeMatchesStatus</mca:CSharpReference>
@@ -277,6 +285,11 @@
             <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba1:ApplyCodeMatchesToDB.RoutingDatabaseId>
+        <twrba1:ApplyCodeMatchesToDB.ShouldApplyCodeZoneMatch>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.ShouldApplyCodeZoneMatch</mca:CSharpValue>
+          </InArgument>
+        </twrba1:ApplyCodeMatchesToDB.ShouldApplyCodeZoneMatch>
       </twrba1:ApplyCodeMatchesToDB>
       <twrba1:ApplyCodesToCodeSaleZoneTable Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCodesToCodeSaleZoneTable_1">
         <twrba1:ApplyCodesToCodeSaleZoneTable.InputQueue>
@@ -296,7 +309,7 @@
         </twrba1:ApplyCodesToCodeSaleZoneTable.RoutingDatabaseId>
       </twrba1:ApplyCodesToCodeSaleZoneTable>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWw0SAOsAg4CAQFOBaQBEAMBnQKlAQWqAhACAQJPB2YSAwHeAmcHowESAwGeAqkBDakBjwECAQ+xAQ2xAY8BAgEDtwEH2wEhAwHHAdwBB/EBKwMBlgHyAQeHAiwCAWWIAgeYAiUCAUCZAgepAi4CARtQCWUfAwHfAmsJcSkDAdcCcgmRASMDAbICkgEJogEpAwGfAsQBDcQBjgEDAZECyQENyQF1AwGFAr8BDb8BgwEDAfkBugENugF4AwHtAc4BDc4BdwMB4QHTAQ3TAX0DAdUBtwGVAbcBnAEDAdQB2AEN2AFzAwHIAekBDekBbwMBuwHfAQ3fAXsDAa8B7gEN7gF5AwGjAeQBDeQBeQMBlwH/AQ3/AXEDAYoB9QEN9QGGAQIBfoQCDYQCegIBcvoBDfoBfgIBZpACDZACcQIBWYsCDYsCcQIBTZUCDZUCYQIBQaECDaECcgIBNJwCDZwCdgIBKKYCDaYCYQIBHF0PXWwDAe8CWA9YfwMB6gJTD1N6AwHlAmIPYlwDAeACbg9uiAEDAdgCeg96bAMB0QJ1D3V6AwHLAoQBD4QBkAEDAcUCjgEPjgGAAQMBvwKJAQ+JAYcBAwG5An8Pf1wDAbMClQEPlQFjAwGsApoBD5oBfwMBpgKfAQ+fAX0DAaAC</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZENvZGVNYXRjaGVzQnlDb2RlUHJlZml4LnhhbWw2SwO5Ag4CAQFRBacBEAMBtQKoAQW3AhACAQJSB2kSAwH2AmoHpgESAwG2AqwBDawBjwECAQ+0AQ20AY8BAgEDugEH3gEhAwHfAd8BB/kBKwMBogH6AQePAiwCAXGQAgelAiUCAUCmAge2Ai4CARtTCWgfAwH3Am4JdCkDAe8CdQmUASMDAcoClQEJpQEpAwG3AscBDccBjgEDAakCzAENzAF1AwGdAsIBDcIBgwEDAZECvQENvQF4AwGFAtEBDdEBdwMB+QHWAQ3WAX0DAe0BugGVAboBnAEDAewB2wEN2wFzAwHgAewBDewBbwMB0wHiAQ3iAXsDAccB8QEN8QFqAwG7AfYBDfYBeQMBrwHnAQ3nAXkDAaMBhwINhwJxAwGWAf0BDf0BhgEDAYoBjAINjAJ6AgF+ggINggJ+AgFymAINmAJxAgFlkwINkwJxAgFZnQINnQJhAgFNogINogJqAgFBrgINrgJyAgE0qQINqQJ2AgEoswINswJhAgEcYA9gbAMBhwNbD1t/AwGCA1YPVnoDAf0CZQ9lXAMB+AJxD3GIAQMB8AJ9D31sAwHpAngPeHoDAeMChwEPhwGQAQMB3QKRAQ+RAYABAwHXAowBD4wBhwEDAdECggEPggFcAwHLApgBD5gBYwMBxAKdAQ+dAX8DAb4CogEPogF9AwG4Ag==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

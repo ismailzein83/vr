@@ -18,6 +18,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
     {
         readonly string[] columns = { "Code", "SupplierCodeID", "SupplierZoneID", "SupplierID" };
 
+		public bool ShouldApplyCodeZoneMatch { get; set; }
+
         CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
         SaleZoneManager _saleZoneManager = new SaleZoneManager();
         SupplierZoneManager _supplierZoneManager = new SupplierZoneManager();

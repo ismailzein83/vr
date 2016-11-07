@@ -10,6 +10,8 @@ namespace TOne.WhS.Routing.Data
 {
     public interface ICodeMatchesDataManager : IDataManager, IBulkApplyDataManager<CodeMatches>, IRoutingDataManager
     {
+		bool ShouldApplyCodeZoneMatch { get; set; }
+
         void ApplyCodeMatchesForDB(object preparedCodeMatches);
 
         IEnumerable<RPCodeMatches> GetCodeMatches(long fromZoneId, long toZoneId);

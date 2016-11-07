@@ -15,6 +15,8 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public int RoutingDatabaseId { get; set; }
 
+		public bool ShouldApplyCodeZoneMatch { get; set; }
+
         public IEnumerable<CodePrefix> CodePrefixGroup { get; set; }
 
         public DateTime? EffectiveOn { get; set; }
