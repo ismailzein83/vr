@@ -96,24 +96,6 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
             }
 
-            $scope.scopeModal = {
-                emails: []
-            };
-
-            $scope.scopeModal.disabledemail = true;
-            $scope.scopeModal.onEmailValueChange = function (value) {
-                $scope.scopeModal.disabledemail = (value == undefined);
-            }
-
-            $scope.addEmailOption = function () {
-                var email = $scope.scopeModal.emailvalue;
-                $scope.scopeModal.emails.push({
-                    email: email
-                });
-                $scope.scopeModal.emailvalue = undefined;
-                $scope.scopeModal.disabledemail = true;
-            };
-
 
             defineAPI();
         }
@@ -126,11 +108,6 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
             };
 
             function buildTestCallObjFromScope() {
-                var listEmailsObj = "";
-               
-                for (var i = 0; i < $scope.scopeModal.emails.length; i++) {
-                    listEmailsObj = listEmailsObj + $scope.scopeModal.emails[i].email + ";";
-                }
                 var obj = {
                     $type: "QM.CLITester.Business.TestCallTaskActionArgument, QM.CLITester.Business",
                     SuppliersIds: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
@@ -139,7 +116,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                     ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedZone, "ZoneId"),//$scope.selectedZone.ZoneId,
                     ZoneSourceId: "",
                     ProfileID: $scope.selectedProfile.ProfileId,
-                    ListEmails: listEmailsObj
+                    ListEmails: $scope.toMail.join(";")
                 };
                 return obj;
             }
@@ -212,15 +189,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 }
 
                 if (payload != undefined && payload.data != undefined && payload.data && payload.data.ListEmails != undefined) {
-                    var listEmails = payload.data.ListEmails.split(";");
-
-                    for (var i = 0; i < listEmails.length; i++) {
-                        if (i != listEmails.length - 1) {
-                            $scope.scopeModal.emails.push({
-                                email: listEmails[i]
-                            });
-                        }
-                    }
+                    $scope.toMail = payload.data.ListEmails.split(";");
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

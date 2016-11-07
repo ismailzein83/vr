@@ -171,6 +171,13 @@ namespace QM.CLITester.Business
 
         public IDataRetrievalResult<TestCallDetail> GetFilteredTestCalls(DataRetrievalInput<TestCallQuery> input)
         {
+            if (!SecurityContext.Current.HasPermissionToActions("QM_CLITester/TestCall/ViewAllUsers"))
+            {
+                if (input.Query.UserIds != null)
+                    input.Query.UserIds.Clear();
+                input.Query.UserIds = new List<int>();
+                input.Query.UserIds.Add(SecurityContext.Current.GetLoggedInUserId());
+            }
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             
             Vanrise.Entities.BigResult<TestCall> testCalls= dataManager.GetTestCallFilteredFromTemp(input);

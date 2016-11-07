@@ -47,6 +47,9 @@
     <Reference Include="Vanrise.Security.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.MainExtensions">
+      <HintPath>..\QualityMeasurement.Web\bin\Vanrise.Security.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddTestCallOutput.cs" />
@@ -65,6 +68,7 @@
     <Compile Include="Profiles\SourceProfile.cs" />
     <Compile Include="Profiles\SourceProfileReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduleTestCallInfo.cs" />
     <Compile Include="SourceProfileReaderConfig.cs" />
     <Compile Include="TaskCheckProgressContext.cs" />
     <Compile Include="TestCall.cs" />
@@ -73,6 +77,8 @@
     <Compile Include="TestCallQuery.cs" />
     <Compile Include="AddTestCallInput.cs" />
     <Compile Include="TotalCallsChart.cs" />
+    <Compile Include="VRObjectTypes\ScheduleTestCallPropertyEvaluator.cs" />
+    <Compile Include="VRObjectTypes\ScheduleTestResultObjectType.cs" />
     <Compile Include="VRObjectTypes\TestResultObjectType.cs" />
     <Compile Include="VRObjectTypes\TestResultPropertyEvaluator.cs" />
   </ItemGroup>

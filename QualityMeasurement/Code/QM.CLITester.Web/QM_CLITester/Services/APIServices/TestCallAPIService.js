@@ -36,6 +36,10 @@
 
         }
 
+        function HasViewAllUsersPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_CLITester_ModuleConfig.moduleName, controllerName, ['ViewAllUsers']));
+        }
+
         function SendMail(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "SendMail"), input);
         }
@@ -48,7 +52,8 @@
             GetTestTemplates: GetTestTemplates,
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
-            SendMail: SendMail
+            SendMail: SendMail,
+            HasViewAllUsersPermission: HasViewAllUsersPermission
         });
     }
 

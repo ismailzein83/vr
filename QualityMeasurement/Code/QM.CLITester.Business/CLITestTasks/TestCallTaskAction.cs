@@ -16,6 +16,7 @@ using QM.CLITester.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Entities;
 
 namespace QM.CLITester.Business
 {
@@ -110,11 +111,7 @@ namespace QM.CLITester.Business
 
                         var testCallTaskArg = context.Task.TaskSettings.TaskActionArgument as TestCallTaskActionArgument;
 
-
-                        SendMail(memoryStream, user.Email, testCallTaskArg.ListEmails);
-
-                        //string filename = "D:\\" + DateTime.Now.Minute + DateTime.Now.Second + "book1.xls";
-                        //wbk.Save(filename);
+                        SendMail(memoryStream, user.Email, testCallTaskArg.ListEmails, context.Task.Name);
                     }
                 }
             }
@@ -168,32 +165,25 @@ namespace QM.CLITester.Business
             worksheet.Cells.SetColumnWidth(row, 20);
         }
 
-        private void SendMail(MemoryStream memoryStream, string userMail, string listEmails)
+        private void SendMail(MemoryStream memoryStream, string userMail, string listEmails, string taskName)
         {
-
             memoryStream.Position = 0;
-            var attachment = new Attachment(memoryStream, "book1.xls");
+            var attachment = new Attachment(memoryStream, "ClearVoice-ScheduleTestResult-" + taskName + ".xls");
             attachment.ContentType = new ContentType("application/vnd.ms-excel");
             attachment.TransferEncoding = TransferEncoding.Base64;
             attachment.NameEncoding = Encoding.UTF8;
-            attachment.Name = "book1.xls";
+            attachment.Name = "ClearVoice-ScheduleTestResult-" + taskName + ".xls";
 
-            StringBuilder EmailBody = new StringBuilder();
-            EmailBody.Append("<table cellspacing='0' cellpadding='0'>");
-            EmailBody.Append("<tr><td style='font-family: Arial; font-size: 13pt; font-weight: bold'>Clear Voice</td></tr>");
-            EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-            EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Dear&nbsp;,</td></tr>");
-            EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-            EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Kindly find attached last schedule log details:</td></tr>");
-            EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-            EmailBody.Append("</table></td></tr>");
-            EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-            EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>For more information, don't hesitate to contact us.</td></tr>");
-            EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-            EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-            EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Thanks,</td></tr>");
-            EmailBody.Append("<tr><td><a style='font-family: Arial; font-size: 11pt' href='http://www.vanrise.com'>www.vanrise.com</a> Team</td></tr>");
-            EmailBody.Append("</table>");
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            ScheduleTestCallInfo scheduleTestCallInfo = new ScheduleTestCallInfo();
+            scheduleTestCallInfo.TaskName = taskName;
+            objects.Add("SendScheduleTestCallResultObjList", scheduleTestCallInfo);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(new Guid("0538B964-C1A8-4185-88A6-D88AB1509E4F"), objects);
+
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            EmailSettingData emailSettingData = configManager.GetSystemEmail();
 
             MailMessage objMail = new MailMessage();
 
@@ -204,23 +194,15 @@ namespace QM.CLITester.Business
                 objMail.To.Add(address);
             }
 
-            string strEmailFrom = "vanrise.clitester@gmail.com";
-
-            objMail.From = new MailAddress(strEmailFrom, "Clear Voice");
-            objMail.Subject = "Clear Voice - Schedule done";
-            objMail.Body = EmailBody.ToString();
+            objMail.From = new MailAddress(emailSettingData.SenderEmail);
+            objMail.Subject = template.Subject;
+            objMail.Body = template.Body;
             objMail.IsBodyHtml = true;
             objMail.Priority = MailPriority.High;
             objMail.Attachments.Add(attachment);
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com",587);
-            smtp.Host = "smtp.gmail.com";
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential(strEmailFrom, "passwordQ1");
-            smtp.Port = 587;
-            smtp.EnableSsl = true;
-            smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
 
-            smtp.Send(objMail);
+            SmtpClient client = vrMailManager.GetSMTPClient(emailSettingData);
+            client.Send(objMail);
         }
     }
 }

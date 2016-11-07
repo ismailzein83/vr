@@ -76,6 +76,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.MainExtensions">
+      <HintPath>..\QualityMeasurement.Web\bin\Vanrise.Security.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLITestTasks\InitiateTestTaskAction.cs" />

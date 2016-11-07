@@ -15,21 +15,9 @@
         <vr-qm-be-zone-selector on-ready="onZoneDirectiveReady" selectedvalues="selectedZone" isrequired ismultipleselection></vr-qm-be-zone-selector>
     </vr-columns>
 </vr-row>
+
 <vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox label="Email" type="email" value="scopeModal.emailvalue" onvaluechanged="scopeModal.onEmailValueChange"></vr-textbox>
+        <vr-textbox-multiple value="toMail" datatype="email" label="Email(s)" isrequired></vr-textbox-multiple>
     </vr-columns>
-
-    <vr-columns withemptyline width="1/4row">
-        <vr-button type="Add" data-onclick="addEmailOption" vr-disabled="scopeModal.disabledemail" standalone></vr-button>
-    </vr-columns>
-
 </vr-row>
-
-<vr-datalist maxitemsperrow="2" datasource="scopeModal.emails" autoremoveitem="true">
-    <vr-row>
-        <vr-columns width="1/4row">
-            {{dataItem.email}}
-        </vr-columns>
-    </vr-row>
-</vr-datalist>

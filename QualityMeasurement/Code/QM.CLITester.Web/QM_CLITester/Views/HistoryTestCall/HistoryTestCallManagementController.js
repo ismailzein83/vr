@@ -3,10 +3,10 @@
     "use strict";
 
     Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'UtilsService', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
-        'VR_Sec_UserAPIService', 'VRUIUtilsService'];
+        'VR_Sec_UserAPIService', 'VRUIUtilsService', 'Qm_CliTester_TestCallAPIService'];
 
     function Qm_CliTester_HistoryTestCallManagementController($scope, UtilsService, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum,
-        VR_Sec_UserAPIService, VRUIUtilsService) {
+        VR_Sec_UserAPIService, VRUIUtilsService, Qm_CliTester_TestCallAPIService) {
 
         var gridAPI;
 
@@ -60,8 +60,15 @@
                 $scope.testResult.push(Qm_CliTester_CallTestResultEnum[prop]);
             }
 
+            $scope.hasUserPermission = false;
+            $scope.hasViewAllUsersermission = function () {
+               Qm_CliTester_TestCallAPIService.HasViewAllUsersPermission().then(function(response) {
+                   $scope.hasUserPermission = response;
+               });
+            };
 
-
+            $scope.hasViewAllUsersermission();
+            
             $scope.searchClicked = function () {
                 if (gridAPI != undefined) {
                     setFilterObject();
@@ -211,10 +218,13 @@
                 filter.CountryIds = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
             }
 
-            if ($scope.selectedProfiles.length == 0 || $scope.selectedProfiles == undefined)
-                filter.ProfileIds = null;
-            else {
-                filter.ProfileIds = [$scope.selectedProfiles.ProfileId];
+            if ($scope.selectedProfiles === undefined) {
+                    filter.ProfileIds = null;
+            } else {
+                if ($scope.selectedProfiles.length == 0)
+                    filter.ProfileIds = null;
+                else
+                    filter.ProfileIds = [$scope.selectedProfiles.ProfileId];
             }
 
             if ($scope.selectedScheduleTasks.length == 0)

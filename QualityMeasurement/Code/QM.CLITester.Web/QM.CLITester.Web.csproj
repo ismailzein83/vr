@@ -197,6 +197,7 @@
     <Content Include="QM_CLITester\Constant\CallTestStatusEnum.js" />
     <Content Include="QM_CLITester\Constant\ModuleConfig.js" />
     <Content Include="QM_CLITester\Constant\ProfileTypeEnum.js" />
+    <Content Include="QM_CLITester\Constant\ScheduleCallTestPropertyEnum.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\CountryReader\qm-clitester-sourcecountryreader-itest.js" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\CountryReader\Templates\SourceCountryReaderItest.html" />
     <Content Include="QM_CLITester\Directives\MainExtensions\ITest\qm-clitester-initiatetest.js" />
@@ -226,8 +227,12 @@
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-histestcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcall-grid.js" />
     <Content Include="QM_CLITester\Directives\TestCall\vr-qm-clitester-testcalldetails.js" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\Templates\ScheduleTestCallObjectTypeTemplate.html" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\Templates\ScheduleTestCallPropertyEvaluatorTemplate.html" />
     <Content Include="QM_CLITester\Directives\VRObjectTypes\Templates\TestCallDetailObjectTypeTemplate.html" />
     <Content Include="QM_CLITester\Directives\VRObjectTypes\Templates\TestCallDetailPropertyEvaluatorTemplate.html" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\vr-qm-clitester-scheduletestcallobjecttype.js" />
+    <Content Include="QM_CLITester\Directives\VRObjectTypes\vr-qm-clitester-scheduletestcallpropertyevaluator.js" />
     <Content Include="QM_CLITester\Directives\VRObjectTypes\vr-qm-clitester-testcalldetailobjecttype.js" />
     <Content Include="QM_CLITester\Directives\VRObjectTypes\vr-qm-clitester-testcalldetailpropertyevaluator.js" />
     <Content Include="QM_CLITester\ModuleInitialization.js" />

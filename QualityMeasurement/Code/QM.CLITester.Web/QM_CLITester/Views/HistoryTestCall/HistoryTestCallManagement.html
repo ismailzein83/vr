@@ -30,7 +30,7 @@
                                selectedvalues="selectedtestResults" ismultipleselection></vr-select>
                 </vr-columns>
 
-                <vr-columns width="normal">
+                <vr-columns width="normal" ng-show="hasUserPermission ">
                     <vr-select label="Users" datasource="users" ng-show="advancedSelected"
                                datatextfield="Name" datavaluefield="UserId"
                                selectedvalues="selectedUsers" ismultipleselection></vr-select>
