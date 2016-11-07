@@ -40,7 +40,7 @@ app.directive('vrTabHeaderLink', [function () {
                         choicesCtrl.removeTab(ctrl);
                     };
                     ctrl.getTabStyle = function () {
-                        return choicesCtrl.getTabStyle();
+                        return choicesCtrl.getTabStyle(ctrl);
                     };
                     ctrl.choiceClicked = function () {
                         choicesCtrl.selectChoice(ctrl);
@@ -83,7 +83,7 @@ app.directive('vrTabHeaderLink', [function () {
 
             }
         },
-        template: '<label class="hand-cursor" ng-style="ctrl.getTabStyle()" ng-mouseenter="ctrl.adjustTooltipPosition($event)" ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude bs-tooltip   placement="bottom" data-title="{{ctrl.hint}}"></label>'
+        template: '<label class="hand-cursor" ng-style="ctrl.getTabStyle()"  ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude  title="{{ctrl.hint}}"></label>'
     };
 
     return directiveDefinitionObject;

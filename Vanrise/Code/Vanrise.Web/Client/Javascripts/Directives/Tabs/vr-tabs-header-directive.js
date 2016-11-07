@@ -26,7 +26,7 @@ app.directive('vrTabsHeader', [function () {
             var template = '<vr-row removeline>'
                                 + '<vr-columns width="fullrow" >'
                                 + '    <vr-tab-header-links selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()">'
-                                  + '      <vr-tab-header-link ng-repeat="tab in ctrl.tabs" isselected="tab.isSelected">{{ tab.header }} <span ng-if="tab.validationContext.validate() != null" style="color:#D44A47" title="has validation errors!">*</span></vr-tab-header-link>'
+                                  + '      <vr-tab-header-link ng-repeat="tab in ctrl.tabs" isselected="tab.isSelected">{{ tab.header }} <span ng-if="tab.validationContext.validate() != null" style="color:#D44A47;position:relative;right: calc(100% + 7px);" title="has validation errors!">*</span></vr-tab-header-link>'
                                     + '</vr-tab-header-links>'
                                 + '</vr-columns>'
                             + '</vr-row>';

@@ -25,8 +25,11 @@ app.directive('vrChoicesFilter', ['UtilsService', '$rootScope', function (UtilsS
                 UtilsService.safeApply($scope, function () { });
             };
 
-            ctrl.getTabStyle = function () {            
-                return { 'width': 100 / choiceCtrls.length + '%', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' }
+            ctrl.getTabStyle = function (ctrl) {
+                var m = 1;
+                if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length - 1)
+                    m = 0;
+                return { 'width': 'calc(' + 100 / choiceCtrls.length + '% - ' + m + 'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top'}
             }
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {

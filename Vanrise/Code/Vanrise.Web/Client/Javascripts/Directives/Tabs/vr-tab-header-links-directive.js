@@ -22,11 +22,16 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
             }
             ctrl.removeTab = function (tabCtrl) {
                 choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
-                UtilsService.safeApply($scope, function () { });
+                setTimeout(function () {
+                    UtilsService.safeApply($scope);
+                },1)
             };
 
-            ctrl.getTabStyle = function () {
-                return { 'width': 100 / choiceCtrls.length  + '%', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' }
+            ctrl.getTabStyle = function (ctrl) {
+                var m = 1;
+                if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length -1)
+                    m = 0;
+                return { 'width': 'calc('+ 100 / choiceCtrls.length  + '% - '+m+'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' }
             }
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {

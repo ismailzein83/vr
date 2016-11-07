@@ -1918,8 +1918,14 @@ vr-switch[class*="divDisabled"] .switch {
 }
 
 .vr-tabs label {
-    padding: 1px 7px;
-    /*display: inherit !important;*/
+    padding: 1px 9px;
+    border: 1px solid #DDD;
+    height: 26px;
+    margin-bottom: -7px;
+    border-radius: 5px 5px 0px 0px;
+     margin-right: 1px; 
+    height: 26px;
+    margin-right: 1px;
 }
 
 .vr-tabs label > span {
@@ -1937,7 +1943,7 @@ vr-switch[class*="divDisabled"] .switch {
 .vr-tabs .clicked-btn {
     border-width: 1px;
     border-style: solid;
-    background-color: #FFF !important;
+    background-color: #F0F0F0 !important;
     margin-bottom: -1px !important;
     border: 1px solid #DDD;
     border-bottom-color: transparent;
