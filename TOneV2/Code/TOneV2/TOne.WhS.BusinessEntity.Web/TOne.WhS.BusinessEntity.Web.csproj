@@ -249,6 +249,14 @@
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\Templates\GetCDPNsForIdentificationStepPreviewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\Templates\GetCDPNsForIdentificationStepTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\vr-whs-be-getcdpnsforidentificationstep-preview.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\vr-whs-be-getcdpnsforidentificationstep.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\Templates\GetCDPNsForZoneMatchStepPreviewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\Templates\GetCDPNsForZoneMatchStepTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep-preview.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\whs-be-sourcemigrationreader.js" />
