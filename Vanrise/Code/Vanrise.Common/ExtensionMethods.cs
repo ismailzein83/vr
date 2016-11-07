@@ -39,7 +39,7 @@ namespace Vanrise.Common
             return value;
         }
 
-        public static Vanrise.Entities.BigResult<Q> ToBigResult<T, Q>(this Dictionary<T, Q> dic, Vanrise.Entities.DataRetrievalInput input, Func<Q, bool> filterExpression)
+        public static Vanrise.Entities.BigResult<Q> ToBigResult<T, Q>(this IDictionary<T, Q> dic, Vanrise.Entities.DataRetrievalInput input, Func<Q, bool> filterExpression)
         {
             if (dic == null)
                 return null;
@@ -56,7 +56,7 @@ namespace Vanrise.Common
             return rslt;
         }
 
-        public static Vanrise.Entities.BigResult<R> ToBigResult<T, Q, R>(this Dictionary<T, Q> dic, Vanrise.Entities.DataRetrievalInput input,
+        public static Vanrise.Entities.BigResult<R> ToBigResult<T, Q, R>(this IDictionary<T, Q> dic, Vanrise.Entities.DataRetrievalInput input,
             Func<Q, bool> filterExpression, Func<Q, R> mapper)
         {
             if (dic == null)
@@ -74,7 +74,7 @@ namespace Vanrise.Common
             return rslt;
         }
 
-        public static T GetRecord<Q, T>(this Dictionary<Q, T> dic, Q key)
+        public static T GetRecord<Q, T>(this IDictionary<Q, T> dic, Q key)
         {
             T entity;
 
@@ -84,7 +84,7 @@ namespace Vanrise.Common
             return default(T);
         }
 
-        public static T FindRecord<Q, T>(this Dictionary<Q, T> dic, Func<T, bool> predicate)
+        public static T FindRecord<Q, T>(this IDictionary<Q, T> dic, Func<T, bool> predicate)
         {
             if (dic == null)
                 return default(T);
@@ -92,7 +92,7 @@ namespace Vanrise.Common
             return dic.Values.FirstOrDefault(predicate);
         }
 
-        public static IEnumerable<T> FindAllRecords<Q, T>(this Dictionary<Q, T> dic, Func<T, bool> predicate)
+        public static IEnumerable<T> FindAllRecords<Q, T>(this IDictionary<Q, T> dic, Func<T, bool> predicate)
         {
             if (dic == null)
                 return null;
@@ -100,7 +100,7 @@ namespace Vanrise.Common
             return dic.Values.Where(predicate).ToList();
         }
 
-        public static R MapRecord<T, Q, R>(this Dictionary<T, Q> dic, Func<Q, R> mappingExpression, Func<Q, bool> filterExpression)
+        public static R MapRecord<T, Q, R>(this IDictionary<T, Q> dic, Func<Q, R> mappingExpression, Func<Q, bool> filterExpression)
         {
             if (dic == null)
                 return default(R);
@@ -113,7 +113,7 @@ namespace Vanrise.Common
             return filteredResults.Select(mappingExpression).FirstOrDefault();
         }
 
-        public static IEnumerable<M> MapRecords<Q, T, M>(this Dictionary<Q, T> dic, Func<T, M> mappingExpression)
+        public static IEnumerable<M> MapRecords<Q, T, M>(this IDictionary<Q, T> dic, Func<T, M> mappingExpression)
         {
             if (dic == null)
                 return null;
@@ -121,7 +121,7 @@ namespace Vanrise.Common
             return dic.Values.Select(mappingExpression).ToList();
         }
 
-        public static IEnumerable<M> MapRecords<Q, T, M>(this Dictionary<Q, T> dic, Func<T, M> mappingExpression, Func<T, bool> filterExpression)
+        public static IEnumerable<M> MapRecords<Q, T, M>(this IDictionary<Q, T> dic, Func<T, M> mappingExpression, Func<T, bool> filterExpression)
         {
             if (dic == null)
                 return null;
