@@ -37,9 +37,9 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region ExecuteReader
-        protected void ExecuteReaderText(string cmdText, Action<IDataReader> onReaderReady, Action<DbCommand> prepareCommand)
+        protected void ExecuteReaderText(string cmdText, Action<IDataReader> onReaderReady, Action<NpgsqlCommand> prepareCommand)
         {
-            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(this.GetConnectionString()))
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
                 using (var cmd = CreateCommand(conn, cmdText))
@@ -60,7 +60,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region GetItem(s)
-        protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<NpgsqlCommand> prepareCommand)
         {
             T obj = default(T);
             ExecuteReaderText(cmdText, (reader) =>
@@ -73,7 +73,7 @@ namespace Vanrise.Data.Postgres
                 prepareCommand);
             return obj;
         }
-        protected List<T> GetItemsText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        protected List<T> GetItemsText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<NpgsqlCommand> prepareCommand)
         {
             List<T> lst = new List<T>();
             ExecuteReaderText(cmdText, (reader) =>
@@ -93,10 +93,10 @@ namespace Vanrise.Data.Postgres
 
         #region ExecuteScalar
 
-        protected object ExecuteScalarText(string cmdText, Action<DbCommand> prepareCommand)
+        protected object ExecuteScalarText(string cmdText, Action<NpgsqlCommand> prepareCommand)
         {
             object result;
-            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(this.GetConnectionString()))
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
@@ -116,10 +116,10 @@ namespace Vanrise.Data.Postgres
 
         #region ExecuteNonQuery
 
-        protected int ExecuteNonQueryText(string cmdText, Action<DbCommand> prepareCommand)
+        protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand)
         {
             int rowsAffected;
-            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(this.GetConnectionString()))
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
@@ -138,7 +138,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region Private Functions
-        private DbCommand CreateCommand(DbConnection conn, string sql)
+        private NpgsqlCommand CreateCommand(NpgsqlConnection conn, string sql)
         {
             var cmd = conn.CreateCommand();
             cmd.CommandText = sql;
