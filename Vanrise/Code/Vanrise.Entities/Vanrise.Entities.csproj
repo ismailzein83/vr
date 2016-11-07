@@ -57,6 +57,9 @@
     </Compile>
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
+    <Compile Include="ComponentType\VRComponentType.cs" />
+    <Compile Include="ComponentType\VRComponentTypeConfig.cs" />
+    <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="DateTimeType.cs" />
     <Compile Include="Settings\BankDetailsSettings\BankDetailsSettings.cs" />
