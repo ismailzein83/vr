@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodeZoneMatchController.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
     <Compile Include="Controllers\RouteOptionRuleController.cs" />
     <Compile Include="Controllers\RPRouteController.cs" />
@@ -264,6 +265,7 @@
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\Templates\SupplierCodeMatchStepPreviewTemplate.html" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch-preview.js" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch.js" />
+    <Content Include="WhS_Routing\Services\APIServices\CodeZoneMatchAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteOptionRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RPRouteAPIService.js" />
