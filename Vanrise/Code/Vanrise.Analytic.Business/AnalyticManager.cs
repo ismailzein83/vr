@@ -22,7 +22,11 @@ namespace Vanrise.Analytic.Business
             // CheckAnalyticRequiredPermission(input);
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
-
+            if (!input.Query.CurrencyId.HasValue)
+            {
+                CurrencyManager currencyManager = new CurrencyManager();
+                input.Query.CurrencyId = currencyManager.GetSystemCurrency().CurrencyId;
+            }
             if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
             {
                 string[] measureProperty = input.SortByColumnName.Split('.');
