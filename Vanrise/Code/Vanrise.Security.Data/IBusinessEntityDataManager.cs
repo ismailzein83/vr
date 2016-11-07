@@ -11,10 +11,10 @@ namespace Vanrise.Security.Data
     {
         IEnumerable<Vanrise.Security.Entities.BusinessEntity> GetEntities();
 
-        bool ToggleBreakInheritance(string entityId);
+        bool ToggleBreakInheritance(Guid entityId);
         bool AddBusinessEntity(BusinessEntity businessEntity);
         bool UpdateBusinessEntity(BusinessEntity businessEntity);
         bool AreBusinessEntitiesUpdated(ref object updateHandle);
-        bool UpdateBusinessEntityRank(Guid entityId, Guid moduleId);
+        bool UpdateBusinessEntityRank(Guid entityId, Guid moduleId); 
     }
 }
