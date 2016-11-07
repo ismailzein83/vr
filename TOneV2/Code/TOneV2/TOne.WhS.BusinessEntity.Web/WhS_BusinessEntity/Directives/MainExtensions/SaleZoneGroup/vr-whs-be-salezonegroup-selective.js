@@ -57,6 +57,9 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
 
                 $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
                     if (selectedItem != undefined) {
+                        
+                        sellingNumberPlanParameter = selectedItem;
+
                         var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
 
                         var payload = {
