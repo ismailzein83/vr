@@ -327,6 +327,7 @@ namespace TOne.WhS.Analytics.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = result.DimensionTitle });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Periods AVG" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Periods %" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Previous Period %" });
 
                 foreach (var period in result.TimePeriods)
                 {
@@ -341,6 +342,8 @@ namespace TOne.WhS.Analytics.Business
                     row.Cells.Add(new ExportExcelCell() { Value = record.DimensionName });
                     row.Cells.Add(new ExportExcelCell() { Value = record.Average});
                     row.Cells.Add(new ExportExcelCell() { Value = record.Percentage});
+                    row.Cells.Add(new ExportExcelCell() { Value = record.PreviousPeriodPercentage });
+
                     foreach (var v in record.TimePeriodValues)
                     {
 
