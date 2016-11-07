@@ -30,7 +30,7 @@ namespace TOne.WhS.DBSync.Business
         public RouteOptionBlockRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
-          
+
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -47,10 +47,12 @@ namespace TOne.WhS.DBSync.Business
             SourceRouteOptionBlockRuleDataManager dataManager = new SourceRouteOptionBlockRuleDataManager(Context.MigrationContext.ConnectionString, Context.GetEffectiveOnly);
             var blockRules = dataManager.GetRouteOptionBlockRules();
 
-            routeRules.AddRange(GetRulesWithZone(blockRules.Where(o => o.SupplierZoneId.HasValue)));
+            routeRules.AddRange(GetRules(blockRules.Where(o => o.SupplierZoneId.HasValue)));
+            routeRules.AddRange(GetRules(blockRules.Where(o => !o.SupplierZoneId.HasValue)));
             return routeRules;
         }
-        IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOptionBlockRule> blockRules)
+
+        IEnumerable<SourceRule> GetRules(IEnumerable<SourceRouteOptionBlockRule> blockRules)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
             var dicRules = GetRulesDictionary(blockRules);
@@ -59,7 +61,13 @@ namespace TOne.WhS.DBSync.Business
                 SourceRouteOptionBlockRule sourceRule = rules.First();
                 if (sourceRule == null)
                     continue;
-                routeRules.Add(GetSourceRuleFromZones(rules));
+                SourceRule rule = BuildSourceRule(rules);
+                if (rule == null)
+                {
+                    TotalRowsFailed++;
+                    continue;
+                }
+                routeRules.Add(rule);
             }
             return routeRules;
 
@@ -69,7 +77,7 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceRouteOptionBlockRule>> dicRules = new Dictionary<string, List<SourceRouteOptionBlockRule>>();
             foreach (var routeRule in blockedRules)
             {
-                string key = string.Format("{0}_{1}_{2}", routeRule.SupplierId, routeRule.BED, routeRule.EED);
+                string key = string.Format("{0}_{1}_{2}_{3}_{4}", routeRule.SupplierId, routeRule.CustomerId, routeRule.Code, routeRule.BED, routeRule.EED);
 
                 List<SourceRouteOptionBlockRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
@@ -81,20 +89,22 @@ namespace TOne.WhS.DBSync.Business
             }
             return dicRules;
         }
-        SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOptionBlockRule> rules)
+        SourceRule BuildSourceRule(IEnumerable<SourceRouteOptionBlockRule> rules)
         {
-
+            List<long> lstZoneIds = null;
             SourceRouteOptionBlockRule sourceRule = rules.First();
-
-            List<long> lstZoneIds = new List<long>();
-
-            foreach (var rule in rules)
-                if (!_allSupplierZones.ContainsKey(rule.SupplierZoneId.ToString()))
-                    this.TotalRowsFailed++;
-                else
-                    lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
-
+            if (sourceRule.SupplierZoneId.HasValue)
+            {
+                lstZoneIds = new List<long>();
+                foreach (var rule in rules)
+                    if (!_allSupplierZones.ContainsKey(rule.SupplierZoneId.ToString()))
+                        this.TotalRowsFailed++;
+                    else
+                        lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
+            }
             var settings = GetRouteOptionRuleSettings(rules, sourceRule, lstZoneIds);
+            if (settings == null)
+                return null;
 
             return new SourceRule
             {
@@ -111,6 +121,9 @@ namespace TOne.WhS.DBSync.Business
         RouteOptionRule GetRouteOptionRuleSettings(IEnumerable<SourceRouteOptionBlockRule> rules, SourceRouteOptionBlockRule sourceRule,
            List<long> lstZoneIds)
         {
+            if (lstZoneIds == null && string.IsNullOrEmpty(sourceRule.Code))
+                return null;
+
             RouteOptionRule settings = new RouteOptionRule()
             {
                 BeginEffectiveTime = sourceRule.BED,
@@ -136,6 +149,34 @@ namespace TOne.WhS.DBSync.Business
                     }
                 }
             };
+
+            if (!string.IsNullOrEmpty(sourceRule.CustomerId))
+            {
+                CarrierAccount customer;
+                if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
+                {
+                    return null;
+                }
+                settings.Criteria.CustomerGroupSettings = new SelectiveCustomerGroup
+                        {
+                            CustomerIds = new List<int>() { customer.CarrierAccountId },
+                        };
+            }
+
+            if (!string.IsNullOrEmpty(sourceRule.Code))
+            {
+                settings.Criteria.CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
+                {
+                    Codes = new List<CodeCriteria>() { 
+                        new CodeCriteria
+                        {
+                            Code = sourceRule.Code, WithSubCodes = sourceRule.IncludeSubCode
+                        } 
+                    },
+                };
+                if (sourceRule.ExcludedCodesList != null)
+                    settings.Criteria.ExcludedCodes = new List<string>(sourceRule.ExcludedCodesList);
+            }
             return settings;
         }
     }

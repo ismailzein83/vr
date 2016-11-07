@@ -79,9 +79,9 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.Tod:
                         _rulesBaseMigrator = new CommissionRuleMigrator(ruleContext);
                         break;
-                    case RuleEntitiesEnum.SwitchRules:
-                        _rulesBaseMigrator = new SwitchRuleMigrator(ruleContext);
-                        break;
+                    //case RuleEntitiesEnum.SwitchRules:
+                    //    _rulesBaseMigrator = new SwitchRuleMigrator(ruleContext);
+                    //    break;
                     default:
                         _rulesBaseMigrator = null;
                         break;

@@ -35,7 +35,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 CustomerId = reader["CustomerID"] as string,
                 SupplierId = reader["SupplierID"] as string,
                 Code = reader["Code"] as string,
-                SupplierZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                SupplierZoneId = GetReaderValue<int?>(reader, "ZoneID"),
                 BED = (DateTime)reader["BeginEffectiveDate"],
                 EED = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 ExcludedCodes = reader["ExcludedCodes"] as string,
