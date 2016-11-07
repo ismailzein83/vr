@@ -136,7 +136,8 @@ namespace Vanrise.Runtime
                                 {
                                     if (taskTrigger != null)
                                     {
-                                        schedulerTaskState.NextRunTime = taskTrigger.CalculateNextTimeToRun(schedulerTask, schedulerTaskState, schedulerTask.TaskSettings.TaskTriggerArgument);
+                                        if (schedulerTaskState.Status != SchedulerTaskStatus.WaitingEvent)
+                                            schedulerTaskState.NextRunTime = taskTrigger.CalculateNextTimeToRun(schedulerTask, schedulerTaskState, schedulerTask.TaskSettings.TaskTriggerArgument);
                                     }
                                     scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
                                 }
