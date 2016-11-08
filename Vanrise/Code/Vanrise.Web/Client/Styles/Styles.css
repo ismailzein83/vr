@@ -246,7 +246,7 @@ textarea.form-control {
 }
 
 button.btn {
-    height: 29px !important;
+    height: 30px !important;
     padding: 4px 12px !important;
 }
 
@@ -1388,7 +1388,12 @@ loader .outer-loader {
     height: inherit;
     width: auto;
 }
-
+#rootDiv{
+    min-height:29px !important;
+}
+.dropdown {
+     min-height:29px !important;
+}
 .panel-vr {
     margin-top: 10px;
 }
@@ -1615,7 +1620,7 @@ loader .outer-loader {
 }
 
 .with-choices {
-    top: 11px !important;
+    top: 17px !important;
 }
 
 .vr-grid-menu-box:hover {
