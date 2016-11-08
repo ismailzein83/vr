@@ -1933,7 +1933,7 @@ vr-switch[class*="divDisabled"] .switch {
     text-overflow: ellipsis;
     display: inline-block;
     width: 100%;
-    vertical-align: top;
+    vertical-align: middle;
     overflow:hidden;
 }
 
