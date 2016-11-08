@@ -26,13 +26,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return BigDataManager.Instance.RetrieveData(input, new SupplierZoneServiceRequestHandler());
         }
 
-
-        public SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
-        {
-            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-            return dataManager.GetSupplierDefaultServiceBySupplier(supplierId, effectiveOn);
-        }
-
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
@@ -40,34 +33,31 @@ namespace TOne.WhS.BusinessEntity.Business
             return startingId;
         }
 
-        public bool HasSameServices(List<ZoneService> receivedServices, List<ZoneService> defaultServices)
+        public bool Insert(int supplierId, List<ZoneService> services)
         {
-            if (receivedServices.Count != defaultServices.Count)
-                return false;
-            foreach (ZoneService zoneService in receivedServices)
-            {
-                if (!defaultServices.Any(item => item.ServiceId == zoneService.ServiceId))
-                    return false;
-            }
-
-            return true;
-        }
-
-        public bool Insert(SupplierDefaultService supplierDefaultService)
-        {
+            SupplierDefaultService supplierDefaultService = this.PrepareNewDefaultService(supplierId, services);
             supplierDefaultService.SupplierZoneServiceId = this.ReserveIDRange(1);
 
             ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
             return dataManager.Insert(supplierDefaultService); 
-
         }
 
-        public bool CloseOverlappedDefaultService(long supplierZoneServiceId, SupplierDefaultService supplierDefaultService, DateTime effectiveDate)
+        public void UpdateSupplierDefaultService(int supplierId, List<ZoneService> services)
         {
-            supplierDefaultService.SupplierZoneServiceId = this.ReserveIDRange(1);
+            SupplierDefaultService supplierZoneService = this.GetSupplierDefaultServiceBySupplier(supplierId, DateTime.Today);
 
-            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-            return dataManager.CloseOverlappedDefaultService(supplierZoneServiceId, supplierDefaultService, effectiveDate);
+            if (supplierZoneService == null)
+            {
+                this.Insert(supplierId, services);
+            }
+            else if (!this.HasSameServices(supplierZoneService.ReceivedServices, services))
+            {
+                SupplierDefaultService newSupplierZoneService = this.PrepareNewDefaultService(supplierId, services);
+                this.CloseOverlappedDefaultService(supplierZoneService.SupplierZoneServiceId, newSupplierZoneService, DateTime.Today);
+            }
+
+            //TODO: MJA check how to return boolean from this method to indicate success
+            //This boolean should be used in carrier account manager to reflect the correct update status
         }
 
         public int GetSupplierZoneServiceTypeId()
@@ -80,9 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
-
         #endregion
-
 
         #region Private Methods
         private SupplierEntityServiceDetail SupplierEntityServiceDetailMapper(SupplierEntityService supplierEntityService)
@@ -95,6 +83,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return detail;
         }
+        
         private class SupplierZoneServiceRequestHandler : BigDataRequestHandler<SupplierZoneServiceQuery, SupplierEntityServiceDetail, SupplierEntityServiceDetail>
         {
             public override SupplierEntityServiceDetail EntityDetailMapper(SupplierEntityServiceDetail entity)
@@ -125,6 +114,45 @@ namespace TOne.WhS.BusinessEntity.Business
                 return supplierEntityServicesDetail;
             }
         }
+
+        private SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
+        {
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.GetSupplierDefaultServiceBySupplier(supplierId, effectiveOn);
+        }
+
+        private bool HasSameServices(List<ZoneService> receivedServices, List<ZoneService> defaultServices)
+        {
+            if (receivedServices.Count != defaultServices.Count)
+                return false;
+            foreach (ZoneService zoneService in receivedServices)
+            {
+                if (!defaultServices.Any(item => item.ServiceId == zoneService.ServiceId))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool CloseOverlappedDefaultService(long supplierZoneServiceId, SupplierDefaultService supplierDefaultService, DateTime effectiveDate)
+        {
+            supplierDefaultService.SupplierZoneServiceId = this.ReserveIDRange(1);
+
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.CloseOverlappedDefaultService(supplierZoneServiceId, supplierDefaultService, effectiveDate);
+        }
+
+        private SupplierDefaultService PrepareNewDefaultService(int supplierId, List<ZoneService> services)
+        {
+            return new SupplierDefaultService()
+            {
+                EffectiveServices = services,
+                ReceivedServices = services,
+                BED = DateTime.Today,
+                SupplierId = supplierId
+            };
+        }
+
         #endregion
     }
 }

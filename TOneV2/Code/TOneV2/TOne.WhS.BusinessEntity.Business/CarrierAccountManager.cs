@@ -243,20 +243,11 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
             bool isDefaultServiceInsertedSuccessfully = true;
 
-            if (carrierAccount.AccountType != CarrierAccountType.Customer)
+            if (CarrierAccountManager.IsSupplier(carrierAccount.AccountType))
             {
                 SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
-                SupplierDefaultService supplierZoneService = new SupplierDefaultService()
-                {
-                    EffectiveServices = carrierAccount.SupplierSettings.DefaultServices,
-                    ReceivedServices = carrierAccount.SupplierSettings.DefaultServices,
-                    BED = DateTime.Today,
-                    SupplierId = carrierAccountId
-                };
-
-               isDefaultServiceInsertedSuccessfully = zoneServiceManager.Insert(supplierZoneService);
+                isDefaultServiceInsertedSuccessfully = zoneServiceManager.Insert(carrierAccountId, carrierAccount.SupplierSettings.DefaultServices);
             }
-
 
             if (insertActionSucc && isDefaultServiceInsertedSuccessfully)
             {
@@ -286,23 +277,12 @@ namespace TOne.WhS.BusinessEntity.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
-            SupplierDefaultService supplierZoneService = zoneServiceManager.GetSupplierDefaultServiceBySupplier(carrierAccount.CarrierAccountId, DateTime.Today);
+            CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccount.CarrierAccountId);
 
-            if (supplierZoneService == null)
-                throw new DataIntegrityValidationException(string.Format("Supplier {0} does not have default services", carrierAccount.NameSuffix));
-
-           
-            if(!zoneServiceManager.HasSameServices(supplierZoneService.ReceivedServices, carrierAccount.SupplierSettings.DefaultServices))
-            { 
-                SupplierDefaultService supplierZoneServiceNew = new SupplierDefaultService()
-                {
-                    EffectiveServices = carrierAccount.SupplierSettings.DefaultServices,
-                    ReceivedServices = carrierAccount.SupplierSettings.DefaultServices,
-                    BED = DateTime.Today,
-                    SupplierId = carrierAccount.CarrierAccountId
-                };
-               zoneServiceManager.CloseOverlappedDefaultService(supplierZoneService.SupplierZoneServiceId, supplierZoneServiceNew, DateTime.Today);
+            if (CarrierAccountManager.IsSupplier(cachedAccount.AccountType))
+            {
+                SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
+                zoneServiceManager.UpdateSupplierDefaultService(carrierAccount.CarrierAccountId, carrierAccount.SupplierSettings.DefaultServices);
             }
 
             if (updateActionSucc)
