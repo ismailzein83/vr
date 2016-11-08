@@ -10,7 +10,6 @@ namespace NP.IVSwitch.Data
     public interface ITranslationRuleDataManager: IDataManager
     {
         List<TranslationRule> GetTranslationRules();
-        bool AreTranslationRuleUpdated(ref object updateHandle);
         bool Update(TranslationRule TranslationRule);
         bool Insert(TranslationRule TranslationRule, out int insertedId);
         
