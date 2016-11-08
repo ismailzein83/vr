@@ -82,7 +82,7 @@ namespace Vanrise.Reprocess.BP.Activities
                     output.EventCount++;
 
                     batch.Records.Add(itm);
-                    if (batch.Records.Count == 10000)
+                    if (batch.Records.Count >= 10000)
                     {
                         foreach (string stageName in inputArgument.OutputStageNames)
                         {
