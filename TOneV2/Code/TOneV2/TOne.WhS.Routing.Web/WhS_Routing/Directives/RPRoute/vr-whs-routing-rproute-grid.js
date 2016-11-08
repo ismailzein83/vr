@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteRuleService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteRuleService) {
+app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_ZoneRouteOptionsEnum',
+function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteRuleService, WhS_BE_ZoneRouteOptionsEnum) {
 
     var directiveDefinitionObject = {
 
@@ -123,10 +123,11 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                     RoutingDatabaseId: routingDatabaseId,
                     SaleZoneId: rpRouteDetail.SaleZoneId,
                     RoutingProductId: rpRouteDetail.RoutingProductId,
-                    RouteOptions: rpRouteDetail.RouteOptionsDetails
-                };
-                VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
+                    RouteOptions: rpRouteDetail.RouteOptionsDetails,
+                    display: WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value
             };
+                VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
+        };
             promises.push(rpRouteDetail.RouteOptionsLoadDeferred.promise);
 
             rpRouteDetail.saleZoneServiceLoadDeferred = UtilsService.createPromiseDeferred();
@@ -136,16 +137,16 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                 var serviceViewerPayload;
                 if (rpRouteDetail != undefined) {
                     serviceViewerPayload = {
-                        selectedIds: rpRouteDetail.SaleZoneServiceIds
-                    };
-                }
+                            selectedIds: rpRouteDetail.SaleZoneServiceIds
+                };
+            }
 
                 VRUIUtilsService.callDirectiveLoad(rpRouteDetail.serviceViewerAPI, serviceViewerPayload, rpRouteDetail.saleZoneServiceLoadDeferred);
-            };
+        };
             promises.push(rpRouteDetail.saleZoneServiceLoadDeferred.promise);
 
             return UtilsService.waitMultiplePromises(promises);
-        }
+    }
 
         function initDrillDownDefinitions() {
             var drillDownDefinition = {};
@@ -155,20 +156,20 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
 
             drillDownDefinition.loadDirective = function (directiveAPI, rpRouteDetail) {
                 var payload = {
-                    rpRouteDetail: rpRouteDetail,
-                    routingDatabaseId: routingDatabaseId,
-                    filteredPolicies: policies,
-                    defaultPolicyId: selectedPolicyConfigId
-                };
-
-                return directiveAPI.load(payload);
+                        rpRouteDetail: rpRouteDetail,
+                        routingDatabaseId: routingDatabaseId,
+                        filteredPolicies: policies,
+                        defaultPolicyId: selectedPolicyConfigId
             };
 
+                return directiveAPI.load(payload);
+        };
+
             return [drillDownDefinition];
-        }
+    }
 
         this.initializeController = initializeController;
-    }
+}
 
     return directiveDefinitionObject;
 }]);

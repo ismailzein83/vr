@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "WhS_Routing_SupplierStatusEnum", "UtilsService",
-function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsService) {
+app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "WhS_Routing_SupplierStatusEnum", "WhS_BE_ZoneRouteOptionsEnum", "UtilsService",
+function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_ZoneRouteOptionsEnum, UtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -24,6 +24,7 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsServi
         var saleZoneId;
         var routingDatabaseId;
         var currencyId;
+        var display;
 
         function initCtrl() {
             ctrl.routeOptions = [];
@@ -45,12 +46,14 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsServi
                     routingProductId = payload.RoutingProductId;
                     saleZoneId = payload.SaleZoneId;
                     currencyId = payload.CurrencyId;
+                    display = payload.display;
 
                     ctrl.routeOptions = [];
                     if (payload.RouteOptions) {
                         for (var i = 0; i < payload.RouteOptions.length; i++) {
                             var currentItem = payload.RouteOptions[i];
                             currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Entity.Percentage);
+                            currentItem.titleToDisplay = buildTitleToDisplay(currentItem, display);
 
                             if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
                                 currentItem.Color = 'Red';
@@ -70,7 +73,21 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, UtilsServi
             if (percentage) {
                 result = result + ' Percentage: ' + percentage + '%';
             }
+
+            console.log(result);
+
             return result;
+        }
+        function buildTitleToDisplay(currentItem, display) {
+
+            switch (display) {
+
+                case WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value: return currentItem.title;
+
+                case WhS_BE_ZoneRouteOptionsEnum.SupplierRate.value: return currentItem.ConvertedSupplierRate;
+
+                default: return currentItem.ConvertedSupplierRate;
+            }
         }
 
         //function getRowStyle(optionStatus) {
