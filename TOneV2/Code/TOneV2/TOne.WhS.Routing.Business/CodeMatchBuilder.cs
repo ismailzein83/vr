@@ -293,7 +293,7 @@ namespace TOne.WhS.Routing.Business
                            EED = eed,
                            SupplierCodeIterator = new SupplierCodeIterator()
                            {
-                               CodeIterator = new CodeIterator<SupplierCode>(matchingSupplierCodes(itm => itm.Code)),
+                               CodeIterator = new CodeIterator<SupplierCode>(matchingSupplierCodes),
                                SupplierId = supplierId
                            }
                        };
