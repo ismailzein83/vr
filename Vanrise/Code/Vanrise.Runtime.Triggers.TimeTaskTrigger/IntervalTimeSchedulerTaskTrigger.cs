@@ -16,7 +16,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 
             if (taskState.NextRunTime == null)
             {
-                nextRunTime = task.TaskSettings.StartEffDate;
+                nextRunTime = DateTime.Now;
             }
             else
             {
