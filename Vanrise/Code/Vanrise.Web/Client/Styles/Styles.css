@@ -1926,6 +1926,7 @@ vr-switch[class*="divDisabled"] .switch {
      margin-right: 1px; 
     height: 26px;
     margin-right: 1px;
+   background-color: #F0F0F0 ;
 }
 
 .vr-tabs label > span {
@@ -1943,7 +1944,7 @@ vr-switch[class*="divDisabled"] .switch {
 .vr-tabs .clicked-btn {
     border-width: 1px;
     border-style: solid;
-    background-color: #F0F0F0 !important;
+    background-color: #FFF !important;
     margin-bottom: -1px !important;
     border: 1px solid #DDD;
     border-bottom-color: transparent;
