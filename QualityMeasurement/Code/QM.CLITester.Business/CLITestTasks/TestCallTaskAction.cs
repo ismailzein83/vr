@@ -168,11 +168,14 @@ namespace QM.CLITester.Business
         private void SendMail(MemoryStream memoryStream, string userMail, string listEmails, string taskName)
         {
             memoryStream.Position = 0;
-            var attachment = new Attachment(memoryStream, "ClearVoice-ScheduleTestResult-" + taskName + ".xls");
+            Vanrise.Common.Business.ConfigManager productinfo = new Vanrise.Common.Business.ConfigManager();
+            var productInfo = productinfo.GetProductInfo();
+            
+            var attachment = new Attachment(memoryStream, string.Format("{0}-SchedulerTestResult-{1}.xls", productInfo == null ? "ClearVoice" : productInfo.ProductName, taskName));            
             attachment.ContentType = new ContentType("application/vnd.ms-excel");
             attachment.TransferEncoding = TransferEncoding.Base64;
             attachment.NameEncoding = Encoding.UTF8;
-            attachment.Name = "ClearVoice-ScheduleTestResult-" + taskName + ".xls";
+            attachment.Name = string.Format("{0}-SchedulerTestResult-{1}.xls", productInfo == null ? "ClearVoice" : productInfo.ProductName, taskName);
 
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
             ScheduleTestCallInfo scheduleTestCallInfo = new ScheduleTestCallInfo();
