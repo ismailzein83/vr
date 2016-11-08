@@ -164,7 +164,7 @@
     <!--<add key="Routing_TOneV1" value="false"/>--><!--Routing_TOneV1 key if set to true will be used to build only current TOne route and route option tables-->
     <add key="TOneV1RoutingDBConnStringKey" value="TOneV1RoutingDBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="StateBackupDatabase" value="TOne_Configuration_StateBackup"/>
+    <add key="StateBackupDatabase" value="TOneV2_Dev_Backup"/>
 
     <!--USE THIS KEY ONLY IF THE ROUTING PROCESS IS USED TO GENERATE CUSTOMER ROUTE FOR CURRENT TONE (TONE V1). Enable this option to link customer to sale zone services directly since there is no routing product in current TOne.-->
     <add key="TOneWhS_Routing_ZoneServicesExplicitOnCustomer" value="false"/>
