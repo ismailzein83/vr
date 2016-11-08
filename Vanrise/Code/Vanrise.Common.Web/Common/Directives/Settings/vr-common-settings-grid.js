@@ -60,16 +60,22 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
 
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editSettings,
-                haspermission: hasUpdateSettingPermission
-            }];
-        }
+            $scope.gridMenuActions = function (dataItem) {
+                return [{
+                    name: "Edit",
+                    clicked: editSettings,
+                    haspermission: function (dataItem) {
+                        if (dataItem.Entity.IsTechnical == true) {
+                            return VRCommon_SettingsAPIService.HasUpdateTechnicalSettingsPermission();
 
-        function hasUpdateSettingPermission() {
-            return VRCommon_SettingsAPIService.HasUpdateSettingsPermission();
-        }
+                        }
+                        else {
+                            return VRCommon_SettingsAPIService.HasUpdateSettingsPermission();
+                        }
+                    }
+                }];
+            };
+        };
 
         function editSettings(settings) {
             var onSettingsUpdated = function (settingsObj) {

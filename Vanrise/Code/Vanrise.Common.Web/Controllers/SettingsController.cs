@@ -23,18 +23,34 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpPost]
         [Route("UpdateSetting")]
-        public Vanrise.Entities.UpdateOperationOutput<SettingDetail> UpdateSetting(Setting setting)
+        public object UpdateSetting(Setting setting)
         {
             SettingManager manager = new SettingManager();
-            return manager.UpdateSetting(setting);
+            try {
+                return manager.UpdateSetting(setting);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return GetUnauthorizedResponse();
+            }
+                
         }
 
         [HttpGet]
         [Route("GetSetting")]
-        public Setting GetSetting(Guid settingId)
+        public object GetSetting(Guid settingId)
         {
             SettingManager manager = new SettingManager();
-            return manager.GetSetting(settingId);
+            try
+            {
+                return manager.GetSetting(settingId);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return GetUnauthorizedResponse();
+            }
+
+           
         }
 
         [HttpGet]

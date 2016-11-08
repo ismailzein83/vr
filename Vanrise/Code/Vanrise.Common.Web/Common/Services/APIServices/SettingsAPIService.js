@@ -27,14 +27,17 @@
         function HasUpdateSettingsPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['UpdateSetting']));
         }
-
+        function HasUpdateTechnicalSettingsPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['UpdateTechnicalSetting']));
+        }
 
         return ({
             GetFilteredSettings: GetFilteredSettings,
             UpdateSetting: UpdateSetting,
             GetSetting: GetSetting,
             GetDistinctSettingCategories: GetDistinctSettingCategories,
-            HasUpdateSettingsPermission: HasUpdateSettingsPermission
+            HasUpdateSettingsPermission: HasUpdateSettingsPermission,
+            HasUpdateTechnicalSettingsPermission: HasUpdateTechnicalSettingsPermission
         });
     }
 

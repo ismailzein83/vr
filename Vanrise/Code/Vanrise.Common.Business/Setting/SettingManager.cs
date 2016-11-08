@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common.Data;
+using Vanrise.Security.Business;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
     public class SettingManager
     {
+        SecurityContext _securityContext;
+
+        public SettingManager()
+        {
+            _securityContext = new SecurityContext();
+        }
         public T GetSetting<T>(string type) where T : SettingData
         {
             var setting = GetCachedSettingsByType().GetRecord(type);
@@ -18,9 +25,11 @@ namespace Vanrise.Common.Business
         {
             var allSettings = GetCachedSettings();
 
+            var hasTechnicalSettingsView = HasViewTechnicalSettings();
+
             Func<Setting, bool> filterExpression = (itemObject) =>
             {
-                if (itemObject.IsTechnical)
+                 if (!hasTechnicalSettingsView && itemObject.IsTechnical == true) 
                     return false;
 
                 if (input.Query == null)
@@ -32,6 +41,8 @@ namespace Vanrise.Common.Business
                 if (!string.IsNullOrEmpty(input.Query.Category) && string.Compare(itemObject.Category, input.Query.Category, true) != 0)
                     return false;
 
+               
+
                 return true;
             };
 
@@ -40,6 +51,9 @@ namespace Vanrise.Common.Business
 
         public UpdateOperationOutput<SettingDetail> UpdateSetting(Setting setting)
         {
+            if (setting.IsTechnical && !HasUpdateTechnicalSettings())
+                throw new UnauthorizedAccessException();  
+
             ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
 
             bool updateActionSucc = dataManager.UpdateSetting(setting);
@@ -70,7 +84,10 @@ namespace Vanrise.Common.Business
         public Setting GetSetting(Guid settingId)
         {
             var allSettings = GetCachedSettings();
-            return allSettings.GetRecord(settingId);
+            var setting  =  allSettings.GetRecord(settingId);
+            if (setting.IsTechnical && !HasGetTechnicalSettings())
+                throw new UnauthorizedAccessException();
+            return setting;
         }
 
         public Setting GetSettingByType(string type)
@@ -126,6 +143,18 @@ namespace Vanrise.Common.Business
             {
                 Entity = setting
             };
+        }
+        private bool HasViewTechnicalSettings()
+        {
+            return  _securityContext.HasPermissionToActions("VRCommon/Settings/GetFilteredTechnicalSettings");
+        }
+        private bool HasUpdateTechnicalSettings()
+        {
+            return _securityContext.HasPermissionToActions("VRCommon/Settings/UpdateTechnicalSetting");
+        }
+        private bool HasGetTechnicalSettings()
+        {
+            return _securityContext.HasPermissionToActions("VRCommon/Settings/GetTechnicalSetting");
         }
 
 
