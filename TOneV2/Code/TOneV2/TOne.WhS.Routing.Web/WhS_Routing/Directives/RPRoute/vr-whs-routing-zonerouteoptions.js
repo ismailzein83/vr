@@ -71,7 +71,7 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_Zon
         function buildTitle(supplierName, percentage) {
             var result = supplierName;
             if (percentage) {
-                result = result + ' Percentage: ' + percentage + '%';
+                result = result + ' ' + percentage + '%';
             }
 
             console.log(result);
