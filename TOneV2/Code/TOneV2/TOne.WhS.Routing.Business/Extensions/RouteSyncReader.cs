@@ -18,7 +18,7 @@ namespace TOne.WhS.Routing.Business.Extensions
         {
             if (this.RangeType.HasValue)
             {
-                switch(this.RangeType.Value)
+                switch (this.RangeType.Value)
                 {
                     case TOneRouteRangeType.ByCustomer:
                         context.RangeType = RouteRangeType.ByCustomer;
@@ -47,34 +47,43 @@ namespace TOne.WhS.Routing.Business.Extensions
         {
             Action<CustomerRoute> onCustomerRouteLoaded = (customerRoute) =>
             {
-                Route route = new Route
-                {
-                    CustomerId = customerRoute.CustomerId.ToString(),
-                    Code = customerRoute.Code
-                };
-                if (customerRoute.Options != null)
-                {
-                    route.Options = new List<RouteSync.Entities.RouteOption>();
-                    foreach (var customerRouteOption in customerRoute.Options)
-                    {
-                        if (customerRouteOption.IsBlocked)
-                            continue;
-
-                        route.Options.Add(new RouteSync.Entities.RouteOption
-                        {
-                            SupplierId = customerRouteOption.SupplierId.ToString(),
-                            Percentage = customerRouteOption.Percentage
-                        });
-                    }
-                }
+                Route route = BuildRouteFromCustomerRoute(customerRoute);
                 context.OnRouteReceived(route, null);
             };
             return onCustomerRouteLoaded;
         }
 
+        public static Route BuildRouteFromCustomerRoute(CustomerRoute customerRoute)
+        {
+            Route route = new Route
+            {
+                CustomerId = customerRoute.CustomerId.ToString(),
+                SaleZoneId = customerRoute.SaleZoneId,
+                SaleRate = customerRoute.Rate,
+                Code = customerRoute.Code
+            };
+            if (customerRoute.Options != null)
+            {
+                route.Options = new List<RouteSync.Entities.RouteOption>();
+                foreach (var customerRouteOption in customerRoute.Options)
+                {
+                    if (customerRouteOption.IsBlocked)
+                        continue;
+
+                    route.Options.Add(new RouteSync.Entities.RouteOption
+                    {
+                        SupplierId = customerRouteOption.SupplierId.ToString(),
+                        SupplierRate = customerRouteOption.SupplierRate,
+                        Percentage = customerRouteOption.Percentage
+                    });
+                }
+            }
+            return route;
+        }
+
         private static void GetCustomerAndCode(IRouteReaderContext context, out int? customerId, out string codePrefix)
         {
-             customerId = null;
+            customerId = null;
             codePrefix = null;
             if (context.RouteRangeInfo != null)
             {

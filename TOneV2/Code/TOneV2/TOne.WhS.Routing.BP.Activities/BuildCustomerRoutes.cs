@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Business;
 using Vanrise.Entities;
 using TOne.WhS.RouteSync.BP.Activities;
 using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.Routing.Business.Extensions;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -95,7 +96,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate, inputArgument.IsFuture);
 
                         IEnumerable<SellingProductRoute> sellingProductRoute;
-                       
+
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code, out sellingProductRoute);
 
                         if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
@@ -168,26 +169,7 @@ namespace TOne.WhS.Routing.BP.Activities
             RouteBatch routeBatch = new RouteBatch() { Routes = new List<Route>() };
             foreach (CustomerRoute customerRoute in customerRoutes)
             {
-                Route route = new Route()
-                {
-                    Code = customerRoute.Code,
-                    CustomerId = customerRoute.CustomerId.ToString(),
-                };
-                if (customerRoute.Options != null && customerRoute.Options.Count > 0)
-                {
-                    route.Options = new List<RouteSync.Entities.RouteOption>();
-                    foreach (Routing.Entities.RouteOption option in customerRoute.Options)
-                    {
-                        if (option.IsBlocked)
-                            continue;
-
-                        route.Options.Add(new RouteSync.Entities.RouteOption()
-                        {
-                            Percentage = option.Percentage,
-                            SupplierId = option.SupplierId.ToString()
-                        });
-                    }
-                }
+                Route route = RouteSyncReader.BuildRouteFromCustomerRoute(customerRoute);
                 routeBatch.Routes.Add(route);
             }
 
