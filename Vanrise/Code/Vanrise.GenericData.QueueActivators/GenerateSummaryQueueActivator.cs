@@ -274,6 +274,8 @@ namespace Vanrise.GenericData.QueueActivators
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             bool hasItem = false;
+            ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+
             doWhilePreviousRunning(prepareBatchStatus, () =>
             {
                 do
@@ -287,14 +289,21 @@ namespace Vanrise.GenericData.QueueActivators
                         DateTime batchStart = genericSummaryRecordBatchList[0].BatchStart;
                         recordStorageDataManager.DeleteRecords(batchStart);
 
-                        ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
-
                         foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in genericSummaryRecordBatchList)
                             transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);
 
-                        transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
+                        if (_existingSummaryBatches.Values.Count > 50000)
+                        {
+                            transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
+                            _existingSummaryBatches = new ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+                        }
                     });
                 } while (!prepareBatchStatus.IsComplete || hasItem);
+                
+                if (_existingSummaryBatches.Values.Count > 0)
+                {
+                    transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
+                }
             });
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
         }
