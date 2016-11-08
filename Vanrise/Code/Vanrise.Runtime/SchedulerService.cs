@@ -69,7 +69,10 @@ namespace Vanrise.Runtime
                                     SchedulerTaskCheckProgressOutput output =
                                         taskAction.CheckProgress(checkProgressContext, schedulerTask.OwnerId);
                                     if (output.Result == ExecuteOutputResult.Completed)
+                                    {
                                         schedulerTaskState.Status = SchedulerTaskStatus.Completed;
+                                        taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(schedulerTask.TriggerInfo.FQTN));
+                                    }
                                 }
                                 else
                                 {
