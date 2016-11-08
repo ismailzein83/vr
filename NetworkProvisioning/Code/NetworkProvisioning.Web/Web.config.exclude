@@ -42,6 +42,9 @@
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="NetworkProvisioningDBConnStringKey" value="ConfigurationDBConnString"/>
+
+    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
 
   <system.web>
