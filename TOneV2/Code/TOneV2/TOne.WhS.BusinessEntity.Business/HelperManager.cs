@@ -7,7 +7,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public static class HelperManager
+    public static class Helper
     {
         public static DateTimeRange GetDateTimeRangeWithOffset(DateTime effectiveDate)
         {
@@ -19,36 +19,35 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        public static void StructureBusinessEntitiesByDate<T>(List<T> businessEntityList, Action<IEnumerable<T>, DateTime, DateTime?> onBusinessEntityMatching) where T : IBusinessEntity
+        public static void StructureBusinessEntitiesByDate<T>(List<T> businessEntityList, DateTime fromDate, DateTime toDate, Action<IEnumerable<T>, DateTime, DateTime> onBusinessEntityMatching) where T : IBusinessEntity
         {
             if (businessEntityList == null)
                 return;
 
-            List<DateTime> distinctDateTimes = businessEntityList.FindAll(itm => itm.EED.HasValue).Select(itm => itm.EED.Value).Union(businessEntityList.Select(itm => itm.BED)).Distinct().OrderBy(itm => itm).ToList();
+            HashSet<DateTime> distinctDateTimes = businessEntityList.FindAll(itm => itm.EED.HasValue && itm.EED.Value <= toDate).Select(itm => itm.EED.Value)
+                                                  .Union(businessEntityList.FindAll(itm => itm.BED >= fromDate).Select(itm => itm.BED)).Union(new List<DateTime>() { fromDate, toDate })
+                                                  .Distinct().OrderBy(itm => itm).ToHashSet();
 
-            int distinctDateTimesCount = distinctDateTimes.Count;
+            List<DateTime> intervalDates = distinctDateTimes.ToList();
+            int distinctDateTimesCount = intervalDates.Count;
 
-            for (var index = 0; index < distinctDateTimesCount; index++)
+            for (var index = 0; index < distinctDateTimesCount - 1; index++)
             {
-                var bed = distinctDateTimes[index];
-                DateTime? eed = index == distinctDateTimesCount - 1 ? (DateTime?)null : distinctDateTimes[index + 1];
-
+                var effectiveDate = intervalDates[index];
+                var eed = intervalDates[index + 1];
                 Func<T, bool> predicate = (itm) =>
                 {
-                    if (itm.BED > bed)
+                    if (itm.BED > effectiveDate)
                         return false;
 
-                    if (itm.EED.HasValue && (!eed.HasValue || itm.EED.Value < eed.Value))
-                        return false;
-
-                    if (!itm.EED.HasValue && eed.HasValue)
+                    if (itm.EED.HasValue && itm.EED.Value <= effectiveDate)
                         return false;
 
                     return true;
                 };
 
                 IEnumerable<T> matchingBusinessEntities = businessEntityList.FindAllRecords(predicate);
-                onBusinessEntityMatching(matchingBusinessEntities, bed, eed);
+                onBusinessEntityMatching(matchingBusinessEntities, effectiveDate, eed);
             }
         }
 

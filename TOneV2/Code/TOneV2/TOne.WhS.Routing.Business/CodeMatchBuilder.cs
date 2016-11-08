@@ -264,12 +264,12 @@ namespace TOne.WhS.Routing.Business
 
         private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
         {
-            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId,effectiveOn );
-            return HelperManager.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
+            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
+            return Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
         }
-        private List<SupplierCodeIteratorInfo> GetSupplierCodeIterators(int supplierId,DateTime effectiveOn)
+        private List<SupplierCodeIteratorInfo> GetSupplierCodeIterators(int supplierId, DateTime effectiveOn)
         {
-            DateTimeRange dateTimeRange = HelperManager.GetDateTimeRangeWithOffset(effectiveOn);
+            DateTimeRange dateTimeRange = Helper.GetDateTimeRangeWithOffset(effectiveOn);
 
             var cacheName = new GetSupplierCodeIteratorCacheName { SupplierId = supplierId, EffectiveOn = dateTimeRange.From };// String.Concat("GetSupplierCodeIterator_", supplierId, "_", effectiveOn.Date);
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
@@ -285,7 +285,7 @@ namespace TOne.WhS.Routing.Business
 
                    List<SupplierCodeIteratorInfo> supplierCodeIterators = new List<SupplierCodeIteratorInfo>();
 
-                   HelperManager.StructureBusinessEntitiesByDate(supplierCodes, (matchingSupplierCodes, bed, eed) =>
+                   Helper.StructureBusinessEntitiesByDate(supplierCodes, dateTimeRange.From, dateTimeRange.To, (matchingSupplierCodes, bed, eed) =>
                    {
                        SupplierCodeIteratorInfo supplierCodeIteratorInfo = new SupplierCodeIteratorInfo()
                        {
@@ -293,7 +293,7 @@ namespace TOne.WhS.Routing.Business
                            EED = eed,
                            SupplierCodeIterator = new SupplierCodeIterator()
                            {
-                               CodeIterator = new CodeIterator<SupplierCode>(matchingSupplierCodes),
+                               CodeIterator = new CodeIterator<SupplierCode>(matchingSupplierCodes(itm => itm.Code)),
                                SupplierId = supplierId
                            }
                        };

@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (supplierDefaultServices == null)
                 return null;
 
-            return HelperManager.GetBusinessEntityInfo<SupplierDefaultService>(supplierDefaultServices, effectiveOn);
+            return Helper.GetBusinessEntityInfo<SupplierDefaultService>(supplierDefaultServices, effectiveOn);
         }
 
         public SupplierZoneService GetSupplierZoneServicesByZone(int supplierId, long supplierZoneId, DateTime effectiveOn)
@@ -47,7 +47,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (supplierZoneServices == null)
                 return null;
 
-            return HelperManager.GetBusinessEntityInfo<SupplierZoneService>(supplierZoneServices, effectiveOn);
+            return Helper.GetBusinessEntityInfo<SupplierZoneService>(supplierZoneServices, effectiveOn);
         }
 
 
@@ -63,7 +63,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private Dictionary<int, List<SupplierDefaultService>> GetCachedSupplierDefaultServices()
         {
-            DateTimeRange dateTimeRange = HelperManager.GetDateTimeRangeWithOffset(_effectiveOn);
+            DateTimeRange dateTimeRange = Helper.GetDateTimeRangeWithOffset(_effectiveOn);
 
             var cacheName = new GetCachedSupplierDefaultServicesCacheName { EffectiveOn = _effectiveOn.Date };
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneServiceCacheManager>().GetOrCreateObject(cacheName, () =>
@@ -105,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SupplierZoneServicesByZoneData GetCachedSupplierZoneServices(int supplierId)
         {
-            DateTimeRange dateTimeRange = HelperManager.GetDateTimeRangeWithOffset(_effectiveOn);
+            DateTimeRange dateTimeRange = Helper.GetDateTimeRangeWithOffset(_effectiveOn);
 
             var cacheName = new GetCachedSupplierZoneServicesCacheName { SupplierId = supplierId, EffectiveOn = _effectiveOn.Date };
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneServiceCacheManager>().GetOrCreateObject(cacheName, () =>

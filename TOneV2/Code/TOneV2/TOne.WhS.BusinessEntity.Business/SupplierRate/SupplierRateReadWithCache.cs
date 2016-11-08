@@ -81,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public SupplierRatesByZone GetSupplierRates(int supplierId, DateTime effectiveOn)
         {
             List<SupplierRatesByZoneInfo> supplierRatesByZoneInfoList = GetCachedSupplierRates(supplierId);
-            SupplierRatesByZoneInfo SupplierRatesByZoneInfo = HelperManager.GetBusinessEntityInfo<SupplierRatesByZoneInfo>(supplierRatesByZoneInfoList, effectiveOn);
+            SupplierRatesByZoneInfo SupplierRatesByZoneInfo = Helper.GetBusinessEntityInfo<SupplierRatesByZoneInfo>(supplierRatesByZoneInfoList, effectiveOn);
 
             if (SupplierRatesByZoneInfo == null)
                 return null;
@@ -99,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         List<SupplierRatesByZoneInfo> GetCachedSupplierRates(int supplierId)
         {
-            DateTimeRange dateTimeRange = HelperManager.GetDateTimeRangeWithOffset(_effectiveOn);
+            DateTimeRange dateTimeRange = Helper.GetDateTimeRangeWithOffset(_effectiveOn);
 
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>();
             var cacheName = new GetCachedSupplierRatesCacheName
@@ -116,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                    var priceLists = new SupplierPriceListManager().GetCachedPriceLists();
 
-                   HelperManager.StructureBusinessEntitiesByDate<SupplierRate>(supplierRates, (matchingSupplierRates, bed, eed) =>
+                   Helper.StructureBusinessEntitiesByDate<SupplierRate>(supplierRates, dateTimeRange.From, dateTimeRange.To, (matchingSupplierRates, bed, eed) =>
                    {
                        Dictionary<int, SupplierRatesByZone> data = new Dictionary<int, SupplierRatesByZone>();
 
