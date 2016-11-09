@@ -12,7 +12,7 @@ namespace CDRComparison.Business
         public string Value { get;  set; }
         public string NormalizedValue { get; set; }
 
-        public Vanrise.Rules.BaseRule Rule
+        public Vanrise.Rules.IVRRule Rule
         {
             get;
             set;
