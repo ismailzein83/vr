@@ -85,6 +85,12 @@ set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModule
 --------------------------------------------------------------------------------------------------------------
 end
 
+--[sec].[Permission]--------------------------------------------------------------------------------
+begin
+set nocount on;;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(0,'1',1,'363ce71b-a320-47c3-8738-24a6423fc182','[{"Name":"View","Value":1}]')-- give view permission on VRCommon_Settings_Technical to admisitrator--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))merge	[sec].[Permission] as tusing	cte_data as son		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]when matched then	update set	[PermissionFlags] = s.[PermissionFlags]when not matched by target then	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+----------------------------------------------------------------------------------------------------
+end
+
 --[sec].[Module]------------------------------101 to 200------------------------------------------------------
 begin
 set nocount on;
