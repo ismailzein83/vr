@@ -77,7 +77,7 @@ as (select * from (values
 ('66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Tariff Management',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,7,1),
 ('E70468BE-4793-466B-9B83-BAF2535D64D2','Network Elements',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,3,0),
 ('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing',null,null,'/images/menu-icons/billing.png',15,0),
-('DEF902AB-B628-4B3F-9A6E-1A0E9B012428','Reports',null,null,'/images/menu-icons/NOC.png',6,null),
+('DEF902AB-B628-4B3F-9A6E-1A0E9B012428','Reports',null,null,'/images/menu-icons/NOC.png',17,null),
 ('50CCC638-A8D7-4AEF-A4D8-CD0E5B6BD761','Charging Set',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,7,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
