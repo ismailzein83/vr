@@ -3,10 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [Retail].[sp_AccountService_Update]
+CREATE PROCEDURE [Retail].[sp_AccountService_Update]
 	@ID bigint,
 	@AccountId bigint,
-	@ServiceTypeID INT,
+	@ServiceTypeID uniqueidentifier,
 	@ServiceChargingPolicyID INT,
 	@Settings NVARCHAR(MAX)
 

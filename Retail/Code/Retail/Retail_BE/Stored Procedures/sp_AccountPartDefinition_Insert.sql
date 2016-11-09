@@ -4,10 +4,11 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [Retail_BE].[sp_AccountPartDefinition_Insert]
+	@ID uniqueidentifier ,
 	@Name NVARCHAR(255),
 	@Title NVARCHAR(255),
-	@Details NVARCHAR(MAX),
-	@ID INT OUT
+	@Details NVARCHAR(MAX)
+
 AS
 BEGIN
 	IF NOT EXISTS
@@ -16,8 +17,8 @@ BEGIN
 		WHERE Name = @Name
 	)
 	BEGIN
-		INSERT INTO Retail_BE.AccountPartDefinition (Name, Title, Details)
-		VALUES (@Name, @Title, @Details)
-		SET @ID = SCOPE_IDENTITY()
+		INSERT INTO Retail_BE.AccountPartDefinition (ID,Name, Title, Details)
+		VALUES (@ID,@Name, @Title, @Details)
+
 	END
 END

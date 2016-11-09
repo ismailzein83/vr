@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [Retail].[sp_AccountService_Insert]
 	@AccountId bigint,
-	@ServiceTypeID INT,
+	@ServiceTypeID uniqueidentifier,
 	@ServiceChargingPolicyID INT,
 	@Settings NVARCHAR(MAX),
 	@StatusID uniqueidentifier,

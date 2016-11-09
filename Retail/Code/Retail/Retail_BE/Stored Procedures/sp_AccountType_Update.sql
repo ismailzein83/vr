@@ -3,8 +3,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE Retail_BE.sp_AccountType_Update
-	@ID INT,
+CREATE PROCEDURE [Retail_BE].[sp_AccountType_Update]
+	@ID uniqueidentifier,
 	@Name NVARCHAR(255),
 	@Title NVARCHAR(255),
 	@Settings NVARCHAR(MAX)

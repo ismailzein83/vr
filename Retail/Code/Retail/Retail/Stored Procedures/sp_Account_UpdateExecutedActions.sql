@@ -3,15 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_ServiceType_Update]
-	@ID uniqueidentifier,
-	@Title NVARCHAR(255),
-	@Settings NVARCHAR(MAX)
+create PROCEDURE [Retail].[sp_Account_UpdateExecutedActions]
+	@ID BIGINT,
+	@ExecutedActions nvarchar(MAX)
 AS
 BEGIN
-	BEGIN
-		UPDATE Retail.ServiceType
-		SET Title = @Title, Settings = @Settings
+		UPDATE Retail.Account
+		SET ExecutedActionsData = @ExecutedActions
 		WHERE ID = @ID
-	END
 END

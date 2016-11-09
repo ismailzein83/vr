@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [Retail].[sp_ChargingPolicy_Insert]
 	@Name NVARCHAR(255),
-	@ServiceTypeId INT,
+	@ServiceTypeId uniqueidentifier,
 	@Settings NVARCHAR(MAX),
 	@ID INT OUT
 AS

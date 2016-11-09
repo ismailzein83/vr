@@ -230,5 +230,7 @@
     <Build Include="Retail\Stored Procedures\sp_Distributor_Update.sql" />
     <Build Include="Retail\Stored Procedures\sp_Distributor_Insert.sql" />
     <Build Include="Retail\Stored Procedures\sp_Distributor_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_AccountService_UpdateExecutedActions.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Account_UpdateExecutedActions.sql" />
   </ItemGroup>
 </Project>

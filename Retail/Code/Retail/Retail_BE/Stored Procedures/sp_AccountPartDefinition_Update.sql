@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [Retail_BE].[sp_AccountPartDefinition_Update]
-	@ID INT,
+	@ID uniqueidentifier,
 	@Name NVARCHAR(255),
 	@Title NVARCHAR(255),
 	@Details NVARCHAR(MAX)

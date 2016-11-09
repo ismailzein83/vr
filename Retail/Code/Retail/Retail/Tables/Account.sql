@@ -1,7 +1,8 @@
 ﻿CREATE TABLE [Retail].[Account] (
     [ID]                  BIGINT           IDENTITY (1, 1) NOT NULL,
     [Name]                NVARCHAR (255)   NOT NULL,
-    [TypeID]              INT              NOT NULL,
+    [OldTypeID]           INT              NULL,
+    [TypeID]              UNIQUEIDENTIFIER NOT NULL,
     [Settings]            NVARCHAR (MAX)   NULL,
     [ParentID]            INT              NULL,
     [StatusID]            UNIQUEIDENTIFIER NULL,
@@ -11,6 +12,8 @@
     [timestamp]           ROWVERSION       NULL,
     CONSTRAINT [PK_Account] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

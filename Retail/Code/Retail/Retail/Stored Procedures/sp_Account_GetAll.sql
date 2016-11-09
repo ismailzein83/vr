@@ -6,6 +6,6 @@
 CREATE PROCEDURE [Retail].[sp_Account_GetAll]
 AS
 BEGIN
-	SELECT	ID, Name, [TypeID], Settings, [StatusID] ,ParentID, SourceID
+	SELECT	ID, Name, [TypeID], Settings, [StatusID] ,ParentID, SourceID,ExecutedActionsData
 	FROM	Retail.Account  with(nolock)
 END

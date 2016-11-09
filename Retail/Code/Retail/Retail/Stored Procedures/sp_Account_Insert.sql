@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [Retail].[sp_Account_Insert]
 	@Name NVARCHAR(255),
-	@TypeID INT,
+	@TypeID uniqueidentifier,
 	@Settings NVARCHAR(MAX),
 	@ParentID INT,
 	@StatusID uniqueidentifier,
