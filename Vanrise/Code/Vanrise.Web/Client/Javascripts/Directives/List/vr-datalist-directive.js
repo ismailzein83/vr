@@ -51,17 +51,20 @@ app.directive('vrDatalist', [function () {
         template: function (element, attrs) {
 
             var draggableIconTemplate = '';
-            var contentWidth = '100%'
+            var contentWidth = 0;
             if (attrs.isitemdraggable != undefined) {
                 draggableIconTemplate = '<div style="width: 14px; display:inline-block;height:25px">'
-                                                + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 10px); left: -6px"></i>'
-                                            + '</div>';
-                contentWidth = 'calc(100% - 14px)';
+                                            + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 10px); left: -6px"></i>'
+                                        + '</div>';
+                contentWidth += 14;
             }
 
             var onRemoveAttr = '';
-            if (attrs.autoremoveitem != undefined || attrs.onremoveitem != undefined)
+            if (attrs.autoremoveitem != undefined || attrs.onremoveitem != undefined) {
                 onRemoveAttr = 'onremove="VRDatalistCtrl.onInternalRemove(dataItem)"';
+                contentWidth += 14;
+            }
+               
 
             var onItemClickedAttr = '';
             if (attrs.onitemclicked != undefined) {
@@ -72,7 +75,7 @@ app.directive('vrDatalist', [function () {
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + draggableIconTemplate
-                             + '<div ' + onItemClickedAttr + ' style="width: ' + contentWidth + '; display:inline-block;text-overflow: ellipsis; ">' + element.html() + '</div>'
+                             + '<div ' + onItemClickedAttr + ' style="width: calc ( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden;">' + element.html() + '</div>'
                              + '</vr-listitem>'
                             + '</div>'
                            + '</vr-list>';
