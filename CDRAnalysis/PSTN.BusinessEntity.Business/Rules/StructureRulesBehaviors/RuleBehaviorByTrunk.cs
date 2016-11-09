@@ -5,7 +5,7 @@ namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorByTrunk : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {
-        protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
+        protected override void GetKeysFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<int> keys)
         {
             IRuleTrunkCriteria tuleTrunkCriteria = rule as IRuleTrunkCriteria;
             keys = tuleTrunkCriteria.TrunkIds;

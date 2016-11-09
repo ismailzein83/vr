@@ -9,7 +9,7 @@ namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorByNumberType : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<NormalizationPhoneNumberType>
     {
-        protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<NormalizationPhoneNumberType> keys)
+        protected override void GetKeysFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<NormalizationPhoneNumberType> keys)
         {
             IRulePhoneNumberTypeCriteria rulePhoneNumberTypeCriteria = rule as IRulePhoneNumberTypeCriteria;
             keys = rulePhoneNumberTypeCriteria.PhoneNumberTypes;

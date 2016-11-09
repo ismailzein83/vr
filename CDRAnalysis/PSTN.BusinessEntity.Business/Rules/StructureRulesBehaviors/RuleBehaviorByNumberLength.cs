@@ -5,7 +5,7 @@ namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorByNumberLength : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {
-        protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
+        protected override void GetKeysFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<int> keys)
         {
             IRulePhoneNumberLengthCriteria rulePhoneNumberLengthCriteria = rule as IRulePhoneNumberLengthCriteria;
             keys = rulePhoneNumberLengthCriteria.PhoneNumberLengths;

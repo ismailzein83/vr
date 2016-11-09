@@ -5,7 +5,7 @@ namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorByNumberPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix
     {
-        protected override void GetPrefixesFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> prefixes)
+        protected override void GetPrefixesFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<string> prefixes)
         {
             IRulePhoneNumberPrefixCriteria rulePhoneNumberPrefixCriteria = rule as IRulePhoneNumberPrefixCriteria;
             prefixes = rulePhoneNumberPrefixCriteria.PhoneNumberPrefixes;
