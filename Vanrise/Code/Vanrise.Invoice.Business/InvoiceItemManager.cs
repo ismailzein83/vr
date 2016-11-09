@@ -45,42 +45,94 @@ namespace Vanrise.Invoice.Business
       
         #endregion
 
-        #region Mappers
-
-        public InvoiceItemDetail InvoiceItemDetailMapper(Entities.InvoiceItem invoiceItem)
-        {
-            InvoiceItemDetail invoiceItemDetail = new InvoiceItemDetail();
-            invoiceItemDetail.Entity = invoiceItem;
-            return invoiceItemDetail;
-        }
-
-        #endregion
-
         #region Private Classes
 
-        private class InvoiceItemRequestHandler : BigDataRequestHandler<InvoiceItemQuery, Entities.InvoiceItem, Entities.InvoiceItemDetail>
+        private class InvoiceItemRequestHandler : BigDataRequestHandler<InvoiceItemQuery, Entities.InvoiceItemDetail, Entities.InvoiceItemDetail>
         {
             public InvoiceItemRequestHandler()
             {
             }
-            public override InvoiceItemDetail EntityDetailMapper(Entities.InvoiceItem entity)
+            public override InvoiceItemDetail EntityDetailMapper(Entities.InvoiceItemDetail entity)
             {
-                return new InvoiceItemDetail
-                {
-                    Entity = entity
-                };
+                return entity;
             }
 
-            public override IEnumerable<Entities.InvoiceItem> RetrieveAllData(DataRetrievalInput<InvoiceItemQuery> input)
+            public override IEnumerable<Entities.InvoiceItemDetail> RetrieveAllData(DataRetrievalInput<InvoiceItemQuery> input)
             {
-                IInvoiceItemDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
 
-                if (input.Query.ItemSetNameParts != null && input.Query.ItemSetNameParts.Count>0)
+                InvoiceTypeManager manager = new InvoiceTypeManager();
+                var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
+                var gridColumns = GetInvoiceSubSectionGridColumn(invoiceType, input.Query.UniqueSectionID);
+                IInvoiceItemDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
+                if (input.Query.ItemSetNameParts != null && input.Query.ItemSetNameParts.Count > 0)
                 {
-                    input.Query.ItemSetName = InvoiceItemManager.ExecuteItemSetNameParts(input.Query.ItemSetNameParts, input.Query.InvoiceItemDetails,input.Query.ItemSetName);
+                    input.Query.ItemSetName = InvoiceItemManager.ExecuteItemSetNameParts(input.Query.ItemSetNameParts, input.Query.InvoiceItemDetails, input.Query.ItemSetName);
+                }
+                var results = _dataManager.GetFilteredInvoiceItems(input);
+                List<Entities.InvoiceItemDetail> detailedResults = new List<InvoiceItemDetail>();
+                foreach (var item in results)
+                {
+                    InvoiceItemDetail invoiceItemDetail = new Entities.InvoiceItemDetail();
+                    invoiceItemDetail.Items = new List<InvoiceItemDetailObject>();
+                    invoiceItemDetail.Entity = item;
+                    if (gridColumns != null)
+                    {
+                        foreach (var column in gridColumns)
+                        {
+                            var fieldValue = Vanrise.Common.Utilities.GetPropValueReader(column.FieldName).GetPropertyValue(item.Details);
+                            invoiceItemDetail.Items.Add(new InvoiceItemDetailObject
+                            {
+                                Description = column.FieldType.GetDescription(fieldValue),
+                                Value = fieldValue
+                            });
+                        }
+                    }
+                    detailedResults.Add(invoiceItemDetail);
+
                 }
 
-                return _dataManager.GetFilteredInvoiceItems(input);
+                return detailedResults;
+            }
+
+            public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(InvoiceType invoiceType, Guid uniqueSectionID)
+            {
+                List<InvoiceSubSectionGridColumn> gridColumns = null;
+                foreach(var subsection in invoiceType.Settings.UISettings.SubSections)
+                {
+                    var invoiceItemSubSection = subsection.Settings as InvoiceItemSubSection;
+                    if (invoiceItemSubSection != null)
+                    {
+                        if (subsection.UniqueSectionID == uniqueSectionID)
+                        {
+                            gridColumns = invoiceItemSubSection.GridColumns;
+                            break;
+                        }else
+                        {
+                            gridColumns = GetInvoiceSubSectionGridColumn(invoiceItemSubSection.SubSections, uniqueSectionID);
+                            if (gridColumns != null)
+                                break;
+                        }
+                    }
+                    
+                  
+                }
+                return gridColumns;
+            }
+            public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(List<InvoiceItemSubSectionOfSubSuction> subSections , Guid uniqueSectionID)
+            {
+                if (subSections == null || subSections.Count == 0)
+                    return null;
+                foreach (var subsection in subSections)
+                {
+                    if (subsection.UniqueSectionID == uniqueSectionID)
+                    {
+                        return subsection.Settings.GridColumns;
+                    }else
+                    {
+                        return GetInvoiceSubSectionGridColumn(subsection.Settings.SubSections, uniqueSectionID);
+                    }
+                }
+                return null;
             }
         }
         #endregion

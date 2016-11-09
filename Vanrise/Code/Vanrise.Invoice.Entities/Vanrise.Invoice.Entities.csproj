@@ -47,10 +47,11 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
-    <Compile Include="InvoiceType\CovertToGridColumnAttributeInput.cs" />
+    <Compile Include="InvoiceType\ConvertToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceType\IInvoiceActionContext.cs" />
     <Compile Include="InvoiceType\IInvoiceSerialNumberConcatenatedPartContext.cs" />
     <Compile Include="InvoiceType\InvoiceDataSource\InvoiceDataSource.cs" />
+    <Compile Include="InvoiceType\InvoiceFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\InvoiceGeneratorConfig.cs" />
     <Compile Include="InvoiceType\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceSubSectionGridColumn.cs" />

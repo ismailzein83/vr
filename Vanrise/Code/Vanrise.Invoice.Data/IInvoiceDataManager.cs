@@ -10,9 +10,10 @@ namespace Vanrise.Invoice.Data
 {
     public interface IInvoiceDataManager:IDataManager
     {
-        IEnumerable<Entities.Invoice> GetGetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
+        IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
         bool SaveInvoices(GenerateInvoiceInput createInvoiceInput, GeneratedInvoice invoice,Entities.Invoice invoiceEntity, out long insertedInvoiceId);
         Entities.Invoice GetInvoice(long invoiceId);
+        bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
     }
 }

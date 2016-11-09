@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Caching;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 namespace Vanrise.Common.Business
 {
-    public class CurrencyManager
+    public class CurrencyManager : IBusinessEntityManager
     {
 
         public Vanrise.Entities.IDataRetrievalResult<CurrencyDetail> GetFilteredCurrencies(Vanrise.Entities.DataRetrievalInput<CurrencyQuery> input)
@@ -50,6 +51,8 @@ namespace Vanrise.Common.Business
         public string GetCurrencyName(int currencyId)
         {
             Currency currency = this.GetCurrency(currencyId);
+            if (currency == null)
+                return null;
             return currency.Name;
         }
 
@@ -142,5 +145,42 @@ namespace Vanrise.Common.Business
             return currencDetail;
         }
         #endregion
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCurrencyName(Convert.ToInt32(context.EntityId));
+        }
+
+
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetCurrency(context.EntityId);
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllCurrencies().Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

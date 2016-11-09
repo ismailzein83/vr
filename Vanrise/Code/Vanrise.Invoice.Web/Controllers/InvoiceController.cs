@@ -25,6 +25,20 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
+        [HttpGet]
+        [Route("SetInvoicePaid")]
+        public bool SetInvoicePaid(long invoiceId, bool isInvoicePaid)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.SetInvoicePaid(invoiceId, isInvoicePaid);
+        }
 
+        [HttpGet]
+        [Route("GetInvoiceDetail")]
+        public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetInvoiceDetail(invoiceId);
+        }
     }
 }

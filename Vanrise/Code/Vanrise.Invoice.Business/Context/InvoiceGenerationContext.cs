@@ -14,5 +14,6 @@ namespace Vanrise.Invoice.Business
         public DateTime ToDate { get; set; }
         public dynamic CustomSectionPayload { get; set; }
         public GeneratedInvoice Invoice { get; set; }
+        public Guid InvoiceTypeId { get; set; }
     }
 }

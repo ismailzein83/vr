@@ -66,7 +66,9 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
                             actions.push({
-                                ActionTypeName: currentItem.Entity.ActionTypeName,
+                                Title: currentItem.Entity.Title,
+                                ReloadGridItem: currentItem.Entity.ReloadGridItem,
+                                InvoiceFilterCondition: currentItem.Entity.InvoiceFilterCondition,
                                 Settings: currentItem.Entity.Settings,
                             });
                         }

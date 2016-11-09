@@ -185,6 +185,13 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\Templates\SerialNumberPartsTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\vr-invoicetype-serialnumber-pattern.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\SerialNumber\vr-invoicetype-serialnumberparts.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\GridActionSettings\Templates\SetInvoicePaidActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\GridActionSettings\vr-invoicetype-gridactionsettings-setinvoicepaid.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterGroupConditionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\InvoiceFilterCondition\Templates\IsPaidInvoiceFilterConditionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-filtergroup.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-ispaidinvoice.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\vr-invoicetype-invoicefiltercondition.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\BankDetailsDataSourceSettings.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\InvoiceDataSourceItems.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\vr-invoicetype-datasourcesettings-bankdetails.js" />
@@ -229,8 +236,8 @@
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneralSettings\vr-invoicetype-invoicegenerator.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-subsection-grid.js" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\Templates\OpenRDLCReportActionTemplate.html" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\vr-invoicetype-gridactionsettings-openrdlcreport.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\GridActionSettings\Templates\OpenRDLCReportActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\GridSettings\InvoiceGridActionSettings\MainExtensions\GridActionSettings\vr-invoicetype-gridactionsettings-openrdlcreport.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\InvoiceItemSubSectionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\vr-invoicetype-invoiceuisubsectionsettings-invoiceitem.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\Templates\CustomFieldRDLReportParameterValue.html" />

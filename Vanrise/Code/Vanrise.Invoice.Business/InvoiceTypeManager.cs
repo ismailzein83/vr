@@ -90,6 +90,12 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<InvoiceUISubSectionSettingsConfig>(InvoiceUISubSectionSettingsConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<InvoiceFilterConditionConfig> GetInvoiceFilterConditionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceFilterConditionConfig>(InvoiceFilterConditionConfig.EXTENSION_TYPE);
+        }
         public IDataRetrievalResult<InvoiceTypeDetail> GetFilteredInvoiceTypes(DataRetrievalInput<InvoiceTypeQuery> input)
         {
             var allItems = GetCachedInvoiceTypes();
@@ -143,7 +149,7 @@ namespace Vanrise.Invoice.Business
 
             return updateOperationOutput;
         }
-        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(CovertToGridColumnAttributeInput input)
+        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
         {
             List<GridColumnAttribute> gridColumnAttributes = null;
             if(input.GridColumns != null)

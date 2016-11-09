@@ -55,11 +55,13 @@
                 mainGridColumns: $scope.invoiceTypeEntity.MainGridRuntimeColumns,
                 subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.SubSections,
                 invoiceGridActions: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.InvoiceGridActions,
+                InvoiceTypeId:invoiceTypeId,
                 query: {
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
-                    PartnerId: partnerSelectorAPI.getSelectedIds(),
-                    InvoiceTypeId: invoiceTypeId
+                    PartnerIds: partnerSelectorAPI.getSelectedIds(),
+                    InvoiceTypeId: invoiceTypeId,
+                    IssueDate: $scope.issueDate
                 }
             };
             return filter;

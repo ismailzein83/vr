@@ -28,14 +28,7 @@ namespace Vanrise.Invoice.Business
                 var invoiceType = invoiceTypeManager.GetInvoiceType(input.Query.InvoiceTypeId);
                 foreach(var data in result.Data)
                 { 
-                    DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(data.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
-                    foreach(var section in invoiceType.Settings.UISettings.SubSections)
-                    {
-                        if(recordFilterManager.IsFilterGroupMatch(section.FilterGroup, context))
-                        {
-                            data.SectionTitle = section.SectionTitle;
-                        }
-                    }
+                    FillNeededDetailData(data, invoiceType);
                 }
             }
             return result;
@@ -63,7 +56,8 @@ namespace Vanrise.Invoice.Business
                 CustomSectionPayload = createInvoiceInput.CustomSectionPayload,
                 FromDate = createInvoiceInput.FromDate,
                 PartnerId = createInvoiceInput.PartnerId,
-                ToDate = createInvoiceInput.ToDate
+                ToDate = createInvoiceInput.ToDate,
+                InvoiceTypeId = createInvoiceInput.InvoiceTypeId
             };
             invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
 
@@ -105,15 +99,54 @@ namespace Vanrise.Invoice.Business
 
             return insertOperationOutput;
         }
-
+        public bool SetInvoicePaid(long invoiceId, bool isInvoicePaid)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            DateTime? paidDate = null;
+            if (isInvoicePaid)
+                paidDate = DateTime.Now;
+            return dataManager.SetInvoicePaid(invoiceId, paidDate);
+        }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetInvoiceCount(InvoiceTypeId, partnerId, fromDate, toDate);
         }
+        public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            var invoiceDetail = InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceDetail.Entity.InvoiceTypeId);
+            FillNeededDetailData(invoiceDetail, invoiceType);
+            return invoiceDetail;
+        }
 
+        private void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
+        {
+            DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
+            foreach (var section in invoiceType.Settings.UISettings.SubSections)
+            {
+                if (recordFilterManager.IsFilterGroupMatch(section.FilterGroup, context))
+                {
+                    if (invoiceDetail.SectionsTitle == null)
+                        invoiceDetail.SectionsTitle = new List<string>();
+                    invoiceDetail.SectionsTitle.Add(section.SectionTitle);
+                }
+            }
+            InvoiceFilterConditionContext invoiceFilterConditionContext = new InvoiceFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType };
+            foreach (var action in invoiceType.Settings.UISettings.InvoiceGridActions)
+            {
+                if (action.InvoiceFilterCondition == null || action.InvoiceFilterCondition.IsFilterMatch(invoiceFilterConditionContext))
+                {
+                    if (invoiceDetail.ActionTypeNames == null)
+                        invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
+                    invoiceDetail.ActionTypeNames.Add(action);
+                }
+            }
+        }
         #endregion
-
 
         #region Mappers
 
@@ -133,12 +166,12 @@ namespace Vanrise.Invoice.Business
             return new InvoiceDetail
             {
                 Entity = invoice,
-                PartnerName = partnerName
+                PartnerName = partnerName,
+                Paid = invoice.PaidDate.HasValue
             };
         }
 
         #endregion
-
 
         #region Private Classes
 
@@ -155,7 +188,7 @@ namespace Vanrise.Invoice.Business
             public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
             {
                 IInvoiceDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-                return _dataManager.GetGetFilteredInvoices(input);
+                return _dataManager.GetFilteredInvoices(input);
             }
         }
         #endregion

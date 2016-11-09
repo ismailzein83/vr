@@ -10,6 +10,8 @@ namespace Vanrise.Invoice.Entities
     {
         public Invoice Entity { get; set; }
         public string PartnerName { get; set; }
-        public string SectionTitle { get; set; }
+        public List<string> SectionsTitle { get; set; }
+        public List<InvoiceGridAction> ActionTypeNames { get; set; }
+        public Boolean Paid { get; set; }
     }
 }

@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilterCondition\FilterGroupCondition.cs" />
+    <Compile Include="FilterCondition\IsPaidFilterCondition.cs" />
+    <Compile Include="InvoiceGridActionSettings\RecreateInvoiceAction.cs" />
+    <Compile Include="InvoiceGridActionSettings\SendEmailAction.cs" />
+    <Compile Include="InvoiceGridActionSettings\SetInvoicePaidAction.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
     <Compile Include="InvoiceDataSourceSettings\BankDetailsDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\InvoiceDataSourceItems.cs" />

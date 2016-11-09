@@ -9,6 +9,7 @@ namespace Vanrise.Invoice.Entities
 {
     public class InvoiceItemSubSectionOfSubSuction
     {
+        public Guid UniqueSectionID { get; set; }
         public string SectionTitle { get; set; }
         public InvoiceItemSubSectionOfSubSuctionSettings Settings { get; set; }
     }

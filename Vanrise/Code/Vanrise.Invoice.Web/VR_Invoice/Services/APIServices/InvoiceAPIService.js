@@ -18,11 +18,23 @@
         function GetFilteredInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoices'), input);
         }
-
+        function SetInvoicePaid(invoiceId, isInvoicePaid) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SetInvoicePaid'), {
+                invoiceId: invoiceId,
+                isInvoicePaid: isInvoicePaid
+            });
+        }
+        function GetInvoiceDetail(invoiceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetail'), {
+                invoiceId: invoiceId,
+            });
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
-            GetFilteredInvoices: GetFilteredInvoices
+            GetFilteredInvoices: GetFilteredInvoices,
+            SetInvoicePaid: SetInvoicePaid,
+            GetInvoiceDetail: GetInvoiceDetail
         });
     }
 

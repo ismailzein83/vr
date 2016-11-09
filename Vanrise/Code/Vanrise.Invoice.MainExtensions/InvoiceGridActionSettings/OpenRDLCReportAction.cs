@@ -9,12 +9,15 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class OpenRDLCReportAction : InvoiceGridActionSettings
     {
+        public override string ActionTypeName { get { return "OpenRDLCReportAction"; } }
         public override Guid ConfigId { get { return new Guid("5B4BD540-832E-46E4-8C18-49073775D002"); } }
         public string ReportURL { get; set; }
         public List<RDLCReportParameter> MainReportParameters { get; set; }
         public List<InvoiceDataSource> MainReportDataSources { get; set; }
         public List<RDLCSubReport> SubReports { get; set; }
-      
+
+
+       
     }
     public class RDLCSubReport
     {

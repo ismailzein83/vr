@@ -30,10 +30,23 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             var gridAPI;
             var subSectionConfigs = [];
             var subSections = [];
+            var invoiceTypeId;
+            var invoiceGridActions = [];
             function initializeController() {
 
                 $scope.datastore = [];
                 $scope.gridMenuActions = [];
+
+                $scope.menuActions = function (dataItem) {
+                    var menuActions = [];
+                    if (dataItem.menuActions != null) {
+                        for (var i = 0; i < dataItem.menuActions.length; i++)
+                            menuActions.push(dataItem.menuActions[i]);
+                    }
+                    return menuActions;
+                };
+
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -54,7 +67,9 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     buildGridFields(payload.mainGridColumns);
                                     subSections = payload.subSections;
                                     query = payload.query;
-                                    defineMenuActions(payload.invoiceGridActions);
+                                    invoiceGridActions = payload.invoiceGridActions;
+                                    invoiceTypeId = payload.InvoiceTypeId;
+                                    //defineMenuActions(payload.invoiceGridActions);
                                 }
                                 gridAPI.retrieveData(query).then(function()
                                 {
@@ -82,8 +97,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             if (response.Data != undefined) {
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var dataItem = response.Data[i];
-                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs);
-
+                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId);
                                 }
                             }
                             onResponseReady(response);
@@ -143,6 +157,10 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 field = "Entity." + VR_Invoice_InvoiceFieldEnum.DueDate.fieldName;
                                 attribute.type = VR_Invoice_InvoiceFieldEnum.DueDate.type;
                                 break;
+                            case VR_Invoice_InvoiceFieldEnum.Paid.value:
+                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.Paid.fieldName;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.Paid.type;
+                                break;
                         }
                         $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, NumberPrecision: attribute.numberprecision });
                     }
@@ -189,21 +207,54 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                     for(var i=0;i<invoiceGridActions.length;i++)
                     {
                         var invoiceGridAction = invoiceGridActions[i];
-                        var actionType = VR_Invoice_InvoiceService.getActionTypeIfExist(invoiceGridAction.ActionTypeName);
+                        var actionType = VR_Invoice_InvoiceService.getActionTypeIfExist(invoiceGridAction.Settings.ActionTypeName);
                         if(actionType != undefined)
                         {
-                            $scope.gridMenuActions.push({
-                                name: invoiceGridAction.ActionTypeName,
-                                clicked: function (dataItem)
-                                {
-                                    var payload = {
-                                        invoice: dataItem
-                                    };
-                                    return actionType.actionMethod(payload);
-                                }
-
-                            });
+                            addgridMenuAction(invoiceGridAction,actionType);
                         }
+                    }
+                    function addgridMenuAction(invoiceGridAction, actionType)
+                    {
+                        $scope.gridMenuActions.push({
+                            name: invoiceGridAction.Title,
+                            clicked: function (dataItem) {
+                                var payload = {
+                                    invoice: dataItem,
+                                    invoiceGridAction: invoiceGridAction
+                                };
+                                var promiseDeffered = UtilsService.createPromiseDeferred();
+
+                                var promise = actionType.actionMethod(payload);
+                                if (promise != undefined && promise.then != undefined)
+                                {
+                                    ctrl.isLodingGrid = true;
+
+                                    promise.then(function (response) {
+                                        if (invoiceGridAction.ReloadGridItem && response)
+                                        {
+                                            var invoiceId = dataItem.Entity.InvoiceId;
+                                            return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
+                                                promiseDeffered.resolve();
+                                                gridAPI.itemUpdated(response);
+                                            }).catch(function (error) {
+                                                promiseDeffered.reject(error);
+                                            });
+                                        }else
+                                        {
+                                          promiseDeffered.resolve();
+                                        }
+                                    }).catch(function (error) {
+                                        promiseDeffered.reject(error);
+                                    }).finally(function () {
+                                        ctrl.isLodingGrid = false;
+                                    });
+                                } else
+                                {
+                                    promiseDeffered.resolve();
+                                }
+                                return promiseDeffered.promise;
+                            }
+                        });
                     }
                 }
             }

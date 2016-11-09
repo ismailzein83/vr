@@ -23,14 +23,22 @@ namespace Vanrise.Invoice.Data.SQL
         #endregion
 
         #region Public Methods
-
+        public bool SetInvoicePaid(long invoiceId, DateTime? paidDate)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoicePaid", invoiceId, paidDate);
+            return (affectedRows > -1);
+        }
         public Entities.Invoice GetInvoice(long invoiceId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
         }
-        public IEnumerable<Entities.Invoice> GetGetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
+        public IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper,input.Query.InvoiceTypeId, input.Query.PartnerId, input.Query.FromTime, input.Query.ToTime);
+            string partnerIds = null;
+            if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count() > 0)
+                partnerIds = string.Join<string>(",", input.Query.PartnerIds);
+
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.FromTime, input.Query.ToTime,  input.Query.IssueDate);
         }
 
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId,DateTime? fromDate,DateTime? toDate)
@@ -78,10 +86,14 @@ namespace Vanrise.Invoice.Data.SQL
                 PartnerId=  reader["PartnerId"] as string,
                 SerialNumber= reader["SerialNumber"] as string,
                 ToDate=  GetReaderValue<DateTime>(reader,"ToDate"),
+                PaidDate = GetReaderValue<DateTime?>(reader, "PaidDate"),
             };
             return invoice;
         }
         #endregion
 
+
+
+     
     }
 }

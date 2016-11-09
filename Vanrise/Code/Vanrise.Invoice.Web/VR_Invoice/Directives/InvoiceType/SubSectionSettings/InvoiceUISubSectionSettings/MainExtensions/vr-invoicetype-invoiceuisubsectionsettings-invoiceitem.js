@@ -78,7 +78,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceItemSubSection ,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.Business.InvoiceItemSubSection ,Vanrise.Invoice.Business",
                         ItemSetName: $scope.scopeModel.itemSetName,
                         GridColumns: subSectionGridColumnsAPI.getData(),
                         SubSections: invoiceItemSubSectionGridColumnsAPI.getData()

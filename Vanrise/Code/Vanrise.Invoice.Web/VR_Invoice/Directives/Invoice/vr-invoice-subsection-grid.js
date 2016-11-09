@@ -32,6 +32,8 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
             var drillDownManager;
             var drillDownTabs = [];
             var subSectionConfigs = [];
+
+            var invoiceTypeId;
             var invoiceId;
             function initializeController() {
                 gridWidthFactors = UtilsService.getArrayEnum(VRCommon_GridWidthFactorEnum);
@@ -49,8 +51,10 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                     function getDirectiveAPI() {
                         var directiveAPI = {};
                         directiveAPI.load = function (payload) {
+                            console.log(payload);
                             var query = {};
                             if (payload != undefined) {
+                                invoiceTypeId = payload.invoiceTypeId;
                                 invoiceId = payload.invoiceId;
                                 var promiseDeferred = UtilsService.createPromiseDeferred();
                                 if (payload.query != undefined)
@@ -91,6 +95,7 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                     return VR_Invoice_InvoiceItemAPIService.GetFilteredInvoiceItems(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                console.log(response.Data);
                                 for (var i = 0; i < response.Data.length; i++) {
                                     drillDownManager.setDrillDownExtensionObject(response.Data[i]);
                                 }
@@ -115,7 +120,7 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                        
                         if (gridAttribute != undefined)
                         {
-                            gridAttribute.Field = "Entity." + gridColumn.FieldName;
+                            gridAttribute.Field = "Items["+i+"].Description";
                             var gridWidthFactor = UtilsService.getItemByVal(gridWidthFactors, gridColumn.WidthFactor, "value");
                             if (gridWidthFactor != undefined)
                                 gridAttribute.WidthFactor = gridWidthFactor.widthFactor;
@@ -141,16 +146,20 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                             drillDownTabs.push(tab);
                     }
                     function buildInvoiceItemsTab(subSection) {
+                        console.log(subSection);
                         var invoiceItemsTab = {};
                         invoiceItemsTab.title = subSection.SectionTitle;
                         invoiceItemsTab.directive = "vr-invoice-subsection-grid";
                         invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoiceItem) {
+                            console.log(invoiceItem);
                             invoiceItem.invoiceItemGridAPI = invoiceItemGridAPI;
                             var invoiceItemGridPayload = {
                                 query: {
                                     InvoiceId: invoiceId,
                                     ItemSetName: invoiceItem.Entity.ItemSetName,
-                                    InvoiceItemDetails: invoiceItem.Entity.Details
+                                    InvoiceItemDetails: invoiceItem.Entity.Details,
+                                    UniqueSectionID: subSection.UniqueSectionID,
+                                    InvoiceTypeId: invoiceTypeId
                                 },
                                 settings: subSection.Settings,
                                 invoiceId: invoiceId,

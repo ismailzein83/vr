@@ -66,6 +66,14 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetInvoiceUISubSectionSettingsConfigs();
         }
+        [HttpGet]
+        [Route("GetInvoiceFilterConditionConfigs")]
+        public IEnumerable<InvoiceFilterConditionConfig> GetInvoiceFilterConditionConfigs()
+        {
+            return _manager.GetInvoiceFilterConditionConfigs();
+        }
+
+        
         [HttpPost]
         [Route("AddInvoiceType")]
         public Vanrise.Entities.InsertOperationOutput<InvoiceTypeDetail> AddInvoiceType(InvoiceType invoiceType)
@@ -81,7 +89,7 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpPost]
         [Route("CovertToGridColumnAttribute")]
-        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(CovertToGridColumnAttributeInput input)
+        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
         {
             return _manager.CovertToGridColumnAttribute(input);
         }

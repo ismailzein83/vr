@@ -7,4 +7,5 @@
     ToDate: { value: 5, description: "To Date", fieldName: "ToDate", type: "Datetime" },
     IssueDate: { value: 6, description: "Issue Date", fieldName: "IssueDate", type: "Datetime" },
     DueDate: { value: 7, description: "Due Date", fieldName: "DueDate", type: "Datetime" },
+    Paid: { value: 8, description: "Paid Date", fieldName: "PaidDate", type: "Datetime" },
 });

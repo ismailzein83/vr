@@ -103,6 +103,7 @@
             return {
                 SectionTitle: $scope.scopeModel.sectionTitle,
                 FilterGroup: filterGroup != undefined ? filterGroup.filterObj : undefined,
+                UniqueSectionID: UtilsService.guid(),
                 Settings: invoiceUISubsectionSettingsAPI.getData()
             };
         }

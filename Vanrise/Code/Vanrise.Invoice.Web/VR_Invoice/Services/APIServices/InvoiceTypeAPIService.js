@@ -57,6 +57,11 @@
         function GetItemsFilterConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetItemsFilterConfigs"));
         }
+        function GetInvoiceFilterConditionConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceFilterConditionConfigs"));
+
+        }
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
@@ -71,7 +76,8 @@
             CovertToGridColumnAttribute: CovertToGridColumnAttribute,
             GetInvoiceTypesInfo: GetInvoiceTypesInfo,
             GetInvoicePartnerSettingsConfigs: GetInvoicePartnerSettingsConfigs,
-            GetItemsFilterConfigs: GetItemsFilterConfigs
+            GetItemsFilterConfigs: GetItemsFilterConfigs,
+            GetInvoiceFilterConditionConfigs: GetInvoiceFilterConditionConfigs
         });
     }
 

@@ -52,6 +52,7 @@
     <Compile Include="Context\PreviewInvoiceActionContext.cs" />
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
     <Compile Include="Context\RDLCReportParameterValueContext.cs" />
+    <Compile Include="Extensions\InvoiceItemSubSection.cs" />
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceTypeManager.cs" />

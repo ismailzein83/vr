@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class CovertToGridColumnAttributeInput
+    public class ConvertToGridColumnAttributeInput
     {
         public List<InvoiceSubSectionGridColumn> GridColumns { get; set; }
     }

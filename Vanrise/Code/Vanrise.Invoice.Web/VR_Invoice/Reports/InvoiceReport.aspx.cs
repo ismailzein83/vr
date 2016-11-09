@@ -40,7 +40,7 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                 
                 foreach(var action in invoiceType.Settings.UISettings.InvoiceGridActions)
                 {
-                    if(action.ActionTypeName == actionTypeName)
+                    if(action.Settings.ActionTypeName == actionTypeName)
                     {
                        openRDLCReportAction = action.Settings as OpenRDLCReportAction;
                         break;

@@ -22,6 +22,7 @@ namespace Vanrise.Invoice.Business
             var invoiceType = invoiceTypeManager.GetInvoiceType(this.InvoiceTypeId);
             InvoiceGenerationContext context = new InvoiceGenerationContext
             {
+                InvoiceTypeId = this.InvoiceTypeId,
                 CustomSectionPayload = CustomSectionPayload,
                 FromDate = this.FromDate,
                 PartnerId = this.PartnerId,

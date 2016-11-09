@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/GridSettings/InvoiceGridActionSettings/MainExtensions/Templates/OpenRDLCReportActionTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/GridSettings/InvoiceGridActionSettings/MainExtensions/GridActionSettings/Templates/OpenRDLCReportActionTemplate.html"
 
         };
 

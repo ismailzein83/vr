@@ -75,6 +75,7 @@
         function builSubSectionObjFromScope() {
             return {
                 SectionTitle: $scope.scopeModel.sectionTitle,
+                UniqueSectionID:UtilsService.guid(),
                 Settings: invoiceItemSubSectionGridColumnsAPI.getData()
             };
         }

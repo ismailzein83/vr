@@ -14,7 +14,8 @@
         var gridActionSettingsAPI;
         var gridActionSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
+        var invoiceFilterConditionAPI;
+        var invoiceFilterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -35,6 +36,10 @@
                 gridActionSettingsAPI =api;
                 gridActionSettingsReadyPromiseDeferred.resolve();
             }
+            $scope.scopeModel.onInvoiceFilterConditionReady = function (api) {
+                invoiceFilterConditionAPI = api;
+                invoiceFilterConditionReadyPromiseDeferred.resolve();
+            }
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateGridAction() : addGridAction();
             };
@@ -48,7 +53,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadGridActionSettingsDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGridActionSettingsDirective, loadInvoiceFilterConditionDirective]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -64,8 +69,22 @@
         }
         function loadStaticData() {
             if (actionEntity != undefined) {
-                $scope.scopeModel.actionTypeName = actionEntity.ActionTypeName;
+                console.log(actionEntity);
+                $scope.scopeModel.actionTitle = actionEntity.Title;
+                $scope.scopeModel.reloadGridItem = actionEntity.ReloadGridItem;
+
             }
+        }
+        function loadInvoiceFilterConditionDirective() {
+            var invoiceFilterConditionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            invoiceFilterConditionReadyPromiseDeferred.promise.then(function () {
+                var invoiceFilterConditionPayload = { context: getContext() }
+                if (actionEntity != undefined) {
+                    invoiceFilterConditionPayload.invoiceFilterConditionEntity = actionEntity.InvoiceFilterCondition;
+                }
+                VRUIUtilsService.callDirectiveLoad(invoiceFilterConditionAPI, invoiceFilterConditionPayload, invoiceFilterConditionLoadPromiseDeferred);
+            });
+            return invoiceFilterConditionLoadPromiseDeferred.promise;
         }
         function loadGridActionSettingsDirective() {
             var gridActionSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -82,15 +101,19 @@
 
         function builGridActionObjFromScope() {
             return {
-                ActionTypeName: $scope.scopeModel.actionTypeName,
+                Title: $scope.scopeModel.actionTitle,
+                ReloadGridItem: $scope.scopeModel.reloadGridItem,
+                InvoiceFilterCondition: invoiceFilterConditionAPI.getData(),
                 Settings: gridActionSettingsAPI.getData()
             };
         }
 
         function getContext()
         {
-           
-            return context;
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
 
         function addGridAction() {

@@ -19,6 +19,7 @@ namespace Vanrise.Invoice.Entities
     {
         public abstract Guid ConfigId { get; }
         public virtual string PartnerSelector { get; set; }
+        public virtual string PartnerFilterSelector { get; set; }
         public virtual IPartnerManager PartnerManagerFQTN { get; set; }
     }
 }
