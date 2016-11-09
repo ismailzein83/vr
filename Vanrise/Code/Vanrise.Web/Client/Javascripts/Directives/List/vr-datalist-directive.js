@@ -18,7 +18,6 @@ app.directive('vrDatalist', [function () {
                 ctrl.datasource = {};
 
             ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
-
             ctrl.onInternalRemove = function (dataItem) {
                 if (ctrl.autoremoveitem == true) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -32,7 +31,8 @@ app.directive('vrDatalist', [function () {
             $scope.ondataitemclicked = function (dataItem) {
                 if (typeof (ctrl.onitemclicked) == 'function')
                     ctrl.onitemclicked(dataItem);
-            }
+            };
+
         },
         controllerAs: 'VRDatalistCtrl',
         bindToController: true,
@@ -75,7 +75,7 @@ app.directive('vrDatalist', [function () {
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + draggableIconTemplate
-                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden;">' + element.html() + '</div>'
+                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden;" title="{{dataItem}}">' + element.html() + '</div>'
                              + '</vr-listitem>'
                             + '</div>'
                            + '</vr-list>';
