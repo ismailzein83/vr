@@ -262,6 +262,7 @@
                     $scope.scopeModal.website = carrierProfileEntity.Settings.Website;
                     $scope.scopeModal.registrationNumber = carrierProfileEntity.Settings.RegistrationNumber;
                     $scope.scopeModal.address = carrierProfileEntity.Settings.Address;
+                    $scope.scopeModal.duePeriod = carrierProfileEntity.Settings.DuePeriod;
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
                     $scope.scopeModal.customerInvoiceByProfile = carrierProfileEntity.Settings.CustomerInvoiceByProfile;
@@ -343,6 +344,7 @@
                     Address: $scope.scopeModal.address,
                     PostalCode: $scope.scopeModal.postalCode,
                     Town: $scope.scopeModal.town,
+                    DuePeriod: $scope.scopeModal.duePeriod,
                     CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),

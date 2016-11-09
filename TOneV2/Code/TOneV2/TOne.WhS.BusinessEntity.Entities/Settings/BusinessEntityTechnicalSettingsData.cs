@@ -14,5 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public RateTypeConfiguration RateTypeConfiguration { get; set; }
 
         public IEnumerable<StateBackupCleanupTask> Tasks { get; set; }
+        public VRTaxesDefinition TaxesDefinition { get; set; }
     }
 }

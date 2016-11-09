@@ -23,6 +23,8 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
         function settingEditorCtor(ctrl, $scope, $attrs) {
 
+            ctrl.titles = [];
+
             var offPeakRateTypeSelectorAPI;
             var offPeakRateTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -48,6 +50,24 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
             }
 
             function initializeController() {
+                ctrl.disabledAddTitle = true;
+
+                ctrl.addTitle = function () {
+                    ctrl.titles.push({ title: ctrl.titlevalue });
+                    ctrl.titlevalue = undefined;
+                    ctrl.disabledAddTitle = true;
+                }
+
+                ctrl.onTitleValueChange = function (value) {
+                    ctrl.disabledAddTitle = (value == undefined && ctrl.titlevalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.titles, value, "title") != -1;
+                }
+
+                ctrl.validateAddTitle = function () {
+                    if (ctrl.title != undefined && ctrl.title.length == 0)
+                        return "Enter at least one keyword.";
+                    return null;
+                };
+
                 defineAPI();
             }
 
@@ -61,6 +81,12 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     var holidayPayload;
 
                     if (payload != undefined && payload.data != undefined) {
+
+                        if (payload.data.TaxesDefinition != undefined && payload.data.TaxesDefinition.ItemDefinitions != undefined)
+                            angular.forEach(payload.data.TaxesDefinition.ItemDefinitions, function (val) {
+                                ctrl.titles.push({ title: val.Title });
+                            });
+
                         if (payload.data.RateTypeConfiguration != undefined) {
                             offPeakPayload = { selectedIds: payload.data.RateTypeConfiguration.OffPeakRateTypeId };
                             weekendPayload = { selectedIds: payload.data.RateTypeConfiguration.WeekendRateTypeId };
@@ -99,13 +125,23 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                 }
 
                 api.getData = function () {
+                    var itemDefinitions = [];
+
+                    for (var i = 0; i < ctrl.titles.length; i++) {
+                        var taxItemDefinition = {};
+                        taxItemDefinition.ItemId = UtilsService.guid();
+                        taxItemDefinition.Title = ctrl.titles[i].title;
+                        itemDefinitions.push(taxItemDefinition);
+                    }
+
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.BusinessEntityTechnicalSettingsData, TOne.WhS.BusinessEntity.Entities",
                         RateTypeConfiguration: {
                             OffPeakRateTypeId: offPeakRateTypeSelectorAPI.getSelectedIds(),
                             WeekendRateTypeId: weekendRateTypeSelectorAPI.getSelectedIds(),
                             HolidayRateTypeId: holidayRateTypeSelectorAPI.getSelectedIds()
-                        }
+                        },
+                        TaxesDefinition: { ItemDefinitions: itemDefinitions }
                     };
                 }
 
