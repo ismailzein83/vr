@@ -16,6 +16,9 @@
         var cityDirectiveAPI;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var currencySelectorAPI;
+        var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var countrySelectedPromiseDeferred;
 
         loadParameters();
@@ -57,6 +60,11 @@
             $scope.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
+            }
+
+            $scope.scopeModal.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyPromiseDeferred.resolve();
             }
 
             $scope.scopeModal.disabledfax = true;
@@ -144,7 +152,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -157,6 +165,21 @@
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierProfileEntity ? carrierProfileEntity.Name : null, 'Carrier Profile') : UtilsService.buildTitleForAddEditor('Carrier Profile');
         }
 
+        function loadCurrencySelector() {
+            var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            currencySelectorReadyPromiseDeferred.promise.then(function() {
+
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.CurrencyId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, loadCurrencySelectorPromiseDeferred);
+
+            });
+
+            return loadCurrencySelectorPromiseDeferred.promise;
+        }
 
         function loadCountryCitySection() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -312,6 +335,7 @@
                 Name: $scope.scopeModal.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getSelectedIds(),
+                    CurrencyId: currencySelectorAPI.getSelectedIds(),
                     CityId: cityDirectiveAPI.getSelectedIds(),
                     Company: $scope.scopeModal.company,
                     Website: $scope.scopeModal.website,
