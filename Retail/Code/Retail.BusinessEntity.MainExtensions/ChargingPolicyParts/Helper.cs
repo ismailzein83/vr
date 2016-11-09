@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.MainExtensions.ChargingPolicyParts
                         throw new ArgumentNullException("partRuleSettings");
                     if (partRuleSettings.RuleCriteriaDefinition == null)
                         throw new ArgumentNullException("partRuleSettings.RuleCriteriaDefinition");
-                    return new Vanrise.GenericData.Business.GenericRuleManager<Vanrise.GenericData.Entities.GenericRule>().BuildRuleTree(partRuleSettings.RuleCriteriaDefinition, rules);
+                    return Vanrise.GenericData.Business.GenericRuleManager<Vanrise.GenericData.Entities.GenericRule>.BuildRuleTree(partRuleSettings.RuleCriteriaDefinition, rules);
                 });
         }
 
