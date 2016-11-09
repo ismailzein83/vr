@@ -199,11 +199,16 @@ namespace TOne.WhS.Routing.Business
 
         }
 
-        private struct GetSellingNumberPlanSaleCodeIteratorCacheName
+        private struct GetSellingNumberPlanSaleCodeIteratorCacheName : IBEDayFilterCacheName
         {
             public int SettingNumberPlanId { get; set; }
 
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return EffectiveOn; }
+            }
         }
 
         private SaleCodeIterator GetSellingNumberPlanSaleCodeIterator(int sellingNumberPlanId, DateTime effectiveOn)
@@ -229,9 +234,14 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
-        private struct GetCachedSaleCodesCacheName
+        private struct GetCachedSaleCodesCacheName : IBEDayFilterCacheName
         {
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return EffectiveOn; }
+            }
         }
 
         private Dictionary<int, List<SaleCode>> GetCachedSaleCodes(DateTime effectiveOn)
@@ -255,11 +265,16 @@ namespace TOne.WhS.Routing.Business
         }
 
 
-        private struct GetSupplierCodeIteratorCacheName
+        private struct GetSupplierCodeIteratorCacheName : IBEDayFilterCacheName
         {
             public int SupplierId { get; set; }
 
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
         }
 
         private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
@@ -303,9 +318,14 @@ namespace TOne.WhS.Routing.Business
                });
         }
 
-        private struct GetCachedSupplierCodesCacheName
+        private struct GetCachedSupplierCodesCacheName : IBEDayFilterCacheName
         {
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
         }
 
         private Dictionary<int, List<SupplierCode>> GetCachedSupplierCodes(DateTime from, DateTime to)

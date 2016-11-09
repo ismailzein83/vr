@@ -31,9 +31,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private struct GetCachedSaleRatesCacheName
+        private struct GetCachedSaleRatesCacheName : IBEDayFilterCacheName
         {
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
         }
         private SaleRatesByZone GetCachedSaleRates(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
@@ -49,8 +54,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 SaleRatesByOwner result = new SaleRatesByOwner
                 {
-                    SaleRatesByCustomer = new Dictionary<int, SaleRatesByZone>(),
-                    SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>()
+                    SaleRatesByCustomer = new VRDictionary<int, SaleRatesByZone>(),
+                    SaleRatesByProduct = new VRDictionary<int, SaleRatesByZone>()
                 };
                 SalePriceListManager salePriceListManager = new SalePriceListManager();
                 var priceLists = salePriceListManager.GetCachedSalePriceLists();

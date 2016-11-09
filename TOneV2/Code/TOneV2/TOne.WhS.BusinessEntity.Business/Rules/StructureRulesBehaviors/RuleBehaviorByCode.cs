@@ -12,11 +12,11 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
         RuleBehaviorByCodeAsKey _ruleBehaviorByCodeAsKey = new RuleBehaviorByCodeAsKey();
         RuleBehaviorByCodeAsPrefix _ruleBehaviorByCodeAsPrefix = new RuleBehaviorByCodeAsPrefix();
 
-        public override IEnumerable<Vanrise.Rules.RuleNode> StructureRules(IEnumerable<Vanrise.Rules.BaseRule> rules, out List<Vanrise.Rules.BaseRule> notMatchRules)
+        public override IEnumerable<Vanrise.Rules.RuleNode> StructureRules(IEnumerable<Vanrise.Rules.IVRRule> rules, out List<Vanrise.Rules.IVRRule> notMatchRules)
         {
-            List<Vanrise.Rules.BaseRule> notMatchRules1;
+            List<Vanrise.Rules.IVRRule> notMatchRules1;
             var nodes1 = _ruleBehaviorByCodeAsKey.StructureRules(rules, out notMatchRules1);
-            List<Vanrise.Rules.BaseRule> notMatchRules2;
+            List<Vanrise.Rules.IVRRule> notMatchRules2;
             var nodes2 = _ruleBehaviorByCodeAsPrefix.StructureRules(rules, out notMatchRules2);
 
             List<Vanrise.Rules.RuleNode> allNodes = new List<Vanrise.Rules.RuleNode>();
@@ -57,7 +57,7 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
 
         private class RuleBehaviorByCodeAsKey : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<string>
         {
-            protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> keys)
+            protected override void GetKeysFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<string> keys)
             {
                 keys = null;
                 IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;
@@ -89,7 +89,7 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
 
         private class RuleBehaviorByCodeAsPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix
         {
-            protected override void GetPrefixesFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<string> prefixes)
+            protected override void GetPrefixesFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<string> prefixes)
             {
                 prefixes = null;
                 IRuleCodeCriteria ruleCodeCriteria = rule as IRuleCodeCriteria;

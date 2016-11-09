@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -14,12 +15,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
     public class SaleRatesByOwner
     {
-        public Dictionary<int, SaleRatesByZone> SaleRatesByCustomer { get; set; }
+        public VRDictionary<int, SaleRatesByZone> SaleRatesByCustomer { get; set; }
 
-        public Dictionary<int, SaleRatesByZone> SaleRatesByProduct { get; set; }
+        public VRDictionary<int, SaleRatesByZone> SaleRatesByProduct { get; set; }
     }
 
-    public class SaleRatesByZone : Dictionary<long, SaleRatePriceList>
+    public class SaleRatesByZone : VRDictionary<long, SaleRatePriceList>
     {
 
     }

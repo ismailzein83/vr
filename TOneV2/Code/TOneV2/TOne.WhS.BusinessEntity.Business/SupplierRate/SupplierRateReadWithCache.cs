@@ -92,9 +92,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Members
 
-        private struct GetCachedSupplierRatesCacheName
+        private struct GetCachedSupplierRatesCacheName : IBEDayFilterCacheName
         {
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
         }
 
         List<SupplierRatesByZoneInfo> GetCachedSupplierRates(int supplierId)

@@ -19,6 +19,12 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        public override T GetOrCreateObject<T>(object cacheName, Func<T> createObject)
+        {
+            return GetOrCreateObject(cacheName, BECacheExpirationChecker.Instance, createObject);
+        }
+
+
         ISaleCodeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
         object _updateHandle;
 
@@ -29,13 +35,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SaleCode CacheAndGetCode(SaleCode code)
         {
-            Dictionary<long, SaleCode> cachedCodesById = this.GetOrCreateObject("cachedCodesById", () => new Dictionary<long, SaleCode>());
-            SaleCode matchCode;
-            lock (cachedCodesById)
-            {
-                matchCode = cachedCodesById.GetOrCreateItem(code.SaleCodeId, () => code);
-            }
-            return matchCode;
+            return code;
+            //Dictionary<long, SaleCode> cachedCodesById = this.GetOrCreateObject("cachedCodesById", () => new Dictionary<long, SaleCode>());
+            //SaleCode matchCode;
+            //lock (cachedCodesById)
+            //{
+            //    matchCode = cachedCodesById.GetOrCreateItem(code.SaleCodeId, () => code);
+            //}
+            //return matchCode;
         }
 
     }

@@ -44,15 +44,15 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SaleRatesByOwner result = new SaleRatesByOwner();
             SaleRatesByZone saleRateByZone;
-            result.SaleRatesByCustomer = new Dictionary<int, SaleRatesByZone>();
-            result.SaleRatesByProduct = new Dictionary<int, SaleRatesByZone>();
+            result.SaleRatesByCustomer = new VRDictionary<int, SaleRatesByZone>();
+            result.SaleRatesByProduct = new VRDictionary<int, SaleRatesByZone>();
 
             IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetEffectiveSaleRateByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
             SaleRate tempSaleRate;
             foreach (SaleRate saleRate in saleRates)
             {
                 SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
-                Dictionary<int, SaleRatesByZone> saleRatesByOwner = priceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleRatesByCustomer : result.SaleRatesByProduct;
+                VRDictionary<int, SaleRatesByZone> saleRatesByOwner = priceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleRatesByCustomer : result.SaleRatesByProduct;
 
                 if (!saleRatesByOwner.TryGetValue(priceList.OwnerId, out saleRateByZone))
                 {

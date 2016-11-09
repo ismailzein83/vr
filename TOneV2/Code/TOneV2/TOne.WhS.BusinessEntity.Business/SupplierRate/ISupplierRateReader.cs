@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -9,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Business
         SupplierRatesByZone GetSupplierRates(int supplierId, DateTime effectiveOn);
     }
 
-    public class SupplierRatesByZone : Dictionary<long, SupplierZoneRate>
+    public class SupplierRatesByZone : VRDictionary<long, SupplierZoneRate>
     {
 
     }

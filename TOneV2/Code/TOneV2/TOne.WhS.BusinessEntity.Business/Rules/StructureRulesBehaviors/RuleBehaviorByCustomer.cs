@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
 {
     public class RuleBehaviorByCustomer : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {
-        protected override void GetKeysFromRule(Vanrise.Rules.BaseRule rule, out IEnumerable<int> keys)
+        protected override void GetKeysFromRule(Vanrise.Rules.IVRRule rule, out IEnumerable<int> keys)
         {
             IRuleCustomerCriteria ruleCustomerCriteria = rule as IRuleCustomerCriteria;
             keys = ruleCustomerCriteria.CustomerIds;

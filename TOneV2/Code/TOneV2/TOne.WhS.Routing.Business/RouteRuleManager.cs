@@ -92,7 +92,7 @@ namespace TOne.WhS.Routing.Business
                     var routeRuleTypes = GetRouteRuleTypesTemplates();
 
                     int? currentPriority = null;
-                    List<Vanrise.Rules.BaseRule> currentRules = null;
+                    List<Vanrise.Rules.IVRRule> currentRules = null;
                     foreach (var ruleType in routeRuleTypes.OrderBy(itm => GetRuleTypePriority(itm)))
                     {
                         int priority = GetRuleTypePriority(ruleType);
@@ -101,7 +101,7 @@ namespace TOne.WhS.Routing.Business
                             if (currentRules != null && currentRules.Count > 0)
                                 ruleTrees.Add(new Vanrise.Rules.RuleTree(currentRules, structureBehaviors));
                             currentPriority = priority;
-                            currentRules = new List<Vanrise.Rules.BaseRule>();
+                            currentRules = new List<Vanrise.Rules.IVRRule>();
                         }
                         var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId
                                                          && (!routingProductId.HasValue || (itm.Criteria.RoutingProductId.HasValue && routingProductId.Value == itm.Criteria.RoutingProductId.Value)));

@@ -22,6 +22,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        public override T GetOrCreateObject<T>(object cacheName, Func<T> createObject)
+        {
+            return GetOrCreateObject(cacheName, BECacheExpirationChecker.Instance, createObject);
+        }
+
         protected override bool ShouldSetCacheExpired(object parameter)
         {
             return _dataManager.AreSaleRatesUpdated(ref _updateHandle);
@@ -29,13 +34,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SaleRate CacheAndGetRate(SaleRate rate)
         {
-            Dictionary<long, SaleRate> cachedRatesById = this.GetOrCreateObject("cachedRatesById", () => new Dictionary<long, SaleRate>());
-            SaleRate matchRate;
-            lock (cachedRatesById)
-            {
-                matchRate = cachedRatesById.GetOrCreateItem(rate.SaleRateId, () => rate);
-            }
-            return matchRate;
+            return rate;
+            //Dictionary<long, SaleRate> cachedRatesById = this.GetOrCreateObject("cachedRatesById", () => new Dictionary<long, SaleRate>());
+            //SaleRate matchRate;
+            //lock (cachedRatesById)
+            //{
+            //    matchRate = cachedRatesById.GetOrCreateItem(rate.SaleRateId, () => rate);
+            //}
+            //return matchRate;
         }
 
     }
