@@ -1,0 +1,9 @@
+﻿<vr-datagrid datasource="scopeModel.vrComponentTypes"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.VRComponentTypeId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRComponentTypeId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+</vr-datagrid>

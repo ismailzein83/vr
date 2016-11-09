@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Data;
+using Vanrise.Caching;
 
 namespace Vanrise.Common.Business
 {
@@ -13,22 +15,90 @@ namespace Vanrise.Common.Business
     {
         static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
 
-        private struct GetComponentTypeCacheName
+        public InsertOperationOutput<VRComponentTypeDetail> AddVRComponentType(VRComponentType componentType)
         {
-            public Guid ComponentTypeId { get; set; }
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRComponentTypeDetail>();
 
-            public Type CLRType { get; set; }
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            IVRComponentTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRComponentTypeDataManager>();
+
+            componentType.VRComponentTypeId = Guid.NewGuid();
+
+            if (dataManager.Insert(componentType))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = VRComponentTypeDetailMapper(componentType);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
         }
 
-        public Q GetComponentType<T, Q>(Guid componentTypeId) where T : VRComponentTypeSettings
+        public UpdateOperationOutput<VRComponentTypeDetail> UpdateVRComponentType(VRComponentType componentType)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRComponentTypeDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IVRComponentTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRComponentTypeDataManager>();
+
+            if (dataManager.Update(componentType))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = VRComponentTypeDetailMapper(this.GetComponentType(componentType.VRComponentTypeId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public IDataRetrievalResult<VRComponentTypeDetail> GetFilteredVRComponentTypes(DataRetrievalInput<VRComponentTypeQuery> input)
+        {
+            var allVRComponentTypes = GetCachedComponentTypes();
+            Func<VRComponentType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRComponentTypes.ToBigResult(input, filterExpression, VRComponentTypeDetailMapper));
+        }
+
+        public VRComponentType GetComponentType(Guid vrComponentTypeId)
+        {
+            Dictionary<Guid, VRComponentType> cachedVRComponentTypes = this.GetCachedComponentTypes();
+            return cachedVRComponentTypes.GetRecord(vrComponentTypeId);
+        }
+        public IEnumerable<VRComponentTypeConfig> GetVRComponentTypeExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<VRComponentTypeConfig>(VRComponentTypeConfig.EXTENSION_TYPE);
+        }
+        public VRComponentTypeDetail VRComponentTypeDetailMapper(VRComponentType componentType)
+        {
+            VRComponentTypeDetail componentTypeDetail = new VRComponentTypeDetail()
+            {
+                Entity = componentType
+            };
+            return componentTypeDetail;
+        }
+
+        public Q GetComponentType<T, Q>(Guid componentTypeId)
+            where T : VRComponentTypeSettings
             where Q : VRComponentType<T>
         {
             var cacheName = new GetComponentTypeCacheName
             {
-                 ComponentTypeId = componentTypeId,
-                 CLRType = typeof(T)
+                ComponentTypeId = componentTypeId,
+                CLRType = typeof(T)
             };
-            return s_cacheManager.GetOrCreateObject(cacheName, ()=>
+            return s_cacheManager.GetOrCreateObject(cacheName, () =>
             {
                 var componentTypeEntity = GetCachedComponentTypes().GetRecord(componentTypeId);
                 if (componentTypeEntity == null)
@@ -46,7 +116,7 @@ namespace Vanrise.Common.Business
             });
         }
 
-        public T GetComponentTypeSettings<T>(Guid componentTypeId)where T : VRComponentTypeSettings
+        public T GetComponentTypeSettings<T>(Guid componentTypeId) where T : VRComponentTypeSettings
         {
             var componentType = GetComponentType<T, VRComponentType<T>>(componentTypeId);
             if (componentType == null)
@@ -54,13 +124,14 @@ namespace Vanrise.Common.Business
             return componentType.Settings;
         }
 
-        private ConcurrentDictionary<Guid, VRComponentType> GetCachedComponentTypes()
+        Dictionary<Guid, VRComponentType> GetCachedComponentTypes()
         {
-            return s_cacheManager.GetOrCreateObject("GetCachedComponentTypes", ()=>
-            {                
-                throw new NotImplementedException();
-                ConcurrentDictionary<Guid, VRComponentType> componentTypes = null;
-                return componentTypes;
+            return s_cacheManager.GetOrCreateObject("GetCachedComponentTypes", () =>
+            {
+                IVRComponentTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRComponentTypeDataManager>();
+                IEnumerable<VRComponentType> componentTypes = dataManager.GetComponentTypes();
+
+                return componentTypes.ToDictionary(ct => ct.VRComponentTypeId, ct => ct);
             });
         }
 
@@ -68,12 +139,28 @@ namespace Vanrise.Common.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            IVRComponentTypeDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRComponentTypeDataManager>();
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired()
             {
-                throw new NotImplementedException();
+                return _dataManager.AreVRComponentTypeUpdated(ref _updateHandle);
             }
         }
 
+        struct GetComponentTypeCacheName
+        {
+            public Guid ComponentTypeId { get; set; }
+
+            public Type CLRType { get; set; }
+        }
         #endregion
+
+
+        public VRComponentTypeConfig GetVRComponentTypeExtensionConfigById(Guid extensionConfigId)
+        {
+            IEnumerable<VRComponentTypeConfig> allExtensionConfigs = GetVRComponentTypeExtensionConfigs();
+            return allExtensionConfigs.FindRecord(e => e.ExtensionConfigurationId == extensionConfigId);
+        }
     }
 }

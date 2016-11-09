@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
+    <Compile Include="VRComponentTypeDataManager.cs" />
     <Compile Include="VRZoneTimeDataManager.cs" />
     <Compile Include="DataGroupingAnalysisInfoDataManager.cs" />
     <Compile Include="StyleDefinitionDataManager.cs" />

@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BalanceAlertController.cs" />
+    <Compile Include="Controllers\BillingTransactionTypeController.cs" />
     <Compile Include="Controllers\BillingTransactionController.cs" />
     <Compile Include="Controllers\LiveBalanceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,9 +141,14 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="VR_AccountBalance\Constants\ModuleConfig.js" />
+    <Folder Include="VR_AccountBalance\Directives\BillingTransactionType\Templates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Constants\ModuleConfig.js" />
+    <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\vr-accountbalance-accounttype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\vr-accountbalance-balancealertthreshold.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\vr-accountbalance-balancealertrulesettings.js" />
@@ -159,6 +165,7 @@
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertchecker-process.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertthreshold-updateprocess.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAlertAPIService.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
     <Content Include="VR_AccountBalance\Services\BalanceAlertService.js" />

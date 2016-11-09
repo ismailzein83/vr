@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -184,6 +185,9 @@
     <Content Include="Common\Directives\Filter\Text\Templates\TextFilterTemplate.html" />
     <Content Include="Common\Directives\Filter\Text\vr-common-filter-text.js" />
     <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
+    <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
+    <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
+    <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
     <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-selector.js" />
@@ -276,6 +280,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTimeZoneAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\EmailTemplateAPIService.js" />
@@ -293,6 +298,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
+    <Content Include="Common\Services\VRComponentTypeService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRConcatenatedPartService.js" />
@@ -375,6 +381,10 @@
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditor.html" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditorController.js" />
+    <Content Include="Common\Views\VRComponentType\VRComponentTypeEditor.html" />
+    <Content Include="Common\Views\VRComponentType\VRComponentTypeEditorController.js" />
+    <Content Include="Common\Views\VRComponentType\VRComponentTypeManagement.html" />
+    <Content Include="Common\Views\VRComponentType\VRComponentTypeManagementController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditor.html" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditorController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneManagement.html" />

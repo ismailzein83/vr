@@ -23,7 +23,7 @@ namespace Vanrise.AccountBalance.Business
             return (billingTransactionType != null) ? billingTransactionType.Name : null;
         }
 
-        
+
         #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -50,5 +50,19 @@ namespace Vanrise.AccountBalance.Business
         }
 
         #endregion
+
+        public object GetBillingTransactionTypesInfo()
+        {
+            return GetCachedBillingTransactionTypes().MapRecords(BillingTransactionTypeInfoMapper);
+        }
+
+        BillingTransactionTypeInfo BillingTransactionTypeInfoMapper(BillingTransactionType transactionType)
+        {
+            return new BillingTransactionTypeInfo
+            {
+                Id = transactionType.BillingTransactionTypeId,
+                Name = transactionType.Name
+            };
+        }
     }
 }
