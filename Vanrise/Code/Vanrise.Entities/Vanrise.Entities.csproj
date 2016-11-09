@@ -76,6 +76,10 @@
     <Compile Include="TextManipulation\TextManipulationSettings.cs" />
     <Compile Include="TextManipulation\TextManipulationTarget.cs" />
     <Compile Include="VRMail\VRMailEvaluatedTemplate.cs" />
+    <Compile Include="VRTax\VRTaxesDefinition.cs" />
+    <Compile Include="VRTax\VRTaxItem.cs" />
+    <Compile Include="VRTax\VRTaxItemDefinition.cs" />
+    <Compile Include="VRTax\VRTaxSetting.cs" />
     <Compile Include="VRTimeZone.cs" />
     <Compile Include="VRConcatenatedPart\ConcatenatedPartSettingsConfig.cs" />
     <Compile Include="VRConcatenatedPart\VRConcatenatedPart.cs" />
