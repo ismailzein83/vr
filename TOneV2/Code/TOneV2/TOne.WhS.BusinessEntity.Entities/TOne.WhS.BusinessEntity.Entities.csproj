@@ -146,6 +146,7 @@
     <Compile Include="SalePLNotification\SalePLCodeNotification.cs" />
     <Compile Include="SalePLNotification\SalePLRateNotification.cs" />
     <Compile Include="SalePLNotification\SalePLZoneNotification.cs" />
+    <Compile Include="SalePLNotification\SalePLZoneChange.cs" />
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
