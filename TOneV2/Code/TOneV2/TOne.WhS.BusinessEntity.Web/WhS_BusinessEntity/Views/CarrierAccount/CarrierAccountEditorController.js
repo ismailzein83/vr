@@ -314,6 +314,10 @@
                     if (carrierAccountEntity.SupplierSettings) {
                         $scope.scopeModel.supIncludeProcessingTimeZone = carrierAccountEntity.SupplierSettings.IncludeProcessingTimeZone;
                     }
+
+                    if (carrierAccountEntity.CustomerSettings) {
+                        $scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ
+                    }
                 }
             }
         }
@@ -416,7 +420,8 @@
                 },
                 CustomerSettings: {
                     TimeZoneId: customerTimeDirectiveAPI != undefined ? customerTimeDirectiveAPI.getSelectedIds() : undefined,
-                    RoutingStatus: cusRoutingStatusSelectorAPI != undefined ? cusRoutingStatusSelectorAPI.getSelectedIds() : undefined
+                    RoutingStatus: cusRoutingStatusSelectorAPI != undefined ? cusRoutingStatusSelectorAPI.getSelectedIds() : undefined,
+                    IsAToZ : $scope.scopeModel.isAToZ
                 }
             };
 

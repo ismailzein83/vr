@@ -70,6 +70,9 @@
                             <vr-whs-be-routingstatus-selector  hideremoveicon="true" isrequired on-ready="scopeModel.onCustomerRoutingStatusDirectiveReady">
                             </vr-whs-be-routingstatus-selector>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.isAToZ" label="A To Z Pricelist"></vr-switch>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
