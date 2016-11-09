@@ -159,7 +159,18 @@ namespace Vanrise.ExcelConversion.Business
                     var cell = (row != null) ? row.GetCellOrNull(colIndex) : null;
                     ExcelCell eCell = new ExcelCell();
 
-                    eCell.Value = (cell != null) ? cell.Value : null;
+                    if (cell != null)
+                    {
+                        if (cell.Type == CellValueType.IsDateTime)
+                        {
+                            eCell.Value = cell.StringValue;
+                        }
+                        else
+                            eCell.Value = cell.Value;
+                    }
+                    else
+                        eCell.Value = null;
+
                     eRow.Cells.Add(eCell);
 
 
