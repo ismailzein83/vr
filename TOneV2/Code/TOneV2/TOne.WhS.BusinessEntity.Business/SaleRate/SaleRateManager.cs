@@ -70,10 +70,17 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetSaleRateById(rateId);
         }
+
+        private struct GetCachedSaleRatesInBetweenPeriodCacheName
+        {
+            public DateTime FromTime { get; set; }
+            public DateTime ToTime { get; set; }      
+        }
         public Dictionary<long, SaleRate> GetCachedSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
+            var cacheName = new GetCachedSaleRatesInBetweenPeriodCacheName {FromTime = fromTime, ToTime = tillTime};
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>();
-            return cacheManager.GetOrCreateObject("GetSaleRatesInBetweenPeriod",
+            return cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
                    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();

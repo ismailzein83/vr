@@ -56,10 +56,16 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return dataManager.GetSupplierRateById(rateId);
         }
+        private struct GetCachedSupplierInBetweenPeriodCacheName
+        {
+            public DateTime FromTime { get; set; }
+            public DateTime ToTime { get; set; }
+        }
         public Dictionary<long, SupplierRate> GetCachedSupplierRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
+            var cacheName = new GetCachedSupplierInBetweenPeriodCacheName { FromTime = fromTime, ToTime = tillTime };
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>();
-            return cacheManager.GetOrCreateObject("GetSupplierRatesInBetweenPeriod",
+            return cacheManager.GetOrCreateObject(cacheName,
                () =>
                {
                    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
