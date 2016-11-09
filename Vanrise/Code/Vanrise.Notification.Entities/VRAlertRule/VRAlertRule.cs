@@ -16,9 +16,4 @@ namespace Vanrise.Notification.Entities
 
         public VRAlertRuleSettings Settings { get; set; }
     }
-
-    public class VRAlertRule<T> : VRAlertRule where T : VRAlertRuleCriteria
-    {
-        public T RuleCriteria { get; set; }
-    }
 }

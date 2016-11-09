@@ -21,6 +21,19 @@ namespace Vanrise.Notification.Business
             return cachedVRAlertRuleTypes.GetRecord(vrAlertRuleTypeId);
         }
 
+        public T GetVRAlertRuleTypeSettings<T>(Guid vrAlertRuleTypeId) where T : VRAlertRuleTypeSettings
+        {
+            var alertRuleType = GetVRAlertRuleType(vrAlertRuleTypeId);
+            if (alertRuleType == null)
+                throw new NullReferenceException(String.Format("alertRuleType '{0}'", vrAlertRuleTypeId));
+            if (alertRuleType.Settings == null)
+                throw new NullReferenceException(String.Format("alertRuleType.Settings '{0}'", vrAlertRuleTypeId));
+            T settingsAsT = alertRuleType.Settings as T;
+            if (settingsAsT == null)
+                throw new Exception(String.Format("alertRuleType.Settings is not of type '{0}'. it is of type '{1}'", typeof(T), alertRuleType.Settings.GetType()));
+            return settingsAsT;
+        }
+
         public IDataRetrievalResult<VRAlertRuleTypeDetail> GetFilteredVRAlertRuleTypes(DataRetrievalInput<VRAlertRuleTypeQuery> input)
         {
             var allVRAlertRuleTypes = GetCachedVRAlertRuleTypes();

@@ -10,10 +10,10 @@ namespace Vanrise.Rules.RuleStructureBehaviors
 {
     public abstract class RuleStructureBehaviorByKey<T> : BaseRuleStructureBehavior
     {
-        ConcurrentDictionary<T, RuleNode> _ruleNodesByKey = new ConcurrentDictionary<T, RuleNode>();
-        public override IEnumerable<RuleNode> StructureRules(IEnumerable<BaseRule> rules, out List<BaseRule> notMatchedRules)
+        VRDictionary<T, RuleNode> _ruleNodesByKey = new VRDictionary<T, RuleNode>();
+        public override IEnumerable<RuleNode> StructureRules(IEnumerable<IVRRule> rules, out List<IVRRule> notMatchedRules)
         {
-            notMatchedRules = new List<BaseRule>();
+            notMatchedRules = new List<IVRRule>();
             foreach (var rule in rules)
             {
                 IEnumerable<T> keys;
@@ -22,7 +22,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                 {
                     foreach (var key in keys)
                     {
-                        RuleNode matchNode = _ruleNodesByKey.GetOrCreateItem(key, () => new RuleNode { Rules = new List<BaseRule>() });
+                        RuleNode matchNode = _ruleNodesByKey.GetOrCreateItem(key, () => new RuleNode { Rules = new List<IVRRule>() });
                         matchNode.Rules.Add(rule);
                     }
                 }
@@ -46,7 +46,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
             return null;
         }
 
-        protected abstract void GetKeysFromRule(BaseRule rule, out IEnumerable<T> keys);
+        protected abstract void GetKeysFromRule(IVRRule rule, out IEnumerable<T> keys);
 
         protected abstract bool TryGetKeyFromTarget(object target, out T key);
     }

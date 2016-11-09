@@ -11,7 +11,8 @@ namespace Vanrise.Rules
     {
         public static Object s_lockObj = new object();
         List<BaseRuleStructureBehavior> _structureBehaviors;
-        public RuleTree(IEnumerable<BaseRule> rules, IEnumerable<BaseRuleStructureBehavior> structureBehaviors)
+
+        public RuleTree(IEnumerable<IVRRule> rules, IEnumerable<BaseRuleStructureBehavior> structureBehaviors)
         {
             _structureBehaviors = structureBehaviors.ToList();
 
@@ -19,7 +20,7 @@ namespace Vanrise.Rules
             StructureRules(this, 0, null);
         }
 
-        void StructureRules(RuleNode node, int behaviorIndex, Dictionary<int, List<BaseRule>> priorities)
+        void StructureRules(RuleNode node, int behaviorIndex, Dictionary<int, List<IVRRule>> priorities)
         {
             if (priorities != null)
                 priorities = priorities.OrderBy(itm => itm.Key).ToDictionary(itm => itm.Key, itm => itm.Value);
@@ -30,7 +31,7 @@ namespace Vanrise.Rules
             int nextBehaviorIndex = behaviorIndex + 1;
             node.Behavior = _structureBehaviors[behaviorIndex].CreateNewBehaviorObject();
 
-            List<BaseRule> notMatchedRules;
+            List<IVRRule> notMatchedRules;
             IEnumerable<RuleNode> childNodes = node.Behavior.StructureRules(node.Rules, out notMatchedRules);
             if (childNodes != null && childNodes.Count() > 0)
             {
@@ -40,7 +41,7 @@ namespace Vanrise.Rules
                     if (childNode.Rules != null && childNode.Rules.Count() > 0)
                     {
                         childNode.ParentNode = node;
-                        Dictionary<int, List<BaseRule>> childNodePiorities = BuildPriorities(priorities, childNode.Priorities);
+                        Dictionary<int, List<IVRRule>> childNodePiorities = BuildPriorities(priorities, childNode.Priorities);
                         StructureRules(childNode, nextBehaviorIndex, childNodePiorities);
                         node.ChildNodes.Add(childNode);
                         if (nextBehaviorIndex >= _structureBehaviors.Count)
@@ -60,7 +61,7 @@ namespace Vanrise.Rules
             }
         }
 
-        private void OrderRules(RuleNode node, Dictionary<int, List<BaseRule>> priorities)
+        private void OrderRules(RuleNode node, Dictionary<int, List<IVRRule>> priorities)
         {
             if (priorities == null || priorities.Count == 0)
                 return;
@@ -68,10 +69,10 @@ namespace Vanrise.Rules
             if (node.Rules == null || node.Rules.Count == 0)
                 return;
 
-            HashSet<BaseRule> rules = new HashSet<BaseRule>();
+            HashSet<IVRRule> rules = new HashSet<IVRRule>();
             foreach (var priority in priorities)
             {
-                foreach (BaseRule rule in priority.Value)
+                foreach (IVRRule rule in priority.Value)
                 {
                     if (node.Rules.Contains(rule))
                         rules.Add(rule);
@@ -80,14 +81,14 @@ namespace Vanrise.Rules
             node.Rules = rules.ToList();
         }
 
-        private Dictionary<int, List<BaseRule>> BuildPriorities(Dictionary<int, List<BaseRule>> priorities, Dictionary<BaseRule, int> nodePriorities)
+        private Dictionary<int, List<IVRRule>> BuildPriorities(Dictionary<int, List<IVRRule>> priorities, Dictionary<IVRRule, int> nodePriorities)
         {
-            Dictionary<int, List<BaseRule>> result = new Dictionary<int, List<BaseRule>>();
+            Dictionary<int, List<IVRRule>> result = new Dictionary<int, List<IVRRule>>();
             int priority = 0;
   
 
             if (nodePriorities == null || nodePriorities.Count == 0)
-                return priorities != null ? new Dictionary<int, List<BaseRule>>(priorities) : null;
+                return priorities != null ? new Dictionary<int, List<IVRRule>>(priorities) : null;
 
             if (priorities == null || priorities.Count == 0)
             {
@@ -98,10 +99,10 @@ namespace Vanrise.Rules
                 return result;
             }
 
-            foreach (KeyValuePair<int, List<BaseRule>> item in priorities)
+            foreach (KeyValuePair<int, List<IVRRule>> item in priorities)
             {
-                Dictionary<int, List<BaseRule>> tempDict = new Dictionary<int, List<BaseRule>>();
-                foreach (BaseRule baseRule in item.Value)
+                Dictionary<int, List<IVRRule>> tempDict = new Dictionary<int, List<IVRRule>>();
+                foreach (var baseRule in item.Value)
                 {
                     int rulePriority;
                     if (nodePriorities.TryGetValue(baseRule, out rulePriority))
@@ -120,9 +121,9 @@ namespace Vanrise.Rules
             return result.Count > 0 ? result : null;
         }
 
-        public BaseRule GetMatchRule(BaseRuleTarget target)
+        public IVRRule GetMatchRule(BaseRuleTarget target)
         {
-            BaseRule matchRule = GetMatchRule(this, target);
+            IVRRule matchRule = GetMatchRule(this, target);
             if (matchRule != null)
             {
                 DateTime now = VRClock.Now;
@@ -140,7 +141,7 @@ namespace Vanrise.Rules
             return matchRule;
         }
 
-        BaseRule GetMatchRule(RuleNode parentNode, BaseRuleTarget target)
+        IVRRule GetMatchRule(RuleNode parentNode, BaseRuleTarget target)
         {
             if (parentNode.Behavior == null)//last node in the tree
             {
@@ -172,7 +173,7 @@ namespace Vanrise.Rules
             return null;
         }
 
-        BaseRule GetFirstMatchRuleFromNode(RuleNode node, BaseRuleTarget target)
+        IVRRule GetFirstMatchRuleFromNode(RuleNode node, BaseRuleTarget target)
         {
             foreach (var rule in node.Rules)
             {
@@ -183,7 +184,7 @@ namespace Vanrise.Rules
             return null;
         }
 
-        bool IsRuleMatched(BaseRule rule, BaseRuleTarget target)
+        bool IsRuleMatched(IVRRule rule, BaseRuleTarget target)
         {
             DateTime now = VRClock.Now;
 

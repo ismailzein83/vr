@@ -19,10 +19,16 @@ namespace Vanrise.Caching
 
         public Object Object { get; set; }
 
+        public ICacheManager CacheManager { get; set; }
+
+        public Object AdditionalInfo { get; set; }
+
         public CacheObjectSize ApproximateSize { get; set; }
 
         public DateTime LastAccessedTime { get; set; }
 
         public DateTime CreatedTime { get; set; }
+
+        public CacheExpirationChecker CacheExpirationChecker { get; set; }
     }
 }

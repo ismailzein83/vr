@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountBalanceUpdateHandler.cs" />
+    <Compile Include="AccountTypeManager.cs" />
     <Compile Include="BalanceAlertEventPayload.cs" />
     <Compile Include="BalanceAlertManager.cs" />
     <Compile Include="BalanceAlertRuleManager.cs" />
@@ -52,6 +53,8 @@
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Context\BalanceAlertThresholdContext.cs" />
     <Compile Include="Context\BalancePeriodContext.cs" />
+    <Compile Include="Extensions\AccountBalanceAlertRuleBehavior.cs" />
+    <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
     <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="UsageBalanceManager.cs" />
     <Compile Include="BillingTransactionManager.cs" />

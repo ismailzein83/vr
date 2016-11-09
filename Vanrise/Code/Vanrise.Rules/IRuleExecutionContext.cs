@@ -8,6 +8,6 @@ namespace Vanrise.Rules
 {
     public interface IRuleExecutionContext
     {
-        BaseRule Rule { get; set; }
+        IVRRule Rule { get; set; }
     }
 }

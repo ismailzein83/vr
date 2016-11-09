@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
+using Vanrise.Common;
 
 namespace Vanrise.Caching
 {
     public static class CacheManagerFactory
     {
-        internal static ConcurrentDictionary<Type, ICacheManager> s_defaultCacheManagers = new ConcurrentDictionary<Type, ICacheManager>();       
+        static CacheManagerFactory()
+        {
+            CacheCleaner.Start();
+        }
+
+        internal static VRDictionary<Type, ICacheManager> s_defaultCacheManagers = new VRDictionary<Type, ICacheManager>(true);       
 
         public static T GetCacheManager<T>(Guid? cacheManagerId = null) where T : class, ICacheManager
         {
@@ -17,7 +23,6 @@ namespace Vanrise.Caching
 
         public static ICacheManager GetCacheManager(Type cacheManagerType, Guid? cacheManagerId = null)
         {
-            //CacheCleaner.CleanCacheIfNeeded();
             if (!cacheManagerId.HasValue)
             {
                 ICacheManager cacheManager;
@@ -75,6 +80,11 @@ namespace Vanrise.Caching
                 toCheck = toCheck.BaseType;
             }
             return false;
+        }
+
+        public static void SetCacheObjectCleanable(CachedObject cachedObject)
+        {
+            CacheCleaner.SetCacheObjectCleanable(cachedObject);
         }
     }
     

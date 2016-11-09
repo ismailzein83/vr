@@ -10,18 +10,18 @@ namespace Vanrise.Rules.RuleStructureBehaviors
 {
     public abstract class RuleStructureBehaviorByPrefix : BaseRuleStructureBehavior
     {
-        ConcurrentDictionary<string, RuleNode> _ruleNodesByPrefixes = new ConcurrentDictionary<string, RuleNode>();
+        VRDictionary<string, RuleNode> _ruleNodesByPrefixes = new VRDictionary<string, RuleNode>();
         int _minPrefixLength = int.MaxValue;
         int _maxPrefixLength = 0;
-        
 
-        public override IEnumerable<RuleNode> StructureRules(IEnumerable<BaseRule> rules, out List<BaseRule> notMatchRules)
+
+        public override IEnumerable<RuleNode> StructureRules(IEnumerable<IVRRule> rules, out List<IVRRule> notMatchRules)
         {
             int priority = 0;
             int keyLength = 0;
-            List<BaseRule> baseRules;
+            List<IVRRule> baseRules;
 
-            notMatchRules = new List<BaseRule>();
+            notMatchRules = new List<IVRRule>();
             foreach (var rule in rules)
             {
                 IEnumerable<string> prefixes;
@@ -35,7 +35,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                             _minPrefixLength = prefixLength;
                         if (prefixLength > _maxPrefixLength)
                             _maxPrefixLength = prefixLength;
-                        RuleNode matchNode = _ruleNodesByPrefixes.GetOrCreateItem(prefix, () => new RuleNode { Rules = new List<BaseRule>(), Priorities = new Dictionary<BaseRule,int>() });
+                        RuleNode matchNode = _ruleNodesByPrefixes.GetOrCreateItem(prefix, () => new RuleNode { Rules = new List<IVRRule>(), Priorities = new Dictionary<IVRRule, int>() });
                         matchNode.Rules.Add(rule);
                         matchNode.Priorities.Add(rule, 0);
                     }
@@ -82,7 +82,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
             return null;
         }
 
-        protected abstract void GetPrefixesFromRule(BaseRule rule, out IEnumerable<string> prefixes);
+        protected abstract void GetPrefixesFromRule(IVRRule rule, out IEnumerable<string> prefixes);
 
         protected abstract bool TryGetValueToCompareFromTarget(object target, out string value);
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Rules;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -26,10 +27,56 @@ namespace Vanrise.GenericData.Entities
         public MappingRuleStructureBehaviorType RuleStructureBehaviorType { get; set; }
     }
 
-    public class BELookupRule : Vanrise.Rules.BaseRule
+    public class BELookupRule : Vanrise.Rules.IVRRule
     {
         public BELookupRuleDefinition RuleDefinition { get; set; }
 
         public dynamic BusinessEntityObject { get; set; }
+        
+
+        public bool IsAnyCriteriaExcluded(object target)
+        {
+            return false;
+        }
+
+        public DateTime BeginEffectiveTime
+        {
+            get
+            {
+                return DateTime.MinValue;
+            }
+            set
+            {
+
+            }
+        }
+
+        public DateTime? EndEffectiveTime
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+
+            }
+        }
+
+        public DateTime? LastRefreshedTime
+        {
+            get;
+            set;
+        }
+
+        public TimeSpan RefreshTimeSpan
+        {
+            get { return TimeSpan.MaxValue; }
+        }
+
+        public void RefreshRuleState(IRefreshRuleStateContext context)
+        {
+
+        }
     }
 }

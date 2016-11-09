@@ -8,7 +8,7 @@ namespace Vanrise.Rules
 {
     public class RuleNode
     {
-        public List<BaseRule> Rules { get; set; }
+        public List<IVRRule> Rules { get; set; }
 
         internal RuleNode ParentNode { get; set; }
 
@@ -21,6 +21,6 @@ namespace Vanrise.Rules
         internal bool IsUnMatchedRulesNode { get; set; }
 
         //public Dictionary<int, List<BaseRule>> Priorities { get; set; }
-        public Dictionary<BaseRule, int> Priorities { get; set; }
+        public Dictionary<IVRRule, int> Priorities { get; set; }
     }
 }

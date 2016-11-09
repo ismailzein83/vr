@@ -120,6 +120,7 @@
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionQuery.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleCriteria.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleTypeSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAggregationField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcCalculationField.cs" />

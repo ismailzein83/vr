@@ -14,6 +14,6 @@ namespace Vanrise.GenericData.Pricing
 
         public Dictionary<int, Decimal> RatesByRateType { set; get; }
 
-        public BaseRule Rule { get; set; }
+        public IVRRule Rule { get; set; }
     }
 }

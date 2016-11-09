@@ -15,19 +15,18 @@ namespace Vanrise.Common
             _assemblies = assemblies;
         }
 
-        ConcurrentDictionary<Type, Type> _cachedImplementedTypes = new ConcurrentDictionary<Type, Type>();
+        VRDictionary<Type, Type> _cachedImplementedTypes = new VRDictionary<Type, Type>(true);
 
-        static ConcurrentDictionary<Type, Type> s_explicitImplementedTypes = new ConcurrentDictionary<Type, Type>();
+        static VRDictionary<Type, Type> s_explicitImplementedTypes = new VRDictionary<Type, Type>(true);
 
         public static void AddExplicitImplementation<T, Q>()
         {
-            s_explicitImplementedTypes.AddOrUpdate(typeof(T), typeof(Q), (t, q) => q);
+            s_explicitImplementedTypes.Add(typeof(T), typeof(Q));
         }
 
         public static void RemoveExplicitImplementation<T>()
-        {
-            Type dummy;
-            s_explicitImplementedTypes.TryRemove(typeof(T), out dummy);
+        {            
+            s_explicitImplementedTypes.Remove(typeof(T));
         }
 
         public T CreateObjectFromType<T>() where T : class

@@ -12,9 +12,9 @@ namespace Vanrise.Caching
         object dummyParameter = new object();
         CacheStore _cacheDictionary = new CacheStore();
 
-        public override T GetOrCreateObject<T>(Object cacheName, object parameter, Func<T> createObject)
+        public override T GetOrCreateObject<T>(Object cacheName, object parameter, CacheExpirationChecker cacheExpirationChecker, Func<T> createObject)
         {
-            return base.GetOrCreateObject<T>(cacheName, dummyParameter, createObject);
+            return base.GetOrCreateObject<T>(cacheName, dummyParameter, cacheExpirationChecker, createObject);
         }
 
         protected override CacheStore GetCacheDictionary(object parameter)
@@ -27,12 +27,17 @@ namespace Vanrise.Caching
             return _cacheDictionary.Values;
         }
 
-        public T GetOrCreateObject<T>(Object cacheName, Func<T> createObject)
+        public virtual T GetOrCreateObject<T>(Object cacheName, CacheExpirationChecker cacheExpirationChecker, Func<T> createObject)
         {
-            return base.GetOrCreateObject(cacheName, dummyParameter, createObject);
+            return base.GetOrCreateObject(cacheName, dummyParameter, cacheExpirationChecker, createObject);
         }
 
-        public void RemoveObjectFromCache(string cacheName)
+        public virtual T GetOrCreateObject<T>(Object cacheName, Func<T> createObject)
+        {
+            return this.GetOrCreateObject(cacheName, null, createObject);
+        }
+
+        public void RemoveObjectFromCache(Object cacheName)
         {
             base.RemoveObjectFromCache(cacheName, dummyParameter);
         }

@@ -73,12 +73,6 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="DAProfCalcAlertRuleSubProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.BP.Activities\Vanrise.Analytic.BP.Activities.csproj">
       <Project>{b9f55273-1461-42d9-acb3-0d253b2af449}</Project>
       <Name>Vanrise.Analytic.BP.Activities</Name>

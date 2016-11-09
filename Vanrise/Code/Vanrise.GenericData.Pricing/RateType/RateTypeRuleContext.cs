@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Pricing
 
         public int? RateTypeId { get; set; }
 
-        public BaseRule Rule { get; set; }
+        public IVRRule Rule { get; set; }
 
         public List<int> RateTypes { get; set; }
     }

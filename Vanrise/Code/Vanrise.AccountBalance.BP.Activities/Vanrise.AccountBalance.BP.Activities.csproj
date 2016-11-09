@@ -69,7 +69,6 @@
     <Compile Include="BalanceAlertThresholdUpdate\CalculateNextAlertThresholds.cs" />
     <Compile Include="BalanceAlertChecker\CreateAlertActions.cs" />
     <Compile Include="AccountBalanceUpdate\CreateBalanceClosingPeriod.cs" />
-    <Compile Include="GetAlertRulesIfUpdated.cs" />
     <Compile Include="AccountBalanceUpdate\GetNextBalanceClosingDate.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\LoadAccountBalances.cs" />
     <Compile Include="BalanceAlertChecker\LoadBalancesToAlert.cs" />

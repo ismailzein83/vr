@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.Pricing
          
         public Decimal? TotalAmount { get; set; }
 
-        public BaseRule Rule { get; set; }
+        public IVRRule Rule { get; set; }
 
         public Decimal ExtraChargeRate { get; set; }
 

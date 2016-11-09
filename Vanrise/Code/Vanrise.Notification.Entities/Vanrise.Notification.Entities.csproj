@@ -49,6 +49,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BalanceAlertRule\VRBalanceAlertEventPayload.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceAlertRuleBehavior.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceAlertRuleSettings.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceAlertRuleTypeSettings.cs" />
+    <Compile Include="BalanceAlertRule\IVREntityBalanceInfo.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceUpdateLastAlertInfoPayload.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceUpdateRuleInfoPayload.cs" />
     <Compile Include="VRAction\CreateVRActionInput.cs" />
     <Compile Include="VRAction\IVRActionEventPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,27 +64,38 @@
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeConfig.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeFilter.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeInfo.cs" />
+    <Compile Include="VRAlertRule\CreateAlertRuleNotificationInput.cs" />
+    <Compile Include="VRAlertRule\CreateAlertRuleNotificationOutput.cs" />
     <Compile Include="VRAlertRule\VRAlertRule.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleCheckerInput.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleCheckerOutput.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleCriteria.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleDetail.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleEventPayload.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleExecution.cs" />
-    <Compile Include="VRAlertRule\VRAlertRuleMatchedEvent.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleQuery.cs" />
     <Compile Include="VRAlertRule\VRAlertRuleSettings.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleType.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeDetail.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeQuery.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeSettings.cs" />
+    <Compile Include="VRNotification\CreateVRNotificationInput.cs" />
+    <Compile Include="VRNotification\CreateVRNotificationOutput.cs" />
+    <Compile Include="VRNotification\VRNotification.cs" />
+    <Compile Include="VRNotification\VRNotificationType.cs" />
+    <Compile Include="VRNotification\VRNotificationTypeSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
+      <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
+      <Name>Vanrise.Rules</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

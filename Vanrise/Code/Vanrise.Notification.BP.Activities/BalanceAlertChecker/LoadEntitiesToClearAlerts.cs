@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.Notification.Entities;
+using Vanrise.Queueing;
 
-namespace Vanrise.Notification.BP.Activities
+namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {
 
-    public sealed class GetAlertRuleTypeSettings<T> : CodeActivity where T : VRAlertRuleTypeSettings
+    public sealed class LoadEntitiesToClearAlerts : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<Guid> AlertRuleTypeId { get; set; }
+        public InArgument<VRBalanceAlertRuleTypeSettings> RuleTypeSettings { get; set; }
 
         [RequiredArgument]
-        public OutArgument<T> AlertRuleTypeSettings { get; set; }
+        public InOutArgument<BaseQueue<VREntityBalanceInfoBatch>> OutputQueue { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             

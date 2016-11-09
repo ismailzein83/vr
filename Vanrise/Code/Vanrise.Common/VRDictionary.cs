@@ -10,11 +10,58 @@ namespace Vanrise.Common
 {
     public class VRDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
+        public VRDictionary() : this(false)
+        {
+
+        }
+
+        bool _isConcurrent;
+        public VRDictionary(bool isConcurrent)
+        {
+            _isConcurrent = isConcurrent;
+        }
+
         ConcurrentDictionary<TKey, TValue> _localDictionary = new ConcurrentDictionary<TKey, TValue>();
         public void Add(TKey key, TValue value)
         {
-            _localDictionary.TryAdd(key, value);
+            if (!TryAdd(key, value))
+                throw new Exception(String.Format("Cannot add Item to dictionary. Item Key '{0}'", key));
+            //if (_isConcurrent)
+            //{
+            //    lock(_localDictionary)
+            //    {
+            //        Add_Private(key, value, false);
+            //    }
+            //}
+            //else
+            //    Add_Private(key, value, false);
         }
+
+        public bool TryAdd(TKey key, TValue value)
+        {
+            return _localDictionary.TryAdd(key, value);
+            //if (_isConcurrent)
+            //{
+            //    lock (_localDictionary)
+            //    {
+            //        return Add_Private(key, value, true);
+            //    }
+            //}
+            //else
+            //    return Add_Private(key, value, true);
+                        
+        }
+
+        //bool Add_Private(TKey key, TValue value, bool addIfNotExists)
+        //{
+        //    if (!addIfNotExists || !_localDictionary.ContainsKey(key))
+        //    {
+        //        _localDictionary.Add(key, value);
+        //        return true;
+        //    }
+        //    else
+        //        return false;
+        //}
 
         public bool ContainsKey(TKey key)
         {
@@ -30,7 +77,21 @@ namespace Vanrise.Common
         {
             TValue dummy;
             return _localDictionary.TryRemove(key, out dummy);
+            //if (_isConcurrent)
+            //{
+            //    lock (_localDictionary)
+            //    {
+            //        return Remove_Private(key);
+            //    }
+            //}
+            //else
+            //    return Remove_Private(key);
         }
+
+        //bool Remove_Private(TKey key)
+        //{
+        //    return _localDictionary.Remove(key);
+        //}
 
         public bool TryGetValue(TKey key, out TValue value)
         {
@@ -61,18 +122,23 @@ namespace Vanrise.Common
 
         public void Clear()
         {
-            _localDictionary.Clear();
+            if (_isConcurrent)
+            {
+                lock (_localDictionary)
+                    _localDictionary.Clear();
+            }
+            else
+                _localDictionary.Clear();
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            TValue val;
-            return _localDictionary.TryGetValue(item.Key, out val) && ((val == null && item.Value == null) || val.Equals(item.Value));
+        {            
+            return _localDictionary.Contains(item);
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            ((IDictionary<TKey, TValue>)_localDictionary).CopyTo(array, arrayIndex);
+            ((IDictionary<TKey,TValue>)_localDictionary).CopyTo(array, arrayIndex);
         }
 
         public int Count
@@ -88,6 +154,13 @@ namespace Vanrise.Common
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             return ((IDictionary<TKey, TValue>)_localDictionary).Remove(item);
+            //if (_isConcurrent)
+            //{
+            //    lock (_localDictionary)
+            //        return _localDictionary.Remove(item);
+            //}
+            //else
+            //    return _localDictionary.Remove(item);           
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()

@@ -58,7 +58,6 @@
     <Compile Include="DAProfCalc\ProfilingDGHandler.cs" />
     <Compile Include="DAProfCalc\ExecuteProfiledMerging.cs" />
     <Compile Include="DAProfCalc\ExecuteRecordProfiling.cs" />
-    <Compile Include="DAProfCalc\GenerateVRAlertEvents.cs" />
     <Compile Include="DAProfCalc\ProfilingDGItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

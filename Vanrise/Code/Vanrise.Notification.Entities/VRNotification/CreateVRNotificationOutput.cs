@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    public class VRAlertRuleMatchedEvent
+    public class CreateVRNotificationOutput
     {
-        public long AlertRuleId { get; set; }
 
-        public VRAlertRuleEventPayload EventPayload { get; set; }
     }
 }

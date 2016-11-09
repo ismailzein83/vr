@@ -10,11 +10,16 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
 {
     public class GenericRuleStructureBehaviorByPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix, IGenericRuleStructureBehavior
     {
-        public string FieldName { get; set; }
+        public GenericRuleDefinitionCriteriaField GenericRuleDefinitionCriteriaField { get; set; }
 
-        protected override void GetPrefixesFromRule(BaseRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
+        protected override void GetPrefixesFromRule(IVRRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
         {
-            IEnumerable<Object> fieldValues = GenericRuleManager<GenericRule>.GetCriteriaFieldValues(rule as GenericRule, this.FieldName);
+            if (rule == null)
+                throw new ArgumentNullException("rule");
+            IGenericRule genericRule = rule as IGenericRule;
+            if (genericRule == null)
+                throw new Exception(String.Format("rule is not of type IGenericRule. it is of type '{0}'", rule.GetType()));
+            IEnumerable<Object> fieldValues = GenericRuleManager<GenericRule>.GetCriteriaFieldValues(genericRule, this.GenericRuleDefinitionCriteriaField);
             if (fieldValues != null)
                 prefixes = fieldValues.Select(itm => itm as string);
             else
@@ -23,8 +28,13 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
 
         protected override bool TryGetValueToCompareFromTarget(object target, out string value)
         {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            GenericRuleTarget genericRuleTarget = target as GenericRuleTarget;
+            if (genericRuleTarget == null)
+                throw new Exception(String.Format("target is not of type GenericRuleTarget. it is of type '{0}'", target.GetType()));
             object fieldValue;
-            if (GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.FieldName, out fieldValue))
+            if (GenericRuleManager<GenericRule>.TryGetTargetFieldValue(genericRuleTarget, this.GenericRuleDefinitionCriteriaField.FieldName, out fieldValue))
             {
                 value = fieldValue as string;
                 return true;
@@ -40,7 +50,7 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
         {
             return new GenericRuleStructureBehaviorByPrefix
             {
-                FieldName = this.FieldName
+                GenericRuleDefinitionCriteriaField = this.GenericRuleDefinitionCriteriaField
             };
         }
     }

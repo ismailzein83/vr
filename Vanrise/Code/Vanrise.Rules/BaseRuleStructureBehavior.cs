@@ -8,7 +8,7 @@ namespace Vanrise.Rules
 {
     public abstract class BaseRuleStructureBehavior
     {
-        public abstract IEnumerable<RuleNode> StructureRules(IEnumerable<BaseRule> rules, out List<BaseRule> notMatchRules);
+        public abstract IEnumerable<RuleNode> StructureRules(IEnumerable<IVRRule> rules, out List<IVRRule> notMatchRules);
 
         public abstract List<RuleNode> GetMatchedNodes(object target);
 

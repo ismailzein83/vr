@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Business.BELookupRules.RuleStructureBehaviors
     {
         public string FieldPath { get; set; }
 
-        protected override void GetKeysFromRule(BaseRule rule, out IEnumerable<object> keys)
+        protected override void GetKeysFromRule(IVRRule rule, out IEnumerable<object> keys)
         {
             var beLookupRule = rule as BELookupRule;
             if (beLookupRule == null)

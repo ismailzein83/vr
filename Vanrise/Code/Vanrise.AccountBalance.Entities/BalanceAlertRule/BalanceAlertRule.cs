@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
@@ -34,5 +36,17 @@ namespace Vanrise.AccountBalance.Entities
         {
             return true;
         }
+    }
+
+    public class BalanceAlertRuleSettings : VRGenericAlertRuleExtendedSettings
+    {
+        public const string VRACTION_EXTENSION_TYPE = "VR_AccountBalance_VRAction";
+
+        public BalanceAlertSettings Settings { get; set; }
+    }
+
+    public class BalanceAlertRuleTypeSettings : VRGenericAlertRuleTypeSettings
+    {
+        public Guid AccountTypeId { get; set; }
     }
 }

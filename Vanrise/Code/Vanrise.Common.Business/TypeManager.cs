@@ -24,7 +24,7 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-        static ConcurrentDictionary<string, int> s_typesIds = new ConcurrentDictionary<string, int>();
+        static VRDictionary<string, int> s_typesIds = new VRDictionary<string, int>(true);
 
         public int GetTypeId(Type t)
         {

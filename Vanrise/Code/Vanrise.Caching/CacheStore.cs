@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Caching
 {
@@ -12,7 +13,7 @@ namespace Vanrise.Caching
         bool _hasFirstItem;
         Object _firstItemKey;
         CachedObject _firstItemValue;
-        ConcurrentDictionary<Object, CachedObject> _dictionary = new ConcurrentDictionary<object, CachedObject>();
+        VRDictionary<Object, CachedObject> _dictionary = new VRDictionary<object, CachedObject>();
 
         public DateTime LastExpirationCheckTime { get; set; }
 
@@ -28,7 +29,7 @@ namespace Vanrise.Caching
                 }
                 else
                 {
-                    _dictionary.TryAdd(key, cachedObject);
+                    _dictionary.Add(key, cachedObject);
                 }
             }
         }
@@ -56,8 +57,7 @@ namespace Vanrise.Caching
                 }
                 else
                 {
-                    CachedObject dummy;
-                    _dictionary.TryRemove(key, out dummy);
+                    _dictionary.Remove(key);
                 }
             }
         }

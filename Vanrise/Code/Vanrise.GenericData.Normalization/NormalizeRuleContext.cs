@@ -22,6 +22,6 @@ namespace Vanrise.GenericData.Normalization
             set;
         }
 
-       public BaseRule Rule { get; set; }
+       public IVRRule Rule { get; set; }
     }
 }

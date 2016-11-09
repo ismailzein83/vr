@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Notification.Entities
+namespace Vanrise.Notification.Business
 {
-    public class VRAlertRuleCheckerOutput
+    public class VRBalanceAlertRuleManager : VRGenericAlertRuleManager
     {
-    }    
+        
+    }
 }

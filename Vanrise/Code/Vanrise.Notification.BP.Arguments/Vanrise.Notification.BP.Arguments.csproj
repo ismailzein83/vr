@@ -46,8 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlertCheckerProcessInput.cs" />
+    <Compile Include="BalanceAlertCheckerProcessInput.cs" />
+    <Compile Include="BalanceAlertThresholdUpdateProcessInput.cs" />
+    <Compile Include="ClearNotificationInput.cs" />
     <Compile Include="CreateActionProcessInput.cs" />
+    <Compile Include="ExecuteNotificationProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

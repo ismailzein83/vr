@@ -18,7 +18,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
     {
         #region ctor/Local Variables
 
-        ConcurrentDictionary<DateTime, ConcurrentDictionary<string, SummaryItemInProcess<Q>>> _existingSummaryBatches = new ConcurrentDictionary<DateTime, ConcurrentDictionary<string, SummaryItemInProcess<Q>>>();
+        VRDictionary<DateTime, VRDictionary<string, SummaryItemInProcess<Q>>> _existingSummaryBatches = new VRDictionary<DateTime, VRDictionary<string, SummaryItemInProcess<Q>>>();
         ISummaryTransformationDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ISummaryTransformationDataManager>();
 
         #endregion
@@ -27,7 +27,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj)
         {
-            ConcurrentDictionary<DateTime, SummaryBatchInProcess<Q>> batches = new ConcurrentDictionary<DateTime, SummaryBatchInProcess<Q>>();
+            VRDictionary<DateTime, SummaryBatchInProcess<Q>> batches = new VRDictionary<DateTime, SummaryBatchInProcess<Q>>();
             
             foreach (var item in items)
             {
@@ -41,8 +41,8 @@ namespace Vanrise.Common.Business.SummaryTransformation
                     batch = new SummaryBatchInProcess<Q>();
                     batch.BatchStart = batchStart;
                     batch.BatchEnd = batchEnd;
-                    batch.ItemsBySummaryKey = new ConcurrentDictionary<string, Q>();
-                    batches.TryAdd(batchStart, batch);
+                    batch.ItemsBySummaryKey = new VRDictionary<string, Q>();
+                    batches.Add(batchStart, batch);
                 }
 
                 Q summaryItem = CreateSummaryItemFromRawItem(item);
@@ -53,7 +53,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 if (batch.ItemsBySummaryKey.TryGetValue(itemKey, out existingSummaryItem))
                     UpdateSummaryItemFromSummaryItem(existingSummaryItem, summaryItem);
                 else
-                    batch.ItemsBySummaryKey.TryAdd(itemKey, summaryItem);
+                    batch.ItemsBySummaryKey.Add(itemKey, summaryItem);
             }
             return batches.Values.Select(
                 itm =>
@@ -67,7 +67,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         public void UpdateNewBatches(DateTime batchStart, IEnumerable<R> newBatches)
         {
-            ConcurrentDictionary<string, SummaryItemInProcess<Q>> existingSummaryBatch;
+            VRDictionary<string, SummaryItemInProcess<Q>> existingSummaryBatch;
             if (!_existingSummaryBatches.TryGetValue(batchStart, out existingSummaryBatch))
                 throw new Exception(String.Format("Summary Transformation should be locked before calling the UpdateNewBatches. Batch Start: '{0}'", batchStart));
 
@@ -98,17 +98,17 @@ namespace Vanrise.Common.Business.SummaryTransformation
             if (_dataManager.TryLock(GetTypeId(), batchStart, currentRuntimeProcessId, runningRuntimeProcessesIds))
             {
                 var items = GetItemsFromDB(batchStart);
-                ConcurrentDictionary<string, SummaryItemInProcess<Q>> itemsByKey = new ConcurrentDictionary<string, SummaryItemInProcess<Q>>();
+                VRDictionary<string, SummaryItemInProcess<Q>> itemsByKey = new VRDictionary<string, SummaryItemInProcess<Q>>();
                 if(items != null)
                 {
                     foreach(var itm in items)
                     {
                         string itemKey = GetSummaryItemKey(itm);
                         if (!itemsByKey.ContainsKey(itemKey))
-                            itemsByKey.TryAdd(itemKey, new SummaryItemInProcess<Q> { SummaryItem = itm });
+                            itemsByKey.Add(itemKey, new SummaryItemInProcess<Q> { SummaryItem = itm });
                     }
                 }
-                _existingSummaryBatches.TryAdd(batchStart, itemsByKey);
+                _existingSummaryBatches.Add(batchStart, itemsByKey);
                 return true;
             }
             else
@@ -118,8 +118,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
         public void Unlock(DateTime batchStart)
         {
             _dataManager.UnLock(GetTypeId(), batchStart);
-            ConcurrentDictionary<string, SummaryItemInProcess<Q>> dummy;
-            _existingSummaryBatches.TryRemove(batchStart, out dummy);
+            _existingSummaryBatches.Remove(batchStart);
         }
         
         #endregion
@@ -161,7 +160,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
             }
         }
 
-        public void UpdateExistingFromNew(ConcurrentDictionary<string, SummaryItemInProcess<Q>> existingSummaryItemsByKey, R newSummaryBatch)
+        public void UpdateExistingFromNew(VRDictionary<string, SummaryItemInProcess<Q>> existingSummaryItemsByKey, R newSummaryBatch)
         {
             if (newSummaryBatch == null)
                 throw new NullReferenceException("newSummaryBatch");
@@ -175,7 +174,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 if (!existingSummaryItemsByKey.TryGetValue(summaryItemKey, out matchSummaryItem))
                 {
                     matchSummaryItem = new SummaryItemInProcess<Q> { SummaryItem = newSummaryItem};
-                    existingSummaryItemsByKey.TryAdd(summaryItemKey, matchSummaryItem);
+                    existingSummaryItemsByKey.Add(summaryItemKey, matchSummaryItem);
                 }
                 else
                 {
@@ -218,7 +217,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
             public DateTime BatchEnd { get; set; }
 
-            public ConcurrentDictionary<string, T> ItemsBySummaryKey { get; set; }
+            public VRDictionary<string, T> ItemsBySummaryKey { get; set; }
         }
 
         #endregion

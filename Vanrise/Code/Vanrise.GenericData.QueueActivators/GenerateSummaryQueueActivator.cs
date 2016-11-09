@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Common.Business.SummaryTransformation;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
@@ -52,7 +53,7 @@ namespace Vanrise.GenericData.QueueActivators
         void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
-            var allSummaryBatches = new ConcurrentDictionary<DateTime, ConcurrentDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
+            var allSummaryBatches = new VRDictionary<DateTime, VRDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
             List<GenericSummaryRecordBatch> genericSummaryRecordBatches = new List<GenericSummaryRecordBatch>();
 
             context.DoWhilePreviousRunning(() =>
@@ -71,11 +72,11 @@ namespace Vanrise.GenericData.QueueActivators
                         {
                             foreach (var summaryBatch in summaryRecordBatches)
                             {
-                                ConcurrentDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>> matchBatch;
+                                VRDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>> matchBatch;
                                 if (!allSummaryBatches.TryGetValue(summaryBatch.BatchStart, out matchBatch))
                                 {
-                                    matchBatch = new ConcurrentDictionary<string, Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>();
-                                    allSummaryBatches.TryAdd(summaryBatch.BatchStart, matchBatch);
+                                    matchBatch = new VRDictionary<string, Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>();
+                                    allSummaryBatches.Add(summaryBatch.BatchStart, matchBatch);
                                 }
                                 transformationManager.UpdateExistingFromNew(matchBatch, summaryBatch);
                             }
@@ -274,7 +275,7 @@ namespace Vanrise.GenericData.QueueActivators
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             bool hasItem = false;
-            ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+            VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
 
             doWhilePreviousRunning(prepareBatchStatus, () =>
             {
@@ -295,7 +296,7 @@ namespace Vanrise.GenericData.QueueActivators
                         if (_existingSummaryBatches.Values.Count > 50000)
                         {
                             transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
-                            _existingSummaryBatches = new ConcurrentDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
+                            _existingSummaryBatches = new VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
                         }
                     });
                 } while (!prepareBatchStatus.IsComplete || hasItem);

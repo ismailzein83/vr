@@ -54,58 +54,29 @@ namespace Vanrise.GenericData.Business
 
         public T GetMatchRule(Guid ruleDefinitionId, GenericRuleTarget target)
         {
-            if (target == null)
-                throw new ArgumentNullException("target");
-            FillTargetEvaluatedCriterias(target, ruleDefinitionId);
             var ruleTree = GetRuleTree(ruleDefinitionId);
-            return ruleTree.GetMatchRule(target) as T;
+            var criteriaEvaluationInfos = GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
+            return GetMatchRule<T>(ruleTree, criteriaEvaluationInfos, target);
         }
 
-        public static IEnumerable<Object> GetCriteriaFieldValues(GenericRule rule, string fieldName)
-        {
-            if (rule == null)
-                throw new ArgumentNullException("rule");
-            if (rule.Criteria == null || rule.Criteria.FieldsValues == null)
-                return null;
-            //if (rule.Criteria == null)
-            //    throw new ArgumentNullException("rule.Criteria");
-            //if (rule.Criteria.FieldsValues == null)
-            //    throw new ArgumentNullException("rule.Criteria.FieldsValues");
-            GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
-            if (rule.Criteria.FieldsValues.TryGetValue(fieldName, out genericRuleCriteriaFieldValues))
-            {
-                var fieldType = GetCritieriaFieldType(rule, fieldName);
+        //private static DataRecordFieldType GetCritieriaFieldType(GenericRuleDefinitionCriteria ruleCriteriaDefinition, string fieldName)
+        //{
+        //    var ruleDefinition = GetRuleDefinition(rule.DefinitionId);
 
-                var fieldRuntimeType = fieldType.GetNonNullableRuntimeType();
+        //    if (ruleDefinition.CriteriaDefinition == null)
+        //        throw new NullReferenceException(String.Format("ruleDefinition.CriteriaDefinition {0}", rule.DefinitionId));
 
-                var values = genericRuleCriteriaFieldValues.GetValues();
-                if (values != null)
-                    return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
-                else
-                    return null;
-            }
-            else
-                return null;
-        }
+        //    if (ruleCriteriaDefinition.Fields == null)
+        //        throw new NullReferenceException(String.Format("ruleCriteriaDefinition.Fields {0}", rule.DefinitionId));
 
-        private static DataRecordFieldType GetCritieriaFieldType(GenericRule rule, string fieldName)
-        {
-            var ruleDefinition = GetRuleDefinition(rule.DefinitionId);
+        //    var fieldDefinition = ruleDefinition.CriteriaDefinition.Fields.FirstOrDefault(itm => itm.FieldName == fieldName);
+        //    if (fieldDefinition == null)
+        //        throw new NullReferenceException(String.Format("fieldDefinition . Rule Definition Id {0}. Field Name {1}", rule.DefinitionId, fieldName));
 
-            if (ruleDefinition.CriteriaDefinition == null)
-                throw new NullReferenceException(String.Format("ruleDefinition.CriteriaDefinition {0}", rule.DefinitionId));
-
-            if (ruleDefinition.CriteriaDefinition.Fields == null)
-                throw new NullReferenceException(String.Format("ruleDefinition.CriteriaDefinition.Fields {0}", rule.DefinitionId));
-
-            var fieldDefinition = ruleDefinition.CriteriaDefinition.Fields.FirstOrDefault(itm => itm.FieldName == fieldName);
-            if (fieldDefinition == null)
-                throw new NullReferenceException(String.Format("fieldDefinition . Rule Definition Id {0}. Field Name {1}", rule.DefinitionId, fieldName));
-
-            if (fieldDefinition.FieldType == null)
-                throw new NullReferenceException(String.Format("fieldDefinition.FieldType . Rule Definition Id {0}. Field Name {1}", rule.DefinitionId, fieldName));
-            return fieldDefinition.FieldType;
-        }
+        //    if (fieldDefinition.FieldType == null)
+        //        throw new NullReferenceException(String.Format("fieldDefinition.FieldType . Rule Definition Id {0}. Field Name {1}", rule.DefinitionId, fieldName));
+        //    return fieldDefinition.FieldType;
+        //}
 
         private static GenericRuleDefinition GetRuleDefinition(Guid ruleDefinitionId)
         {
@@ -114,15 +85,6 @@ namespace Vanrise.GenericData.Business
             if (ruleDefinition == null)
                 throw new NullReferenceException(String.Format("ruleDefinition {0}", ruleDefinitionId));
             return ruleDefinition;
-        }
-
-        public static bool TryGetTargetFieldValue(GenericRuleTarget target, string fieldName, out Object value)
-        {
-            if (target == null)
-                throw new ArgumentNullException("target");
-            if (target.TargetFieldValues == null)
-                throw new ArgumentNullException("target.TargetFieldValues");
-            return target.TargetFieldValues.TryGetValue(fieldName, out value);
         }
 
         public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
@@ -139,8 +101,99 @@ namespace Vanrise.GenericData.Business
         {
             return this.DeleteRule(ruleId) as Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail>;
         }
+
         #endregion
 
+        #region Static Methods
+
+        public static Q GetMatchRule<Q>(RuleTree ruleTree, List<CriteriaEvaluationInfo> criteriaEvaluationInfos, GenericRuleTarget target) where Q : class, IVRRule, IGenericRule
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            FillTargetEvaluatedCriterias(target, criteriaEvaluationInfos);
+            return ruleTree.GetMatchRule(target) as Q;
+        }
+
+        public static IEnumerable<Object> GetCriteriaFieldValues(IGenericRule rule, GenericRuleDefinitionCriteriaField genericRuleDefinitionCriteriaField)
+        {
+            if (rule == null)
+                throw new ArgumentNullException("rule");
+            if (rule.Criteria == null || rule.Criteria.FieldsValues == null)
+                return null;
+            //if (rule.Criteria == null)
+            //    throw new ArgumentNullException("rule.Criteria");
+            //if (rule.Criteria.FieldsValues == null)
+            //    throw new ArgumentNullException("rule.Criteria.FieldsValues");
+            GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
+            if (rule.Criteria.FieldsValues.TryGetValue(genericRuleDefinitionCriteriaField.FieldName, out genericRuleCriteriaFieldValues))
+            {
+                var fieldType = genericRuleDefinitionCriteriaField.FieldType;// GetCritieriaFieldType(rule, fieldName);
+
+                var fieldRuntimeType = fieldType.GetNonNullableRuntimeType();
+
+                var values = genericRuleCriteriaFieldValues.GetValues();
+                if (values != null)
+                    return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
+                else
+                    return null;
+            }
+            else
+                return null;
+        }
+
+        public static bool TryGetTargetFieldValue(GenericRuleTarget target, string fieldName, out Object value)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (target.TargetFieldValues == null)
+                throw new ArgumentNullException("target.TargetFieldValues");
+            return target.TargetFieldValues.TryGetValue(fieldName, out value);
+        }
+
+        public static RuleTree BuildRuleTree<Q>(GenericRuleDefinitionCriteria ruleDefinitionCriteria, IEnumerable<Q> rules) where Q : class, IVRRule, IGenericRule
+        {
+            List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
+            foreach (var ruleDefinitionCriteriaField in ruleDefinitionCriteria.Fields.OrderBy(itm => itm.Priority))
+            {
+                BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
+                ruleStructureBehaviors.Add(ruleStructureBehavior);
+            }
+            return new RuleTree(rules, ruleStructureBehaviors);
+        }
+
+        public static List<CriteriaEvaluationInfo> BuildCriteriaEvaluationInfos(GenericRuleDefinitionCriteria criteriaDefinition, VRObjectVariableCollection objects)
+        {
+            List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = new List<CriteriaEvaluationInfo>();
+
+            foreach (var criteriaField in criteriaDefinition.Fields)
+            {
+                if (criteriaField.ValueObjectName != null || criteriaField.ValueEvaluator != null)
+                {
+                    if (criteriaField.ValueObjectName == null)
+                        throw new NullReferenceException("criteriaField.ValueObjectName");
+                    if (criteriaField.ValueEvaluator == null)
+                        throw new NullReferenceException("criteriaField.ValueEvaluator");
+                    if (objects == null)
+                        throw new NullReferenceException("objects");
+                    VRObjectVariable objectVariable;
+                    if (!objects.TryGetValue(criteriaField.ValueObjectName, out objectVariable))
+                        throw new NullReferenceException(String.Format("objectVariable '{0}'", criteriaField.ValueObjectName));
+                    if (objectVariable.ObjectType == null)
+                        throw new NullReferenceException(String.Format("objectVariable.ObjectType '{0}'", criteriaField.ValueObjectName));
+                    ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
+                    {
+                        CriteriaName = criteriaField.FieldName,
+                        ObjectName = criteriaField.ValueObjectName,
+                        ObjectType = objectVariable.ObjectType,
+                        PropertyEvaluator = criteriaField.ValueEvaluator
+                    });
+                }
+            }
+            return ruleCriteriaEvaluationInfos;
+        }
+
+        #endregion
+        
         #region Private Methods
 
         bool RuleCriteriaFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, Dictionary<string, object> filterValues)
@@ -197,18 +250,7 @@ namespace Vanrise.GenericData.Business
 
         }
 
-        public RuleTree BuildRuleTree(GenericRuleDefinitionCriteria ruleDefinitionCriteria, IEnumerable<GenericRule> rules)
-        {
-            List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
-            foreach (var ruleDefinitionCriteriaField in ruleDefinitionCriteria.Fields.OrderBy(itm => itm.Priority))
-            {
-                BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
-                ruleStructureBehaviors.Add(ruleStructureBehavior);
-            }
-            return new RuleTree(rules, ruleStructureBehaviors);
-        }
-
-        private BaseRuleStructureBehavior CreateRuleStructureBehavior(GenericRuleDefinitionCriteriaField ruleDefinitionCriteriaField)
+        private static BaseRuleStructureBehavior CreateRuleStructureBehavior(GenericRuleDefinitionCriteriaField ruleDefinitionCriteriaField)
         {
             GenericRules.RuleStructureBehaviors.IGenericRuleStructureBehavior behavior = null;
             switch (ruleDefinitionCriteriaField.RuleStructureBehaviorType)
@@ -216,15 +258,14 @@ namespace Vanrise.GenericData.Business
                 case MappingRuleStructureBehaviorType.ByKey: behavior = new GenericRules.RuleStructureBehaviors.GenericRuleStructureBehaviorByKey(); break;
                 case MappingRuleStructureBehaviorType.ByPrefix: behavior = new GenericRules.RuleStructureBehaviors.GenericRuleStructureBehaviorByPrefix(); break;
             }
-            behavior.FieldName = ruleDefinitionCriteriaField.FieldName;
+            behavior.GenericRuleDefinitionCriteriaField = ruleDefinitionCriteriaField;
             return behavior as BaseRuleStructureBehavior;
         }
 
-        private void FillTargetEvaluatedCriterias(GenericRuleTarget target, Guid ruleDefinitionId)
+        private static void FillTargetEvaluatedCriterias(GenericRuleTarget target, List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos)
         {
             if (target.TargetFieldValues == null)
                 target.TargetFieldValues = new Dictionary<string, object>();
-            List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
             if (ruleCriteriaEvaluationInfos != null)
             {
                 foreach (var criteriaEvaluationInfo in ruleCriteriaEvaluationInfos)
@@ -253,57 +294,20 @@ namespace Vanrise.GenericData.Business
             var cacheName = new CriteriaEvaluationInfosCacheName { RuleDefinitionId = ruleDefinitionId };// String.Concat("GetCachedCriteriaEvaluationInfos_", ruleDefinitionId);
             return GetCachedOrCreate(cacheName, () =>
             {
-                List<CriteriaEvaluationInfo> ruleCriteriaEvaluationInfos = new List<CriteriaEvaluationInfo>();
                 var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
                 if (ruleDefinition.CriteriaDefinition != null && ruleDefinition.CriteriaDefinition.Fields != null)
                 {
-                    foreach (var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
-                    {
-                        if (criteriaField.ValueObjectName != null || criteriaField.ValueEvaluator != null)
-                        {
-                            if (criteriaField.ValueObjectName == null)
-                                throw new NullReferenceException("criteriaField.ValueObjectName");
-                            if (criteriaField.ValueEvaluator == null)
-                                throw new NullReferenceException("criteriaField.ValueEvaluator");
-                            if (ruleDefinition.Objects == null)
-                                throw new NullReferenceException("ruleDefinition.Objects");
-                            VRObjectVariable objectVariable;
-                            if (!ruleDefinition.Objects.TryGetValue(criteriaField.ValueObjectName, out objectVariable))
-                                throw new NullReferenceException(String.Format("objectVariable '{0}'", criteriaField.ValueObjectName));
-                            if (objectVariable.ObjectType == null)
-                                throw new NullReferenceException(String.Format("objectVariable.ObjectType '{0}'", criteriaField.ValueObjectName));
-                            ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
-                            {
-                                CriteriaName = criteriaField.FieldName,
-                                ObjectName = criteriaField.ValueObjectName,
-                                ObjectType = objectVariable.ObjectType,
-                                PropertyEvaluator = criteriaField.ValueEvaluator
-                            });
-                        }
-                    }
+                    return BuildCriteriaEvaluationInfos(ruleDefinition.CriteriaDefinition, ruleDefinition.Objects);
                 }
-                return ruleCriteriaEvaluationInfos;
+                else
+                {
+                    return null;
+                }
             });
         }
-
-
+        
         #endregion
-
-        #region Private Classes
-
-        private class CriteriaEvaluationInfo
-        {
-            public string CriteriaName { get; set; }
-
-            public string ObjectName { get; set; }
-
-            public VRObjectType ObjectType { get; set; }
-
-            public VRObjectPropertyEvaluator PropertyEvaluator { get; set; }
-        }
-
-        #endregion
-
+        
         #region Protected Methods
 
         public override GenericRuleDetail MapToDetails(T rule)
@@ -330,5 +334,16 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+    }
+
+    public class CriteriaEvaluationInfo
+    {
+        public string CriteriaName { get; set; }
+
+        public string ObjectName { get; set; }
+
+        public VRObjectType ObjectType { get; set; }
+
+        public VRObjectPropertyEvaluator PropertyEvaluator { get; set; }
     }
 }

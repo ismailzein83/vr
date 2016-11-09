@@ -12,7 +12,7 @@ namespace Vanrise.Common
 
         #region ctor/Local Variables
 
-        Dictionary<string, T> _codesByValue = new Dictionary<string, T>();
+        VRDictionary<string, T> _codesByValue = new VRDictionary<string, T>();
         int _minLength = int.MaxValue;
         int _maxLength = 0;
 

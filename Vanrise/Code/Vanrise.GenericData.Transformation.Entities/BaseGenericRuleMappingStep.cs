@@ -57,7 +57,7 @@ namespace Vanrise.GenericData.Transformation.Entities
             {
                 context.AddCodeToCurrentInstanceExecutionBlock("if({0}.Rule != null)", ruleContextVariableName);
                 context.AddCodeToCurrentInstanceExecutionBlock("{");
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rule.RuleId;", this.RuleId, ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1}.Rule as Vanrise.Rules.BaseRule).RuleId;", this.RuleId, ruleContextVariableName);
                 context.AddCodeToCurrentInstanceExecutionBlock("}");
             }
         }

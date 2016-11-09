@@ -182,8 +182,8 @@ namespace Vanrise.Rules
 
         #region Private Methods
 
-        static ConcurrentDictionary<string, int> s_ruleTypesIds = new ConcurrentDictionary<string, int>();
-        static ConcurrentDictionary<Type, string> s_ruleTypes = new ConcurrentDictionary<Type, string>();
+        static VRDictionary<string, int> s_ruleTypesIds = new VRDictionary<string, int>(true);
+        static VRDictionary<Type, string> s_ruleTypes = new VRDictionary<Type, string>(true);
         public int GetRuleTypeId()
         {
             string ruleType;

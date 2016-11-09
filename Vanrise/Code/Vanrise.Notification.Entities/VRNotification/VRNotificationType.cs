@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    public abstract class VRAlertRuleEventPayload
+    public class VRNotificationType : Vanrise.Entities.VRComponentType<VRNotificationTypeSettings>
     {
-        public abstract string GetEventKey();
     }
 }

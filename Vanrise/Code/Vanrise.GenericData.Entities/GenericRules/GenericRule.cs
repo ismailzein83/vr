@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public abstract class GenericRule : Vanrise.Rules.BaseRule
+    public abstract class GenericRule : Vanrise.Rules.BaseRule, IGenericRule
     {
         public Guid DefinitionId { get; set; }
 
@@ -15,5 +15,10 @@ namespace Vanrise.GenericData.Entities
         public abstract string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context);
 
         public abstract bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue);
+    }
+
+    public interface IGenericRule
+    {
+        GenericRuleCriteria Criteria { get; }
     }
 }

@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Business.BELookupRules.RuleStructureBehaviors
     {
         public string FieldPath { get; set; }
 
-        protected override void GetPrefixesFromRule(BaseRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
+        protected override void GetPrefixesFromRule(IVRRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
         {
             var beLookupRule = rule as BELookupRule;
             if (beLookupRule == null)

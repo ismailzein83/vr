@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.Entities
 {
     public class DAProfCalcAlertRuleTypeSettings : VRAlertRuleTypeSettings
     {
+        #region TO REMOVE
+
         public override string CriteriaEditor
         {
             get
@@ -33,15 +35,17 @@ namespace Vanrise.Analytic.Entities
             }
         }
 
-        public override string CheckerBPActivityFQTN
+        #endregion
+
+        public override string SettingEditor
         {
             get
             {
-                return "Vanrise.Analytic.BP.DAProfCalcAlertRuleSubProcess";
+                return "vr-analytic-daprofcalc-alertrulesettings";
             }
             set
             {
-                base.CheckerBPActivityFQTN = value;
+                base.SettingEditor = value;
             }
         }
 

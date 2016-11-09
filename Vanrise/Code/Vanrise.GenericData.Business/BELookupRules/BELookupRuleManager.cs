@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Business.BELookupRules.RuleStructureBehaviors;
 using Vanrise.GenericData.Entities;
 using Vanrise.Rules;
@@ -98,7 +99,7 @@ namespace Vanrise.GenericData.Business
             DateTime? _beLookupRuleDefinitionCacheLastCheck;
             DateTime? _businessEntityDefinitionCacheLastCheck;
 
-            ConcurrentDictionary<Guid, BEDefinitionCacheItem> _beDefinitionCacheItems = new ConcurrentDictionary<Guid, BEDefinitionCacheItem>();
+            VRDictionary<Guid, BEDefinitionCacheItem> _beDefinitionCacheItems = new VRDictionary<Guid, BEDefinitionCacheItem>(true);
 
             protected override bool ShouldSetCacheExpired(Guid businessEntityDefinitionId)
             {

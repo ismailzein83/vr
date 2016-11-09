@@ -49,7 +49,7 @@ namespace Vanrise.Caching
 
         #region Public Methods
 
-        public virtual T GetOrCreateObject<T>(Object cacheName, ParamType parameter, Func<T> createObject)
+        public virtual T GetOrCreateObject<T>(Object cacheName, ParamType parameter, CacheExpirationChecker cacheExpirationChecker, Func<T> createObject)
         {
             CachedObject cachedObject;
             CacheStore cacheDictionary = GetCacheDictionary(parameter);
@@ -64,8 +64,14 @@ namespace Vanrise.Caching
                         cachedObject = new CachedObject(obj)
                         {
                             CacheName = cacheName,
-                            ApproximateSize = this.ApproximateObjectSize
+                            ApproximateSize = this.ApproximateObjectSize,
+                            CacheExpirationChecker = cacheExpirationChecker,
+                            CacheManager = this,
+                            AdditionalInfo = parameter,
+                            LastAccessedTime = VRClock.Now
                         };
+                        if (cachedObject.CacheExpirationChecker != null)
+                            CacheManagerFactory.SetCacheObjectCleanable(cachedObject);
                         cacheDictionary.Add(cacheName, cachedObject);
                     }
                 }
@@ -75,6 +81,11 @@ namespace Vanrise.Caching
                 cachedObject.LastAccessedTime = VRClock.Now;
             }
             return cachedObject.Object != null ? (T)cachedObject.Object : default(T);
+        }
+
+        public virtual T GetOrCreateObject<T>(Object cacheName, ParamType parameter, Func<T> createObject)
+        {
+            return GetOrCreateObject<T>(cacheName, parameter, null, createObject);
         }
 
         private bool IsCacheObjectExpired(CachedObject cachedObject)
@@ -87,7 +98,7 @@ namespace Vanrise.Caching
             return false;
         }
 
-        public virtual void RemoveObjectFromCache(string cacheName, ParamType parameter)
+        public virtual void RemoveObjectFromCache(Object cacheName, ParamType parameter)
         {
             CacheStore objectTypeCaches = GetCacheDictionary(parameter);
            objectTypeCaches.TryRemove(cacheName);
@@ -95,18 +106,8 @@ namespace Vanrise.Caching
 
         public virtual void RemoveObjectFromCache(CachedObject cachedObject)
         {
-            foreach (var cacheDictionary in _cacheDictionaries.Values)
-            {
-                CachedObject matchObj;
-                if (cacheDictionary.TryGetValue(cachedObject.CacheName, out matchObj))
-                {
-                    if (matchObj == cachedObject)
-                    {
-                        cacheDictionary.TryRemove(cachedObject.CacheName);
-                        break;
-                    }
-                }
-            }
+            ParamType parameter = cachedObject.AdditionalInfo != null ? (ParamType)cachedObject.AdditionalInfo : default(ParamType);
+            this.RemoveObjectFromCache(cachedObject.CacheName, parameter);
         }
         
         public virtual IEnumerable<CachedObject> GetAllCachedObjects()
@@ -214,5 +215,5 @@ namespace Vanrise.Caching
         }
 
         #endregion
-    }    
+    }
 }
