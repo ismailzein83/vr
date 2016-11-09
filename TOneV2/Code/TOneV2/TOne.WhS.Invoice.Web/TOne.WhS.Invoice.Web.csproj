@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-filter-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-supplier-selector.js" />

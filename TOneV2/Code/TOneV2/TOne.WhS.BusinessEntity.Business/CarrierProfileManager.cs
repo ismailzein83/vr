@@ -126,6 +126,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierProfile.IsDeleted;
         }
+        public int GetCarrierProfileCurrencyId(int carrierProfileId)
+        {
+            CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+            if (carrierProfile == null)
+                throw new NullReferenceException("carrierProfile");
+            if (carrierProfile.Settings == null)
+                throw new NullReferenceException("carrierProfile.Settings");
+            return carrierProfile.Settings.CurrencyId;
+        }
 
         #endregion
 

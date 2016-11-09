@@ -40,6 +40,7 @@ app.directive("vrInvoicetypePartnersettingsCarrier", ["UtilsService", "VRNotific
                         $scope.useMaskInfo = payload.UseMaskInfo;
                         $scope.partnerSelector = payload.PartnerSelector;
                         $scope.partnerManagerFQTN = UtilsService.serializetoJson(payload.PartnerManagerFQTN);
+                        $scope.partnerFilterSelector = payload.PartnerFilterSelector;
                     }
                 }
 
@@ -48,7 +49,8 @@ app.directive("vrInvoicetypePartnersettingsCarrier", ["UtilsService", "VRNotific
                         $type: "TOne.WhS.Invoice.Business.Extensions.CarrierPartnerSettings ,TOne.WhS.Invoice.Business",
                         UseMaskInfo: $scope.useMaskInfo,
                         PartnerSelector: $scope.partnerSelector,
-                        PartnerManagerFQTN: UtilsService.parseStringToJson($scope.partnerManagerFQTN)
+                        PartnerManagerFQTN: UtilsService.parseStringToJson($scope.partnerManagerFQTN),
+                        PartnerFilterSelector: $scope.partnerFilterSelector
                     };
                 }
 

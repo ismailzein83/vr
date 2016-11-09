@@ -12,6 +12,7 @@ namespace TOne.WhS.Invoice.Entities
         public Double SaleAmount { get; set; }
         public decimal Duration { get; set; }
         public string PartnerType { get; set; }
+        public string Currency { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {
