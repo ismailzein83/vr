@@ -214,7 +214,6 @@
     <Build Include="common\Tables\IDManager.sql" />
     <Build Include="common\Tables\Country.sql" />
     <Build Include="StatisticManagement\Tables\StatisticBatch.sql" />
-    <Build Include="StatisticManagement\Functions\ParseStringList.sql" />
     <Build Include="common\Stored Procedures\sp_Type_InsertIfNotExistsAndGetID.sql" />
     <Build Include="common\Stored Procedures\sp_IDManager_ReserveIDRange.sql" />
     <Build Include="common\Stored Procedures\sp_CurrencyExchangeRate_update.sql" />
@@ -223,7 +222,6 @@
     <Build Include="common\Stored Procedures\sp_Country_Update.sql" />
     <Build Include="common\Stored Procedures\sp_Country_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_Country_GetAll.sql" />
-    <Build Include="Security\StatisticManagement.sql" />
     <Build Include="common\Tables\City.sql" />
     <Build Include="common\Functions\getExchangeRatesConvertedToCurrency.sql" />
     <Build Include="common\Functions\getExchangeRates.sql" />
@@ -461,6 +459,11 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Get.sql" />
     <Build Include="VR_Invoice\User Defined Types\InvoiceItemType.sql" />
     <Build Include="Security\VR_Invoice.sql" />
+    <Build Include="common\Tables\VRComponentType.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoicePaid.sql" />
+    <Build Include="common\Stored Procedures\sp_VRComponentType_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRComponentType_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRComponentType_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

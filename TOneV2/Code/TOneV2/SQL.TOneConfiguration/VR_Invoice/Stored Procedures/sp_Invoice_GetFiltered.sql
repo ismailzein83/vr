@@ -5,13 +5,17 @@
 -- =============================================
 CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetFiltered]
 	@InvoiceTypeId uniqueidentifier,
-	@PartnerID nvarchar(50),
+	@PartnerIds nvarchar(MAX),
 	@FromDate datetime,
-	@ToDate datetime
+	@ToDate datetime,
+	@IssueDate datetime
 AS
 BEGIN
-	SELECT	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details
+DECLARE @PartnerIdsTable TABLE (PartnerId nvarchar(50))
+INSERT INTO @PartnerIdsTable (PartnerId)
+select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@PartnerIds)
+	SELECT	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Paid
 	FROM	VR_Invoice.Invoice with(nolock)
-	where	(InvoiceTypeId = @InvoiceTypeId) AND (@PartnerID is null OR PartnerID = @PartnerID) 
-			AND FromDate >= @FromDate AND (@ToDate is null OR ToDate <= @ToDate)
+	where	(InvoiceTypeId = @InvoiceTypeId) AND  (@PartnerIds is Null or PartnerID IN (SELECT PartnerId FROM @PartnerIdsTable))
+			AND FromDate >= @FromDate AND (@ToDate is null OR ToDate <= @ToDate)   AND (@IssueDate is null OR IssueDate =@IssueDate )
 END
