@@ -73,6 +73,16 @@
                         var setLoader = function (value) { $scope.isLoadingDirective = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
+                    dataItem.onWidthSelectionChanged = function () {
+                        var obj = dataItem;
+                        if (dataItem.dimensionGridWidthFactorAPI.getSelectedIds() == 'FixedWidth') {
+                            obj.fixedwidth = true;
+                        }
+                        else
+                            obj.fixedwidth = false;
+                        $scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(dataItem)] = obj;
+
+                    };
                     $scope.scopeModel.dimensions.push(dataItem);
                 }
 
@@ -111,7 +121,7 @@
                     if (measureStyleGridAPI != undefined)
                         measureStyleGridAPI.reloadMeasures();
                 }
-
+              
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     var dataItem = {
                         AnalyticItemConfigId: measure.AnalyticItemConfigId,
@@ -125,6 +135,7 @@
                         var setLoader = function (value) { $scope.isLoadingDirective = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
+                     
                     $scope.scopeModel.measures.push(dataItem);
                 }
 
@@ -327,10 +338,25 @@
                     dataItem.dimensionGridWidthFactorAPI = api;
                     gridField.readyPromiseDeferred.resolve();
                 };
+                dataItem.onWidthSelectionChanged = function () {
+                    var obj = dataItem;
+                    if (dataItem.dimensionGridWidthFactorAPI.getSelectedIds() == 'FixedWidth') {
+                        obj.fixedwidth = true;
+                    }
+                    else
+                        obj.fixedwidth = false;
+                    //console.log(dataItem);
+                    $scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(dataItem)] = obj;
+                    //console.log($scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(obj)]);
+
+                };
                 gridField.readyPromiseDeferred.promise
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.dimensionGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
                     });
+                dataItem.showFixedCol = function () {
+                    return dataItem.fixedwidth == true;
+                }
                 $scope.scopeModel.dimensions.push(dataItem);
             }
             function addMeasureGridWidthAPI(gridField) {
@@ -345,6 +371,7 @@
                     dataItem.measureGridWidthFactorAPI = api;
                     gridField.readyPromiseDeferred.resolve();
                 };
+              
                 gridField.readyPromiseDeferred.promise
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.measureGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);

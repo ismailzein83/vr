@@ -24,12 +24,14 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                            <vr-common-gridwidthfactor-selector on-ready="dataItem.onDimensionGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
+                            <vr-common-gridwidthfactor-selector on-ready="dataItem.onDimensionGridWidthFactorSelectorReady" onselectionchanged="dataItem.onWidthSelectionChanged" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="3" disablesorting="true">
                             <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                         </vr-datagridcolumn>
-
+                        <vr-datagridcolumn headertext="'Fixed Width'" widthfactor="4" disablesorting="true" >
+                            <vr-textbox type="number" ng-show="dataItem.fixedwidth" decimalprecision="0" isrequired="dataItem.fixedwidth"></vr-textbox>
+                        </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>
@@ -47,8 +49,8 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                            <vr-common-gridwidthfactor-selector on-ready="dataItem.onMeasureGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
-                        </vr-datagridcolumn>
+                            <vr-common-gridwidthfactor-selector  on-ready="dataItem.onMeasureGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
+                        </vr-datagridcolumn>              
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>
