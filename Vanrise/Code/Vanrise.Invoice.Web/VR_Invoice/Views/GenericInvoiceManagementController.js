@@ -51,6 +51,7 @@
            
         }
         function getFilterObject() {
+            var partnerObject = partnerSelectorAPI.getData();
             var filter = {
                 mainGridColumns: $scope.invoiceTypeEntity.MainGridRuntimeColumns,
                 subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.SubSections,
@@ -59,7 +60,8 @@
                 query: {
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
-                    PartnerIds: partnerSelectorAPI.getSelectedIds(),
+                    PartnerIds: partnerObject != undefined ? partnerObject.selectedIds : undefined,
+                    PartnerPrefix:partnerObject != undefined?partnerObject.partnerPrefix:undefined,
                     InvoiceTypeId: invoiceTypeId,
                     IssueDate: $scope.issueDate
                 }

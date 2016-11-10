@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
     {
         public Guid InvoiceTypeId { get; set; }
         public List<string> PartnerIds { get; set; }
+        public string PartnerPrefix { get; set; }
         public DateTime FromTime { get; set; }
         public DateTime? ToTime { get; set; }
         public DateTime? IssueDate { get; set; }

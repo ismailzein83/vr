@@ -10,6 +10,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Invoice.Business
 {
@@ -60,9 +61,10 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = createInvoiceInput.InvoiceTypeId
             };
             invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
-
+            
             Entities.Invoice invoice = new Entities.Invoice
             {
+                UserId = new SecurityContext().GetLoggedInUserId(),
                 Details = context.Invoice.InvoiceDetails,
                 InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
                 FromDate = createInvoiceInput.FromDate,
@@ -87,7 +89,7 @@ namespace Vanrise.Invoice.Business
             }
             invoice.SerialNumber = serialNumber;
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            if (dataManager.SaveInvoices(createInvoiceInput, context.Invoice,invoice,out insertedInvoiceId))
+            if (dataManager.SaveInvoices(context.Invoice.InvoiceItemSets,invoice,out insertedInvoiceId))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
@@ -165,11 +167,13 @@ namespace Vanrise.Invoice.Business
                 };
                 partnerName = invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetPartnerName(context);
             }
+            UserManager userManager = new UserManager();
             return new InvoiceDetail
             {
                 Entity = invoice,
                 PartnerName = partnerName,
-                Paid = invoice.PaidDate.HasValue
+                Paid = invoice.PaidDate.HasValue,
+                UserName = userManager.GetUserName(invoice.UserId)
             };
         }
 

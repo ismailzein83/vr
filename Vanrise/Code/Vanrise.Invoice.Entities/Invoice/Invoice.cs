@@ -13,7 +13,7 @@ namespace Vanrise.Invoice.Entities
         public Guid InvoiceTypeId { get; set; }
 
         public string PartnerId { get; set; }
-
+        public int UserId { get; set; }
         public string SerialNumber { get; set; }
 
         public DateTime FromDate { get; set; }

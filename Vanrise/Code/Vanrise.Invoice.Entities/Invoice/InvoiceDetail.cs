@@ -13,5 +13,6 @@ namespace Vanrise.Invoice.Entities
         public List<string> SectionsTitle { get; set; }
         public List<InvoiceGridAction> ActionTypeNames { get; set; }
         public Boolean Paid { get; set; }
+        public string UserName { get; set; }
     }
 }

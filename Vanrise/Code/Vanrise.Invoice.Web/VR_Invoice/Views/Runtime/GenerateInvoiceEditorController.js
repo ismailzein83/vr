@@ -28,10 +28,12 @@
 
             $scope.preview = function()
             {
+                var partnerObject = partnerSelectorAPI.getData();
+
                 var context = {
                     $type: "Vanrise.Invoice.Business.PreviewInvoiceActionContext,Vanrise.Invoice.Business",
                     InvoiceTypeId: invoiceTypeId,
-                    PartnerId: partnerSelectorAPI.getSelectedIds(),
+                    PartnerId: partnerObject != undefined ? partnerObject.selectedIds : undefined,
                     FromDate:$scope.fromDate,
                     ToDate: $scope.toDate,
                     IssueDate: $scope.issueDate

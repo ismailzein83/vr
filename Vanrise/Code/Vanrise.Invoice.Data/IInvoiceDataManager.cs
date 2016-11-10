@@ -12,7 +12,7 @@ namespace Vanrise.Invoice.Data
     {
         IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
-        bool SaveInvoices(GenerateInvoiceInput createInvoiceInput, GeneratedInvoice invoice,Entities.Invoice invoiceEntity, out long insertedInvoiceId);
+        bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, out long insertedInvoiceId);
         Entities.Invoice GetInvoice(long invoiceId);
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
     }
