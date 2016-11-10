@@ -233,7 +233,12 @@
     }
 /*bootstrap overide */
 .form-control {
-    height: 29px;
+    height: 26px;
+    padding: 3px 12px;
+}
+
+.vr-datagrid-celltext .form-control {
+    height: 20px !important;
     padding: 3px 12px;
 }
 
@@ -246,7 +251,7 @@ textarea.form-control {
 }
 
 button.btn {
-    height: 30px !important;
+    height: 27px !important;
     padding: 4px 12px !important;
 }
 
@@ -498,7 +503,7 @@ a.vr-select-disabled-item:hover, a.vr-select-disabled-item:active, a.vr-select-d
 }
 
 .with-filter {
-    height: 225px;
+    height: 191px;
 }
 
 .custom-label {
@@ -612,7 +617,7 @@ add padding .left-addon input {
     padding: 5px 2px;
     font-size: 12px;
     right: -2px;
-    top: 25px;
+    top: 20px;
 }
 .vr-select-disabled-item{
     color: #c1c1c1 !important;
@@ -821,12 +826,11 @@ loader .outer-loader {
     height: 100% !important;
 }
 
-.required-inpute > div:nth-child(1) {
+.required-inpute>div:nth-child(1){
     border: 1px solid #D44A47 !important;
     outline: 0px none;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 2px rgba(195, 127, 122, 0.85);
     border-radius: 4px;
-    margin: -1px;
 }
 
 .toggle-Icon {
@@ -1388,115 +1392,112 @@ loader .outer-loader {
     height: inherit;
     width: auto;
 }
-#rootDiv{
-    min-height:29px !important;
-}
 .dropdown {
-     min-height:29px !important;
+     min-height:26px !important;
 }
 .panel-vr {
     margin-top: 10px;
 }
 
-    .panel-vr > .panel-heading {
-        text-transform: uppercase;
+.panel-vr > .panel-heading {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #fff;
+    margin-bottom: -2px;
+    top: -1px;
+    width: 100%;
+    position: relative;
+    border-radius: 4px 4px 0px 0px;
+    color: #635F5F !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    background: transparent linear-gradient(to top, #fff, #ddd) repeat scroll 0% 0%;
+    border-bottom: transparent;
+}
+
+.panel-vr > .panel-heading[expanded="false"]{
+    border-bottom: 1px solid #ddd;
+}
+.panel-vr > .panel-heading label {
+    font-weight: bold;
+}
+
+.panel-vr > .panel-body {
+    border: 1px solid #ddd;
+    border-radius: 0px 0px 4px 4px;
+}
+/* panel-vr-child */
+.panel-vr-child> .panel-heading[expanded="false"] {
+    margin-bottom: 15px !important;
+}
+.panel-vr.panel-vr-child > .panel-heading {
+    background: transparent none repeat scroll 0% 0%;
+    border-radius: 0px;
+    border-width: 0px 0px 1px;
+    border-style: solid;
+    border-color: #666;
+    border-image: none;
+    margin: 0px;
+    position: static;
+    overflow: initial;
+    padding: 4px 6px 4px 0px;
+    margin-top: -17px;
+}
+    .panel-vr.panel-vr-child > .panel-heading label {
         font-weight: bold;
         font-size: 12px;
-        background-color: #fff;
-        margin-bottom: -2px;
-        top: -1px;
-        width: 100%;
+        top: 17px;
+        background-color: #FFF;
+        padding: 0px 5px 0px 0px;
         position: relative;
-        border-radius: 4px 4px 0px 0px;
-        color: #635F5F !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding: 4px 6px;
-        border: 1px solid #ddd;
-        background: transparent linear-gradient(to top, #fff, #ddd) repeat scroll 0% 0%;
-        border-bottom: transparent;
     }
 
-   .panel-vr > .panel-heading[expanded="false"]{
-       border-bottom: 1px solid #ddd;
-   }
-    .panel-vr > .panel-heading label {
-        font-weight: bold;
-    }
-
-    .panel-vr > .panel-body {
-        border: 1px solid #ddd;
-        border-radius: 0px 0px 4px 4px;
-    }
-    /* panel-vr-child */
-    .panel-vr-child> .panel-heading[expanded="false"] {
-        margin-bottom: 15px !important;
-    }
-    .panel-vr.panel-vr-child > .panel-heading {
-        background: transparent none repeat scroll 0% 0%;
-        border-radius: 0px;
-        border-width: 0px 0px 1px;
-        border-style: solid;
-        border-color: #666;
-        border-image: none;
-        margin: 0px;
-        position: static;
-        overflow: initial;
-        padding: 4px 6px 4px 0px;
-        margin-top: -17px;
-    }
-        .panel-vr.panel-vr-child > .panel-heading label {
-            font-weight: bold;
-            font-size: 12px;
-            top: 17px;
-            background-color: #FFF;
-            padding: 0px 5px 0px 0px;
-            position: relative;
-        }
-
-    .panel-vr.panel-vr-child > .panel-body {
-        border: 0px none !important;
-        border-radius: 0px;
-        padding: 0px;
-        margin: 0px -10px;
-    }
+.panel-vr.panel-vr-child > .panel-body {
+    border: 0px none !important;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px -10px;
+}
 
 .fieldset-vr {
     margin-top: 10px;
 }
 
-    .fieldset-vr > .panel-heading {
-        font-weight: bold;
-        font-size: 12px;
-        background-color: transparent;
-        margin-bottom: -2px;
-        top: -1px;
-        width: 200px;
-        position: relative;
-        border-radius: 4px 4px 0px 0px;
-        color: #333 !important;
-        /*text-shadow: 2px 2px 0px #C5C5C5;*/
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding: 4px 6px;
-        border-color: transparent;
-        top: 10px;
-    }
+.fieldset-vr > .panel-heading {
+    font-weight: bold;
+    font-size: 12px;
+    background-color: transparent;
+    margin-bottom: -2px;
+    top: -1px;
+    width: 200px;
+    position: relative;
+    border-radius: 4px 4px 0px 0px;
+    color: #333 !important;
+    /*text-shadow: 2px 2px 0px #C5C5C5;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 4px 6px;
+    border-color: transparent;
+    top: 10px;
+}
 
-        .fieldset-vr > .panel-heading .title {
-            display: inline-block;
-            top: 10px;
-            background-color: #fff;
-            padding: 0px 5px;
-            text-transform: capitalize;
-        }
+.fieldset-vr > .panel-heading .title {
+    display: inline-block;
+    top: 10px;
+    background-color: #fff;
+    padding: 0px 5px;
+    text-transform: capitalize;
+}
 
-    .fieldset-vr > .panel-body {
-        border: 1px solid #ddd;
-        border-radius: 0px 4px 4px 4px;
-    }
+.fieldset-vr > .panel-body {
+border: 1px solid #ddd;
+border-radius: 0px 4px 4px 4px;
+}
 
 .breadcrumb-vr {
     padding: 4px 0px;
@@ -1511,81 +1512,81 @@ loader .outer-loader {
     border: 0px !important;
 }
 
-    .vr-grid .ui-grid-header {
-        border-bottom: 0px solid #D4D4D4;
-    }
+.vr-grid .ui-grid-header {
+    border-bottom: 0px solid #D4D4D4;
+}
 
-    .vr-grid .ui-grid-header-cell {
-        border: 0px;
-    }
+.vr-grid .ui-grid-header-cell {
+    border: 0px;
+}
 
-    .vr-grid .ui-grid-header-canvas {
-        background-color: #fff;
-        border-bottom: 0px solid #798992;
-    }
+.vr-grid .ui-grid-header-canvas {
+    background-color: #fff;
+    border-bottom: 0px solid #798992;
+}
 
-    .vr-grid .ui-grid-header-cell {
-        font-size: 12px;
-        color: #534B4B;
-        border: medium none;
-    }
+.vr-grid .ui-grid-header-cell {
+    font-size: 12px;
+    color: #534B4B;
+    border: medium none;
+}
 
-    .vr-grid .ui-grid-cell {
-        border-bottom: 1px solid #D4D4D4;
-        border-right: 0px solid #D4D4D4;
-        font-size: 12px;
-        margin-top: 0px;
-        color: #616f77;
-    }
+.vr-grid .ui-grid-cell {
+    border-bottom: 1px solid #D4D4D4;
+    border-right: 0px solid #D4D4D4;
+    font-size: 12px;
+    margin-top: 0px;
+    color: #616f77;
+}
 
-    .vr-grid .ui-grid-row:nth-child(odd) .ui-grid-cell {
-        background-color: #fff;
-    }
+.vr-grid .ui-grid-row:nth-child(odd) .ui-grid-cell {
+    background-color: #fff;
+}
 
-    .vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
-        background-color: #fff;
-    }
+.vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
+    background-color: #fff;
+}
 
-    .vr-grid .ui-grid-cell-contents {
-        box-sizing: border-box;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        height: 100%;
-    }
+.vr-grid .ui-grid-cell-contents {
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
+}
 
-    .vr-grid .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
-        border-right: 0px solid #fff;
-    }
+.vr-grid .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
+    border-right: 0px solid #fff;
+}
 
-    .vr-grid .ui-grid-header-canvas {
-        background-color: #829EBF !important;
-        min-height: 26.983px;
-    }
+.vr-grid .ui-grid-header-canvas {
+    background-color: #829EBF !important;
+    min-height: 26.983px;
+}
 
-    .vr-grid .ui-grid-header-cell {
-        background-color: #829EBF;
-        color: #fff !important;
-        border: none;
-    }
+.vr-grid .ui-grid-header-cell {
+    background-color: #829EBF;
+    color: #fff !important;
+    border: none;
+}
 
-    .vr-grid input.ui-grid-filter-input[type="text"] {
-        padding: 0px;
-        margin: 0px;
-        width: 100%;
-        border: 1px solid #D4D4D4;
-        border-radius: 0px;
-        background-clip: padding-box;
-        color: #000;
-    }
+.vr-grid input.ui-grid-filter-input[type="text"] {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    border: 1px solid #D4D4D4;
+    border-radius: 0px;
+    background-clip: padding-box;
+    color: #000;
+}
 
-    .vr-grid .ui-grid-cell {
-        border: none;
-    }
+.vr-grid .ui-grid-cell {
+    border: none;
+}
 
-    .vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
-        background-color: #F5F5F5;
-    }
+.vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
+    background-color: #F5F5F5;
+}
 
 .vr-rotate-header {
     transform: rotate(270deg);
@@ -1840,10 +1841,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     /*background-color:#8dc641;*/
 }
 
-    .vr-pager-container .btn {
+    .vr-pager-container .vr-dropdown-select.btn{
         height: 21px !important;
         background-color: #0074D9;
         padding: 0px 4px 0px 2px !important;
+        position:static !important;
     }
 
     .vr-pager-container .dropdown {
@@ -1967,20 +1969,22 @@ vr-switch[class*="divDisabled"] .switch {
 
 .radio-btn-groupe {
     border-color: transparent !important;
+    overflow: hidden;
 }
 
-    .radio-btn-groupe label {
-        padding: 1px 3px !important;
-        cursor: pointer !important;
-    }
+.radio-btn-groupe label {
+    padding: 1px 3px !important;
+    cursor: pointer !important;
+    border-radius: 5px;
+}
 
-    .radio-btn-groupe .clicked-btn {
-        border-bottom-color: #DDD !important;
-        border-radius: 5px !important;
-        background-color: #6DA279 !important;
-        color: #fff !important;
-        font-weight: normal !important;
-    }
+.radio-btn-groupe .clicked-btn {
+    border-bottom-color: #DDD !important;
+    border-radius: 5px !important;
+    background-color: #6DA279 !important;
+    color: #fff !important;
+    font-weight: normal !important;
+}
 
 .switch-btn-groupe {
     margin: 0px !important;
@@ -2010,10 +2014,13 @@ vr-switch[class*="divDisabled"] .switch {
 
 
 /**************START VR-Upload*********/
-.vr-file-ulpoad {
+.vr-file-upload {
     border: 1px solid #CCC;
     width: 100%;
     border-radius: 4px;
+}
+.vr-file-upload-paperclip{
+    top:0px;
 }
 
 .vr-file {
@@ -2054,9 +2061,9 @@ vr-switch[class*="divDisabled"] .switch {
     position: absolute;
     left: 0px;
     height: 5px;
-    font-size: 11px;
-    top: 25px;
     width: 100% !important;
+    font-size: 10px;
+    top: 20px;
 }
 
 .vr-file-name {
@@ -2166,10 +2173,20 @@ vr-label[ellipsis] .vr-control-label {
     overflow-y: auto;
     overflow-x: hidden;
 }
-
-    .vr-select-height:empty {
-        height: 0px;
-    }
+.vr-select-remove {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    font-size: 11px;
+}
+.vr-select-caret {
+   position:absolute;
+   top:10px;
+   right:5px;
+}
+.vr-select-height:empty {
+    height: 0px;
+}
 
 .vr-disabled {
     pointer-events: none;
@@ -2192,17 +2209,33 @@ vr-label[ellipsis] .vr-control-label {
     border-radius: 4px 0px 0px 4px;
 }
 
+.vr-datetime-container{
+    border-radius: 4px;
+    height: 26px;
+    padding: 0px;
+    display: block;
+    position:relative;
+}
+
 .vr-date-input {
     border-color: transparent;
     outline: 0px none;
     box-shadow: none;
+    padding: 1px 5px;
+    width: calc(100% - 5px);
+    position:absolute;
 }
-
-    .vr-date-input:focus {
-        border-color: transparent;
-        outline: 0px none;
-        box-shadow: none;
-    }
+.datetime-icon-container{
+    position: absolute;
+    z-index: 11;
+    transform: translate(-50%,-50%);
+    top: 50%;
+}
+.vr-date-input:focus {
+    border-color: transparent;
+    outline: 0px none;
+    box-shadow: none;
+}
 
 .vr-small-addon {
     border: 1px solid #CCC !important;
@@ -2350,9 +2383,12 @@ vr-label[ellipsis] .vr-control-label {
 }
 
 .with-label {
-    top: 27px !important;
+    top: 22px !important;
 }
-
+.vr-hint-input{
+    top : 0px;
+    color:#337AB7
+}
 .vr-numeric .vr-numeric-control .unit {
     position: absolute;
     right: 15px;
@@ -2576,16 +2612,146 @@ div[validationcontainer]{
 .vr-multiple  .glyphicon-plus-sign{
     top:7px
 }
+.vr-multiple-caret{
+    position:absolute;
+    top:13px;
+    right:5px;
+}
 /*wysiwyg-edit*/
 wysiwyg-edit .tinyeditor .sizer {
     min-height: 100px;
     height: 200px;
     position: relative;
 }
-
+.vr-dropdown-select.btn{
+    width:100%;
+    text-align: left;
+    position:absolute;
+    height:100% !important;
+}
 /*vr-datetimepicker today class*/
 .datepicker-days .today{
     border: 1px solid #666;
     border-style: dotted;
 }
-    
+vr-validator > div:nth-child(1){
+   min-height:28px;
+}
+vr-validator .panel-vr {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+vr-validator > div[validator-section] >div:nth-child(1){
+   min-height:28px;
+}
+vr-validator[vr-input] > div[validator-section] >div:nth-child(1){
+   min-height:initial !important;
+}
+vr-validator[vr-input] > div:nth-child(1){
+   height:29px;
+   min-height:initial !important;
+}
+
+.vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
+    height: 21px;
+    min-height: initial !important;
+    position: relative;
+    top: -2px;
+}
+
+.vr-datagrid-celltext .dropdown {
+    min-height: 20px !important;
+}
+.vr-switch{
+    min-height :28px;
+}
+.vr-datagrid-celltext .vr-dropdown-select.btn {
+    width: 100%;
+    text-align: left;
+    position: static;
+    height: 20px !important;
+    padding: 0px 12px !important;
+}
+
+.vr-datagrid-celltext .vr-select-remove {   
+    top: 4px;
+}
+.vr-datagrid-celltext .vr-select-caret {
+   top:8px;
+}
+
+.vr-datagrid-celltext .vr-datetime-container {
+    border-radius: 4px;
+    height: 26px;
+    padding: 0px;
+    display: block;
+    position: relative;
+    padding: 0px !important;
+}
+
+.vr-datagrid-celltext .vr-date-input {
+    border-color: transparent;
+    outline: 0px none;
+    box-shadow: none;
+    padding: 0px 5px;
+    width: calc(100% - 5px);
+    position: static;
+    height: 18px !important;
+}
+.vr-datagrid-celltext .vr-small-addon{
+    font-size : 11px !important;
+}
+.vr-datagrid-celltext .vr-switch{
+    min-height: 21px;
+    position: relative;
+    top: -2px;
+}
+.vr-datagrid-celltext .switch { 
+    width: 24px;
+    height: 14px;
+}
+.vr-datagrid-celltext .switch small {   
+    width: 14px;
+    height: 14px;
+}
+.vr-datagrid-celltext .vr-numeric .vr-numeric-control {   
+    top: 1px;
+}
+.vr-datagrid-celltext .vr-numeric .vr-numeric-control .arrow-box {
+    height: 5px;
+}
+
+.vr-datagrid-celltext  .vr-file-upload-paperclip{
+    top:-5px;
+}
+.vr-datagrid-celltext .vr-file-name {
+    font-size: 9px;
+    top: 3px;
+    height: 10px;
+}
+.vr-datagrid-celltext .vr-file-btn input[type="file"] {
+    font-size: 10px;
+}
+.vr-datagrid-celltext .vr-file-btn {
+    top: 0px;
+}
+.vr-datagrid-celltext .vr-file-process {
+     font-size: 8px;
+    top: 15px;
+}
+.vr-datagrid-celltext button.btn {
+    height: 22px !important;
+    padding: 0px 12px !important;
+}
+.vr-datagrid-celltext .vr-tabs label {  
+    height:21px;
+}
+.vr-datagrid-celltext .vr-tabs label > span {   
+    position: relative;
+    top: -4px;
+}
+.vr-datagrid-celltext .vr-multiple-caret{
+    position:absolute;
+    top:10px;
+    right:5px
+}

@@ -14,7 +14,7 @@ app.directive('vrModalbody', [function () {
             //if (tAttrs.maxheight != undefined)
             //    maxHeigth = tAttrs.maxheight;
 
-            maxHeightPart = '\'max-height\': ' + maxHeigth + ', \'overflow\': \'auto\', \'padding\': \'15px\'';
+            maxHeightPart = '\'max-height\': ' + maxHeigth + ', \'overflow\': \'auto\',\'overflow-x\': \'hidden\', \'padding\': \'15px\'';
             if (tAttrs.stopdrag != undefined)
                 draggablemodal = '';
 

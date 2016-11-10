@@ -60,8 +60,8 @@ app.directive('vrCheck', ['SecurityService', function (SecurityService) {
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="value"  ng-click="value=!value; notifyUserChange()" class="hand-cursor" style="font-weight: bold; font-size: 16px;" ng-style="value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
-                    + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
+                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="value"  ng-click="value=!value; notifyUserChange()" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
+                    + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
                     + '</div>';
             }
             else

@@ -1,6 +1,6 @@
 ﻿<div class="dropdown-container1">
     <div class="dropdown-container2" >
-        <vr-validator validate="ctrl.validate()">
+        <vr-validator validate="ctrl.validate()" vr-input>
             <div class="dropdown drop-down-inside-modal">
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
                     <li role="presentation" ng-click="ctrl.onClickLi($event)" ng-if="ctrl.isDropDownOpened()">
@@ -56,7 +56,7 @@
                         </div>
 
                         <!-- Add DIV in case of multiple -->
-                        <div ng-if="ctrl.selectedSectionVisible()" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.selectedSectionVisible()">
+                        <div ng-if="ctrl.selectedSectionVisible()" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; overflow: auto; white-space:normal" ng-show="ctrl.selectedSectionVisible()">
                             <div style="padding:5px ;height:29px">
                                 {{ctrl.selectlbl}}
                                 <a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); ">
@@ -64,7 +64,7 @@
                                     <i class="glyphicon glyphicon-trash hand-cursor "></i>
                                 </a>
                             </div>
-                            <div style="height: 225px; overflow: auto;padding-top:5px">
+                            <div style="height: 200px; overflow: auto;padding-top:5px">
                                 <span class="label custom-label" ng-repeat="obj in ctrl.selectedvalues">
                                     {{::ctrl.getObjectText(obj)}}
                                     <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.selectValue($event,obj);"></span>
@@ -83,7 +83,7 @@
             </div>
         </vr-validator>
 
-        <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
+        <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true" style="top:-10px" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
 
     </div>
     <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" class="glyphicon glyphicon-plus hand-cursor vr-select-add" ng-hide="ctrl.hideAddButton"></span>

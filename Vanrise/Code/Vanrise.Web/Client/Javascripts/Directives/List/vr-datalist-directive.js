@@ -27,6 +27,9 @@ app.directive('vrDatalist', [function () {
                     var removeFunction = $scope.$parent.$eval(ctrl.onremoveitem);
                     removeFunction(dataItem);
                 }
+            };
+            ctrl.getDataItemTitle = function (dataItem) {
+                console.log(typeof dataItem)
             }
             $scope.ondataitemclicked = function (dataItem) {
                 if (typeof (ctrl.onitemclicked) == 'function')
@@ -70,12 +73,14 @@ app.directive('vrDatalist', [function () {
             if (attrs.onitemclicked != undefined) {
                 onItemClickedAttr = 'ng-click="ondataitemclicked(dataItem)"';
             }
-
+            var title='';
+            if (attrs.enabletitle != undefined)
+                title = 'title="{{dataItem}}"';
             var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}">'
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + draggableIconTemplate
-                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden;" title="{{dataItem}}">' + element.html() + '</div>'
+                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden; padding:0px 10px" ' + title + '>' + element.html() + '</div>'
                              + '</vr-listitem>'
                             + '</div>'
                            + '</vr-list>';

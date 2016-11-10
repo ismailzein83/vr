@@ -345,9 +345,9 @@
                         var selfOffset = $(this).offset();
                         var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
                        
-                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 235 : 200;
+                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 235 :200;
 
-                        if (innerHeight - basetop < heigth) {
+                        if ((innerHeight- 100) - basetop < heigth) {
                             var div = $(this).find('.dropdown-menu');
                             var height = div.css({
                                 display: "block"
@@ -399,7 +399,7 @@
                             var baseleft = selfOffset.left - $(window).scrollLeft();
                          
                             var heigth = $(this).parents('.vr-pager-container').length > 0 ? 245 : 200;
-                            if (innerHeight - basetop < heigth){
+                            if ((innerHeight - 100) - basetop < heigth){
                                 top = basetop - (heigth + (selfHeight * 2.7));
                                 if (isRemoteLoad()) {
                                     top = top - 35;
@@ -505,11 +505,11 @@
                     else {
                         var noCaret = attrs.nocaret != undefined;
                         var noborder = attrs.noborder != undefined;
-                        var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
+                        var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
                                             + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                             + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
-                                            + (noCaret === true ? '' : '<span style="position:absolute;top:13px;right:5px" class="caret"></span>')
-                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon()"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor" style="position: absolute;right: 15px;top: 10px;font-size: 11px;" aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
+                                            + (noCaret === true ? '' : '<span class="caret vr-select-caret"></span>')
+                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon()"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
                     }
 

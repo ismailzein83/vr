@@ -20,6 +20,7 @@
                             field: gridColumnAttribute.Field,
                             isFieldDynamic: gridColumnAttribute.IsFieldDynamic,
                             widthFactor: gridColumnAttribute.WidthFactor,
+                            fixedWidth: gridColumnAttribute.FixedWidth,
                             isClickable: gridColumnAttribute.IsClickable,
                             onClicked: gridColumnAttribute.OnClicked,
                             type: gridColumnAttribute.Type,
@@ -63,16 +64,26 @@
                         col.tag = $scope.$eval(iAttrs.tag);
                     if (iAttrs.onsortchanged != undefined)
                         col.onSortChanged = $scope.$eval(iAttrs.onsortchanged);
-                   
+                    //fixedWidth
+                    if (iAttrs.fixedwidth != undefined)
+                        col.fixedWidth = $scope.$eval(iAttrs.fixedwidth);
+
                     if (iAttrs.getcolor != undefined)
                         col.getcolor = $scope.$eval(iAttrs.getcolor);
                     col.cellTemplate = cellTemplate;
+                  
+
+                   
 
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
+                 
 
                     var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;
 
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
+                  
+
+                   
                     if (iAttrs.headertext != undefined)
                         $scope.$watch(iAttrs.headertext, function (val) {                            
                             if (colDef != undefined && val != undefined)

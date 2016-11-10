@@ -52,7 +52,7 @@
                 ctrl.validate = function () {                    
                     return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
                 };
-
+               
                 $scope.ctrl.onBlurDirective = function (e) {
                     if ($attrs.onblurtextbox != undefined) {
                         var onblurtextboxMethod = $scope.$parent.$eval($attrs.onblurtextbox);
@@ -121,6 +121,9 @@
                             
                             return false;
                         }
+                        ctrl.validateInpute = function () {
+                            return VRValidationService.validate(ctrl.valuetext, $scope, { isrequired: false }, validationOptionsInput);
+                        }
                         ctrl.addNewValue = function () {
                             if (!IsInvalide(ctrl.valuetext)) {
                                 ctrl.value.push(ctrl.valuetext);
@@ -140,6 +143,7 @@
                         ctrl.disabledAdd = function () {                         
                             return IsInvalide(ctrl.valuetext);
                         }
+                       
                         ctrl.getLabelText = function () {
                             if (ctrl.value == 0) return "Select";
                             else if (ctrl.value != undefined) return ctrl.value.join(";");
@@ -250,7 +254,8 @@
                         });
                        
 
-                    }
+                    },
+                  
                 }
             },
 
@@ -269,25 +274,26 @@
                 var keypress = '';
                 var keypressclass = '';
                 if (attrs.tonextinput != undefined) {
-                    keypressclass = 'next-input';
-             
+                    keypressclass = 'next-input';             
                 }
+               
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
-                            + '<vr-validator validate="ctrl.validate()" >'
+                            + '<vr-validator validate="ctrl.validate()" vr-input >'
                             + '<div class="dropdown vr-multiple" id="{{ctrl.id}}" >'
                              +  '<button  class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;" type="button" data-toggle="dropdown" '
                                 + ' aria-expanded="true"  >'
                                     + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " > {{ctrl.getLabelText()}} </span>'
-                                    + '<span style="position:absolute;top:13px;right:5px" class="caret" ></span>'
+                                    + '<span style="" class="caret vr-multiple-caret" ></span>'
                                 + '</button>'
                                 + '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuCu-test" style="width : 100%">'
                                     + '<li role="presentation" ng-click="ctrl.muteAction($event);">'
                                         + '<div style="width : 100%" > '
                                         + '<div style="display:inline-block;width:calc(100% - 30px );padding: 0px 3px;" >'
-                                                + ' <vr-textbox value="ctrl.valuetext" type="' + attrs.datatype + '" onenterpress="ctrl.addNewValue"></vr-textbox>'
+                                                + ' <vr-textbox value="ctrl.valuetext" type="ctrl.datatype" customvalidate="ctrl.validateInpute()" onenterpress="ctrl.addNewValue"></vr-textbox>'
                                          + '</div>'
                                         + '<div style="display:inline-block;width:30px" ><vr-button vr-disabled="ctrl.disabledAdd()" type="Add"  standalone data-onclick="ctrl.addNewValue" ></vr-button></div>'
-
+                                         + '</div>'
+                                        + '<div style="width : 100%" > '
                                         +'<div  style="border-left:1px solid #f0f0f0;display: inline-block;overflow: auto; white-space:normal" >'
                                             + '<div style="padding:5px ;height:29px">'
                                                 + 'Values:'
@@ -302,14 +308,13 @@
                                                    + '<span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.removeValue(obj);"></span>'
                                                 + '</span>'
                                             + '</div>'
-                                        + '</div>'
-
-                                        '</div>'
+                                       + '</div>'
                                     +'</li>'
                                 +'</ul>'
                             + '</vr-validator>'
-                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
-                        + '</div>';
+                        + '</div>'
+
+                ;
                 
                 return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }

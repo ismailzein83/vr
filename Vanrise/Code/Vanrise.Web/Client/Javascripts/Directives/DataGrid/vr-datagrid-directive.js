@@ -17,7 +17,8 @@
                 onexport: '=',
                 showexpand: '=',
                 norowhighlightonclick: '=',
-                gridmenuactions: '='
+                gridmenuactions: '=',
+                margin:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -201,7 +202,8 @@
                     getcolor: col.getcolor,
                     rotateHeader: ctrl.rotateHeader,
                     nonHiddable: col.nonHiddable,
-                    expendableColumn: col.expendableColumn
+                    expendableColumn: col.expendableColumn,
+                    fixedWidth: col.fixedWidth
 
 
                 };
@@ -255,9 +257,11 @@
                     colDef.widthFactor = 10;
                 else
                     colDef.widthFactor = col.widthFactor;
-
-
-
+                
+                if (col.fixedWidth == undefined)
+                    col.fixedWidth = 0;
+                else  
+                    col.fixedWidth = col.fixedWidth;
                 if (columnIndex == undefined)
                     ctrl.columnDefs.splice(ctrl.columnDefs.length, 0, colDef);//to insert before the actionType column
                 else
@@ -341,18 +345,49 @@
                 //    width -= 1;
                 ctrl.dataColumnsSectionWidth = "calc(100% - " + otherSectionsWidth + "px)";
             }
+            $(window).resize(function() {
+                setTimeout(function() {
+                      calculateColumnsWidth();
+                 },100)
+            });
 
             function calculateColumnsWidth() {
                 var totalWidthFactors = 0;
+                var totalfixedWidth = 0;
+                var normalColCount = 0;
                 angular.forEach(ctrl.columnDefs, function (col) {
-                    if (col.isHidden != true)
-                        totalWidthFactors += col.widthFactor;
+                    if (col.isHidden != true) {
+                        if (col.fixedWidth != undefined) {
+                            totalfixedWidth += parseInt(col.fixedWidth);
+                        }
+                        else {
+                            totalWidthFactors += parseInt(col.widthFactor);
+                            normalColCount++;
+                        }
+
+                    }
                 });
                 var initialTotalWidth = 100;
                 var totalWidth = initialTotalWidth;
+
+                if (ctrl.margin !=undefined &&  innerWidth>1366) {
+                        totalWidth = initialTotalWidth -(ctrl.margin * (innerWidth/1920));
+                }
+
+
+                 //if(ctrl.margin !=undefined &&  innerWidth>1920)
+                 //   totalWidth = initialTotalWidth - (ctrl.margin * (innerWidth / 1920));
+
                 angular.forEach(ctrl.columnDefs, function (col) {
-                    if (col.isHidden != true)
-                        col.width = (totalWidth * col.widthFactor / totalWidthFactors) + '%';
+                    if (col.isHidden != true) {
+                        if (col.fixedWidth!=undefined) {
+                            col.width = col.fixedWidth + 'px';
+                        }
+                        else {
+                            col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + totalfixedWidth / normalColCount + "px)";
+                         }
+
+                    }
                 });
             }
 
@@ -864,6 +899,7 @@
 
             function setMaxHeight(maxHeight) {
                 ctrl.gridStyle['max-height'] = maxHeight;
+                //ctrl.gridStyle['min-height'] = "60px";
                 ctrl.gridStyle['overflow-y'] = "auto";
                 ctrl.gridStyle['overflow-x'] = "hidden";
             }
@@ -878,14 +914,14 @@
                     }
 
                     else {
-
-                        var sh = screen.height;
+                        var sh = innerHeight;
                         var h = 28;
                         if (isInModal() == true)
-                            h += screen.height * 0.3;
+                            h += sh * 0.3;
                         else
-                            h += screen.height * 0.52;
+                            h += sh - 400;
 
+                        h = h < 30 ? 30 : h;
                         setMaxHeight(h + "px");
                     }
                 }
@@ -936,11 +972,11 @@
             function getPageSize() {
                 var h;
                 if (isInModal() == true)
-                    h = screen.height * 0.3;
+                    h = innerHeight * 0.3;
                 else
-                    h = screen.height * 0.55;
+                    h = innerHeight * 0.55;
 
-                var pagesize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 25 ? 25 : (Math.ceil(parseInt((h / 25) * 1.7) / 10) * 10);
+                var pagesize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 30 ? 30 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);
                 return pagesize;
             }
             function getScrollbarWidth() {
