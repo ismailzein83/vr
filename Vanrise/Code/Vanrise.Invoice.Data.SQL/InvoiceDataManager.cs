@@ -89,6 +89,7 @@ namespace Vanrise.Invoice.Data.SQL
                 PaidDate = GetReaderValue<DateTime?>(reader, "PaidDate"),
                 DueDate = GetReaderValue<DateTime>(reader, "DueDate"),
                 UserId = GetReaderValue<int>(reader, "UserId"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
             };
             return invoice;
         }

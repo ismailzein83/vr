@@ -165,6 +165,10 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 field = VR_Invoice_InvoiceFieldEnum.UserId.fieldName;
                                 attribute.type = VR_Invoice_InvoiceFieldEnum.UserId.type;
                                 break;
+                            case VR_Invoice_InvoiceFieldEnum.CreatedTime.value:
+                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.CreatedTime.fieldName;
+                                attribute.type = VR_Invoice_InvoiceFieldEnum.CreatedTime.type;
+                                break;
                         }
                         $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, NumberPrecision: attribute.numberprecision });
                     }

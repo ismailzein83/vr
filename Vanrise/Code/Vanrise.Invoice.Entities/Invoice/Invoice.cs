@@ -23,7 +23,7 @@ namespace Vanrise.Invoice.Entities
         public DateTime IssueDate { get; set; }
 
         public DateTime DueDate { get; set; }
-
+        public DateTime CreatedTime { get; set; }
         public dynamic Details { get; set; }
         public DateTime? PaidDate { get; set; }
         public Invoice() { }
