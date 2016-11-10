@@ -37,7 +37,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     DimensionValue customerDimension = customer.DimensionValues[0];
 
-                    List<string> listCustomerDimensions = new List<string> { "SaleZone", "SaleCurrency", "SaleRate", "SaleCurrency", "SaleRateType" };
+                    List<string> listCustomerDimensions = new List<string> { "SaleZone", "SaleCurrency", "SaleRate",  "SaleRateType" };
                     var analyticResultByCustomerSaleZone = GetFilteredRecords(listCustomerDimensions, listMeasures, "Customer", customerDimension.Value, context.FromDate, context.ToDate);
                     BuilInvoiceCustomerItemSet(analyticResultByCustomerSaleZone.Data, generatedInvoiceItemSets, string.Format("GroupedByCustomer_{0}", customerDimension.Value.ToString()), context.FromDate, context.ToDate,currencyId);
                 }
@@ -49,7 +49,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(Convert.ToInt32(partner[1]));
             }
 
-            List<string> listDimensions = new List<string> { "SaleZone", "SaleCurrency", "SaleRate", "SaleCurrency", "SaleRateType" };
+            List<string> listDimensions = new List<string> { "SaleZone", "SaleCurrency", "SaleRate", "SaleRateType" };
             var analyticResultBySaleZone = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
             BuilInvoiceCustomerItemSet(analyticResultBySaleZone.Data, generatedInvoiceItemSets, "GroupedBySaleZone", context.FromDate, context.ToDate,currencyId);
 
@@ -62,7 +62,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             context.Invoice = new GeneratedInvoice
             {
                 InvoiceDetails = customerInvoiceDetails,
-                InvoiceItemSets = generatedInvoiceItemSets
+                InvoiceItemSets = generatedInvoiceItemSets,
             };
         }
 
@@ -100,10 +100,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
             foreach (var analyticRecord in analyticRecords)
             {
 
-                DimensionValue dimensionName = analyticRecord.DimensionValues[0];
-                DimensionValue currencyName = null;
-                if(analyticRecord.DimensionValues.Length > 1)
-                   currencyName = analyticRecord.DimensionValues[1];
+                DimensionValue dimensionId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(2);
+                DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(3);
+
+
 
                 MeasureValue saleDuration;
                 analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
@@ -119,8 +121,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
                     NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
                     SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
-                    DimensionId = Convert.ToInt64(dimensionName.Value),
-                    SaleCurrencyId = currencyName != null ? Convert.ToInt64(currencyName.Value) : currencyId,
+                    DimensionId = Convert.ToInt64(dimensionId.Value),
+                    SaleCurrencyId = saleCurrencyId != null ? Convert.ToInt64(saleCurrencyId.Value) : currencyId,
+                    SaleRate = saleRate != null?Convert.ToDecimal(saleRate.Value):default(Decimal),
+                    SaleRateTypeId = saleRateTypeId != null && saleRateTypeId .Value != null? Convert.ToInt32(saleRateTypeId.Value) : default(int),
                     FromDate = fromDate,
                     ToDate = toDate
                 };

@@ -96,5 +96,25 @@ namespace TOne.WhS.Invoice.Business
             }
             return null;
         }
+
+        public int GetPartnerDuePeriod(IPartnerManagerContext context)
+        {
+            string[] partnerId = context.PartnerId.Split('_');
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
+            if (partnerId[0].Equals("Profile"))
+            {
+                var carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partnerId[1]));
+                return carrierProfile.Settings.DuePeriod;
+            }
+            else if (partnerId[0].Equals("Account"))
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId[1]));
+                var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+                return carrierProfile.Settings.DuePeriod;
+            }
+            return 0;
+        }
     }
 }
