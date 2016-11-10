@@ -28,7 +28,7 @@ namespace TOne.WhS.Routing.Business.TransformationSteps
             var codeMatchManagerName = context.GenerateUniqueMemberName("codeMatchBuilder");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new TOne.WhS.Routing.Business.CodeMatchBuilder();", codeMatchManagerName);
              var saleCodeMatch = context.GenerateUniqueMemberName("saleCodeMatch");
-             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetSaleCodeMatchWithMaster({2}, {3},{4});", 
+             context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.Routing.Entities.SaleCodeMatchWithMaster {0} = {1}.GetSaleCodeMatchWithMaster({2}, {3},{4});", 
                  saleCodeMatch, codeMatchManagerName, this.Number, !String.IsNullOrEmpty(this.CustomerId) ? this.CustomerId : "null", this.EffectiveOn);
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)",saleCodeMatch);
             context.AddCodeToCurrentInstanceExecutionBlock("{");

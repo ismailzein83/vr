@@ -250,6 +250,7 @@
     <Compile Include="SwitchConnectivity\SwitchConnectivityQuery.cs" />
     <Compile Include="SwitchConnectivity\SwitchConnectivitySettings.cs" />
     <Compile Include="Switch\Switch.cs" />
+    <Compile Include="Switch\SwitchCDPN.cs" />
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Switch\SwitchQuery.cs" />

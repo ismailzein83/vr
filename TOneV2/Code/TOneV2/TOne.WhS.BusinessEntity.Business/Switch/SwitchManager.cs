@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -140,6 +138,68 @@ namespace TOne.WhS.BusinessEntity.Business
             return deleteOperationOutput;
         }
 
+        public SwitchCDPNsForIdentification GetSwitchCDPNsForIdentification(int switchId, string inputCDPN, string cdpnIn, string cdpnOut)
+        {
+            Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = GetCachedMappingSwitchCDPNs(switchId);
+
+            string customerCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.CustomerCDPN), inputCDPN, cdpnIn, cdpnOut);
+            string supplierCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.SupplierCDPN), inputCDPN, cdpnIn, cdpnOut);
+            string outputCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.CDPN), inputCDPN, cdpnIn, cdpnOut);
+
+            return new SwitchCDPNsForIdentification
+            {
+                CustomerCDPN = customerCDPN,
+                SupplierCDPN = supplierCDPN,
+                OutputCDPN = outputCDPN,
+            };
+        }
+
+        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(int switchId, string inputCDPN, string cdpnIn, string cdpnOut)
+        {
+            Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = GetCachedMappingSwitchCDPNs(switchId);
+
+            string saleZoneCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.SaleZoneCDPN), inputCDPN, cdpnIn, cdpnOut);
+            string supplierZoneCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.SupplierZoneCDPN), inputCDPN, cdpnIn, cdpnOut);
+
+            return new SwitchCDPNsForZoneMatch
+            {
+                SaleZoneCDPN = saleZoneCDPN,
+                SupplierZoneCDPN = supplierZoneCDPN,
+            };
+        }
+
+        private Dictionary<SwitchCDPN, CDPNIdentification> GetCachedMappingSwitchCDPNs(int switchId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetMappingSwitchCDPNs",
+                () =>
+                {
+                    ConfigManager configManager = new ConfigManager();
+                    Switch currentSwitch = this.GetSwitch(switchId);
+                    if (currentSwitch == null)
+                        throw new NullReferenceException(string.Format("currentSwitch for ID: {0}", switchId));
+
+                    SwitchCDRProcessConfiguration switchCDRProcessConfiguration = currentSwitch.Settings != null ? currentSwitch.Settings.SwitchCDRProcessConfiguration : null;
+
+                    Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = new Dictionary<SwitchCDPN, CDPNIdentification>();
+                    if (currentSwitch.Settings.SwitchCDRProcessConfiguration != null)
+                    {
+                        mappingResults.Add(SwitchCDPN.CDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.GeneralIdentification, configManager.GetGeneralCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.CustomerCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.CustomerIdentification, configManager.GetCustomerCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SupplierCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.SupplierIdentification, configManager.GetSupplierCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SaleZoneCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.SaleZoneIdentification, configManager.GetSaleZoneCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SupplierZoneCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.SupplierZoneIdentification, configManager.GetSupplierZoneCDPNIndentification()));
+                    }
+                    else
+                    {
+                        mappingResults.Add(SwitchCDPN.CDPN, configManager.GetGeneralCDPNIndentification());
+                        mappingResults.Add(SwitchCDPN.CustomerCDPN, configManager.GetCustomerCDPNIndentification());
+                        mappingResults.Add(SwitchCDPN.SupplierCDPN, configManager.GetSupplierCDPNIndentification());
+                        mappingResults.Add(SwitchCDPN.SaleZoneCDPN, configManager.GetSaleZoneCDPNIndentification());
+                        mappingResults.Add(SwitchCDPN.SupplierZoneCDPN, configManager.GetSupplierZoneCDPNIndentification());
+                    }
+                    return mappingResults;
+                });
+        }
         #endregion
 
         #region Validation Methods
@@ -166,12 +226,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _SettingsCacheLastCheck;
+
             ISwitchDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreSwitchesUpdated(ref _updateHandle);
+                return _dataManager.AreSwitchesUpdated(ref _updateHandle)
+                    |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _SettingsCacheLastCheck);
             }
         }
 
@@ -190,6 +254,24 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        private CDPNIdentification GetCorrespondingCDPNIdentification(ICDPNIdentification switchCDPNIdentification, CDPNIdentification defaultCDPNIdentification)
+        {
+            if (switchCDPNIdentification != null && switchCDPNIdentification.CDPNIdentification.HasValue)
+                return switchCDPNIdentification.CDPNIdentification.Value;
+
+            return defaultCDPNIdentification;
+        }
+
+        private string GetCDPNPropertyValue(CDPNIdentification cdpnIdentification, string inputCDPN, string cdpnIn, string cdpnOut)
+        {
+            switch (cdpnIdentification)
+            {
+                case CDPNIdentification.CDPN: return inputCDPN;
+                case CDPNIdentification.CDPNIn: return cdpnIn;
+                case CDPNIdentification.CDPNOut: return cdpnOut;
+                default: throw new NotSupportedException("cdpnIdentification");
+            }
+        }
         #endregion
 
         #region Mappers
@@ -212,7 +294,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
@@ -222,7 +303,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-
 
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {

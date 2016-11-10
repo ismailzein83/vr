@@ -11,6 +11,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class ConfigManager
     {
+        #region Public Methods
+
         public int GetOffPeakRateTypeId()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
@@ -20,7 +22,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting.RateTypeConfiguration.OffPeakRateTypeId;
         }
-
         public int GetWeekendRateTypeId()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
@@ -30,7 +31,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting.RateTypeConfiguration.WeekendRateTypeId;
         }
-
         public int GetHolidayRateTypeId()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
@@ -40,6 +40,99 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting.RateTypeConfiguration.HolidayRateTypeId;
         }
+
+        public CDPNIdentification GetGeneralCDPNIndentification()
+        {
+            GeneralIdentification generalIdentification = GetGeneralIdentification();
+            if (!generalIdentification.CDPNIdentification.HasValue)
+                throw new NullReferenceException("generalIdentification.CDPNIdentification");
+
+            return generalIdentification.CDPNIdentification.Value;
+        }
+
+        public CDPNIdentification GetCustomerCDPNIndentification()
+        {
+            CustomerIdentification customerIdentification = GetCustomerIdentification();
+            if (!customerIdentification.CDPNIdentification.HasValue)
+                throw new NullReferenceException("customerIdentification.CDPNIdentification");
+
+            return customerIdentification.CDPNIdentification.Value;
+        }
+
+        public CDPNIdentification GetSupplierCDPNIndentification()
+        {
+            SupplierIdentification supplierIdentification = GetSupplierIdentification();
+            if (!supplierIdentification.CDPNIdentification.HasValue)
+                throw new NullReferenceException("supplierIdentification.CDPNIdentification");
+
+            return supplierIdentification.CDPNIdentification.Value;
+        }
+
+        public CDPNIdentification GetSaleZoneCDPNIndentification()
+        {
+            SaleZoneIdentification saleZoneIdentification = GetSaleZoneIdentification();
+            if (!saleZoneIdentification.CDPNIdentification.HasValue)
+                throw new NullReferenceException("saleZoneIdentification.CDPNIdentification");
+
+            return saleZoneIdentification.CDPNIdentification.Value;
+        }
+
+        public CDPNIdentification GetSupplierZoneCDPNIndentification()
+        {
+            SupplierZoneIdentification supplierZoneIdentification = GetSupplierZoneIdentification();
+            if (!supplierZoneIdentification.CDPNIdentification.HasValue)
+                throw new NullReferenceException("supplierZoneIdentification.CDPNIdentification");
+
+            return supplierZoneIdentification.CDPNIdentification.Value;
+        }
+
+        public GeneralIdentification GetGeneralIdentification()
+        {
+            GeneralIdentification generalIdentification = GetSwitchCDRProcessConfiguration().GeneralIdentification;
+            if (generalIdentification == null)
+                throw new NullReferenceException("generalIdentification");
+
+            return generalIdentification;
+        }
+
+        public CustomerIdentification GetCustomerIdentification()
+        {
+            CustomerIdentification customerIdentification = GetSwitchCDRProcessConfiguration().CustomerIdentification;
+            if (customerIdentification == null)
+                throw new NullReferenceException("customerIdentification");
+
+            return customerIdentification;
+        }
+
+        public SupplierIdentification GetSupplierIdentification()
+        {
+            SupplierIdentification supplierIdentification = GetSwitchCDRProcessConfiguration().SupplierIdentification;
+            if (supplierIdentification == null)
+                throw new NullReferenceException("supplierIdentification");
+
+            return supplierIdentification;
+        }
+
+        public SaleZoneIdentification GetSaleZoneIdentification()
+        {
+            SaleZoneIdentification saleZoneIdentification= GetSwitchCDRProcessConfiguration().SaleZoneIdentification;
+            if (saleZoneIdentification == null)
+                throw new NullReferenceException("saleZoneIdentification");
+
+            return saleZoneIdentification;
+        }
+
+        public SupplierZoneIdentification GetSupplierZoneIdentification()
+        {
+            SupplierZoneIdentification supplierZoneIdentification = GetSwitchCDRProcessConfiguration().SupplierZoneIdentification;
+            if (supplierZoneIdentification == null)
+                throw new NullReferenceException("supplierZoneIdentification");
+
+            return supplierZoneIdentification;
+        }
+        #endregion
+
+        #region Private Method
 
         private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
         {
@@ -51,5 +144,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting;
         }
+
+        private CDRImportSettings GetCDRImportSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            CDRImportSettings cdrImportSettings = settingManager.GetSetting<CDRImportSettings>(Constants.CDRImportSettings);
+
+            if (cdrImportSettings == null)
+                throw new NullReferenceException("cdrImportSettings");
+
+            return cdrImportSettings;
+        }
+        private SwitchCDRProcessConfiguration GetSwitchCDRProcessConfiguration()
+        {
+            CDRImportSettings cdrImportSettings = GetCDRImportSettings();
+            if (cdrImportSettings.SwitchCDRProcessConfiguration == null)
+                throw new NullReferenceException("cdrImportSettings.SwitchCDRProcessConfiguration");
+
+            return cdrImportSettings.SwitchCDRProcessConfiguration;
+        }
+
+        #endregion
     }
 }

@@ -27,24 +27,29 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SupplierZoneIdentification SupplierZoneIdentification { get; set; }
     }
 
-    public class GeneralIdentification
+    public class GeneralIdentification : ICDPNIdentification
     {
         public CDPNIdentification? CDPNIdentification { get; set; }
     }
-    public class CustomerIdentification
+    public class CustomerIdentification : ICDPNIdentification
     {
         public CDPNIdentification? CDPNIdentification { get; set; }
     }
-    public class SupplierIdentification
+    public class SupplierIdentification : ICDPNIdentification
     {
         public CDPNIdentification? CDPNIdentification { get; set; }
     }
-    public class SaleZoneIdentification
+    public class SaleZoneIdentification : ICDPNIdentification
     {
         public CDPNIdentification? CDPNIdentification { get; set; }
     }
-    public class SupplierZoneIdentification
+    public class SupplierZoneIdentification : ICDPNIdentification
     {
         public CDPNIdentification? CDPNIdentification { get; set; }
+    }
+
+    public interface ICDPNIdentification
+    {
+        CDPNIdentification? CDPNIdentification { get; set; }
     }
 }

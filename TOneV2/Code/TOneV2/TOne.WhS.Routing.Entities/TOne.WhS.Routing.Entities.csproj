@@ -69,6 +69,7 @@
     <Compile Include="CodeZoneMatch\CodeSupplierZoneMatch.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="ProcessRuleConfig.cs" />
     <Compile Include="RouteOptionRuleConfig.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleEditorRuntime.cs" />
     <Compile Include="RouteOptionSettingsGroupConfig.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Settings\RouteBuildConfiguration.cs" />
     <Compile Include="Settings\RouteDatabaseConfiguration.cs" />
     <Compile Include="Settings\RouteDatabasesToKeep.cs" />
+    <Compile Include="Settings\RouteOptionRuleConfiguration.cs" />
     <Compile Include="Settings\RouteRuleDataTransformation.cs" />
     <Compile Include="Settings\RouteTechnicalSettingData.cs" />
     <Compile Include="Settings\RouteSettingsData.cs" />

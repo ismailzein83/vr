@@ -22,16 +22,16 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.MappingSteps
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
-            //var switchManagerVariableName = context.GenerateUniqueMemberName("switchManager");
-            //context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new TOne.WhS.BusinessEntity.Business.SwitchManager();", switchManagerVariableName);
+            var switchManagerVariableName = context.GenerateUniqueMemberName("switchManager");
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new TOne.WhS.BusinessEntity.Business.SwitchManager();", switchManagerVariableName);
 
-            //var switchCDPNsForZoneMatchVariableName = context.GenerateUniqueMemberName("switchCDPNsForZoneMatch");
-            //context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.BusinessEntity.Business.SwitchCDPNsForZoneMatch {0} = {1}.GetSwitchCDPNsForZoneMatch({2},{3},{4},{5});", switchCDPNsForZoneMatchVariableName, switchManagerVariableName,
-            //    this.SwitchId, this.CDPNNormalized, this.CDPNIn, this.CDPNOut);
+            var switchCDPNsForZoneMatchVariableName = context.GenerateUniqueMemberName("switchCDPNsForZoneMatch");
+            context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.BusinessEntity.Entities.SwitchCDPNsForZoneMatch {0} = {1}.GetSwitchCDPNsForZoneMatch({2},{3},{4},{5});", switchCDPNsForZoneMatchVariableName, switchManagerVariableName,
+                this.SwitchId, this.CDPNNormalized, this.CDPNIn, this.CDPNOut);
 
-            //context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleZoneCDPN;", this.SaleZoneCDPN, switchCDPNsForZoneMatchVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleZoneCDPN;", this.SaleZoneCDPN, switchCDPNsForZoneMatchVariableName);
 
-            //context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SupplierZoneCDPN;", this.SupplierZoneCDPN, switchCDPNsForZoneMatchVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SupplierZoneCDPN;", this.SupplierZoneCDPN, switchCDPNsForZoneMatchVariableName);
         }
     }
 }

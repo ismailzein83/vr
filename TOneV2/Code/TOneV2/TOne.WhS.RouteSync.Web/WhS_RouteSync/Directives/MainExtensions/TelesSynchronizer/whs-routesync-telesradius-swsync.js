@@ -105,8 +105,8 @@
                                  var carrierMapping = {
                                      CarrierAccountId: response[i].CarrierAccountId,
                                      CarrierAccountName: response[i].Name,
-                                     CustomerMapping: accountCarrierMappings != undefined ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
-                                     SupplierMapping: accountCarrierMappings != undefined ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
+                                     CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != undefined ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
+                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != undefined ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
                                  };
 
                                  $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
@@ -141,8 +141,8 @@
                     var carrierMapping = $scope.scopeModel.carrierAccountMappings[i];
                     result[carrierMapping.CarrierAccountId] = {
                         CarrierId: carrierMapping.CarrierAccountId,
-                        CustomerMapping: carrierMapping.CustomerMapping.split($scope.scopeModel.separator),
-                        SupplierMapping: carrierMapping.SupplierMapping.split($scope.scopeModel.separator)
+                        CustomerMapping: carrierMapping.CustomerMapping != undefined ? carrierMapping.CustomerMapping.split($scope.scopeModel.separator) : undefined,
+                        SupplierMapping: carrierMapping.SupplierMapping != undefined ? carrierMapping.SupplierMapping.split($scope.scopeModel.separator) : undefined
                     };
                 }
                 return result;
