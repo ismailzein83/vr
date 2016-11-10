@@ -316,6 +316,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         			text: "Load",
         			class: "glyphicon glyphicon-search"
         		};
+        	case "Run":
+        		return {
+        			text: "Run",
+        			class: "glyphicon glyphicon-play"
+        		};
+        	case "CalculateRate":
+        		return {
+        			text: "Calculate Rate",
+        			class: "glyphicon glyphicon-play"
+        		};
         } 
     }
 }]);
