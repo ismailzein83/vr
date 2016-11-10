@@ -22,6 +22,10 @@
 
         }
 
+        function GetTaxesDefinition() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetTaxesDefinition"));
+        }
+
         function UpdateCarrierProfile(carrierProfileObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateCarrierProfile"), carrierProfileObject);
         }
@@ -45,7 +49,8 @@
             AddCarrierProfile: AddCarrierProfile,
             UpdateCarrierProfile: UpdateCarrierProfile,
             HasUpdateCarrierProfilePermission: HasUpdateCarrierProfilePermission,
-            HasAddCarrierProfilePermission: HasAddCarrierProfilePermission
+            HasAddCarrierProfilePermission: HasAddCarrierProfilePermission,
+            GetTaxesDefinition: GetTaxesDefinition
         });
     }
 

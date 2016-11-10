@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -27,6 +28,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.GetCarrierProfile(carrierProfileId);
+        }
+
+
+        [HttpGet]
+        [Route("GetTaxesDefinition")]
+        public List<VRTaxItemDefinition> GetTaxesDefinition()
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.GetTaxesDefinition();
         }
 
         [HttpGet]

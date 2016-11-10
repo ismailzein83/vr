@@ -262,6 +262,27 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
+        private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
+        {
+            SettingManager settingManager = new SettingManager();
+            BusinessEntityTechnicalSettingsData setting = settingManager.GetSetting<BusinessEntityTechnicalSettingsData>(BusinessEntityTechnicalSettingsData.BusinessEntityTechnicalSettings);
+
+            if (setting == null)
+                throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
+
+            return setting;
+        }
+
+        public List<VRTaxItemDefinition> GetTaxesDefinition()
+        {
+            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
+
+            if (setting.TaxesDefinition == null)
+                throw new NullReferenceException("setting.TaxesDefinition");
+
+            return setting.TaxesDefinition.ItemDefinitions;
+        }
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierProfile(context.EntityId);

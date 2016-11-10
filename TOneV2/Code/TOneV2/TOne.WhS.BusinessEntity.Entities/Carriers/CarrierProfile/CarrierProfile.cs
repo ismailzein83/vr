@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.BusinessEntity.Entities
@@ -47,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CurrencyId { get; set; }
 
         public List<CarrierContact> Contacts { get; set; }
-
+        public VRTaxSetting TaxSetting { get; set; }
     }
 
     public class CarrierProfile : BaseCarrierProfile

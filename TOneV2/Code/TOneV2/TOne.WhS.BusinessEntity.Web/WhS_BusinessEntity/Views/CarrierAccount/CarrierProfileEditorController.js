@@ -47,6 +47,7 @@
 
             $scope.scopeModal = {
                 contacts: [],
+                taxes: [],
                 faxes: [],
                 phoneNumbers: []
 
@@ -86,7 +87,7 @@
                 }
             };
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
 
@@ -152,7 +153,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -221,7 +222,26 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        
+        function loadTaxes() {
+
+            $scope.scopeModal.vat = carrierProfileEntity.Settings.TaxSetting.VAT;
+            WhS_BE_CarrierProfileAPIService.GetTaxesDefinition().then(function (response) {
+                if (response.length > 0) {
+                    for (var i = 0; i < response.length; i++) {
+                        var item = response[i];
+                        $scope.scopeModal.taxes.push(item);
+
+                        for (var j = 0; j < carrierProfileEntity.Settings.TaxSetting.Items.length; j++) {
+                            if (carrierProfileEntity.Settings.TaxSetting.Items[j].ItemId === item.ItemId) {
+                                item.value = carrierProfileEntity.Settings.TaxSetting.Items[j].Value;
+                            }
+                        }
+                    };
+                }
+            });
+
+        }
+
         function loadContacts() {
             for (var x in WhS_BE_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
@@ -369,6 +389,17 @@
                 };
             }
 
+            if ($scope.scopeModal.taxes.length > 0) {
+                obj.Settings.TaxSetting = {};
+                obj.Settings.TaxSetting.VAT = $scope.scopeModal.vat;
+                obj.Settings.TaxSetting.Items = [];
+                for (var i = 0; i < $scope.scopeModal.taxes.length; i++) {
+                    var item = $scope.scopeModal.taxes[i];
+                    if (item.value != undefined) {
+                        obj.Settings.TaxSetting.Items.push({ ItemId: item.ItemId, Value: item.value });
+                    }
+                };
+            }
             return obj;
         }
     }
