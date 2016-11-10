@@ -15,14 +15,16 @@ namespace Vanrise.GenericData.Transformation
     internal class DataTransformationCodeGenerationContext : IDataTransformationCodeGenerationContext
     {
         DataTransformationDefinition _dataTransformationDefinition;
+
+        StringBuilder _globalMembersBuilder;
+        StringBuilder _instanceExecutionBlockBuilder;
+
         public DataTransformationCodeGenerationContext(DataTransformationDefinition dataTransformationDefinition)
         {
             _dataTransformationDefinition = dataTransformationDefinition;
 
         }
 
-        StringBuilder _globalMembersBuilder;
-        StringBuilder _instanceExecutionBlockBuilder;
 
         #region IDataTransformationCodeGenerationContext
 
@@ -48,9 +50,15 @@ namespace Vanrise.GenericData.Transformation
 
         void IDataTransformationCodeGenerationContext.GenerateStepsCode(IEnumerable<MappingStep> steps)
         {
+            IDataTransformationCodeGenerationContext codeGenContext = this as IDataTransformationCodeGenerationContext;
+            int stepNumber = 0;
             foreach (var step in steps)
             {
+                codeGenContext.AddCodeToCurrentInstanceExecutionBlock("try {");
                 step.GenerateExecutionCode(this);
+                codeGenContext.AddCodeToCurrentInstanceExecutionBlock("} catch(Exception ex) {");                
+                codeGenContext.AddCodeToCurrentInstanceExecutionBlock("Exception exceptionToLog = new Exception(\"Transformation Error occured in Step Name '{0}'. Step Number '{1}'\", ex);", step.GetType().FullName, ++stepNumber);
+                codeGenContext.AddCodeToCurrentInstanceExecutionBlock("throw exceptionToLog; }");
             }
         }
 
@@ -89,8 +97,6 @@ namespace Vanrise.GenericData.Transformation
             errorMessages = null;
             return true;
         }
-
-
 
         private string BuildClassDefinition(out string fullTypeName)
         {
