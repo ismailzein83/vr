@@ -62,8 +62,12 @@ app.directive('whsInvoiceCarrierCustomerFilterSelector', ['UtilsService', 'VRUIU
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
-                api.getSelectedIds = function () {
-                    return directiveReadyAPI.getSelectedIds();
+                api.getData = function () {
+                    var data = directiveReadyAPI.getData();
+                    return {
+                        partnerPrefix: data != undefined ? data.partnerPrefix : undefined,
+                        selectedIds: data != undefined ? data.selectedIds : undefined,
+                    }
                 }
 
                 if (ctrl.onReady != null)

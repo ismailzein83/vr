@@ -104,9 +104,12 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
 
                 api.load = function (payload) {
                 }
-                api.getSelectedIds = function()
+                api.getData = function()
                 {
-                    return VRUIUtilsService.getIdSelectedIds('InvoiceCarrierId', attrs, ctrl);
+                    return {
+                        partnerPrefix: ctrl.selectedCarrierTypes != undefined && ctrl.selectedCarrierTypes.length == 1 ? ctrl.selectedCarrierTypes[0].description : undefined,
+                        selectedIds: VRUIUtilsService.getIdSelectedIds('InvoiceCarrierId', attrs, ctrl)
+                    };
                 }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
