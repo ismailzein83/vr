@@ -36,5 +36,17 @@ namespace Vanrise.Invoice.Business
                 throw new NullReferenceException("PartnerManagerFQTN");
             return invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetActualPartnerId(context);
         }
+        public int GetPartnerDuePeriod(Guid invoiceTypeId, string partnerId)
+        {
+            InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            PartnerManagerContext context = new PartnerManagerContext
+            {
+                PartnerId = partnerId,
+            };
+            if (invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN == null)
+                throw new NullReferenceException("PartnerManagerFQTN");
+            return invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetPartnerDuePeriod(context);
+        }
     }
 }

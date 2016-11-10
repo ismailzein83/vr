@@ -8,10 +8,11 @@ using Vanrise.Common;
 using Vanrise.Common.Data;
 using Vanrise.Data;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class RateTypeManager
+    public class RateTypeManager : IBusinessEntityManager
     {
         #region ctor/Local Variables
         #endregion
@@ -131,5 +132,43 @@ namespace Vanrise.Common.Business
             };
         }
         #endregion
+
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetRateTypeName(Convert.ToInt32(context.EntityId));
+        }
+
+
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetRateType(context.EntityId);
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllRateTypes().Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

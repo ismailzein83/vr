@@ -70,7 +70,9 @@ namespace Vanrise.Invoice.Business
                 ToDate = createInvoiceInput.ToDate,
                 IssueDate = createInvoiceInput.IssueDate,
             };
-
+            PartnerManager partnerManager = new PartnerManager();
+            var duePeriod = partnerManager.GetPartnerDuePeriod(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);
+            invoice.DueDate = createInvoiceInput.IssueDate.AddDays(duePeriod);
             var serialNumber = invoiceType.Settings.SerialNumberPattern;
             InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext{
                 Invoice = invoice,

@@ -11,6 +11,7 @@ namespace Vanrise.Invoice.Entities
         string GetPartnerName(IPartnerManagerContext context);
         dynamic GetPartnerInfo(IPartnerManagerInfoContext context);
         dynamic GetActualPartnerId(IPartnerManagerContext context);
+        int GetPartnerDuePeriod(IPartnerManagerContext context);
     }
     public interface IPartnerManagerContext
     {

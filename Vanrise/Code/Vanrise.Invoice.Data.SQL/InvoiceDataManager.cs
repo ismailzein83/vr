@@ -59,7 +59,7 @@ namespace Vanrise.Invoice.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object invoiceId;
-                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, invoiceEntity.SerialNumber, createInvoiceInput.FromDate, createInvoiceInput.ToDate, invoiceEntity.IssueDate, DateTime.Now, Vanrise.Common.Serializer.Serialize(invoice.InvoiceDetails));
+                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, invoiceEntity.SerialNumber, createInvoiceInput.FromDate, createInvoiceInput.ToDate, invoiceEntity.IssueDate, invoiceEntity.DueDate, Vanrise.Common.Serializer.Serialize(invoice.InvoiceDetails));
                 insertedInvoiceId = Convert.ToInt64(invoiceId);
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems((long)invoiceId,invoice.InvoiceItemSets);
@@ -87,6 +87,7 @@ namespace Vanrise.Invoice.Data.SQL
                 SerialNumber= reader["SerialNumber"] as string,
                 ToDate=  GetReaderValue<DateTime>(reader,"ToDate"),
                 PaidDate = GetReaderValue<DateTime?>(reader, "PaidDate"),
+                DueDate = GetReaderValue<DateTime>(reader, "DueDate"),
             };
             return invoice;
         }

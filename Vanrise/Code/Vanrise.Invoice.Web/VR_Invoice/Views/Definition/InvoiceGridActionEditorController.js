@@ -69,7 +69,6 @@
         }
         function loadStaticData() {
             if (actionEntity != undefined) {
-                console.log(actionEntity);
                 $scope.scopeModel.actionTitle = actionEntity.Title;
                 $scope.scopeModel.reloadGridItem = actionEntity.ReloadGridItem;
 
