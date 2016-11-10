@@ -9,4 +9,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	def.[ID],def.[Name],def.Details,def.CreatedTime
     FROM	genericdata.SummaryTransformationDefinition def WITH(NOLOCK) 
+	ORDER BY def.[Name]
 END

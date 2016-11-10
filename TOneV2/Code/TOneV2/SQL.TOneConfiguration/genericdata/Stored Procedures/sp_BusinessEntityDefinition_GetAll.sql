@@ -8,4 +8,5 @@ AS
 BEGIN
 	SELECT	ID, Name, Title, Settings
 	FROM	[genericdata].BusinessEntityDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

@@ -11,8 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT [ID]
-      ,[Name]
-      ,[TriggerTypeInfo]
-      FROM [runtime].SchedulerTaskTriggerType WITH(NOLOCK) 
+	SELECT	[ID],[Name],[TriggerTypeInfo]
+    FROM	[runtime].SchedulerTaskTriggerType WITH(NOLOCK) 
+	ORDER BY [Name]
 END

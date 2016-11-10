@@ -12,4 +12,5 @@ BEGIN
 	-- interfering with SELECT statements.
 	SELECT	w.Id,w.WidgetDefinitionId,w.Name AS WidgetName,w.Title,w.Setting
 	FROM	sec.Widget w  WITH(NOLOCK) 
+	ORDER BY w.[Name]
 END

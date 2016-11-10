@@ -13,4 +13,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	[Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]
     from	[sec].BusinessEntity WITH(NOLOCK) 
+	order by [Name]
 END

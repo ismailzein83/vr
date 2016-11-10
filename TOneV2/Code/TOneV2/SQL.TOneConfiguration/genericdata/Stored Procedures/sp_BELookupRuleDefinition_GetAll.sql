@@ -8,4 +8,5 @@ AS
 BEGIN
 	SELECT	[ID], [Name], [Details]
 	FROM	[genericdata].BELookupRuleDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

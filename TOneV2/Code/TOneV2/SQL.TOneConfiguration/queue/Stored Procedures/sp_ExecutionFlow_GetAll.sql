@@ -13,5 +13,5 @@ BEGIN
 	SELECT ef.ID, ef.ExecutionFlowDefinitionID, ef.Name, efd.ExecutionTree
 	FROM queue.ExecutionFlow ef WITH(NOLOCK) 
 	INNER JOIN queue.ExecutionFlowDefinition efd  WITH(NOLOCK) ON ef.ExecutionFlowDefinitionID = efd.ID
-	
+	ORDER BY ef.[Name]
 END

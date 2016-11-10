@@ -8,4 +8,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	[ID],[Name],[Symbol],[SourceID]
     from	[common].Currency WITH(NOLOCK) 
+	ORDER BY [Name]
 END

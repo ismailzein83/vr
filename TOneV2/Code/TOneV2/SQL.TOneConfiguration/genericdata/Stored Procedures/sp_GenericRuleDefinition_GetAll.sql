@@ -8,4 +8,5 @@ AS
 BEGIN
 	SELECT	ID, Name, Details, CreatedTime
 	FROM	[genericdata].GenericRuleDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

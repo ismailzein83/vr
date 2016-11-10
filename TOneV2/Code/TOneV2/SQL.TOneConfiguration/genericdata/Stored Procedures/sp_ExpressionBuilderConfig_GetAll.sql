@@ -8,4 +8,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	[ID],[Name],Details
     FROM	[genericdata].ExpressionBuilderConfig WITH(NOLOCK) 
+	ORDER BY [Name]
 END

@@ -4,4 +4,5 @@ AS
 BEGIN
 	SELECT	ID, Name, Settings
 	FROM	[reprocess].ReprocessDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

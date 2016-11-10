@@ -8,4 +8,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	[ID],[Name],ParentID,Fields
     FROM	[genericdata].DataRecordType WITH(NOLOCK) 
+	ORDER BY [Name]
 END

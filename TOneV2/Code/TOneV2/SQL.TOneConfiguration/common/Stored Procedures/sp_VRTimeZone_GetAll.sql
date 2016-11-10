@@ -2,5 +2,7 @@
 as
 Begin
     SET NOCOUNT ON;
-	Select tz.ID,tz.Name, tz.Settings from [common].[VRTimeZone] tz With(NOLOCK);
+	Select	tz.ID,tz.Name, tz.Settings 
+	from	[common].[VRTimeZone] tz With(NOLOCK)
+	ORDER BY tz.[Name]
 End

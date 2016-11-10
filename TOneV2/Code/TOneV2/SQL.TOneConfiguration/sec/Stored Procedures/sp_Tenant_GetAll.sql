@@ -11,5 +11,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	Select [ID], [Name], [Settings], [ParentTenantID]  FROM [sec].[Tenant]  WITH(NOLOCK) 
+	Select	[ID], [Name], [Settings], [ParentTenantID]  
+	FROM	[sec].[Tenant]  WITH(NOLOCK) 
+	ORDER BY [Name]
 END

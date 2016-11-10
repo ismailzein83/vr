@@ -8,4 +8,5 @@ AS
 BEGIN
 	SELECT	ID, Name, Settings
 	FROM	[genericdata].DataStore WITH(NOLOCK) 
+	ORDER BY [Name]
 END

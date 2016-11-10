@@ -15,4 +15,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	drfc.[ID],drfc.[Name],drfc.[Settings]
     FROM	[genericdata].DataRecordFieldChoice drfc WITH(NOLOCK) 
+	ORDER BY drfc.[Name]
 END

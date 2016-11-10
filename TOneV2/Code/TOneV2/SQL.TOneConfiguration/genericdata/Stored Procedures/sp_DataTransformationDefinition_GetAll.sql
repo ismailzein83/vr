@@ -8,4 +8,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	[ID],[Name],[Title],Details
     FROM	[genericdata].DataTransformationDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

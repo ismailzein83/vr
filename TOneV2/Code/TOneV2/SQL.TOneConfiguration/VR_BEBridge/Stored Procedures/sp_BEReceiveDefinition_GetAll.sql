@@ -6,4 +6,5 @@ BEGIN
 	SET NOCOUNT ON;
 SELECT	[ID],[Name],[Settings]
 FROM	[VR_BEBridge].[BEReceiveDefinition] WITH(NOLOCK) 
+ORDER BY [Name]
 END

@@ -3,4 +3,5 @@ AS
 BEGIN
 	SELECT	ID, Name, Settings
 	FROM	[common].VRObjectTypeDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

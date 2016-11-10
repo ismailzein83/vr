@@ -4,4 +4,5 @@ BEGIN
 
 	SELECT  ID, Name ,[Type],[Category], Settings, [Data], [IsTechnical]
 	FROM	[common].Setting  WITH(NOLOCK) 
+	ORDER BY [Name]
 END

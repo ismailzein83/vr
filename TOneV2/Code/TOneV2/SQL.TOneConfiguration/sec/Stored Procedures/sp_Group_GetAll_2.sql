@@ -13,4 +13,5 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT	[ID],[Name],[Description],[Settings] 
 	from	[sec].[Group] WITH(NOLOCK) 
+	order by [Name]
 END

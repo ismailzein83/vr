@@ -11,8 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT [ID]
-      ,[Name]
-      ,[ActionTypeInfo]
-      FROM runtime.SchedulerTaskActionType WITH(NOLOCK) 
+	SELECT	[ID],[Name],[ActionTypeInfo]
+    FROM	[runtime].[SchedulerTaskActionType] WITH(NOLOCK) 
+	ORDER BY [Name]
 END

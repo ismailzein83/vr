@@ -8,10 +8,12 @@
     [IssueDate]     DATE             NOT NULL,
     [DueDate]       DATE             NOT NULL,
     [Details]       NVARCHAR (MAX)   NULL,
-    [Paid]          BIT              NULL,
+    [PaidDate]      DATETIME         NULL,
     [CreatedTime]   DATETIME         CONSTRAINT [DF_Invoice_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Invoice] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

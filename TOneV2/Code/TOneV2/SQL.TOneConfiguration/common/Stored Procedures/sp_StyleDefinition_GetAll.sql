@@ -3,4 +3,5 @@ AS
 BEGIN
 	SELECT	ID, Name, Settings
 	FROM	[common].StyleDefinition WITH(NOLOCK) 
+	ORDER BY [Name]
 END

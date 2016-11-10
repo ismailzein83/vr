@@ -7,5 +7,6 @@ CREATE PROCEDURE [sec].[sp_SystemAction_GetAll]
 AS
 BEGIN
 	SELECT ID, Name, RequiredPermissions
-	FROM	sec.SystemAction WITH(NOLOCK) 
+	FROM	[sec].[SystemAction] WITH(NOLOCK) 
+	ORDER BY [Name]
 END
