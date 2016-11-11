@@ -58,7 +58,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                 if (payload != undefined) {
                     payloadFilter = {
                         saleZoneFilterSettings: payload.saleZoneFilterSettings,
-                        sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined,
+                        sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined
                     }
 
                     saleZoneGroupPayload = {

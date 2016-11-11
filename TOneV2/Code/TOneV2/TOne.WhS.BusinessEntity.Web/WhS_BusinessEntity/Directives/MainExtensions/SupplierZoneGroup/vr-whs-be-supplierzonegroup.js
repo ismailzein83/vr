@@ -49,7 +49,7 @@ function (UtilsService, $compile, WhS_BE_SupplierZoneAPIService, VRNotificationS
                 var supplierZoneGroupPayload;
                 if (payload != undefined) {
                     payloadFilter = {
-                        supplierZoneFilterSettings: payload.supplierZoneFilterSettings,
+                        supplierZoneFilterSettings: payload.supplierZoneFilterSettings
                     }
 
                     supplierZoneGroupPayload = {
