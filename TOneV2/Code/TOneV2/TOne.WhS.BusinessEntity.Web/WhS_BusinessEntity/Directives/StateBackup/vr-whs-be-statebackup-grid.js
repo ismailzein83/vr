@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
                     directiveAPI.loadGrid = function (query) {
                         gquery = query;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                    
                     return directiveAPI;
                 }
@@ -82,7 +82,7 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
         function restoreStateBackup(stateBackupObject) {
             var onStateBackupRestored = function (stateBackup) {
                 return gridAPI.retrieveData(gquery);
-            }
+            };
             return VRNotificationService.showConfirmation("Are you sure you want to restore the selected backup").then(function (result) {
                 if (result) {
                     ctrl.isRestoring = true;

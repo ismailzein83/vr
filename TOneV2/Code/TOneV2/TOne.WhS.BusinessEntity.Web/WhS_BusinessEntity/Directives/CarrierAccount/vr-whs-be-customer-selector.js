@@ -79,7 +79,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
                     });
 
                     return loadCarrierAccountPromiseDeferred.promise;
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return carrierAccountDirectiveAPI.getSelectedIds();

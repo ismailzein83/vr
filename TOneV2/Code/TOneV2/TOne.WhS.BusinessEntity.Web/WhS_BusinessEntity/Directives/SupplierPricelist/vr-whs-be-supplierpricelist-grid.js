@@ -44,7 +44,7 @@ function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPr
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

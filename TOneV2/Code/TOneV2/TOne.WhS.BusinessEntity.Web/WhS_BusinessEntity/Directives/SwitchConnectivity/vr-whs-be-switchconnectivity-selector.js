@@ -72,7 +72,7 @@ function (WhS_BE_SwitchConnectivityAPIService, UtilsService, VRUIUtilsService) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('SwitchConnectivityId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;

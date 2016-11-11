@@ -72,8 +72,8 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             dataItem.onServiceReady = function (api) {
                 dataItem.ServieApi = api
                 dataItem.ServieApi.load({ service: dataItem.Entity });
-            }
-        }
+            };
+        };
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
@@ -90,7 +90,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             var onZoneServiceConfigUpdated = function (zoneServiceConfigObj) {
                 gridAPI.itemUpdated(zoneServiceConfigObj);
                 addReadySericeApi(zoneServiceConfigObj);
-            }
+            };
             WhS_BE_ZoneServiceConfigService.editZoneServiceConfig(zoneServiceConfigObj.Entity.ZoneServiceConfigId, onZoneServiceConfigUpdated);
         }
 

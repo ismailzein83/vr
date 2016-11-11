@@ -62,11 +62,11 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onSellingProductAdded = function (sellingProductObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(sellingProductObject);
                         gridAPI.itemAdded(sellingProductObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -112,7 +112,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
         function editSellingProduct(sellingProductObj) {
             var onSellingProductUpdated = function (sellingProduct) {
                 gridAPI.itemUpdated(sellingProduct);
-            }
+            };
 
             WhS_BE_SellingProductService.editSellingProduct(sellingProductObj.Entity, onSellingProductUpdated);
         }

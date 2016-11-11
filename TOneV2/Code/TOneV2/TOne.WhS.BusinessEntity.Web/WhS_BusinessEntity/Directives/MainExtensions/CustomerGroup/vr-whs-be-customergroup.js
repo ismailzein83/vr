@@ -68,8 +68,8 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
 
 
                 if (payload != undefined) {
-                        customerConfigId = payload.ConfigId;
-                        customerGroupSettings = payload;
+                    customerConfigId = payload.ConfigId;
+                    customerGroupSettings = payload;
                 }
                 var promises = [];
                 var loadCustomerGroupTemplatesPromise = WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
@@ -78,7 +78,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                     });
                     if (customerConfigId != undefined)
                         $scope.selectedCustomerGroupTemplate = UtilsService.getItemByVal($scope.customerGroupTemplates, customerConfigId, "ExtensionConfigurationId");
-                    
+
                 });
                 promises.push(loadCustomerGroupTemplatesPromise);
                 if (customerGroupSettings != undefined) {
@@ -93,7 +93,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                     });
                 }
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

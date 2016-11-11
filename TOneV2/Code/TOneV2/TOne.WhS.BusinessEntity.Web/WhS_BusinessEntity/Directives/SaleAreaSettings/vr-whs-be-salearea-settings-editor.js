@@ -51,11 +51,11 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     ctrl.mobileKeywords.push({ mobileKeyword: ctrl.mobileKeywordvalue });
                     ctrl.mobileKeywordvalue = undefined;
                     ctrl.disabledAddMobileKeyword = true;
-                }
+                };
 
                 ctrl.onMobileKeywordValueChange = function (value) {
                     ctrl.disabledAddMobileKeyword = (value == undefined && ctrl.mobileKeywordvalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.mobileKeywords, value, "mobileKeyword") != -1;
-                }
+                };
 
                 ctrl.validateAddMobileKeyWords = function () {
                     if (ctrl.mobileKeywords != undefined && ctrl.mobileKeywords.length == 0)

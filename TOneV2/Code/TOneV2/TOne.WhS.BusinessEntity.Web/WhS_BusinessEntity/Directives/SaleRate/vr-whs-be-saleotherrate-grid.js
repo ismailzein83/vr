@@ -40,7 +40,7 @@ function (UtilsService, VRNotificationService) {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (data) {
                         $scope.saleOtherRates = data;
-                    }
+                    };
                    
                     return directiveAPI;
                 }

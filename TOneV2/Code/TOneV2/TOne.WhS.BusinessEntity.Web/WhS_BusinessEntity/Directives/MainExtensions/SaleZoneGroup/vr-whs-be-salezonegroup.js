@@ -73,7 +73,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                 var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
                     angular.forEach(response, function (item) {
 
-                        if (payload == undefined ||  !payload.saleZoneFilterSettings || !payload.saleZoneFilterSettings.RoutingProductId || !item.IsHiddenInRP) {
+                        if (payload == undefined || !payload.saleZoneFilterSettings || !payload.saleZoneFilterSettings.RoutingProductId || !item.IsHiddenInRP) {
                             $scope.saleZoneGroupTemplates.push(item);
                         }
                     });
@@ -97,7 +97,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             api.getData = function () {
                 var saleZoneGroupSettings;

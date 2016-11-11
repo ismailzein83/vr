@@ -77,11 +77,11 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                             query = payload.query;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onCarrierAccountAdded = function (carrierAccountObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccountObject);
                         gridAPI.itemAdded(carrierAccountObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -151,7 +151,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccount);
                 addReadySericeApi(carrierAccount);
                 gridAPI.itemUpdated(carrierAccount);
-            }
+            };
             var carrierAccountItem;
 
             if ($scope.hideProfileColumn)
@@ -165,8 +165,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             dataItem.onServiceReady = function (api) {
                 dataItem.ServieApi = api
                 dataItem.ServieApi.load({ selectedIds: dataItem.Services });
-            }
-        }
+            };
+        };
         function assignNew(dataItem) {
             if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
                 return;

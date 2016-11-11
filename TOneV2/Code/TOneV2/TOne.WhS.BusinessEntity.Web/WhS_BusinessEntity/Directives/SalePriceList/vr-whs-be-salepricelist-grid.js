@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService) {
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

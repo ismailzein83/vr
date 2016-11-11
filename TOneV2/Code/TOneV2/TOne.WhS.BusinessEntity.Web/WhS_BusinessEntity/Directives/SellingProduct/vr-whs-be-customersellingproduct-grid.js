@@ -107,7 +107,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
         function editCustomerSellingProduct(customerSellingProductObj) {
             var onCustomerSellingProductUpdated = function (customerSellingProduct) {
                 gridAPI.itemUpdated(customerSellingProduct);
-            }
+            };
 
             WhS_BE_CustomerSellingProductService.editCustomerSellingProduct(customerSellingProductObj.Entity, onCustomerSellingProductUpdated);
         }

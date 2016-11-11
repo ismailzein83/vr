@@ -61,7 +61,7 @@ app.directive('vrWhsBeCarrieraccountallSelector', ['UtilsService', 'VRUIUtilsSer
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }

@@ -77,7 +77,7 @@ app.directive('vrWhsBeSellingnumberplanSelective', ['WhS_BE_SaleZoneAPIService',
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan.SelectiveSellingNumberPlan, TOne.WhS.BusinessEntity.MainExtensions",
-                        SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                        SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds()
                     };
                 };
 

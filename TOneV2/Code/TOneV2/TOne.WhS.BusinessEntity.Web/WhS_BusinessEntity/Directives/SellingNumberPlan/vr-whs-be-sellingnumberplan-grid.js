@@ -95,7 +95,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
             var onSellingNumberPlanAdded = function (sellingNumberPlanObj) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(sellingNumberPlanObj);
                 gridAPI.itemUpdated(sellingNumberPlanObj);
-            }
+            };
 
             WhS_BE_SellingNumberPlanService.editSellingNumberPlan(sellingNumberPlanObj.Entity.SellingNumberPlanId, onSellingNumberPlanAdded);
         }

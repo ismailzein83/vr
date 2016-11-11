@@ -121,7 +121,7 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
                 var onDealBuyingUpdated = function (dealBuying) {
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealBuyingObj.Name, 'Name');
                     ctrl.datasource[index] = dealBuying;
-                }
+                };
                 var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
 
                 WhS_BE_DealBuyingService.editDealBuying(dealBuyingObj, supplierId, onDealBuyingUpdated);

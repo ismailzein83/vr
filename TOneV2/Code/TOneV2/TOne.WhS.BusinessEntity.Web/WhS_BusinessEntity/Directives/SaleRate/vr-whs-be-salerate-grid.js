@@ -54,9 +54,9 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUt
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                    
                     return directiveAPI;
                 }

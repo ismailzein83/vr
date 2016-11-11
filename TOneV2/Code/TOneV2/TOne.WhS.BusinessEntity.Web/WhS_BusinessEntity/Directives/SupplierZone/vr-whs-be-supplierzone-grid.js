@@ -49,7 +49,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneAPIService, Wh
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

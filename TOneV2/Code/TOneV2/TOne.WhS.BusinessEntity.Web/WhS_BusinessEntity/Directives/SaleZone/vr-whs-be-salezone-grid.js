@@ -72,7 +72,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                     directiveAPI.loadGrid = function (query) {
                         effectiveOn = query.EffectiveOn;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                    
                     return directiveAPI;
                 }

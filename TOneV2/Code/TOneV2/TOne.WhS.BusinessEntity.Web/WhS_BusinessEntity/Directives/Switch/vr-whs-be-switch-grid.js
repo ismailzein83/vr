@@ -99,7 +99,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
         function deleteSwitch(whsSwitch) {
             var onSwitchDeleted = function () {
                 gridAPI.itemDeleted(whsSwitch);
-            }
+            };
 
             WhS_BE_SwitchService.deleteSwitch($scope, whsSwitch.Entity.SwitchId, onSwitchDeleted);
         }

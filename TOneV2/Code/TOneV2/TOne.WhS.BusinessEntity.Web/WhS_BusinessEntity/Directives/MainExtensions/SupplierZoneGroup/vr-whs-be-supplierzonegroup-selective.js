@@ -39,11 +39,11 @@ function (UtilsService, $compile, VRUIUtilsService) {
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You Should Select at least one Supplier ";
-            }
+            };
             ctrl.datasource = [];
             ctrl.onSelectItem = function (dataItem) {
                 addSupplierZoneAPIFunction(dataItem);
-            }
+            };
             ctrl.onDeselectItem = function (dataItem) {
                 var datasourceIndex = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.CarrierAccountId, 'CarrierAccountId');
                 ctrl.datasource.splice(datasourceIndex, 1);
@@ -66,7 +66,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
 
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     }
-                }
+                };
 
                 ctrl.datasource.push(dataItem);
             }

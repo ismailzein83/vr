@@ -46,10 +46,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onCodeGroupAdded = function (codeGroupObject) {
                         gridAPI.itemAdded(codeGroupObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -82,7 +82,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
         function editCodeGroupe(codeGroupObj) {
             var onCodeGroupUpdated = function (codeGroupObj) {
                 gridAPI.itemUpdated(codeGroupObj);
-            }
+            };
 
             WhS_BE_CodeGroupService.editCodeGroup(codeGroupObj.Entity.CodeGroupId, onCodeGroupUpdated, disabCountry);
         }

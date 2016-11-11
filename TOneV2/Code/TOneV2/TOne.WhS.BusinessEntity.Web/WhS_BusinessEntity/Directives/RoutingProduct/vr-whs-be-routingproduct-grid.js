@@ -42,12 +42,12 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onRoutingProductAdded = function (routingProductObject) {
                         drillDownManager.setDrillDownExtensionObject(routingProductObject);
                         gridAPI.itemAdded(routingProductObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }

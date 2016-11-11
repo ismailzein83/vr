@@ -67,7 +67,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
             ctrl.onSelectorReady = function (api) {
                 selectorApi = api;
                 defineAPI();
-            }
+            };
         }
 
         function defineAPI() {

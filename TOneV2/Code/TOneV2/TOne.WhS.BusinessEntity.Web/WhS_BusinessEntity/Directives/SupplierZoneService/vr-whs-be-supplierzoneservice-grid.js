@@ -40,9 +40,9 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                    
                     return directiveAPI;
                 }
@@ -67,7 +67,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
             dataItem.onServiceReady = function (api) {
                 dataItem.ServieApi = api
                 dataItem.ServieApi.load({ selectedIds: dataItem.Services });
-            }
+            };
         };
     }
 

@@ -42,7 +42,7 @@ app.directive("vrWhsBeVolumecommitmentItems", ["UtilsService", "VRNotificationSe
                 ctrl.addItem = function () {
                     var onVolumeCommitmentItemAdded = function (volumeCommitmentItem) {
                         ctrl.datasource.push({ Entity: volumeCommitmentItem });
-                    }
+                    };
                     WhS_BE_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext());
                 };
 

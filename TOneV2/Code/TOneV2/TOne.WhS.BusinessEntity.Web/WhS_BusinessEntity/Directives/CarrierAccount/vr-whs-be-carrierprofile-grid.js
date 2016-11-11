@@ -64,11 +64,11 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);
                         gridAPI.itemAdded(carrierProfileObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -117,7 +117,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfile);
                 gridAPI.itemUpdated(carrierProfile);
 
-            }
+            };
             WhS_BE_CarrierProfileService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
         }
 
