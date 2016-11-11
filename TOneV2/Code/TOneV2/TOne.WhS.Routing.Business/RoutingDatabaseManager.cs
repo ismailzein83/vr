@@ -88,7 +88,7 @@ namespace TOne.WhS.Routing.Business
 		public RoutingDatabase GetLatestRoutingDatabase(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
 		{
 			IEnumerable<RoutingDatabase> routingDatabases = GetRoutingDatabasesReady(routingProcessType, routingDatabaseType);
-			if (routingDatabases == null)
+            if (routingDatabases == null || routingDatabases.Count() == 0)
 				return null;
 			return routingDatabases.OrderByDescending(itm => itm.CreatedTime).First();
 		}
