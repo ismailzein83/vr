@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSourceBankDetails.cs" />
     <Compile Include="GeneratedInvoice\GenerateInvoiceInput.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
