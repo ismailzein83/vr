@@ -81,6 +81,10 @@
     <Compile Include="SupplierZoneGroups\SelectiveSupplierZoneGroup.cs" />
     <Compile Include="TransformationSteps\CustomerZoneRateStep.cs" />
     <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
+    <Compile Include="VRObjectTypes\CustomerObjectType.cs" />
+    <Compile Include="VRObjectTypes\CustomerPropertyEvaluator.cs" />
+    <Compile Include="VRObjectTypes\SalePriceListObjectType.cs" />
+    <Compile Include="VRObjectTypes\SalePriceListPropertyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
