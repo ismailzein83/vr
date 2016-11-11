@@ -1668,8 +1668,7 @@
                       <rd:DefaultName>FromDate</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
+                          <Style>None</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1700,8 +1699,7 @@
                       <rd:DefaultName>Textbox44</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
+                          <Style>None</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1736,8 +1734,7 @@
                       <rd:DefaultName>ToDate</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
+                          <Style>None</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1749,14 +1746,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="NumberOfCalls">
+                    <Textbox Name="TotalNumberOfCalls">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!NumberOfCalls.Value</Value>
+                              <Value>=FormatNumber(Fields!TotalNumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1769,11 +1766,10 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>NumberOfCalls</rd:DefaultName>
+                      <rd:DefaultName>TotalNumberOfCalls</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
+                          <Style>None</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1808,8 +1804,7 @@
                       <rd:DefaultName>Duration</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
+                          <Style>None</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1844,8 +1839,7 @@
                       <rd:DefaultName>SaleAmount1</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
+                          <Style>None</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1914,7 +1908,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>2.1179in</Left>
+        <Left>1.1179in</Left>
         <Height>0.21875in</Height>
         <Width>1.16666in</Width>
         <ZIndex>29</ZIndex>
@@ -1936,7 +1930,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!TotalNumberOfCalls.Value</Value>
+                <Value>=FormatNumber(Parameters!TotalNumberOfCalls.Value,0)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -1951,7 +1945,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>3.28456in</Left>
+        <Left>2.28456in</Left>
         <Height>0.21875in</Height>
         <Width>1.32477in</Width>
         <ZIndex>30</ZIndex>
@@ -1988,7 +1982,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>4.60933in</Left>
+        <Left>3.60933in</Left>
         <Height>0.21875in</Height>
         <Width>1.11236in</Width>
         <ZIndex>31</ZIndex>
@@ -2025,7 +2019,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>5.72169in</Left>
+        <Left>4.73419in</Left>
         <Height>0.21875in</Height>
         <Width>1.25083in</Width>
         <ZIndex>32</ZIndex>
@@ -2249,8 +2243,8 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="NumberOfCalls">
-          <DataField>NumberOfCalls</DataField>
+        <Field Name="TotalNumberOfCalls">
+          <DataField>TotalNumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="SaleAmount">
@@ -2265,45 +2259,25 @@
           <DataField>Duration</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="CustomerId">
-          <DataField>CustomerId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CustomerName">
-          <DataField>CustomerName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SaleZoneId">
-          <DataField>SaleZoneId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="SaleZoneName">
-          <DataField>SaleZoneName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleCurrencyId">
-          <DataField>OriginalSaleCurrencyId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleCurrency">
-          <DataField>OriginalSaleCurrency</DataField>
+        <Field Name="PartnerType">
+          <DataField>PartnerType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleCurrencyId">
           <DataField>SaleCurrencyId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="SaleCurrency">
           <DataField>SaleCurrency</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SaleRateTypeId">
-          <DataField>SaleRateTypeId</DataField>
+        <Field Name="OriginalSaleCurrencyId">
+          <DataField>OriginalSaleCurrencyId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleCurrency">
+          <DataField>OriginalSaleCurrency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="FromDate">
           <DataField>FromDate</DataField>
@@ -2316,9 +2290,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>CustomerInvoiceDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="BankDetails">
