@@ -29,9 +29,14 @@ namespace TOne.WhS.Invoice.Business
                              if(carrierProfile.Settings.Address != null)
                                  rdlcReportParameters.Add("Address", new VRRdlcReportParameter { Value = carrierProfile.Settings.Address, IsVisible = true });
                              if (carrierProfile.Settings.PhoneNumbers != null)
-                                 rdlcReportParameters.Add("Phone", new VRRdlcReportParameter { Value = String.Join(" ",carrierProfile.Settings.PhoneNumbers) ,IsVisible = true});
+                             {
+                                  rdlcReportParameters.Add("Phone", new VRRdlcReportParameter { Value = carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(0), IsVisible = true });
+                                  rdlcReportParameters.Add("Phone1", new VRRdlcReportParameter { Value = carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(1), IsVisible = true });
+                             }
                              if (carrierProfile.Settings.Faxes != null)
-                                 rdlcReportParameters.Add("Fax", new VRRdlcReportParameter { Value = String.Join(" ", carrierProfile.Settings.Faxes), IsVisible = true });
+                             {
+                                 rdlcReportParameters.Add("Fax", new VRRdlcReportParameter { Value = carrierProfile.Settings.Faxes.ElementAtOrDefault(0), IsVisible = true });
+                             }
                              if (carrierProfile.Settings.CompanyLogo != null)
                              {
                                  VRFileManager fileManager = new VRFileManager();
@@ -52,9 +57,14 @@ namespace TOne.WhS.Invoice.Business
                              if (carrierProfile.Settings.Address != null)
                                  rdlcReportParameters.Add("Address", new VRRdlcReportParameter { Value = carrierProfile.Settings.Address, IsVisible = true });
                              if (carrierProfile.Settings.PhoneNumbers != null)
-                                 rdlcReportParameters.Add("Phone", new VRRdlcReportParameter { Value = String.Join(" ", carrierProfile.Settings.PhoneNumbers), IsVisible = true });
+                             {
+                                 rdlcReportParameters.Add("Phone", new VRRdlcReportParameter { Value = carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(0), IsVisible = true });
+                                 rdlcReportParameters.Add("Phone1", new VRRdlcReportParameter { Value = carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(1), IsVisible = true });
+                             }
                              if (carrierProfile.Settings.Faxes != null)
-                                 rdlcReportParameters.Add("Fax", new VRRdlcReportParameter { Value = String.Join(" ", carrierProfile.Settings.Faxes), IsVisible = true });
+                             {
+                                 rdlcReportParameters.Add("Fax", new VRRdlcReportParameter { Value = carrierProfile.Settings.Faxes.ElementAtOrDefault(0), IsVisible = true });
+                             }
                              if (carrierProfile.Settings.CompanyLogo != null)
                              {
                                  VRFileManager fileManager = new VRFileManager();

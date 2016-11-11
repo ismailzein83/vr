@@ -19,111 +19,34 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override Guid ConfigId { get { return  new Guid("BD4F7B2C-1C07-4037-8730-92768BD28900"); } }
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
-
-            List<string> listMeasures = new List<string> { "SaleNet", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom" };
-            List<string> listDimensions = new List<string> {"SaleZone", "SaleCurrency", "SaleRate", "SaleRateType" };
+            List<string> listMeasures = new List<string> { "SaleNet", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
+            List<string> listDimensions = new List<string> {"Customer","SaleZone", "SaleCurrency", "SaleRate", "SaleRateType" };
             string[] partner = context.PartnerId.Split('_');
             string dimentionName = null;
 
             string partnerType = partner[0];
+            int currencyId = -1;
+            bool isGroupedByCustomer = false;
             if (partnerType.Equals("Profile"))
             {
                 dimentionName = "CustomerProfile";
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(Convert.ToInt32(partner[1]));
+                isGroupedByCustomer = true;
             }
             else if (partnerType.Equals("Account"))
             {
                 dimentionName = "Customer";
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(Convert.ToInt32(partner[1]));
+                isGroupedByCustomer = false;
             }
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
-
-            int currencyId = -1;
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string,List<InvoiceBillingRecord>>();
-
-            if (partnerType.Equals("Profile"))
-            {
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(Convert.ToInt32(partner[1]));
-
-
-
-            }
-            else if (partnerType.Equals("Account"))
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(Convert.ToInt32(partner[1]));
-
-                foreach (var analyticRecord in analyticResult.Data)
-                {
-
-                    DimensionValue dimensionId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-                    DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(2);
-                    DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(3);
-                    DimensionValue originalSaleRate = analyticRecord.DimensionValues.ElementAtOrDefault(4);
-
-
-                    MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");
-                    MeasureValue saleNet = GetMeasureValue(analyticRecord, "SaleNet");
-                    MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
-                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-
-                    InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
-                    {
-                        SaleCurrencyId = saleCurrencyId != null ? Convert.ToInt64(saleCurrencyId.Value) : currencyId,
-                        SaleRate = saleRate != null ? Convert.ToDecimal(saleRate.Value) : default(Decimal),
-                        SaleRateTypeId = saleRateTypeId != null && saleRateTypeId.Value != null ? Convert.ToInt32(saleRateTypeId.Value) : default(int),
-                        SaleZoneId = Convert.ToInt64(dimensionId.Value),
-                        InvoiceMeasures = new InvoiceMeasures
-                        {
-                            BillingPeriodFrom = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
-                            BillingPeriodTo = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
-                            SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
-                            SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
-                            NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
-                        }
-
-                    };
-                    AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
-                }
-            }
-
-
-
-
-            //List<string> listDimensions = new List<string> { "SaleZone", "SaleCurrency", "SaleRate", "SaleRateType" };
-            //var analyticResultBySaleZone = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
-            //BuilInvoiceCustomerItemSet(analyticResultBySaleZone.Data, generatedInvoiceItemSets, "GroupedBySaleZone", context.FromDate, context.ToDate, currencyId);
-            //BuilInvoiceCustomerItemSet(analyticResultForCustomer.Data, generatedInvoiceItemSets, "GroupedByCustomer", context.FromDate, context.ToDate, currencyId);
-
-
-
-
-            //if (partner[0].Equals("Profile"))
-            //{
-            //    dimentionName = "CustomerProfile";
-            //    CarrierProfileManager carrierProfileManager= new CarrierProfileManager();
-            //    currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(Convert.ToInt32(partner[1]));
-            //    List<string> listProfileDimensions = new List<string> { "Customer" };
-            //    var analyticResultForCustomer = GetFilteredRecords(listProfileDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
-            //    BuilInvoiceCustomerItemSet(analyticResultForCustomer.Data, generatedInvoiceItemSets, "GroupedByCustomer",context.FromDate,context.ToDate,currencyId);
-            //    foreach(var customer in analyticResultForCustomer.Data)
-            //    {
-            //        DimensionValue customerDimension = customer.DimensionValues[0];
-
-            //        List<string> listCustomerDimensions = new List<string> { "SaleZone", "SaleCurrency", "SaleRate",  "SaleRateType" };
-            //        var analyticResultByCustomerSaleZone = GetFilteredRecords(listCustomerDimensions, listMeasures, "Customer", customerDimension.Value, context.FromDate, context.ToDate);
-            //        BuilInvoiceCustomerItemSet(analyticResultByCustomerSaleZone.Data, generatedInvoiceItemSets, string.Format("GroupedByCustomer_{0}", customerDimension.Value.ToString()), context.FromDate, context.ToDate,currencyId);
-            //    }
-            //}
-    
-
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, isGroupedByCustomer);
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
             #region BuildCustomerInvoiceDetails
-            List<string> listDimensionsForCustomerInvoice = new List<string> { dimentionName };
-            var analyticResultForCustomerInvoice = GetFilteredRecords(listDimensionsForCustomerInvoice, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
-            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(analyticResultForCustomerInvoice.Data, partner[0]);
+            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0]);
             #endregion
 
             context.Invoice = new GeneratedInvoice
@@ -132,72 +55,86 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 InvoiceItemSets = generatedInvoiceItemSets,
             };
         }
-
-        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(IEnumerable<AnalyticRecord> analyticRecords, string partnerType)
+        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType)
         {
+            CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
             if (partnerType != null)
             {
-                customerInvoiceDetails = new CustomerInvoiceDetails();
-                customerInvoiceDetails.PartnerType = partnerType;
 
-                foreach (var analyticRecord in analyticRecords)
+                if (itemSetNamesDic != null)
                 {
-                    MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");
-                    customerInvoiceDetails.Duration += Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                    MeasureValue saleNet = GetMeasureValue(analyticRecord, "SaleNet");
-                    customerInvoiceDetails.SaleAmount += Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
-                    customerInvoiceDetails.TotalNumberOfCalls += Convert.ToInt32(calls.Value ?? 0.0);
-                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                    customerInvoiceDetails.ToDate = Convert.ToDateTime(billingPeriodTo.Value ?? 0.0);
-                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-                    customerInvoiceDetails.FromDate = Convert.ToDateTime(billingPeriodTo.Value ?? 0.0);
+                    List<InvoiceBillingRecord> invoiceBillingRecordList = null;
+                    if (itemSetNamesDic.TryGetValue("GroupedBySaleZone", out invoiceBillingRecordList))
+                    {
+                         customerInvoiceDetails = new CustomerInvoiceDetails();
+                         customerInvoiceDetails.PartnerType = partnerType;
+                        foreach (var invoiceBillingRecord in invoiceBillingRecordList)
+                        {
+
+                            customerInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.SaleDuration;
+                            customerInvoiceDetails.SaleAmount += invoiceBillingRecord.InvoiceMeasures.SaleNet;
+                            customerInvoiceDetails.OriginalSaleAmount += invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr;
+                            customerInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
+                            customerInvoiceDetails.OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId;
+                            customerInvoiceDetails.SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId;
+                            customerInvoiceDetails.ToDate = customerInvoiceDetails.ToDate > invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? customerInvoiceDetails.ToDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
+                            customerInvoiceDetails.FromDate = customerInvoiceDetails.FromDate < invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? customerInvoiceDetails.FromDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
+                        }
+                    };
                 }
             }
+            customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencyName(customerInvoiceDetails.OriginalSaleCurrencyId);
+            customerInvoiceDetails.SaleCurrency  =currencyManager.GetCurrencyName(customerInvoiceDetails.SaleCurrencyId);
             return customerInvoiceDetails;
         }
-        private void BuilInvoiceCustomerItemSet(IEnumerable<AnalyticRecord> analyticRecords, List<GeneratedInvoiceItemSet> generatedInvoiceItemSets, string itemSetName,DateTime fromDate,DateTime toDate,long currencyId)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
         {
-            GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-            generatedInvoiceItemSet.SetName = itemSetName;
-            generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-            foreach (var analyticRecord in analyticRecords)
+            CurrencyManager currencyManager = new CurrencyManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
+            if (itemSetNamesDic != null)
             {
-
-                DimensionValue dimensionId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-                DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(2);
-                DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(3);
-                DimensionValue originalSaleRate = analyticRecord.DimensionValues.ElementAtOrDefault(4);
-
-
-                MeasureValue saleDuration = GetMeasureValue(analyticRecord,"SaleDuration");
-                MeasureValue saleNet = GetMeasureValue(analyticRecord, "SaleNet");
-                MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
-                MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-
-                CustomerInvoiceItemDetails customerInvoiceItemDetails = new Entities.CustomerInvoiceItemDetails()
+                foreach (var itemSet in itemSetNamesDic)
                 {
-                    Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
-                    NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
-                    SaleAmount = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
-                    DimensionId = Convert.ToInt64(dimensionId.Value),
-                    SaleCurrencyId = saleCurrencyId != null ? Convert.ToInt64(saleCurrencyId.Value) : currencyId,
-                    SaleRate = saleRate != null?Convert.ToDecimal(saleRate.Value):default(Decimal),
-                    SaleRateTypeId = saleRateTypeId != null && saleRateTypeId.Value != null? Convert.ToInt32(saleRateTypeId.Value) : default(int),
-                    FromDate = billingPeriodFrom != null?Convert.ToDateTime(billingPeriodFrom.Value):default(DateTime),
-                    ToDate = billingPeriodTo != null?Convert.ToDateTime(billingPeriodTo.Value):default(DateTime),
-                    OriginalSaleRate = originalSaleRate != null ? Convert.ToDecimal(originalSaleRate.Value) : default(Decimal),
-                };
-                generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                {
-                    Details = customerInvoiceItemDetails,
-                    Name = "SaleZone"
-                });
+                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                    generatedInvoiceItemSet.SetName = itemSet.Key;
+                    var itemSetValues = itemSet.Value;
+                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
+                    foreach (var item in itemSetValues)
+                    {
+                        CustomerInvoiceItemDetails customerInvoiceItemDetails = new Entities.CustomerInvoiceItemDetails()
+                        {
+                            Duration = item.InvoiceMeasures.SaleDuration,
+                            NumberOfCalls = item.InvoiceMeasures.NumberOfCalls,
+                            OriginalSaleCurrencyId = item.OriginalSaleCurrencyId,
+                            OriginalSaleAmount = item.InvoiceMeasures.SaleNet_OrigCurr,
+                            SaleAmount = item.InvoiceMeasures.SaleNet,
+                            SaleZoneId = item.SaleZoneId,
+                            CustomerId = item.CustomerId,
+                            SaleCurrencyId = item.SaleCurrencyId,
+                            SaleRate = item.SaleRate,
+                            SaleRateTypeId = item.SaleRateTypeId,
+                            FromDate = item.InvoiceMeasures.BillingPeriodFrom,
+                            ToDate = item.InvoiceMeasures.BillingPeriodTo,
+                            SaleCurrency = currencyManager.GetCurrencyName(item.SaleCurrencyId),
+                            OriginalSaleCurrency = currencyManager.GetCurrencyName(item.OriginalSaleCurrencyId),
+                            CustomerName = carrierAccountManager.GetCarrierAccountName(item.CustomerId),
+                            SaleZoneName = saleZoneManager.GetSaleZoneName(item.SaleZoneId),
+                        };
+                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                        {
+                            Details = customerInvoiceItemDetails,
+                            Name = " "
+                        });
+                    }
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+
+                }
             }
-            generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+            return generatedInvoiceItemSets;
         }
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate)
         {
@@ -224,55 +161,151 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
-
-
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord,string measureName)
         {
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId,bool isGroupedByCustomer)
+        {
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
+            if (analyticRecords != null)
+            {
+                Dictionary<int, InvoiceBillingRecord> groupedByCustomerDic = new Dictionary<int, InvoiceBillingRecord>();
+                foreach (var analyticRecord in analyticRecords)
+                {
 
+                    #region ReadDataFromAnalyticResult
+                    DimensionValue customerId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue saleZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                    DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
+                    DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
+                    DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
+                    DimensionValue originalSaleRate = analyticRecord.DimensionValues.ElementAtOrDefault(5);
 
-        private void AddItemToDictionary(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string itemSetName, InvoiceBillingRecord invoiceBillingRecord)
+                    MeasureValue saleNet_OrigCurr = GetMeasureValue(analyticRecord, "SaleNet_OrigCurr");
+                    MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");
+                    MeasureValue saleNet = GetMeasureValue(analyticRecord, "SaleNet");
+                    MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
+                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
+                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
+
+                    #endregion
+                
+                    InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                    {
+                        CustomerId = Convert.ToInt32(customerId.Value),
+                        SaleCurrencyId = currencyId,
+                        OriginalSaleCurrencyId = Convert.ToInt32(saleCurrencyId.Value),
+                        SaleRate = saleRate != null ? Convert.ToDecimal(saleRate.Value) : default(Decimal),
+                        SaleRateTypeId = saleRateTypeId != null && saleRateTypeId.Value != null ? Convert.ToInt32(saleRateTypeId.Value) : default(int),
+                        SaleZoneId = Convert.ToInt64(saleZoneId.Value),
+                        InvoiceMeasures = new InvoiceMeasures
+                        {
+                            BillingPeriodFrom = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
+                            BillingPeriodTo = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
+                            SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
+                            SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
+                            NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
+                            SaleNet_OrigCurr = Convert.ToDouble(saleNet_OrigCurr == null ? 0.0 : saleNet_OrigCurr.Value ?? 0.0),
+                        }
+
+                    };
+
+                    AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
+
+                    #region Grouping By Customer
+                    if (isGroupedByCustomer)
+                    {
+                        AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCustomer_{0}", invoiceBillingRecord.CustomerId), invoiceBillingRecord);
+
+                        InvoiceBillingRecord customerInvoiceBillingRecord = null;
+                        if (!groupedByCustomerDic.TryGetValue(invoiceBillingRecord.CustomerId, out customerInvoiceBillingRecord))
+                        {
+                            customerInvoiceBillingRecord = new InvoiceBillingRecord
+                            {
+                                SaleRateTypeId = invoiceBillingRecord.SaleRateTypeId,
+                                SaleRate = invoiceBillingRecord.SaleRate,
+                                SaleZoneId = invoiceBillingRecord.SaleZoneId,
+                                SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId,
+                                OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId,
+                                CustomerId = invoiceBillingRecord.CustomerId,
+                                InvoiceMeasures = new InvoiceMeasures
+                                {
+                                    SaleNet = invoiceBillingRecord.InvoiceMeasures.SaleNet,
+                                    SaleDuration = invoiceBillingRecord.InvoiceMeasures.SaleDuration,
+                                    BillingPeriodFrom = invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom,
+                                    BillingPeriodTo = invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo,
+                                    NumberOfCalls = invoiceBillingRecord.InvoiceMeasures.NumberOfCalls,
+                                    SaleNet_OrigCurr = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr,
+                                }
+                            };
+                            groupedByCustomerDic.Add(invoiceBillingRecord.CustomerId, customerInvoiceBillingRecord);
+                        }
+                        else
+                        {
+                            customerInvoiceBillingRecord.InvoiceMeasures.SaleDuration += invoiceBillingRecord.InvoiceMeasures.SaleDuration;
+                            customerInvoiceBillingRecord.InvoiceMeasures.SaleNet += invoiceBillingRecord.InvoiceMeasures.SaleNet;
+                            customerInvoiceBillingRecord.InvoiceMeasures.NumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
+
+                            customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo > invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo : invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
+                            customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom < invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom : invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
+                            groupedByCustomerDic[invoiceBillingRecord.CustomerId] = customerInvoiceBillingRecord;
+                        }
+
+                    }
+                    #endregion
+
+                }
+                if (isGroupedByCustomer)
+                {
+                    foreach (var item in groupedByCustomerDic)
+                    {
+                        AddItemToDictionary(itemSetNamesDic, "GroupedByCustomer", item.Value);
+                    }
+                }
+            }
+           
+            return itemSetNamesDic;
+        }
+        private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
         {
             if (itemSetNamesDic == null)
-                itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
+                itemSetNamesDic = new Dictionary<T, List<InvoiceBillingRecord>>();
             List<InvoiceBillingRecord> invoiceBillingRecordList = null;
 
-            if(!itemSetNamesDic.TryGetValue(itemSetName,out invoiceBillingRecordList))
+            if (!itemSetNamesDic.TryGetValue(key, out invoiceBillingRecordList))
             {
                 invoiceBillingRecordList = new List<InvoiceBillingRecord>();
                 invoiceBillingRecordList.Add(invoiceBillingRecord);
-                itemSetNamesDic.Add(itemSetName, invoiceBillingRecordList);
+                itemSetNamesDic.Add(key, invoiceBillingRecordList);
             }else
             {
                 invoiceBillingRecordList.Add(invoiceBillingRecord);
-                itemSetNamesDic[itemSetName] = invoiceBillingRecordList;
+                itemSetNamesDic[key] = invoiceBillingRecordList;
             }
         }
         public class InvoiceMeasures
         {
             public Double SaleNet { get; set; }
+            public Double SaleNet_OrigCurr { get; set; }
             public int NumberOfCalls { get; set; }
             public Decimal SaleDuration { get; set; }
             public DateTime BillingPeriodTo { get; set; }
             public DateTime BillingPeriodFrom { get; set; }
 
 
-        }
+        } 
         public  class InvoiceBillingRecord
         {
             public InvoiceMeasures InvoiceMeasures { get; set; }
-            public int CustomerId { get; set; }
-            public int ProfileId { get; set; }
             public long SaleZoneId { get; set; }
-            public long SaleCurrencyId { get; set; }
+            public int CustomerId { get; set; }
+            public int OriginalSaleCurrencyId { get; set; }
             public Decimal SaleRate { get; set; }
             public int SaleRateTypeId { get; set; }
-            public long OriginalSaleCurrencyId { get; set; }
-            public Decimal OriginalSaleRate { get; set; }
-            public int OriginalSaleRateTypeId { get; set; }
+            public int SaleCurrencyId { get; set; }
 
         }
     }
