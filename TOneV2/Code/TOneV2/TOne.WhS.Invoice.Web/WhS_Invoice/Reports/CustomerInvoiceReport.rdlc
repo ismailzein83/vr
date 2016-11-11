@@ -22,7 +22,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>1.83138in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.16667in</Height>
         <Width>0.79166in</Width>
         <Style>
@@ -55,7 +55,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>2.02582in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>1</ZIndex>
@@ -89,9 +89,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>1.83138in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.16667in</Height>
-        <Width>4.14583in</Width>
+        <Width>3.92708in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -123,7 +123,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>2.41819in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.1875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>3</ZIndex>
@@ -155,7 +155,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>2.80013in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>4</ZIndex>
@@ -192,9 +192,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.40347in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.375in</Height>
-        <Width>7.37332in</Width>
+        <Width>6.83003in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border />
@@ -210,7 +210,7 @@
         <MIMEType>image/png</MIMEType>
         <Sizing>FitProportional</Sizing>
         <Top>0.19097in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.79514in</Height>
         <Width>3.12123in</Width>
         <ZIndex>6</ZIndex>
@@ -349,7 +349,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!CurrencyId.Value</Value>
+                                  <Value>=Fields!CurrencyName.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -752,7 +752,7 @@
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
         <Top>5.73278in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>1.54931in</Height>
         <Width>4.1629in</Width>
         <ZIndex>7</ZIndex>
@@ -782,7 +782,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox72</rd:DefaultName>
         <Top>5.3432in</Top>
-        <Left>1.76958in</Left>
+        <Left>1.63208in</Left>
         <Height>0.17708in</Height>
         <Width>1.26042in</Width>
         <ZIndex>8</ZIndex>
@@ -799,7 +799,7 @@
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
         <Top>5.55917in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.02083in</Height>
         <Width>4.1629in</Width>
         <ZIndex>9</ZIndex>
@@ -831,7 +831,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.10764in</Top>
-        <Left>5.64039in</Left>
+        <Left>4.87789in</Left>
         <Height>0.25417in</Height>
         <Width>2.01293in</Width>
         <ZIndex>10</ZIndex>
@@ -864,7 +864,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.36875in</Top>
-        <Left>5.64039in</Left>
+        <Left>4.87789in</Left>
         <Height>0.19792in</Height>
         <Width>2.01293in</Width>
         <ZIndex>11</ZIndex>
@@ -898,7 +898,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.58612in</Top>
-        <Left>5.64039in</Left>
+        <Left>4.87789in</Left>
         <Height>0.375in</Height>
         <Width>2.01293in</Width>
         <ZIndex>12</ZIndex>
@@ -933,7 +933,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.96806in</Top>
-        <Left>5.64039in</Left>
+        <Left>4.87789in</Left>
         <Height>0.24652in</Height>
         <Width>0.96211in</Width>
         <ZIndex>13</ZIndex>
@@ -966,7 +966,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.96806in</Top>
-        <Left>6.67194in</Left>
+        <Left>5.90944in</Left>
         <Height>0.1875in</Height>
         <Width>0.98138in</Width>
         <ZIndex>14</ZIndex>
@@ -1001,7 +1001,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>1.16251in</Top>
-        <Left>6.67194in</Left>
+        <Left>5.90944in</Left>
         <Height>0.21875in</Height>
         <Width>0.98138in</Width>
         <ZIndex>15</ZIndex>
@@ -1035,7 +1035,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>3.4802in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>16</ZIndex>
@@ -1069,9 +1069,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.02582in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.33334in</Height>
-        <Width>4.14583in</Width>
+        <Width>3.92708in</Width>
         <ZIndex>17</ZIndex>
         <Style>
           <Border>
@@ -1103,9 +1103,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.41819in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.1875in</Height>
-        <Width>4.14583in</Width>
+        <Width>3.92708in</Width>
         <ZIndex>18</ZIndex>
         <Style>
           <Border>
@@ -1137,9 +1137,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>3.09069in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.36458in</Height>
-        <Width>4.14583in</Width>
+        <Width>3.92708in</Width>
         <ZIndex>19</ZIndex>
         <Style>
           <Border>
@@ -1171,9 +1171,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>3.4802in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.21875in</Height>
-        <Width>4.14583in</Width>
+        <Width>3.92708in</Width>
         <ZIndex>20</ZIndex>
         <Style>
           <Border>
@@ -1205,7 +1205,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>3.76839in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>21</ZIndex>
@@ -1239,7 +1239,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>1.83138in</Top>
-        <Left>5.52874in</Left>
+        <Left>4.89124in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
         <ZIndex>22</ZIndex>
@@ -1273,7 +1273,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>2.02582in</Top>
-        <Left>5.52874in</Left>
+        <Left>4.89124in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
         <ZIndex>23</ZIndex>
@@ -1307,7 +1307,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>2.24805in</Top>
-        <Left>5.52874in</Left>
+        <Left>4.89124in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
         <ZIndex>24</ZIndex>
@@ -1341,7 +1341,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>1.83138in</Top>
-        <Left>6.57958in</Left>
+        <Left>5.92958in</Left>
         <Height>0.16667in</Height>
         <Width>1.32374in</Width>
         <ZIndex>25</ZIndex>
@@ -1362,7 +1362,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!InvoiceDate.Value</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -1375,7 +1375,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.02582in</Top>
-        <Left>6.57959in</Left>
+        <Left>5.92959in</Left>
         <Height>0.16667in</Height>
         <Width>1.32374in</Width>
         <ZIndex>26</ZIndex>
@@ -1396,7 +1396,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!InvoiceDueDate.Value</Value>
+                <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -1409,7 +1409,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.24805in</Top>
-        <Left>6.57959in</Left>
+        <Left>5.92959in</Left>
         <Height>0.16667in</Height>
         <Width>1.32374in</Width>
         <ZIndex>27</ZIndex>
@@ -1431,9 +1431,6 @@
             </TablixColumn>
             <TablixColumn>
               <Width>0.15875in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -1495,43 +1492,6 @@
                 </TablixCell>
                 <TablixCell />
                 <TablixCell />
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox36">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Billing Time</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox36</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <BackgroundColor>LightGrey</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
                 <TablixCell>
                   <CellContents>
                     <Textbox Name="Textbox40">
@@ -1692,7 +1652,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!FromDate.Value</Value>
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1760,7 +1720,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ToDate.Value</Value>
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1774,42 +1734,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>ToDate</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="SaleCurrencyId">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!SaleCurrencyId.Value</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>SaleCurrencyId</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1868,7 +1792,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Duration.Value</Value>
+                              <Value>=FormatNumber(Fields!Duration.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1904,7 +1828,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SaleAmount.Value</Value>
+                              <Value>=FormatNumber(Fields!SaleAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1946,7 +1870,6 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -1961,9 +1884,9 @@
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
         <Top>4.20708in</Top>
-        <Left>0.28in</Left>
+        <Left>0.1425in</Left>
         <Height>0.5in</Height>
-        <Width>6.83003in</Width>
+        <Width>5.83003in</Width>
         <ZIndex>28</ZIndex>
         <Style>
           <Border>
@@ -1991,7 +1914,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>2.2554in</Left>
+        <Left>2.1179in</Left>
         <Height>0.21875in</Height>
         <Width>1.16666in</Width>
         <ZIndex>29</ZIndex>
@@ -2028,7 +1951,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>3.42206in</Left>
+        <Left>3.28456in</Left>
         <Height>0.21875in</Height>
         <Width>1.32477in</Width>
         <ZIndex>30</ZIndex>
@@ -2050,7 +1973,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!TotalDuration.Value</Value>
+                <Value>=FormatNumber(Parameters!TotalDuration.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -2065,7 +1988,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>4.74683in</Left>
+        <Left>4.60933in</Left>
         <Height>0.21875in</Height>
         <Width>1.11236in</Width>
         <ZIndex>31</ZIndex>
@@ -2087,7 +2010,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!TotalSaleAmount.Value</Value>
+                <Value>=FormatNumber(Parameters!TotalSaleAmount.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -2102,7 +2025,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.80729in</Top>
-        <Left>5.85919in</Left>
+        <Left>5.72169in</Left>
         <Height>0.21875in</Height>
         <Width>1.25083in</Width>
         <ZIndex>32</ZIndex>
@@ -2117,28 +2040,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Subreport Name="Subreport2">
-        <ReportName>CustomerInvoiceItemsReport</ReportName>
-        <Parameters>
-          <Parameter Name="Title">
-            <Value>=Parameters!Title.Value</Value>
-          </Parameter>
-          <Parameter Name="Image">
-            <Value>=Parameters!Image.Value</Value>
-          </Parameter>
-        </Parameters>
-        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
-        <Top>7.61126in</Top>
-        <Left>0.28in</Left>
-        <Height>2.94097in</Height>
-        <Width>7.37332in</Width>
-        <ZIndex>33</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Subreport>
       <Textbox Name="Textbox30">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -2159,10 +2060,10 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.80013in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.21875in</Height>
-        <Width>4.14583in</Width>
-        <ZIndex>34</ZIndex>
+        <Width>3.92708in</Width>
+        <ZIndex>33</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2193,10 +2094,10 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>3.76839in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.21875in</Height>
-        <Width>4.14583in</Width>
-        <ZIndex>35</ZIndex>
+        <Width>3.92708in</Width>
+        <ZIndex>34</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2227,10 +2128,10 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.63347in</Top>
-        <Left>1.1929in</Left>
+        <Left>0.9304in</Left>
         <Height>0.1875in</Height>
-        <Width>4.14583in</Width>
-        <ZIndex>36</ZIndex>
+        <Width>3.92708in</Width>
+        <ZIndex>35</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2242,21 +2143,21 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>11in</Height>
+    <Height>10.34375in</Height>
     <Style />
   </Body>
-  <Width>8.27in</Width>
+  <Width>7.28917in</Width>
   <Page>
     <PageFooter>
-      <Height>0.61458in</Height>
+      <Height>0.45833in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
         <Line Name="Line1">
           <Top>0.125in</Top>
-          <Left>0.28in</Left>
+          <Left>0.055in</Left>
           <Height>0in</Height>
-          <Width>7.37332in</Width>
+          <Width>6.91753in</Width>
           <Style>
             <Border>
               <Style>Solid</Style>
@@ -2282,8 +2183,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox24</rd:DefaultName>
-          <Top>0.20208in</Top>
-          <Left>6.4725in</Left>
+          <Top>0.15208in</Top>
+          <Left>5.9975in</Left>
           <Height>0.25in</Height>
           <Width>1.13542in</Width>
           <ZIndex>1</ZIndex>
@@ -2326,11 +2227,103 @@
       </ConnectionProperties>
       <rd:DataSourceID>dccf0262-4670-4b85-997c-bde0441adcf0</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="VanriseInvoiceEntities">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>8763b4e5-6615-473f-8e6c-3c7f52b6267f</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="VanriseInvoiceEntities1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>fad98fdc-cdb2-4e14-a988-eb9d65cf133b</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
+    <DataSet Name="ItemsDetails">
+      <Query>
+        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="NumberOfCalls">
+          <DataField>NumberOfCalls</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmount">
+          <DataField>SaleAmount</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleAmount">
+          <DataField>OriginalSaleAmount</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="Duration">
+          <DataField>Duration</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CustomerId">
+          <DataField>CustomerId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CustomerName">
+          <DataField>CustomerName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleZoneId">
+          <DataField>SaleZoneId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="SaleZoneName">
+          <DataField>SaleZoneName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleCurrencyId">
+          <DataField>OriginalSaleCurrencyId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleCurrency">
+          <DataField>OriginalSaleCurrency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleCurrencyId">
+          <DataField>SaleCurrencyId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="SaleCurrency">
+          <DataField>SaleCurrency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleRate">
+          <DataField>SaleRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleRateTypeId">
+          <DataField>SaleRateTypeId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FromDate">
+          <DataField>FromDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ToDate">
+          <DataField>ToDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
     <DataSet Name="BankDetails">
       <Query>
-        <DataSourceName>VanriseEntities</DataSourceName>
+        <DataSourceName>VanriseInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -2341,6 +2334,10 @@
         <Field Name="CurrencyId">
           <DataField>CurrencyId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyName">
+          <DataField>CurrencyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="AccountCode">
           <DataField>AccountCode</DataField>
@@ -2372,72 +2369,10 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>Vanrise.Entities</rd:DataSetName>
-        <rd:TableName>BankDetail</rd:TableName>
+        <rd:DataSetName>Vanrise.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>DataSourceBankDetails</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetBankDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>Vanrise.Entities.BankDetail, Vanrise.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="ItemsDetails">
-      <Query>
-        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="NumberOfCalls">
-          <DataField>NumberOfCalls</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="Duration">
-          <DataField>Duration</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="DimensionName">
-          <DataField>DimensionName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DimensionId">
-          <DataField>DimensionId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="SaleCurrency">
-          <DataField>SaleCurrency</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SaleCurrencyId">
-          <DataField>SaleCurrencyId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleRate">
-          <DataField>OriginalSaleRate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SaleRateTypeId">
-          <DataField>SaleRateTypeId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="FromDate">
-          <DataField>FromDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ToDate">
-          <DataField>ToDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.DataSourceBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
