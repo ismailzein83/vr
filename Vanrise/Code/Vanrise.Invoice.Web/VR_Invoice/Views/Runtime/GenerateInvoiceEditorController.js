@@ -91,9 +91,11 @@
         function loadStaticData() {
         }
         function buildInvoiceObjFromScope() {
+            var partnerObject = partnerSelectorAPI.getData();
+
             var obj = {
                 InvoiceTypeId: invoiceTypeId,
-                PartnerId:partnerSelectorAPI.getSelectedIds(),
+                PartnerId: partnerObject != undefined ? partnerObject.selectedIds:undefined,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
                 IssueDate: $scope.issueDate

@@ -15,6 +15,7 @@ namespace TOne.WhS.Invoice.Entities
         public long DimensionId { get; set; }
         public string SaleCurrency { get; set; }
         public long SaleCurrencyId { get; set; }
+        public Decimal OriginalSaleRate { get; set; }
         public Decimal SaleRate { get; set; }
         public int SaleRateTypeId { get; set; }
         public DateTime FromDate { get; set; }
