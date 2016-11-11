@@ -72,7 +72,7 @@ app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService'
                     gridAPI.itemUpdated(updatedVRComponentType);
                 };
 
-                VRCommon_VRComponentTypeService.editVRComponentType(vrComponentTypeItem.Entity.ExtensionConfigId, vrComponentTypeItem.Entity.VRComponentTypeId, onVRComponentTypeUpdated);
+                VRCommon_VRComponentTypeService.editVRComponentType(vrComponentTypeItem.Entity.Settings.VRComponentTypeConfigId, vrComponentTypeItem.Entity.VRComponentTypeId, onVRComponentTypeUpdated);
             }
 
             function hasEditVRComponentTypePermission() {

@@ -10,7 +10,7 @@
 
         var vrComponentTypeId;
         var componentTypeEntity;
-        var extensionConfigurationEntity;
+
         var extensionConfigurationId;
 
         var componentTypeEditorAPI;
@@ -58,24 +58,34 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
-            VRCommon_VRComponentTypeAPIService.GetVRComponentTypeExtensionConfigById(extensionConfigurationId).then(function (response) {
-                extensionConfigurationEntity = response;
-                $scope.scopeModel.ExtensionConfigurationEditor = extensionConfigurationEntity.Editor;
-                if (isEditMode) {
-                    getVRComponentType().then(function () {
-                        loadAllControls().finally(function () {
-                            componentTypeEntity = undefined;
-                        });
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        $scope.isLoading = false;
-                    });
-                }
-                else {
-                    loadAllControls();
-                }
+            var promises = [];
+
+            var getComponentTypeExtensionPromise = getComponentExtensionConfig();
+            promises.push(getComponentTypeExtensionPromise);
+
+            if (isEditMode) {
+                var getgetVRComponentTypePromise = getVRComponentType();
+                promises.push(getgetVRComponentTypePromise);
+            }
+
+            return UtilsService.waitMultiplePromises(promises).then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
+        function getComponentExtensionConfig() {
+            return VRCommon_VRComponentTypeAPIService.GetVRComponentTypeExtensionConfigById(extensionConfigurationId).then(function (response) {
+                $scope.scopeModel.ExtensionConfigurationEditor = response.Editor;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
             });
         }
 
@@ -92,7 +102,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
 
@@ -130,7 +140,7 @@
         }
 
         function updateComponentType() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             var settingObject = buildComponentTypeObjFromScope();
 
@@ -144,12 +154,12 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 
         function insertComponentType() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             var settingObject = buildComponentTypeObjFromScope();
 
@@ -163,7 +173,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
     }

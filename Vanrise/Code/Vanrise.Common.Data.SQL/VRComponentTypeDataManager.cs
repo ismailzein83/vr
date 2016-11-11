@@ -30,7 +30,6 @@ namespace Vanrise.Common.Data.SQL
             {
                 VRComponentTypeId = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
-                ExtensionConfigId = GetReaderValue<Guid>(reader, "ConfigID"),
                 Settings = Serializer.Deserialize<VRComponentTypeSettings>(reader["Settings"] as string)
             };
         }
@@ -38,7 +37,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(VRComponentType componentType)
         {
             string serializedSettings = componentType.Settings != null ? Vanrise.Common.Serializer.Serialize(componentType.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("[common].[sp_VRComponentType_Insert]", componentType.VRComponentTypeId, componentType.Name, componentType.ExtensionConfigId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("[common].[sp_VRComponentType_Insert]", componentType.VRComponentTypeId, componentType.Name, componentType.Settings.VRComponentTypeConfigId, serializedSettings);
 
             if (affectedRecords > 0)
                 return true;
@@ -49,7 +48,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Update(VRComponentType componentType)
         {
             string serializedSettings = componentType.Settings != null ? Vanrise.Common.Serializer.Serialize(componentType.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("[common].[sp_VRComponentType_Update]", componentType.VRComponentTypeId, componentType.Name, componentType.ExtensionConfigId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("[common].[sp_VRComponentType_Update]", componentType.VRComponentTypeId, componentType.Name, componentType.Settings.VRComponentTypeConfigId, serializedSettings);
             return (affectedRecords > 0);
         }
 

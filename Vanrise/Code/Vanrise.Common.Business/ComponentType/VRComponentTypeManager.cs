@@ -66,7 +66,7 @@ namespace Vanrise.Common.Business
         public IDataRetrievalResult<VRComponentTypeDetail> GetFilteredVRComponentTypes(DataRetrievalInput<VRComponentTypeQuery> input)
         {
             var allVRComponentTypes = GetCachedComponentTypes();
-            Func<VRComponentType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<VRComponentType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()) && (input.Query.ExtensionConfigId == null || x.Settings.VRComponentTypeConfigId == input.Query.ExtensionConfigId));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRComponentTypes.ToBigResult(input, filterExpression, VRComponentTypeDetailMapper));
         }
 
@@ -80,7 +80,12 @@ namespace Vanrise.Common.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<VRComponentTypeConfig>(VRComponentTypeConfig.EXTENSION_TYPE);
         }
-        public VRComponentTypeDetail VRComponentTypeDetailMapper(VRComponentType componentType)
+        public VRComponentTypeConfig GetVRComponentTypeExtensionConfigById(Guid configId)
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfiguration<VRComponentTypeConfig>(configId, VRComponentTypeConfig.EXTENSION_TYPE);
+        }
+        VRComponentTypeDetail VRComponentTypeDetailMapper(VRComponentType componentType)
         {
             VRComponentTypeDetail componentTypeDetail = new VRComponentTypeDetail()
             {
@@ -114,6 +119,17 @@ namespace Vanrise.Common.Business
                 componentType.Settings = settingsAsT;
                 return componentType;
             });
+        }
+
+        public List<VRComponentType<T>> GetComponentTypes<T>()
+            where T : VRComponentTypeSettings
+        {
+            return GetCachedComponentTypes().FindAllRecords(itm => itm.Settings is T).Select(itm => new VRComponentType<T>
+            {
+                VRComponentTypeId = itm.VRComponentTypeId,
+                Name = itm.Name,
+                Settings = itm.Settings as T
+            }).ToList();
         }
 
         public T GetComponentTypeSettings<T>(Guid componentTypeId) where T : VRComponentTypeSettings
@@ -156,11 +172,5 @@ namespace Vanrise.Common.Business
         }
         #endregion
 
-
-        public VRComponentTypeConfig GetVRComponentTypeExtensionConfigById(Guid extensionConfigId)
-        {
-            IEnumerable<VRComponentTypeConfig> allExtensionConfigs = GetVRComponentTypeExtensionConfigs();
-            return allExtensionConfigs.FindRecord(e => e.ExtensionConfigurationId == extensionConfigId);
-        }
     }
 }

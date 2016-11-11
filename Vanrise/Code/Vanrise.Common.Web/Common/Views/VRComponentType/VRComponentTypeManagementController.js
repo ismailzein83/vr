@@ -21,14 +21,17 @@
             $scope.scopeModel.selectedComponentType;
 
             $scope.scopeModel.search = function () {
-                var query = buildGridQuery();
-                return gridAPI.load(query);
+                loadGrid();
             };
 
             $scope.scopeModel.onComponentTypeConfigSelectorReady = function (api) {
                 componentTypeSelectorAPI = api;
                 componentTypeSelectorReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onComponentTypeConfigSelectorChanged = function () {
+                loadGrid();
+            }
 
             $scope.scopeModel.add = function () {
                 var onVRObjectTypeDefinitionAdded = function (addedItem) {
@@ -43,7 +46,7 @@
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.load({});
+                //gridAPI.load({});
             };
         }
 
@@ -56,6 +59,10 @@
             });
         }
 
+        function loadGrid() {
+            var query = buildGridQuery();
+            return gridAPI.load(query);
+        }
         function loadVRComponentTypes() {
             var loadComponentTypesPromiseDeferred = UtilsService.createPromiseDeferred();
             componentTypeSelectorReadyDeferred.promise.then(function () {
@@ -68,6 +75,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
+                ExtensionConfigId: $scope.scopeModel.selectedComponentType.ExtensionConfigurationId
             };
         }
     }

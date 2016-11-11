@@ -108,7 +108,7 @@
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
                     + ' datavaluefield="ExtensionConfigurationId"'
-                    + ' datatextfield="Name"'
+                    + ' datatextfield="Title"'
                     + ismultipleselection
                     + ' vr-disabled="ctrl.isdisabled"'
                     + ' isrequired="ctrl.isrequired"'

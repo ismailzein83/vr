@@ -9,5 +9,7 @@ namespace Vanrise.Entities
     public class VRComponentTypeQuery
     {
         public string Name { get; set; }
+
+        public Guid ExtensionConfigId { get; set; }
     }
 }
