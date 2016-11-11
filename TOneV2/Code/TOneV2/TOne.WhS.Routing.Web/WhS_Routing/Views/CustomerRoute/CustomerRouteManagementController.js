@@ -18,14 +18,14 @@
 
         function defineScope() {
 
-            $scope.onCarrierAccountDirectiveReady = function (api) {
-                carrierAccountDirectiveAPI = api;
-                carrierAccountReadyPromiseDeferred.resolve();
-            }
-
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
                 routingDatabaseReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                carrierAccountDirectiveAPI = api;
+                carrierAccountReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -48,7 +48,6 @@
                 return query;
             }
         }
-
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
@@ -69,7 +68,6 @@
 
             return loadRoutingDatabasePromiseDeferred.promise;
         }
-
         function loadCustomersSection() {
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
