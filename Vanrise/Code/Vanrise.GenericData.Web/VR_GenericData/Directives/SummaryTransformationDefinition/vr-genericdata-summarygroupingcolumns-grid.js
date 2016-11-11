@@ -67,7 +67,7 @@ app.directive("vrGenericdataSummarygroupingcolumnsGrid", ["UtilsService", "VRNot
                         else
                             ctrl.enableAddColumnGrouping = true;
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

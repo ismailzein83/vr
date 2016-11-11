@@ -41,19 +41,18 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
             var mainPayload;
             function initializeController() {
                 $scope.criteriaFieldsMappings = [];
-                $scope.onBusinessEntityMappingReady = function (api)
-                {
-                  
+                $scope.onBusinessEntityMappingReady = function (api) {
+
 
                     businessEntityMappingApi = api;
                     businessEntityMappingReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onBELookupRuleDefinitionSelectorReady = function (api) {
-                    beLookupRuleDefinitionSelectorDirectiveReadyAPI = api; 
+                    beLookupRuleDefinitionSelectorDirectiveReadyAPI = api;
 
                     beLookupRuleDefinitionSelectorReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onBELookupRuleDefinitionSelectionChanged = function () {
 
@@ -83,7 +82,7 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                             $scope.isLoadingMappingData = false;
                         });
                     }
-                }
+                };
 
 
                 defineAPI();
@@ -109,8 +108,8 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                     promises.push(loadBeLookupRuleDefinitionSelectorPromiseDeferred.promise);
 
                     if (payload != undefined && payload.stepDetails != undefined && payload.stepDetails.BELookupRuleDefinitionId != undefined) {
-                         GetBELookupRuleDefinitionById(payload.stepDetails.BELookupRuleDefinitionId).then(function (response) {
-                             if (response && response.CriteriaFields) {
+                        GetBELookupRuleDefinitionById(payload.stepDetails.BELookupRuleDefinitionId).then(function (response) {
+                            if (response && response.CriteriaFields) {
                                 $scope.criteriaFieldsMappings.length = 0;
                                 for (var i = 0; i < response.CriteriaFields.length; i++) {
                                     var criteriaField = response.CriteriaFields[i];
@@ -122,11 +121,9 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                                     promises.push(filterItem.loadPromiseDeferred.promise);
 
                                     var payloadData;
-                                    if (payload.stepDetails.CriteriaFieldsMappings != undefined)
-                                    {
+                                    if (payload.stepDetails.CriteriaFieldsMappings != undefined) {
                                         var data = UtilsService.getItemByVal(payload.stepDetails.CriteriaFieldsMappings, criteriaField.FieldPath, "FieldPath");
-                                        if (data != undefined)
-                                        {
+                                        if (data != undefined) {
                                             payloadData = data.Value;
                                         }
                                     }
@@ -151,7 +148,7 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                     promises.push(loadbusinessEntityMappingDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var criteriaFieldsMappings = [];
@@ -171,9 +168,9 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                         $type: "Vanrise.GenericData.MainExtensions.MappingSteps.BELookupRuleMappingStep, Vanrise.GenericData.MainExtensions",
                         BELookupRuleDefinitionId: beLookupRuleDefinitionSelectorDirectiveReadyAPI != undefined ? beLookupRuleDefinitionSelectorDirectiveReadyAPI.getSelectedIds() : undefined,
                         CriteriaFieldsMappings: criteriaFieldsMappings,
-                        BusinessEntity: businessEntityMappingApi !=undefined ?businessEntityMappingApi.getData():undefined
+                        BusinessEntity: businessEntityMappingApi != undefined ? businessEntityMappingApi.getData() : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

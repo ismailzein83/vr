@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/QueueActivator/Templates/QueueActivatorStoreBatchTemplate.html';
@@ -49,14 +49,14 @@
 
                 api.load = function (payload) {
                     return loadSelector(payload);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.GenericData.QueueActivators.StoreBatchQueueActivator, Vanrise.GenericData.QueueActivators',
                         DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds()
                     };
-                }
+                };
 
                 return api;
             }

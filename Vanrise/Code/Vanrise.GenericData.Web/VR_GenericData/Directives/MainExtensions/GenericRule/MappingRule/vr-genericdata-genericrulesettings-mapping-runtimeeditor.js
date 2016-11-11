@@ -36,11 +36,10 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.isrequired = ctrl.isrequired;
-                $scope.scopeModel.onRuntimeEditorDirectiveReady = function (api)
-                {
+                $scope.scopeModel.onRuntimeEditorDirectiveReady = function (api) {
                     fieldTypeDirectiveAPI = api;
                     fieldTypeOnReadyPromiseDeferred.resolve();
-                }
+                };
                 
                 defineAPI();
             }
@@ -58,8 +57,7 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
                         settings = payload.settings;
                     }
 
-                    if (genericRuleDefinition.SettingsDefinition != null)
-                    {
+                    if (genericRuleDefinition.SettingsDefinition != null) {
                         var fieldType = genericRuleDefinition.SettingsDefinition.FieldType;
                         var fieldTitle = genericRuleDefinition.SettingsDefinition.FieldTitle;
 
@@ -86,26 +84,23 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
 
                         function getFieldTypeConfig() {
                             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
-                                if (response)
-                                {
+                                if (response) {
                                     var item = UtilsService.getItemByVal(response, fieldType.ConfigId, "ExtensionConfigurationId");
-                                    if(item != undefined)
-                                    {
+                                    if (item != undefined) {
                                         $scope.scopeModel.runtimeEditorDirective = item.RuntimeEditor;
                                     }
                                 }
                             });
                         }
                     }
-                }
+                };
 
-                api.getData = function()
-                {
+                api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.Entities.MappingRuleSettings, Vanrise.GenericData.Transformation.Entities",
                         Value: fieldTypeDirectiveAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

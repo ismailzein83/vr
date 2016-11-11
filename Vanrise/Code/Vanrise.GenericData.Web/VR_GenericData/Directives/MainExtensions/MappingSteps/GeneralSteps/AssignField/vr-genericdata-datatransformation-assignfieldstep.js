@@ -43,12 +43,12 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                 $scope.onSourceReady = function (api) {
                     sourceDirectiveReadyAPI = api;
                     sourceDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onTargetReady = function (api) {
                     targetDirectiveReadyAPI = api;
                     targetDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -60,38 +60,38 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                     stepPayload = payload;
                     var promises = [];
 
-                        var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                      
-                        targetDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadTarget = { context: payload.context };
-                            if (payload.stepDetails != undefined)
-                                payloadTarget.selectedRecords = payload.stepDetails.Target;
-                            VRUIUtilsService.callDirectiveLoad(targetDirectiveReadyAPI, payloadTarget, loadTargetDirectivePromiseDeferred);
-                        });
-                        promises.push(loadTargetDirectivePromiseDeferred.promise);
+                    var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        var loadSourceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                      
-                        sourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadSource = { context: payload.context};
-                            if (payload.stepDetails != undefined)
-                                payloadSource.selectedRecords = payload.stepDetails.Source;
-                            VRUIUtilsService.callDirectiveLoad(sourceDirectiveReadyAPI, payloadSource, loadSourceDirectivePromiseDeferred);
-                        });
-                        promises.push(loadSourceDirectivePromiseDeferred.promise);
+                    targetDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadTarget = { context: payload.context };
+                        if (payload.stepDetails != undefined)
+                            payloadTarget.selectedRecords = payload.stepDetails.Target;
+                        VRUIUtilsService.callDirectiveLoad(targetDirectiveReadyAPI, payloadTarget, loadTargetDirectivePromiseDeferred);
+                    });
+                    promises.push(loadTargetDirectivePromiseDeferred.promise);
+
+                    var loadSourceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadSource = { context: payload.context };
+                        if (payload.stepDetails != undefined)
+                            payloadSource.selectedRecords = payload.stepDetails.Source;
+                        VRUIUtilsService.callDirectiveLoad(sourceDirectiveReadyAPI, payloadSource, loadSourceDirectivePromiseDeferred);
+                    });
+                    promises.push(loadSourceDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AssignFieldStep, Vanrise.GenericData.Transformation.MainExtensions",
                         Source: sourceDirectiveReadyAPI.getData(),
                         Target: targetDirectiveReadyAPI.getData(),
-                        
+
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

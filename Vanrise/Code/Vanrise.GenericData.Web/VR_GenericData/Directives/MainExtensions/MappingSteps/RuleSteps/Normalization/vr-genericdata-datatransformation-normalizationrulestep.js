@@ -48,17 +48,17 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onValueDirectiveReady = function (api) {
                     valueDirectiveAPI = api;
                     valueDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onNormalizationValueDirectiveReady = function (api) {
                     normalizationValueDirectiveAPI = api;
                     normalizationValueDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -67,7 +67,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                 var api = {};
 
                 api.load = function (payload) {
-                   
+
                     var promises = [];
                     var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
@@ -117,17 +117,17 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
 
                     promises.push(loadNormalizationValueDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.GenericData.Normalization.NormalizationRuleStep, Vanrise.GenericData.Normalization",
                         Value: valueDirectiveAPI != undefined ? valueDirectiveAPI.getData() : undefined,
-                        NormalizedValue: normalizationValueDirectiveAPI != undefined ? normalizationValueDirectiveAPI.getData() : undefined,
-                    }
+                        NormalizedValue: normalizationValueDirectiveAPI != undefined ? normalizationValueDirectiveAPI.getData() : undefined
+                    };
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

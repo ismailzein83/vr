@@ -41,7 +41,7 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDataTransformationDefinitonTemplate(attrs);
@@ -74,7 +74,7 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataTransformationDefinitionId" isrequired="ctrl.isrequired" ' + hideremoveicon
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Data Transformation Definiton" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function DataTransformationDefiniton(ctrl, $scope, attrs) {
@@ -85,7 +85,7 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -117,11 +117,11 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
 
 
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('DataTransformationDefinitionId', attrs, ctrl);
-                }
+                };
 
 
                 if (ctrl.onReady != null)

@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/Editor/Templates/EditorTemplate.html';
@@ -43,12 +43,12 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload)
+                    console.log(payload);
                     if (payload != undefined && payload.sections != undefined) {
                         selectedValues = payload.selectedValues;
                         ctrl.sections.length = 0;
                         var promises = [];
-                        
+
                         var editorpromise = UtilsService.createPromiseDeferred();
                         var editorPromises = [];
                         for (var i = 0; i < payload.sections.length; i++) {
@@ -72,7 +72,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                         promises.push(editorpromise.promise);
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     var sections = {};
@@ -81,7 +81,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                         sections = UtilsService.mergeObject(sections, section.rowsAPI.getData(), false);
                     }
                     return sections;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -92,8 +92,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                 section.onSectionDirectiveReady = function (api) {
                     section.rowsAPI = api;
                     section.readyPromiseDeferred.resolve();
-                }
-                var payload = { context: getContext(), rows: section.Rows }
+                };
+                var payload = { context: getContext(), rows: section.Rows };
                 if (section.readyPromiseDeferred != undefined) {
                     section.readyPromiseDeferred.promise.then(function () {
                         section.readyPromiseDeferred = undefined;

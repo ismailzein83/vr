@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Management/Grid/Templates/GenericBusinessEntityGridDesign.html';
@@ -40,7 +40,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                     var index = ctrl.selectedFields.indexOf(dataItem);
                     if (index != -1)
                         ctrl.selectedFields.splice(index, 1);
-                }
+                };
                 defineAPI();
             }
 
@@ -65,7 +65,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                             }
                         }
                     }
-                }
+                };
 
                 api.getData = function () {
                     var fields = [];
@@ -77,7 +77,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                         });
                     }
                     return { Columns: fields };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

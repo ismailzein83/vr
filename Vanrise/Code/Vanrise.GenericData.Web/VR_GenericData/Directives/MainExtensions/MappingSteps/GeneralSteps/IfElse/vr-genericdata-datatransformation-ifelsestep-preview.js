@@ -46,12 +46,12 @@ app.directive('vrGenericdataDatatransformationIfelsestepPreview', ['UtilsService
                 $scope.onThenSequenceDirectiveReady = function (api) {
                     thenSequenceDirectiveAPI = api;
                     thenSequenceReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onElseSequenceDirectiveReady = function (api) {
                     elseSequenceDirectiveAPI = api;
                     elseSequenceReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -60,14 +60,12 @@ app.directive('vrGenericdataDatatransformationIfelsestepPreview', ['UtilsService
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
+                    if (payload != undefined) {
                         currentContext = payload.context;
-                        if (payload.stepDetails != undefined)
-                        {
+                        if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             currentContext = payload.context;
-                            ctrl.condition = payload.stepDetails.Condition;    
+                            ctrl.condition = payload.stepDetails.Condition;
                         }
                         checkValidation();
 
@@ -98,28 +96,26 @@ app.directive('vrGenericdataDatatransformationIfelsestepPreview', ['UtilsService
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                 
-                }
 
-                api.applyChanges = function (changes) {                    
+                };
+
+                api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.condition = changes.Condition;
-                }
+                };
 
-                api.checkValidation = function ()
-                {
-                  return  checkValidation();
-                }
+                api.checkValidation = function () {
+                    return checkValidation();
+                };
 
                 api.getData = function () {
                     var forLoobStepDetails = stepObj.stepDetails;
-                    if (forLoobStepDetails != undefined)
-                    {
+                    if (forLoobStepDetails != undefined) {
                         forLoobStepDetails.ThenSteps = thenSequenceDirectiveAPI != undefined ? thenSequenceDirectiveAPI.getData() : undefined;
                         forLoobStepDetails.ElseSteps = elseSequenceDirectiveAPI != undefined ? elseSequenceDirectiveAPI.getData() : undefined;
                     }
                     return forLoobStepDetails;
-                }
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

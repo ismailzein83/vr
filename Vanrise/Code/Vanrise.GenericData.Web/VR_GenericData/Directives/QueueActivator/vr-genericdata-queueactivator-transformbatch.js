@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/QueueActivator/Templates/QueueActivatorTransformBatchTemplate.html';
@@ -82,7 +82,7 @@
                     }
                     else
                         $scope.showTransformationRecordSelector = false;
-                }
+                };
 
             }
 
@@ -192,7 +192,7 @@
                             });
                         }
 
-                    })
+                    });
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -203,7 +203,7 @@
                         VRUIUtilsService.callDirectiveLoad(dataTransformationSelectorAPI, selectorPayload, selectorLoadDeferred);
                         return selectorLoadDeferred.promise;
                     }
-                }
+                };
 
 
                 api.getData = function () {
@@ -226,7 +226,7 @@
                         SourceRecordName: $scope.selectedTransformationRecord.RecordName,
                         NextStagesRecords: NextStagesRecords.length > 0 ? NextStagesRecords : undefined
                     };
-                }
+                };
 
                 return api;
             }

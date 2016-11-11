@@ -21,9 +21,9 @@
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-            $scope.hasAddDataRecordType = function () { 
+            $scope.hasAddDataRecordType = function () {
                 return dataRecordTypeAPIService.HasAddDataRecordType();
-            }
+            };
             $scope.addDataRecordType = function () {
                 var onDataRecordTypeAdded = function (onDataRecordTypeObj) {
                     gridAPI.onDataRecordTypeAdded(onDataRecordTypeObj);
@@ -39,7 +39,7 @@
 
         function getFilterObject() {
             filter = {
-                Name: $scope.name,
+                Name: $scope.name
             };
         }
     }

@@ -32,7 +32,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -63,7 +63,7 @@
 
                 api.clearDataSource = function () {
                     selectorAPI.clearDataSource();
-                }
+                };
 
                 api.load = function (payload) {
                     var selectedIds;
@@ -74,7 +74,7 @@
                         if (payload.showaddbutton)
                             ctrl.onAddDataStorageRecord = onAddDataStorageRecord;
                         selectedIds = payload.selectedIds;
-                    }
+                    };
 
                     return VR_GenericData_DataRecordStorageAPIService.GetDataRecordsStorageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();

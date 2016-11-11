@@ -33,7 +33,7 @@ app.directive('vrGenericdataFieldtypeBooleanRulefiltereditor', ['VR_GenericData_
                     if (payload && payload.filterObj) {
                         $scope.isTrue = payload.filterObj.IsTrue;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -41,11 +41,11 @@ app.directive('vrGenericdataFieldtypeBooleanRulefiltereditor', ['VR_GenericData_
                         IsTrue: $scope.isTrue
 
                     };
-                }
+                };
 
                 api.getExpression = function () {
                     return $scope.isTrue ? 'Is True' : 'Is False';
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

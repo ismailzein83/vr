@@ -6,7 +6,7 @@
 
     function BusinessEntityDefinitionService(VRModalService, VRNotificationService) {
         return {
-            editBusinessEntityDefinition: editBusinessEntityDefinition,
+            editBusinessEntityDefinition: editBusinessEntityDefinition
         };
 
         function editBusinessEntityDefinition(businessEntityDefinitionId, onBusinessEntityDefinitionUpdated, editor) {

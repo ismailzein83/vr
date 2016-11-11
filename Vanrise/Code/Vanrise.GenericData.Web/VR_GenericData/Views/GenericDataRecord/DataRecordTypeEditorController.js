@@ -30,7 +30,7 @@
             $scope.scopeModal.onDataRecordFieldDirectiveReady = function (api) {
                 dataRecordFieldAPI = api;
                 dataRecordFieldReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.hasSaveDataRecordType = function () {
                 if (isEditMode) {
@@ -39,7 +39,7 @@
                 else {
                     return VR_GenericData_DataRecordTypeAPIService.HasAddDataRecordType();
                 }
-            }
+            };
             $scope.scopeModal.SaveDataRecordType = function () {
                 $scope.scopeModal.isLoading = true;
                 if (isEditMode) {

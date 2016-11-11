@@ -41,7 +41,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                 ctrl.onCommonDirectiveReady = function (api) {
                     commonDirectiveAPI = api;
                     commonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -89,7 +89,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (commonDirectiveAPI != undefined)
@@ -112,7 +112,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     ctrl.extraChargeRate = changes.ExtraChargeRate;
                     ctrl.extraChargeValue = changes.ExtraChargeValue;
                     ctrl.currencyId = changes.CurrencyId;
-                }
+                };
 
                 api.checkValidation = function () {
                     var validate;
@@ -121,7 +121,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     if (validate == undefined)
                         validate = checkValidation();
                     return validate;
-                }
+                };
 
                 api.getData = function () {
                     var stepDetails = commonDirectiveAPI.getData();
@@ -136,7 +136,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                         stepDetails.CurrencyId = stepObj.currencyId;
                     }
                     return stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

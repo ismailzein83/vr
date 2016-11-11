@@ -48,17 +48,17 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onNormalRateDirectiveReady = function (api) {
                     normalRateDirectiveAPI = api;
                     normalRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onRatesByRateTypeDirectiveReady = function (api) {
                     ratesByRateTypeDirectiveAPI = api;
                     ratesByRateTypeDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -116,17 +116,17 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
 
                     promises.push(loadRatesByRateTypeDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.GenericData.Pricing.RateValueMappingStep, Vanrise.GenericData.Pricing",
                         NormalRate: normalRateDirectiveAPI != undefined ? normalRateDirectiveAPI.getData() : undefined,
                         RatesByRateType: ratesByRateTypeDirectiveAPI != undefined ? ratesByRateTypeDirectiveAPI.getData() : undefined,
-                    }
+                    };
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

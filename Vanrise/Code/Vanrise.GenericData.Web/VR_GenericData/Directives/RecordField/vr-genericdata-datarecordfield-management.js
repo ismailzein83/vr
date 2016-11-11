@@ -38,13 +38,13 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should Select at least one filter type ";
-                }
+                };
 
                 ctrl.addDataRecordField = function () {
                     var onDataRecordFieldAdded = function (dataRecordField) {
                         addNeededFields(dataRecordField);
                         ctrl.datasource.push(dataRecordField);
-                    }
+                    };
 
                     VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded, ctrl.datasource);
                 };
@@ -72,10 +72,10 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
                     }
                     var obj = {
-                        Fields: fields,
-                    }
+                        Fields: fields
+                    };
                     return obj;
-                }
+                };
 
                 api.load = function (payload) {
 
@@ -93,7 +93,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                             }
                         }
                     });
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -117,7 +117,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editDataRecordField(dataRecordFieldObj) {
@@ -125,7 +125,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     addNeededFields(dataRecordField);
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordFieldObj.Name, 'Name');
                     ctrl.datasource[index] = dataRecordField;
-                }
+                };
 
                 VR_GenericData_DataRecordFieldService.editDataRecordField(dataRecordFieldObj, onDataRecordFieldUpdated, ctrl.datasource);
             }

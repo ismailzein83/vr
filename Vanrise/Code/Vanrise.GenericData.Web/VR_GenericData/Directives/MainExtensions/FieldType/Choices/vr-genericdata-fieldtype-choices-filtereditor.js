@@ -37,7 +37,7 @@
                     if (ctrl.onReady != undefined) {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -45,10 +45,9 @@
                 api.load = function (payload) {
                     return directiveAPI.load(payload);
                 };
-                api.getValuesAsArray = function ()
-                {
-                   return directiveAPI.getData();
-                }
+                api.getValuesAsArray = function () {
+                    return directiveAPI.getData();
+                };
                 api.getData = function () {
                     var returnValue;
                     var directiveData = directiveAPI.getData();

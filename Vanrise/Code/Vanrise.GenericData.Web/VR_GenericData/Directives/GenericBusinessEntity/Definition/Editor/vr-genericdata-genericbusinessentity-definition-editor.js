@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/DefinitionEditorTemplate.html';
@@ -51,16 +51,14 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                     };
 
                     VR_GenericData_ExtensibleBEItemService.addSection(onSectionAdded, getExistingSections());
-                }
+                };
 
-                ctrl.validateEditor =function()
-                {
-                    if(ctrl.sections.length == 0)
-                    {
+                ctrl.validateEditor = function () {
+                    if (ctrl.sections.length == 0) {
                         return "At least one section should be added.";
                     }
                     return null;
-                }
+                };
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -74,8 +72,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload !=undefined)
-                    {
+                    if (payload != undefined) {
                         recordTypeFields = payload.recordTypeFields;
                         ctrl.sections.length = 0;
                         if (payload.sections != undefined) {
@@ -89,7 +86,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                         }
 
                     }
-                }
+                };
 
                 api.getData = function () {
                     var sections = [];
@@ -101,12 +98,12 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                             rows = section.rowsGridAPI.getData();
                         else
                             rows = { Rows: section.Rows };
-                       
+
                         rows.SectionTitle = section.sectionTitle;
                         sections.push(rows);
                     }
                     return { Sections: sections };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -149,13 +146,13 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
 
             function prepareSectionObject(section) {
 
-                section.sectionTitle = section.SectionTitle
+                section.sectionTitle = section.SectionTitle;
                 section.onRowsDirectiveReady = function (api) {
                     section.rowsGridAPI = api;
                     var payload = { context: getContext(), rows: section.Rows };
                     var setLoader = function (value) { $scope.isLoading = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, section.rowsGridAPI, payload, setLoader);
-                }
+                };
                 ctrl.sections.push(section);
             }
 
@@ -175,7 +172,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                 }
                 for(var i=0;i<recordTypeFields.length;i++)
                 {
-                    filterSections(ctrl.sections, filteredFields, exceptedFields)
+                    filterSections(ctrl.sections, filteredFields, exceptedFields);
                    
                 }
                 return filteredFields;
@@ -187,9 +184,9 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                     var section = sections[j];
                     if (section.rowsGridAPI != undefined) {
                         var rows = section.rowsGridAPI.getData();
-                        filterRows(rows.Rows, filteredFields, exceptedFields)
+                        filterRows(rows.Rows, filteredFields, exceptedFields);
                     } else if (section.Rows != undefined) {
-                        filterRows(section.Rows, filteredFields, exceptedFields)
+                        filterRows(section.Rows, filteredFields, exceptedFields);
                     }
                 }
             }

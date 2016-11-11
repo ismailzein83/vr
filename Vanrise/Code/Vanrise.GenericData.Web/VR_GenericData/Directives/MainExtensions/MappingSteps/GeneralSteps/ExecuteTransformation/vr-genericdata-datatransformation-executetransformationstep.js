@@ -40,20 +40,16 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                 $scope.onDataTransformationSelectorDirectiveReady = function (api) {
                     dataTransformationSelectorDirectiveReadyAPI = api;
                     dataTransformationSelectorReadyPromiseDeferred.resolve();
-                }
+                };
 
-                $scope.onDataTransformationSelectionChanged = function ()
-                {
+                $scope.onDataTransformationSelectionChanged = function () {
 
-                    if (dataTransformationSelectorDirectiveReadyAPI != undefined && dataTransformationSelectorDirectiveReadyAPI.getSelectedIds() !=undefined)
-                    {
+                    if (dataTransformationSelectorDirectiveReadyAPI != undefined && dataTransformationSelectorDirectiveReadyAPI.getSelectedIds() != undefined) {
                         $scope.isLoadingMappingData = true;
                         VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinition(dataTransformationSelectorDirectiveReadyAPI.getSelectedIds()).then(function (response) {
-                            if(response && response.RecordTypes)
-                            {
+                            if (response && response.RecordTypes) {
                                 $scope.recordsMapping.length = 0;
-                                for (var i = 0; i < response.RecordTypes.length;i++)
-                                {
+                                for (var i = 0; i < response.RecordTypes.length; i++) {
                                     var record = response.RecordTypes[i];
                                     var filterItem = {
                                         Record: record,
@@ -62,7 +58,7 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                                     };
                                     var payload;
                                     if (mainPayload != undefined && mainPayload.RecordsMapping != undefined)
-                                        payload = mainPayload.RecordsMapping[i] !=undefined? mainPayload.RecordsMapping[i].Value:undefined;
+                                        payload = mainPayload.RecordsMapping[i] != undefined ? mainPayload.RecordsMapping[i].Value : undefined;
                                     addFilterItemToGrid(filterItem, payload);
                                 }
                             }
@@ -70,7 +66,7 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                             $scope.isLoadingMappingData = false;
                         });
                     }
-                }
+                };
 
               
                 defineAPI();
@@ -80,8 +76,8 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload !=undefined)
-                      mainPayload = payload.stepDetails;
+                    if (payload != undefined)
+                        mainPayload = payload.stepDetails;
                     var promises = [];
                     var loadDataTransformationSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -89,14 +85,13 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                         var payloadSelector;
                         if (payload != undefined && payload.stepDetails != undefined)
                             payloadSelector = {
-                                selectedIds : payload.stepDetails.DataTransformationId
+                                selectedIds: payload.stepDetails.DataTransformationId
                             }
                         VRUIUtilsService.callDirectiveLoad(dataTransformationSelectorDirectiveReadyAPI, payloadSelector, loadDataTransformationSelectorPromiseDeferred);
                     });
                     promises.push(loadDataTransformationSelectorPromiseDeferred.promise);
 
-                    if (payload != undefined && payload.stepDetails != undefined && payload.stepDetails.DataTransformationId!=undefined)
-                    {
+                    if (payload != undefined && payload.stepDetails != undefined && payload.stepDetails.DataTransformationId != undefined) {
                         VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinition(payload.stepDetails.DataTransformationId).then(function (response) {
                             if (response && response.RecordTypes) {
                                 $scope.recordsMapping.length = 0;
@@ -109,7 +104,7 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                                     };
                                     promises.push(filterItem.loadPromiseDeferred.promise);
                                     var payloadData;
-                                    if (payload.stepDetails.RecordsMapping !=undefined)
+                                    if (payload.stepDetails.RecordsMapping != undefined)
                                         payloadData = payload.stepDetails.RecordsMapping[i] != undefined ? mainPayload.RecordsMapping[i].Value : undefined;
                                     addFilterItemToGrid(filterItem, payloadData);
                                 }
@@ -117,14 +112,12 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var recordsMapping = [];
-                    if( $scope.recordsMapping.length >0)
-                    {
-                        for(var i=0;i< $scope.recordsMapping.length;i++)
-                        {
+                    if ($scope.recordsMapping.length > 0) {
+                        for (var i = 0; i < $scope.recordsMapping.length; i++) {
                             var recordMapping = $scope.recordsMapping[i];
                             if (recordMapping.directiveAPI != undefined && recordMapping.directiveAPI.getData() != undefined) {
                                 recordsMapping.push({
@@ -132,15 +125,15 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                                     Value: recordMapping.directiveAPI != undefined ? recordMapping.directiveAPI.getData() : undefined
                                 });
                             }
-                            
+
                         }
                     }
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.ExecuteTransformationStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        DataTransformationId: dataTransformationSelectorDirectiveReadyAPI!=undefined?dataTransformationSelectorDirectiveReadyAPI.getSelectedIds():undefined,
+                        DataTransformationId: dataTransformationSelectorDirectiveReadyAPI != undefined ? dataTransformationSelectorDirectiveReadyAPI.getSelectedIds() : undefined,
                         RecordsMapping: recordsMapping
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

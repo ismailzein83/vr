@@ -66,7 +66,7 @@
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

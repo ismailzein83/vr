@@ -34,7 +34,7 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
             $scope.onNumberFilterEditorReady = function (api) {
                 numberFilterEditorApi = api;
                 numberFilterReadyDeferred.resolve();
-            }
+            };
             function defineAPI() {
                 var api = {};
 
@@ -57,7 +57,7 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
                         promises.push(numberFilterLoadDeferred.promise);
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -65,11 +65,11 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
                         CompareOperator: $scope.selectedFilter.value,
                         Value: numberFilterEditorApi.getData()
                     };
-                }
+                };
 
                 api.getExpression = function () {
                     return $scope.selectedFilter.description + ' ' + numberFilterEditorApi.getData();
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

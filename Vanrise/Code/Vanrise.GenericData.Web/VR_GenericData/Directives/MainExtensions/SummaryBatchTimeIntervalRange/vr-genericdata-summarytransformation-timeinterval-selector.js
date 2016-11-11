@@ -21,7 +21,7 @@ app.directive("vrGenericdataSummarytransformationTimeintervalSelector", ['VR_Gen
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return getDirectiveTemplateUrl();
@@ -57,7 +57,7 @@ app.directive("vrGenericdataSummarytransformationTimeintervalSelector", ['VR_Gen
                         $scope.intervalOffset = payload.Settings.IntervalOffset;
                         $scope.selectedIntervalType = UtilsService.getItemByVal($scope.intervalTypes, payload.Settings.IntervalType, "value");
                     }
-                }
+                };
 
 
                 if (ctrl.onReady != null)

@@ -39,7 +39,7 @@ app.directive('vrGenericdataDatatransformationIfelsestep', ['UtilsService', 'VR_
                 ctrl.onConditionDirectiveReady = function (api) {
                     conditionDirectiveReadyAPI = api;
                     conditionDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -58,14 +58,14 @@ app.directive('vrGenericdataDatatransformationIfelsestep', ['UtilsService', 'VR_
                     });
                     promises.push(loadConditionDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.IfElseStep, Vanrise.GenericData.Transformation.MainExtensions",
                         Condition: conditionDirectiveReadyAPI.getData(),
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

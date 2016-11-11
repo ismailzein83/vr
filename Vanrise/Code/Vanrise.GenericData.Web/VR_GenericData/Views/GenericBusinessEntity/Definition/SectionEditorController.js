@@ -35,18 +35,15 @@
                 }
             };
 
-            $scope.scopeModal.validate = function()
-            {
-                if (isEditMode && $scope.scopeModal.sectionValue.toLowerCase() == sectionTitleValue.toLowerCase())
-                {
+            $scope.scopeModal.validate = function () {
+                if (isEditMode && $scope.scopeModal.sectionValue.toLowerCase() == sectionTitleValue.toLowerCase()) {
                     return null;
                 }
-                else if (UtilsService.contains(exitingSections, $scope.scopeModal.sectionValue.toLowerCase()))
-                {
+                else if (UtilsService.contains(exitingSections, $scope.scopeModal.sectionValue.toLowerCase())) {
                     return "Same name exist.";
                 }
                 return null;
-            }
+            };
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };

@@ -28,24 +28,21 @@
             function initializeController() {
                 ctrl.dataSource = [];
                 ctrl.columns = [];
-                $scope.isValueBool = function (colDef, dataItem)
-                {
-                    if (colDef.tag.Attribute.Type.indexOf("Boolean")>-1)
-                    {
-                      
+                $scope.isValueBool = function (colDef, dataItem) {
+                    if (colDef.tag.Attribute.Type.indexOf("Boolean") > -1) {
+
                         return true;
-                    }else
-                    {
+                    } else {
                         return false;
                     }
-                }
-                $scope.getFieldValue = function (result,colDef, dataItem) {
+                };
+                $scope.getFieldValue = function (result, colDef, dataItem) {
                     if (result) {
                         return dataItem.Entity.Details[colDef.tag.FieldPath];
                     } else {
                         return dataItem.FieldValueDescriptions[ctrl.columns.indexOf(colDef.tag)];
                     }
-                }
+                };
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
@@ -98,7 +95,7 @@
                     var gridQuery;
 
                     if (payload != undefined) {
-                        runtimeGrid = payload.runtimeGrid
+                        runtimeGrid = payload.runtimeGrid;
                         gridQuery = payload.gridQuery;
                     }
 

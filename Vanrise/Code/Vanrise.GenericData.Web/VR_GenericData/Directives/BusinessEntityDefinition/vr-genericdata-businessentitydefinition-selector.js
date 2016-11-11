@@ -33,7 +33,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -52,7 +52,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -80,11 +80,11 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'BusinessEntityDefinitionId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('BusinessEntityDefinitionId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }

@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFieldFormulas/Templates/ParentBusinessEntityFieldFormulaTemplate.html';
@@ -45,21 +45,20 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['
                     if (payload != undefined) {
                         $scope.fields.length = 0;
                         context = payload.context;
-                        if (context !=undefined && context.getFields != undefined)
+                        if (context != undefined && context.getFields != undefined)
                             $scope.fields = context.getFields();
-                        if(payload.formula !=undefined)
-                        {
-                            $scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.ChildFieldName,"fieldName")
+                        if (payload.formula != undefined) {
+                            $scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.ChildFieldName, "fieldName")
                         }
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas.ParentBusinessEntityFieldFormula, Vanrise.GenericData.MainExtensions",
-                        ChildFieldName: $scope.selectedFieldName !=undefined? $scope.selectedFieldName.fieldName:undefined
+                        ChildFieldName: $scope.selectedFieldName != undefined ? $scope.selectedFieldName.fieldName : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

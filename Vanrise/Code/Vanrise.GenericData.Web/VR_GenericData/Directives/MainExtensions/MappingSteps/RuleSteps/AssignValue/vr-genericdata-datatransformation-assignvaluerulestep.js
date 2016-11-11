@@ -42,17 +42,15 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
             var targetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                $scope.onRuleStepCommonReady = function (api)
-                {
+                $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
-                $scope.onTargetDirectiveReady = function (api)
-                {
+                $scope.onTargetDirectiveReady = function (api) {
                     targetDirectiveAPI = api;
                     targetDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -64,49 +62,47 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                     var promises = [];
                     var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadRuleStep = { ruleTypeName: ruleTypeName};
-                            if (payload != undefined && payload.context != undefined)
-                                payloadRuleStep.context= payload.context;
-                            if (payload != undefined && payload.stepDetails)
-                            {
-                                payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
-                                payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
-                                payloadRuleStep.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
-                                payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;
-                                payloadRuleStep.ruleId = payload.stepDetails.RuleId;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(ruleStepCommonDirectiveAPI, payloadRuleStep, loadRuleStepCommonDirectivePromiseDeferred);
-                        });
+                        var payloadRuleStep = { ruleTypeName: ruleTypeName };
+                        if (payload != undefined && payload.context != undefined)
+                            payloadRuleStep.context = payload.context;
+                        if (payload != undefined && payload.stepDetails) {
+                            payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
+                            payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
+                            payloadRuleStep.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
+                            payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;
+                            payloadRuleStep.ruleId = payload.stepDetails.RuleId;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(ruleStepCommonDirectiveAPI, payloadRuleStep, loadRuleStepCommonDirectivePromiseDeferred);
+                    });
 
                     promises.push(loadRuleStepCommonDirectivePromiseDeferred.promise);
 
                     var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     targetDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadtarget;
-                        if (payload != undefined)
-                        {
+                        if (payload != undefined) {
                             payloadtarget = {};
                             if (payload != undefined && payload.context != undefined)
-                                payloadtarget.context= payload.context;
+                                payloadtarget.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadtarget.selectedRecords = payload.stepDetails.Target;
                         }
-                       VRUIUtilsService.callDirectiveLoad(targetDirectiveAPI, payloadtarget, loadTargetDirectivePromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(targetDirectiveAPI, payloadtarget, loadTargetDirectivePromiseDeferred);
                     });
 
                     promises.push(loadTargetDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
                
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AssignValueRuleStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        Target: targetDirectiveAPI !=undefined? targetDirectiveAPI.getData():undefined
-                    }
+                        Target: targetDirectiveAPI != undefined ? targetDirectiveAPI.getData() : undefined
+                    };
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

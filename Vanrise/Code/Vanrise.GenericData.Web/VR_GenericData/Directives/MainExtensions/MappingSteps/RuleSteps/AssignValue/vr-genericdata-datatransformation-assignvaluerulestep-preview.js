@@ -38,11 +38,10 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
             var commonDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                ctrl.onCommonDirectiveReady = function(api)
-                {
+                ctrl.onCommonDirectiveReady = function (api) {
                     commonDirectiveAPI = api;
                     commonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -74,30 +73,30 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                     promises.push(loadCommonDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (commonDirectiveAPI != undefined)
                         commonDirectiveAPI.applyChanges(changes);
                     stepObj.target = changes.Target;
                     ctrl.target = changes.Target;
-                }
+                };
 
                 api.checkValidation = function () {
                     var validate;
                     if (commonDirectiveAPI != undefined)
-                     validate = commonDirectiveAPI.checkValidation();
+                        validate = commonDirectiveAPI.checkValidation();
                     if (validate == undefined)
                         validate = checkValidation();
                     return validate;
-                }
+                };
 
                 api.getData = function () {
                     var stepDetails = commonDirectiveAPI.getData();
                     if (stepDetails != undefined)
                         stepDetails.Target = stepObj.target;
                     return stepDetails;
-                }
+                };
 
 
                 if (ctrl.onReady != null)

@@ -43,18 +43,17 @@
                 }
             };
 
-            $scope.scopeModal.onDataRecordTypeFieldsFormulaReady = function(api)
-            {
+            $scope.scopeModal.onDataRecordTypeFieldsFormulaReady = function (api) {
                 dataRecordTypeFieldsFormulaAPI = api;
                 dataRecordTypeFieldsFormulaReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModal.validateName = function () {
                 return validateName();
-            }
+            };
 
             $scope.scopeModal.validateTitle = function () {
                 return validateTitle();
-            }
+            };
 
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
@@ -63,7 +62,7 @@
             $scope.scopeModal.onDirectiveReady = function (api) {
                 directiveReadyAPI = api;
                 directiveReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

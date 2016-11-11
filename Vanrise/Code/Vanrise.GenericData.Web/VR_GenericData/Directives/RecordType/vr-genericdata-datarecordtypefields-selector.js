@@ -53,7 +53,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
         var disabled = "";
         if (attrs.isdisabled)
-            disabled = "vr-disabled='true'"
+            disabled = "vr-disabled='true'";
 
         
 
@@ -62,7 +62,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
             hideselectedvaluessection = "hideselectedvaluessection";
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
@@ -86,11 +86,11 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('Name', $attrs, ctrl);
-            }
+            };
 
             api.clearDataSource = function () {
                 selectorAPI.clearDataSource();
-            }
+            };
 
 
 
@@ -112,7 +112,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

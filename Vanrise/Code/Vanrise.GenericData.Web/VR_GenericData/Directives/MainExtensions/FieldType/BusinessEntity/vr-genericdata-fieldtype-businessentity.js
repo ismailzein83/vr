@@ -23,7 +23,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/BusinessEntity/Templates/BusinessEntityFieldTypeTemplate.html';
@@ -64,7 +64,7 @@
                         VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
                         return selectorLoadDeferred.promise;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -72,7 +72,7 @@
                         BusinessEntityDefinitionId: selectorAPI.getSelectedIds(),
                         IsNullable: ctrl.isNullable
                     };
-                }
+                };
 
                 return api;
             }

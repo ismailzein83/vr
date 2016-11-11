@@ -35,7 +35,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
             $scope.onDateFilterEditorReady = function (api) {
                 dateFilterEditorApi = api;
                 dateFilterReadyDeferred.resolve();
-            }
+            };
 
             function defineAPI() {
                 var api = {};
@@ -62,7 +62,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -74,7 +74,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
 
                 api.getExpression = function () {
                     return $scope.selectedFilter.description + ' ' + dateFilterEditorApi.getData();
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

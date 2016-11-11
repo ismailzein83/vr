@@ -32,14 +32,14 @@
                 $scope.scopeModel.onDataRecordObjectTypeSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
 
                 $scope.scopeModel.onDataRecordObjectTypeSelectionChanged = function () {
                     var selectIds = selectorAPI.getSelectedIds();
                     if (selectIds != undefined) {
                         context.canDefineProperties(true);
                     }
-                }
+                };
             }
             function defineAPI() {
                 var api = {};
@@ -64,13 +64,13 @@
                     return dataRecordObjectTypeSelectorLoadDeferred.promise
                 };
 
-                api.getData = function() {
+                api.getData = function () {
                     var data = {
                         $type: "Vanrise.GenericData.MainExtensions.VRObjectTypes.VRDataRecordObjectType, Vanrise.GenericData.MainExtensions",
                         RecordTypeId: selectorAPI.getSelectedIds()
                     }
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof(ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

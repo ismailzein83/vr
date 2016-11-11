@@ -40,7 +40,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader, dataRecordTypeFieldReadyDeferred);
 
-                }
+                };
 
                 $scope.scopeModel.onDataRecordTypeFieldFilterReady = function (api) {
                     dataRecordTypeFieldEditorApi = api;
@@ -48,7 +48,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                         $scope.scopeModel.isLoading = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, undefined, setLoader, dataRecordTypeFieldReadyDeferred);
-                }
+                };
                 $scope.scopeModel.onDataRecordTypeFieldSelectionChanged = function () {
                     $scope.scopeModel.ruleFilterEditor = undefined;
                     setTimeout(function () {
@@ -57,7 +57,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                         }
                         UtilsService.safeApply($scope);
                     });
-                }
+                };
 
                 defineAPI();
             }
@@ -95,13 +95,13 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = dataRecordTypeFieldEditorApi.getData();
                     obj.FieldName = $scope.scopeModel.dataRecordTypeField.FieldName;
                     return obj;
-                }
+                };
 
                 api.getExpression = function () {
                     return $scope.scopeModel.dataRecordTypeField.FieldTitle + ' ' + dataRecordTypeFieldEditorApi.getExpression();

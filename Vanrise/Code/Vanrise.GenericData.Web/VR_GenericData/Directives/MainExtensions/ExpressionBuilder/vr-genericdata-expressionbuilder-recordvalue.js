@@ -82,7 +82,7 @@ app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_Data
                 else {
                     ctrl.selectedFieldName = undefined;
                 }
-            }
+            };
 
             defineAPI();
         }
@@ -91,22 +91,20 @@ app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_Data
             var api = {};
 
             api.getData = function () {
-                var value="";
-                if (ctrl.selectedRecordName != undefined)
-                {
+                var value = "";
+                if (ctrl.selectedRecordName != undefined) {
                     value = ctrl.selectedRecordName.Name;
                     if (ctrl.selectedFieldName != undefined)
                         value += "." + ctrl.selectedFieldName.Name;
-                } else if (ctrl.selectedFieldName != undefined)
-                {
+                } else if (ctrl.selectedFieldName != undefined) {
                     value = ctrl.selectedFieldName.Name;
-                }       
+                }
                 return value;
-            }
+            };
 
             api.load = function (payload) {
                 mainPayload = payload;
-              
+
                 var selectedRecordName;
                 if (payload != undefined) {
                     ctrl.recordNames = payload.context.getRecordNames();
@@ -114,7 +112,7 @@ app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_Data
                         ctrl.selectedRecordName = UtilsService.getItemByVal(ctrl.recordNames, payload.selectedRecords.split('.')[0], "Name");
                     }
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

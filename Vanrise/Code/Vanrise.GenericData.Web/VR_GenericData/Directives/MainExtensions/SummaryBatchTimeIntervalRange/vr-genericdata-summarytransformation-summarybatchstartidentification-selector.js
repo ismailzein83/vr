@@ -21,7 +21,7 @@ app.directive("vrGenericdataSummarytransformationSummarybatchstartidentification
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return getDirectiveTemplateUrl();
@@ -94,7 +94,7 @@ app.directive("vrGenericdataSummarytransformationSummarybatchstartidentification
                         promises.push(loadSummaryBatchIntervalSourceTemplatePromiseDeferred.promise);
                     }
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

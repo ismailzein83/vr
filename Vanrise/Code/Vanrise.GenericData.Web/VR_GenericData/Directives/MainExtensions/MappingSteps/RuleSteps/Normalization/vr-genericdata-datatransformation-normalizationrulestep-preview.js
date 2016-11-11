@@ -76,7 +76,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (commonDirectiveAPI != undefined)
@@ -85,7 +85,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                     stepObj.normalizedValue = changes.NormalizedValue;
                     ctrl.value = changes.Value;
                     ctrl.normalizedValue = changes.NormalizedValue;
-                }
+                };
 
                 api.checkValidation = function () {
                     var validate;
@@ -94,17 +94,16 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                     if (validate == undefined)
                         validate = checkValidation();
                     return validate;
-                }
+                };
 
                 api.getData = function () {
                     var stepDetails = commonDirectiveAPI.getData();
-                    if (stepDetails != undefined)
-                    {
+                    if (stepDetails != undefined) {
                         stepDetails.Value = stepObj.value;
                         stepDetails.NormalizedValue = stepObj.normalizedValue;
                     }
                     return stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

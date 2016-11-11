@@ -22,7 +22,7 @@
             };
             $scope.hasAddDataRecordFieldChoice = function () {
                 return VR_GenericData_DataRecordFieldChoiceAPIService.HasAddDataRecordFieldChoice();
-            }
+            };
             $scope.addDataRecordFieldChoice = function () {
                 var onDataRecordFieldChoiceAdded = function (dataRecordFieldChoiceObj) {
                     dataRecordFieldChoiceGridAPI.onDataRecordFieldChoiceAdded(dataRecordFieldChoiceObj);

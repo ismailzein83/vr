@@ -41,13 +41,13 @@ app.directive('vrGenericdataFieldtypeText', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { }
+                api.load = function (payload) { };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions",
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

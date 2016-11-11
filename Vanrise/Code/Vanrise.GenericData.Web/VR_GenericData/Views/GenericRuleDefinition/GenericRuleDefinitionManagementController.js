@@ -22,9 +22,9 @@
                 setGridQuery();
                 return gridAPI.loadGrid(gridQuery);
             };
-            $scope.hasAddGenericRuleDefinition = function () { 
+            $scope.hasAddGenericRuleDefinition = function () {
                 return genericRuleDefinitionAPIService.HasAddGenericRuleDefinition();
-            }
+            };
             $scope.addGenericRuleDefinition = function () {
                 var onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
                     gridAPI.onGenericRuleDefinitionAdded(addedGenericRuleDefinition);

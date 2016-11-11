@@ -30,7 +30,7 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
             $scope.onChoiceFilterEditorReady = function (api) {
                 choiceFilterEditorApi = api;
                 choiceFilterReadyDeferred.resolve();
-            }
+            };
 
 
             function initializeController() {
@@ -60,7 +60,7 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
                         promises.push(choiceFilterLoadDeferred.promise);
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -68,7 +68,7 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
                         CompareOperator: $scope.selectedFilter.value,
                         Values: choiceFilterEditorApi.getData()
                     };
-                }
+                };
 
                 api.getExpression = function () {
                     var ids = choiceFilterEditorApi.getData();
@@ -80,7 +80,7 @@ app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_
                     }
                     expression += ')';
                     return expression;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

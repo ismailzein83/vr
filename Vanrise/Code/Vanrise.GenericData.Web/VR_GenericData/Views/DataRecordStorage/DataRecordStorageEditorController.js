@@ -83,7 +83,7 @@
             $scope.scopeModel.onRequiredPermissionReady = function (api) {
                 requiredPermissionAPI = api;
                 requiredPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.saveDataRecordStorage = function () {
                 if (isEditMode)
                     return updateDataRecordStorage();
@@ -97,14 +97,14 @@
                 else {
                     return VR_GenericData_DataRecordStorageAPIService.HasAddDataRecordStorage();
                 }
-            }
+            };
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onDateFieldSelectorReady = function (api) {
                 dateFieldSelectorAPI = api;
-            }
+            };
         }
 
         function load() {
@@ -351,7 +351,7 @@
                 DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                 DataStoreId: dataStoreSelectorAPI.getSelectedIds(),
                 Settings: settingsDirectiveAPI.getData()
-            }
+            };
             obj.Settings.DateTimeField = $scope.scopeModel.selectedDataRecordTypeField.Entity.Name;
             obj.Settings.RequiredPermission = requiredPermissionAPI.getData();
             return obj;

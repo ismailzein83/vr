@@ -46,7 +46,7 @@
 
             $scope.scopeModal.validateName = function () {
                 return validateName();
-            }
+            };
 
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
@@ -55,7 +55,7 @@
             $scope.scopeModal.onDirectiveReady = function (api) {
                 directiveReadyAPI = api;
                 directiveReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {
@@ -90,7 +90,7 @@
 
                 directiveReadyPromiseDeferred.promise
                     .then(function () {
-                        var directivePayload = (dataRecordTypeEntity != undefined) ? { selectedIds: dataRecordTypeEntity.DataRecordTypeId } : undefined
+                        var directivePayload = (dataRecordTypeEntity != undefined) ? { selectedIds: dataRecordTypeEntity.DataRecordTypeId } : undefined;
                         VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, directivePayload, loadDataRecordTypePromiseDeferred);
                     });
 

@@ -21,7 +21,7 @@ app.directive('vrGenericdataExpressionbuilder', ['VR_GenericData_ExpressionBuild
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTamplate(attrs);
@@ -52,14 +52,12 @@ app.directive('vrGenericdataExpressionbuilder', ['VR_GenericData_ExpressionBuild
         function initializeController() {
 
          
-            $scope.openExpressionBuilder = function()
-            {
-                var onSetExpressionBuilder = function(expressionBuilderValue)
-                {
+            $scope.openExpressionBuilder = function () {
+                var onSetExpressionBuilder = function (expressionBuilderValue) {
                     $scope.expressionBuilderValue = expressionBuilderValue;
-                }
-                VR_GenericData_ExpressionBuilderService.openExpressionBuilder(onSetExpressionBuilder,context, $scope.expressionBuilderValue)
-            }
+                };
+                VR_GenericData_ExpressionBuilderService.openExpressionBuilder(onSetExpressionBuilder, context, $scope.expressionBuilderValue)
+            };
             defineAPI();
         }
 
@@ -68,21 +66,20 @@ app.directive('vrGenericdataExpressionbuilder', ['VR_GenericData_ExpressionBuild
 
             api.getData = function () {
                 return $scope.expressionBuilderValue;
-            }
+            };
 
             api.load = function (payload) {
                 if (payload != undefined) {
                     context = payload.context;
-                    if (payload.selectedRecords != undefined)
-                    {
+                    if (payload.selectedRecords != undefined) {
                         $scope.expressionBuilderValue = payload.selectedRecords;
                     }
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
+        };
 
         this.initializeController = initializeController;
 

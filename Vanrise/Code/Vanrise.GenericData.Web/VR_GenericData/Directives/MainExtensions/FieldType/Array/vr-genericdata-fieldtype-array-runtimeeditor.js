@@ -25,7 +25,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -118,7 +118,7 @@
                     }
 
                     return retVal;
-                }
+                };
 
                 if (ctrl.onReady != undefined) {
                     ctrl.onReady(api);

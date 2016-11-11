@@ -37,40 +37,36 @@
         function defineScope() {
             $scope.scopeModal = {}
 
-            $scope.scopeModal.onEditorRemove= function()
-            {
+            $scope.scopeModal.onEditorRemove = function () {
                 $scope.scopeModal.selectedStep.isSelected = false;
                 $scope.scopeModal.selectedStep = undefined;
-            }
+            };
 
             $scope.scopeModal.stepsDefinition = [];
 
             $scope.scopeModal.steps = [];
 
-            $scope.scopeModal.onGridReady = function (api)
-            {
+            $scope.scopeModal.onGridReady = function (api) {
                 gridDirectiveAPI = api;
-            }
+            };
 
-            $scope.scopeModal.addStep = function (dataItem)
-            {
+            $scope.scopeModal.addStep = function (dataItem) {
                 if (selectedComposite != undefined) {
                     checkValidation();
                     selectedComposite.addStep(dataItem);
-                }             
-            }
+                }
+            };
 
-            $scope.scopeModal.applyChanges = function ()
-            {
+            $scope.scopeModal.applyChanges = function () {
                 applyChanges();
                 $scope.scopeModal.selectedStep.isSelected = false;
                 $scope.scopeModal.selectedStep = undefined;
-            }
+            };
 
             $scope.scopeModal.onDataRecordTypeDirectiveReady = function (api) {
                 dataRecordTypeAPI = api;
                 dataRecordTypeReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.SaveDataTransformationDefinition = function () {
 
@@ -92,52 +88,48 @@
             };
 
             $scope.hasSaveDataTransformationDefinition = function () {
-                 if (isEditMode) {
-                     return VR_GenericData_DataTransformationDefinitionAPIService.HasUpdateDataTransformationDefinition();
+                if (isEditMode) {
+                    return VR_GenericData_DataTransformationDefinitionAPIService.HasUpdateDataTransformationDefinition();
                 }
                 else {
-                     return VR_GenericData_DataTransformationDefinitionAPIService.HasAddDataTransformationDefinition();
+                    return VR_GenericData_DataTransformationDefinitionAPIService.HasAddDataTransformationDefinition();
                 }
-            }
+            };
 
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            $scope.scopeModal.onEditorDirectiveReady=function(api)
-            {
+            $scope.scopeModal.onEditorDirectiveReady = function (api) {
                 editorDirectiveAPI = api;
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingDirective = value;
                 };
-                var payload={
+                var payload = {
                     context: $scope.scopeModal.selectedStep.context,
-                    stepDetails:$scope.scopeModal.selectedStep.previewAPI != undefined? $scope.scopeModal.selectedStep.previewAPI.getData():undefined
-                }
+                    stepDetails: $scope.scopeModal.selectedStep.previewAPI != undefined ? $scope.scopeModal.selectedStep.previewAPI.getData() : undefined
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
-            }
+            };
 
-            $scope.scopeModal.onSequenceDirectiveReady = function (api)
-            {
+            $scope.scopeModal.onSequenceDirectiveReady = function (api) {
                 sequenceDirectiveAPI = api;
                 selectedComposite = api;
                 selectedComposite.setCheckedSequence(true);
                 sequenceReadyPromiseDeferred.resolve();
-            }
+            };
 
-            $scope.scopeModal.onCompileClick = function()
-            {
-                
-                return tryCompile().then(function(response)
-                {
+            $scope.scopeModal.onCompileClick = function () {
+
+                return tryCompile().then(function (response) {
                     if (response)
-                      VRNotificationService.showSuccess("All steps compiled successfully.");
+                        VRNotificationService.showSuccess("All steps compiled successfully.");
                 });
 
-            }
+            };
             $scope.hasTryCompilePermission = function () {
                 return VR_GenericData_DataTransformationDefinitionAPIService.HasTryCompileSteps();
-            }
+            };
 
             $scope.scopeModal.refreshEditor = function ()
             {
@@ -264,7 +256,7 @@
             var payload = {
                 context: context,
                 stepDetails: stepEntity
-            }
+            };
             stepItem.onPreviewDirectiveReady = function (api) {
                 stepItem.previewAPI = api;
                
@@ -474,7 +466,7 @@
             var payload = {
                 context: $scope.scopeModal.selectedStep.context,
                 stepDetails: $scope.scopeModal.selectedStep.previewAPI != undefined ? $scope.scopeModal.selectedStep.previewAPI.getData() : undefined
-            }
+            };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
         }
 
@@ -486,8 +478,8 @@
                 Title: $scope.scopeModal.title,
                 DataTransformationDefinitionId: dataTransformationDefinitionId,
                 RecordTypes: obj != undefined ? obj.RecordTypes : undefined,
-                MappingSteps: sequenceDirectiveAPI !=undefined? sequenceDirectiveAPI.getData():undefined
-            }
+                MappingSteps: sequenceDirectiveAPI != undefined ? sequenceDirectiveAPI.getData() : undefined
+            };
             return dataTransformationDefinition;
         }
 

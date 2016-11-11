@@ -40,7 +40,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 ctrl.onCommonDirectiveReady = function (api) {
                     commonDirectiveAPI = api;
                     commonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -74,7 +74,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     promises.push(loadCommonDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (commonDirectiveAPI != undefined)
@@ -83,7 +83,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     stepObj.ratesByRateType = changes.RatesByRateType;
                     ctrl.normalRate = changes.NormalRate;
                     ctrl.ratesByRateType = changes.RatesByRateType;
-                }
+                };
 
                 api.checkValidation = function () {
                     var validate;
@@ -92,16 +92,16 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     if (validate == undefined)
                         validate = checkValidation();
                     return validate;
-                }
+                };
 
                 api.getData = function () {
-                    var stepDetails = commonDirectiveAPI !=undefined? commonDirectiveAPI.getData():undefined;
+                    var stepDetails = commonDirectiveAPI != undefined ? commonDirectiveAPI.getData() : undefined;
                     if (stepDetails != undefined) {
                         stepDetails.NormalRate = stepObj.normalRate;
                         stepDetails.RatesByRateType = stepObj.ratesByRateType;
                     }
                     return stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

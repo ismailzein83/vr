@@ -44,7 +44,7 @@
             };
             $scope.hasAddDataRecordStorage = function () {
                 return dataRecordStorageAPIService.HasAddDataRecordStorage();
-            }
+            };
         }
 
         function load() {

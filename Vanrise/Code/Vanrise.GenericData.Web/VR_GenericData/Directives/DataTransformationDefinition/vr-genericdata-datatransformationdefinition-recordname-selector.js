@@ -35,7 +35,7 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -51,7 +51,7 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
             label = 'label="'+attrs.label+'"';
         var disabled = "";
         if (attrs.isdisabled)
-            disabled = "vr-disabled='true'"
+            disabled = "vr-disabled='true'";
 
         var required = "";
         if (attrs.isrequired != undefined)
@@ -62,7 +62,7 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
             hideselectedvaluessection = "hideselectedvaluessection";
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
 
         return ' <vr-select ' + multipleselection + ' on-ready="onSelectorReady" datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
                + 'entityname="Record Name" ' + label + '></vr-select>';
@@ -72,10 +72,9 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
     function recordTypeCtor(ctrl, $scope, $attrs) {
         var selectorAPI;
         function initializeController() {
-            $scope.onSelectorReady = function(api)
-            {
+            $scope.onSelectorReady = function (api) {
                 selectorAPI = api;
-            }
+            };
             defineAPI();
         }
 
@@ -84,22 +83,21 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('Name', $attrs, ctrl);
-            }
+            };
 
             api.load = function (payload) {
                 if (selectorAPI != undefined)
                     selectorAPI.clearDataSource();
-                
+
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
-                    if (payload.context != undefined)
-                    {
+                    if (payload.context != undefined) {
                         if (payload.getArray && payload.getNonArray && payload.getDynamic)
                             ctrl.datasource = payload.context.getAllRecordNames();
-                        else if(payload.getArray && payload.getNonArray)
+                        else if (payload.getArray && payload.getNonArray)
                             ctrl.datasource = payload.context.getAllRecordNamesExceptDynamic();
-                        else if(payload.getArray)
+                        else if (payload.getArray)
                             ctrl.datasource = payload.context.getArrayRecordNames();
                         else if (payload.getNonArray)
                             ctrl.datasource = payload.context.getRecordNames();
@@ -107,7 +105,7 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

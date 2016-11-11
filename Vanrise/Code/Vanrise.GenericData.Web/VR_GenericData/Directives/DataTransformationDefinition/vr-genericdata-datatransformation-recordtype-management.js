@@ -34,16 +34,16 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                 ctrl.datasource = [];
 
                 ctrl.isValid = function () {
-                    if (ctrl.datasource !=undefined && ctrl.datasource.length > 0)
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should Select at least one filter type ";
-                }
+                };
 
                 ctrl.addDataRecordType = function () {
                     var onDataRecordTypeAdded = function (dataRecordType) {
                         addNeededTypes(dataRecordType);
                         ctrl.datasource.push(dataRecordType);
-                    }
+                    };
 
                     VR_GenericData_DataTransformationDefinitionService.addDataRecordType(onDataRecordTypeAdded, ctrl.datasource);
                 };
@@ -72,23 +72,22 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                     }
                     var obj = {
                         RecordTypes: recordTypes,
-                    }
+                    };
                     return obj;
-                }
+                };
 
                 api.load = function (payload) {
-                        
+
                     return getDataRecordTypeInfo().then(function () {
-                            if (payload != undefined && payload.RecordTypes) {
-                                for(var i=0; i < payload.RecordTypes.length; i++)
-                                {
-                                    var dataItem = payload.RecordTypes[i];
-                                    addNeededTypes(dataItem);
-                                    ctrl.datasource.push(dataItem);
-                                }
+                        if (payload != undefined && payload.RecordTypes) {
+                            for (var i = 0; i < payload.RecordTypes.length; i++) {
+                                var dataItem = payload.RecordTypes[i];
+                                addNeededTypes(dataItem);
+                                ctrl.datasource.push(dataItem);
                             }
-                        });
-                }
+                        }
+                    });
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -114,7 +113,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editDataRecordType(dataRecordTypeObj) {
@@ -122,7 +121,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                     addNeededTypes(dataRecordType);
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordTypeObj.RecordName, 'RecordName');
                     ctrl.datasource[index] = dataRecordType;
-                }
+                };
 
                 VR_GenericData_DataTransformationDefinitionService.editDataRecordType(dataRecordTypeObj, onDataRecordTypeUpdated, ctrl.datasource);
             }

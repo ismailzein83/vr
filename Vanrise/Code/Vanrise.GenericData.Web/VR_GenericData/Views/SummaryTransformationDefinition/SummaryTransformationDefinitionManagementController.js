@@ -23,7 +23,7 @@
             };
             $scope.hasAddSummaryTransformationDefinition = function () {
                 return summaryTransformationDefinitionAPIService.HasAddSummaryTransformationDefinition();
-            }
+            };
             $scope.addSummaryTransformationDefinition = function () {
                 var onSummaryTransformationDefinitionAdded = function (onSummaryTransformationDefinitionObj) {
                     gridAPI.onSummaryTransformationDefinitionAdded(onSummaryTransformationDefinitionObj);

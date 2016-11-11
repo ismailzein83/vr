@@ -42,31 +42,28 @@ app.directive('vrGenericdataDatatransformationInitializerecordstepPreview', ['Ut
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
-                        if (payload.stepDetails != undefined)
-                        {
+                    if (payload != undefined) {
+                        if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             ctrl.recordName = payload.stepDetails.RecordName;
                         }
-                       checkValidation();
+                        checkValidation();
                     }
-                 
-                }
+
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.recordName = changes.RecordName;
                     stepObj.stepDetails = changes;
-                }
+                };
 
-                api.checkValidation = function ()
-                {
-                  return  checkValidation();
-                }
+                api.checkValidation = function () {
+                    return checkValidation();
+                };
 
                 api.getData = function () {
-                    return stepObj.stepDetails      
-                }
+                    return stepObj.stepDetails;
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

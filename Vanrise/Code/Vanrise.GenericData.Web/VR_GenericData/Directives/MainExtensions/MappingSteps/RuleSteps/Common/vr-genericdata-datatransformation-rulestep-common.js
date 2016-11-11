@@ -57,22 +57,22 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                 $scope.onRuleDefinitionReady = function (api) {
                     ruleDefinitionDirectiveAPI = api;
                     ruleDefinitionDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onEffectiveTimeDirectiveReady = function (api) {
                     effectiveTimeDirectiveAPI = api;
                     effectiveTimeDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onIsEffectiveInFutureDirectiveReady = function (api) {
                     isEffectiveInFutureDirectiveAPI = api;
                     isEffectiveInFutureDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onRuleIdDirectiveReady = function (api) {
                     ruleIdDirectiveAPI = api;
                     ruleIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onRuleSelectionChanged = function () {
                     if ($scope.selectedRuleDefinition == undefined) {
@@ -85,7 +85,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         }
                         isSecondSelection = true;
                     }
-                }
+                };
 
                 $scope.onRuleSelectionItem = function (selectedItem) {
 
@@ -95,18 +95,17 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     loadRuleDefinition(selectedItem.GenericRuleDefinitionId).then(function (response) {
                         if (response.CriteriaDefinition.Fields) {
                             for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
-                                var fuleField =  response.CriteriaDefinition.Fields[i];
+                                var fuleField = response.CriteriaDefinition.Fields[i];
                                 var filterItem = {
-                                    RuleFields:fuleField,
+                                    RuleFields: fuleField,
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                     loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                 };
                                 var payload;
-                                if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && mainPayload.ruleFieldsMappings.length > 0 && firstTimeload)
-                                {
+                                if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && mainPayload.ruleFieldsMappings.length > 0 && firstTimeload) {
                                     var ruleFieldsMapping = UtilsService.getItemByVal(mainPayload.ruleFieldsMappings, fuleField.FieldName, "RuleCriteriaFieldName");
                                     if (ruleFieldsMapping != undefined)
-                                      payload = ruleFieldsMapping.Value;
+                                        payload = ruleFieldsMapping.Value;
                                 }
                                 addFilterItemToGrid(filterItem, payload);
                             }
@@ -136,7 +135,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         firstTimeload = false;
                     });
 
-                }
+                };
 
                 function addFilterItemToGrid(filterItem, payload) {
 
@@ -259,7 +258,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
-                }
+                };
 
                 function loadRuleType(ruleTypeName) {
                     return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypeByName(ruleTypeName).then(function (response) {
@@ -304,7 +303,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     obj.RuleId = ruleIdDirectiveAPI != undefined ? ruleIdDirectiveAPI.getData() : undefined;
                     obj.RuleFieldsMappings = ruleFieldsMappings;
                     obj.RuleObjectsMappings = ruleObjectsMappings;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

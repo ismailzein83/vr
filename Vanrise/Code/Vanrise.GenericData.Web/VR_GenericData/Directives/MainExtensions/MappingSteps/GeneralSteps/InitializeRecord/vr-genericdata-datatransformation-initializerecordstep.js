@@ -46,14 +46,13 @@ app.directive('vrGenericdataDatatransformationInitializerecordstep', ['UtilsServ
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         var promises = [];
 
                         var loadRecordNameSelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
                         recordNameSelectorDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadRecordName = { context: payload.context, getArray: true ,getNonArray:true};
+                            var payloadRecordName = { context: payload.context, getArray: true, getNonArray: true };
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadRecordName.selectedIds = payload.stepDetails.RecordName;
                             VRUIUtilsService.callDirectiveLoad(recordNameSelectorDirectiveReadyAPI, payloadRecordName, loadRecordNameSelectorDirectivePromiseDeferred);
@@ -61,17 +60,17 @@ app.directive('vrGenericdataDatatransformationInitializerecordstep', ['UtilsServ
                         promises.push(loadRecordNameSelectorDirectivePromiseDeferred.promise);
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                   
 
-                }
+
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.InitializeRecordStep, Vanrise.GenericData.Transformation.MainExtensions",
                         RecordName: recordNameSelectorDirectiveReadyAPI != undefined ? recordNameSelectorDirectiveReadyAPI.getSelectedIds() : undefined,
-                        
+
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

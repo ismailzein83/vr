@@ -68,7 +68,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
             var api = {};
 
             api.load = function (payload) {
-                
+
                 var fieldValue;
 
                 if (payload != undefined) {
@@ -92,7 +92,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                         $scope.scopeModel.value = fieldValue;
                     }
                 }
-            }
+            };
 
             api.getData = function () {
                 var retVal;
@@ -111,11 +111,11 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                     }
                 }
                 else {
-                    retVal = getValueAsNumber( $scope.scopeModel.value);
+                    retVal = getValueAsNumber($scope.scopeModel.value);
                 }
 
                 return retVal;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

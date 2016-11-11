@@ -48,7 +48,7 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
             label = 'label="Summary Transformation Definition"';
         var disabled = "";
         if (attrs.isdisabled)
-            disabled = "vr-disabled='true'"
+            disabled = "vr-disabled='true'";
 
         var required = "";
         if (attrs.isrequired != undefined)
@@ -59,7 +59,7 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
             hideselectedvaluessection = "hideselectedvaluessection";
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
@@ -80,7 +80,7 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('SummaryTransformationDefinitionId', $attrs, ctrl);
-            }
+            };
 
             api.load = function (payload) {
                 var filter;
@@ -100,7 +100,7 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
                         VRUIUtilsService.setSelectedValues(selectedIds, 'SummaryTransformationDefinitionId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -43,10 +43,10 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onExtensibleBEItemAdded = function (extensibleBEItemObj) {
                             gridAPI.itemAdded(extensibleBEItemObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -75,13 +75,13 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editExtensibleBEItem(dataItem) {
                 var onExtensibleBEItemUpdated = function (extensibleBEItem) {
                     gridAPI.itemUpdated(extensibleBEItem);
-                }
+                };
 
                 VR_GenericData_ExtensibleBEItemService.editExtensibleBEItem(dataItem.Entity.ExtensibleBEItemId, onExtensibleBEItemUpdated);
             }

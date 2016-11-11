@@ -58,7 +58,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
             '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
                 + multipleselection + ' isrequired="ctrl.isrequired"></vr-select>' +
-                '</vr-columns>'
+                '</vr-columns>';
         }
 
         function choicesCtor(ctrl, $scope, $attrs) {
@@ -69,7 +69,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -89,13 +89,11 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                         fieldValue = payload.fieldValue;
                     }
 
-                    if (fieldType != undefined)
-                    {
+                    if (fieldType != undefined) {
                         for (var i = 0; i < fieldType.Choices.length; i++)
                             ctrl.datasource.push(fieldType.Choices[i]);
 
-                        if (fieldValue != undefined)
-                        {
+                        if (fieldValue != undefined) {
                             if (ctrl.selectionmode == "dynamic") {
                                 if (fieldValue.Values != undefined) {
                                     for (var i = 0; i < fieldValue.Values.length; i++) {
@@ -119,7 +117,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                             }
                         }
                     }
-                }
+                };
 
                 api.getData = function () {
                     var retVal;
@@ -137,15 +135,14 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                             retVal = UtilsService.getPropValuesFromArray(ctrl.selectedvalues, 'Value');
                         }
                     }
-                    else if (ctrl.selectionmode == "single")
-                    {
+                    else if (ctrl.selectionmode == "single") {
                         if (ctrl.selectedvalues != undefined) {
                             retVal = ctrl.selectedvalues['Value'];
                         }
                     }
 
                     return retVal;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

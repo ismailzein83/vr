@@ -42,11 +42,10 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
-                        directiveAPI.onDataRecordTypeAdded = function (onDataRecordTypeObj)
-                        {
+                        };
+                        directiveAPI.onDataRecordTypeAdded = function (onDataRecordTypeObj) {
                             gridAPI.itemAdded(onDataRecordTypeObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -76,7 +75,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasEditDataRecordTypePermission() {
@@ -85,7 +84,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             function editDataRecordField(dataItem) {
                 var onDataRecordFieldUpdated = function (dataRecordFieldObj) {
                     gridAPI.itemUpdated(dataRecordFieldObj);
-                }
+                };
 
                 VR_GenericData_DataRecordTypeService.editDataRecordType(dataItem.Entity.DataRecordTypeId, onDataRecordFieldUpdated);
             }

@@ -40,7 +40,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                 ctrl.isValid = function () {
                     if (ctrl.values !=undefined && ctrl.values.length > 0)
                         return null;
-                    return "You Should Add At Least One Choice."
+                    return "You Should Add At Least One Choice.";
                 } 
                 ctrl.disableAddButton = true;
                 ctrl.addValue = function () {
@@ -48,10 +48,10 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                     ctrl.Id = ctrl.values.length + 1;
                     ctrl.value = undefined;
                     ctrl.disableAddButton = true;
-                }
+                };
                 ctrl.onValueChange = function (value) {
                     ctrl.disableAddButton = value == undefined || (UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Text") != -1 || UtilsService.getItemIndexByVal(ctrl.values, ctrl.Id, "Value") != -1);
-                }
+                };
 
                 defineAPI();
             }
@@ -60,7 +60,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                 var obj = {
                     Value: ctrl.Id,
                     Text: choice
-                }
+                };
                 return obj;
             }
 
@@ -72,7 +72,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                         ctrl.values = payload.Choices;
                         ctrl.isNullable = payload.IsNullable;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -80,7 +80,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                         Choices: ctrl.values,
                         IsNullable: ctrl.isNullable
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

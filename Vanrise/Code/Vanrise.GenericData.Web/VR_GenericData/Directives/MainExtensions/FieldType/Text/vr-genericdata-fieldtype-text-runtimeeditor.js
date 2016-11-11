@@ -79,8 +79,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                     fieldValue = payload.fieldValue;
                 }
 
-                if(fieldValue != undefined)
-                {
+                if (fieldValue != undefined) {
                     if (ctrl.selectionmode == "dynamic") {
                         angular.forEach(fieldValue.Values, function (val) {
                             $scope.scopeModel.values.push(val);
@@ -91,19 +90,16 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                             $scope.scopeModel.values.push(fieldValue[i]);
                         }
                     }
-                    else
-                    {
+                    else {
                         $scope.scopeModel.value = fieldValue;
                     }
                 }
-            }
+            };
 
-            api.getData = function()
-            {
+            api.getData = function () {
                 var retVal;
 
-                if(ctrl.selectionmode == "dynamic")
-                {
+                if (ctrl.selectionmode == "dynamic") {
                     if ($scope.scopeModel.values.length > 0) {
                         retVal = {
                             $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
@@ -121,7 +117,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 }
 
                 return retVal;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

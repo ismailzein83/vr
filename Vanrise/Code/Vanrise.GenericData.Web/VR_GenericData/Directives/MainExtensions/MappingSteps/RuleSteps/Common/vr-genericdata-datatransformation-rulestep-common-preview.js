@@ -61,7 +61,7 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
 
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
@@ -70,15 +70,15 @@ app.directive('vrGenericdataDatatransformationRulestepcommonPreview', ['UtilsSer
                     ctrl.effectiveTime = changes.EffectiveTime;
                     ctrl.isEffectiveInFuture = changes.IsEffectiveInFuture;
                     ctrl.ruleId = changes.RuleId;
-                }
+                };
 
                 api.checkValidation = function () {
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
                     return stepObj.stepDetails;
-                }
+                };
 
 
                 if (ctrl.onReady != null)

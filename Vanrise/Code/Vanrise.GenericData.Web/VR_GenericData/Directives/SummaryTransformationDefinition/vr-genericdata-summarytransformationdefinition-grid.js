@@ -42,10 +42,10 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onSummaryTransformationDefinitionAdded = function (onSummaryTransformationDefinitionObj) {
                             gridAPI.itemAdded(onSummaryTransformationDefinitionObj);
-                        }
+                        };
 
                         return directiveAPI;
                     }
@@ -76,7 +76,7 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasEditSummaryTransformationDefinitionPermission() {
@@ -85,7 +85,7 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
             function editSummaryTransformationDefinition(dataItem) {
                 var onSummaryTransformationDefinitionUpdated = function (summaryTransformationDefinitionObj) {
                     gridAPI.itemUpdated(summaryTransformationDefinitionObj);
-                }
+                };
 
                 VR_GenericData_SummaryTransformationDefinitionService.editSummaryTransformationDefinition(dataItem.Entity.SummaryTransformationDefinitionId, onSummaryTransformationDefinitionUpdated);
             }

@@ -31,13 +31,13 @@ app.directive('vrGenericdataDatarecordtypefieldNonemptyfilter', [function () {
 
             api.load = function () {
 
-            }
+            };
 
             api.getData = function () {
                 return {
                     $type: "Vanrise.GenericData.Entities.NonEmptyRecordFilter, Vanrise.GenericData.Entities"
                 };
-            }
+            };
 
             api.getExpression = function () {
                 return 'Is Not Empty';

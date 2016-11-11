@@ -54,27 +54,27 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onInitialRateDirectiveReady = function (api) {
                     initialRateDirectiveAPI = api;
                     initialRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onEffectiveRateDirectiveReady = function (api) {
                     effectiveRateDirectiveAPI = api;
                     effectiveRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onExtraChargeRateDirectiveReady = function (api) {
                     extraChargeRateDirectiveAPI = api;
                     extraChargeRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onCurrencyIdDirectiveReady = function (api) {
                     currencyIdDirectiveAPI = api;
                     currencyIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 
                 defineAPI();
             }
@@ -165,7 +165,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                     promises.push(loadCurrencyIdDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
@@ -174,10 +174,10 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestep', ['UtilsServi
                         EffectiveRate: effectiveRateDirectiveAPI != undefined ? effectiveRateDirectiveAPI.getData() : undefined,
                         ExtraChargeRate: extraChargeRateDirectiveAPI != undefined ? extraChargeRateDirectiveAPI.getData() : undefined,
                         CurrencyId: currencyIdDirectiveAPI != undefined ? currencyIdDirectiveAPI.getData() : undefined
-                    }
+                    };
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

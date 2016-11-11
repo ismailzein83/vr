@@ -35,7 +35,7 @@ app.directive('vrGenericdataDatatransformationdefinitionrecordSelector', ['Utils
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDataTransformationDefinitonTemplate(attrs);
@@ -60,7 +60,7 @@ app.directive('vrGenericdataDatatransformationdefinitionrecordSelector', ['Utils
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="RecordName" datavaluefield="RecordName" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Data Transformation Record" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function DataTransformationDefiniton(ctrl, $scope, attrs) {
@@ -71,7 +71,7 @@ app.directive('vrGenericdataDatatransformationdefinitionrecordSelector', ['Utils
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -80,7 +80,7 @@ app.directive('vrGenericdataDatatransformationdefinitionrecordSelector', ['Utils
                 api.clearDataSource = function () {
                     ctrl.datasource.length = 0;
                     ctrl.selectedvalues = undefined;
-                }
+                };
 
                 api.load = function (payload) {
 
@@ -112,11 +112,11 @@ app.directive('vrGenericdataDatatransformationdefinitionrecordSelector', ['Utils
 
 
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('RecordName', attrs, ctrl);
-                }
+                };
 
 
                 if (ctrl.onReady != null)

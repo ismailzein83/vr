@@ -42,17 +42,17 @@ app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-              
-                    if (payload !=undefined)
-                    ctrl.isNullable = payload.IsNullable;
-                }
+
+                    if (payload != undefined)
+                        ctrl.isNullable = payload.IsNullable;
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType,Vanrise.GenericData.MainExtensions",
                         IsNullable: ctrl.isNullable
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

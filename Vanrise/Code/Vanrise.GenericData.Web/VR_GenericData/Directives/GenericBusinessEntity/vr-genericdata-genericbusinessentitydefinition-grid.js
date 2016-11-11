@@ -46,7 +46,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                     if (dataItem.IsExtensible)
                         return true;
                     return false
-                }
+                };
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -75,11 +75,11 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onGenericBusinessEntityDefinitionAdded = function (genericBusinessEntityDefinitionObj) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(genericBusinessEntityDefinitionObj);
                             gridAPI.itemAdded(genericBusinessEntityDefinitionObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -122,11 +122,10 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                 $scope.gridMenuActions = function (dataItem) {
                     if (dataItem.IsExtensible)
                         return extensibleMenuActions;
-                    else if(dataItem.Entity.Settings.DefinitionEditor !=undefined)
-                    {
+                    else if (dataItem.Entity.Settings.DefinitionEditor != undefined) {
                         return genericMenuActions;
                     }
-                }
+                };
             }
 
             function hasEditBusinessEntityDefinition() {
@@ -142,7 +141,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                 var onExtendedSettingsAdded = function (extendedSettingsObj) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(extendedSettingsObj);
                     dataItem.genericEditorGridAPI.onExtensibleBEItemAdded(extendedSettingsObj);
-                }
+                };
 
                 VR_GenericData_ExtensibleBEItemService.addExtendedSettings(dataItem.Entity.BusinessEntityDefinitionId, onExtendedSettingsAdded);
             }
@@ -151,7 +150,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
             {
                 var onBusinessEntityDefinitionUpdated = function (businessEntityDefinition) {
                     gridAPI.itemUpdated(businessEntityDefinition);
-                }
+                };
 
                 VR_GenericData_BusinessEntityDefinitionService.editBusinessEntityDefinition(dataItem.Entity.BusinessEntityDefinitionId, onBusinessEntityDefinitionUpdated, dataItem.Entity.Settings.DefinitionEditor);
             }

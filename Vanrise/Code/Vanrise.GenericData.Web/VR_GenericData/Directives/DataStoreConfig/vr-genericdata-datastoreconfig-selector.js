@@ -55,7 +55,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -75,16 +75,16 @@
                                 ctrl.datasource.push(response[i]);
                             }
                         }
-                        console.log(ctrl.datasource)
+                        console.log(ctrl.datasource);
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }

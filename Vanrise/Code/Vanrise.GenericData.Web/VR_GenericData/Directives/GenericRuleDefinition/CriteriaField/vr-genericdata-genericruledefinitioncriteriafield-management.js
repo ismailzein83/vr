@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/CriteriaField/Templates/GenericRuleDefinitionCriteriaFieldManagementTemplate.html'
         };
@@ -54,7 +54,7 @@
                     };
                     VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, context, onCriteriaFieldAdded);
                 };
-                ctrl.onDeleteCriteriaField = function (criteriaField) { 
+                ctrl.onDeleteCriteriaField = function (criteriaField) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
                             var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
@@ -62,7 +62,7 @@
                             deletePriorityDataItem(criteriaField);
                         }
                     });
-                }
+                };
 
                 ctrl.onValidateCriteriaFields = function () {
                     if (ctrl.criteriaFields.length == 0) {

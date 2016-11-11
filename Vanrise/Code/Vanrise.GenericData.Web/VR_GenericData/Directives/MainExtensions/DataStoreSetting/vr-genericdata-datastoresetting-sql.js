@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStoreSetting/Templates/SqlTemplate.html";
@@ -35,7 +35,7 @@
                 connectionStringType = {
                     ConnectionString: { value: 0, description: "Connection String" },
                     ConnectionStringName: { value: 1, description: "Connection String Name" },
-                }
+                };
 
                 $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
                 $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
@@ -50,7 +50,7 @@
                         }
 
                     }
-                }
+                };
 
 
 
@@ -81,9 +81,9 @@
                             $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
                         }
 
-                      //  $scope.connectionString = payload.data.ConnectionString;
+                        //  $scope.connectionString = payload.data.ConnectionString;
                     }
-                }
+                };
 
 
                 if (ctrl.onReady != null)

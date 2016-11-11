@@ -41,7 +41,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                 ctrl.onCommonDirectiveReady = function (api) {
                     commonDirectiveAPI = api;
                     commonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -77,7 +77,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (commonDirectiveAPI != undefined)
@@ -88,7 +88,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
 
                     ctrl.rateTypes = changes.RateTypes;
                     ctrl.rateTypeId = changes.RateTypeId;
-                }
+                };
 
                 api.checkValidation = function () {
                     var validate;
@@ -97,7 +97,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                     if (validate == undefined)
                         validate = checkValidation();
                     return validate;
-                }
+                };
 
                 api.getData = function () {
                     var stepDetails = commonDirectiveAPI.getData();
@@ -106,7 +106,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                         stepDetails.RateTypeId = stepObj.rateTypeId;
                     }
                     return stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

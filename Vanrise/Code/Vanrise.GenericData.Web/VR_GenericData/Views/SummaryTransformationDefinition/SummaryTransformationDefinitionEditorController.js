@@ -85,7 +85,7 @@
             $scope.scopeModal.onSummaryDataRecordTypeFieldsSelectorReady = function (api) {
                 directiveSummaryReadyAPI = api;
                 directiveSummaryReadyPromiseDeferred.resolve();
-            }
+            };
             //$scope.scopeModal.onSelectSummaryFieldItem = function (summaryItem) {
             //    var dataItem = {
             //        SummaryFieldName: summaryItem.Name,
@@ -164,7 +164,7 @@
                     if (dataTransformationDefinitionRecordSummaryInsertSelectorAPI != undefined)
                         dataTransformationDefinitionRecordSummaryInsertSelectorAPI.clearDataSource();
                 }
-            }
+            };
 
             $scope.scopeModal.selectedDataTransformationDefinitionRecordSummaryInsert;
             $scope.scopeModal.onDataTransformationDefinitionRecordSummaryInsertReady = function (api) {
@@ -331,7 +331,7 @@
 
 
                 enableColumnGrouping();
-            }
+            };
 
             $scope.scopeModal.selectedSummaryDataRecordTypeFieldsBatch;
             $scope.scopeModal.onSummaryDataRecordTypeFieldsBatchSelectorReady = function (api) {
@@ -346,7 +346,7 @@
                 else {
                     return VR_GenericData_SummaryTransformationDefinitionAPIService.HasAddSummaryTransformationDefinition();
                 }
-            }
+            };
             $scope.scopeModal.SaveSummaryTransformationDefinition = function () {
                 $scope.scopeModal.isLoading = true;
                 if (isEditMode) {
@@ -772,7 +772,7 @@
                 },
                 DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
                 BatchRangeRetrieval: batchTimeIntervalSelectorAPI.getData()
-            }
+            };
             return item;
         }
 

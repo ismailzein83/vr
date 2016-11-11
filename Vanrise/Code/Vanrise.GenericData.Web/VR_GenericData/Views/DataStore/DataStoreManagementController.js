@@ -23,7 +23,7 @@
             };
             $scope.hasAddDataStore = function () {
                 return VR_GenericData_DataStoreAPIService.HasAddDataStore();
-            }
+            };
             $scope.addDataStore = function () {
                 var onDataStoreAdded = function (dataStoreObj) {
                     DatStoreGridAPI.onDataStoreAdded(dataStoreObj);

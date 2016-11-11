@@ -42,10 +42,10 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onDataStoreAdded = function (onDataStoreObj) {
                             gridAPI.itemAdded(onDataStoreObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -76,7 +76,7 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasEditDataStorePermission() {
@@ -85,7 +85,7 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
             function editDataStore(dataItem) {
                 var onDataStoreUpdated = function (dataStoreObj) {
                     gridAPI.itemUpdated(dataStoreObj);
-                }
+                };
                 VR_GenericData_DataStoreService.editDataStore(dataItem.Entity.DataStoreId, onDataStoreUpdated);
             }
         }

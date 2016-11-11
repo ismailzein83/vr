@@ -40,7 +40,7 @@
             };
             $scope.hasAddBusinessEntityPermission = function () {
                 return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId);
-            }
+            };
             $scope.search = function () {
                 return gridDirectiveAPI.load(getGridDirectivePayload(true));
             };

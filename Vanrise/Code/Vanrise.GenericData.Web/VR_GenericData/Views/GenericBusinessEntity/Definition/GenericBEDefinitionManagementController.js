@@ -23,7 +23,7 @@
             };
             $scope.hasAddGenericBEPermission = function () {
                 return businessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
-            }
+            };
             $scope.addGenericBE = function () {
                 var onGenericBEAdded = function (onGenericBusinessEntityDefinitionObj) {
                     gridAPI.onGenericBusinessEntityDefinitionAdded(onGenericBusinessEntityDefinitionObj);

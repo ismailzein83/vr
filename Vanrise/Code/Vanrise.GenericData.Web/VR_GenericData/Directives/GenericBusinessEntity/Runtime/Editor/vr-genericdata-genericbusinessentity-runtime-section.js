@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/Editor/Templates/SectionTemplate.html';
@@ -56,17 +56,16 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     var rows = {};
-                    for(var i = 0; i < ctrl.rows.length; i++ )
-                    {
+                    for (var i = 0; i < ctrl.rows.length; i++) {
                         var row = ctrl.rows[i];
-                        rows = UtilsService.mergeObject(rows, row.fieldsAPI.getData(),false);
+                        rows = UtilsService.mergeObject(rows, row.fieldsAPI.getData(), false);
                     }
                     return rows;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -77,8 +76,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                 row.onRowDirectiveReady = function (api) {
                     row.fieldsAPI = api;
                     row.readyPromiseDeferred.resolve();
-                }
-                var payload = { context: getContext(), fields: row.Fields }
+                };
+                var payload = { context: getContext(), fields: row.Fields };
                 if (row.readyPromiseDeferred != undefined) {
                     row.readyPromiseDeferred.promise.then(function () {
                         row.readyPromiseDeferred = undefined;

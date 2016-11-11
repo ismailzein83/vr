@@ -31,7 +31,7 @@
             };
             $scope.hasAddDataTransformationDefinition = function () {
                 return dataTransformationDefinitionAPIService.HasAddDataTransformationDefinition();
-            }
+            };
         }
 
         function load() {

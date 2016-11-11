@@ -56,12 +56,12 @@
             $scope.scopeModal.onRawDataRecordTypeFieldsSelectorReady = function (api) {
                 directiveRawReadyAPI = api;
                 directiveRawReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.onSummaryDataRecordTypeFieldsSelectorReady = function (api) {
                 directiveSummaryReadyAPI = api;
                 directiveSummaryReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

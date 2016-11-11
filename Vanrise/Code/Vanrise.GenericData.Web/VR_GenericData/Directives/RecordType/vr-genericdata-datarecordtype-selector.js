@@ -52,7 +52,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
         var disabled = "";
         if (attrs.isdisabled)
-            disabled = "vr-disabled='true'"
+            disabled = "vr-disabled='true'";
 
         var required = "";
         if (attrs.isrequired != undefined)
@@ -63,7 +63,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             hideselectedvaluessection = "hideselectedvaluessection";
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
@@ -84,7 +84,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('DataRecordTypeId', $attrs, ctrl);
-            }
+            };
 
             api.load = function (payload) {
 
@@ -102,7 +102,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
                         VRUIUtilsService.setSelectedValues(selectedIds, 'DataRecordTypeId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

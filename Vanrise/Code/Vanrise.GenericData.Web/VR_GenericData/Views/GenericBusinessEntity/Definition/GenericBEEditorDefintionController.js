@@ -55,16 +55,15 @@
         function defineScope() {
             $scope.scopeModal = {}
 
-            $scope.scopeModal.onGridFieldDesignReady = function(api)
-            {
+            $scope.scopeModal.onGridFieldDesignReady = function (api) {
                 gridFieldsDirectiveAPI = api;
                 gridFieldsDesignReadyPromiseDeferred.resolve();
-            }
+            };
             
             $scope.scopeModal.onFilterFieldDesignReady = function (api) {
                 filterFieldsDirectiveAPI = api;
                 filterFieldsDesignReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.isRecordTypeDisbled = (isEditMode == true);
 
@@ -75,8 +74,7 @@
                 if (selectedDataRecordTypeId != undefined) {
                     if (recordTypeSelectedPromiseDeferred != undefined)
                         recordTypeSelectedPromiseDeferred.resolve();
-                    else
-                    {
+                    else {
                         getDataRecordType(selectedDataRecordTypeId).then(function () {
                             var payload = { recordTypeFields: recordTypeEntity.Fields };
                             var setLoader = function (value) { $scope.isLoading = value; };
@@ -93,24 +91,24 @@
                         });
                     }
                 }
-            }
+            };
 
             $scope.scopeModal.onDataRecordTypeSelectorDirectiveReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModal.onViewRequiredPermissionReady = function (api) {
                 viewPermissionAPI = api;
                 viewPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModal.onAddRequiredPermissionReady = function (api) {
                 addPermissionAPI = api;
                 addPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModal.onEditRequiredPermissionReady = function (api) {
                 editPermissionAPI = api;
                 editPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModal.SaveGenericBEEditor = function () {
                 if (isEditMode) {
                     return update();
@@ -126,7 +124,7 @@
                 else {
                     return VR_GenericData_BusinessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
                 }
-            }
+            };
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -134,7 +132,7 @@
             $scope.scopeModal.onGenericEditorDirectiveReady = function (api) {
                 genericEditorDesignAPI = api;
                 genericEditorDesignReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.onTreeReady = function (api) {
                 treeAPI = api;

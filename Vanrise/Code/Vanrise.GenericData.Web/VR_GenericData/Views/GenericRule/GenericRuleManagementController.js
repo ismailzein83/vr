@@ -48,7 +48,7 @@
             };
             $scope.hasAddGenericRulePermission = function () {
                 return VR_GenericData_GenericRuleAPIService.DoesUserHaveAddAccess(ruleDefinitionId);
-            }
+            };
             $scope.search = function () {
                 var filter = getFilterObject();
                 return gridAPI.loadGrid(filter);

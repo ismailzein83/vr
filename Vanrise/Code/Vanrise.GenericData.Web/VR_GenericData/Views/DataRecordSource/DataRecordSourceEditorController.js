@@ -35,7 +35,7 @@
         function defineScope() {
             $scope.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
-            }
+            };
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -56,18 +56,18 @@
             $scope.removeField = function (field) {
                 //$scope.dataRecordTypeFields.push(field);
                 $scope.selectedFields.splice($scope.selectedFields.indexOf(field), 1);
-            }
+            };
 
             $scope.isFieldGridValid = function () {
                 if ($scope.selectedFields.length == 0) {
                     return 'At least one Field must be added.'
                 }
                 return null;
-            }
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
-            }
+            };
 
             $scope.saveDataRecordSource = function () {
                 if (validateData()) {
@@ -81,7 +81,7 @@
                 else {
                     VRNotificationService.showWarning('Same Source Title Exists');
                 }
-            }
+            };
         }
         function validateData() {
             if (!existingSources || existingSources.length == 0) {

@@ -24,7 +24,7 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DateTime/Templates/DateTimeFieldTypeTemplate.html';
@@ -53,7 +53,7 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_
                     if (dataTypeValue != undefined) {
                         ctrl.selectedDateTimeDataType = UtilsService.getItemByVal(ctrl.dateTimeDataTypes, dataTypeValue, 'value');
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -61,7 +61,7 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_
                         DataType: ctrl.selectedDateTimeDataType.value,
                         IsNullable: ctrl.isNullable
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

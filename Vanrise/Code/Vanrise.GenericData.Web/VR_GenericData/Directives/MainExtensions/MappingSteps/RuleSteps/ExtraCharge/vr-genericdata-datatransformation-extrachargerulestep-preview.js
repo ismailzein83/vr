@@ -41,7 +41,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                 ctrl.onCommonDirectiveReady = function (api) {
                     commonDirectiveAPI = api;
                     commonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -81,7 +81,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (commonDirectiveAPI != undefined)
@@ -91,12 +91,12 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                     stepObj.effectiveRate = changes.EffectiveRate;
                     stepObj.extraChargeRate = changes.ExtraChargeRate;
                     stepObj.currencyId = changes.CurrencyId;
-                    
+
                     ctrl.initialRate = changes.InitialRate;
                     ctrl.effectiveRate = changes.EffectiveRate;
                     ctrl.extraChargeRate = changes.ExtraChargeRate;
                     ctrl.currencyId = changes.CurrencyId;
-                }
+                };
 
                 api.checkValidation = function () {
                     var validate;
@@ -105,10 +105,10 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
                     if (validate == undefined)
                         validate = checkValidation();
                     return validate;
-                }
+                };
 
                 api.getData = function () {
-                    var stepDetails = commonDirectiveAPI !=undefined? commonDirectiveAPI.getData():undefined;
+                    var stepDetails = commonDirectiveAPI != undefined ? commonDirectiveAPI.getData() : undefined;
                     if (stepDetails != undefined) {
                         stepDetails.InitialRate = stepObj.initialRate;
                         stepDetails.EffectiveRate = stepObj.effectiveRate;
@@ -117,7 +117,7 @@ app.directive('vrGenericdataDatatransformationExtrachargerulestepPreview', ['Uti
 
                     }
                     return stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

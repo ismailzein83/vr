@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionRow', ['UtilsService'
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/DefinitionRowTemplate.html';
@@ -46,19 +46,18 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionRow', ['UtilsService'
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload !=undefined)
-                    {
+                    if (payload != undefined) {
                         ctrl.fields.length = 0;
-                        ctrl.fields = payload.fields;                   
+                        ctrl.fields = payload.fields;
                     }
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     if (changes != undefined) {
                         ctrl.fields.length = 0;
                         ctrl.fields = changes;
                     }
-                }
+                };
                 api.getData = function () {
                     var fields = [];
                     for (var i = 0; i < ctrl.fields.length; i++) {
@@ -70,7 +69,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionRow', ['UtilsService'
                         });
                     }
                     return { Fields: fields };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -79,7 +79,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                 }
 
                 if (fieldValue != undefined) {
-                        if (ctrl.selectionmode == "dynamic") {
+                    if (ctrl.selectionmode == "dynamic") {
                         angular.forEach(fieldValue.Values, function (val) {
                             $scope.scopeModel.values.push(value);
                         });
@@ -93,7 +93,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                         $scope.scopeModel.value = fieldValue;
                     }
                 }
-            }
+            };
 
             api.getData = function () {
                 var retVal;
@@ -116,7 +116,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                 }
 
                 return retVal;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

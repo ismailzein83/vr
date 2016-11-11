@@ -42,12 +42,11 @@ app.directive('vrGenericdataDatatransformationAdditemtoarraystep', ['UtilsServic
                 ctrl.onVariableReady = function (api) {
                     variableDirectiveReadyAPI = api;
                     variableDirectiveReadyPromiseDeferred.resolve();
-                }
-                ctrl.onRecordNameSelectorReady = function(api)
-                {
+                };
+                ctrl.onRecordNameSelectorReady = function (api) {
                     recordNameSelectorDirectiveReadyAPI = api;
                     recordNameSelectorDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -92,9 +91,9 @@ app.directive('vrGenericdataDatatransformationAdditemtoarraystep', ['UtilsServic
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AddItemToArrayStep, Vanrise.GenericData.Transformation.MainExtensions",
                         ArrayVariableName: ctrl.selectedRecordName != undefined ? ctrl.selectedRecordName.Name : undefined,
                         VariableName: variableDirectiveReadyAPI != undefined ? variableDirectiveReadyAPI.getData() : undefined,
-                        
+
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

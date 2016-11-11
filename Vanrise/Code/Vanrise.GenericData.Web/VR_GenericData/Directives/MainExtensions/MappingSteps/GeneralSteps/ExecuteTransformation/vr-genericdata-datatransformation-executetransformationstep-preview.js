@@ -55,20 +55,20 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstepPreview',
 
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.recordsMapping = changes.RecordsMapping;
-                }
+                };
 
                 api.checkValidation = function () {
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
-                    return stepObj.stepDetails
-                }
+                    return stepObj.stepDetails;
+                };
 
 
                 if (ctrl.onReady != null)

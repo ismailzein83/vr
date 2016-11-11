@@ -38,19 +38,17 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
                    currentContext.editStep(stepItem);
             };
 
-            $scope.onCheckedChanged =function()
-            {
-                
-                if(currentContext != undefined)
-                {
-                    if (ctrl.checkedSequence)
-                      currentContext.setSelectedComposite(api);
-                    else
-                      currentContext.setSelectedComposite();
-                }
-               
+            $scope.onCheckedChanged = function () {
 
-            }
+                if (currentContext != undefined) {
+                    if (ctrl.checkedSequence)
+                        currentContext.setSelectedComposite(api);
+                    else
+                        currentContext.setSelectedComposite();
+                }
+
+
+            };
 
             $scope.onRemoveStep = function (dataItem) {
                 var index = ctrl.childSteps.indexOf(dataItem);
@@ -59,7 +57,7 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
                     currentContext.removeStep(dataItem);
                 }
 
-            }
+            };
 
             defineAPI();
         }
@@ -70,8 +68,7 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
             api.load = function (payload) {
 
                 var promises = [];
-                if (payload != undefined)
-                {
+                if (payload != undefined) {
                     currentContext = payload.context;
                     if (currentContext != undefined && payload.MappingSteps != undefined) {
 
@@ -84,11 +81,11 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
 
                     }
                 }
-               
-              
+
+
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             api.addStep = function (stepDefinition) {
                 var stepItem = currentContext.createStepItem(stepDefinition, null, getChildrenContext());
@@ -96,15 +93,13 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
                 ctrl.childSteps.push(stepItem);
             };
 
-            api.setCheckedSequence = function(value)
-            {
+            api.setCheckedSequence = function (value) {
                 ctrl.checkedSequence = value;
-            }
+            };
 
-            api.getData = function()
-            {
+            api.getData = function () {
                 return buildStepsData();
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

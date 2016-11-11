@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Management/Filter/Templates/GenericBusinessEntityFilterDesign.html';
@@ -39,7 +39,7 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                     var index = ctrl.selectedFields.indexOf(dataItem);
                     if (index != -1)
                         ctrl.selectedFields.splice(index, 1);
-                }
+                };
                 defineAPI();
             }
 
@@ -54,11 +54,9 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                             var field = payload.recordTypeFields[i];
                             ctrl.fields.push({ fieldPath: field.Name, fieldTitle: field.Name });
                         }
-                        if(payload.selectedFields !=undefined)
-                        {
-                            for(var i=0;i<payload.selectedFields.length;i++)
-                            {
-                                var selectedField= payload.selectedFields[i];
+                        if (payload.selectedFields != undefined) {
+                            for (var i = 0; i < payload.selectedFields.length; i++) {
+                                var selectedField = payload.selectedFields[i];
                                 ctrl.selectedFields.push({
                                     fieldPath: selectedField.FieldPath,
                                     fieldTitle: selectedField.FieldTitle,
@@ -67,7 +65,7 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                             }
                         }
                     }
-                }
+                };
                 api.getData = function () {
                     var fields = [];
                     for (var i = 0; i < ctrl.selectedFields.length; i++) {
@@ -79,7 +77,7 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                         });
                     }
                     return { Fields: fields };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

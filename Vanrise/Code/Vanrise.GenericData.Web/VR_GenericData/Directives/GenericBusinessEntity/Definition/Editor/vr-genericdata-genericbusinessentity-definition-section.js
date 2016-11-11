@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/DefinitionSectionTemplate.html';
@@ -35,7 +35,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
             var selectedValues;
             var gridAPI;
             var context;
-            var fieldSelectedText = " Fields."
+            var fieldSelectedText = " Fields.";
             function initializeController() {
                 ctrl.rows = [];
                 ctrl.datasource = [];
@@ -52,11 +52,9 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         context = payload.context;
-                        if(payload.rows !=undefined)
-                        {
+                        if (payload.rows != undefined) {
                             for (var i = 0; i < payload.rows.length; i++) {
                                 var row = payload.rows[i];
                                 prepareRowObject(row);
@@ -64,14 +62,13 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
 
                         }
                     }
-                }
+                };
 
                 api.onAddRow = function (row) {
                     var rowObj = {
                         numberOfFields: row.length + fieldSelectedText,
-                        row:row,
-                        onRowDirectiveReady :function(api)
-                        {
+                        row: row,
+                        onRowDirectiveReady: function (api) {
                             rowObj.rowAPI = api;
                             var payload = { fields: rowObj.row };
                             var setLoader = function (value) { $scope.isLoading = value; };
@@ -80,19 +77,19 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                     };
                     ctrl.rows.push(rowObj);
                     gridAPI.expandRow(rowObj);
-                }
+                };
 
                 api.getData = function () {
                     var rows = [];
                     for (var i = 0; i < ctrl.rows.length; i++) {
                         var row = ctrl.rows[i];
-                        if (row.rowAPI !=undefined)
+                        if (row.rowAPI != undefined)
                             rows.push(row.rowAPI.getData());
                         else
                             rows.push({ Fields: row.row });
                     }
                     return { Rows: rows };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -78,15 +78,15 @@
             $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
                 viewPermissionAPI = api;
                 viewPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
                 addPermissionAPI = api;
                 addPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onEditRequiredPermissionReady = function (api) {
                 editPermissionAPI = api;
                 editPermissionReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -105,7 +105,7 @@
                 else {
                     return VR_GenericData_GenericRuleDefinitionAPIService.HasAddGenericRuleDefinition();
                 }
-            }
+            };
             $scope.scopeModel.validateMenuLocation = function () {
                 return ($scope.scopeModel.selectedMenuItem != undefined) ? null : 'No menu location selected';
             };

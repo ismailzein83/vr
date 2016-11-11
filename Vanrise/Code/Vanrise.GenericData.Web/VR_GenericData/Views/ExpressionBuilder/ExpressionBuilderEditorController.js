@@ -31,24 +31,22 @@
                     $scope.isLoadingDirective = value;
                     UtilsService.safeApply($scope);
                 };
-                var payload = { context: context }
+                var payload = { context: context };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, expressionBuilderDirectiveAPI, payload, setLoader);
-            }
-            $scope.isbuttonDisabled = function()
-            {
-                if (expressionBuilderDirectiveAPI !=undefined)
+            };
+            $scope.isbuttonDisabled = function () {
+                if (expressionBuilderDirectiveAPI != undefined)
                     return expressionBuilderDirectiveAPI.getData() == undefined;
                 return true;
-            }
-            $scope.addData = function()
-            {
-              
+            };
+            $scope.addData = function () {
+
                 var obj = expressionBuilderDirectiveAPI.getData();
                 if ($scope.expressionValue != undefined)
                     $scope.expressionValue += obj;
                 else
                     $scope.expressionValue = obj;
-            }
+            };
          
             $scope.saveExpressionBuilder = function () {
                 return setExpressionBuilder();
@@ -58,12 +56,11 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.validateExpression = function()
-            {
+            $scope.validateExpression = function () {
                 if ($scope.expressionValue == expressionBuilderValue)
                     return 'No changed.';
                 return null;
-            }
+            };
         }
 
         function load() {

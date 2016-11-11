@@ -44,35 +44,32 @@ app.directive('vrGenericdataBelookuprulestepPreview', ['UtilsService', 'VRUIUtil
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
-                        if (payload.stepDetails != undefined)
-                        {
+                    if (payload != undefined) {
+                        if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             if (payload.stepDetails.CriteriaFieldsMappings != undefined && payload.stepDetails.CriteriaFieldsMappings.length > 0) {
                                 ctrl.recordsMapping = payload.stepDetails.CriteriaFieldsMappings;
                             }
                             ctrl.businessEntity = payload.stepDetails.BusinessEntity;
                         }
-                       checkValidation();
+                        checkValidation();
                     }
-                 
-                }
+
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.criteriaFieldsMappings = changes.CriteriaFieldsMappings;
                     ctrl.businessEntity = changes.BusinessEntity;
                     stepObj.stepDetails = changes;
-                }
+                };
 
-                api.checkValidation = function ()
-                {
-                  return  checkValidation();
-                }
+                api.checkValidation = function () {
+                    return checkValidation();
+                };
 
                 api.getData = function () {
-                    return stepObj.stepDetails      
-                }
+                    return stepObj.stepDetails;
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

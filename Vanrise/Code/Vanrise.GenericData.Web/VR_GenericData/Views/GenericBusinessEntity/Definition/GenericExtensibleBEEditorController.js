@@ -40,20 +40,19 @@
             $scope.scopeModal.isRecordTypeDisbled = (isEditMode ==true);
             $scope.scopeModal.onRecordTypeSelectionChanged = function () {
                 var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-                if (selectedDataRecordTypeId != undefined)
-                {
+                if (selectedDataRecordTypeId != undefined) {
                     getDataRecordType(selectedDataRecordTypeId).then(function () {
                         var payload = { recordTypeFields: recordTypeEntity.Fields };
                         var setLoader = function (value) { $scope.isLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, extensibleBEItemDesignAPI, payload, setLoader, extensibleBEItemDesignReadyPromiseDeferred);
                     });
                 }
-            }
+            };
 
             $scope.scopeModal.onDataRecordTypeSelectorDirectiveReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.SaveExtensibleBEItem = function () {
                 if (isEditMode) {
@@ -71,7 +70,7 @@
             $scope.scopeModal.onExtensibleBEItemDirectiveReady = function (api) {
                 extensibleBEItemDesignAPI = api;
                 extensibleBEItemDesignReadyPromiseDeferred.resolve();
-            }
+            };
 
         }
 

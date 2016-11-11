@@ -42,11 +42,10 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
-                        directiveAPI.onDataTransformationDefinitionAdded = function (onDataTransformationDefinitionObj)
-                        {
+                        };
+                        directiveAPI.onDataTransformationDefinitionAdded = function (onDataTransformationDefinitionObj) {
                             gridAPI.itemAdded(onDataTransformationDefinitionObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -77,7 +76,7 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasEditDataTransformationDefinitionPermission() {                
@@ -87,7 +86,7 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
             function editDataTransformationDefinition(dataItem) {
                 var onDataTransformationDefinitionUpdated = function (onDataTransformationDefinitionObj) {
                     gridAPI.itemUpdated(onDataTransformationDefinitionObj);
-                }
+                };
 
                 VR_GenericData_DataTransformationDefinitionService.editDataTransformationDefinition(dataItem.Entity.DataTransformationDefinitionId, onDataTransformationDefinitionUpdated);
             }

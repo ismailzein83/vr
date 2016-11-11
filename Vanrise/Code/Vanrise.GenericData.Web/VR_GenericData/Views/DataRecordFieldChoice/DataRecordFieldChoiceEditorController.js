@@ -31,17 +31,17 @@
                 if ($scope.scopeModel.values != undefined && $scope.scopeModel.values.length > 0)
                     return null;
                 return "You Should Add At Least One Choice."
-            }
+            };
             $scope.scopeModel.disableAddButton = true;
             $scope.scopeModel.addValue = function () {
                 $scope.scopeModel.values.push(AddChoice($scope.scopeModel.value));
                 $scope.scopeModel.Id = $scope.scopeModel.values.length + 1;
                 $scope.scopeModel.value = undefined;
                 $scope.scopeModel.disableAddButton = true;
-            }
+            };
             $scope.scopeModel.onValueChange = function (value) {
                 $scope.scopeModel.disableAddButton = value == undefined || (UtilsService.getItemIndexByVal($scope.scopeModel.values, $scope.scopeModel.value, "Text") != -1 || UtilsService.getItemIndexByVal($scope.scopeModel.values, $scope.scopeModel.Id, "Value") != -1);
-            }
+            };
 
             $scope.scopeModel.saveDataRecordFieldChoice = function () {
                 $scope.isLoading = true;
@@ -60,13 +60,13 @@
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
-            }
+            };
         }
         function AddChoice(choice) {
             var obj = {
                 Value: $scope.scopeModel.Id,
                 Text: choice
-            }
+            };
             return obj;
         }
 

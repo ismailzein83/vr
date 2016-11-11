@@ -42,33 +42,30 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
-                        if (payload.stepDetails != undefined)
-                        {
+                    if (payload != undefined) {
+                        if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             ctrl.target = payload.stepDetails.Target;
                             ctrl.source = payload.stepDetails.Source;
                         }
-                       checkValidation();
+                        checkValidation();
                     }
-                 
-                }
+
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.target = changes.Target;
                     ctrl.source = changes.Source;
                     stepObj.stepDetails = changes;
-                }
+                };
 
-                api.checkValidation = function ()
-                {
-                  return  checkValidation();
-                }
+                api.checkValidation = function () {
+                    return checkValidation();
+                };
 
                 api.getData = function () {
-                    return stepObj.stepDetails      
-                }
+                    return stepObj.stepDetails
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

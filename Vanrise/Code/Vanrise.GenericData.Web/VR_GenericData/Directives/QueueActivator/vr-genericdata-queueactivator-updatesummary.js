@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/QueueActivator/Templates/QueueActivatorUpdateSummaryTemplate.html';
@@ -69,14 +69,14 @@
                         VRUIUtilsService.callDirectiveLoad(dataSummaryTransformationDefinitionSelectorAPI, selectorPayload, dataSummaryTransformationDefinitionSelectorLoadDeferred);
                         return dataSummaryTransformationDefinitionSelectorLoadDeferred.promise;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.GenericData.QueueActivators.UpdateSummaryQueueActivator, Vanrise.GenericData.QueueActivators',
                         SummaryTransformationDefinitionId: dataSummaryTransformationDefinitionSelectorAPI.getSelectedIds()
                     };
-                }
+                };
 
                 api.getQueueItemType = function () {
                     return {

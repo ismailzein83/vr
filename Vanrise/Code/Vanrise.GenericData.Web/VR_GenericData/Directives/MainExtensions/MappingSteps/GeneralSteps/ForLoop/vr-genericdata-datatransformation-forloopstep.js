@@ -39,7 +39,7 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
                 ctrl.onRecordNameSelectorReady = function (api) {
                     recordNameSelectorDirectiveReadyAPI = api;
                     recordNameSelectorDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -61,15 +61,15 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
                     });
                     promises.push(loadRecordNameSelectorDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.ForLoopStep, Vanrise.GenericData.Transformation.MainExtensions",
                         IterationVariableName: ctrl.iterationVariableName,
-                        ArrayVariableName: ctrl.selectedArray != undefined? ctrl.selectedArray.Name:undefined
+                        ArrayVariableName: ctrl.selectedArray != undefined ? ctrl.selectedArray.Name : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

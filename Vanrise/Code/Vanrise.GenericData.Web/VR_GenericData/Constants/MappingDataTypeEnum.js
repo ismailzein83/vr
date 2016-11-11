@@ -23,5 +23,5 @@
             DataType: 0,
             IsNullable: false
         }
-    },
+    }
 });

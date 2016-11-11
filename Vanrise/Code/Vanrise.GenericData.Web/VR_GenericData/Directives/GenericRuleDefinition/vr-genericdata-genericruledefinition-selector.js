@@ -33,7 +33,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -55,7 +55,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -86,15 +86,15 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'GenericRuleDefinitionId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('GenericRuleDefinitionId', attrs, ctrl);
-                }
+                };
 
                 api.getDatasource = function () {
                     return ctrl.datasource;
-                }
+                };
 
                 return api;
             }

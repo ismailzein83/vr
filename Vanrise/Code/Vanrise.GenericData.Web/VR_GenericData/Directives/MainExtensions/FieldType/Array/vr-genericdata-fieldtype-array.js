@@ -32,7 +32,7 @@
                     if (ctrl.onReady != undefined) {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {

@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/QueueActivator/Templates/QueueActivatorGenerateSummaryTemplate.html';
@@ -78,7 +78,7 @@
                             ctrl.isLoadingGenerateSummaryActivatorSection = false;
                         });
                     }
-                }
+                };
 
             }
 
@@ -123,7 +123,7 @@
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -131,7 +131,7 @@
                         SummaryTransformationDefinitionId: dataSummaryTransformationDefinitionSelectorAPI.getSelectedIds(),
                         NextStageName: $scope.scopeModal.selectedNextStage.stageName
                     };
-                }
+                };
 
                 return api;
             }

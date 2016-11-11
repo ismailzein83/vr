@@ -40,14 +40,14 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     }
                 };
                 ctrl.rules.push(rule);
-            }
+            };
             $scope.removeRule = function (rule) {
                 ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
-            }
+            };
 
             $scope.removeGroup = function (group) {
                 ctrl.groups.splice(ctrl.groups.indexOf(group), 1);
-            }
+            };
 
             ctrl.addGroup = function () {
                 var group = {
@@ -62,7 +62,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
 
 
                 ctrl.groups.push(group);
-            }
+            };
 
             ctrl.groups = [];
             ctrl.rules = [];
@@ -88,7 +88,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 var buildData = function (items, promises) {
                     if (items) {
@@ -115,7 +115,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                             }
                         }
                     }
-                }
+                };
 
                 var buildRule = function (filterItem) {
                     var rule = {};
@@ -132,7 +132,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         });
 
                     ctrl.rules.push(rule);
-                }
+                };
 
                 var buildGroup = function (filterItem) {
 
@@ -150,7 +150,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         });
 
                     ctrl.groups.push(group);
-                }
+                };
 
                 api.getData = function () {
 
@@ -176,7 +176,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         Filters: filters
                     };
                     return filterGroup;
-                }
+                };
 
                 api.getExpression = function () {
                     var logicalOperator = UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'value', ctrl.condition);
@@ -203,7 +203,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     }
 
                     return expression;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

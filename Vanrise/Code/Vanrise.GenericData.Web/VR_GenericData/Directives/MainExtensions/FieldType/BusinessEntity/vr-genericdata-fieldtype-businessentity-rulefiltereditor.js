@@ -30,7 +30,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
             $scope.onBusinessEntityReady = function (api) {
                 businessEntityApi = api;
                 businessEntityReadyDeferred.resolve();
-            }
+            };
 
             function initializeController() {
                 defineAPI();
@@ -59,9 +59,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
                         promises.push(businessEntityLoadDeferred.promise);
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                   
 
-                }
+
+                };
 
                 api.getData = function () {
                     return {
@@ -69,7 +69,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
                         CompareOperator: $scope.selectedFilter.value,
                         Values: businessEntityApi.getData()
                     };
-                }
+                };
 
                 api.getExpression = function () {
                     var ids = businessEntityApi.getData();
@@ -81,7 +81,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
                     }
                     expression += ')';
                     return expression;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

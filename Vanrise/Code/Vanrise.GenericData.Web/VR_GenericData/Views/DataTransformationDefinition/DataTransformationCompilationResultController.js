@@ -26,7 +26,7 @@ function DataTransformationCompilationResult($scope, VRNavigationService, UtilsS
             return VR_GenericData_DataTransformationDefinitionAPIService.ExportCompilationResult($scope.dataTransformationObj).then(function (response) {
                 UtilsService.downloadFile(response.data, response.headers);
             });
-        }
+        };
         $scope.title = 'Data Transformation Compilation Result';
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;

@@ -59,13 +59,13 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                 + '<vr-row removeline> <vr-columns width="fullrow"> <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
-                '</vr-section> </vr-columns> </vr-row> '
+                '</vr-section> </vr-columns> </vr-row> ';
             }
             else {
                 return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                 + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
-                '</vr-section>'
+                '</vr-section>';
             }
 
         }
@@ -139,7 +139,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     $scope.selector.onDirectiveReady = function (api) {
                                         $scope.selector.directiveAPI = api;
                                         $scope.selector.directiveReadyPromiseDeferred.resolve();
-                                    }
+                                    };
 
                                     $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                                     innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
@@ -170,7 +170,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         promises.push(loadBusinessEntityDefPromiseDeferred);
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     var retVal;
@@ -200,7 +200,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     }
 
                     return retVal;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

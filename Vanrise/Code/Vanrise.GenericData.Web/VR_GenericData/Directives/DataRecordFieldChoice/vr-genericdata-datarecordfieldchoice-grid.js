@@ -42,10 +42,10 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onDataRecordFieldChoiceAdded = function (onDataRecordFieldChoiceObj) {
                             gridAPI.itemAdded(onDataRecordFieldChoiceObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -76,7 +76,7 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasEditDataRecordFieldChoicePermission() {
@@ -85,7 +85,7 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
             function editDataRecordFieldChoice(dataItem) {
                 var onDataRecordFieldChoiceUpdated = function (dataRecordFieldChoiceObj) {
                     gridAPI.itemUpdated(dataRecordFieldChoiceObj);
-                }
+                };
                 VR_GenericData_DataRecordFieldChoiceService.editDataRecordFieldChoice(dataItem.Entity.DataRecordFieldChoiceId, onDataRecordFieldChoiceUpdated);
             }
         }

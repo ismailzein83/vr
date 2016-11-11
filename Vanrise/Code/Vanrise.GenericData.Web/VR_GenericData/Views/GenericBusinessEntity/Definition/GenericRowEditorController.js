@@ -35,12 +35,11 @@
             
             $scope.scopeModal.selectedFields = [];
 
-            $scope.scopeModal.onRemoveField = function(dataItem)
-            {
+            $scope.scopeModal.onRemoveField = function (dataItem) {
                 var index = $scope.scopeModal.selectedFields.indexOf(dataItem);
-                if(index != -1)
-                 $scope.scopeModal.selectedFields.splice(index, 1);
-            }
+                if (index != -1)
+                    $scope.scopeModal.selectedFields.splice(index, 1);
+            };
 
             $scope.scopeModal.SaveRow = function () {
                 if (isEditMode) {
