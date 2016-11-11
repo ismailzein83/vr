@@ -43,7 +43,7 @@
                     return WhS_BE_CarrierProfileAPIService.HasUpdateCarrierProfilePermission();
                 else
                     return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
-            }
+            };
 
             $scope.scopeModal = {
                 contacts: [],
@@ -56,7 +56,7 @@
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;

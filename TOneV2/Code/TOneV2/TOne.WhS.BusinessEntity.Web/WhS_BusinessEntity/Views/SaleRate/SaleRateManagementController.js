@@ -101,7 +101,6 @@
             };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                ;
             }
           
         }

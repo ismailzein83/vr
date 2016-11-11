@@ -29,7 +29,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var filter = {
-                }
+                };
                 api.loadGrid(filter);
             };
             $scope.effectiveDate;

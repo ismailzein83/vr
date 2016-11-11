@@ -93,7 +93,7 @@
                 zoneServiceConfigSelectorAPI = api;
                 var payload = {
                     selectedIds: getDefaultServices()
-                }
+                };
                 var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfig = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
             };

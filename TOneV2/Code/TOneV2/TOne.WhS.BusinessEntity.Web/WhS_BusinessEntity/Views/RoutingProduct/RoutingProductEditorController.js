@@ -124,7 +124,7 @@
                         $scope.scopeModel.routingProductZoneServices.splice(index, 1);
                     }
                 });
-            }
+            };
 
             $scope.scopeModel.onSelectSaleZone = function (selectedSaleZone) {
                 if (zoneNamesDict == undefined)

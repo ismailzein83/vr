@@ -114,12 +114,12 @@
             $scope.scopeModel.removeOutboundTraffic = function (obj) {
                 $scope.scopeModel.outboundTraffics.splice($scope.scopeModel.outboundTraffics.indexOf(obj), 1);
                 evalTotalResultAnalysis();
-            }
+            };
 
             $scope.scopeModel.removeInboundTraffic = function (obj) {
                 $scope.scopeModel.inboundTraffics.splice($scope.scopeModel.inboundTraffics.indexOf(obj), 1);
                 evalTotalResultAnalysis();
-            }
+            };
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();

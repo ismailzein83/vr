@@ -34,11 +34,11 @@
         }
         function defineScope() {
             $scope.hasSaveCustomerSellingProductPermission = function () {
-                if(isEditMode)
+                if (isEditMode)
                     return WhS_BE_CustomerSellingProductAPIService.HasUpdateCustomerSellingProductPermission();
                 else
                     return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
-            }
+            };
             $scope.showErrorMessage = false;
             $scope.selectedSellingProduct;
             $scope.SaveSellingProduct = function () {
@@ -65,7 +65,7 @@
                     var setLoader = function (value) { $scope.isLoadingCustomers = value };
                     var payload = {
                         filter: { AssignableToSellingProductId: sellingProductDirectiveAPI.getSelectedIds() },
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, payload, setLoader);
                 }
 

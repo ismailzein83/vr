@@ -30,15 +30,14 @@
 
         function defineScope() {
             $scope.scopeModel.rates = [];
-            $scope.scopeModel.addRate = function()
-            {
+            $scope.scopeModel.addRate = function () {
                 var dataItem = {
                     UpToVolume: 0,
                     Rate: 0,
-                    IsRetroActive:false
+                    IsRetroActive: false
                 };
                 $scope.scopeModel.rates.push(dataItem);
-            }
+            };
 
             $scope.scopeModel.isValid = function () {
                 if ($scope.scopeModel.rates != undefined && $scope.scopeModel.rates.length > 0)

@@ -65,7 +65,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
 
         var addReadySericeApi = function (dataItem) {
             dataItem.onServiceReady = function (api) {
-                dataItem.ServieApi = api
+                dataItem.ServieApi = api;
                 dataItem.ServieApi.load({ selectedIds: dataItem.Services });
             };
         };
