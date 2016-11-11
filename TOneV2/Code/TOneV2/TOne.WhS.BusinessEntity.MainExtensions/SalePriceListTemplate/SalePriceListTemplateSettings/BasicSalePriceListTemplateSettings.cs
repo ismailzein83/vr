@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities
+namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-	public class SalePriceListTemplateQuery
+	public class BasicSalePriceListTemplateSettings
 	{
-		public string Name { get; set; }
 	}
 }

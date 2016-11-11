@@ -73,6 +73,7 @@
     <Compile Include="MappingSteps\GetCDPNsForIdentificationStep.cs" />
     <Compile Include="MappingSteps\GetCDPNsForZoneMatchStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\BasicSalePriceListTemplateSettings.cs" />
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />
