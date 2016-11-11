@@ -23,15 +23,15 @@
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onCountryReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
-               
-            }
+                gridAPI = api;
+
+            };
         }
 
         function load() {

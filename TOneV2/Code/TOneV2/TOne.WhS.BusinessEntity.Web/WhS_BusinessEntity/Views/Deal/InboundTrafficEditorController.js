@@ -46,7 +46,7 @@
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

@@ -21,7 +21,7 @@ app.directive("vrWhsBeStatebackupSaleentity", ['UtilsService', 'VRUIUtilsService
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/StateBackup/Templates/SaleEntityStateBackupEditor.html"
         };
@@ -46,18 +46,18 @@ app.directive("vrWhsBeStatebackupSaleentity", ['UtilsService', 'VRUIUtilsService
                 $scope.onOwnerTypeSelectorReady = function (api) {
                     ownerTypeSelectorAPI = api;
                     ownerTypeSelectorReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onSellingProductSelectorReady = function (api) {
                     sellingProductSelectorAPI = api;
                     sellingProductSelectorReadyDeferred.resolve();
-                }
+                };
 
 
                 $scope.onCarrierAccountSelectorReady = function (api) {
                     carrierAccountSelectorAPI = api;
                     carrierAccountSelectorReadyDeferred.resolve();
-                }
+                };
 
 
                 $scope.onOwnerTypeChanged = function (item) {

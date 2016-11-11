@@ -22,7 +22,7 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SupplierGroup/Templates/SelectiveSuppliersDirectiveTemplate.html';
@@ -38,7 +38,7 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -58,14 +58,14 @@ app.directive('vrWhsBeSuppliergroupSelective', ['UtilsService',
                     });
 
                     return loadCarrierAccountPromiseDeferred.promise;
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.SelectiveSuppliersSettings, TOne.WhS.BusinessEntity.Entities",
                         SupplierIds: carrierAccountDirectiveAPI.getSelectedIds()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

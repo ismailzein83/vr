@@ -34,7 +34,7 @@
             $scope.onTimeRangeDirectiveReady = function (api) {
                 timeRangeDirectiveAPI = api;
                 timeRangeReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
@@ -141,7 +141,7 @@
                 var payload = {
                     period: PeriodEnum.CurrentYear.value
 
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, payload, timeRangeLoadPromiseDeferred);
             });
             return timeRangeLoadPromiseDeferred.promise;

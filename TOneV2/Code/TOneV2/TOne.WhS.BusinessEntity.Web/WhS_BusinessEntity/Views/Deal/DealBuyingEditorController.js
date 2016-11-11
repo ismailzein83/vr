@@ -45,7 +45,7 @@
             $scope.onSupplierZoneDirectiveReady = function (api) {
                 supplierZoneDirectiveAPI = api;
                 supplierZoneReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

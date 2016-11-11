@@ -20,12 +20,12 @@
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
-            }
+            };
 
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());

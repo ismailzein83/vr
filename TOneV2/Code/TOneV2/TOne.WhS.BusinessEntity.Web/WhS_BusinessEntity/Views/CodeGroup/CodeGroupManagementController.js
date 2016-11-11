@@ -16,11 +16,11 @@
 
             $scope.hasAddCodeGroupPermission = function () {
                 return WhS_BE_CodeGroupAPIService.HasAddCodeGroupPermission();
-            }
+            };
 
             $scope.hasUploadCodeGroupListPermission = function () {
                 return WhS_BE_CodeGroupAPIService.HasUploadCodeGroupListPermission();
-            }
+            };
 
             $scope.searchClicked = function () {
 
@@ -34,15 +34,15 @@
                 var onCodeGroupUploaded = function () {
                 };
                 WhS_BE_CodeGroupService.uploadCodeGroup(onCodeGroupUploaded);
-            }
+            };
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
 
             $scope.addNewCodeGroup = addNewCodeGroup;
         }

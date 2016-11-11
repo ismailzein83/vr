@@ -37,17 +37,17 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
             $scope.onOffPeakRateTypeSelectorReady = function (api) {
                 offPeakRateTypeSelectorAPI = api;
                 offPeakRateTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onWeekendRateTypeSelectorReady = function (api) {
                 weekendRateTypeSelectorAPI = api;
                 weekendRateTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onHolidayRateTypeSelectorReady = function (api) {
                 holidayRateTypeSelectorAPI = api;
                 holidayRateTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             function initializeController() {
                 ctrl.disabledAddTitle = true;
@@ -56,11 +56,11 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     ctrl.titles.push({ title: ctrl.titlevalue });
                     ctrl.titlevalue = undefined;
                     ctrl.disabledAddTitle = true;
-                }
+                };
 
                 ctrl.onTitleValueChange = function (value) {
                     ctrl.disabledAddTitle = (value == undefined && ctrl.titlevalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.titles, value, "title") != -1;
-                }
+                };
 
                 ctrl.validateAddTitle = function () {
                     if (ctrl.title != undefined && ctrl.title.length == 0)

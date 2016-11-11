@@ -30,7 +30,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     pre: function ($scope, iElem, iAttrs, saleZoneSelectorCtrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getBeSaleZoneTemplate(attrs);
@@ -67,7 +67,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  label="' + label + '"'
                    + '  >'
                    + '</vr-select>'
-                   + '</vr-columns>'
+                   + '</vr-columns>';
         }
 
         function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {

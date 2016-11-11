@@ -17,11 +17,11 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onRoutingProductZoneServiceAdded = onRoutingProductZoneServiceAdded
+                modalScope.onRoutingProductZoneServiceAdded = onRoutingProductZoneServiceAdded;
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductZoneServiceEditor.html', parameters, modalSettings);
-        };
+        }
 
         function editRoutingProductZoneService(zoneService, selectedSellingNumberPlanId, availableZoneIds, excludedZoneIds, onRoutingProductZoneServiceUpdated) {
 
@@ -39,7 +39,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductZoneServiceEditor.html', parameters, modalSettings);
-        };
+        }
 
 
         return ({

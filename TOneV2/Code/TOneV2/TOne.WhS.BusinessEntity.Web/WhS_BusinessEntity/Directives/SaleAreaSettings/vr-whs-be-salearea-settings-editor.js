@@ -34,11 +34,11 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     ctrl.fixedKeywords.push({ fixedKeyword: ctrl.fixedKeywordvalue });
                     ctrl.fixedKeywordvalue = undefined;
                     ctrl.disabledAddFixedKeyword = true;
-                }
+                };
 
                 ctrl.onFixedKeywordValueChange = function (value) {
                     ctrl.disabledAddFixedKeyword = (value == undefined && ctrl.fixedKeywordvalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.fixedKeywords, value, "fixedKeyword") != -1;
-                }
+                };
 
                 ctrl.validateAddFixedKeyWords = function () {
                     if (ctrl.fixedKeywords != undefined && ctrl.fixedKeywords.length == 0)

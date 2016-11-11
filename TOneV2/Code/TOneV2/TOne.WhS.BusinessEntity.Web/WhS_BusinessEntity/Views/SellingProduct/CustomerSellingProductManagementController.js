@@ -18,7 +18,7 @@
         function defineScope() {
             $scope.hasAddCustomerSellingProductPermission = function () {
                 return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined)

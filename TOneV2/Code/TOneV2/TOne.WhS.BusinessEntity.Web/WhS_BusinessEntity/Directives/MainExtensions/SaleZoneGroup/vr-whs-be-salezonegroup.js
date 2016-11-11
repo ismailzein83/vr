@@ -37,13 +37,13 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
             $scope.onSaleZoneSelectorReady = function (api) {
                 saleZoneSelectorAPI = api;
                 defineAPI();
-            }
+            };
 
             $scope.onSaleZoneGroupDirectiveReady = function (api) {
                 saleZoneGroupDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSaleZoneGroupDirective = value };
+                var setLoader = function (value) { $scope.isLoadingSaleZoneGroupDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupDirectiveAPI, payloadFilter, setLoader, saleZoneGroupDirectiveReadyPromiseDeferred);
-            }
+            };
         }
 
         function defineAPI() {
@@ -59,13 +59,13 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                     payloadFilter = {
                         saleZoneFilterSettings: payload.saleZoneFilterSettings,
                         sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined
-                    }
+                    };
 
                     saleZoneGroupPayload = {
                         sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined,
                         saleZoneFilterSettings: payload.saleZoneFilterSettings,
                         saleZoneGroupSettings: payload.saleZoneGroupSettings != undefined ? payload.saleZoneGroupSettings : payload
-                    }
+                    };
                     saleZoneConfigId = payload.saleZoneGroupSettings != undefined ? payload.saleZoneGroupSettings.ConfigId : payload.ConfigId;
                 }
                 var promises = [];

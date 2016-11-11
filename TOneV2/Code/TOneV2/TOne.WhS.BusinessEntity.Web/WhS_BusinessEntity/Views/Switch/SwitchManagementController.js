@@ -13,12 +13,12 @@
         function defineScope() {
             $scope.hasAddSwitchPermission = function () {
                 return WhS_BE_SwitchAPIService.HasAddSwitchPermission();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
-            }
+            };
 
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());

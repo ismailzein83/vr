@@ -14,17 +14,17 @@
 
             $scope.hasAddZoneServiceConfigPermission = function () {
                 return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
-            }
+            };
             $scope.searchClicked = function () {
-                setFilterObject()
+                setFilterObject();
                 return gridAPI.loadGrid(filter);
             };
 
             $scope.onGridReady = function (api) {
-               
+
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
             $scope.addNewZoneServiceConfig = addNewZoneServiceConfig;
         }
 

@@ -15,7 +15,7 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 api.load({});
-            }
+            };
 
             $scope.searchClicked = function () {
                 return gridAPI.load(getFilterObject());

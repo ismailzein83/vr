@@ -22,7 +22,7 @@
             $scope.add = function () {
                 var onDealAnalysisAdded = function () {
 
-                }
+                };
                 WhS_BE_DealAnalysisService.addDealAnalysis(onDealAnalysisAdded);
             };
 

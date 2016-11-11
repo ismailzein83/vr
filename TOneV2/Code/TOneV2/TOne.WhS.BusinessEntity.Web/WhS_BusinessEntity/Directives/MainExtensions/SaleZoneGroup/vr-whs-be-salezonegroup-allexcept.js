@@ -25,7 +25,7 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SaleZoneGroup/Templates/SelectiveSaleZonesDirectiveTemplate.html';
@@ -48,24 +48,24 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onSaleZoneDirectiveReady = function (api) {
                     saleZoneDirectiveAPI = api;
                     saleZoneReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
                     if (selectedItem != undefined) {
-                        var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+                        var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
 
                         var payload = {
-                            sellingNumberPlanId: selectedItem.SellingNumberPlanId,
-                        }
+                            sellingNumberPlanId: selectedItem.SellingNumberPlanId
+                        };
 
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
                     }
-                }
+                };
 
                 defineAPI();
             }
@@ -120,7 +120,7 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                     });
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -128,7 +128,7 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                         SellingNumberPlanId: sellingNumberPlanParameter != undefined && sellingNumberPlanParameter > 0 ? sellingNumberPlanParameter : sellingNumberPlanDirectiveAPI.getSelectedIds(),
                         ZoneIds: saleZoneDirectiveAPI.getSelectedIds()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

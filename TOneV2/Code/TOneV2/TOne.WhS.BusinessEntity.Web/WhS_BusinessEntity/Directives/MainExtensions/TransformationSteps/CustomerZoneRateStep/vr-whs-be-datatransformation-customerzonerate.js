@@ -23,7 +23,7 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/TransformationSteps/CustomerZoneRateStep/Templates/CustomerZoneRateStepTemplate.html';
@@ -49,19 +49,19 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
                 $scope.onCustomerIdDirectiveReady = function (api) {
                     customerIdDirectiveAPI = api;
                     customerIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onSaleZoneIdDirectiveReady = function (api) {
                     saleZoneIdDirectiveAPI = api;
                     saleZoneIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onEffectiveOnDirectiveReady = function (api) {
                     effectiveOnDirectiveAPI = api;
                     effectiveOnDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onCustomerZoneRateDirectiveReady = function (api) {
                     customerZoneRateDirectiveAPI = api;
                     customerZoneRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 

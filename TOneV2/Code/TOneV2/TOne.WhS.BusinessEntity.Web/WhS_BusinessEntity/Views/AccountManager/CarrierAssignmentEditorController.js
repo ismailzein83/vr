@@ -27,7 +27,7 @@
 
             $scope.hasAssignCarriersPermission = function () {
                 return WhS_BE_AccountManagerAPIService.HasAssignCarriersPermission();
-            }
+            };
 
             $scope.carriers = [];
             $scope.selectedCarriers = [];
@@ -49,10 +49,10 @@
                         IsSupplierAssigned: value != null ? value.IsSupplierAssigned : false,
                         IsSupplierAvailable: value != null ? value.IsSupplierAvailable : item.IsSupplierAvailable,
                         IsSupplierInDirect: value != null ? value.IsSupplierInDirect : false
-                    }
+                    };
 
                     extendGridItem(obj);
-                    $scope.carriers.push(obj)
+                    $scope.carriers.push(obj);
                 }
             };
 

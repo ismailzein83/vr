@@ -48,22 +48,22 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 carrierAccountId = parameters.CarrierAccountId;
-                carrierProfileId = parameters.CarrierProfileId
+                carrierProfileId = parameters.CarrierProfileId;
             }
             isEditMode = (carrierAccountId != undefined);
         }
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode
-            $scope.scopeModel.disableCarrierAccountType = isEditMode
-            $scope.scopeModel.disableSellingNumberPlan = isEditMode
+            $scope.scopeModel.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode;
+            $scope.scopeModel.disableCarrierAccountType = isEditMode;
+            $scope.scopeModel.disableSellingNumberPlan = isEditMode;
             $scope.scopeModel.showZoneServiceConfig = false;
 
             $scope.scopeModel.onBPBusinessRuleSetSelectorReady = function (api) {
                 bpBusinessRuleSetDirectiveAPI = api;
                 bpBusinessRuleSetReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.hasSaveCarrierAccountPermission = function () {
                 if (isEditMode)
                     return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();

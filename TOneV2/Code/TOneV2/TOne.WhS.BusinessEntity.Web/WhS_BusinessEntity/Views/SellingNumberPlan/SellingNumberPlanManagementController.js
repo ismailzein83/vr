@@ -15,7 +15,7 @@
 
             $scope.hasAddSellingNumberPlanPermission = function () {
                 return WhS_BE_SellingNumberPlanAPIService.HasAddSellingNumberPlanPermission();
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined) {
@@ -27,7 +27,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
 
             $scope.addNewSellingNumberPlan = addNewSellingNumberPlan;
         }

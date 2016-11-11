@@ -23,7 +23,7 @@ app.directive('vrWhsBeDatatransformationCustomerzoneratePreview', ['UtilsService
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/TransformationSteps/CustomerZoneRateStep/Templates/CustomerZoneRateStepPreviewTemplate.html';
@@ -53,7 +53,7 @@ app.directive('vrWhsBeDatatransformationCustomerzoneratePreview', ['UtilsService
                         checkValidation();
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.customerId = changes.CustomerId;
@@ -61,15 +61,15 @@ app.directive('vrWhsBeDatatransformationCustomerzoneratePreview', ['UtilsService
                     ctrl.effectiveOn = changes.EffectiveOn;
                     ctrl.customerZoneRate = changes.CustomerZoneRate;
                     stepObj.stepDetails = changes;
-                }
+                };
 
                 api.checkValidation = function () {
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
-                    return stepObj.stepDetails
-                }
+                    return stepObj.stepDetails;
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

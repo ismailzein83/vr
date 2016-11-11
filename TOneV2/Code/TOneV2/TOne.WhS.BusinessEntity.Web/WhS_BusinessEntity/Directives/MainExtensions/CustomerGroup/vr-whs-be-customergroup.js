@@ -39,10 +39,10 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
 
             $scope.onCustomerGroupDirectiveReady = function (api) {
                 customerGroupDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingCustomerGroupDirective = value };
+                var setLoader = function (value) { $scope.isLoadingCustomerGroupDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerGroupDirectiveAPI, undefined, setLoader, customerGroupDirectiveReadyPromiseDeferred);
 
-            }
+            };
         }
 
         function defineAPI() {
@@ -58,7 +58,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                     }
                 }
                 return customerGroupSettings;
-            }
+            };
 
             api.load = function (payload) {
                 customerSelectorAPI.clearDataSource();

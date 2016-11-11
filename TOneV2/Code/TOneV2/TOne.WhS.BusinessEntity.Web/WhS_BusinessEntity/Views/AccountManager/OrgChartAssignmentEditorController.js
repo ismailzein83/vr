@@ -26,7 +26,7 @@
 
             $scope.hasUpdateLinkedOrgChartPermission = function () {
                 return WhS_BE_AccountManagerAPIService.HasUpdateLinkedOrgChartPermission();
-            }
+            };
 
             $scope.onOrgChartSelectorReady = function (api) {
                 orgChartSelectorAPI = api;

@@ -33,37 +33,37 @@
 
                 var payload = {
                     queryHandler: queryHandler
-                }
+                };
 
                 return gridAPI.loadGrid(payload);
             };
 
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
-               
-            }
+                gridAPI = api;
+
+            };
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
                 if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+                    var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
 
                     var payload = {
                         sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
                 }
 
-            }
+            };
         }
         function load() {           
             $scope.isLoadingFilter = true;

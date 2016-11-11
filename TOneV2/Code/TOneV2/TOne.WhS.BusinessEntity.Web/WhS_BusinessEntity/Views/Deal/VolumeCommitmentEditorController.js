@@ -14,7 +14,7 @@
         var carrierAccountSelectorReadyDeferred;
 
         var volumeCommitmenetItemsAPI;
-        var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();;
+        var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();

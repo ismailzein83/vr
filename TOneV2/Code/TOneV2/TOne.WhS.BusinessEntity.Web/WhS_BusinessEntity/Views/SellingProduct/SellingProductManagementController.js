@@ -15,7 +15,7 @@
         function defineScope() {
             $scope.hasAddSellingProductPermission = function () {
                 return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
-            }
+            };
             $scope.searchClicked = function () {
                 if (gridReady != undefined)
                     return gridReady.loadGrid(getFilterObject());

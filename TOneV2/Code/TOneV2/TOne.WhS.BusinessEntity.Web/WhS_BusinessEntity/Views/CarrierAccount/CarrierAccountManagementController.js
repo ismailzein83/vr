@@ -29,32 +29,32 @@
                 gridAPI = api;
                 var filter = {};
                 api.loadGrid(filter);
-            }
+            };
 
             $scope.onActivationStatusDirectiveReady = function (api) {
                 activationStatusSelectorAPI = api;
                 activationStatusSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
-            }
+            };
 
             $scope.onZoneServiceConfigSelectorReady = function (api) {
                 serviceDirectiveAPI = api;
-            }
+            };
 
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCarrierTypeSelectionChanged = function () {
                 if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
                     if (sellingNumberPlanDirectiveAPI != undefined) {
                         $scope.showSellingNumberPlan = true;
-                        
-                        var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
+
+                        var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader);
                     }
                 }
@@ -63,11 +63,11 @@
                     $scope.selectedSellingNumberPlans.length = 0;
                 }
 
-                if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Supplier) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)){
+                if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Supplier) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
                     if (serviceDirectiveAPI != undefined) {
                         $scope.showZoneService = true;
 
-                        var setLoader = function (value) { $scope.isLoadingService = value };
+                        var setLoader = function (value) { $scope.isLoadingService = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, serviceDirectiveAPI, undefined, setLoader);
                     }
                 }
@@ -75,7 +75,7 @@
                     $scope.showZoneService = false;
                     $scope.servicesValues.length = 0;
                 }
-            }
+            };
 
             $scope.selectedCarrierAccountTypes = [];
             $scope.selectedSellingNumberPlans = [];
@@ -134,7 +134,7 @@
             var loadActivationStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             activationStatusSelectorReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, undefined, loadActivationStatusSelectorPromiseDeferred);
-            })
+            });
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
 

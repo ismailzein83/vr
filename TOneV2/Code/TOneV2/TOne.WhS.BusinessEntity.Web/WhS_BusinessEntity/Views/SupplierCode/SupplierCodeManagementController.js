@@ -25,31 +25,31 @@
             $scope.onSupplierZoneDirectiveReady = function (api) {
                 supplierZoneDirectiveAPI = api;
                 supplierZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.onSelectSupplier = function (selectedItem) {
                 $scope.showSupplierZoneSelector = true;
                 $scope.selectedSupplierZones.length = 0;
                 var payload = {
-                    supplierId: selectedItem.CarrierAccountId 
-                }
+                    supplierId: selectedItem.CarrierAccountId
+                };
 
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
-            }
+            };
 
 
 
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
             
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
-               
-            }
+                gridAPI = api;
+
+            };
         }
 
         function load() {

@@ -21,7 +21,7 @@ app.directive('vrWhsBeSellingnumberplanSelective', ['WhS_BE_SaleZoneAPIService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SellingNumberPlan/Templates/SelectiveSellingNumberPlansDirectiveTemplate.html"
 
@@ -39,7 +39,7 @@ app.directive('vrWhsBeSellingnumberplanSelective', ['WhS_BE_SaleZoneAPIService',
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -72,14 +72,14 @@ app.directive('vrWhsBeSellingnumberplanSelective', ['WhS_BE_SaleZoneAPIService',
 
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan.SelectiveSellingNumberPlan, TOne.WhS.BusinessEntity.MainExtensions",
                         SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

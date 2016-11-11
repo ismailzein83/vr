@@ -22,11 +22,11 @@
 
             $scope.hasUpdateLinkedOrgChartPermission = function () {
                 return WhS_BE_AccountManagerAPIService.HasUpdateLinkedOrgChartPermission();
-            }
+            };
 
             $scope.hasAssignCarriersPermission = function () {
                 return WhS_BE_AccountManagerAPIService.HasAssignCarriersPermission();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;

@@ -22,7 +22,7 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForZoneMatch/Templates/GetCDPNsForZoneMatchStepPreviewTemplate.html';
@@ -57,7 +57,7 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                         checkValidation();
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.inputFields = [];
@@ -67,16 +67,16 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                     fillOutputFieldsArray(changes, ctrl.outputFields);
 
                     stepObj.stepDetails = changes;
-                }
+                };
 
                 api.checkValidation = function () {
 
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
                     return stepObj.stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -15,7 +15,7 @@ app.directive('vrWhsBeServicesViewer', [
                 ctrl.selectedItems = [];
                 ctrl.getSelectedItemColor = function (item) {
                     return item.Settings.Color;
-                }
+                };
                 var ctor = new zoneServicesViewerCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
@@ -28,7 +28,7 @@ app.directive('vrWhsBeServicesViewer', [
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/ZoneServiceConfig/Templates/ZoneServiceViewer.html"
         };

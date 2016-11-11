@@ -22,7 +22,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'V
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForIdentification/Templates/GetCDPNsForIdentificationStepPreviewTemplate.html';
@@ -57,7 +57,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'V
                         checkValidation();
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.inputFields = [];
@@ -67,16 +67,16 @@ app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'V
                     fillOutputFieldsArray(changes, ctrl.outputFields);
 
                     stepObj.stepDetails = changes;
-                }
+                };
 
                 api.checkValidation = function () {
 
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
                     return stepObj.stepDetails;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

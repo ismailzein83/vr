@@ -15,7 +15,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = Date.now();
 
             $scope.searchClicked = function () {
                 setFilterObject();
@@ -25,7 +25,7 @@
             $scope.onSupplierZoneDirectiveReady = function (api) {
                 supplierZoneDirectiveAPI = api;
                 supplierZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSelectSupplier = function (selectedItem) {
                 $scope.showSupplierZoneSelector = true;
@@ -33,23 +33,23 @@
 
                 var payload = {
                     supplierId: selectedItem.CarrierAccountId
-                }
+                };
 
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value };
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
-            }
+            };
 
 
 
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-            }
+            };
         }
 
         function load() {

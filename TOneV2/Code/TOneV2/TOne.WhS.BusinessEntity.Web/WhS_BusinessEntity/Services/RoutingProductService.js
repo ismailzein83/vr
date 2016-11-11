@@ -15,11 +15,11 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onRoutingProductAdded = onRoutingProductAdded
+                modalScope.onRoutingProductAdded = onRoutingProductAdded;
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', null, settings);
-        };
+        }
 
         function editRoutingProduct(routingProductId, onRoutingProductUpdated) {
             var modalSettings = {
@@ -33,7 +33,7 @@
                 modalScope.onRoutingProductUpdated = onRoutingProductUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);
-        };
+        }
 
         function deleteRoutingProduct(scope, routingProductObj, onRoutingProductDeleted) {
             VRNotificationService.showConfirmation()
@@ -50,7 +50,7 @@
                                 });
                         }
                     });
-        };
+        }
     }
 
     appControllers.service('WhS_BE_RoutingProductService', RoutingProductService);

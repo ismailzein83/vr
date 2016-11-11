@@ -26,7 +26,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
 
             $scope.onStateBackupTypesDirectiveReady = function (api) {
@@ -36,7 +36,7 @@
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stateBackupTypesDirectiveAPI, undefined, setLoader, stateBackupTypesDirectiveReadyPromiseDeferred);
-            }
+            };
         }
 
         function load() {

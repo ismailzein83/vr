@@ -21,7 +21,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                } 
+                };
             },
             templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceMigrationReader/Templates/SourceMigrationReader.html"
         };

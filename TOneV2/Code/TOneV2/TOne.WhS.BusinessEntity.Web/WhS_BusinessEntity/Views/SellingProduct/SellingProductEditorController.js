@@ -32,9 +32,9 @@
                 else {
                     return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
                 }
-            }
+            };
 
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
             $scope.scopeModal.isEditMode = isEditMode;
             $scope.scopeModal.saveSellingProduct = function () {
                 if (isEditMode) {
@@ -46,13 +46,13 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModal.onSellingNumberPlansDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {
@@ -107,7 +107,7 @@
                 .then(function () {
                     var directivePayload = {
                         selectedIds: sellingProductEntity != undefined ? sellingProductEntity.SellingNumberPlanId : undefined
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
                 });

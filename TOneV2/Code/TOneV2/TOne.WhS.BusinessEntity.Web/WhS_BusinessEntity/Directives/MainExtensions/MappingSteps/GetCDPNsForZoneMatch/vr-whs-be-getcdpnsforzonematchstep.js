@@ -23,7 +23,7 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForZoneMatch/Templates/GetCDPNsForZoneMatchStepTemplate.html';
@@ -57,28 +57,28 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                 $scope.scopeModel.onSwitchIdReady = function (api) {
                     switchIdDirectiveReadyAPI = api;
                     switchIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCDPNNormalizedReady = function (api) {
                     cdpnNormalizedDirectiveReadyAPI = api;
                     cdpnNormalizedDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCDPNInReady = function (api) {
                     cdpnInDirectiveReadyAPI = api;
                     cdpnInDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCDPNOutReady = function (api) {
                     cdpnOutDirectiveReadyAPI = api;
                     cdpnOutDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onSaleZoneCDPNReady = function (api) {
                     saleZoneCDPNDirectiveReadyAPI = api;
                     saleZoneCDPNDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onSupplierZoneCDPNReady = function (api) {
                     supplierZoneCDPNDirectiveReadyAPI = api;
                     supplierZoneCDPNDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }

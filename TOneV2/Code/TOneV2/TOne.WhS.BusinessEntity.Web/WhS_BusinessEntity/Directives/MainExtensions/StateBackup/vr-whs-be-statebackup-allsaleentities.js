@@ -21,7 +21,7 @@ app.directive("vrWhsBeStatebackupAllsaleentities", ['UtilsService', 'VRUIUtilsSe
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/StateBackup/Templates/AllSaleEntitiesStateBackupEditor.html"
         };
@@ -37,7 +37,7 @@ app.directive("vrWhsBeStatebackupAllsaleentities", ['UtilsService', 'VRUIUtilsSe
                     sellingNumberPlanSelectorAPI = api;
                     sellingNumberPlanSelectorReadyPromiseDeferred.resolve();
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -46,9 +46,9 @@ app.directive("vrWhsBeStatebackupAllsaleentities", ['UtilsService', 'VRUIUtilsSe
 
                 api.getData = function () {
                     return {
-                        $type : "TOne.WhS.BusinessEntity.Entities.AllSaleEntitiesStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
+                        $type: "TOne.WhS.BusinessEntity.Entities.AllSaleEntitiesStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
                         SellingNumberPlanIds: sellingNumberPlanSelectorAPI.getSelectedIds()
-                    }
+                    };
                 };
 
                 api.load = function (payload) {
@@ -56,7 +56,7 @@ app.directive("vrWhsBeStatebackupAllsaleentities", ['UtilsService', 'VRUIUtilsSe
                          .catch(function (error) {
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
                          });
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

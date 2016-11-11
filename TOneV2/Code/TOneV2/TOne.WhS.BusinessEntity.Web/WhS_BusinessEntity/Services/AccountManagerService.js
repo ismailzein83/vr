@@ -32,7 +32,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onCarriersAssigned = onCarriersAssigned
+                modalScope.onCarriersAssigned = onCarriersAssigned;
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/AccountManager/CarrierAssignmentEditor.html', modalParameters, modalSettings);

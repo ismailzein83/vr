@@ -33,7 +33,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
             ctrl.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
+            };
             ctrl.isValid = function () {
 
                 if (ctrl.datasource.length > 0)

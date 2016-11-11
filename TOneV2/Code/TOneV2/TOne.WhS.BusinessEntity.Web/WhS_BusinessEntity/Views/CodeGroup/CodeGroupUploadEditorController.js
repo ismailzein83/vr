@@ -10,15 +10,15 @@ function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService,
     function defineScope() {
         $scope.hasDownloadCodeGroupListTemplatePermission = function () {
             return WhS_BE_CodeGroupAPIService.HasDownloadCodeGroupListTemplatePermission();
-        }
+        };
 
         $scope.hasDownloadCodeGroupLogPermission = function () {
             return WhS_BE_CodeGroupAPIService.HasDownloadCodeGroupLogPermission();
-        }
+        };
 
         $scope.hasUploadCodeGroupListPermission = function () {
             return WhS_BE_CodeGroupAPIService.HasUploadCodeGroupListPermission();
-        }
+        };
 
         $scope.isUploadingComplete = false;
         $scope.upload = function () {
@@ -31,25 +31,25 @@ function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService,
             }).catch(function (error) {
                 VRNotificationService.showError(error.ExceptionMessage);
             });
-        }
+        };
         $scope.downloadTemplate = function () {
             return WhS_BE_CodeGroupAPIService.DownloadCodeGroupListTemplate().then(function (response) {
                 UtilsService.downloadFile(response.data, response.headers);
             });
-        }
+        };
         $scope.downloadLog = function () {
             if (fileID != undefined) {
                 return WhS_BE_CodeGroupAPIService.DownloadCodeGroupLog(fileID).then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             }
-        }
+        };
 
     }
     function load() {
-        $scope.title = UtilsService.buildTitleForUploadEditor("Code Group")
+        $scope.title = UtilsService.buildTitleForUploadEditor("Code Group");
     }
 
 
-};
+}
 appControllers.controller('WhS_BE_CodeGroupUploadEditorController', codeGroupUploadEditorController);

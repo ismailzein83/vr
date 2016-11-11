@@ -21,7 +21,7 @@ app.directive("vrWhsBeStatebackupSupplier", ['UtilsService', 'VRUIUtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/StateBackup/Templates/SupplierStateBackupEditor.html"
         };
@@ -37,7 +37,7 @@ app.directive("vrWhsBeStatebackupSupplier", ['UtilsService', 'VRUIUtilsService',
                     supplierSelectorAPI = api;
                     supplierSelectorReadyPromiseDeferred.resolve();
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -51,13 +51,13 @@ app.directive("vrWhsBeStatebackupSupplier", ['UtilsService', 'VRUIUtilsService',
                 };
             };
 
-            api.load = function (payload) {
-                return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector])
-                     .catch(function (error) {
-                         VRNotificationService.notifyExceptionWithClose(error, $scope);
-                     });
+                api.load = function (payload) {
+                    return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector])
+                         .catch(function (error) {
+                             VRNotificationService.notifyExceptionWithClose(error, $scope);
+                         });
 
-            }
+                };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

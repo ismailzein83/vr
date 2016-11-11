@@ -23,7 +23,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForIdentification/Templates/GetCDPNsForIdentificationStepTemplate.html';
@@ -62,32 +62,32 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
                 $scope.scopeModel.onSwitchIdReady = function (api) {
                     switchIdDirectiveReadyAPI = api;
                     switchIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onInputCDPNReady = function (api) {
                     inputCDPNDirectiveReadyAPI = api;
                     inputCDPNDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCDPNInReady = function (api) {
                     cdpnInDirectiveReadyAPI = api;
                     cdpnInDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCDPNOutReady = function (api) {
                     cdpnOutDirectiveReadyAPI = api;
                     cdpnOutDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onCustomerCDPNReady = function (api) {
                     customerCDPNDirectiveReadyAPI = api;
                     customerCDPNDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onSupplierCDPNReady = function (api) {
                     supplierCDPNDirectiveReadyAPI = api;
                     supplierCDPNDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onOutputCDPNReady = function (api) {
                     outputCDPNDirectiveReadyAPI = api;
                     outputCDPNDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -207,8 +207,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
 
                         return loadSupplierCDPNDirectivePromiseDeferred;
                     }
-                    function getLoadOutputCDPNDirectivePromiseDeferred()
-                    {
+                    function getLoadOutputCDPNDirectivePromiseDeferred() {
                         var loadOutputCDPNDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         outputCDPNDirectiveReadyPromiseDeferred.promise.then(function () {
 
@@ -223,7 +222,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {

@@ -32,9 +32,9 @@ function (UtilsService, $compile, WhS_BE_SupplierZoneAPIService, VRNotificationS
         function initializeController() {
             $scope.onSupplierZoneGroupDirectiveReady = function (api) {
                 supplierZoneGroupDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSupplierZoneGroupDirective = value };
+                var setLoader = function (value) { $scope.isLoadingSupplierZoneGroupDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneGroupDirectiveAPI, payloadFilter, setLoader, supplierZoneGroupDirectiveReadyPromiseDeferred);
-            }
+            };
 
             defineAPI();
         }
@@ -50,12 +50,12 @@ function (UtilsService, $compile, WhS_BE_SupplierZoneAPIService, VRNotificationS
                 if (payload != undefined) {
                     payloadFilter = {
                         supplierZoneFilterSettings: payload.supplierZoneFilterSettings
-                    }
+                    };
 
                     supplierZoneGroupPayload = {
                         supplierZoneFilterSettings: payload.supplierZoneFilterSettings,
                         supplierZoneGroupSettings: payload.supplierZoneGroupSettings != undefined ? payload.supplierZoneGroupSettings : payload
-                    }
+                    };
                     supplierZoneConfigId = payload.supplierZoneGroupSettings != undefined ? payload.supplierZoneGroupSettings.ConfigId : payload.ConfigId;
                 }
                 var promises = [];

@@ -9,9 +9,10 @@
         WhS_BE_RoutingProductZoneServiceService, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
 
         var isEditMode;
-        var routingProductId
+        var routingProductId;
         var routingProductEntity;
-        var zoneNamesDict, serviceNamesDict;
+        var zoneNamesDict;
+        var serviceNamesDict;
 
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -48,17 +49,17 @@
         }
         function defineScope() {
 
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.routingProductZoneServices = [];
 
             $scope.scopeModel.onSellingNumberPlansSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onZoneServiceSelectorReady = function (api) {
                 zoneServiceAPI = api;
                 zoneServiceSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onSaleZoneSelectorReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
@@ -66,11 +67,11 @@
             $scope.scopeModel.onRoutingProductZoneServiceGridReady = function (api) {
                 routingProductZoneServiceGridAPI = api;
                 routingProductZoneServiceGridReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onSellingNumberPlanSelectionChanged = function () {
                 var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
@@ -82,7 +83,7 @@
                     payload.sellingNumberPlanId = selectedSellingNumberPlanId;
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, sellingNumberPlanSelectionChangedPromiseDeferred);
                 }
-            }
+            };
             $scope.scopeModel.onSaleZoneRelationTypeSelectionChanged = function () {
                 $scope.scopeModel.showSaleZoneSelector = ($scope.scopeModel.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
 
@@ -95,14 +96,14 @@
 
                     $scope.scopeModel.routingProductZoneServices = [];
                 }
-            }
+            };
             $scope.scopeModel.onSupplierRelationTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedSuppliers != undefined && $scope.scopeModel.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.AllSuppliers) {
                     $scope.scopeModel.selectedSuppliers.length = 0;
                 }
 
                 $scope.scopeModel.showSupplierSelector = ($scope.scopeModel.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.SpecificSuppliers);
-            }
+            };
 
             $scope.scopeModel.onAddRoutingProductZoneService = function () {
 

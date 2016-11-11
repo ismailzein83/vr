@@ -14,7 +14,7 @@
 
             $scope.hasAddRoutingProductPermission = function () {
                 return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
-            }
+            };
 
             $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlans = [];
@@ -22,7 +22,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined)

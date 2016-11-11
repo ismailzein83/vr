@@ -27,7 +27,7 @@
                 sellingProductId = parameters.SellingProductId;
                 $scope.carrierAccountId = parameters.CarrierAccountId;
             }
-            isEditMode = (customerSellingProductId != undefined)
+            isEditMode = (customerSellingProductId != undefined);
             $scope.disableSellingProduct = (sellingProductId != undefined);
             $scope.disableCarrierAccount = ($scope.carrierAccountId != undefined || isEditMode);
 

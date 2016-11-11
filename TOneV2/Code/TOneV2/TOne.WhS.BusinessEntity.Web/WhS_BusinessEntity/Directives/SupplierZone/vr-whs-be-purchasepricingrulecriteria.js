@@ -34,13 +34,13 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
             $scope.onSupplierSelectorReady = function (api) {
                 supplierSelectorAPI = api;
                 defineAPI();
-            }
+            };
 
             $scope.onDirectiveReady = function (api) {
                 directiveReadyAPI = api;
-                var setLoader = function (value) { $scope.isLoadingDirective = value };
+                var setLoader = function (value) { $scope.isLoadingDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
-            }
+            };
 
             $scope.onSelectionChanged = function () {
                 if (carrierAccountDirectiveAPI != undefined)

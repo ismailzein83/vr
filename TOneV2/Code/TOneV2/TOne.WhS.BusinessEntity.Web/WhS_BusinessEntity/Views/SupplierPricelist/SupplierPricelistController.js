@@ -18,7 +18,7 @@
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
             $scope.searchClicked = function () {
 
                 if (gridAPI != undefined) {
@@ -30,12 +30,12 @@
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 setFilterObject();
                 api.loadGrid(filter);
-            }
+            };
 
           
         }

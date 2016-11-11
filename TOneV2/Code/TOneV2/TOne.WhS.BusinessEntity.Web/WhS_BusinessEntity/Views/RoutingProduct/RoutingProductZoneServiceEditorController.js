@@ -9,7 +9,9 @@
         var isEditMode;
 
         var zoneServiceEntity;
-        var selectedSellingNumberPlanId, availableZoneIds, excludedZoneIds;
+        var selectedSellingNumberPlanId;
+        var availableZoneIds;
+        var  excludedZoneIds;
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -46,7 +48,7 @@
             $scope.scopeModel.onZoneServiceSelectorReady = function (api) {
                 zoneServiceAPI = api;
                 zoneServiceSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
 
