@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     CodeGroupService.$inject = ['VRCommon_CountryService', 'VRModalService'];
 

@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     SwitchService.$inject = ['WhS_BE_SwitchAPIService', 'VRModalService', 'VRNotificationService'];
 

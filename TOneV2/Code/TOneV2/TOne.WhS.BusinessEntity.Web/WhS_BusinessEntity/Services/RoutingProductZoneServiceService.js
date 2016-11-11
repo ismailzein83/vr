@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     RoutingProductZoneServiceService.$inject = ['VRModalService', 'VRNotificationService'];
 

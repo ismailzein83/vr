@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     VolumeCommitmentService.$inject = ['UtilsService', 'VRModalService'];
 

@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     SupplierZoneService_Service.$inject = ['WhS_BE_SupplierZoneService'];
 

@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     CustomerSellingProductService.CustomerSellingProductService = ['UtilsService', 'VRModalService', 'VRNotificationService'];
 

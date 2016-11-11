@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     ZoneServiceConfigService.$inject = ['UtilsService', 'VRModalService'];
 

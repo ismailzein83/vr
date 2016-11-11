@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     SellingProductService.$inject = ['WhS_BE_SellingProductAPIService', 'VRModalService', 'VRNotificationService'];
 

@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     CarrierProfileService.$inject = ['VRModalService'];
 

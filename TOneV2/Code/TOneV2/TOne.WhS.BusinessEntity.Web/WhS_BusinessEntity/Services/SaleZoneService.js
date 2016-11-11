@@ -1,6 +1,6 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     SaleZoneService.$inject = ['WhS_BE_SellingNumberPlanService', 'VRModalService'];
 
