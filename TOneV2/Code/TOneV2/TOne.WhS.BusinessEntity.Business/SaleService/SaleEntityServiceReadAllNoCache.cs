@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -56,7 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #region Private Methods
-        private void GetAllSaleEntityServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfoDetails, DateTime? effectiveOn, bool isEffectiveInFuture, 
+        private void GetAllSaleEntityServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfoDetails, DateTime? effectiveOn, bool isEffectiveInFuture,
                                                      out SaleEntityZoneServicesByOwner saleEntityZoneServicesByOwner, out SaleEntityDefaultServicesByOwner saleEntityDefaultServicesByOwner)
         {
             saleEntityZoneServicesByOwner = new SaleEntityZoneServicesByOwner();
@@ -71,7 +68,6 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleEntityDefaultService saleEntityDefaultServices;
 
             IEnumerable<SaleEntityZoneService> saleEntityZoneServices = _saleEntityServiceDataManager.GetEffectiveSaleEntityZoneServicesByOwner(customerInfoDetails, effectiveOn, isEffectiveInFuture);
-            SaleEntityZoneService tempSaleEntityZoneService;
 
             foreach (SaleEntityZoneService saleEntityZoneService in saleEntityZoneServices)
             {
@@ -81,24 +77,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     Dictionary<int, SaleEntityZoneServicesByZone> saleEntityZoneServicesByOwnerType = priceList.OwnerType == SalePriceListOwnerType.Customer ? saleEntityZoneServicesByOwner.SaleEntityZoneServicesByCustomer : saleEntityZoneServicesByOwner.SaleEntityZoneServicesByProduct;
 
-                    if (!saleEntityZoneServicesByOwnerType.TryGetValue(priceList.OwnerId, out saleEntityZoneServicesByZone))
-                    {
-                        saleEntityZoneServicesByZone = new SaleEntityZoneServicesByZone();
-                        saleEntityZoneServicesByOwnerType.Add(priceList.OwnerId, saleEntityZoneServicesByZone);
-                    }
+                    saleEntityZoneServicesByZone = saleEntityZoneServicesByOwnerType.GetOrCreateItem(priceList.OwnerId);
 
-                    if (!saleEntityZoneServicesByZone.TryGetValue(saleEntityZoneService.ZoneId, out tempSaleEntityZoneService))
-                    {
+                    if (!saleEntityZoneServicesByZone.ContainsKey(saleEntityZoneService.ZoneId))
                         saleEntityZoneServicesByZone.Add(saleEntityZoneService.ZoneId, saleEntityZoneService);
-                    }
                 }
                 else
                 {
                     Dictionary<int, SaleEntityDefaultService> saleEntityDefaultServicesByOwnerType = priceList.OwnerType == SalePriceListOwnerType.Customer ? saleEntityDefaultServicesByOwner.DefaultServicesByCustomer : saleEntityDefaultServicesByOwner.DefaultServicesByProduct;
 
-                    if (!saleEntityDefaultServicesByOwnerType.TryGetValue(priceList.OwnerId, out saleEntityDefaultServices))
+                    if (!saleEntityDefaultServicesByOwnerType.ContainsKey(priceList.OwnerId))
                     {
-                        saleEntityDefaultServices = new SaleEntityDefaultService() 
+                        saleEntityDefaultServices = new SaleEntityDefaultService()
                         {
                             BED = saleEntityZoneService.BED,
                             EED = saleEntityZoneService.EED,
@@ -112,5 +102,5 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
         #endregion
-    } 
+    }
 }

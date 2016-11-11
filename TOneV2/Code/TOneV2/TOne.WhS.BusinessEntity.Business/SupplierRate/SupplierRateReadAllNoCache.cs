@@ -45,23 +45,16 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
 
-                if (!result.TryGetValue(supplierPriceList.SupplierId, out supplierRatesByZone))
-                {
-                    supplierRatesByZone = new SupplierRatesByZone();
-                    result.Add(supplierPriceList.SupplierId, supplierRatesByZone);
-                }
-
-                if (!supplierRatesByZone.TryGetValue(supplierRate.ZoneId, out supplierZoneRate))
-                {
-                    supplierZoneRate = new SupplierZoneRate();
-                    supplierRatesByZone.Add(supplierRate.ZoneId, supplierZoneRate);
-                }
+                supplierRatesByZone = result.GetOrCreateItem(supplierPriceList.SupplierId);
+                supplierZoneRate = supplierRatesByZone.GetOrCreateItem(supplierRate.ZoneId);
 
                 if (supplierRate.RateTypeId.HasValue)
                 {
                     if (supplierZoneRate.RatesByRateType == null)
                         supplierZoneRate.RatesByRateType = new Dictionary<int, SupplierRate>();
-                    supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
+
+                    if (!supplierZoneRate.RatesByRateType.ContainsKey(supplierRate.RateTypeId.Value))
+                        supplierZoneRate.RatesByRateType.Add(supplierRate.RateTypeId.Value, supplierRate);
                 }
                 else
                     supplierZoneRate.Rate = supplierRate;

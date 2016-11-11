@@ -58,7 +58,8 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             foreach (SupplierDefaultService supplierDefaultService in supplierDefaultServices)
             {
-                result.Add(supplierDefaultService.SupplierId, supplierDefaultService);
+                if (!result.ContainsKey(supplierDefaultService.SupplierId))
+                    result.Add(supplierDefaultService.SupplierId, supplierDefaultService);
             }
 
             return result;
@@ -71,19 +72,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             List<SupplierZoneService> supplierZoneServices = _dataManager.GetEffectiveSupplierZoneServicesBySuppliers(supplierInfos, effectiveOn, isEffectiveInFuture);
             SupplierZoneServicesByZone supplierZoneServicesByZone;
-            SupplierZoneService tempSupplierZoneService;
 
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
 
             foreach (SupplierZoneService supplierZoneService in supplierZoneServices)
             {
-                SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierZoneService.PriceListId);
-                supplierZoneServicesByZone = result.GetOrCreateItem(supplierPriceList.SupplierId);
+                supplierZoneServicesByZone = result.GetOrCreateItem(supplierZoneService.SupplierId);
 
-                if (!supplierZoneServicesByZone.TryGetValue(supplierZoneService.ZoneId, out tempSupplierZoneService))
-                {
+                if (!supplierZoneServicesByZone.ContainsKey(supplierZoneService.ZoneId))
                     supplierZoneServicesByZone.Add(supplierZoneService.ZoneId, supplierZoneService);
-                }
             }
 
             return result;

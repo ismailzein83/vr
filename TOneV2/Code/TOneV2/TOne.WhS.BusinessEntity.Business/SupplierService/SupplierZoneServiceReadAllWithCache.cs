@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -75,21 +72,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (defaultServices != null)
                 {
-                    SupplierDefaultService supplierDefaultService;
-
                     foreach (SupplierDefaultService defaultService in defaultServices)
                     {
                         List<SupplierDefaultService> supplierDefaultServices = supplierZoneServicesBySupplier.GetOrCreateItem(defaultService.SupplierId);
-
-                        supplierDefaultService = new SupplierDefaultService()
-                        {
-                            SupplierId = defaultService.SupplierId,
-                            BED = defaultService.BED,
-                            EffectiveServices = defaultService.EffectiveServices,
-                            ReceivedServices = defaultService.ReceivedServices
-                        };
-
-                        supplierDefaultServices.Add(supplierDefaultService);
+                        supplierDefaultServices.Add(defaultService);
                     }
                 }
                 return supplierZoneServicesBySupplier;

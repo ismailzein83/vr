@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -44,36 +41,26 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SaleRatesByOwner result = new SaleRatesByOwner();
             SaleRatesByZone saleRateByZone;
+            SaleRatePriceList saleRatePriceList;
+
             result.SaleRatesByCustomer = new VRDictionary<int, SaleRatesByZone>();
             result.SaleRatesByProduct = new VRDictionary<int, SaleRatesByZone>();
 
             IEnumerable<SaleRate> saleRates = _saleRateDataManager.GetEffectiveSaleRateByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
-            SaleRate tempSaleRate;
             foreach (SaleRate saleRate in saleRates)
             {
                 SalePriceList priceList = _salePriceListManager.GetPriceList(saleRate.PriceListId);
                 VRDictionary<int, SaleRatesByZone> saleRatesByOwner = priceList.OwnerType == SalePriceListOwnerType.Customer ? result.SaleRatesByCustomer : result.SaleRatesByProduct;
 
-                if (!saleRatesByOwner.TryGetValue(priceList.OwnerId, out saleRateByZone))
-                {
-                    saleRateByZone = new SaleRatesByZone();
-                    saleRatesByOwner.Add(priceList.OwnerId, saleRateByZone);
-                }
-
-                SaleRatePriceList saleRatePriceList;
-
-                if (!saleRateByZone.TryGetValue(saleRate.ZoneId, out saleRatePriceList))
-                {
-                    saleRatePriceList = new SaleRatePriceList();
-                    saleRateByZone.Add(saleRate.ZoneId, saleRatePriceList);
-                }
+                saleRateByZone = saleRatesByOwner.GetOrCreateItem(priceList.OwnerId);
+                saleRatePriceList = saleRateByZone.GetOrCreateItem(saleRate.ZoneId);
 
                 if (saleRate.RateTypeId.HasValue)
                 {
                     if (saleRatePriceList.RatesByRateType == null)
                         saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
 
-                    if (!saleRatePriceList.RatesByRateType.TryGetValue(saleRate.RateTypeId.Value, out tempSaleRate))
+                    if (!saleRatePriceList.RatesByRateType.ContainsKey(saleRate.RateTypeId.Value))
                         saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
                 }
                 else

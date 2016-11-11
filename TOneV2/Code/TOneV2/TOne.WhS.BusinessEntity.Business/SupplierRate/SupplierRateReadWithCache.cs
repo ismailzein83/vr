@@ -139,7 +139,9 @@ namespace TOne.WhS.BusinessEntity.Business
                            {
                                if (supplierZoneRates.RatesByRateType == null)
                                    supplierZoneRates.RatesByRateType = new Dictionary<int, SupplierRate>();
-                               supplierZoneRates.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
+
+                               if (!supplierZoneRates.RatesByRateType.ContainsKey(cachedRate.RateTypeId.Value))
+                                   supplierZoneRates.RatesByRateType.Add(cachedRate.RateTypeId.Value, cachedRate);
                            }
                            else
                                supplierZoneRates.Rate = cachedRate;
