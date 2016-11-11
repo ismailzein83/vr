@@ -200,8 +200,8 @@
                             case WhS_BE_VolumeCommitmentTypeEnum.Buy.value:
 
                                 payload = {
-                                    supplierId: carrierAccountSelectorAPI.getSelectedIds(),
-                                }
+                                    supplierId: carrierAccountSelectorAPI.getSelectedIds()
+                                };
                                 if (item != undefined)
                                 {
                                     payload.selectedIds = item.ZoneIds;
@@ -211,7 +211,7 @@
                                 var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
                                 payload = {
                                     sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
-                                }
+                                };
                                 if (item != undefined) {
                                     payload.selectedIds = item.ZoneIds;
                                 }

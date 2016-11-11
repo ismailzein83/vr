@@ -32,7 +32,7 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
 
                 return "/Client/Modules/WhS_BusinessEntity/Directives/CDRImportSettings/Templates/CDPNSelectorTemplate.html";
             }
-        }
+        };
 
         function CDPNSelectorCtor(ctrl, $scope, attrs) {
 

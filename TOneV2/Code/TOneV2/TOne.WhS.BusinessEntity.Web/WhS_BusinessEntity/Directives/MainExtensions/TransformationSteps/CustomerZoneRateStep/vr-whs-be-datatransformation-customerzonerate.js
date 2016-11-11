@@ -140,7 +140,7 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
                         SaleZoneId: saleZoneIdDirectiveAPI != undefined ? saleZoneIdDirectiveAPI.getData() : undefined,
                         EffectiveOn: effectiveOnDirectiveAPI != undefined ? effectiveOnDirectiveAPI.getData() : undefined,
                         CustomerZoneRate: customerZoneRateDirectiveAPI != undefined ? customerZoneRateDirectiveAPI.getData() : undefined
-                    }
+                    };
                     return obj;
                 };
 

@@ -48,25 +48,25 @@
                 var setSaleZoneLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
                 var saleZoneSelectorPayload = {
                     sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
-                }
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, saleZoneSelectorPayload, setSaleZoneLoader);
 
                 var sellingProductPayload = {
                     filter: { SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds() }
-                }
+                };
 
                 var carrierAccountPayload = {
                     filter: { SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds() }
-                }
+                };
 
                 var sellingProductSelectorLoadPromise = sellingProductSelectorAPI.load(sellingProductPayload);
                 var carrierAccountSelectorLoadPromise = carrierAccountSelectorAPI.load(carrierAccountPayload);
 
                 $scope.isLoadingOwnerSelector = true;
-                UtilsService.waitMultiplePromises([sellingProductSelectorLoadPromise, carrierAccountSelectorLoadPromise]).finally()
-                {
+                UtilsService.waitMultiplePromises([sellingProductSelectorLoadPromise, carrierAccountSelectorLoadPromise]).finally(function () {
                     $scope.isLoadingOwnerSelector = false;
-                };
+
+                });
             };
 
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
@@ -101,7 +101,7 @@
             };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
           
         }
         function load() {           

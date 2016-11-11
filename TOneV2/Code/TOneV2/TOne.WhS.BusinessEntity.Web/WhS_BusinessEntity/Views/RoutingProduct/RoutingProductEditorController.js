@@ -273,7 +273,7 @@
                 .then(function () {
                     var directivePayload = {
                         selectedIds: routingProductEntity != undefined ? routingProductEntity.SellingNumberPlanId : undefined
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
                 });

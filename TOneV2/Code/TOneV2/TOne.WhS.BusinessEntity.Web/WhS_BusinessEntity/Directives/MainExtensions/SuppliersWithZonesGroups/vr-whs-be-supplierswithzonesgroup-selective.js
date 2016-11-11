@@ -61,8 +61,8 @@ function (UtilsService, $compile, VRUIUtilsService) {
                         var setLoader = function (value) { $scope.isLoadingSupplierZonesSelector = value };
 
                         var payload = {
-                            supplierId: supplierId,
-                        }
+                            supplierId: supplierId
+                        };
 
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     }

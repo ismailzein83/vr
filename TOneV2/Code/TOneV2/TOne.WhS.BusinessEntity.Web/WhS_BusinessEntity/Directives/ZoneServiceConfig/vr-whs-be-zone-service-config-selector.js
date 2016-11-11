@@ -37,7 +37,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
                         ctrl.selectedvalues = zoneServiceConfigObj.Entity;
                 };
                 WhS_BE_ZoneServiceConfigService.addZoneServiceConfig(onZoneServiceConfigAdded);
-            }
+            };
             ctrl.haspermission = function () {
                 return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
             };

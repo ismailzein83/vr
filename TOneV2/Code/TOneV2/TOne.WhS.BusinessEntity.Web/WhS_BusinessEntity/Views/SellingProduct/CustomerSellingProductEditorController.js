@@ -130,7 +130,7 @@
                     var directivePayload = {
                         selectedIds: sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined,
                         filter: { AssignableToCustomerId: $scope.carrierAccountId }
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
                 });

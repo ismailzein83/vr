@@ -106,7 +106,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
 
                 api.clearDataSource = function () {
                     selectorApi.clearDataSource();
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

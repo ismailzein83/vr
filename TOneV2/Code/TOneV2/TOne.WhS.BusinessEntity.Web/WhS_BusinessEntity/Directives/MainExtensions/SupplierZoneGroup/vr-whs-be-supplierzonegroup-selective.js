@@ -47,7 +47,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
             ctrl.onDeselectItem = function (dataItem) {
                 var datasourceIndex = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.CarrierAccountId, 'CarrierAccountId');
                 ctrl.datasource.splice(datasourceIndex, 1);
-            }
+            };
             function addSupplierZoneAPIFunction(obj) {
                 var dataItem = {
                     CarrierAccountId: obj.CarrierAccountId,
@@ -62,7 +62,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
 
                         var payload = {
                             supplierId: supplierId
-                        }
+                        };
 
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     }
@@ -93,13 +93,13 @@ function (UtilsService, $compile, VRUIUtilsService) {
                 var supplierZoneSelective = {
                     $type: "TOne.WhS.BusinessEntity.MainExtensions.SupplierZoneGroups.SelectiveSupplierZoneGroup,TOne.WhS.BusinessEntity.MainExtensions",
                     SuppliersWithZones: suppliersWithZones
-                }
+                };
                 return supplierZoneSelective;
             };
 
             api.load = function (payload) {
                 var supplierIds = [];
-                if (payload != undefined && payload.supplierZoneGroupSettings !=undefined) {
+                if (payload != undefined && payload.supplierZoneGroupSettings != undefined) {
                     for (var i = 0; i < payload.supplierZoneGroupSettings.SuppliersWithZones.length; i++) {
                         var obj = payload.supplierZoneGroupSettings.SuppliersWithZones[i];
                         supplierIds.push(obj.SupplierId);
@@ -161,7 +161,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                             CarrierAccountId: selectedSupplier.CarrierAccountId,
                             name: selectedSupplier.Name
                         };
-                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, supplierId: selectedSupplier.CarrierAccountId  };
+                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, supplierId: selectedSupplier.CarrierAccountId };
 
                         dataItem.selectedSuplierZones = [];
                         dataItem.onDirectiveReady = function (api) {
@@ -178,7 +178,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

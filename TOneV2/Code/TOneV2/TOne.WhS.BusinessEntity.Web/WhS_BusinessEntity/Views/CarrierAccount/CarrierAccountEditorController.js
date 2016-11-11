@@ -69,7 +69,7 @@
                     return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
                 else
                     return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
-            }
+            };
 
             $scope.scopeModel.SaveCarrierAccount = function () {
                 if (isEditMode)
@@ -84,7 +84,7 @@
                 if (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null)
                     payload = {
                         selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
-                    }
+                    };
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
             };
@@ -111,7 +111,7 @@
                 if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.TimeZoneId != 0)
                     payload = {
                         selectedIds: carrierAccountEntity.CustomerSettings.TimeZoneId
-                    }
+                    };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeDirectiveAPI, payload, setLoader);
 
 
@@ -123,7 +123,7 @@
                 if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.TimeZoneId != 0)
                     payload = {
                         selectedIds: carrierAccountEntity.SupplierSettings.TimeZoneId
-                    }
+                    };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeDirectiveAPI, payload, setLoader);
 
             };
@@ -163,7 +163,7 @@
                             var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
                             var payload = {
                                 selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
                         }
 
@@ -173,7 +173,7 @@
                             if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.TimeZoneId != 0)
                                 payload = {
                                     selectedIds: carrierAccountEntity.CustomerSettings.TimeZoneId
-                                }
+                                };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeDirectiveAPI, payload, setLoader);
                         }
                         $scope.scopeModel.showSellingNumberPlan = true;
@@ -189,7 +189,7 @@
                             var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfig = value };
                             var payload = {
                                 selectedIds: getDefaultServices()
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
                         }
 
@@ -199,7 +199,7 @@
                             if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.TimeZoneId != 0)
                                 payload = {
                                     selectedIds: carrierAccountEntity.SupplierSettings.TimeZoneId
-                                }
+                                };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeDirectiveAPI, payload, setLoader);
                         }
                         $scope.scopeModel.showZoneServiceConfig = true;
@@ -280,7 +280,7 @@
 
                 VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, loadCurrencySelectorPromiseDeferred);
 
-            })
+            });
 
             return loadCurrencySelectorPromiseDeferred.promise;
 
@@ -316,7 +316,7 @@
                     }
 
                     if (carrierAccountEntity.CustomerSettings) {
-                        $scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ
+                        $scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ;
                     }
                 }
             }
@@ -334,7 +334,7 @@
                 };
 
                 VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, payload, loadActivationStatusSelectorPromiseDeferred);
-            })
+            });
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
 
@@ -349,7 +349,7 @@
                 };
 
                 VRUIUtilsService.callDirectiveLoad(bpBusinessRuleSetDirectiveAPI, payload, loadBPBusinessRuleSetSelectorPromiseDeferred);
-            })
+            });
             return loadBPBusinessRuleSetSelectorPromiseDeferred.promise;
         }
 

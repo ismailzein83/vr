@@ -22,7 +22,7 @@
             };
             $scope.onGridReady = function (api) {
                 gridReady = api;
-                var filter = {}
+                var filter = {};
                 api.loadGrid(filter);
             };
             $scope.onSellingNumberPlanDirectiveReady = function (api) {

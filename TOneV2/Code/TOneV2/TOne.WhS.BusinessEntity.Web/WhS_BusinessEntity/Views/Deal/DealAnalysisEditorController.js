@@ -77,13 +77,13 @@
                         Name: addedOutbound.Name,
                         SupplierZoneIds: addedOutbound.SupplierZoneIds,
                         CommitedVolume: addedOutbound.CommitedVolume,
-                        DailyVolume: (addedOutbound.CommitedVolume / $scope.scopeModel.DealPeriod ),
+                        DailyVolume: (addedOutbound.CommitedVolume / $scope.scopeModel.DealPeriod),
                         Rate: addedOutbound.Rate,
-                        CurrentCost:addedOutbound.CurrentCost,
+                        CurrentCost: addedOutbound.CurrentCost,
                         CostSavingFromRate: addedOutbound.CurrentCost - addedOutbound.Rate,
                         TotalDealSaving: (addedOutbound.CurrentCost - addedOutbound.Rate) * addedOutbound.CommitedVolume,
                         RevenuePerDeal: addedOutbound.CommitedVolume * addedOutbound.Rate
-                    }
+                    };
                     $scope.scopeModel.outboundTraffics.push(obj);
                     evalTotalResultAnalysis();
                 };
@@ -98,13 +98,13 @@
                         Name: addedInbound.Name,
                         SaleZoneIds: addedInbound.SaleZoneIds,
                         CommitedVolume: addedInbound.CommitedVolume,
-                        DailyVolume: (addedInbound.CommitedVolume / $scope.scopeModel.DealPeriod) ,
+                        DailyVolume: (addedInbound.CommitedVolume / $scope.scopeModel.DealPeriod),
                         Rate: addedInbound.Rate,
                         CurrentCost: addedInbound.CurrentCost,
                         ProfitFromRate: addedInbound.Rate - addedInbound.CurrentCost,
                         DealProfit: (addedInbound.Rate - addedInbound.CurrentCost) * addedInbound.CommitedVolume,
                         Revenue: addedInbound.CommitedVolume * addedInbound.Rate
-                    }
+                    };
                     $scope.scopeModel.inboundTraffics.push(obj);
                     evalTotalResultAnalysis();
                 };
@@ -125,17 +125,17 @@
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined && carrierAccountInfo.SellingNumberPlanId) {
 
-                    var setLoader = function (value) { $scope.isLoadingSelector = value };
+                    var setLoader = function (value) { $scope.isLoadingSelector = value; };
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                    }
+                    };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payload.SellingParts = dealEntity.Settings.SellingParts;
 
 
                     var payloadBuying = {
                         supplierId: carrierAccountInfo.CarrierAccountId
-                    }
+                    };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadBuying.BuyingParts = dealEntity.Settings.BuyingParts;
                 }
@@ -155,13 +155,13 @@
                     name: "Edit",
                     clicked: editOutbound
                 }
-             ]
+            ];
             $scope.scopeModel.gridMenuActionsInbound = [
               {
                   name: "Edit",
                   clicked: editInbound
               }
-            ]
+            ];
 
 
         }
@@ -214,7 +214,7 @@
                         .then(function() {
                             var directivePayload = {
                                 sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                            }
+                            };
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.SellingParts = dealEntity.Settings.SellingParts;
                             VRUIUtilsService.callDirectiveLoad(dealSellingAPI, directivePayload, loadDealSellingPromiseDeferred);
@@ -250,7 +250,7 @@
                         .then(function () {
                             var directivePayload = {
                                 sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                            }
+                            };
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.BuyingParts = dealEntity.Settings.BuyingParts;
 
@@ -375,10 +375,10 @@
             var totalSaving = 0;
 
             var totalOutVolumes = 0;
-            var totalOutVolumesDay = 0
+            var totalOutVolumesDay = 0;
 
             var totalInVolumes = 0;
-            var totalInVolumesDay = 0
+            var totalInVolumesDay = 0;
 
             var totalCommitmentRevenue = 0;
             var totalCustomerProfit = 0;
@@ -446,13 +446,13 @@
                     Name: updatedOutbound.Name,
                     SupplierZoneIds: updatedOutbound.SupplierZoneIds,
                     CommitedVolume: updatedOutbound.CommitedVolume,
-                    DailyVolume: (updatedOutbound.CommitedVolume / $scope.scopeModel.DealPeriod) ,
+                    DailyVolume: (updatedOutbound.CommitedVolume / $scope.scopeModel.DealPeriod),
                     Rate: updatedOutbound.Rate,
                     CurrentCost: updatedOutbound.CurrentCost,
                     CostSavingFromRate: updatedOutbound.CurrentCost - updatedOutbound.Rate,
                     TotalDealSaving: (updatedOutbound.CurrentCost - updatedOutbound.Rate) * updatedOutbound.CommitedVolume,
                     RevenuePerDeal: updatedOutbound.CommitedVolume * updatedOutbound.Rate
-                }
+                };
                 $scope.scopeModel.outboundTraffics[$scope.scopeModel.outboundTraffics.indexOf(item)] = obj;
                 evalTotalResultAnalysis();
             };
@@ -468,13 +468,13 @@
                     Name: updatedInbound.Name,
                     SaleZoneIds: updatedInbound.SaleZoneIds,
                     CommitedVolume: updatedInbound.CommitedVolume,
-                    DailyVolume: (updatedInbound.CommitedVolume / $scope.scopeModel.DealPeriod) ,
+                    DailyVolume: (updatedInbound.CommitedVolume / $scope.scopeModel.DealPeriod),
                     Rate: updatedInbound.Rate,
                     CurrentCost: updatedInbound.CurrentCost,
                     ProfitFromRate: updatedInbound.Rate - updatedInbound.CurrentCost,
                     DealProfit: (updatedInbound.Rate - updatedInbound.CurrentCost) * updatedInbound.CommitedVolume,
                     Revenue: updatedInbound.CommitedVolume * updatedInbound.Rate
-                }
+                };
                 $scope.scopeModel.inboundTraffics[$scope.scopeModel.inboundTraffics.indexOf(item)] = obj;
 
                 evalTotalResultAnalysis();

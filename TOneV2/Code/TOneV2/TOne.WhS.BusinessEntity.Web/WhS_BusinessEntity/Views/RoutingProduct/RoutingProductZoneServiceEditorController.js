@@ -170,7 +170,7 @@
                 return;
 
             var _selectedServices = $scope.scopeModel.selectedServices;
-            _selectedServices.sort(function (a, b) { return (a.ZoneServiceConfigId > b.ZoneServiceConfigId) ? 1 : ((b.ZoneServiceConfigId > a.ZoneServiceConfigId) ? -1 : 0); })
+            _selectedServices.sort(function (a, b) { return (a.ZoneServiceConfigId > b.ZoneServiceConfigId) ? 1 : ((b.ZoneServiceConfigId > a.ZoneServiceConfigId) ? -1 : 0); });
 
             for (var i = 0; i < _selectedServices.length; i++) {
                 serviceIds.push(_selectedServices[i].ZoneServiceConfigId);

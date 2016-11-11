@@ -50,14 +50,14 @@
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                    }
+                    };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payload.SellingParts = dealEntity.Settings.SellingParts;
 
 
                     var payloadBuying = {
                         supplierId: carrierAccountInfo.CarrierAccountId
-                    }
+                    };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadBuying.BuyingParts = dealEntity.Settings.BuyingParts;
 
@@ -139,7 +139,7 @@
                         .then(function() {
                             var directivePayload = {
                                 sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                            }
+                            };
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.SellingParts = dealEntity.Settings.SellingParts;
                             VRUIUtilsService.callDirectiveLoad(dealSellingAPI, directivePayload, loadDealSellingPromiseDeferred);
@@ -175,7 +175,7 @@
                         .then(function () {
                             var directivePayload = {
                                 sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                            }
+                            };
                             if (dealEntity != undefined && dealEntity.Settings != undefined)
                                 directivePayload.BuyingParts = dealEntity.Settings.BuyingParts;
 

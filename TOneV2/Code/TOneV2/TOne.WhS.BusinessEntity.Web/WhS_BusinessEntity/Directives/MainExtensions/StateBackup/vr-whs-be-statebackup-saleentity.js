@@ -77,7 +77,7 @@ app.directive("vrWhsBeStatebackupSaleentity", ['UtilsService', 'VRUIUtilsService
                         $scope.showCarrierAccountSelector = true;
                         $scope.selectedSellingProduct.length = 0;
                     }
-                    carrierAccountSelectorAPI.clearSelection
+                    carrierAccountSelectorAPI.clearSelection;
                 };
 
                 UtilsService.waitMultiplePromises([ownerTypeSelectorReadyPromiseDeferred.promise, carrierAccountSelectorReadyDeferred.promise, sellingProductSelectorReadyDeferred.promise]).then(function () {
@@ -97,14 +97,14 @@ app.directive("vrWhsBeStatebackupSaleentity", ['UtilsService', 'VRUIUtilsService
                             $type: "TOne.WhS.BusinessEntity.Entities.SaleEntityStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
                             OwnerType: ownerType,
                             OwnerIds: sellingProductSelectorAPI.getSelectedIds()
-                        }
+                        };
 
                     else
                         return {
                             $type: "TOne.WhS.BusinessEntity.Entities.SaleEntityStateBackupFilter, TOne.WhS.BusinessEntity.Entities",
                             OwnerType: ownerType,
                             OwnerIds: carrierAccountSelectorAPI.getSelectedIds()
-                        }
+                        };
 
                 };
 
