@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -15,8 +13,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-
             List<string> listGrouping = new List<string>();
             listGrouping.Add("Day");
 
@@ -24,14 +20,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             listMeasures.Add("NumberOfCalls");
             listMeasures.Add("DurationNet");
 
-            
 
-            if(parameters.IsCost){
-            
+
+            if (parameters.IsCost)
+            {
+
                 listGrouping.Add("Supplier");
                 listMeasures.Add("CostDuration");
                 listMeasures.Add("CostNet");
-               
+
             }
 
             else
@@ -41,7 +38,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("SaleNet");
 
             }
-                
+
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
                 Query = new AnalyticQuery()
@@ -81,27 +78,20 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<SummaryByCarrier> listCarrierSummary = new List<SummaryByCarrier>();
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
-            if(result != null)
-            foreach (var analyticRecord in result.Data)
-            {
-                CarrierAccount carrier = new CarrierAccount();
-
-                SummaryByCarrier carrierSummary = new SummaryByCarrier();
-
-                var dayValue = analyticRecord.DimensionValues[0];
-                if (dayValue != null)
-                    carrierSummary.Day = dayValue.Name;
-
-
-                var carrierValue = analyticRecord.DimensionValues[1];
-                if (carrierValue != null)
+            if (result != null)
+                foreach (var analyticRecord in result.Data)
                 {
-                    carrier = carrierAccountManager.GetCarrierAccount((int)carrierValue.Value);
-                    carrierSummary.Carrier = carrierValue.Name;
-                }
+                    SummaryByCarrier carrierSummary = new SummaryByCarrier();
 
-                if (carrier != null && carrier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !carrier.IsDeleted)
-                {
+                    var dayValue = analyticRecord.DimensionValues[0];
+                    if (dayValue != null)
+                        carrierSummary.Day = dayValue.Name;
+
+
+                    var carrierValue = analyticRecord.DimensionValues[1];
+                    if (carrierValue != null)
+                        carrierSummary.Carrier = carrierValue.Name;
+
                     MeasureValue calls;
 
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
@@ -126,12 +116,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
                     carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
 
+
+
+
                     listCarrierSummary.Add(carrierSummary);
                 }
-            }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("CarrierSummary", listCarrierSummary.OrderBy(x=>x.Carrier));
+            dataSources.Add("CarrierSummary", listCarrierSummary.OrderBy(x => x.Carrier));
             return dataSources;
         }
 

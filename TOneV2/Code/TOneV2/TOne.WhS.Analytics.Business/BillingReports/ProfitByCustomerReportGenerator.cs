@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -26,7 +24,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
             {
@@ -79,89 +76,75 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierAccount customer = new CarrierAccount();
-                    CarrierAccount supplier = new CarrierAccount();
                     ProfitByCustomerFormatted carrierSummary = new ProfitByCustomerFormatted();
 
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
-                    {
-                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         carrierSummary.Customer = customerValue.Name;
-                    }
-                        
                     var supplierValue = analyticRecord.DimensionValues[1];
                     if (supplierValue != null)
-                    {
-                        supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
                         carrierSummary.Supplier = supplierValue.Name;
-                    }
 
-                    if (supplier != null && customer != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        !supplier.IsDeleted && !customer.IsDeleted)
-                    {
-                        MeasureValue saleDuration;
-                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                        carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                        carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleDuration);
-                        totalSaleDur = totalSaleDur + carrierSummary.SaleDuration;
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    carrierSummary.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    carrierSummary.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleDuration);
+                    totalSaleDur = totalSaleDur + carrierSummary.SaleDuration;
 
-                        MeasureValue costDuration;
-                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                        carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                        carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostDuration);
-                        totalCostDur = totalCostDur + carrierSummary.CostDuration;
+                    MeasureValue costDuration;
+                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
+                    carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
+                    carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostDuration);
+                    totalCostDur = totalCostDur + carrierSummary.CostDuration;
 
-                        MeasureValue costNet;
-                        analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                        carrierSummary.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
-                        carrierSummary.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostNet);
-                        totalCostNt = totalCostNt + carrierSummary.CostNet;
+                    MeasureValue costNet;
+                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    carrierSummary.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
+                    carrierSummary.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostNet);
+                    totalCostNt = totalCostNt + carrierSummary.CostNet;
 
-                        MeasureValue saleNet;
-                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
-                        carrierSummary.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                        carrierSummary.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleNet);
-                        totalSaleNt = totalSaleNt + carrierSummary.SaleNet;
+                    MeasureValue saleNet;
+                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    carrierSummary.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
+                    carrierSummary.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleNet);
+                    totalSaleNt = totalSaleNt + carrierSummary.SaleNet;
 
-                        MeasureValue profit;
-                        analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
-                        carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
-                        carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
-                        totalProft = totalProft + carrierSummary.Profit;
+                    MeasureValue profit;
+                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                    carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
+                    carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
+                    totalProft = totalProft + carrierSummary.Profit;
 
-                        MeasureValue costChargesValue;
-                        analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out costChargesValue);
-                        carrierSummary.CostExtraChargeValue = Convert.ToDouble(costChargesValue.Value ?? 0.0);
-                        carrierSummary.CostExtraChargeValueFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.CostExtraChargeValue);
-                        totalCostExtraChrg = totalCostExtraChrg + Math.Abs(carrierSummary.CostExtraChargeValue.Value);
+                    MeasureValue costChargesValue;
+                    analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out costChargesValue);
+                    carrierSummary.CostExtraChargeValue = Convert.ToDouble(costChargesValue.Value ?? 0.0);
+                    carrierSummary.CostExtraChargeValueFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.CostExtraChargeValue);
+                    totalCostExtraChrg = totalCostExtraChrg + Math.Abs(carrierSummary.CostExtraChargeValue.Value);
 
-                        MeasureValue saleChargesValue;
-                        analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out saleChargesValue);
-                        carrierSummary.SaleExtraChargeValue = Convert.ToDouble(saleChargesValue.Value ?? 0.0);
-                        carrierSummary.SaleExtraChargeValueFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleExtraChargeValue);
-                        totalSaleExtraChrg = totalSaleExtraChrg + Math.Abs(carrierSummary.SaleExtraChargeValue.Value);
+                    MeasureValue saleChargesValue;
+                    analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out saleChargesValue);
+                    carrierSummary.SaleExtraChargeValue = Convert.ToDouble(saleChargesValue.Value ?? 0.0);
+                    carrierSummary.SaleExtraChargeValueFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleExtraChargeValue);
+                    totalSaleExtraChrg = totalSaleExtraChrg + Math.Abs(carrierSummary.SaleExtraChargeValue.Value);
 
-                        MeasureValue percentageProfit;
-                        analyticRecord.MeasureValues.TryGetValue("PercentageProfit", out percentageProfit);
-                        carrierSummary.PercentageProfit = Convert.ToDouble(percentageProfit.Value ?? 0.0);
-                        carrierSummary.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage(carrierSummary.PercentageProfit);
+                    MeasureValue percentageProfit;
+                    analyticRecord.MeasureValues.TryGetValue("PercentageProfit", out percentageProfit);
+                    carrierSummary.PercentageProfit = Convert.ToDouble(percentageProfit.Value ?? 0.0);
+                    carrierSummary.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage(carrierSummary.PercentageProfit);
 
-                        carrierSummary.AvgMin = (carrierSummary.SaleDuration.Value != 0) ? (decimal)(((double)carrierSummary.Profit.Value) / (double)carrierSummary.SaleDuration.Value) : 0;
-                        totalAvgMin = totalAvgMin + carrierSummary.AvgMin;
+                    carrierSummary.AvgMin = (carrierSummary.SaleDuration.Value != 0) ? (decimal)(((double)carrierSummary.Profit.Value) / (double)carrierSummary.SaleDuration.Value) : 0;
+                    totalAvgMin = totalAvgMin + carrierSummary.AvgMin;
 
-                        netProft = netProft + (carrierSummary.SaleNet - carrierSummary.CostNet);
+                    netProft = netProft + (carrierSummary.SaleNet - carrierSummary.CostNet);
 
-                        carrierSummary.AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0) ? ReportHelpers.FormatLongNumberDigit((decimal)carrierSummary.Profit / carrierSummary.SaleDuration) : "0.00";
+                    carrierSummary.AvgMinFormatted = (carrierSummary.SaleDuration.Value != 0) ? ReportHelpers.FormatLongNumberDigit((decimal)carrierSummary.Profit / carrierSummary.SaleDuration) : "0.00";
 
-                        listCarrierSummaryDetailed.Add(carrierSummary);
-                    }
+                    listCarrierSummaryDetailed.Add(carrierSummary);
                 }
             if (parameters.IsCommission)
                 netProft = netProft - totalSaleExtraChrg - totalCostExtraChrg;
 
-            totalProftPerc = (totalSaleNt - totalCostNt)/totalSaleNt;
+            totalProftPerc = (totalSaleNt - totalCostNt) / totalSaleNt;
             totalCostDuration = ReportHelpers.FormatNormalNumberDigit(totalCostDur);
             totalSaleDuration = ReportHelpers.FormatNormalNumberDigit(totalSaleDur);
             totalSaleNet = ReportHelpers.FormatNormalNumberDigit(totalSaleNt);
@@ -186,7 +169,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
-            list.Add("Customer", new RdlcParameter {Value = ReportHelpers.GetCarrierName(parameters.CustomersId,"Customers"), IsVisible = true});
+            list.Add("Customer", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.CustomersId, "Customers"), IsVisible = true });
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Profit by Customer", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });

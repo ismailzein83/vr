@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -16,13 +14,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
 
             AnalyticManager analyticManager = new AnalyticManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
                 Query = new AnalyticQuery()
                 {
-                    DimensionFields = new List<string> { "Customer"},
+                    DimensionFields = new List<string> { "Customer" },
                     MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration", "CostDuration" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -51,52 +48,44 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierAccount customer = new CarrierAccount();
-
                     SalesAndProfitsByCustomer salesAndProfitsByCustomer = new SalesAndProfitsByCustomer();
 
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
-                    {
-                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         salesAndProfitsByCustomer.Customer = customerValue.Name;
-                    }
 
-                    if (customer != null && customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !customer.IsDeleted)
-                    {
-                        MeasureValue saleNet;
-                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    MeasureValue saleNet;
+                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
 
-                        salesAndProfitsByCustomer.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                        salesAndProfitsByCustomer.SaleNetFormatted = salesAndProfitsByCustomer.SaleNet == 0 ? "" : (salesAndProfitsByCustomer.SaleNet.HasValue) ?
-                            ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.SaleNet) : "0.00";
+                    salesAndProfitsByCustomer.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
+                    salesAndProfitsByCustomer.SaleNetFormatted = salesAndProfitsByCustomer.SaleNet == 0 ? "" : (salesAndProfitsByCustomer.SaleNet.HasValue) ?
+                        ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.SaleNet) : "0.00";
 
-                        MeasureValue costNet;
-                        analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                        salesAndProfitsByCustomer.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
-                        salesAndProfitsByCustomer.CostNetFormatted = (salesAndProfitsByCustomer.CostNet.HasValue)
-                            ? ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.CostNet)
-                            : "0.00";
+                    MeasureValue costNet;
+                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    salesAndProfitsByCustomer.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
+                    salesAndProfitsByCustomer.CostNetFormatted = (salesAndProfitsByCustomer.CostNet.HasValue)
+                        ? ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.CostNet)
+                        : "0.00";
 
-                        MeasureValue saleDuration;
-                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                        salesAndProfitsByCustomer.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                        salesAndProfitsByCustomer.SaleDurationFormatted = salesAndProfitsByCustomer.SaleNet == 0 ? "" : (salesAndProfitsByCustomer.SaleDuration.HasValue) ?
-                            ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.SaleDuration) : "0.00";
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    salesAndProfitsByCustomer.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    salesAndProfitsByCustomer.SaleDurationFormatted = salesAndProfitsByCustomer.SaleNet == 0 ? "" : (salesAndProfitsByCustomer.SaleDuration.HasValue) ?
+                        ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.SaleDuration) : "0.00";
 
-                        MeasureValue costDuration;
-                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                        salesAndProfitsByCustomer.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                        salesAndProfitsByCustomer.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.CostDuration);
+                    MeasureValue costDuration;
+                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
+                    salesAndProfitsByCustomer.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
+                    salesAndProfitsByCustomer.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.CostDuration);
 
-                        salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0;
-                        salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
-                        salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet > 0)
-                            ? ReportHelpers.FormatNumberPercentage(((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet))
-                            : ReportHelpers.FormatNumberPercentage(0);
+                    salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0;
+                    salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
+                    salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet > 0)
+                        ? ReportHelpers.FormatNumberPercentage(((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet))
+                        : ReportHelpers.FormatNumberPercentage(0);
 
-                        listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
-                    }
+                    listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
                 }
 
             List<ProfitSummary> profitSummary = GetCustomerProfitSummary(listSalesAndProfitsByCustomer);
@@ -112,7 +101,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString():null, IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Sales and Profits by Customer", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });

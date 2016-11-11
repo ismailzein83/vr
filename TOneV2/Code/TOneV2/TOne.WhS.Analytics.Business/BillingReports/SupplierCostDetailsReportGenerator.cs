@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -15,7 +13,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             List<string> listDimensions = new List<string>() { "Customer", "Supplier" };
             List<string> listMeasures = new List<string> { "CostDuration", "CostNet" };
 
@@ -61,40 +58,28 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierAccount customer = new CarrierAccount();
-                    CarrierAccount supplier = new CarrierAccount();
                     SupplierCostDetailsFormatted supplierCostDetails = new SupplierCostDetailsFormatted();
 
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
-                    {
-                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         supplierCostDetails.Customer = customerValue.Name;
-                    }
 
                     var supplierValue = analyticRecord.DimensionValues[1];
                     if (supplierValue != null)
-                    {
-                        supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
                         supplierCostDetails.Carrier = supplierValue.Name;
-                    }
 
-                    if (supplier != null && customer != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        !supplier.IsDeleted && !customer.IsDeleted)
-                    {
-                        MeasureValue costDuration;
-                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                        supplierCostDetails.Duration = (costDuration == null) ? 0 : Convert.ToDecimal(costDuration.Value ?? 0.0);
-                        supplierCostDetails.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(supplierCostDetails.Duration);
+                    MeasureValue costDuration;
+                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
+                    supplierCostDetails.Duration = (costDuration == null) ? 0 : Convert.ToDecimal(costDuration.Value ?? 0.0);
+                    supplierCostDetails.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(supplierCostDetails.Duration);
 
-                        MeasureValue costNet;
-                        analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
-                        supplierCostDetails.Amount = (costNet == null) ? 0 : Convert.ToDouble(costNet.Value ?? 0.0);
-                        supplierCostDetails.AmountFormatted = ReportHelpers.FormatNormalNumberDigit(supplierCostDetails.Amount);
 
-                        listSupplierCostDetails.Add(supplierCostDetails);
-                    }
+                    MeasureValue costNet;
+                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    supplierCostDetails.Amount = (costNet == null) ? 0 : Convert.ToDouble(costNet.Value ?? 0.0);
+                    supplierCostDetails.AmountFormatted = ReportHelpers.FormatNormalNumberDigit(supplierCostDetails.Amount);
+
+                    listSupplierCostDetails.Add(supplierCostDetails);
                 }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
@@ -106,7 +91,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue  ? parameters.ToTime.ToString() : null, IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Supllier Cost Details", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "4", IsVisible = true });

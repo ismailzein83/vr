@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Analytics.Entities.BillingReport;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -42,7 +41,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile"); else listDimensions.Add("Customer");
                 }
                 else
-                     listDimensions.Add("Customer");
+                    listDimensions.Add("Customer");
             }
 
             if (parameters.IsCost)
@@ -120,14 +119,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (zoneValue != null)
                         detailedBillingByZone.Zone = zoneValue.Name;
 
-                    CarrierAccount carrierAccount = new CarrierAccount();
+                    bool isDeleted = false;
 
                     if (parameters.IsCost)
                     {
                         if (parameters.GroupBySupplier)
                         {
                             var supplierValue = analyticRecord.DimensionValues[1];
-                            carrierAccount = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
+                            isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
                             if (supplierValue != null)
                                 detailedBillingByZone.SupplierID = supplierValue.Name;
                         }
@@ -135,12 +134,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                     {
                         var customerValue = analyticRecord.DimensionValues[1];
-                        carrierAccount = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
+                        isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
                         if (customerValue != null)
                             detailedBillingByZone.CustomerID = customerValue.Name;
                     }
-                    if (carrierAccount != null && carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        !carrierAccount.IsDeleted)
+                    if (!isDeleted)
                     {
                         MeasureValue durationNet;
                         analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
@@ -261,7 +259,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue?  parameters.ToTime.ToString():null, IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = String.Format("Detailed Billing By Zone ({0})", parameters.IsCost == true ? "Purchase" : "Sale"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });

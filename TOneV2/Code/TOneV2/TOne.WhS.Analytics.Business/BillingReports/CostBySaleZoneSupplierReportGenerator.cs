@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -15,7 +13,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             //
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
             AnalyticManager analyticManager = new AnalyticManager();
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -73,22 +71,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var supplierValue = analyticRecord.DimensionValues[1];
                     if (supplierValue != null)
                         costBySaleZoneSupplier.SupplierID = supplierValue.Name;
-                    CarrierAccount supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
-                    if (supplier!= null && !supplier.IsDeleted && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
-                    {
-                        MeasureValue averageCost;
-                        analyticRecord.MeasureValues.TryGetValue("AverageCost", out averageCost);
-                        costBySaleZoneSupplier.HighestRate = Convert.ToDouble(averageCost.Value ?? 0.0);
-                        costBySaleZoneSupplier.HighestRateFormatted = costBySaleZoneSupplier.HighestRate == 0 ? "" : (costBySaleZoneSupplier.HighestRate.HasValue) ?
-                            ReportHelpers.FormatLongNumberDigit(costBySaleZoneSupplier.HighestRate) : "0.00";
 
-                        MeasureValue saleDuration;
-                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                        costBySaleZoneSupplier.AvgDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                        costBySaleZoneSupplier.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigit(costBySaleZoneSupplier.AvgDuration);
+                    MeasureValue averageCost;
+                    analyticRecord.MeasureValues.TryGetValue("AverageCost", out averageCost);
+                    costBySaleZoneSupplier.HighestRate = Convert.ToDouble(averageCost.Value ?? 0.0);
+                    costBySaleZoneSupplier.HighestRateFormatted = costBySaleZoneSupplier.HighestRate == 0 ? "" : (costBySaleZoneSupplier.HighestRate.HasValue) ?
+                        ReportHelpers.FormatLongNumberDigit(costBySaleZoneSupplier.HighestRate) : "0.00";
 
-                        listCostBySaleZoneSupplier.Add(costBySaleZoneSupplier);
-                    }
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    costBySaleZoneSupplier.AvgDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    costBySaleZoneSupplier.AvgDurationFormatted = ReportHelpers.FormatNormalNumberDigit(costBySaleZoneSupplier.AvgDuration);
+
+                    listCostBySaleZoneSupplier.Add(costBySaleZoneSupplier);
                 }
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("SaleZoneCostSummarySupplier", listCostBySaleZoneSupplier);
@@ -99,7 +94,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = (parameters.ToTime.HasValue)?parameters.ToTime.ToString():null, IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = (parameters.ToTime.HasValue) ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Cost by Sale Zone - Grouped by Supplier", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });

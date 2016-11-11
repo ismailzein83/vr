@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Analytics.Entities.BillingReport;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
@@ -17,12 +15,16 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             AnalyticManager analyticManager = new AnalyticManager();
             List<string> listGrouping = new List<string>();
             List<string> listMeasures = new List<string>();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+
+
 
             listGrouping.Add("SupplierZone");
             listGrouping.Add("SaleZone");
             listGrouping.Add("Supplier");
             listGrouping.Add("Customer");
+
+
 
             listMeasures.Add("SaleRate");
             listMeasures.Add("CostRate");
@@ -31,6 +33,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             listMeasures.Add("TotalSaleNet");
             listMeasures.Add("TotalCostNet");
             listMeasures.Add("PercentageLoss");
+
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
@@ -87,6 +90,50 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     LossesByZonesFormatted rateLossFromatted = new LossesByZonesFormatted();
 
+
+
+                    MeasureValue saleRate;
+                    analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
+                    rateLossFromatted.SaleRate = Convert.ToDecimal(saleRate.Value ?? 0.0);
+                    rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.SaleRate);
+
+                    MeasureValue costRate;
+                    analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
+                    rateLossFromatted.CostRate = Convert.ToDecimal(costRate.Value ?? 0.0);
+                    rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.CostRate);
+
+                    MeasureValue saleDuration;
+                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                    rateLossFromatted.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                    rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleDuration);
+
+                    MeasureValue costDuration;
+                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
+                    rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
+                    rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostDuration);
+
+                    MeasureValue saleNet;
+                    analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out saleNet);
+                    rateLossFromatted.SaleNet = Convert.ToDecimal(saleNet.Value ?? 0.0);
+                    rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleNet);
+
+                    MeasureValue costNet;
+                    analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out costNet);
+                    rateLossFromatted.CostNet = Convert.ToDecimal(costNet.Value ?? 0.0);
+                    rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostNet);
+
+                    var loss = rateLossFromatted.CostNet - rateLossFromatted.SaleNet;
+                    if (loss <= 0) continue;
+
+                    var supplierZoneValue = analyticRecord.DimensionValues[0];
+                    if (supplierZoneValue != null)
+                        rateLossFromatted.CostZone = supplierZoneValue.Name;
+
+                    var customerZoneValue = analyticRecord.DimensionValues[1];
+                    if (customerZoneValue != null)
+                        rateLossFromatted.SaleZone = customerZoneValue.Name;
+
+
                     var supplierValue = analyticRecord.DimensionValues[2];
                     if (supplierValue != null)
                         rateLossFromatted.Supplier = supplierValue.Name;
@@ -95,64 +142,18 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     if (customerValue != null)
                         rateLossFromatted.Customer = customerValue.Name;
 
-                    CarrierAccount supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
-                    CarrierAccount customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
-                    if (supplier != null && customer != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive &&
-                        !supplier.IsDeleted && !customer.IsDeleted)
-                    {
-                        MeasureValue saleRate;
-                        analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
-                        rateLossFromatted.SaleRate = Convert.ToDecimal(saleRate.Value ?? 0.0);
-                        rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.SaleRate);
 
-                        MeasureValue costRate;
-                        analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
-                        rateLossFromatted.CostRate = Convert.ToDecimal(costRate.Value ?? 0.0);
-                        rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.CostRate);
 
-                        MeasureValue saleDuration;
-                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                        rateLossFromatted.SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0);
-                        rateLossFromatted.SaleDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleDuration);
+                    rateLossFromatted.Loss = (decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet);
 
-                        MeasureValue costDuration;
-                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
-                        rateLossFromatted.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
-                        rateLossFromatted.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostDuration);
+                    rateLossFromatted.LossFormatted = ReportHelpers.FormatLongNumberDigit(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)));
 
-                        MeasureValue saleNet;
-                        analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out saleNet);
-                        rateLossFromatted.SaleNet = Convert.ToDecimal(saleNet.Value ?? 0.0);
-                        rateLossFromatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.SaleNet);
+                    MeasureValue percentageLoss;
+                    analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
 
-                        MeasureValue costNet;
-                        analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out costNet);
-                        rateLossFromatted.CostNet = Convert.ToDecimal(costNet.Value ?? 0.0);
-                        rateLossFromatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(rateLossFromatted.CostNet);
+                    rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(System.Math.Abs((decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet);
 
-                        var loss = rateLossFromatted.CostNet - rateLossFromatted.SaleNet;
-                        if (loss <= 0) continue;
-
-                        var supplierZoneValue = analyticRecord.DimensionValues[0];
-                        if (supplierZoneValue != null)
-                            rateLossFromatted.CostZone = supplierZoneValue.Name;
-
-                        var customerZoneValue = analyticRecord.DimensionValues[1];
-                        if (customerZoneValue != null)
-                            rateLossFromatted.SaleZone = customerZoneValue.Name;
-
-                        rateLossFromatted.Loss = (decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet);
-
-                        rateLossFromatted.LossFormatted = ReportHelpers.FormatLongNumberDigit(System.Math.Abs((double)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)));
-
-                        MeasureValue percentageLoss;
-                        analyticRecord.MeasureValues.TryGetValue("PercentageLoss", out percentageLoss);
-
-                        rateLossFromatted.LossPerFormatted = ReportHelpers.FormatNumberPercentage(System.Math.Abs((decimal)(rateLossFromatted.CostNet - rateLossFromatted.SaleNet)) / rateLossFromatted.CostNet);
-
-                        listRateLossFromatted.Add(rateLossFromatted);
-                    }
+                    listRateLossFromatted.Add(rateLossFromatted);
                 }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources =
