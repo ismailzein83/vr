@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public IEnumerable<string> FixedKeywords { get; set; }
         public IEnumerable<string> MobileKeywords { get; set; }
         public PrimarySaleEntity PrimarySaleEntity { get; set; }
+
+        public Guid EmailId { get; set; }
     }
 
     public enum PrimarySaleEntity { SellingProduct = 0, Customer = 1 }

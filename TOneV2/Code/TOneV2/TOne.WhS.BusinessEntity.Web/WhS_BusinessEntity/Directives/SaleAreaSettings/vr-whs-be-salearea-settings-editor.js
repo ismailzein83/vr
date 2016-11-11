@@ -25,6 +25,9 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
             ctrl.fixedKeywords = [];
             ctrl.mobileKeywords = [];
             ctrl.primarySaleEntities = UtilsService.getArrayEnum(WhS_BE_PrimarySaleEntityEnum);
+            var salePriceListSelectorReadyAPI;
+            var salePriceListReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 ctrl.disabledAddFixedKeyword = true;
@@ -40,6 +43,10 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     ctrl.disabledAddFixedKeyword = (value == undefined && ctrl.fixedKeywordvalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.fixedKeywords, value, "fixedKeyword") != -1;
                 };
 
+                $scope.scopeModel.onPriceListEmailTemplateSelectorReady = function (api) {
+                    salePriceListSelectorReadyAPI = api;
+                    salePriceListReadyPromiseDeferred.resolve();
+                }
                 ctrl.validateAddFixedKeyWords = function () {
                     if (ctrl.fixedKeywords != undefined && ctrl.fixedKeywords.length == 0)
                         return "Enter at least one keyword.";
@@ -64,7 +71,10 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 };
 
                 ctrl.onPrimarySaleEntitySelectorReady = function (api) {
-                    defineAPI();
+
+                   return  salePriceListReadyPromiseDeferred.promise.then(function () {
+                        defineAPI();
+                    });
                 };
             }
 
@@ -84,6 +94,18 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         angular.forEach(payload.data.MobileKeywords, function (value) {
                             ctrl.mobileKeywords.push({ mobileKeyword: value });
                         });
+
+
+                        var salePriceListSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var payload = {
+                            filter: {
+                                selectedIds: payload.data.EmailId,
+                                VRMailMessageTypeId: "f61f0b87-ee5b-4794-8b0f-6c0777006441",
+
+                            }
+                        }
+                        VRUIUtilsService.callDirectiveLoad(salePriceListSelectorReadyAPI, payload, salePriceListSelectorLoadPromiseDeferred);
+                        promises.push(salePriceListSelectorLoadPromiseDeferred.promise);
                     }
                 };
 
@@ -93,7 +115,8 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         FixedKeywords: UtilsService.getPropValuesFromArray(ctrl.fixedKeywords, "fixedKeyword"),
                         MobileKeywords: UtilsService.getPropValuesFromArray(ctrl.mobileKeywords, "mobileKeyword"),
                         DefaultRate: ctrl.defaultRate,
-                        PrimarySaleEntity: ctrl.primarySaleEntity.value
+                        PrimarySaleEntity: ctrl.primarySaleEntity.value,
+                        EmailId: salePriceListSelectorReadyAPI.getSelectedIds()
                     };
                 };
 

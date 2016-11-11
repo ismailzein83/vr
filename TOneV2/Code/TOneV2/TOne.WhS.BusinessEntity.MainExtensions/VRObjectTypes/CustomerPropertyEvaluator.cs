@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("2647ede8-0ba5-4131-8f2f-eb047ff0b359"); } 
         }
 
         public CustomerField CustomerField { get; set; }
