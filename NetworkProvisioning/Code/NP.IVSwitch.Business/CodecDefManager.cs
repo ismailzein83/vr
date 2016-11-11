@@ -12,20 +12,13 @@ namespace NP.IVSwitch.Business
 {
     public class CodecDefManager
     {
-        #region Public Methods
-        public CodecDef GetCodecDef(int codecDefId)
-        {
-            Dictionary<int, CodecDef> cachedCodecDef = this.GetCachedCodecDefs();
-            return cachedCodecDef.GetRecord(codecDefId);
-        }
+        #region Public Methods        
 
        public IEnumerable<CodecDefInfo> GetCodecDefsInfo(CodecDefFilter filter)
         {
             Func<CodecDef, bool> filterExpression = null;
 
             return this.GetCachedCodecDefs().MapRecords(CodecDefInfoMapper, filterExpression).OrderBy(x => x.Description);
- 
-
         }
 
         public List<CodecDef> GetCodecDefList(List<int> CodecIdList)
@@ -73,14 +66,7 @@ namespace NP.IVSwitch.Business
 
         #region Mappers
 
-        public CodecDefDetail CodecDefDetailMapper(CodecDef codecDef)
-        {
-            CodecDefDetail codecDefDetail = new CodecDefDetail()
-            {
-                Entity = codecDef
-            };
-            return codecDefDetail;
-        }
+       
 
         public CodecDefInfo CodecDefInfoMapper(CodecDef codecDef)
         {

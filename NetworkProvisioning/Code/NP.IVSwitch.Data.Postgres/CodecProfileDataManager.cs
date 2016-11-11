@@ -56,27 +56,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool Update(CodecProfile codecProfile, Dictionary<int, CodecDef> cachedCodecDef)
         {
-            String codecString = "^^";
-            String uiCodecDisplay = null;
-
-            Func<CodecDef, bool> filterExpression = (x) => (codecProfile.CodecDefId == null || codecProfile.CodecDefId.Contains(x.CodecId)); ;
-
-            List<CodecDef> CodecDefList = cachedCodecDef.FindAllRecords(filterExpression).OrderBy(x => x.FsName).ToList();
-
-            for (int i = 0; i < CodecDefList.Count(); i++)
-            {
-                codecString += ":" + CodecDefList[i].FsName;
-
-                if (uiCodecDisplay != null)
-                    uiCodecDisplay += "|-1:" + CodecDefList[i].CodecId.ToString();
-                else
-                    uiCodecDisplay = CodecDefList[i].CodecId.ToString();
-
-            }
-
-            if (uiCodecDisplay != null)
-                uiCodecDisplay += "|-1";
-
+            List<String> codecDefParams = GetCodecDefParams(cachedCodecDef, codecProfile.CodecDefId);
 
             String cmdText = @"UPDATE codec_profiles
 	                             SET profile_name = @psgname, codec_string = @psgcodecstring, ui_codec_display = @psguicodecdisplay
@@ -86,8 +66,8 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@psgid", codecProfile.CodecProfileId);
                 cmd.Parameters.AddWithValue("@psgname", codecProfile.ProfileName);
-                cmd.Parameters.AddWithValue("@psgcodecstring", codecString);
-                cmd.Parameters.AddWithValue("@psguicodecdisplay", uiCodecDisplay); 
+                cmd.Parameters.AddWithValue("@psgcodecstring", codecDefParams[0]);
+                cmd.Parameters.AddWithValue("@psguicodecdisplay", codecDefParams[1]); 
 
  
             }
@@ -98,26 +78,9 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(CodecProfile codecProfile, Dictionary<int, CodecDef> cachedCodecDef, out int insertedId)
         {
             object codecProfileId;
-            String codecString = "^^";
-            String uiCodecDisplay = null;
 
-            Func<CodecDef, bool> filterExpression = (x) => (codecProfile.CodecDefId == null || codecProfile.CodecDefId.Contains(x.CodecId)); ;
-
-            List<CodecDef> CodecDefList = cachedCodecDef.FindAllRecords(filterExpression).OrderBy(x => x.FsName).ToList();
-
-            for (int i = 0; i < CodecDefList.Count(); i++)
-            {
-                codecString += ":" + CodecDefList[i].FsName ;
-
-                if(uiCodecDisplay != null)
-                    uiCodecDisplay +=   "|-1:" + CodecDefList[i].CodecId.ToString()  ;
-                else
-                    uiCodecDisplay =  CodecDefList[i].CodecId.ToString()  ;
-
-            }
-
-            if (uiCodecDisplay != null)
-                uiCodecDisplay += "|-1";
+            List<String> codecDefParams = GetCodecDefParams(cachedCodecDef, codecProfile.CodecDefId);
+          
 
 
             String cmdText = @"INSERT INTO codec_profiles(profile_name,codec_string,ui_codec_display)
@@ -128,8 +91,8 @@ namespace NP.IVSwitch.Data.Postgres
             codecProfileId = ExecuteScalarText(cmdText, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@psgname", codecProfile.ProfileName);
-                cmd.Parameters.AddWithValue("@psgcodecstring", codecString);
-                cmd.Parameters.AddWithValue("@psguicodecdisplay", uiCodecDisplay); 
+                cmd.Parameters.AddWithValue("@psgcodecstring", codecDefParams[0]);
+                cmd.Parameters.AddWithValue("@psguicodecdisplay", codecDefParams[1]); 
 
               }
             );
@@ -143,6 +106,35 @@ namespace NP.IVSwitch.Data.Postgres
             else
                 return false;
 
+        }
+
+        private List<String> GetCodecDefParams(Dictionary<int, CodecDef> cachedCodecDef, List<int> CodecDefId)
+        {
+            StringBuilder codecString = new StringBuilder("^^");
+            StringBuilder uiCodecDisplay = new StringBuilder();
+ 
+            Func<CodecDef, bool> filterExpression = (x) => (CodecDefId== null || CodecDefId.Contains(x.CodecId)); ;
+
+            List<CodecDef> CodecDefList = cachedCodecDef.FindAllRecords(filterExpression).OrderBy(x => x.FsName).ToList();
+
+            for (int i = 0; i < CodecDefList.Count(); i++)
+            {
+                codecString.Append( ":" + CodecDefList[i].FsName);
+
+                if (uiCodecDisplay.Length != 0)
+                    uiCodecDisplay.Append("|-1:" + CodecDefList[i].CodecId.ToString());
+                else
+                    uiCodecDisplay.Append(CodecDefList[i].CodecId.ToString());
+
+            }
+
+            if (uiCodecDisplay != null)
+                uiCodecDisplay.Append( "|-1");
+
+            List<String> CodecDefParams = new List<String>{codecString.ToString(), uiCodecDisplay.ToString()};
+
+            return CodecDefParams;
+             
         }
 
     }

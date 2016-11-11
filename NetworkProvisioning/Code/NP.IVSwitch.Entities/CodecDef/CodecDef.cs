@@ -13,7 +13,6 @@ namespace NP.IVSwitch.Entities
         public string Description { get; set; }
         public int ClockRate { get; set; }
         public int DefaultMsPerPacket { get; set; }
-
         public bool PassThru { get; set; }
             
     }

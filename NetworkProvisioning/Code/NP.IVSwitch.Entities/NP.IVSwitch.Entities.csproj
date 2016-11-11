@@ -44,10 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodecDef\CodecDef.cs" />
-    <Compile Include="CodecDef\CodecDefDetail.cs" />
     <Compile Include="CodecDef\CodecDefFilter.cs" />
     <Compile Include="CodecDef\CodecDefInfo.cs" />
-    <Compile Include="CodecDef\CodecDefQuery.cs" />
     <Compile Include="CodecProfile\CodecProfile.cs" />
     <Compile Include="CodecProfile\CodecProfileDetail.cs" />
     <Compile Include="CodecProfile\CodecProfileEditorRuntime.cs" />
