@@ -56,7 +56,7 @@
                         drillDownDefinition.setTabSelected(countryItem);
                     var query = {
                         CountriesIds: [countryItem.Entity.CountryId]
-                    }
+                    };
                     var onCodeGroupAdded = function (codeGroupObj) {
                         if (countryItem.codeGroupGridAPI != undefined) {
                             countryItem.codeGroupGridAPI.onCodeGroupAdded(codeGroupObj);

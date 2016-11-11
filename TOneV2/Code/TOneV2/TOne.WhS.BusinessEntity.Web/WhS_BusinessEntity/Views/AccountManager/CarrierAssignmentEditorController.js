@@ -110,7 +110,7 @@
                 var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 carrierAccountReadyPromiseDeferred.promise.then(function () {
-                    var payload = { filter: { AssignableToUserId: selectedAccountManagerId } }
+                    var payload = { filter: { AssignableToUserId: selectedAccountManagerId } };
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, payload, loadCarrierAccountPromiseDeferred);
                 });
 

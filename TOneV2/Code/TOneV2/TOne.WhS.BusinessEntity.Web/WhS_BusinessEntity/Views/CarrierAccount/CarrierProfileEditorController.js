@@ -212,7 +212,7 @@
                     var citiesPayload = {
                         countryId: carrierProfileEntity.Settings.CountryId,
                         selectedIds: carrierProfileEntity.Settings.CityId
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;

@@ -125,7 +125,7 @@
             var volumeCommitmenetItemsLoadDeferred = UtilsService.createPromiseDeferred();
 
             volumeCommitmenetItemsReadyDeferred.promise.then(function () {
-                var payload = { context: getContext() }
+                var payload = { context: getContext() };
                 if(volumeCommitmentEntity != undefined)
                 {
                     payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items ;

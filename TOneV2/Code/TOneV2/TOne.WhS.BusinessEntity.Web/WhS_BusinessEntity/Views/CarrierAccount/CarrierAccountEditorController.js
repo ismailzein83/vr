@@ -262,7 +262,7 @@
                 .then(function () {
                     var directivePayload = {
                         selectedIds: (carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined ? carrierProfileId : undefined))
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
                 });
 

@@ -120,7 +120,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
             gridAPI.expandRow(dataItem);
             var query = {
                 SellingProductsIds: [dataItem.Entity.SellingProductId]
-            }
+            };
 
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
                 if (dataItem.custormerSellingProductGridAPI != undefined) {

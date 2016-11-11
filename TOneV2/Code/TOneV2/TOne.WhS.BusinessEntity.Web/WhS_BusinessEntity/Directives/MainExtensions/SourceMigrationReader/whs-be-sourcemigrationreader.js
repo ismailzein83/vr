@@ -188,9 +188,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 var loadOffPeakRateTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 offPeakRateTypeSelectorReadyPrmoiseDeferred.promise.then(function () {
-                   var offPeakRatePayload = {
+                    var offPeakRatePayload = {
                         selectedIds: offPeakRateTypeId
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(offPeakRateTypeSelectorAPI, offPeakRatePayload, loadOffPeakRateTypeSelectorPromiseDeferred);
                 });
 
@@ -201,9 +201,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 var loadWeekendRateTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 weekendRateTypeSelectorReadyPrmoiseDeferred.promise.then(function () {
-                  var  weekendRatePayload = {
+                    var weekendRatePayload = {
                         selectedIds: weekendRateTypeId
-                    }
+                    };
                   VRUIUtilsService.callDirectiveLoad(weekendRateTypeSelectorAPI, weekendRatePayload, loadWeekendRateTypeSelectorPromiseDeferred);
                 });
 

@@ -95,7 +95,7 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
                                 var directivePayload = {
                                     sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
                                     selectedIds: selectedIds
-                                }
+                                };
 
                                 VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
                             });

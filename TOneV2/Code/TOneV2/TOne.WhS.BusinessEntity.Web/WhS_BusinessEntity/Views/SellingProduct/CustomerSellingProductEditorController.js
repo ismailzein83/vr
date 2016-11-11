@@ -144,7 +144,7 @@
                     var directivePayload = {
                         selectedIds: $scope.carrierAccountId != undefined ? [$scope.carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined,
                         filter: { AssignableToSellingProductId: sellingProductId }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
                 });
             return carrierAccountLoadPromiseDeferred.promise;

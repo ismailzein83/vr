@@ -100,7 +100,7 @@
             countryReadyPromiseDeferred.promise.then(function () {
                 var directivePayload = {
                     selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId : (countryId != undefined) ? countryId : undefined
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
             });
             return countryLoadPromiseDeferred.promise;

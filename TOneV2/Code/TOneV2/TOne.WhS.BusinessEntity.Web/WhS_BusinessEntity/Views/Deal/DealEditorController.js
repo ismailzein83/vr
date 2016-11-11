@@ -151,7 +151,7 @@
                     .then(function () {
                         var directivePayload = {
                             sellingNumberPlanId: null
-                        }
+                        };
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
                             directivePayload.SellingParts = dealEntity.Settings.SellingParts;
 
@@ -188,7 +188,7 @@
                     .then(function () {
                         var directivePayload = {
                             sellingNumberPlanId: null
-                        }
+                        };
                         if (dealEntity != undefined && dealEntity.Settings != undefined)
                             directivePayload.BuyingParts = dealEntity.Settings.BuyingParts;
 

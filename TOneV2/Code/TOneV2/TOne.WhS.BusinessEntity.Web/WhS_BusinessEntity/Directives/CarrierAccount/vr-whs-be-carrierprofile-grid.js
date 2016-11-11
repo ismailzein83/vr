@@ -125,7 +125,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             gridAPI.expandRow(dataItem);
             var query = {
                 CarrierProfilesIds: [dataItem.CarrierProfileId],
-            }
+            };
 
             var onCarrierAccountAdded = function (carrierAccountObj) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccountObj);
