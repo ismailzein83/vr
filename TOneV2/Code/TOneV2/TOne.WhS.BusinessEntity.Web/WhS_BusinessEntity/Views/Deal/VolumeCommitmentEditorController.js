@@ -42,11 +42,10 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountSelectorAPI, payload, setLoader, carrierAccountSelectorReadyDeferred);
             };
 
-            $scope.scopeModel.onVolumeCommitmenetItemsReady = function(api)
-            {
+            $scope.scopeModel.onVolumeCommitmenetItemsReady = function (api) {
                 volumeCommitmenetItemsAPI = api;
                 volumeCommitmenetItemsReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateVolumeCommitment() : insertVolumeCommitment();

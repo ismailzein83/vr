@@ -34,12 +34,12 @@
                     return WhS_BE_CodeGroupAPIService.HasUpdateCodeGroupPermission();
                 else
                     return WhS_BE_CodeGroupAPIService.HasAddCodeGroupPermission();
-            }
+            };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.saveCodeGroup = function () {
                 if (editMode) {
                     return updateCodeGroup();

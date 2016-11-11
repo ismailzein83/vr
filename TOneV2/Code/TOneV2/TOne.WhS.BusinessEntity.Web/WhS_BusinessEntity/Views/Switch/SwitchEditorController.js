@@ -37,7 +37,7 @@
                     return WhS_BE_SwitchAPIService.HasUpdateSwitchPermission();
                 else
                     return WhS_BE_SwitchAPIService.HasAddSwitchPermission();
-            }
+            };
 
             $scope.scopeModel.saveSwitch = function () {
                 if (isEditMode) {
@@ -55,7 +55,7 @@
             $scope.scopeModel.onSwitchCDRProcessConfiguration = function (api) {
                 switchCDRProcessConfigurationDirectiveAPI = api;
                 switchCDRProcessConfigurationDirectiveReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();

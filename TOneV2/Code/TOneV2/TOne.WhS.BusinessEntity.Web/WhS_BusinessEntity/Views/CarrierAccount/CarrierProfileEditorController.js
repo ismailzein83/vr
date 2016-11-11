@@ -61,21 +61,21 @@
             $scope.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.disabledfax = true;
             $scope.scopeModal.onFaxValueChange = function (value) {
                 $scope.scopeModal.disabledfax = (value == undefined);
-            }
+            };
             $scope.scopeModal.disabledphone = true;
             $scope.scopeModal.onPhoneValueChange = function (value) {
                 $scope.scopeModal.disabledphone = (value == undefined);
-            }
+            };
 
 
             $scope.SaveCarrierProfile = function () {
@@ -101,7 +101,7 @@
             };
 
 
-            $scope.onCountrySelectionChanged= function () {
+            $scope.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
                     var setLoader = function (value) { $scope.isLoadingCities = value };
@@ -112,7 +112,7 @@
                 }
                 else if (cityDirectiveAPI != undefined)
                     cityDirectiveAPI.clearDataSource();
-            }
+            };
 
 
             $scope.addFaxOption = function () {

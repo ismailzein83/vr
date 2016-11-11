@@ -33,11 +33,11 @@
                     return WhS_BE_ZoneServiceConfigAPIService.HasUpdateZoneServiceConfigPermission();
                 else
                     return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
-            }
+            };
             $scope.onZoneServiceSelectorReady = function (api) {
                 zoneServiceAPI = api;
                 zoneServiceSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.saveZoneServiceConfig = function () {
                 if (isEditMode) {
                     return updateZoneServiceConfig();
@@ -89,7 +89,7 @@
 
         function loadStaticControls() {
             if (zoneServiceConfigEntity == undefined)
-                return
+                return;
 
             $scope.name = zoneServiceConfigEntity.Settings.Name;
             $scope.symbol = zoneServiceConfigEntity.Symbol;

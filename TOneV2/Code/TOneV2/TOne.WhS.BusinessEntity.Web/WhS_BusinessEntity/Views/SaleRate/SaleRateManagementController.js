@@ -67,7 +67,7 @@
                 {
                     $scope.isLoadingOwnerSelector = false;
                 };
-            }
+            };
 
             $scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
@@ -100,8 +100,8 @@
                 carrierAccountSelectorReadyDeferred.resolve();
             };
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
-               
+                gridAPI = api;
+                ;
             }
           
         }

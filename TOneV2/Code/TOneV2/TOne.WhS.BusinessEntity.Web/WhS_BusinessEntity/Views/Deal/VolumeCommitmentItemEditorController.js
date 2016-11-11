@@ -44,18 +44,17 @@
                 if ($scope.scopeModel.rates != undefined && $scope.scopeModel.rates.length > 0)
                     return null;
                 return "You Should add at least one rate.";
-            }
+            };
 
 
             $scope.scopeModel.removeRate = function (dataItem) {
                 var index = $scope.scopeModel.rates.indexOf(dataItem);
                 $scope.scopeModel.rates.splice(index, 1);
-            }
-            $scope.scopeModel.onZoneSelectorReady = function(api)
-            {
+            };
+            $scope.scopeModel.onZoneSelectorReady = function (api) {
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateVolumeCommitmentItem() : addVolumeCommitmentItem();

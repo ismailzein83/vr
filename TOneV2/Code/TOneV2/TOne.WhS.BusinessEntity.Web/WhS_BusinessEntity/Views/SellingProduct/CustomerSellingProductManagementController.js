@@ -31,18 +31,18 @@
                 var filter = {
                 }
                 api.loadGrid(filter);
-            }
+            };
             $scope.effectiveDate;
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingCustomers = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
-            }
+            };
             $scope.onSellingProductsDirectiveReady = function (api) {
                 sellingProductsDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSellingProduct = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductsDirectiveAPI, undefined, setLoader, sellingProductReadyPromiseDeferred);
-            }
+            };
         }
 
         function load() {

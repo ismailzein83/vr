@@ -27,7 +27,7 @@
                     return WhS_BE_SellingNumberPlanAPIService.HasUpdateSellingNumberPlanPermission();
                 else
                     return WhS_BE_SellingNumberPlanAPIService.HasAddSellingNumberPlanPermission();
-            }
+            };
 
             $scope.saveSellingNumberPlan = function () {
                 if (editMode) {

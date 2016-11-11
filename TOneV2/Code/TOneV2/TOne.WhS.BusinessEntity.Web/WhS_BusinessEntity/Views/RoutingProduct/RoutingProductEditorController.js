@@ -131,15 +131,15 @@
                     zoneNamesDict = {};
 
                 zoneNamesDict[selectedSaleZone.SaleZoneId] = selectedSaleZone.Name;
-            }
+            };
             $scope.scopeModel.onDeselectSaleZone = function (deselectedSaleZone) {
                 editRoutingProductZoneServiceObj(deselectedSaleZone.SaleZoneId);
-            }
+            };
 
             $scope.scopeModel.validateSellingNumberPlan = function () {
                 return ($scope.scopeModel.selectedSellingNumberPlan != undefined) ? null : 'No selling number plan selected';
 
-            }
+            };
 
             $scope.scopeModel.SaveRoutingProduct = function () {
                 if (isEditMode) {
@@ -155,7 +155,7 @@
                     return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
                 else
                     return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()

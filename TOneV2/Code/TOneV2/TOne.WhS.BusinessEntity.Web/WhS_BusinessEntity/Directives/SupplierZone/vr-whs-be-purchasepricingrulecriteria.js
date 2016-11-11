@@ -60,7 +60,7 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
                     }
                 }
                 return obj;
-            }
+            };
 
             api.load = function (payload) {
                 supplierSelectorAPI.clearDataSource();
@@ -95,7 +95,7 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -24,12 +24,12 @@
                 gridReady = api;
                 var filter = {}
                 api.loadGrid(filter);
-            }
+            };
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
 
-            }
+            };
 
             $scope.AddNewSellingProduct = AddNewSellingProduct;
         }

@@ -95,7 +95,7 @@ function (UtilsService, $compile, WhS_BE_SupplierZoneAPIService, VRNotificationS
                     }
                 }
                 return supplierZoneGroupSettings;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

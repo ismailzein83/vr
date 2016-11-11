@@ -56,29 +56,29 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onSellingProductsDirectiveReady = function (api) {
                     sellingProductDirectiveAPI = api;
-                }
+                };
 
 
                 $scope.onOffPeakRateTypeSelectorReady = function (api) {
                     offPeakRateTypeSelectorAPI = api;
                     offPeakRateTypeSelectorReadyPrmoiseDeferred.resolve();
-                }
+                };
 
                 $scope.onWeekendRateTypeSelectorReady = function (api) {
                     weekendRateTypeSelectorAPI = api;
                     weekendRateTypeSelectorReadyPrmoiseDeferred.resolve();
-                }
+                };
 
 
                 $scope.validateOffPeakAndWeekendRate = function () {
                     if (weekendRateTypeSelectorAPI != undefined && offPeakRateTypeSelectorAPI != undefined && weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds())
                         return "offPeak rate must be different to weekend rate";
                     return null;
-                }
+                };
 
                 $scope.onSellingNumberPlanSelectionChanged = function () {
                     var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
@@ -96,7 +96,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     }
                     else if (sellingProductDirectiveAPI != undefined)
                         sellingProductDirectiveAPI.clearDataSource();
-                }
+                };
 
                 UtilsService.waitMultiplePromises([sellingNumberPlanReadyPromiseDeferred.promise, offPeakRateTypeSelectorReadyPrmoiseDeferred.promise, weekendRateTypeSelectorReadyPrmoiseDeferred.promise]).then(function () {
                     defineAPI();
@@ -162,7 +162,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
                          });
 
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

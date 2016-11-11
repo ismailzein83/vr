@@ -55,11 +55,11 @@
             $scope.onSellingProductsDirectiveReady = function (api) {
                 sellingProductDirectiveAPI = api;
                 sellingProductReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onSelectionChanged = function () {
                 if (sellingProductDirectiveAPI != undefined && !$scope.disableCarrierAccount) {
                     var setLoader = function (value) { $scope.isLoadingCustomers = value };
@@ -69,11 +69,11 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, payload, setLoader);
                 }
 
-            }
+            };
             $scope.beginEffectiveDate = new Date();
             $scope.validateEffectiveDate = function () {
                 return VRValidationService.validateTimeEqualorGreaterthanToday($scope.beginEffectiveDate);
-            }
+            };
         }
         function load() {
             $scope.isLoading = true;

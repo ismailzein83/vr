@@ -87,7 +87,7 @@
                     }
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
-            }
+            };
 
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
@@ -96,13 +96,13 @@
                 }
                 var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfig = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
-            }
+            };
 
             $scope.scopeModel.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
 
-            }
+            };
 
             $scope.scopeModel.onCustomerTimeSelectorReady = function (api) {
                 customerTimeDirectiveAPI = api;
@@ -115,7 +115,7 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeDirectiveAPI, payload, setLoader);
 
 
-            }
+            };
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
                 supplierTimeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSupplier = value };
@@ -126,12 +126,12 @@
                     }
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeDirectiveAPI, payload, setLoader);
 
-            }
+            };
 
             $scope.scopeModel.onActivationStatusDirectiveReady = function (api) {
                 activationStatusSelectorAPI = api;
                 activationStatusSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onCustomerRoutingStatusDirectiveReady = function (api) {
                 cusRoutingStatusSelectorAPI = api;
@@ -140,7 +140,7 @@
                     selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != undefined ? carrierAccountEntity.CustomerSettings.RoutingStatus : null)
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, cusRoutingStatusSelectorAPI, payload, setLoader);
-            }
+            };
             $scope.scopeModel.onSupplierRoutingStatusDirectiveReady = function (api) {
 
                 supRoutingStatusSelectorAPI = api;
@@ -149,11 +149,11 @@
                     selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.RoutingStatus : null)
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supRoutingStatusSelectorAPI, payload, setLoader);
-            }
+            };
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onCarrierTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
@@ -213,7 +213,7 @@
 
                 }
 
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
