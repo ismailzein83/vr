@@ -34,14 +34,14 @@
                 rpRoutePolicyAPI = api;
             };
 
-            $scope.onRoutingProductSelectorReady = function (api) {
-                routingProductSelectorAPI = api;
-                routingProductReadyPromiseDeferred.resolve();
-            }
-
             $scope.onSaleZoneSelectorReady = function (api) {
                 saleZoneSelectorAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onRoutingProductSelectorReady = function (api) {
+                routingProductSelectorAPI = api;
+                routingProductReadyPromiseDeferred.resolve();
             }
 
             $scope.onRoutingDatabaseSelectorChange = function ()
@@ -88,7 +88,6 @@
                 return query;
             }
         }
-
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
@@ -108,7 +107,6 @@
 
             return loadRoutingDatabasePromiseDeferred.promise;
         }
-
         function loadRoutingProductSelector() {
             var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -118,7 +116,6 @@
 
             return loadRoutingProductPromiseDeferred.promise;
         }
-
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
