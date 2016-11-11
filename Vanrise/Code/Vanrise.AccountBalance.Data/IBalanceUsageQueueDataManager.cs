@@ -7,9 +7,9 @@ using Vanrise.AccountBalance.Entities;
 
 namespace Vanrise.AccountBalance.Data
 {
-    public interface IBalanceUsageQueueDataManager:IDataManager
+    public interface IBalanceUsageQueueDataManager : IDataManager
     {
-        void LoadUsageBalanceUpdate(Action<BalanceUsageQueue> onUsageBalanceUpdateReady);
-        bool UpdateUsageBalance(BalanceUsageDetail balanceUsageDetail);
+        void LoadUsageBalanceUpdate(Guid accountTypeId, Action<BalanceUsageQueue> onUsageBalanceUpdateReady);
+        bool UpdateUsageBalance(Guid accountTypeId, BalanceUsageDetail balanceUsageDetail);
     }
 }

@@ -10,21 +10,25 @@ using Vanrise.AccountBalance.Data;
 
 namespace Vanrise.AccountBalance.BP.Activities
 {
-   
+
     #region Argument Classes
     public class LoadPendingUsageUpdatesInput
     {
+        public Guid AccountTypeId { get; set; }
         public BaseQueue<BalanceUsageQueue> OutputQueue { get; set; }
     }
     #endregion
-    
+
     public sealed class LoadPendingUsageUpdates : BaseAsyncActivity<LoadPendingUsageUpdatesInput>
     {
 
         #region Arguments
         [RequiredArgument]
+        public InArgument<Guid> AccountTypeId { get; set; }
+
+        [RequiredArgument]
         public InOutArgument<BaseQueue<BalanceUsageQueue>> OutputQueue { get; set; }
-        
+
         #endregion
 
         protected override void DoWork(LoadPendingUsageUpdatesInput inputArgument, AsyncActivityHandle handle)
@@ -33,7 +37,7 @@ namespace Vanrise.AccountBalance.BP.Activities
 
             IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
 
-            dataManager.LoadUsageBalanceUpdate((balanceUsageQueue) =>
+            dataManager.LoadUsageBalanceUpdate(inputArgument.AccountTypeId, (balanceUsageQueue) =>
             {
                 inputArgument.OutputQueue.Enqueue(balanceUsageQueue);
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "New Billing Transactions loaded.");
@@ -50,6 +54,7 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             return new LoadPendingUsageUpdatesInput()
             {
+                AccountTypeId = this.AccountTypeId.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }

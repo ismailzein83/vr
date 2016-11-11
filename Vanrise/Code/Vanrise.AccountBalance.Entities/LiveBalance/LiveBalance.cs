@@ -9,6 +9,7 @@ namespace Vanrise.AccountBalance.Entities
     public class LiveBalance : Vanrise.Notification.Entities.IVREntityBalanceInfo
     {
         public long AccountId { get; set; }
+        public Guid AccountTypeId { get; set; }
         public decimal InitialBalance { get; set; }
         public Decimal UsageBalance { get; set; }
         public int? AlertRuleID { get; set; }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Data
 {
-    public interface IBalanceHistoryDataManager:IDataManager
+    public interface IBalanceHistoryDataManager : IDataManager
     {
+        bool InsertBalanceHistoryFromLiveBalance(long closingPeriodID);
     }
 }

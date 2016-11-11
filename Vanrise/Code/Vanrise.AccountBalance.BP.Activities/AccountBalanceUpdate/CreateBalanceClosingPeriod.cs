@@ -12,8 +12,10 @@ namespace Vanrise.AccountBalance.BP.Activities
 
     public sealed class CreateBalanceClosingPeriod : CodeActivity
     {
-       
+
         #region Arguments
+         [RequiredArgument]
+        public InArgument<Guid> AccountTypeId { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> BalanceClosingPeriod { get; set; }
@@ -25,7 +27,7 @@ namespace Vanrise.AccountBalance.BP.Activities
 
             IClosingPeriodDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IClosingPeriodDataManager>();
             ConfigurationManager configurationManager = new ConfigurationManager();
-            dataManager.CreateClosingPeriod(BalanceClosingPeriod.Get(context), configurationManager.GetUsageTransactionTypeId());
+            dataManager.CreateClosingPeriod(BalanceClosingPeriod.Get(context), AccountTypeId.Get(context), configurationManager.GetUsageTransactionTypeId());
         }
     }
 }

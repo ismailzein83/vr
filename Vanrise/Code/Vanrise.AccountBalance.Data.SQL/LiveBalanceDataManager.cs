@@ -12,7 +12,7 @@ namespace Vanrise.AccountBalance.Data.SQL
 {
     public class LiveBalanceDataManager : BaseSQLDataManager, ILiveBalanceDataManager
     {
-         
+
         #region ctor/Local Variables
         const string LiveBalance_TABLENAME = "LiveBalance";
         public LiveBalanceDataManager()
@@ -41,7 +41,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 BillingTransactionDataManager dataManager = new BillingTransactionDataManager();
                 dataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
                 scope.Complete();
-            } 
+            }
             return true;
         }
         public bool UpdateLiveBalanceFromBalanceUsageQueue(IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId)
@@ -62,22 +62,22 @@ namespace Vanrise.AccountBalance.Data.SQL
                 }
                 liveBalanceToUpdate.EndLoadData();
                 if (liveBalanceToUpdate.Rows.Count > 0)
-                 ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBalanceUsageQueue]",
-                        (cmd) =>
-                        {
-                            var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceTable", SqlDbType.Structured);
-                            dtPrm.Value = liveBalanceToUpdate;
-                            cmd.Parameters.Add(dtPrm);
-                        });
+                    ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBalanceUsageQueue]",
+                           (cmd) =>
+                           {
+                               var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceTable", SqlDbType.Structured);
+                               dtPrm.Value = liveBalanceToUpdate;
+                               cmd.Parameters.Add(dtPrm);
+                           });
                 BalanceUsageQueueDataManager dataManager = new BalanceUsageQueueDataManager();
                 dataManager.DeleteBalanceUsageQueue(balanceUsageQueueId);
                 scope.Complete();
             }
             return true;
         }
-        public  IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo()
+        public IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId)
         {
-            return GetItemsSP("[VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]", LiveBalanceAccountInfoMapper);
+            return GetItemsSP("[VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]", LiveBalanceAccountInfoMapper, accountTypeId);
         }
         public void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady)
         {
@@ -90,13 +90,13 @@ namespace Vanrise.AccountBalance.Data.SQL
                    }
                });
         }
-        public bool AddLiveBalance(long accountId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
+        public bool AddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
         }
-        public bool UpdateLiveBalanceBalance()
+        public bool UpdateLiveBalanceBalance(Guid accountTypeId)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]") > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]", accountTypeId) > 0);
         }
 
         public bool UpdateLiveBalanceThreshold(List<BalanceAccountThreshold> balanceAccountsThresholds)
@@ -159,6 +159,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
                 AccountId = (long)reader["AccountId"],
+                AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 AlertRuleID = GetReaderValue<int?>(reader, "AlertRuleID"),

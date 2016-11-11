@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class BillingTransactionQuery
+   public class BalanceAccountTypeInfo
     {
-        public List<long> AccountsIds { get; set; }
-        public Guid AccountTypeId { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

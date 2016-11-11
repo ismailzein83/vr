@@ -26,7 +26,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
                 accountsIds = string.Join<long>(",", query.AccountsIds);
 
-            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds, query.AccountTypeId);
         }
         public bool UpdateBillingTransactionBalanceStatus(List<long> billingTransactionIds)
         {
@@ -35,7 +35,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 billingTransactionIDs = string.Join<long>(",", billingTransactionIds);
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_SetBalanceUpdated]", billingTransactionIDs) > 0);
         }
-        public void GetBillingTransactionsByBalanceUpdated(Action<BillingTransaction> onBillingTransactionReady)
+        public void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_BillingTransaction_GetBalanceNotUpdated]",
                 (reader) =>
@@ -44,20 +44,35 @@ namespace Vanrise.AccountBalance.Data.SQL
                     {
                         onBillingTransactionReady(BillingTransactionMapper(reader));
                     }
-                });
+                }, accountTypeId);
         }
 
-        public bool InsertBillingTransactionFromLiveBalance(DateTime closingTime,Guid usageTransactionTypeId,long closingPeriodID)
+        public bool InsertBillingTransactionFromLiveBalance(DateTime closingTime, Guid accountTypeId, Guid usageTransactionTypeId, long closingPeriodID)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromLiveBalance]", closingTime, usageTransactionTypeId, closingPeriodID) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromLiveBalance]", closingTime, accountTypeId, usageTransactionTypeId, closingPeriodID) > 0);
         }
-        public bool UpdateBillingTransactionClosingPeriod(long closingPeriodID)
+        public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_UpdateClosingPeriodId]", closingPeriodID) > 0);
+            object billingTransactionID;
+            int affectedRecords = ExecuteNonQuerySP("[VR_AccountBalance].sp_BillingTransaction_Insert", out billingTransactionID, billingTransaction.AccountId, billingTransaction.AccountTypeId, billingTransaction.Amount, billingTransaction.CurrencyId, billingTransaction.TransactionTypeId, billingTransaction.TransactionTime, billingTransaction.Notes, billingTransaction.Reference);
+
+            if (affectedRecords > 0)
+            {
+                billingTransactionId = (int)billingTransactionID;
+                return true;
+            }
+
+            billingTransactionId = -1;
+            return false;
+        }
+
+        public bool UpdateBillingTransactionClosingPeriod(long closingPeriodID, Guid accountTypeId)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_UpdateClosingPeriodId]", closingPeriodID, accountTypeId) > 0);
 
         }
+
         #endregion
-
 
         #region Mappers
 
@@ -65,8 +80,9 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return new BillingTransaction
             {
-                AccountBillingTransactionId=(long)reader["ID"],
+                AccountBillingTransactionId = (long)reader["ID"],
                 AccountId = (long)reader["AccountID"],
+                AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
                 Amount = GetReaderValue<Decimal>(reader, "Amount"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
                 Notes = reader["Notes"] as string,
@@ -78,20 +94,5 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         #endregion
 
-        public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
-        {
-            object billingTransactionID;
-            int affectedRecords = ExecuteNonQuerySP("[VR_AccountBalance].sp_BillingTransaction_Insert", out billingTransactionID, billingTransaction.AccountId, billingTransaction.Amount,
-                                                     billingTransaction.CurrencyId, billingTransaction.TransactionTypeId, billingTransaction.TransactionTime, billingTransaction.Notes, billingTransaction.Reference);
-
-            if (affectedRecords > 0)
-            {  
-                billingTransactionId = (int)billingTransactionID;
-                return true;
-            }  
-
-            billingTransactionId = -1;
-            return false;
-        }
     }
 }

@@ -11,19 +11,22 @@ using System.Threading;
 
 namespace Vanrise.AccountBalance.BP.Activities
 {
-  
+
     #region Argument Classes
     public class LoadNewBillingTransactionsInput
     {
+        public Guid AccountTypeId { get; set; }
         public BaseQueue<BillingTransactionBatch> OutputQueue { get; set; }
     }
     #endregion
 
     public sealed class LoadNewBillingTransactions : BaseAsyncActivity<LoadNewBillingTransactionsInput>
     {
-        
+
         #region Arguments
-       
+         [RequiredArgument]
+        public InArgument<Guid> AccountTypeId { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<BillingTransactionBatch>> OutputQueue { get; set; }
         #endregion
@@ -31,15 +34,15 @@ namespace Vanrise.AccountBalance.BP.Activities
         protected override void DoWork(LoadNewBillingTransactionsInput inputArgument, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading New Billing Transactions ...");
-          
+
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             long accountId = -1;
             var list = new List<BillingTransaction>();
-            dataManager.GetBillingTransactionsByBalanceUpdated( (billingTransaction) =>
+            dataManager.GetBillingTransactionsByBalanceUpdated(inputArgument.AccountTypeId, (billingTransaction) =>
             {
                 if (accountId == -1)
                     accountId = billingTransaction.AccountId;
-              
+
                 if (billingTransaction.AccountId != accountId)
                 {
                     var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
@@ -49,8 +52,8 @@ namespace Vanrise.AccountBalance.BP.Activities
                 }
                 list.Add(billingTransaction);
             });
-         
-            if(list.Count>0)
+
+            if (list.Count > 0)
             {
                 var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
                 inputArgument.OutputQueue.Enqueue(billingTransactionBatch);
@@ -67,6 +70,7 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             return new LoadNewBillingTransactionsInput()
             {
+                AccountTypeId = this.AccountTypeId.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }

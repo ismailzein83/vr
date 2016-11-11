@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAccountbalanceUpdateprocess", [function () {
+app.directive("vrAccountbalanceUpdateprocessManual", ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -21,14 +21,22 @@ app.directive("vrAccountbalanceUpdateprocess", [function () {
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_AccountBalance/Directives/ProcessInput/Templates/AccountBalanceUpdateProcess.html"
+        templateUrl: "/Client/Modules/VR_AccountBalance/Directives/ProcessInput/Normal/Templates/AccountBalanceUpdateProcessManualTemplate.html"
     };
 
     function DirectiveConstructor($scope, ctrl) {
-
         this.initializeController = initializeController;
 
+        var accountTypeSelectorAPI;
+        var accountTypeSelectorAPIReadyDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
+
+            $scope.accountTypeSelectorReady = function (api) {
+                accountTypeSelectorAPI = api;
+                accountTypeSelectorAPIReadyDeferred.resolve();
+            };
+
             defineAPI();
         }
 
@@ -39,16 +47,28 @@ app.directive("vrAccountbalanceUpdateprocess", [function () {
                 return {
                     InputArguments: {
                         $type: "Vanrise.AccountBalance.BP.Arguments.AccountBalanceUpdateProcessInput, Vanrise.AccountBalance.BP.Arguments",
+                        AccountTypeId: accountTypeSelectorAPI.getSelectedIds()
                     }
                 };
             };
 
             api.load = function (payload) {
-
+                var promises = [];
+                promises.push(loadAccountTypeSelector());
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function loadAccountTypeSelector() {
+            var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            accountTypeSelectorAPIReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, undefined, accountTypeSelectorLoadDeferred);
+            });
+
+            return accountTypeSelectorLoadDeferred.promise;
         }
     }
 

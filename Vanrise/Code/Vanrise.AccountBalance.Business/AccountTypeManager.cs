@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance
 {
@@ -16,10 +18,31 @@ namespace Vanrise.AccountBalance
             return accountTypeSettings.AccountBusinessEntityDefinitionId;
         }
 
-        private AccountTypeSettings GetAccountTypeSettings(Guid accountTypeId)
+        public IEnumerable<BalanceAccountTypeInfo> GetAccountTypeInfo()
+        {
+            return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings>().MapRecords(AccountTypeInfoMapper);
+        }
+
+        private BalanceAccountTypeInfo AccountTypeInfoMapper(VRComponentType<AccountTypeSettings> componentType)
+        {
+            return new BalanceAccountTypeInfo
+            {
+                Id = componentType.VRComponentTypeId,
+                Name = componentType.Name
+            };
+        }
+
+        AccountTypeSettings GetAccountTypeSettings(Guid accountTypeId)
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<AccountTypeSettings>(accountTypeId);
         }
-
+        BalanceAccountTypeInfo AccountTypeInfoMapper(AccountType accountType)
+        {
+            return new BalanceAccountTypeInfo
+            {
+                Id = accountType.VRComponentTypeId,
+                Name = accountType.Name
+            };
+        }
     }
 }

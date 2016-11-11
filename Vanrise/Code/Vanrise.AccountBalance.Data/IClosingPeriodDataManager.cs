@@ -7,9 +7,9 @@ using Vanrise.AccountBalance.Entities;
 
 namespace Vanrise.AccountBalance.Data
 {
-    public interface IClosingPeriodDataManager:IDataManager
+    public interface IClosingPeriodDataManager : IDataManager
     {
-        void CreateClosingPeriod(DateTime balanceClosingPeriod, Guid usageTransactionTypeId);
-        BalanceClosingPeriod GetLastClosingPeriod();
+        void CreateClosingPeriod(DateTime balanceClosingPeriod, Guid accountTypeId, Guid usageTransactionTypeId);
+        BalanceClosingPeriod GetLastClosingPeriod(Guid accountTypeId);
     }
 }

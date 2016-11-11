@@ -10,7 +10,7 @@ using Vanrise.Data.SQL;
 
 namespace Vanrise.AccountBalance.Data.SQL
 {
-    public class BalanceUsageQueueDataManager: BaseSQLDataManager, IBalanceUsageQueueDataManager
+    public class BalanceUsageQueueDataManager : BaseSQLDataManager, IBalanceUsageQueueDataManager
     {
         #region ctor/Local Variables
         public BalanceUsageQueueDataManager()
@@ -18,12 +18,12 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
         }
 
-       
+
 
         #endregion
 
         #region Public Methods
-        public void LoadUsageBalanceUpdate(Action<BalanceUsageQueue> onUsageBalanceUpdateReady)
+        public void LoadUsageBalanceUpdate(Guid accountTypeId, Action<BalanceUsageQueue> onUsageBalanceUpdateReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_BalanceUsageQueue_GetAll]",
                 (reader) =>
@@ -32,23 +32,23 @@ namespace Vanrise.AccountBalance.Data.SQL
                     {
                         onUsageBalanceUpdateReady(BillingTransactionMapper(reader));
                     }
-                });
+                }, accountTypeId);
         }
-        public bool UpdateUsageBalance(BalanceUsageDetail balanceUsageDetail)
+        public bool UpdateUsageBalance(Guid accountTypeId, BalanceUsageDetail balanceUsageDetail)
         {
             byte[] binaryArray = null;
             if (balanceUsageDetail != null)
             {
                 binaryArray = Common.ProtoBufSerializer.Serialize(balanceUsageDetail);
             }
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Update]", binaryArray) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Update]", accountTypeId, binaryArray) > 0);
         }
         public bool DeleteBalanceUsageQueue(long balanceUsageQueueId)
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Delete]", balanceUsageQueueId) > 0);
         }
         #endregion
-      
+
         #region Mappers
 
         private BalanceUsageQueue BillingTransactionMapper(IDataReader reader)
@@ -56,7 +56,8 @@ namespace Vanrise.AccountBalance.Data.SQL
             return new BalanceUsageQueue
             {
                 BalanceUsageQueueId = (long)reader["ID"],
-                UsageDetails = Vanrise.Common.ProtoBufSerializer.Deserialize<BalanceUsageDetail>(GetReaderValue<byte[]>(reader,"UsageDetails"))
+                AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
+                UsageDetails = Vanrise.Common.ProtoBufSerializer.Deserialize<BalanceUsageDetail>(GetReaderValue<byte[]>(reader, "UsageDetails"))
             };
         }
 

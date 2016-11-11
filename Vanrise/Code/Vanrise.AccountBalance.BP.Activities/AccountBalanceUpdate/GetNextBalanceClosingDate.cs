@@ -11,12 +11,14 @@ namespace Vanrise.AccountBalance.BP.Activities
 
     public sealed class GetNextBalanceClosingDate : CodeActivity
     {
-       
+
         #region Arguments
-       
+         [RequiredArgument]
+        public InArgument<Guid> AccountTypeId { get; set; }
+
         [RequiredArgument]
         public OutArgument<DateTime> NextClosingDate { get; set; }
-     
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -24,7 +26,7 @@ namespace Vanrise.AccountBalance.BP.Activities
             context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Load Next Balance Closing Date.");
             ConfigurationManager configurationManager = new ConfigurationManager();
             IClosingPeriodDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IClosingPeriodDataManager>();
-            var lastClosingPeriod =  dataManager.GetLastClosingPeriod();
+            var lastClosingPeriod = dataManager.GetLastClosingPeriod(AccountTypeId.Get(context));
 
             BalancePeriodContext balancePeriodContext = new Business.BalancePeriodContext
             {

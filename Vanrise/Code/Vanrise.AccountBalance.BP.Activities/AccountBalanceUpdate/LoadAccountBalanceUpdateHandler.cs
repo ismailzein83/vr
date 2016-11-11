@@ -12,17 +12,19 @@ namespace Vanrise.AccountBalance.BP.Activities
 {
     public class LoadAccountBalanceUpdateHandler : CodeActivity
     {
-      
+
         #region Arguments
+        [RequiredArgument]
+        public InArgument<Guid> AccountTypeId { get; set; }
 
         [RequiredArgument]
         public OutArgument<AccountBalanceUpdateHandler> Handler { get; set; }
 
         #endregion
-      
+
         protected override void Execute(CodeActivityContext context)
         {
-            Handler.Set(context, AccountBalanceUpdateHandler.Current);
+            Handler.Set(context, AccountBalanceUpdateHandler.GetHandlerByAccountTypeId(AccountTypeId.Get(context)));
         }
     }
 }

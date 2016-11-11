@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BalanceAccountTypeController.cs" />
     <Compile Include="Controllers\BalanceAlertController.cs" />
     <Compile Include="Controllers\BillingTransactionTypeController.cs" />
     <Compile Include="Controllers\BillingTransactionController.cs" />
@@ -142,9 +143,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="VR_AccountBalance\Directives\BalanceAccountType\Templates\" />
     <Folder Include="VR_AccountBalance\Directives\BillingTransactionType\Templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
@@ -158,13 +161,16 @@
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\FixedBalanceAlertThresholdTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-balancealertthreshold-fixed.js" />
-    <Content Include="VR_AccountBalance\Directives\ProcessInput\Templates\AccountBalanceUpdateProcess.html" />
+    <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\Templates\AccountBalanceUpdateProcessManualTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\Templates\AccountBalanceUpdateProcessScheduledTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\vr-accountbalance-updateprocess-scheduled.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Templates\BalanceAlertCheckerProcess.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Templates\BalanceAlertThresholdUpdateProcess.html" />
-    <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-accountbalance-updateprocess.js" />
+    <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\vr-accountbalance-updateprocess-manual.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertchecker-process.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertthreshold-updateprocess.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAlertAPIService.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\BalanceAccountTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />

@@ -10,5 +10,6 @@ namespace Vanrise.AccountBalance.Entities
     {
         public long BalanceClosingPeriodId { get; set; }
         public DateTime ClosingTime { get; set; }
+        public Guid AccountTypeId { get; set; }
     }
 }

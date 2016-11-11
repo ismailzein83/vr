@@ -20,7 +20,6 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
         function AccountBalanceAccountTypeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var accountTypeEntity;
-            var extensionConfigId;
 
             var genericBESelectorAPI;
             var genericBESelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -51,7 +50,6 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     $scope.scopeModel.isLoading = true;
                     if (payload != undefined) {
                         accountTypeEntity = payload.componentType;
-                        extensionConfigId = payload.extensionConfigId;
                     }
 
                     return UtilsService.waitMultipleAsyncOperations([loadBillingTransactionTypeSelector, loadGenericBESelector, loadAllControls]).catch(function (error) {
@@ -65,8 +63,6 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
 
                     return {
                         Name: $scope.scopeModel.name,
-                        VRComponentTypeId: accountTypeEntity != undefined ? accountTypeEntity.VRComponentTypeId : undefined,
-                        ExtensionConfigId: extensionConfigId,
                         Settings: GetAccountSettings(),
                     };
                 };

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,31 +12,34 @@ namespace Vanrise.AccountBalance.Business
 {
     public class AccountBalanceUpdateHandler
     {
+        static ConcurrentDictionary<Guid, AccountBalanceUpdateHandler> _handlersByAccountTypeId = new ConcurrentDictionary<Guid, AccountBalanceUpdateHandler>();
         Dictionary<long, LiveBalanceAccountInfo> AccountsInfo;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
         ILiveBalanceDataManager dataManager;
         bool LoadingError;
-        static AccountBalanceUpdateHandler s_Current;
-        public static AccountBalanceUpdateHandler Current
-        {
-            get
-            {
-                if (s_Current == null)
-                    s_Current = new AccountBalanceUpdateHandler();
-                return s_Current;
-            }
-        }
-
+        Guid _accountTypeId;
         #region ctor
-        private AccountBalanceUpdateHandler()
+        private AccountBalanceUpdateHandler(Guid accountTypeId)
         {
             currencyExchangeRateManager = new CurrencyExchangeRateManager();
             dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             manager = new AccountManager();
+            _accountTypeId = accountTypeId;
             IntializeAccountsInfo();
         }
         #endregion
+
+        public static AccountBalanceUpdateHandler GetHandlerByAccountTypeId(Guid accountTypeId)
+        {
+            AccountBalanceUpdateHandler handler;
+            if (!_handlersByAccountTypeId.TryGetValue(accountTypeId, out handler))
+            {
+                handler = new AccountBalanceUpdateHandler(accountTypeId);
+                _handlersByAccountTypeId.TryAdd(accountTypeId, handler);
+            }
+            return handler;
+        }
 
         #region Public Methods
         public void AddAndUpdateLiveBalanceFromBillingTransction(List<BillingTransaction> billingTransactions)
@@ -49,19 +53,19 @@ namespace Vanrise.AccountBalance.Business
             LiveBalanceAccountInfo accountInfo = null;
             if (!AccountsInfo.TryGetValue(accountId, out accountInfo))
             {
-               accountInfo = AddLiveAccountInfo(accountId);
+                accountInfo = AddLiveAccountInfo(accountId);
             }
-            UpdateLiveBalanceFromBillingTransaction(billingTransactions, accountId,accountInfo);
-            
+            UpdateLiveBalanceFromBillingTransaction(billingTransactions, accountId, accountInfo);
+
         }
         public void AddAndUpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<UsageBalanceUpdate> usageBalanceUpdates)
         {
-            if(this.LoadingError)
+            if (this.LoadingError)
             {
                 IntializeAccountsInfo();
             }
             var accountsToInsert = usageBalanceUpdates.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Distinct();
-            foreach(var accountToInsert in accountsToInsert)
+            foreach (var accountToInsert in accountsToInsert)
             {
                 AddLiveAccountInfo(accountToInsert.AccountId);
             }
@@ -69,7 +73,7 @@ namespace Vanrise.AccountBalance.Business
         }
         public bool AddLiveBalance(long accountId, int currencyId)
         {
-            return dataManager.AddLiveBalance(accountId,0, currencyId,0,0);
+            return dataManager.AddLiveBalance(accountId, _accountTypeId, 0, currencyId, 0, 0);
         }
         #endregion
 
@@ -93,7 +97,7 @@ namespace Vanrise.AccountBalance.Business
         private void IntializeAccountsInfo()
         {
             AccountsInfo = new Dictionary<long, LiveBalanceAccountInfo>();
-            var accountBlances = dataManager.GetLiveBalanceAccountsInfo();
+            var accountBlances = dataManager.GetLiveBalanceAccountsInfo(_accountTypeId);
             AccountsInfo = accountBlances.ToDictionary(x => x.AccountId, x => x);
         }
         private bool UpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<UsageBalanceUpdate> usageBalanceUpdates)
@@ -104,7 +108,7 @@ namespace Vanrise.AccountBalance.Business
                 AccountsInfo.TryGetValue(itm.AccountId, out accountInfo);
                 itm.Value = itm.CurrencyId != accountInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(itm.Value, itm.CurrencyId, accountInfo.CurrencyId, itm.EffectiveOn) : itm.Value;
             }
-            var groupedResult = usageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value)});
+            var groupedResult = usageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value) });
             return dataManager.UpdateLiveBalanceFromBalanceUsageQueue(groupedResult, balanceUsageQueueId);
         }
         private decimal ConvertValueToCurrency(decimal amount, int fromCurrencyId, int currencyId, DateTime effectiveOn)

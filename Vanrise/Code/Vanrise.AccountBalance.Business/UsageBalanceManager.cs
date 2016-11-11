@@ -10,10 +10,10 @@ namespace Vanrise.AccountBalance.Business
 {
     public class UsageBalanceManager
     {
-        public void UpdateUsageBalance(BalanceUsageDetail balanceUsageDetail)
+        public void UpdateUsageBalance(Guid accountTypeId, BalanceUsageDetail balanceUsageDetail)
         {
             IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
-            dataManager.UpdateUsageBalance(balanceUsageDetail);
+            dataManager.UpdateUsageBalance(accountTypeId, balanceUsageDetail);
         }
     }
 }
