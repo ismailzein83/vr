@@ -19,6 +19,8 @@ namespace TOne.WhS.Invoice.Business
                 case "InvoiceRDLCReport":
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
                      string[] partnerId = context.PartnerId.Split('_');
+                     CurrencyManager currencyManager = new CurrencyManager();
+
                      if (partnerId[0].Equals("Profile"))
                      {
                          CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
@@ -26,6 +28,8 @@ namespace TOne.WhS.Invoice.Business
                          if (carrierProfile != null)
                          {
                              rdlcReportParameters.Add("Customer", new VRRdlcReportParameter { Value = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId), IsVisible = true });
+
+                             rdlcReportParameters.Add("Currency", new VRRdlcReportParameter { Value = currencyManager.GetCurrencyName(carrierProfile.Settings.CurrencyId), IsVisible = true });
                              if(carrierProfile.Settings.Address != null)
                                  rdlcReportParameters.Add("Address", new VRRdlcReportParameter { Value = carrierProfile.Settings.Address, IsVisible = true });
                              if (carrierProfile.Settings.PhoneNumbers != null)
@@ -54,6 +58,7 @@ namespace TOne.WhS.Invoice.Business
                          if (carrierProfile != null)
                          {
                              rdlcReportParameters.Add("Customer", new VRRdlcReportParameter { Value = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId), IsVisible = true });
+                             rdlcReportParameters.Add("Currency", new VRRdlcReportParameter { Value = currencyManager.GetCurrencyName(carrierAccount.CarrierAccountSettings.CurrencyId), IsVisible = true });
                              if (carrierProfile.Settings.Address != null)
                                  rdlcReportParameters.Add("Address", new VRRdlcReportParameter { Value = carrierProfile.Settings.Address, IsVisible = true });
                              if (carrierProfile.Settings.PhoneNumbers != null)
