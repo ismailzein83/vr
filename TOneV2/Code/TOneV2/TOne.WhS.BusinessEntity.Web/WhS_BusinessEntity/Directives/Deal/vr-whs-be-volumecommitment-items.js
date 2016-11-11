@@ -8,7 +8,7 @@ app.directive("vrWhsBeVolumecommitmentItems", ["UtilsService", "VRNotificationSe
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;

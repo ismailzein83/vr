@@ -7,7 +7,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
         restrict: "E",
         scope: {
-            onReady: "=",
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

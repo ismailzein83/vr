@@ -21,7 +21,7 @@
             $scope.effectiveOn = Date.now();
             $scope.searchClicked = function () {
                 var queryHandler = {
-                    $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business",
+                    $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business"
                 };
 
                 queryHandler.Query = {

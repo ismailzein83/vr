@@ -24,7 +24,7 @@
             var modalSettings = {
             };
             var parameters = {
-                SellingProductId: sellingProductObj.SellingProductId,
+                SellingProductId: sellingProductObj.SellingProductId
             };
 
             modalSettings.onScopeReady = function (modalScope) {

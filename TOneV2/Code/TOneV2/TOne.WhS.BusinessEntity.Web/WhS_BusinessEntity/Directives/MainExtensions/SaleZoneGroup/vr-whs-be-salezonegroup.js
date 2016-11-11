@@ -5,7 +5,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            onReady: '=',
+            onReady: '='
         },
         controller: function ($scope, $element, $attrs) {
 

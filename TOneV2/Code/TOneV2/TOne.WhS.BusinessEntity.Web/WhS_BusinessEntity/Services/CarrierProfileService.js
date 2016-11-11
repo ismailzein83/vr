@@ -26,7 +26,7 @@
             };
 
             var parameters = {
-                CarrierProfileId: carrierProfileObj.Entity.CarrierProfileId,
+                CarrierProfileId: carrierProfileObj.Entity.CarrierProfileId
             };
 
             modalSettings.onScopeReady = function (modalScope) {

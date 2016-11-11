@@ -72,7 +72,7 @@
                         IsCustomerAssigned: item.IsCustomerAssigned,
                         IsSupplierAssigned: item.IsSupplierAssigned,
                         IsCustomerInDirect: (item.IsCustomerInDirect) ? ' (Indirect)' : '',
-                        IsSupplierInDirect: (item.IsSupplierInDirect) ? ' (Indirect)' : '',
+                        IsSupplierInDirect: (item.IsSupplierInDirect) ? ' (Indirect)' : ''
                     };
 
                     mappedCarriers.push(gridObject);

@@ -5,7 +5,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            onReady: '=',
+            onReady: '='
         },
         controller: function ($scope, $element, $attrs) {
 

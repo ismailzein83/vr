@@ -8,7 +8,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
         restrict: "E",
         scope: {
             onReady: "=",
-            sellingproductid: '=',
+            sellingproductid: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

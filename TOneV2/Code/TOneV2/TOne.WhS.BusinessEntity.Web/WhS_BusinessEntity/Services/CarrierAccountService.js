@@ -19,7 +19,7 @@
             var parameters;
             if (dataItem != undefined) {
                 parameters = {
-                    CarrierProfileId: dataItem.CarrierProfileId,
+                    CarrierProfileId: dataItem.CarrierProfileId
                 };
             }
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, settings);

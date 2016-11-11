@@ -48,7 +48,7 @@
                         IsCustomerInDirect: value != null ? value.IsCustomerInDirect : false,
                         IsSupplierAssigned: value != null ? value.IsSupplierAssigned : false,
                         IsSupplierAvailable: value != null ? value.IsSupplierAvailable : item.IsSupplierAvailable,
-                        IsSupplierInDirect: value != null ? value.IsSupplierInDirect : false,
+                        IsSupplierInDirect: value != null ? value.IsSupplierInDirect : false
                     }
 
                     extendGridItem(obj);

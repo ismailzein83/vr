@@ -7,7 +7,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
 
         restrict: "E",
         scope: {
-            onReady: "=",
+            onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

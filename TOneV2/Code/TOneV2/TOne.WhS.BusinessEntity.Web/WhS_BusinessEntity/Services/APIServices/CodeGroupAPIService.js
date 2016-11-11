@@ -29,7 +29,7 @@
 
         function UploadCodeGroupList(fileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UploadCodeGroupList"), {
-                fileId: fileId,
+                fileId: fileId
             });
         }
         function DownloadCodeGroupListTemplate() {

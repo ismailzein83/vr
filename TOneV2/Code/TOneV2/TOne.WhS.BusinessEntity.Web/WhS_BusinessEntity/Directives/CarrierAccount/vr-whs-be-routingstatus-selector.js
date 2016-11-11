@@ -16,7 +16,7 @@ app.directive('vrWhsBeRoutingstatusSelector', ['UtilsService', '$compile', 'VRUI
                 selectedvalues: "=",
                 hidelabel: '@',
                 normalColNum: '@',
-                hideremoveicon: '@',
+                hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;

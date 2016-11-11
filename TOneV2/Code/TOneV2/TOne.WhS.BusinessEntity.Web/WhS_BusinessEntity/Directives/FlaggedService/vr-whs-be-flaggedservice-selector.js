@@ -13,7 +13,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
             selectedvalues: '=',
             normalColNum: '@',
             onselectitem: "=",
-            ondeselectitem: "=",
+            ondeselectitem: "="
         },
         controller: function ($scope, $element, $attrs) {
 

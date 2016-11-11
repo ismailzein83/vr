@@ -16,7 +16,7 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
                 selectedvalues: "=",
                 hidelabel: '@',
                 normalColNum: '@',
-                hideremoveicon: '@',
+                hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
