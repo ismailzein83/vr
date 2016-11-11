@@ -132,6 +132,21 @@ namespace Vanrise.Common.Business
             }).ToList();
         }
 
+        public List<Q> GetComponentTypes<T, Q>()
+            where T : VRComponentTypeSettings
+            where Q : VRComponentType<T>
+        {
+            return GetCachedComponentTypes().FindAllRecords(itm => itm.Settings is T).Select(
+                itm =>
+                {
+                    var componentTypeAsQ = Activator.CreateInstance<Q>();
+                    componentTypeAsQ.VRComponentTypeId = itm.VRComponentTypeId;
+                    componentTypeAsQ.Name = itm.Name;
+                    componentTypeAsQ.Settings = itm.Settings as T;
+                    return componentTypeAsQ;
+                }).ToList();
+        }
+
         public T GetComponentTypeSettings<T>(Guid componentTypeId) where T : VRComponentTypeSettings
         {
             var componentType = GetComponentType<T, VRComponentType<T>>(componentTypeId);
