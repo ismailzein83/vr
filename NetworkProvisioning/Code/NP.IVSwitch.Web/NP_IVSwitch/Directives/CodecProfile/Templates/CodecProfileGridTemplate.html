@@ -1,0 +1,10 @@
+﻿
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.codecProfile"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.CodecProfileId">
+    <vr-datagridcolumn headertext="'Profile Name'" field="'Entity.ProfileName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreateDate'"></vr-datagridcolumn>  
+</vr-datagrid>

@@ -24,8 +24,9 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 TranslationRuleId = (int)reader["trans_rule_id"],
                 Name = reader["trans_rule_name"] as string,
-                DNIS_Pattern = reader["dnis_pattern"] as string,
-                CLI_Pattern = reader["cli_pattern"] as string
+                DNISPattern = reader["dnis_pattern"] as string,
+                CLIPattern = reader["cli_pattern"] as string,
+                CreationDate = reader["create_date"].ToString()
             };
 
             return translationRule;
@@ -34,7 +35,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public List<TranslationRule> GetTranslationRules()
         {
-            String cmdText = "SELECT trans_rule_id, trans_rule_name, dnis_pattern, cli_pattern  FROM trans_rules;";
+            String cmdText = "SELECT  trans_rule_id,trans_rule_name, dnis_pattern, cli_pattern, create_date  FROM trans_rules;";
             return GetItemsText(cmdText, TranslationRuleMapper,(cmd) =>
             {
             });
@@ -49,8 +50,8 @@ namespace NP.IVSwitch.Data.Postgres
                 {
                     cmd.Parameters.AddWithValue("@psgid", translationRule.TranslationRuleId);
                     cmd.Parameters.AddWithValue("@psgname", translationRule.Name);
-                    cmd.Parameters.AddWithValue("@psgdnis", translationRule.DNIS_Pattern);
-                    cmd.Parameters.AddWithValue("@psgcli", translationRule.CLI_Pattern);
+                    cmd.Parameters.AddWithValue("@psgdnis", translationRule.DNISPattern);
+                    cmd.Parameters.AddWithValue("@psgcli", translationRule.CLIPattern);
 
                 }
               );
@@ -69,8 +70,8 @@ namespace NP.IVSwitch.Data.Postgres
                translationRuleId = ExecuteScalarText(cmdText, (cmd) =>
                  {
                      cmd.Parameters.AddWithValue("@psgname", translationRule.Name);
-                     cmd.Parameters.AddWithValue("@psgdnis", translationRule.DNIS_Pattern);
-                     cmd.Parameters.AddWithValue("@psgcli ", translationRule.CLI_Pattern);
+                     cmd.Parameters.AddWithValue("@psgdnis", translationRule.DNISPattern);
+                     cmd.Parameters.AddWithValue("@psgcli ", translationRule.CLIPattern);
 
                  }
                );

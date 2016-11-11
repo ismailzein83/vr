@@ -105,6 +105,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -120,6 +124,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodecDefController.cs" />
+    <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\TranslationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -140,10 +146,25 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
+    <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-selector.js" />
+    <Content Include="NP_IVSwitch\Directives\CodecDef\Templates\CodecDefGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\CodecProfile\Templates\CodecProfileGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-grid.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Services\APIServices\CodecDefAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\CodecProfileAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\TranslationRuleAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\CodecDefService.js" />
+    <Content Include="NP_IVSwitch\Services\CodecProfileService.js" />
     <Content Include="NP_IVSwitch\Services\TranslationRuleService.js" />
+    <Content Include="NP_IVSwitch\Views\CodecDef\CodecDefEditor.html" />
+    <Content Include="NP_IVSwitch\Views\CodecDef\CodecDefEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileEditor.html" />
+    <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileManagement.html" />
+    <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileManagementController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditorController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagement.html" />

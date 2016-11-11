@@ -43,10 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodecDef\CodecDef.cs" />
+    <Compile Include="CodecDef\CodecDefDetail.cs" />
+    <Compile Include="CodecDef\CodecDefFilter.cs" />
+    <Compile Include="CodecDef\CodecDefInfo.cs" />
+    <Compile Include="CodecDef\CodecDefQuery.cs" />
+    <Compile Include="CodecProfile\CodecProfile.cs" />
+    <Compile Include="CodecProfile\CodecProfileDetail.cs" />
+    <Compile Include="CodecProfile\CodecProfileEditorRuntime.cs" />
+    <Compile Include="CodecProfile\CodecProfileQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranslationRule.cs" />
-    <Compile Include="TranslationRuleDetail.cs" />
-    <Compile Include="TranslationRuleQuery.cs" />
+    <Compile Include="TranslationRule\TranslationRule.cs" />
+    <Compile Include="TranslationRule\TranslationRuleDetail.cs" />
+    <Compile Include="TranslationRule\TranslationRuleQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

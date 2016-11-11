@@ -1,0 +1,44 @@
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_CodecDefEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formCodecDef">
+            <vr-tabs>
+                <vr-tab header="'Codec Def'">              
+                    <vr-row>
+                             <np-ivswitch-codecdef-selector on-ready="scopeModel.onSelectorDirectiveReady" onselectionchanged="scopeModel.onSelectionChanged"
+                                                           normal-col-num="3"></np-ivswitch-codecdef-selector> 
+                                <vr-div>
+                                    <vr-columns width="1/4row">
+                                        <vr-label>Payload Size</vr-label>
+                                        <vr-row>
+                                            <vr-label>{{PayloadSize}}</vr-label>
+                                        </vr-row>
+                                </vr-div>
+                        <vr-div>
+                            <vr-columns width="1/4row">
+                                <vr-label>Sampling Frequency (Hz)</vr-label>
+                                <vr-row>
+                                    <vr-label>{{SamplingFrequency}}</vr-label>
+                                </vr-row>
+                        </vr-div>
+                        <vr-div>
+                            <vr-columns width="1/4row">
+                                <vr-label>Passthru</vr-label>
+                                <vr-row>
+                                    <vr-label>{{PassThru}}</vr-label>
+                                </vr-row>
+                        </vr-div>                          
+                    </vr-row> 
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Add" formname="formCodecDef" data-onclick="scopeModel.add"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>   
+</div>

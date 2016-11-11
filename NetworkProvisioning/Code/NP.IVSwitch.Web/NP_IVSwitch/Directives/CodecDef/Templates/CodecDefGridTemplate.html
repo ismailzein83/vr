@@ -1,0 +1,10 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.add"  standalone></vr-button>
+<vr-validator validate="ctrl.isGridValid()">
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.codecDef"
+                 menuactions="scopeModel.menuActions"
+                 idfield="Entity.CodecId"
+                 ondeleterow="ctrl.deleterow">
+        <vr-datagridcolumn headertext="'Codec Name'" field="'Entity.Description'"></vr-datagridcolumn>
+    </vr-datagrid>
+    </vr-validator>

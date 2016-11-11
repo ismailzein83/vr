@@ -29,7 +29,6 @@
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/TranslationRule/TranslationRuleEditor.html', parameters, settings);
         }
 
-
         return {
             addTranslationRule: addTranslationRule,
             editTranslationRule: editTranslationRule

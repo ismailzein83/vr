@@ -33,8 +33,7 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return NP_IVSwitch_TranslationRuleAPIService.GetFilteredTranslationRules(dataRetrievalInput).then(function (response) {
- 
+                    return NP_IVSwitch_TranslationRuleAPIService.GetFilteredTranslationRules(dataRetrievalInput).then(function (response) { 
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
