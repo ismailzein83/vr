@@ -17,10 +17,10 @@ namespace TOne.WhS.Routing.Business
             List<RoutingDatabaseInfo> routingDatabases = new List<RoutingDatabaseInfo>();
             foreach (RoutingDatabaseType routingDatabaseType in Enum.GetValues(typeof(RoutingDatabaseType)))
             {
-                IEnumerable<RoutingDatabase> databases = GetRoutingDatabasesReady(filter.ProcessType, routingDatabaseType);
-                if (databases != null && databases.Count() > 0)
+                RoutingDatabase database = GetLatestRoutingDatabase(filter.ProcessType, routingDatabaseType);
+				if (database != null)
                 {
-                    var item = RoutingDatabaseInfoMapper(databases.OrderByDescending(itm => itm.CreatedTime).First());
+					var item = RoutingDatabaseInfoMapper(database);
                     item.Title = routingDatabaseType.ToString();
                     routingDatabases.Add(item);
                 }
@@ -33,6 +33,7 @@ namespace TOne.WhS.Routing.Business
             Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType && itm.IsReady);
             return GetNotDeletedDatabases().FindAllRecords(filterExpression);
         }
+
         public IEnumerable<RoutingDatabase> GetRoutingDatabases(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
         {
             Func<RoutingDatabase, bool> filterExpression = (itm) => (itm.ProcessType == routingProcessType && itm.Type == routingDatabaseType);
@@ -83,6 +84,15 @@ namespace TOne.WhS.Routing.Business
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return databaseId;
         }
+
+		public RoutingDatabase GetLatestRoutingDatabase(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
+		{
+			IEnumerable<RoutingDatabase> routingDatabases = GetRoutingDatabasesReady(routingProcessType, routingDatabaseType);
+			if (routingDatabases == null)
+				return null;
+			return routingDatabases.OrderByDescending(itm => itm.CreatedTime).First();
+		}
+
         #region Private Methods
 
         private RoutingDatabaseInfo RoutingDatabaseInfoMapper(RoutingDatabase routingDatabase)

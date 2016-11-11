@@ -207,8 +207,7 @@ namespace TOne.WhS.Routing.Business
 			if (routingDatabase == null)
 				throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId:{0}", routingDatabaseId));
 
-			var productRoutingDatabases = routingDatabaseManager.GetRoutingDatabasesReady(routingDatabase.ProcessType, routingDatabase.Type).OrderByDescending(itm => itm.CreatedTime);
-			return productRoutingDatabases.First();
+			return  routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
 		}
 
 		private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId, bool includeBlockedSupplierZones, int? customerProfileId)
