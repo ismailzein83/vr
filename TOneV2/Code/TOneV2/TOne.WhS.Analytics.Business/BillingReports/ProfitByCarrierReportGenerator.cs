@@ -84,63 +84,49 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierAccount customer = new CarrierAccount();
                     ProfitByCarrier profitByCarrier = new ProfitByCarrier();
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
-                    {
-                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         profitByCarrier.Customer = customerValue.Name;
-                    }
 
-                    if (customer != null && customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !customer.IsDeleted)
-                    {
-                        MeasureValue profit;
-                        analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
-                        profitByCarrier.CustomerProfit = Convert.ToDouble(profit.Value ?? 0.0);
-                        profitByCarrier.FormattedCustomerProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.CustomerProfit);
+                    MeasureValue profit;
+                    analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
+                    profitByCarrier.CustomerProfit = Convert.ToDouble(profit.Value ?? 0.0);
+                    profitByCarrier.FormattedCustomerProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.CustomerProfit);
 
-                        profitByCarrier.TotalBase = profitByCarrier.CustomerProfit;
-                        profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
+                    profitByCarrier.TotalBase = profitByCarrier.CustomerProfit;
+                    profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
 
-                        if (!dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
-                            dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
-                    }
+                    if (!dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
+                        dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
                 }
 
             result = analyticManager.GetFilteredRecords(analyticSupplierQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierAccount customer = new CarrierAccount();
                     ProfitByCarrier profitByCarrier = new ProfitByCarrier();
                     var customerValue = analyticRecord.DimensionValues[0];
                     if (customerValue != null)
-                    {
-                        customer = carrierAccountManager.GetCarrierAccount((int)customerValue.Value);
                         profitByCarrier.Customer = customerValue.Name;
-                    }
 
-                    if (customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !customer.IsDeleted)
+                    MeasureValue profit;
+                    analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
+                    profitByCarrier.SupplierProfit = Convert.ToDouble(profit.Value ?? 0.0);
+                    profitByCarrier.FormattedSupplierProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.SupplierProfit);
+                    if (dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
                     {
-                        MeasureValue profit;
-                        analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
-                        profitByCarrier.SupplierProfit = Convert.ToDouble(profit.Value ?? 0.0);
-                        profitByCarrier.FormattedSupplierProfit = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.SupplierProfit);
-                        if (dictionaryprofitByCustomer.ContainsKey(profitByCarrier.Customer))
-                        {
-                            var profitBycust = dictionaryprofitByCustomer[profitByCarrier.Customer];
-                            profitBycust.SupplierProfit = profitByCarrier.SupplierProfit;
-                            profitBycust.FormattedSupplierProfit = profitByCarrier.FormattedSupplierProfit;
-                            profitBycust.TotalBase += profitByCarrier.SupplierProfit;
-                            profitBycust.Total = ReportHelpers.FormatNormalNumberDigit(profitBycust.TotalBase);
-                        }
-                        else
-                        {
-                            dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
-                            profitByCarrier.TotalBase = profitByCarrier.SupplierProfit;
-                            profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
-                        }
+                        var profitBycust = dictionaryprofitByCustomer[profitByCarrier.Customer];
+                        profitBycust.SupplierProfit = profitByCarrier.SupplierProfit;
+                        profitBycust.FormattedSupplierProfit = profitByCarrier.FormattedSupplierProfit;
+                        profitBycust.TotalBase += profitByCarrier.SupplierProfit;
+                        profitBycust.Total = ReportHelpers.FormatNormalNumberDigit(profitBycust.TotalBase);
+                    }
+                    else
+                    {
+                        dictionaryprofitByCustomer[profitByCarrier.Customer] = profitByCarrier;
+                        profitByCarrier.TotalBase = profitByCarrier.SupplierProfit;
+                        profitByCarrier.Total = ReportHelpers.FormatNormalNumberDigit(profitByCarrier.TotalBase);
                     }
                 }
             listprofitByCarrier = dictionaryprofitByCustomer.Values.OrderByDescending(it => it.TotalBase).ToList();
