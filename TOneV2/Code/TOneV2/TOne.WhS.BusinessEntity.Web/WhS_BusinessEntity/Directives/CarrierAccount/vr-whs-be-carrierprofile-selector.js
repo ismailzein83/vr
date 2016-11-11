@@ -45,7 +45,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";

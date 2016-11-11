@@ -5,7 +5,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            onReady: '=',
+            onReady: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -151,7 +151,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                     function addFilterItemToGrid(filterItem) {
                         for (var i = 0; i < ctrl.selectedSuppliers.length; i++) {
                             if (filterItem.payload.SupplierId == ctrl.selectedSuppliers[i].CarrierAccountId) {
-                                addAPIToDataItem(filterItem, ctrl.selectedSuppliers[i])
+                                addAPIToDataItem(filterItem, ctrl.selectedSuppliers[i]);
                             }
                         }
                     }

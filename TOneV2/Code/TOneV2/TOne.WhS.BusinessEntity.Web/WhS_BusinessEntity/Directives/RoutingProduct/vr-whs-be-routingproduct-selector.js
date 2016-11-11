@@ -65,7 +65,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
             + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + '></vr-select>'
-               + '</div>'
+               + '</div>';
         }
 
         function routingProductCtor(ctrl, $scope, $attrs) {

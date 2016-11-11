@@ -52,7 +52,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
             label = 'label="Code Group"';
         var disabled = "";
         if (attrs.isdisabled)
-            disabled = "vr-disabled='true'"
+            disabled = "vr-disabled='true'";
 
         
 
@@ -65,7 +65,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
 
         return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource"  isrequired="ctrl.isrequired"  ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="CodeGroupId"'
                    + 'entityname="Code Group" ' + label + ' ' + addCliked + '></vr-select>';
@@ -76,7 +76,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
         function initializeController() {
             ctrl.addNewCodeGroup = function () {
                 var onCodeGroupAdded = function (CodeGroupObj) {
-                    ctrl.datasource.push(CodeGroupObj)
+                    ctrl.datasource.push(CodeGroupObj);
                     if ($attrs.ismultipleselection != undefined)
                         ctrl.selectedvalues.push(CodeGroupObj);
                     else

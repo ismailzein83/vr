@@ -219,7 +219,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
                             VRUIUtilsService.callDirectiveLoad(outputCDPNDirectiveReadyAPI, outputCDPNPayload, loadOutputCDPNDirectivePromiseDeferred);
                         });
 
-                        return loadOutputCDPNDirectivePromiseDeferred
+                        return loadOutputCDPNDirectivePromiseDeferred;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);

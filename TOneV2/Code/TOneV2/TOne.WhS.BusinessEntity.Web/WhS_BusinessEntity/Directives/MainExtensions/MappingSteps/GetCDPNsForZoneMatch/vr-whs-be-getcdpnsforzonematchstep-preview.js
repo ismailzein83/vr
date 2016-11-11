@@ -75,7 +75,7 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                 }
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    return stepObj.stepDetails;
                 }
 
                 if (ctrl.onReady != null)
@@ -99,10 +99,10 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                 }
 
                 if (misisngFieldsArray.length == 1)
-                    return "Field " + misisngFieldsArray[0] + " is required!!"
+                    return "Field " + misisngFieldsArray[0] + " is required!!";
 
                 if (misisngFieldsArray.length > 1)
-                    return "Fields " + misisngFieldsArray.join(", ") + " are required!!"
+                    return "Fields " + misisngFieldsArray.join(", ") + " are required!!";
 
                 return null;
             }

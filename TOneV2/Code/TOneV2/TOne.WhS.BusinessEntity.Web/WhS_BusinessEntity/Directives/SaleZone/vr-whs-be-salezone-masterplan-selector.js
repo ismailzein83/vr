@@ -32,7 +32,7 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
             }
 
             return '<vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
-            + '</vr-whs-be-salezone-selector>'
+            + '</vr-whs-be-salezone-selector>';
         }
 
 

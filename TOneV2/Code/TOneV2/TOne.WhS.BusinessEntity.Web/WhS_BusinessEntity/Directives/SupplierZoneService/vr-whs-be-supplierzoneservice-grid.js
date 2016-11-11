@@ -68,7 +68,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
                 dataItem.ServieApi = api
                 dataItem.ServieApi.load({ selectedIds: dataItem.Services });
             }
-        }
+        };
     }
 
     return directiveDefinitionObject;

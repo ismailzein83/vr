@@ -72,7 +72,7 @@ app.directive("vrWhsBeStatebackupSupplier", ['UtilsService', 'VRUIUtilsService',
                 VRUIUtilsService.callDirectiveLoad(supplierSelectorAPI, undefined, loadSupplierSelectorPromiseDeferred);
             });
 
-            return loadSupplierSelectorPromiseDeferred.promise
+            return loadSupplierSelectorPromiseDeferred.promise;
         }
          
         this.initializeController = initializeController;

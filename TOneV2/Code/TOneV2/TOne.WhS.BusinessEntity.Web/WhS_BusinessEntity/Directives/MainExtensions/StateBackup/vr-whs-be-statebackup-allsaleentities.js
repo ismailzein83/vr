@@ -71,7 +71,7 @@ app.directive("vrWhsBeStatebackupAllsaleentities", ['UtilsService', 'VRUIUtilsSe
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanSelectorAPI, undefined, loadSellingNumberPlanSelectorPromiseDeferred);
                 });
 
-                return loadSellingNumberPlanSelectorPromiseDeferred.promise
+                return loadSellingNumberPlanSelectorPromiseDeferred.promise;
             }
 
             this.initializeController = initializeController;

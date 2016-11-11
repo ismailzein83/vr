@@ -68,7 +68,7 @@ app.directive('vrWhsBeDatatransformationSupplierzoneratePreview', ['UtilsService
                 }
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    return stepObj.stepDetails;
                 }
 
                 if (ctrl.onReady != null)

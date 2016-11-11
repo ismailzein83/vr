@@ -13,7 +13,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 supplierid: "=",
                 selectedvalues: '=',
                 hidetitle: '@',
-                normalColNum: '@',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -60,7 +60,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                    + '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                    + '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
                    + 'isrequired="ctrl.isrequired" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" entityName="Supplier Zone"></vr-select>'
-                   + '</vr-columns>'
+                   + '</vr-columns>';
         }
 
         function supplierZoneCtor(ctrl, $scope, $attrs) {

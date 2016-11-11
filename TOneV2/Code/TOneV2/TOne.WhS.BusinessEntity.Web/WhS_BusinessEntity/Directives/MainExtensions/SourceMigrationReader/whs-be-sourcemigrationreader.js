@@ -180,7 +180,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
                 });
 
-                return loadSellingNumberPlanPromiseDeferred.promise
+                return loadSellingNumberPlanPromiseDeferred.promise;
             }
 
 
@@ -194,7 +194,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     VRUIUtilsService.callDirectiveLoad(offPeakRateTypeSelectorAPI, offPeakRatePayload, loadOffPeakRateTypeSelectorPromiseDeferred);
                 });
 
-                return loadOffPeakRateTypeSelectorPromiseDeferred.promise
+                return loadOffPeakRateTypeSelectorPromiseDeferred.promise;
             }
 
             function loadWeekendRateTypeSelector() {
@@ -207,7 +207,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                   VRUIUtilsService.callDirectiveLoad(weekendRateTypeSelectorAPI, weekendRatePayload, loadWeekendRateTypeSelectorPromiseDeferred);
                 });
 
-                return loadWeekendRateTypeSelectorPromiseDeferred.promise
+                return loadWeekendRateTypeSelectorPromiseDeferred.promise;
             }
 
 

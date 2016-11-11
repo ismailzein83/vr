@@ -1,0 +1,12 @@
+﻿{
+  "version": "2.3.0",
+  "ignore": [],
+  "options": {
+    "bitwise": true,
+    "eval": true,
+    "single": true,
+    "this": true,
+    "white": true
+  },
+  "globalVariables": []
+}

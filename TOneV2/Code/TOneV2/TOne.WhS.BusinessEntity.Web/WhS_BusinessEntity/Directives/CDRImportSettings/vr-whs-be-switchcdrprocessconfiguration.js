@@ -48,29 +48,29 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                 $scope.scopeModel.onCDPNSelectorReady = function (api) {
                     cdpnSelectorAPI = api;
                     cdpnReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCustomerCDPNSelectorReady = function (api) {
                     customerCDPNSelectorAPI = api;
                     customerCDPNReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onSupplierCDPNSelectorReady = function (api) {
                     supplierCDPNSelectorAPI = api;
                     supplierCDPNReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onSaleZoneCDPNSelectorReady = function (api) {
                     saleZoneCDPNSelectorAPI = api;
                     saleZoneCDPNReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onSupplierZoneCDPNSelectorReady = function (api) {
                     supplierZoneCDPNSelectorAPI = api;
                     supplierZoneCDPNReadyDeferred.resolve();
-                }
+                };
 
 
                 UtilsService.waitMultiplePromises([customerCDPNReadyDeferred.promise, supplierCDPNReadyDeferred.promise, saleZoneCDPNReadyDeferred.promise,
                     supplierZoneCDPNReadyDeferred.promise, cdpnReadyDeferred.promise]).then(function () {
                         defineAPI();
-                    })
+                    });
 
             }
             function defineAPI() {
@@ -136,7 +136,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
 
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -162,7 +162,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                             CDPNIdentification: supplierZoneCDPNSelectorAPI.getSelectedIds()
                         }
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

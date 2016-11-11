@@ -34,12 +34,12 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                 $scope.scopeModel.onSwitchCDRProcessConfiguration = function (api) {
                     switchCDRProcessConfigurationDirectiveAPI = api;
                     switchCDRProcessConfigurationDirectiveDeferred.resolve();
-                }
+                };
 
 
                 UtilsService.waitMultiplePromises([switchCDRProcessConfigurationDirectiveDeferred.promise]).then(function () {
                     defineAPI();
-                })
+                });
 
             }
             function defineAPI() {
@@ -65,14 +65,14 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.CDRImportSettings, TOne.WhS.BusinessEntity.Entities",
                         SwitchCDRProcessConfiguration: switchCDRProcessConfigurationDirectiveAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
