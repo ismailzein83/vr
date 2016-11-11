@@ -151,6 +151,7 @@
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateDetail.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateQuery.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettingsType.cs" />
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />
