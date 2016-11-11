@@ -62,7 +62,7 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -78,15 +78,15 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
                     });
 
                     return loadCarrierAccountPromiseDeferred.promise;
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return carrierAccountDirectiveAPI.getSelectedIds();
-                }
+                };
 
                 api.getSelectedValues = function () {
                     return carrierAccountDirectiveAPI.getSelectedValues();
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

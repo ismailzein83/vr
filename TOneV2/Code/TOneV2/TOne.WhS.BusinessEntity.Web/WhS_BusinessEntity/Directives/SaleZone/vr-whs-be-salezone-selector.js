@@ -96,13 +96,13 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 saleZoneSelectorCtrl.onSellingNumberReady = function (api) {
                     sellingDirectiveApi = api;
                     sellingReadyPromiseDeferred.resolve();
-                }
+                };
 
 
                 saleZoneSelectorCtrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     selectorReadyPromiseDeferred.resolve();
-                }
+                };
 
 
                 saleZoneSelectorCtrl.onSellingNumberPlanSelectionchanged = function () {
@@ -113,7 +113,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     sellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
                     if (sellingNumberPlanId == undefined)
                         sellingNumberPlanId = oldsellingNumberPlanId;
-                }
+                };
 
 
                 saleZoneSelectorCtrl.search = function (nameFilter) {
@@ -136,7 +136,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                     var serializedFilter = UtilsService.serializetoJson(filter);
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
-                }
+                };
 
                 saleZoneSelectorCtrl.isSaleZoneRequired = function () {
                     if (saleZoneSelectorCtrl.isSellingNumberPlanVisible)
@@ -260,11 +260,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                             return loadSellingNumberPlanPromiseDeferred.promise;
                         }
                     }
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, saleZoneSelectorCtrl);
-                }
+                };
 
                 if (saleZoneSelectorCtrl.onReady != null)
                     saleZoneSelectorCtrl.onReady(api);

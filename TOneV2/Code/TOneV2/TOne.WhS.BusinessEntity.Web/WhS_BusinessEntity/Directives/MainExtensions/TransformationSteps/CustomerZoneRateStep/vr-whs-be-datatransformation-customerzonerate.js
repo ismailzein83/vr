@@ -70,7 +70,7 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
 
                 api.load = function (payload) {
                     var promises = [];
-                    
+
                     var loadCustomerIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     customerIdDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadCustomerId;
@@ -84,7 +84,7 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
                     });
 
                     promises.push(loadCustomerIdDirectivePromiseDeferred.promise);
-                    
+
                     var loadSaleZoneIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     saleZoneIdDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadSaleZoneId;
@@ -131,7 +131,7 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
                     promises.push(loadCustomerZoneRateDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
@@ -139,10 +139,10 @@ app.directive('vrWhsBeDatatransformationCustomerzonerate', ['UtilsService', 'VR_
                         CustomerId: customerIdDirectiveAPI != undefined ? customerIdDirectiveAPI.getData() : undefined,
                         SaleZoneId: saleZoneIdDirectiveAPI != undefined ? saleZoneIdDirectiveAPI.getData() : undefined,
                         EffectiveOn: effectiveOnDirectiveAPI != undefined ? effectiveOnDirectiveAPI.getData() : undefined,
-                        CustomerZoneRate: customerZoneRateDirectiveAPI != undefined ? customerZoneRateDirectiveAPI.getData() : undefined,
+                        CustomerZoneRate: customerZoneRateDirectiveAPI != undefined ? customerZoneRateDirectiveAPI.getData() : undefined
                     }
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

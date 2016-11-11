@@ -196,7 +196,7 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -207,9 +207,9 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                         CDPNOut: cdpnOutDirectiveReadyAPI.getData(),
 
                         SaleZoneCDPN: saleZoneCDPNDirectiveReadyAPI.getData(),
-                        SupplierZoneCDPN: supplierZoneCDPNDirectiveReadyAPI.getData(),
+                        SupplierZoneCDPN: supplierZoneCDPNDirectiveReadyAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

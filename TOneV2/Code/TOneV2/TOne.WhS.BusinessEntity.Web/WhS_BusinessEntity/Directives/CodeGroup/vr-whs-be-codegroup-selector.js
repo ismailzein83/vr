@@ -39,7 +39,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -83,7 +83,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
                         ctrl.selectedvalues = CodeGroupObj;
                 };
                 WhS_BE_RateTypeService.addCodeGroup(onCodeGroupAdded);
-            }
+            };
 
             defineAPI();
         }
@@ -93,7 +93,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CodeGroupId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -110,7 +110,7 @@ app.directive('vrWhsBeCodegroupSelector', ['WhS_BE_CodeGroupAPIService', 'WhS_BE
                         VRUIUtilsService.setSelectedValues(selectedIds, 'CodeGroupId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

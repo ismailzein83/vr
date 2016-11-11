@@ -46,17 +46,17 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onSellingNumberPlanAdded = function (sellingNumberPlanObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(sellingNumberPlanObject);
                         gridAPI.itemAdded(sellingNumberPlanObject);
-                    }
+                    };
 
 
                     directiveAPI.onSellingNumberPlanUpdated = function (sellingNumberPlanObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(sellingNumberPlanObject);
                         gridAPI.itemUpdated(sellingNumberPlanObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

@@ -42,7 +42,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
                     directiveAPI.loadGrid = function (payload) {
                         $scope.hidesalezonecolumn = payload.hidesalezonecolumn;
                         return gridAPI.retrieveData(payload.queryHandler);
-                    }
+                    };
                    
                     return directiveAPI;
                 }

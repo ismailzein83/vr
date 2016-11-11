@@ -106,7 +106,7 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, saleZoneSelectorCtrl);
-                }
+                };
 
                 if (saleZoneSelectorCtrl.onReady != null)
                     saleZoneSelectorCtrl.onReady(api);

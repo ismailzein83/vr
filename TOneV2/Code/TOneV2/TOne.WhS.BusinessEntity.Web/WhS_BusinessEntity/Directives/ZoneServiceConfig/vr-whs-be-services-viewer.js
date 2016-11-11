@@ -57,7 +57,7 @@ app.directive('vrWhsBeServicesViewer', [
                     }
                     else
                         return getAllZoneServiceConfigs(ctrl, selectedIds);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

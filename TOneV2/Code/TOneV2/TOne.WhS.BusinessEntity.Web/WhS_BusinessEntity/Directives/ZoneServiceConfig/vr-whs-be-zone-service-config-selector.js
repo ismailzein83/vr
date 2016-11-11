@@ -53,7 +53,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getBeZoneServiceConfigTemplate(attrs);
@@ -78,7 +78,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="onSelectorReady" ' + multipleselection + '  datatextfield="Symbol" datavaluefield="ZoneServiceConfigId" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Zone Service" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" onblurdropdown="ctrl.onblurdropdown" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Zone Service" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" onblurdropdown="ctrl.onblurdropdown" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function zoneServiceConfigCtor(ctrl, $scope, attrs) {
@@ -110,11 +110,11 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
                 if (filter != undefined)
                     serializedFilter = UtilsService.serializetoJson(filter);
                 return getAllZoneServiceConfigs(attrs, ctrl, selectedIds, serializedFilter);
-            }
+            };
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('ZoneServiceConfigId', attrs, ctrl);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

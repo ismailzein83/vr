@@ -56,7 +56,7 @@ function (UtilsService, $compile, WhS_BE_CarrierAccountAPIService, VRUIUtilsServ
                     obj = {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
                         SuppliersWithZones: directiveReadyAPI.getData(),
-                        ConfigId: $scope.selectedSuppliersWithZonesStettingsTemplate.ExtensionConfigurationId,
+                        ConfigId: $scope.selectedSuppliersWithZonesStettingsTemplate.ExtensionConfigurationId
                     }
                 }
                 return obj;

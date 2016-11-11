@@ -39,7 +39,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
                     return false;
                 return true
-            }
+            };
 
             $scope.carrierAccounts = [];
             defineMenuActions();

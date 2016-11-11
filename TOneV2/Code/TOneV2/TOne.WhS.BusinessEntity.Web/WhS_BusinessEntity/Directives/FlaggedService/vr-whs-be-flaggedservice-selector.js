@@ -34,7 +34,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -74,7 +74,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('ZoneServiceConfigId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
                 selectorApi.clearDataSource();
                 ctrl.datasource.length = 0;
@@ -98,7 +98,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_ZoneServiceConfigAPIService) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneServiceConfigId', $attrs, ctrl);
                     }
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

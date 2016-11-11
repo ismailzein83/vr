@@ -91,7 +91,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SellingNumberPlanId', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

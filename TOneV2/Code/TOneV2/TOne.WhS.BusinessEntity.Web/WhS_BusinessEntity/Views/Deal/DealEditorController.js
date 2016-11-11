@@ -53,7 +53,7 @@
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payload.SellingParts = dealEntity.Settings.SellingParts;
-                    
+
 
                     var payloadBuying = {
                         supplierId: carrierAccountInfo.CarrierAccountId
@@ -64,7 +64,7 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealSellingAPI, payload, setLoader);
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealBuyingAPI, payloadBuying, setLoader);
                 }
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateDeal() : insertDeal();
             };
@@ -82,12 +82,12 @@
             $scope.scopeModel.onDealSellingDirectiveReady = function (api) {
                 dealSellingAPI = api;
                 dealSellingReadyPromiseDeferred.resolve();
-            }
+            };
             
             $scope.scopeModel.onDealBuyingDirectiveReady = function (api) {
                 dealBuyingAPI = api;
                 dealBuyingReadyPromiseDeferred.resolve();
-            }
+            };
 
         }
 

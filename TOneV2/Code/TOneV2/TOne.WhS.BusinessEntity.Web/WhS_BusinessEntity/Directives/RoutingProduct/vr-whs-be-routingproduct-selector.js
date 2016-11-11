@@ -34,7 +34,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -107,16 +107,15 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingProductId', $attrs, ctrl);
                     });
-                }
+                };
 
-                api.getSelectedIds = function()
-                {
+                api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('RoutingProductId', $attrs, ctrl);
-                }
+                };
 
                 api.getSelectedValues = function () {
                     return ctrl.selectedvalues;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

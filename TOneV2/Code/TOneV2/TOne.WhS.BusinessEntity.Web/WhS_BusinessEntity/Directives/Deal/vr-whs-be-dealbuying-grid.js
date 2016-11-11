@@ -71,7 +71,7 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
                       buyingParts: [],
                       buyingAmount: 0,
                       buyingDuration: 0
-                  }
+                  };
 
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
                         buyingObj.buyingParts = [];
@@ -95,7 +95,7 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
 
                     }
                     return buyingObj;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
@@ -114,7 +114,7 @@ app.directive("vrWhsBeDealbuyingGrid", ["UtilsService", "VRNotificationService",
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editDealBuying(dealBuyingObj) {

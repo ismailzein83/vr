@@ -52,7 +52,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
 
 
             return '<vr-whs-be-carrieraccount-selector onselectionchanged="ctrl.onselectionchanged"  normal-col-num="{{ctrl.normalColNum}}"   getcustomers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' isrequired="ctrl.isrequired" selectedvalues="ctrl.selectedvalues" hideremoveicon="ctrl.hideremoveicon"></vr-whs-be-carrieraccount-selector>'
+                multipleselection + ' isrequired="ctrl.isrequired" selectedvalues="ctrl.selectedvalues" hideremoveicon="ctrl.hideremoveicon"></vr-whs-be-carrieraccount-selector>';
         }
 
         function customerSelector(ctrl, $scope) {
@@ -63,7 +63,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -83,11 +83,11 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
 
                 api.getSelectedIds = function () {
                     return carrierAccountDirectiveAPI.getSelectedIds();
-                }
+                };
 
                 api.getSelectedValues = function () {
                     return carrierAccountDirectiveAPI.getSelectedValues();
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

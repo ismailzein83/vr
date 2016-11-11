@@ -70,7 +70,7 @@ app.directive('vrWhsBeDatatransformationSupplierzonerate', ['UtilsService', 'VR_
 
                 api.load = function (payload) {
                     var promises = [];
-                    
+
                     var loadSupplierIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     supplierIdDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadSupplierId;
@@ -84,7 +84,7 @@ app.directive('vrWhsBeDatatransformationSupplierzonerate', ['UtilsService', 'VR_
                     });
 
                     promises.push(loadSupplierIdDirectivePromiseDeferred.promise);
-                    
+
                     var loadSupplierZoneIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     supplierZoneIdDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadSupplierZoneId;
@@ -121,7 +121,7 @@ app.directive('vrWhsBeDatatransformationSupplierzonerate', ['UtilsService', 'VR_
                         var payloadSupplierZoneRate;
                         if (payload != undefined) {
                             payloadSupplierZoneRate = {};
-                            payloadSupplierZoneRate.context = payload.context;                                
+                            payloadSupplierZoneRate.context = payload.context;
                             if (payload.stepDetails != undefined)
                                 payloadSupplierZoneRate.selectedRecords = payload.stepDetails.SupplierZoneRate;
                         }
@@ -131,7 +131,7 @@ app.directive('vrWhsBeDatatransformationSupplierzonerate', ['UtilsService', 'VR_
                     promises.push(loadSupplierZoneRateDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
@@ -139,10 +139,10 @@ app.directive('vrWhsBeDatatransformationSupplierzonerate', ['UtilsService', 'VR_
                         SupplierId: supplierIdDirectiveAPI != undefined ? supplierIdDirectiveAPI.getData() : undefined,
                         SupplierZoneId: supplierZoneIdDirectiveAPI != undefined ? supplierZoneIdDirectiveAPI.getData() : undefined,
                         EffectiveOn: effectiveOnDirectiveAPI != undefined ? effectiveOnDirectiveAPI.getData() : undefined,
-                        SupplierZoneRate: supplierZoneRateDirectiveAPI != undefined ? supplierZoneRateDirectiveAPI.getData() : undefined,
+                        SupplierZoneRate: supplierZoneRateDirectiveAPI != undefined ? supplierZoneRateDirectiveAPI.getData() : undefined
                     }
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

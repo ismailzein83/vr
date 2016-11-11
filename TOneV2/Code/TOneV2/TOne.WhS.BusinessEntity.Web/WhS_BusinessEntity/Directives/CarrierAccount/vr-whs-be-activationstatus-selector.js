@@ -49,11 +49,11 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
                 label = 'label="Activation Status"';
             var disabled = "";
             if (attrs.isdisabled)
-                disabled = "vr-disabled='true'"
+                disabled = "vr-disabled='true'";
 
             var hideremoveicon = "";
             if (attrs.hideremoveicon)
-                hideremoveicon = "hideremoveicon"
+                hideremoveicon = "hideremoveicon";
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
@@ -64,7 +64,7 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
 
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined)
-                multipleselection = "ismultipleselection"
+                multipleselection = "ismultipleselection";
 
             var widthfactor = 2;
             if (attrs.widthfactor != undefined)
@@ -86,7 +86,7 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {
@@ -94,7 +94,7 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
                     }
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

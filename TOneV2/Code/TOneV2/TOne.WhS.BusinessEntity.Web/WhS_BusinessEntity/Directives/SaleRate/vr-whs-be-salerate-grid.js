@@ -63,7 +63,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUt
             };
             $scope.isExpandable = function (dataItem) {
                 return (dataItem.OtherRates != null && dataItem.OtherRates.length > 0);
-            }
+            };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SaleRateAPIService.GetFilteredSaleRate(dataRetrievalInput)
                     .then(function (response) {

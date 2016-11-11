@@ -72,21 +72,20 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.data != undefined)
-                    {
+                    if (payload != undefined && payload.data != undefined) {
                         ctrl.defaultRate = payload.data.DefaultRate;
 
                         ctrl.primarySaleEntity = UtilsService.getItemByVal(ctrl.primarySaleEntities, payload.data.PrimarySaleEntity, 'value');
 
                         angular.forEach(payload.data.FixedKeywords, function (val) {
-                            ctrl.fixedKeywords.push({fixedKeyword: val});
+                            ctrl.fixedKeywords.push({ fixedKeyword: val });
                         });
 
                         angular.forEach(payload.data.MobileKeywords, function (value) {
                             ctrl.mobileKeywords.push({ mobileKeyword: value });
                         });
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -96,7 +95,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         DefaultRate: ctrl.defaultRate,
                         PrimarySaleEntity: ctrl.primarySaleEntity.value
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

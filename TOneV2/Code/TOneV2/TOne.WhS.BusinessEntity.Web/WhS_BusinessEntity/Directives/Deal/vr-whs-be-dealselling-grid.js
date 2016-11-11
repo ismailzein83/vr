@@ -66,12 +66,12 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
                 };
 
                 api.getData = function () {
-                    var sellingObj = 
+                    var sellingObj =
                     {
                         sellingParts: [],
                         sellingAmount: 0,
                         sellingDuration: 0
-                    }
+                    };
 
                     if (ctrl.datasource != undefined) {
                         sellingObj.sellingParts = [];
@@ -95,7 +95,7 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
 
                     }
                     return sellingObj;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
@@ -114,14 +114,14 @@ app.directive("vrWhsBeDealsellingGrid", ["UtilsService", "VRNotificationService"
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editDealSelling(dealSellingObj) {
                 var onDealSellingUpdated = function (dealSelling) {
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealSellingObj.Name, 'Name');
                     ctrl.datasource[index] = dealSelling;
-                }
+                };
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
                 WhS_BE_DealSellingService.editDealSelling(dealSellingObj, sellingNumberPlanId, onDealSellingUpdated);

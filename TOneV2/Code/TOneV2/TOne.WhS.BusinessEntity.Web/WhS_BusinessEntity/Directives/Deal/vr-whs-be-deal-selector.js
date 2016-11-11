@@ -33,7 +33,7 @@ function (WhS_BE_DealAPIService, UtilsService, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -67,7 +67,7 @@ function (WhS_BE_DealAPIService, UtilsService, VRUIUtilsService) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('DealId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -83,7 +83,7 @@ function (WhS_BE_DealAPIService, UtilsService, VRUIUtilsService) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'DealId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

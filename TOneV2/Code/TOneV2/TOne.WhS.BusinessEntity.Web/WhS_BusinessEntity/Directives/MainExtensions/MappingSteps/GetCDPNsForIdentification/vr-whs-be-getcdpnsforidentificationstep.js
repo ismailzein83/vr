@@ -236,7 +236,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
                         SupplierCDPN: supplierCDPNDirectiveReadyAPI.getData(),
                         OutputCDPN: outputCDPNDirectiveReadyAPI.getData(),
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

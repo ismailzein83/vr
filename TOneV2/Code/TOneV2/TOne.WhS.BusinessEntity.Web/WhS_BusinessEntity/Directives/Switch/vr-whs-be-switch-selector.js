@@ -33,7 +33,7 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -67,7 +67,7 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('SwitchId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -83,7 +83,7 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -84,17 +84,16 @@ function (UtilsService, $compile, VRUIUtilsService) {
 
             api.getData = function () {
                 var suppliersWithZones = [];
-                for (var i = 0; i < ctrl.datasource.length; i++)
-                {
+                for (var i = 0; i < ctrl.datasource.length; i++) {
                     suppliersWithZones.push({
                         $type: "TOne.WhS.BusinessEntity.Entities.SupplierWithZones,TOne.WhS.BusinessEntity.Entities",
                         SupplierId: ctrl.datasource[i].CarrierAccountId,
                         SupplierZoneIds: UtilsService.getPropValuesFromArray(ctrl.datasource[i].selectedSuplierZones, "SupplierZoneId"),
                     });
                 }
-               
+
                 return suppliersWithZones;
-            }
+            };
  
             api.load = function (payload) {
 
@@ -105,10 +104,10 @@ function (UtilsService, $compile, VRUIUtilsService) {
                         supplierIds.push(obj.SupplierId);
                     }
                 }
-               
+
                 var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                
+
                 carrierAccountReadyPromiseDeferred.promise.then(function () {
                     var carrierAccountPayload = {
                         filter: {},
@@ -119,14 +118,14 @@ function (UtilsService, $compile, VRUIUtilsService) {
                 });
                 var loadFinalPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                 loadCarrierAccountPromiseDeferred.promise.then(function () {
-                     loadSupplierZoneDirectives().then(function () {
-                         if (loadFinalPromiseDeferred != undefined)
+                loadCarrierAccountPromiseDeferred.promise.then(function () {
+                    loadSupplierZoneDirectives().then(function () {
+                        if (loadFinalPromiseDeferred != undefined)
                             loadFinalPromiseDeferred.resolve();
-                     }).catch(function (error) {
-                         if (loadFinalPromiseDeferred != undefined)
-                             loadFinalPromiseDeferred.reject(error);
-                     });
+                    }).catch(function (error) {
+                        if (loadFinalPromiseDeferred != undefined)
+                            loadFinalPromiseDeferred.reject(error);
+                    });
                 });
 
 
@@ -161,7 +160,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                             CarrierAccountId: selectedSupplier.CarrierAccountId,
                             name: selectedSupplier.Name
                         };
-                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, supplierId: selectedSupplier.CarrierAccountId  };
+                        var dataItemPayload = { selectedIds: filterItem.payload.SupplierZoneIds, supplierId: selectedSupplier.CarrierAccountId };
 
                         dataItem.selectedSuplierZones = [];
                         dataItem.onDirectiveReady = function (api) {
@@ -175,10 +174,10 @@ function (UtilsService, $compile, VRUIUtilsService) {
 
                         ctrl.datasource.push(dataItem);
                     }
-                   return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises);
                 }
-              
-            }
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

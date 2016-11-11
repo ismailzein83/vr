@@ -51,14 +51,14 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                             query = payload.query;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onCustomerSellingProductAdded = function (customerSellingProductObject) {
                         gridAPI.itemAdded(customerSellingProductObject);
-                    }
+                    };
                     directiveAPI.onCustomerSellingProductDeleted = function (customerSellingProductObject) {
                         gridAPI.itemDeleted(customerSellingProductObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -97,7 +97,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                 else {
                     return undefined;
                 }
-            }
+            };
         }
 
         function hasUpdateCustomerSellingProductPermission() {

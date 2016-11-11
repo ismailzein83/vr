@@ -113,7 +113,7 @@ app.directive("vrWhsBeStatebackupSaleentity", ['UtilsService', 'VRUIUtilsService
                          .catch(function (error) {
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
                          });
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

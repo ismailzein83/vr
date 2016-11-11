@@ -108,7 +108,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                     }
                 }
                 return saleZoneGroupSettings;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

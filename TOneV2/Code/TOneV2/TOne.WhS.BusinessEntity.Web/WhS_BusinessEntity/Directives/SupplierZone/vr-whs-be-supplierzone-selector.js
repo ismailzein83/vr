@@ -32,7 +32,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getBeSupplierZoneTemplate(attrs);
@@ -81,22 +81,21 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 ctrl.SelectorReady = function (api) {
                     selectorApi = api;
                     selectorReadyPromiseDeferred.resolve();
-                }
+                };
 
                 ctrl.onSupplierReady = function (api) {
                     supplierDirectiveApi = api;
                     suppliersReadyPromiseDeferred.resolve();
-                }
+                };
 
                 ctrl.onSupplierSelectionchanged = function () {
                     selectorApi.clearDataSource();
-                    if(supplierDirectiveApi.getSelectedIds() != undefined)
+                    if (supplierDirectiveApi.getSelectedIds() != undefined)
                         supplierId = supplierDirectiveApi.getSelectedIds();
-                }
+                };
 
                 ctrl.searchSupplierZones = function (searchValue) {
-                    if (supplierId == undefined)
-                    {
+                    if (supplierId == undefined) {
                         var deferredPromise = UtilsService.createPromiseDeferred();
                         deferredPromise.resolve();
                         return deferredPromise.promise;
@@ -116,7 +115,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     var serializedFilter = UtilsService.serializetoJson(filter);
 
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(searchValue, supplierId, serializedFilter);
-                }
+                };
 
                 UtilsService.waitMultiplePromises([suppliersReadyPromiseDeferred.promise, selectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();

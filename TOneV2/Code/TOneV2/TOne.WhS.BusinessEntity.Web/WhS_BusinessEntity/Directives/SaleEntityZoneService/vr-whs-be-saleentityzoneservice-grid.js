@@ -67,8 +67,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleEntityZoneServiceAPISe
             dataItem.onServiceReady = function (api) {
                 dataItem.ServieApi = api
                 dataItem.ServieApi.load({ selectedIds: dataItem.Services });
-            }
-        }
+            };
+        };
     }
 
     return directiveDefinitionObject;

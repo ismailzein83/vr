@@ -43,7 +43,7 @@ function (UtilsService, $compile, WhS_BE_SupplierZoneAPIService, VRNotificationS
             var api = {};
 
             api.load = function (payload) {
-                
+
                 $scope.supplierZoneGroupTemplates = [];
                 var supplierZoneConfigId;
                 var supplierZoneGroupPayload;
@@ -84,7 +84,7 @@ function (UtilsService, $compile, WhS_BE_SupplierZoneAPIService, VRNotificationS
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             api.getData = function () {
                 var supplierZoneGroupSettings;

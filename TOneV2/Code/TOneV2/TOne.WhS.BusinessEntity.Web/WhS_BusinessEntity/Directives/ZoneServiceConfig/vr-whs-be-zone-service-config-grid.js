@@ -43,10 +43,10 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onZoneServiceConfigAdded = function (zoneServiceConfigObject) {
                         gridAPI.itemAdded(zoneServiceConfigObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

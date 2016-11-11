@@ -122,7 +122,7 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     promises.push(holidayRateTypeSelectorLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var itemDefinitions = [];
@@ -143,7 +143,7 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                         },
                         TaxesDefinition: { ItemDefinitions: itemDefinitions }
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -33,7 +33,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -48,7 +48,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
 
             if (attrs.ismultipleselection != undefined) {
                 label = "Selling Products";
-                multipleselection = "ismultipleselection"
+                multipleselection = "ismultipleselection";
             }
             else if (attrs.hideremoveicon != undefined) {
                 hideremoveicon = "hideremoveicon";
@@ -70,16 +70,16 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SellingProductId', $attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
-                    
+
                     selectorApi.clearDataSource();
 
                     var selectedIds;
@@ -102,7 +102,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SellingProductId', $attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.clearDataSource = function () {
                     selectorApi.clearDataSource();

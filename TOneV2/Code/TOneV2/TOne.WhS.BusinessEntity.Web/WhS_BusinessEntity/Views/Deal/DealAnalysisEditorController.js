@@ -131,7 +131,7 @@
                     }
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payload.SellingParts = dealEntity.Settings.SellingParts;
-                    
+
 
                     var payloadBuying = {
                         supplierId: carrierAccountInfo.CarrierAccountId
@@ -139,7 +139,7 @@
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadBuying.BuyingParts = dealEntity.Settings.BuyingParts;
                 }
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateDeal() : insertDeal();
             };

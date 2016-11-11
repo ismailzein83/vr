@@ -83,7 +83,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             ismultipleselection = "ismultipleselection";
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
-            + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></vr-columns>'
+            + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></vr-columns>';
     }
 
     function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
@@ -95,7 +95,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             ctrl.onSelectorReady = function (api) {
                 selectorApi = api;
                 defineAPI();
-            }
+            };
         }
 
         function defineAPI() {
@@ -131,15 +131,15 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                         VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierAccountId', attrs, ctrl);
                     }
                 });
-            }
+            };
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CarrierAccountId', attrs, ctrl);
-            }
+            };
 
             api.getSelectedValues = function () {
                 return ctrl.selectedvalues;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

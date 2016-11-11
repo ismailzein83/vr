@@ -87,7 +87,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     suppliersWithZones.push({
                         SupplierId: ctrl.datasource[i].CarrierAccountId,
-                        SupplierZoneIds: UtilsService.getPropValuesFromArray(ctrl.datasource[i].selectedSuplierZones, "SupplierZoneId"),
+                        SupplierZoneIds: UtilsService.getPropValuesFromArray(ctrl.datasource[i].selectedSuplierZones, "SupplierZoneId")
                     });
                 }
                 var supplierZoneSelective = {
@@ -95,7 +95,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                     SuppliersWithZones: suppliersWithZones
                 }
                 return supplierZoneSelective;
-            }
+            };
 
             api.load = function (payload) {
                 var supplierIds = [];

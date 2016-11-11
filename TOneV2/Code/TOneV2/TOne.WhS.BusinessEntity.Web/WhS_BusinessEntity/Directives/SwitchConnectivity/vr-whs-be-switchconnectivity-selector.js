@@ -88,7 +88,7 @@ function (WhS_BE_SwitchConnectivityAPIService, UtilsService, VRUIUtilsService) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchConnectivityId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

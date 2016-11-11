@@ -40,19 +40,19 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onSwitchDeleted = function (switchObject) {
                         gridAPI.itemDeleted(switchObject);
-                    }
+                    };
 
                     directiveAPI.onSwitchUpdated = function (switchObject) {
                         gridAPI.itemUpdated(switchObject);
-                    }
+                    };
 
                     directiveAPI.onSwitchAdded = function (switchObject) {
                         gridAPI.itemAdded(switchObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }

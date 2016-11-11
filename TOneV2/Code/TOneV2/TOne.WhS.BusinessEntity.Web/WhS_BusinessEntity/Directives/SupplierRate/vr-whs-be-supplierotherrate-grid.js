@@ -40,9 +40,9 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierOtherRateAPIServic
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                    
                     return directiveAPI;
                 }

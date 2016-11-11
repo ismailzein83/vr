@@ -49,7 +49,7 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/CodeCriteriaGroup/Templates/SelectiveCodeCriteriaDirectiveTemplate.html';
@@ -72,14 +72,14 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                             $scope.codeCriteriaArray.push(item);
                         });
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups.SelectiveCodeCriteriaGroup, TOne.WhS.BusinessEntity.MainExtensions",
                         Codes: $scope.codeCriteriaArray
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
