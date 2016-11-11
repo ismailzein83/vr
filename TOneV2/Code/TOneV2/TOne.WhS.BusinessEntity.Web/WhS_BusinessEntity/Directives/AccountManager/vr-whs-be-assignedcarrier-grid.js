@@ -13,7 +13,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var assignedCarrierGrid = new AssignedCarrierGrid($scope, ctrl, $attrs);
+                var assignedCarrierGrid = new CarrierGrid($scope, ctrl, $attrs);
                 assignedCarrierGrid.initialize();
             },
             controllerAs: 'ctrl',
@@ -24,7 +24,7 @@
             templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/AccountManager/Templates/AssignedCarrierGrid.html'
         };
 
-        function AssignedCarrierGrid($scope, ctrl, $attrs) {
+        function CarrierGrid($scope, ctrl, $attrs) {
             this.initialize = initialize;
 
             var gridAPI;
