@@ -237,14 +237,6 @@
     padding: 3px 12px;
 }
 
-.vr-datagrid-celltext .form-control {
-    height: 20px !important;
-    padding: 3px 12px;
-}
-
-.vr-datagrid-celltext .form-control {
-    padding: 3px 3px;
-}
 
 textarea.form-control {
     height: auto;
@@ -2651,6 +2643,10 @@ vr-validator[vr-input] > div:nth-child(1){
    height:29px;
    min-height:initial !important;
 }
+.vr-switch{
+    min-height :28px;
+}
+
 
 .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
     height: 21px;
@@ -2658,13 +2654,20 @@ vr-validator[vr-input] > div:nth-child(1){
     position: relative;
     top: -2px;
 }
+    
+.vr-datagrid-celltext .form-control {
+    height: 20px !important;
+    padding: 3px 12px;
+}
+
+.vr-datagrid-celltext .form-control {
+    padding: 3px 3px;
+}
 
 .vr-datagrid-celltext .dropdown {
     min-height: 20px !important;
 }
-.vr-switch{
-    min-height :28px;
-}
+
 .vr-datagrid-celltext .vr-dropdown-select.btn {
     width: 100%;
     text-align: left;
