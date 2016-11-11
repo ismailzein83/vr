@@ -263,6 +263,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\Templates\GetCDPNsForZoneMatchStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\Templates\BasicSalePriceListTemplateSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-basic.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\whs-be-sourcemigrationreader.js" />
@@ -303,6 +305,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\vr-whs-be-salecode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePriceListGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelist-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleOtherRateGridTemplate.html" />
