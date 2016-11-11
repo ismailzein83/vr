@@ -54,11 +54,11 @@ namespace Vanrise.Caching
             CachedObject cachedObject;
             CacheStore cacheDictionary = GetCacheDictionary(parameter);
             CheckCacheDictionaryExpiration(parameter, cacheDictionary);
-            if (!cacheDictionary.TryGetValue(cacheName, out cachedObject) || IsCacheObjectExpired(cachedObject))
+            if (!cacheDictionary.TryGetValue(cacheName, out cachedObject) || IsCacheObjectExpired(cachedObject, cacheDictionary))
             {
                 lock (GetCacheNameLockObject(cacheName, parameter))
                 {
-                    if (!cacheDictionary.TryGetValue(cacheName, out cachedObject) || IsCacheObjectExpired(cachedObject))
+                    if (!cacheDictionary.TryGetValue(cacheName, out cachedObject) || IsCacheObjectExpired(cachedObject, cacheDictionary))
                     {
                         T obj = createObject();
                         cachedObject = new CachedObject(obj)
@@ -88,12 +88,15 @@ namespace Vanrise.Caching
             return GetOrCreateObject<T>(cacheName, parameter, null, createObject);
         }
 
-        private bool IsCacheObjectExpired(CachedObject cachedObject)
+        private bool IsCacheObjectExpired(CachedObject cachedObject, CacheStore cacheDictionary)
         {
             if (this.IsTimeExpirable)
             {
                 if ((VRClock.Now - cachedObject.CreatedTime) > _timeExpirationInterval)
+                {
+                    cacheDictionary.TryRemove(cachedObject.CacheName);
                     return true;
+                }
             }
             return false;
         }
