@@ -21,26 +21,26 @@ app.directive('vrWhsDealSwapdealSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
 		this.initializeController = initializeController;
 
+		var inboundSettingsEditorAPI;
+		var inboundSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
 		var outboundSettingsEditorAPI;
 		var outboundSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
-
-		//var inboundSettingsEditorAPI;
-		//var inboundSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
 		function initializeController() {
 			$scope.scopeModel = {};
 
-			//$scope.scopeModel.onInboundSettingsEditorReady = function (api) {
-			//	inboundSettingsEditorAPI = api;
-			//	inboundSettingsEditorReadyDeferred.resolve();
-			//};
+			$scope.scopeModel.onInboundSettingsEditorReady = function (api) {
+				inboundSettingsEditorAPI = api;
+				inboundSettingsEditorReadyDeferred.resolve();
+			};
 
 			$scope.scopeModel.onOutboundSettingsEditorReady = function (api) {
 				outboundSettingsEditorAPI = api;
 				outboundSettingsEditorReadyDeferred.resolve();
 			};
 
-			UtilsService.waitMultiplePromises([outboundSettingsEditorReadyDeferred.promise]).then(function () {
+			UtilsService.waitMultiplePromises([inboundSettingsEditorReadyDeferred.promise, outboundSettingsEditorReadyDeferred.promise]).then(function () {
 				defineAPI();
 			});
 		}
@@ -50,9 +50,19 @@ app.directive('vrWhsDealSwapdealSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 			var api = {};
 
 			api.load = function (payload) {
+
 				var promises = [];
 
 				if (payload != undefined && payload.data != undefined) {
+
+					var inboundSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+					promises.push(inboundSettingsLoadDeferred.promise);
+
+					var inboundSettingsPayload = {
+						defaultCalculationMethodId: payload.data.DefaultInboundRateCalcMethodId,
+						inboundCalculationMethods: payload.data.InboundCalculationMethods
+					};
+					VRUIUtilsService.callDirectiveLoad(inboundSettingsEditorAPI, inboundSettingsPayload, inboundSettingsLoadDeferred);
 
 					var outboundSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 					promises.push(outboundSettingsLoadDeferred.promise);
@@ -71,11 +81,14 @@ app.directive('vrWhsDealSwapdealSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
 			api.getData = function () {
 				var data = {};
+				var inboundSettingsData = inboundSettingsEditorAPI.getData();
 				var outboundSettingsData = outboundSettingsEditorAPI.getData();
 				var data = {
 					$type: 'TOne.WhS.Deal.Entities.Settings.SwapDealSettingData, TOne.WhS.Deal.Entities',
 					DefaultCalculationMethodId: outboundSettingsData.DefaultCalculationMethodId,
+					DefaultInboundRateCalcMethodId: inboundSettingsData.DefaultInboundRateCalcMethodId,
 					OutboundCalculationMethods: outboundSettingsData.OutboundCalculationMethods,
+					InboundCalculationMethods: inboundSettingsData.InboundCalculationMethods,
 					GracePeriod: $scope.scopeModel.gracePeriod
 				};
 				return data;

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDealAnalysisService', function (WhS_Deal_SwapDealAnalysisService) {
+app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDealAnalysisService', 'UtilsService', function (WhS_Deal_SwapDealAnalysisService, UtilsService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -37,17 +37,7 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 			};
 
 			$scope.scopeModel.addOutbound = function () {
-				var carrierAccountId = context.settingsAPI.getCarrierAccountId();
-				if (carrierAccountId == undefined) {
-					console.log('Select a carrier');
-					return;
-				}
-				var onOutboundAdded = function (addedOutbound) {
-					if (addedOutbound != undefined) {
-						$scope.scopeModel.outbounds.push(addedOutbound);
-					}
-				};
-				WhS_Deal_SwapDealAnalysisService.addOutbound(settings, carrierAccountId, onOutboundAdded);
+				addOutbound();
 			};
 
 			$scope.scopeModel.removeOutbound = function (outbound) {
@@ -66,12 +56,61 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 		function defineAPI() {
 			var api = {};
 
-			api.load = function (payload)
-			{
+			api.load = function (payload) {
+
+				var outbounds;
+				var summary;
+
 				if (payload != undefined) {
 					context = payload.context;
 					settings = payload.settings;
+					outbounds = payload.Outbounds;
+					summary = payload.Summary;
 				}
+
+				if (outbounds != undefined) {
+
+					var entities = getOutboundEntities();
+
+					for (var i = 0; i < outbounds.length; i++) {
+
+						var index = UtilsService.getItemIndexByVal(entities, outbounds[i].Name, 'Name');
+						if (index == -1)
+							continue;
+
+						var existingRecord = $scope.scopeModel.outbounds[index];
+						if (existingRecord == undefined)
+							continue;
+
+						var updatedEntity = UtilsService.cloneObject($scope.scopeModel.outbounds[index].Entity);
+
+						updatedEntity.DailyVolume = outbounds[i].DailyVolume;
+						updatedEntity.CurrentRate = outbounds[i].CurrentRate;
+						updatedEntity.RateSavings = outbounds[i].RateSavings;
+						updatedEntity.Savings = outbounds[i].Savings;
+						updatedEntity.Revenue = outbounds[i].Revenue;
+
+						$scope.scopeModel.outbounds[index] = { Entity: updatedEntity };
+					}
+				}
+
+				if (summary != undefined) {
+					gridAPI.setSummary({
+						TotalCostMargin: summary.TotalCostMargin,
+						TotalCostRevenue: summary.TotalCostRevenue
+					});
+				}
+			};
+
+			api.getData = function () {
+				return {
+					Outbounds: getOutboundEntities()
+				};
+			};
+
+			api.clear = function () {
+				clearSummary();
+				$scope.scopeModel.outbounds.length = 0;
 			};
 
 			if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
@@ -84,18 +123,43 @@ app.directive('vrWhsDealSwapdealanalysisOutboundManagement', ['WhS_Deal_SwapDeal
 				clicked: editOutbound
 			}];
 		}
+		function addOutbound() {
+			var carrierAccountId = context.settingsAPI.getCarrierAccountId();
+			var onOutboundAdded = function (addedOutbound) {
+				var obj = { Entity: addedOutbound };
+				$scope.scopeModel.outbounds.push(obj);
+				clearCalclulatedFields();
+			};
+			WhS_Deal_SwapDealAnalysisService.addOutbound(settings, carrierAccountId, onOutboundAdded);
+		}
 		function editOutbound(outboundEntity) {
 			var carrierAccountId = context.settingsAPI.getCarrierAccountId();
-			if (carrierAccountId == undefined) {
-				console.log('Select a carrier');
-				return;
-			}
 			var onOutboundUpdated = function (updatedOutbound) {
-				if (updatedOutbound != undefined) {
-					$scope.scopeModel.outbounds[$scope.scopeModel.outbounds.indexOf(outboundEntity)] = updatedOutbound;
-				}
+				var obj = { Entity: updatedOutbound };
+				$scope.scopeModel.outbounds[$scope.scopeModel.outbounds.indexOf(outboundEntity)] = obj;
+				clearCalclulatedFields();
 			};
-			WhS_Deal_SwapDealAnalysisService.editOutbound(settings, carrierAccountId, outboundEntity, onOutboundUpdated);
+			WhS_Deal_SwapDealAnalysisService.editOutbound(settings, carrierAccountId, outboundEntity.Entity, onOutboundUpdated);
+		}
+
+		function getOutboundEntities() {
+			return UtilsService.getPropValuesFromArray($scope.scopeModel.outbounds, 'Entity');
+		}
+		function clearCalclulatedFields() {
+			for (var i = 0; i < $scope.scopeModel.outbounds.length; i++) {
+				var updatedEntity = UtilsService.cloneObject($scope.scopeModel.outbounds[i].Entity);
+				updatedEntity.DailyVolume = undefined;
+				updatedEntity.CurrentRate = undefined;
+				updatedEntity.RateSavings = undefined;
+				updatedEntity.Savings = undefined;
+				updatedEntity.Revenue = undefined;
+				$scope.scopeModel.outbounds[i] = { Entity: updatedEntity };
+			}
+			clearSummary();
+			context.clearResult();
+		}
+		function clearSummary() {
+			gridAPI.clearSummary();
 		}
 	}
 }]);

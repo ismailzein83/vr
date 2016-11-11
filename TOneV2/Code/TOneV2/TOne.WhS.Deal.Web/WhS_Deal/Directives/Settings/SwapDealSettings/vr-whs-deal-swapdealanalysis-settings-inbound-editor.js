@@ -58,15 +58,17 @@ app.directive('vrWhsDealSwapdealanalysisSettingsInboundEditor', ['WhS_Deal_SwapD
 			defineMenuActions();
 		}
 		function defineAPI() {
+
 			var api = {};
 
 			api.load = function (payload) {
-				if (payload != undefined && payload.outboundCalculationMethods != undefined) {
-					for (var key in payload.outboundCalculationMethods) {
+
+				if (payload != undefined && payload.inboundCalculationMethods != undefined) {
+					for (var key in payload.inboundCalculationMethods) {
 						if (key == '$type')
 							continue;
-						var rateCalcMethod = { Entity: payload.outboundCalculationMethods[key] }
-						if (payload.outboundCalculationMethods[key].CalculationMethodId == payload.defaultCalculationMethodId)
+						var rateCalcMethod = { Entity: payload.inboundCalculationMethods[key] }
+						if (payload.inboundCalculationMethods[key].CalculationMethodId == payload.defaultCalculationMethodId)
 							rateCalcMethod.isSelected = true;
 						$scope.scopeModel.rateCalcMethods.push(rateCalcMethod);
 					}
@@ -76,15 +78,15 @@ app.directive('vrWhsDealSwapdealanalysisSettingsInboundEditor', ['WhS_Deal_SwapD
 			api.getData = function () {
 
 				var data = {
-					DefaultCalculationMethodId: UtilsService.getItemByVal($scope.scopeModel.rateCalcMethods, true, 'isSelected').Entity.CalculationMethodId
+					DefaultInboundRateCalcMethodId: UtilsService.getItemByVal($scope.scopeModel.rateCalcMethods, true, 'isSelected').Entity.CalculationMethodId
 				};
 
 				var rateCalcMethods = getRateCalcMethods();
 
 				if (rateCalcMethods != undefined) {
-					data.OutboundCalculationMethods = {};
+					data.InboundCalculationMethods = {};
 					for (var i = 0; i < rateCalcMethods.length; i++)
-						data.OutboundCalculationMethods[rateCalcMethods[i].CalculationMethodId] = rateCalcMethods[i];
+						data.InboundCalculationMethods[rateCalcMethods[i].CalculationMethodId] = rateCalcMethods[i];
 				}
 
 				return data;
@@ -109,7 +111,7 @@ app.directive('vrWhsDealSwapdealanalysisSettingsInboundEditor', ['WhS_Deal_SwapD
 					$scope.scopeModel.rateCalcMethods.push(obj);
 				}
 			};
-			WhS_Deal_SwapDealAnalysisSettingsService.addOutboundRateCalcMethod(onRateCalcMethodAdded);
+			WhS_Deal_SwapDealAnalysisSettingsService.addInboundRateCalcMethod(onRateCalcMethodAdded);
 		}
 		function editRateCalcMethod(rateCalcMethod) {
 			var onRateCalcMethodUpdated = function (updatedRateCalcMethod) {
@@ -122,7 +124,7 @@ app.directive('vrWhsDealSwapdealanalysisSettingsInboundEditor', ['WhS_Deal_SwapD
 					};
 				}
 			};
-			WhS_Deal_SwapDealAnalysisSettingsService.editOutboundRateCalcMethod(rateCalcMethod.Entity.CalculationMethodId, rateCalcMethod.Entity, onRateCalcMethodUpdated);
+			WhS_Deal_SwapDealAnalysisSettingsService.editInboundRateCalcMethod(rateCalcMethod.Entity.CalculationMethodId, rateCalcMethod.Entity, onRateCalcMethodUpdated);
 		}
 
 		function getRateCalcMethods() {

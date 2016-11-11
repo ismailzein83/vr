@@ -77,28 +77,28 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundSuppliersItemedito
 				var promises = [];
 
 				var customerIds;
-				var zoneRateEval;
-				var zoneRateEvalData;
+				var rateEvaluationType;
+				var rateEvaluationData;
 
 				if (payload != undefined) {
-					$scope.scopeModel.selectedCarrierFilter = UtilsService.getItemByVal($scope.scopeModel.carrierFilters, payload.CarrierFilter, 'value');
-					customerIds = payload.CustomerIds;
-					zoneRateEval = payload.ZoneRateEval;
-					zoneRateEvalData = payload.ZoneRateEvalData;
+					$scope.scopeModel.selectedCarrierFilter = UtilsService.getItemByVal($scope.scopeModel.carrierFilters, payload.SupplierFilterType, 'value');
+					customerIds = payload.SupplierIds;
+					rateEvaluationType = payload.RateEvaluationType;
+					rateEvaluationData = payload.RateEvaluationData;
 				}
 
 				var customerSelectorPayload = { selectedIds: customerIds };
 				promises.push(supplierSelectorAPI.load(customerSelectorPayload));
 
-				if (zoneRateEval != undefined) {
+				if (rateEvaluationType != undefined) {
 					directiveReadyDeferred = UtilsService.createPromiseDeferred();
-					$scope.scopeModel.selectedZoneRateEval = UtilsService.getItemByVal($scope.scopeModel.zoneRateEvals, zoneRateEval, 'value');
+					$scope.scopeModel.selectedZoneRateEval = UtilsService.getItemByVal($scope.scopeModel.zoneRateEvals, rateEvaluationType, 'value');
 
 					var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 					promises.push(directiveLoadDeferred.promise);
 
 					directiveReadyDeferred.promise.then(function () {
-						VRUIUtilsService.callDirectiveLoad(directiveAPI, zoneRateEvalData, directiveLoadDeferred);
+						VRUIUtilsService.callDirectiveLoad(directiveAPI, rateEvaluationData, directiveLoadDeferred);
 					});
 				}
 
@@ -107,11 +107,11 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundSuppliersItemedito
 
 			api.getData = function () {
 				return {
-					$type: 'TOne.WhS.Deal.MainExtensions.SwapDealAnalysisOutboundItemRateCustomers, TOne.WhS.Deal.MainExtensions',
-					CarrierFilter: $scope.scopeModel.selectedCarrierFilter.value,
-					CustomerIds: ($scope.scopeModel.selectedCarrierFilter.value != WhS_Deal_CarrierFilterTypeEnum.All.value) ? supplierSelectorAPI.getSelectedIds() : null,
-					ZoneRateEval: $scope.scopeModel.selectedZoneRateEval.value,
-					ZoneRateEvalData: directiveAPI.getData()
+					$type: 'TOne.WhS.Deal.MainExtensions.SwapDealAnalysisOutboundItemRateSuppliers, TOne.WhS.Deal.MainExtensions',
+					SupplierFilterType: $scope.scopeModel.selectedCarrierFilter.value,
+					SupplierIds: ($scope.scopeModel.selectedCarrierFilter.value != WhS_Deal_CarrierFilterTypeEnum.All.value) ? supplierSelectorAPI.getSelectedIds() : null,
+					RateEvaluationType: $scope.scopeModel.selectedZoneRateEval.value,
+					RateEvaluationData: directiveAPI.getData()
 				};
 			};
 

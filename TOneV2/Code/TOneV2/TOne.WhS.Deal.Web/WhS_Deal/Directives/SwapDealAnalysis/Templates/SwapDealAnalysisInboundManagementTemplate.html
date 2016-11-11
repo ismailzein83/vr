@@ -1,1 +1,23 @@
-﻿
+﻿<vr-row>
+	<vr-columns width="fullrow">
+		<vr-button type="Add" data-onclick="scopeModel.addInbound" standalone="true"></vr-button>
+		<vr-validator validate="scopeModel.validateInbounds()">
+			<vr-datagrid on-ready="scopeModel.onGridReady"
+						 datasource="scopeModel.inbounds"
+						 menuactions="scopeModel.menuActions"
+						 ondeleterow="scopeModel.removeInbound"
+						 hidegridmenu="true"
+						 maxheight="300px"
+						 norowhighlightonclick="true">
+				<vr-datagridcolumn headertext="'Group Name'" field="'Entity.Name'" type="'Text'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'" type="'Number'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Daily Volume'" field="'Entity.DailyVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Deal Rate'" field="'Entity.DealRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Rate Profit'" field="'Entity.RateProfit'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Profit'" field="'Entity.Profit'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalSaleMargin'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Revenue'" field="'Entity.Revenue'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalSaleRevenue'" disablesorting></vr-datagridcolumn>
+			</vr-datagrid>
+		</vr-validator>
+	</vr-columns>
+</vr-row>

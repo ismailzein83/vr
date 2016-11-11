@@ -9,9 +9,9 @@ namespace TOne.WhS.Deal.MainExtensions
 {
     public class SwapDealAnalysisOutboundItemRateFixed : SwapDealAnalysisOutboundItemRateCalcMethod
     {
-        public Decimal Rate { get; set; }
+        public decimal Rate { get; set; }
 
-        public override decimal Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context)
+        public override decimal? Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context)
         {
             return this.Rate;
         }

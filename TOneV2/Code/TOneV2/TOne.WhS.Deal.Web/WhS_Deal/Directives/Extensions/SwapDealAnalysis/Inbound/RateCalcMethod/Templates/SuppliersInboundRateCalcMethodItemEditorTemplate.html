@@ -1,0 +1,34 @@
+﻿<vr-columns colnum="{{suppliersCtrl.normalColNum}}">
+	<vr-select on-ready="scopeModel.onCarrierFilterSelectorReady"
+			   label="Suppliers"
+			   datasource="scopeModel.carrierFilters"
+			   datavaluefield="value"
+			   datatextfield="description"
+			   selectedvalues="scopeModel.selectedCarrierFilter"
+			   isrequired="true"
+			   hideremoveicon="true">
+	</vr-select>
+</vr-columns>
+<vr-whs-be-carrieraccount-selector ng-show="scopeModel.areSuppliersRequired()"
+								   on-ready="scopeModel.onSupplierSelectorReady"
+								   getsuppliers="true"
+								   ismultipleselection="true"
+								   normal-col-num="{{suppliersCtrl.normalColNum}}"
+								   isrequired="scopeModel.areSuppliersRequired()"
+								   hideremoveicon="scopeModel.areSuppliersRequired()">
+</vr-whs-be-carrieraccount-selector>
+<vr-columns colnum="{{suppliersCtrl.normalColNum}}">
+	<vr-select on-ready="scopeModel.onZoneRateEvalSelectorReady"
+			   label="Zone Rate Evaluation"
+			   datasource="scopeModel.zoneRateEvals"
+			   datavaluefield="value"
+			   datatextfield="description"
+			   selectedvalues="scopeModel.selectedZoneRateEval"
+			   isrequired="true"
+			   hideremoveicon="true">
+	</vr-select>
+</vr-columns>
+<vr-directivewrapper directive="scopeModel.selectedZoneRateEval.directive"
+					 on-ready="scopeModel.onDirectiveReady"
+					 normal-col-num="{{suppliersCtrl.normalColNum}}">
+</vr-directivewrapper>

@@ -9,9 +9,14 @@
 						 hidegridmenu="true"
 						 maxheight="300px"
 						 norowhighlightonclick="true">
-				<vr-datagridcolumn headertext="'Group Name'" field="'GroupName'" disablesorting></vr-datagridcolumn>
-				<vr-datagridcolumn headertext="'Volume'" field="'Volume'" summaryfield="'TotalOutVolumes'" type="'Number'" disablesorting></vr-datagridcolumn>
-				<vr-datagridcolumn headertext="'Deal Rate'" field="'DealRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Group Name'" field="'Entity.Name'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'" type="'Number'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Daily Volume'" field="'Entity.DailyVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Deal Rate'" field="'Entity.DealRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Rate Savings'" field="'Entity.RateSavings'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Savings'" field="'Entity.Savings'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalCostMargin'" disablesorting></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Revenue'" field="'Entity.Revenue'" type="'Number'" numberprecision="'LongPrecision'" summaryfield="'TotalCostRevenue'" disablesorting></vr-datagridcolumn>
 			</vr-datagrid>
 		</vr-validator>
 	</vr-columns>

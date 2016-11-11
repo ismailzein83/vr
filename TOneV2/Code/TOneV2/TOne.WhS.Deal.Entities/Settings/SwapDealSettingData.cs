@@ -12,9 +12,12 @@ namespace TOne.WhS.Deal.Entities.Settings
     {
         public Guid DefaultCalculationMethodId { get; set; }
 
+		public Guid DefaultInboundRateCalcMethodId { get; set; }
+
+		public Dictionary<Guid, SwapDealAnalysisInboundRateCalcMethod> InboundCalculationMethods { get; set; }
+
         public Dictionary<Guid, SwapDealAnalysisOutboundRateCalcMethod> OutboundCalculationMethods { get; set; }
 
         public int GracePeriod { get; set; }
-
     }
 }

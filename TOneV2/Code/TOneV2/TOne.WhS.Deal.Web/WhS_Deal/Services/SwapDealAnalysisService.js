@@ -6,6 +6,37 @@
 
 	function SwapDealAnalysisService(VRModalService, VRNotificationService, UtilsService) {
 
+		function addInbound(settings, carrierAccountId, sellingNumberPlanId, onInboundAdded) {
+			var parameters = {
+				settings: settings,
+				carrierAccountId: carrierAccountId,
+				sellingNumberPlanId: sellingNumberPlanId
+			};
+
+			var settings = {};
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onInboundAdded = onInboundAdded;
+			};
+
+			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
+		}
+
+		function editInbound(settings, carrierAccountId, sellingNumberPlanId, inboundEntity, onInboundUpdated) {
+			var parameters = {
+				settings: settings,
+				carrierAccountId: carrierAccountId,
+				sellingNumberPlanId: sellingNumberPlanId,
+				inboundEntity: inboundEntity
+			};
+
+			var settings = {};
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onInboundUpdated = onInboundUpdated;
+			};
+
+			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
+		}
+
 		function addOutbound(settings, carrierAccountId, onOutboundAdded)
 		{
 			var parameters = {
@@ -37,6 +68,8 @@
 		}
 
 		return {
+			addInbound: addInbound,
+			editInbound: editInbound,
 			addOutbound: addOutbound,
 			editOutbound: editOutbound
 		};

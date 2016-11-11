@@ -27,12 +27,26 @@ app.directive('vrWhsDealSwapdealanalysisResult', ['WhS_Deal_SwapDealAnalysisType
 		}
 
 		function defineAPI() {
+
 			var api = {};
 
-			api.load = function (payload)
-			{
+			api.load = function (payload) {
+
+				var result;
+
 				if (payload != undefined) {
-					
+					result = payload.Result;
+				}
+
+				if (result != undefined) {
+					$scope.scopeModel.dealPeriodInDays = result.DealPeriodInDays;
+					$scope.scopeModel.totalCostRevenue = result.TotalCostRevenue;
+					$scope.scopeModel.totalSaleRevenue = result.TotalSaleRevenue;
+					$scope.scopeModel.totalCostMargin = result.TotalCostMargin;
+					$scope.scopeModel.totalSaleMargin = result.TotalSaleMargin;
+					$scope.scopeModel.overallProfit = result.OverallProfit;
+					$scope.scopeModel.margins = result.Margins;
+					$scope.scopeModel.overallRevenue = result.OverallRevenue;
 				}
 			};
 

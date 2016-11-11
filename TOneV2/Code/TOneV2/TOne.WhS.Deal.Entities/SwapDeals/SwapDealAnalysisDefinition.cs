@@ -26,14 +26,16 @@ namespace TOne.WhS.Deal.Entities
 
         public DateTime ToDate { get; set; }
 
-        public List<SwapDealAnalysisOutboundSettings> Outbounds { get; set; }
+		public List<SwapDealAnalysisInboundSettings> Inbounds { get; set; }
 
-        public List<SwapDealAnalysisInboundSettings> Inbounds { get; set; }
+        public List<SwapDealAnalysisOutboundSettings> Outbounds { get; set; }
     }
 
     public class SwapDealAnalysisOutboundSettings
     {
         public string Name { get; set; }
+
+		public int CountryId { get; set; }
 
         public List<long> SupplierZoneIds { get; set; }
 
@@ -48,10 +50,14 @@ namespace TOne.WhS.Deal.Entities
     {
         public string Name { get; set; }
 
+		public int CountryId { get; set; }
+
         public List<long> SaleZoneIds { get; set; }
 
         public int Volume { get; set; }
 
         public Decimal DealRate { get; set; }
+
+		public SwapDealAnalysisInboundItemRateCalcMethod ItemCalculationMethod { get; set; }
     }   
 }

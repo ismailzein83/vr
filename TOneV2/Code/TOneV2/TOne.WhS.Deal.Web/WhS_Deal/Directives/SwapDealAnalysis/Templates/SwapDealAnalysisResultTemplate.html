@@ -3,50 +3,50 @@
 		<vr-section title="Analysis Result">
 			<vr-row removeline>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Deal Period (Days)</vr-label>
+					<vr-label>Deal Period In Days</vr-label>
 				</vr-columns>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>{{scopeModel.dealPeriod}}</vr-label>
-				</vr-columns>
-			</vr-row>
-			<vr-row removeline>
-				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Total Revenue Cost</vr-label>
-				</vr-columns>
-				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>${{scopeModel.totalCommitmentCost | number}}</vr-label>
+					<vr-label isvalue>{{scopeModel.dealPeriodInDays}}</vr-label>
 				</vr-columns>
 			</vr-row>
 			<vr-row removeline>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Total Revenue Sale</vr-label>
+					<vr-label>Total Cost Revenue</vr-label>
 				</vr-columns>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>${{scopeModel.totalCommitmentRevenue | number}}</vr-label>
-				</vr-columns>
-			</vr-row>
-			<vr-row removeline>
-				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Total Margin per Period (Sale)</vr-label>
-				</vr-columns>
-				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>${{scopeModel.totalCustomerProfit | number}}</vr-label>
+					<vr-label isvalue>${{scopeModel.totalCostRevenue | vrtextOrNumber:2}}</vr-label>
 				</vr-columns>
 			</vr-row>
 			<vr-row removeline>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Total Margin per Period (Cost)</vr-label>
+					<vr-label>Total Sale Revenue</vr-label>
 				</vr-columns>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>${{scopeModel.totalSaving | number}}</vr-label>
+					<vr-label isvalue>${{scopeModel.totalSaleRevenue | vrtextOrNumber:2}}</vr-label>
 				</vr-columns>
 			</vr-row>
 			<vr-row removeline>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Total Margin per Period</vr-label>
+					<vr-label>Total Cost Margin</vr-label>
 				</vr-columns>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>${{scopeModel.totalCommitmentProfit |  number}}</vr-label>
+					<vr-label isvalue>${{scopeModel.totalCostMargin | vrtextOrNumber:2}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Total Sale Margin</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.totalSaleMargin | vrtextOrNumber:2}}</vr-label>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label>Overall Profit</vr-label>
+				</vr-columns>
+				<vr-columns colnum="{{ctrl.normalColNum}}">
+					<vr-label isvalue>${{scopeModel.overallProfit | vrtextOrNumber:2}}</vr-label>
 				</vr-columns>
 			</vr-row>
 			<vr-row removeline>
@@ -54,15 +54,15 @@
 					<vr-label>Margins</vr-label>
 				</vr-columns>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>{{scopeModel.margins * 100 | number:2  }}%</vr-label>
+					<vr-label isvalue>{{scopeModel.margins | vrtextOrNumber:2}}%</vr-label>
 				</vr-columns>
 			</vr-row>
 			<vr-row removeline>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label>Netting</vr-label>
+					<vr-label>Overall Revenue</vr-label>
 				</vr-columns>
 				<vr-columns colnum="{{ctrl.normalColNum}}">
-					<vr-label isvalue>${{scopeModel.exposure | number}}</vr-label>
+					<vr-label isvalue>${{scopeModel.overallRevenue | vrtextOrNumber:2}}</vr-label>
 				</vr-columns>
 			</vr-row>
 		</vr-section>

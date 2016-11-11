@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
+    <Compile Include="SwapDealAnalysis\Input\CalculateOutboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Inbound\SwapDealAnalysisInboundItemRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Inbound\SwapDealAnalysisInboundRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Inbound\SwapDealAnalysisInboundRateCalcMethodConfig.cs" />

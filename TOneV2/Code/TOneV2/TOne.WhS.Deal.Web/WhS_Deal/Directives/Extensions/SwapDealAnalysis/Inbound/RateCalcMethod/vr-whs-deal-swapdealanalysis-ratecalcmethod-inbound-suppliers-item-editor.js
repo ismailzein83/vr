@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundCustomersItemeditor', ['WhS_Deal_CarrierFilterTypeEnum', 'WhS_Deal_ZoneRateEvaluationTypeEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_Deal_CarrierFilterTypeEnum, WhS_Deal_ZoneRateEvaluationTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsDealSwapdealanalysisRatecalcmethodInboundSuppliersItemeditor', ['WhS_Deal_CarrierFilterTypeEnum', 'WhS_Deal_ZoneRateEvaluationTypeEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_Deal_CarrierFilterTypeEnum, WhS_Deal_ZoneRateEvaluationTypeEnum, UtilsService, VRUIUtilsService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -9,22 +9,22 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundCustomersItemedito
 		},
 		controller: function ($scope, $element, $attrs) {
 			var ctrl = this;
-			var customersOutboundRateCalcMethodItem = new CustomersOutboundRateCalcMethodItem($scope, ctrl, $attrs);
-			customersOutboundRateCalcMethodItem.initializeController();
+			var suppliersInboundRateCalcMethodItem = new SuppliersInboundRateCalcMethodItem($scope, ctrl, $attrs);
+			suppliersInboundRateCalcMethodItem.initializeController();
 		},
-		controllerAs: 'customersCtrl',
+		controllerAs: 'suppliersCtrl',
 		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_Deal/Directives/Extensions/SwapDealAnalysis/Outbound/RateCalcMethod/Templates/CustomersOutboundRateCalcMethodItemEditorTemplate.html'
+		templateUrl: '/Client/Modules/WhS_Deal/Directives/Extensions/SwapDealAnalysis/Inbound/RateCalcMethod/Templates/SuppliersInboundRateCalcMethodItemEditorTemplate.html'
 	};
 
-	function CustomersOutboundRateCalcMethodItem($scope, ctrl, $attrs) {
+	function SuppliersInboundRateCalcMethodItem($scope, ctrl, $attrs) {
 
 		this.initializeController = initializeController;
 
 		var carrierFilterSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var customerSelectorAPI;
-		var customerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		var supplierSelectorAPI;
+		var supplierSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 		var zoneRateEvalSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,9 +41,9 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundCustomersItemedito
 				carrierFilterSelectorReadyDeferred.resolve();
 			};
 
-			$scope.scopeModel.onCustomerSelectorReady = function (api) {
-				customerSelectorAPI = api;
-				customerSelectorReadyDeferred.resolve();
+			$scope.scopeModel.onSupplierSelectorReady = function (api) {
+				supplierSelectorAPI = api;
+				supplierSelectorReadyDeferred.resolve();
 			};
 
 			$scope.scopeModel.onZoneRateEvalSelectorReady = function (api) {
@@ -58,13 +58,13 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundCustomersItemedito
 				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
 			};
 
-			$scope.scopeModel.areCustomersRequired = function () {
+			$scope.scopeModel.areSuppliersRequired = function () {
 				if ($scope.scopeModel.selectedCarrierFilter == undefined)
 					return false;
 				return ($scope.scopeModel.selectedCarrierFilter.value != WhS_Deal_CarrierFilterTypeEnum.All.value);
 			};
 
-			UtilsService.waitMultiplePromises([carrierFilterSelectorReadyDeferred.promise, customerSelectorReadyDeferred.promise, zoneRateEvalSelectorReadyDeferred.promise]).then(function () {
+			UtilsService.waitMultiplePromises([carrierFilterSelectorReadyDeferred.promise, supplierSelectorReadyDeferred.promise, zoneRateEvalSelectorReadyDeferred.promise]).then(function () {
 				defineAPI();
 			});
 		}
@@ -76,19 +76,19 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundCustomersItemedito
 			api.load = function (payload) {
 				var promises = [];
 
-				var customerIds;
+				var supplierIds;
 				var rateEvaluationType;
 				var rateEvaluationData;
 
 				if (payload != undefined) {
-					$scope.scopeModel.selectedCarrierFilter = UtilsService.getItemByVal($scope.scopeModel.carrierFilters, payload.CustomerFilterType, 'value');
-					customerIds = payload.CustomerIds;
+					$scope.scopeModel.selectedCarrierFilter = UtilsService.getItemByVal($scope.scopeModel.carrierFilters, payload.SupplierFilterType, 'value');
+					supplierIds = payload.SupplierIds;
 					rateEvaluationType = payload.RateEvaluationType;
 					rateEvaluationData = payload.RateEvaluationData;
 				}
-				
-				var customerSelectorPayload = { selectedIds: customerIds };
-				promises.push(customerSelectorAPI.load(customerSelectorPayload));
+
+				var supplierSelectorPayload = { selectedIds: supplierIds };
+				promises.push(supplierSelectorAPI.load(supplierSelectorPayload));
 
 				if (rateEvaluationType != undefined) {
 					directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -107,9 +107,9 @@ app.directive('vrWhsDealSwapdealanalysisRatecalcmethodOutboundCustomersItemedito
 
 			api.getData = function () {
 				return {
-					$type: 'TOne.WhS.Deal.MainExtensions.SwapDealAnalysisOutboundItemRateCustomers, TOne.WhS.Deal.MainExtensions',
-					CustomerFilterType: $scope.scopeModel.selectedCarrierFilter.value,
-					CustomerIds: ($scope.scopeModel.selectedCarrierFilter.value != WhS_Deal_CarrierFilterTypeEnum.All.value) ? customerSelectorAPI.getSelectedIds() : null,
+					$type: 'TOne.WhS.Deal.MainExtensions.SwapDealAnalysisInboundItemRateSuppliers, TOne.WhS.Deal.MainExtensions',
+					SupplierFilterType: $scope.scopeModel.selectedCarrierFilter.value,
+					SupplierIds: ($scope.scopeModel.selectedCarrierFilter.value != WhS_Deal_CarrierFilterTypeEnum.All.value) ? supplierSelectorAPI.getSelectedIds() : null,
 					RateEvaluationType: $scope.scopeModel.selectedZoneRateEval.value,
 					RateEvaluationData: directiveAPI.getData()
 				};

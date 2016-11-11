@@ -93,6 +93,26 @@
 				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
 			};
 
+			$scope.scopeModel.calculateRate = function () {
+
+				$scope.scopeModel.isLoading = true;
+
+				var input = {
+					OutboundItemRateCalcMethod: directiveAPI.getData(),
+					SupplierId: supplierId,
+					CountryId: countrySelectorAPI.getSelectedIds(),
+					SupplierZoneIds: supplierZoneSelectorAPI.getSelectedIds()
+				};
+
+				WhS_Deal_SwapDealAnalysisAPIService.CalculateOutboundRate(input).then(function (response) {
+					$scope.scopeModel.calculatedRate = response;
+				}).catch(function (error) {
+					VRNotificationService.notifyException(error, $scope);
+				}).finally(function () {
+					$scope.scopeModel.isLoading = false;
+				});
+			};
+
 			$scope.scopeModel.save = function () {
 				return (isEditMode) ? updateOutbound() : insertOutbound();
 			};
@@ -124,7 +144,7 @@
 			if (isEditMode) {
 				var outboundEntityName;
 				if (outboundEntity != undefined)
-					outboundEntityName = outboundEntity.GroupName;
+					outboundEntityName = outboundEntity.Name;
 				$scope.title = UtilsService.buildTitleForUpdateEditor(outboundEntityName, 'Outbound');
 			}
 			else
@@ -133,7 +153,7 @@
 		function loadStaticSection() {
 			if (outboundEntity == undefined)
 				return;
-			$scope.scopeModel.groupName = outboundEntity.GroupName;
+			$scope.scopeModel.groupName = outboundEntity.Name;
 			$scope.scopeModel.volume = outboundEntity.Volume;
 			$scope.scopeModel.dealRate = outboundEntity.DealRate;
 		}
@@ -152,6 +172,7 @@
 
 				countrySelectedDeferred.promise.then(function ()
 				{
+					countrySelectedDeferred = undefined;
 					loadSupplierZoneSelectorOnPageLoad().then(function () {
 						loadSupplierZoneSelectorDeferred.resolve();
 					}).catch(function (error) {
@@ -244,7 +265,7 @@
 		}
 		function buildOutboundObjFromScope() {
 			var obj = {
-				GroupName: $scope.scopeModel.groupName,
+				Name: $scope.scopeModel.groupName,
 				CountryId: countrySelectorAPI.getSelectedIds(),
 				SupplierZoneIds: supplierZoneSelectorAPI.getSelectedIds(),
 				Volume: $scope.scopeModel.volume,

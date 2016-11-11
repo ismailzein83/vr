@@ -10,14 +10,14 @@ namespace TOne.WhS.Deal.Entities
 	{
 		public Guid CalculationMethodId { get; set; }
 
-		public abstract Decimal Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context);
+		public abstract decimal? Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context);
 	}
 
 	public interface ISwapDealAnalysisOutboundRateCalcMethodContext
 	{
-		SwapDealAnalysisOutboundRateCalcMethod RateCalculationMethod { get; set; }
-
 		int SupplierId { get; }
+
+		int CountryId { get; set; }
 
 		List<long> SupplierZoneIds { get; }
 	}

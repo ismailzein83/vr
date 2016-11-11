@@ -18,13 +18,13 @@ namespace TOne.WhS.Deal.Entities
 
         public Decimal TotalSaleRevenue { get; set; }
 
-        public Decimal TotalCostMargin { get; set; }
+        public Decimal? TotalCostMargin { get; set; }
 
-        public Decimal TotalSaleMargin { get; set; }
+        public Decimal? TotalSaleMargin { get; set; }
 
-        public Decimal OverallProfit { get; set; }
+        public Decimal? OverallProfit { get; set; }
 
-        public Decimal Margins { get; set; }
+        public Decimal? Margins { get; set; }
 
         public Decimal OverallRevenue { get; set; }
     }
@@ -35,11 +35,11 @@ namespace TOne.WhS.Deal.Entities
 
         public int DailyVolume { get; set; }
         
-        public Decimal CurrentCost { get; set; }
+        public Decimal? CurrentRate { get; set; }
 
-        public Decimal RateProfit { get; set; }
+        public Decimal? RateProfit { get; set; }
 
-        public Decimal Profit { get; set; }
+        public Decimal? Profit { get; set; }
 
         public Decimal Revenue { get; set; }
     }
@@ -50,11 +50,11 @@ namespace TOne.WhS.Deal.Entities
 
         public int DailyVolume { get; set; }
 
-        public Decimal CurrentCost { get; set; }
+		public Decimal? CurrentRate { get; set; }
 
-        public Decimal Saving { get; set; }
+		public Decimal RateSavings { get; set; }
 
-        public Decimal RateSaving { get; set; }
+        public Decimal Savings { get; set; }
 
         public Decimal Revenue { get; set; }
     }

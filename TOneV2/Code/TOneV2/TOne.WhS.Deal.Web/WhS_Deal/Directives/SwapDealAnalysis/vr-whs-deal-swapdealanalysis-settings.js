@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', function (WhS_Deal_SwapDealAnalysisTypeEnum, UtilsService, VRUIUtilsService, VRValidationService) {
+app.directive('vrWhsDealSwapdealanalysisSettings', ['UtilsService', 'VRUIUtilsService', 'VRValidationService', function (UtilsService, VRUIUtilsService, VRValidationService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -21,25 +21,29 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTy
 
 		this.initializeController = initializeController;
 
+		var context;
+
 		var carrierAccountSelectorAPI;
 		var carrierAccountReadyDeferred = UtilsService.createPromiseDeferred();
-
-		//var analysisTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 		function initializeController()
 		{
 			$scope.scopeModel = {};
-
-			$scope.scopeModel.swapDealAnalysisTypes = UtilsService.getArrayEnum(WhS_Deal_SwapDealAnalysisTypeEnum);
 
 			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
 				carrierAccountSelectorAPI = api;
 				carrierAccountReadyDeferred.resolve();
 			};
 
-			//$scope.scopeModel.onAnalysisTypeSelectorReady = function (api) {
-			//	analysisTypeSelectorReadyDeferred.resolve();
-			//};
+			$scope.scopeModel.onCarrierAccountSelectionChanged = function (selectedCarrierAccount) {
+
+				var carrierAccountId = carrierAccountSelectorAPI.getSelectedIds()
+				if (carrierAccountId == undefined)
+					return;
+
+				context.setSellingNumberPlanId(selectedCarrierAccount.SellingNumberPlanId);
+				context.clearAnalysis();
+			};
 
 			$scope.scopeModel.validateTimeRange = function () {
 				return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
@@ -56,17 +60,30 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['WhS_Deal_SwapDealAnalysisTy
 			api.load = function (payload)
 			{
 				var carrierAccountId;
+				var settings;
 
 				if (payload != undefined)
 				{
+					context = payload.context;
+					settings = payload.Settings;
+				}
+
+				if (settings != undefined) {
 					$scope.scopeModel.name = payload.Name;
 					carrierAccountId = payload.CarrierAccountId;
-					$scope.scopeModel.selectedSwapDealAnalysisType = UtilsService.getItemByVal($scope.swapDealAnalysisTypes, payload.AnalysisType, 'value');
 					$scope.scopeModel.fromDate = payload.FromDate;
 					$scope.scopeModel.toDate = payload.ToDate;
 				}
 
 				return loadCarrierAccountSelector(carrierAccountId);
+			};
+
+			api.getData = function () {
+				return {
+					CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+					FromDate: $scope.scopeModel.fromDate,
+					ToDate: $scope.scopeModel.toDate
+				};
 			};
 
 			api.getCarrierAccountId = function () {

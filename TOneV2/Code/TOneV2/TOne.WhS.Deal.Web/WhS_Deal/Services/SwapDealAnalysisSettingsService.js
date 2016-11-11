@@ -6,7 +6,35 @@
 
 	function SwapDealAnalysisSettingsService(VRModalService, VRNotificationService, UtilsService) {
 
+		var inboundRateCalcMethodEditorUrl = '/Client/Modules/WhS_Deal/Views/SwapDealAnalysisSettings/Templates/InboundRateCalcMethodEditor.html';
 		var outboundRateCalcMethodEditorUrl = '/Client/Modules/WhS_Deal/Views/SwapDealAnalysisSettings/Templates/OutboundRateCalcMethodEditor.html';
+
+		function addInboundRateCalcMethod(onInboundRateCalcMethodAdded) {
+
+			var parameters = null;
+
+			var settings = {};
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onInboundRateCalcMethodAdded = onInboundRateCalcMethodAdded;
+			};
+
+			VRModalService.showModal(inboundRateCalcMethodEditorUrl, parameters, settings);
+		}
+
+		function editInboundRateCalcMethod(calculationMethodId, inboundRateCalcMethod, onInboundRateCalcMethodUpdated) {
+
+			var parameters = {
+				calculationMethodId: calculationMethodId,
+				inboundRateCalcMethod: inboundRateCalcMethod
+			};
+
+			var settings = {};
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onInboundRateCalcMethodUpdated = onInboundRateCalcMethodUpdated;
+			};
+
+			VRModalService.showModal(inboundRateCalcMethodEditorUrl, parameters, settings);
+		}
 
 		function addOutboundRateCalcMethod(onOutboundRateCalcMethodAdded) {
 
@@ -36,6 +64,8 @@
 		}
 
 		return {
+			addInboundRateCalcMethod: addInboundRateCalcMethod,
+			editInboundRateCalcMethod: editInboundRateCalcMethod,
 			addOutboundRateCalcMethod: addOutboundRateCalcMethod,
 			editOutboundRateCalcMethod: editOutboundRateCalcMethod
 		};
