@@ -121,6 +121,7 @@
     <Compile Include="SaleCode\QueryHandlers\SaleCodeQueryHandler.cs" />
     <Compile Include="SaleCode\SaleCodeExistingEntity.cs" />
     <Compile Include="SalePLNotification\NotificationManager.cs" />
+    <Compile Include="SalePriceListTemplateManager.cs" />
     <Compile Include="SaleRate\FutureSaleRateReadWithCache.cs" />
     <Compile Include="SaleRate\ISaleRateReader.cs" />
     <Compile Include="SaleCode\SaleCodeCacheManager.cs" />

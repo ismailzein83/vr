@@ -156,6 +156,7 @@
     <Compile Include="Controllers\CustomerZoneController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleEntityZoneZerviceController.cs" />
+    <Compile Include="Controllers\SalePriceListTemplateController.cs" />
     <Compile Include="Controllers\SaleRateController.cs" />
     <Compile Include="Controllers\SellingProductController.cs" />
     <Compile Include="Controllers\RoutingProductController.cs" />
@@ -290,6 +291,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaSettings\vr-whs-be-salearea-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\vr-whs-be-salecode-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePriceListGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelist-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleOtherRateGridTemplate.html" />
@@ -373,6 +376,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealProgressAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\DealAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\StateBackupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierOtherRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneServiceAPIService.js" />
@@ -390,6 +394,7 @@
     <Content Include="WhS_BusinessEntity\Services\DealSellingService.js" />
     <Content Include="WhS_BusinessEntity\Services\DealService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
@@ -470,6 +475,10 @@
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelist.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagement.html" />
