@@ -98,6 +98,7 @@
     <Compile Include="ApplyPreviewCodesToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
     <Compile Include="BackupData.cs" />
+    <Compile Include="BuildZonesNotifications.cs" />
     <Compile Include="GenerateRatesPreview.cs" />
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="GenerateZonesPreview.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="GetDataFromZoneChanges.cs" />
     <Compile Include="GetDataFromCodeChanges.cs" />
     <Compile Include="ProcessCountryCodes.cs" />
+    <Compile Include="BuildZonesChanges.cs" />
     <Compile Include="ReserveIdForCodePreparation.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="SetCPContext.cs" />

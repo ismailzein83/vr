@@ -10,5 +10,7 @@ namespace TOne.WhS.CodePreparation.BP.Arguments.Tasks
     public class NotificationTaskExecutionInforamtion : BPTaskExecutionInformation
     {
         public IEnumerable<int> CustomerIds { get; set; }
+
+        public bool Decision { get; set; }
     }
 }

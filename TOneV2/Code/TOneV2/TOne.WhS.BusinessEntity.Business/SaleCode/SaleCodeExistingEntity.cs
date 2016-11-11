@@ -26,6 +26,8 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        public int CountryId { get; set; }
+
         #endregion
 
         #region IExistingEntity Members

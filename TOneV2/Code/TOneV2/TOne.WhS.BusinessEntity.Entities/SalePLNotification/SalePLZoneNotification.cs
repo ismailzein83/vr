@@ -12,6 +12,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string ZoneName { get; set; }
 
+        public long ZoneId { get; set; }
+
         public List<SalePLCodeNotification> Codes
         {
             get

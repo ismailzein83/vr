@@ -24,11 +24,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<RatePreview>>> PreviewRatesQueue { get; set; }
 
+        [RequiredArgument]
+        public InOutArgument<List<RatePreview>> PreviewRates { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
             BaseQueue<IEnumerable<RatePreview>> previewRatesQueue = this.PreviewRatesQueue.Get(context);
+            List<RatePreview> previewRates = this.PreviewRates.Get(context);
 
             List<RatePreview> ratesPreview = new List<RatePreview>();
 
@@ -44,6 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
             
             previewRatesQueue.Enqueue(ratesPreview);
+            previewRates.AddRange(ratesPreview);
         }
 
         private DateTime GetRateToAddBED(IEnumerable<AddedRate> addedRates)

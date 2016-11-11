@@ -49,10 +49,10 @@
                             customerIds.push($scope.scopeModel.customers[i].CarrierAccountId);
                 }
 
-                return executeTask(customerIds);
+                return executeTask(customerIds, true);
             };
             $scope.scopeModel.close = function () {
-                return executeTask(undefined);
+                return executeTask(undefined, false);
             };
         }
         function load() {
@@ -60,6 +60,7 @@
 
             getSellingProduct().then(function () {
                 loadAllControls();
+                
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
@@ -92,17 +93,19 @@
                         $scope.scopeModel.customers.push(response[i]);
                     }
                 }
+                selectOrClearAllCustomers(true);
             });
 
         }
 
-        function executeTask(customerIds) {
+        function executeTask(customerIds, taskAction) {
 
             $scope.scopeModel.isLoading = true;
 
             var executionInformation = {
                 $type: "TOne.WhS.Sales.BP.Arguments.Tasks.EmailTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
-                CustomerIds: customerIds
+                CustomerIds: customerIds,
+                Decision: taskAction
             };
 
             var input = {

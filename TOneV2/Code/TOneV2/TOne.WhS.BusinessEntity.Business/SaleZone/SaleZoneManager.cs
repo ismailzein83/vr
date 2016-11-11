@@ -53,6 +53,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedSaleZones().GetRecord(saleZoneId);
         }
 
+        public int GetSaleZoneCountryId(long saleZoneId)
+        {
+            SaleZone saleZone = GetSaleZone(saleZoneId);
+            return saleZone.CountryId;
+        }
+
         public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
