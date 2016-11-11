@@ -12,11 +12,11 @@
 
         var rpRoutePolicyAPI;
 
-        var routingProductSelectorAPI;
-        var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var saleZoneSelectorAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var routingProductSelectorAPI;
+        var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
