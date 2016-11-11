@@ -18,8 +18,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
 
@@ -100,7 +98,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (result != null)
                 foreach (var analyticRecord in result.Data)
                 {
-                    CarrierAccount supplier = new CarrierAccount();
                     SummaryByZone summaryByZone = new SummaryByZone();
 
                     var zoneValue = analyticRecord.DimensionValues[0];
@@ -117,57 +114,51 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     {
                         var supplierValue = analyticRecord.DimensionValues[2];
                         if (supplierValue != null)
-                        {
-                            supplier = carrierAccountManager.GetCarrierAccount((int)supplierValue.Value);
                             summaryByZone.SupplierID = supplierValue.Name;
-                        }
                     }
 
-                    if (supplier != null && supplier.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive && !supplier.IsDeleted)
-                    {
-                        MeasureValue calls;
-                        analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
-                        summaryByZone.Calls = (calls == null) ? 0 : Convert.ToInt32(calls.Value ?? 0);
+                    MeasureValue calls;
+                    analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
+                    summaryByZone.Calls = (calls == null) ? 0 : Convert.ToInt32(calls.Value ?? 0);
 
-                        MeasureValue durationNet;
-                        analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
-                        summaryByZone.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
-                        summaryByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationNet);
+                    MeasureValue durationNet;
+                    analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                    summaryByZone.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
+                    summaryByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationNet);
 
-                        MeasureValue rate;
-                        if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
-                        else
-                            analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
-                        summaryByZone.Rate = (rate == null) ? (decimal)0.0 : Convert.ToDecimal(rate.Value ?? 0.0);
-                        summaryByZone.RateFormatted = ReportHelpers.FormatNumberDigitRate(summaryByZone.Rate);
+                    MeasureValue rate;
+                    if (parameters.IsCost)
+                        analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
+                    else
+                        analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
+                    summaryByZone.Rate = (rate == null) ? (decimal)0.0 : Convert.ToDecimal(rate.Value ?? 0.0);
+                    summaryByZone.RateFormatted = ReportHelpers.FormatNumberDigitRate(summaryByZone.Rate);
 
-                        MeasureValue durationInMinutes;
-                        if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostDuration", out durationInMinutes);
-                        else
-                            analyticRecord.MeasureValues.TryGetValue("SaleDuration", out durationInMinutes);
-                        summaryByZone.DurationInSeconds = (durationInMinutes == null) ? 0 : Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                        summaryByZone.DurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationInSeconds);
+                    MeasureValue durationInMinutes;
+                    if (parameters.IsCost)
+                        analyticRecord.MeasureValues.TryGetValue("CostDuration", out durationInMinutes);
+                    else
+                        analyticRecord.MeasureValues.TryGetValue("SaleDuration", out durationInMinutes);
+                    summaryByZone.DurationInSeconds = (durationInMinutes == null) ? 0 : Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
+                    summaryByZone.DurationInSecondsFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationInSeconds);
 
-                        MeasureValue net;
-                        if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
-                        else
-                            analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
-                        summaryByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-                        summaryByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.Net);
+                    MeasureValue net;
+                    if (parameters.IsCost)
+                        analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                    else
+                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                    summaryByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
+                    summaryByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.Net);
 
-                        MeasureValue extraChargeValue;
-                        if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
-                        else
-                            analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
-                        summaryByZone.ExtraChargeValue = (extraChargeValue == null) ? (decimal)0.0 : Convert.ToDecimal(extraChargeValue.Value ?? 0.0);
-                        summaryByZone.CommissionValueFormatted = ReportHelpers.FormatLongNumberDigit(summaryByZone.ExtraChargeValue);
+                    MeasureValue extraChargeValue;
+                    if (parameters.IsCost)
+                        analyticRecord.MeasureValues.TryGetValue("CostExtraCharges", out extraChargeValue);
+                    else
+                        analyticRecord.MeasureValues.TryGetValue("SaleExtraCharges", out extraChargeValue);
+                    summaryByZone.ExtraChargeValue = (extraChargeValue == null) ? (decimal)0.0 : Convert.ToDecimal(extraChargeValue.Value ?? 0.0);
+                    summaryByZone.CommissionValueFormatted = ReportHelpers.FormatLongNumberDigit(summaryByZone.ExtraChargeValue);
 
-                        listSummaryByZone.Add(summaryByZone);
-                    }
+                    listSummaryByZone.Add(summaryByZone);
                 }
             //parameters.ServicesForCustomer = services;
             parameters.NormalDuration = listSummaryByZone.Where(y => y.RateTypeFormatted == "Normal").Sum(x => Math.Round(x.DurationInSeconds, 2));
@@ -190,7 +181,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
 
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
-            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ?  parameters.ToTime.ToString() : null, IsVisible = true });
+            list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.HasValue ? parameters.ToTime.ToString() : null, IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = String.Format("Summary By Zone -{0}", parameters.IsCost ? "Purchase" : "Sale"), IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = parameters.CurrencyDescription, IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
