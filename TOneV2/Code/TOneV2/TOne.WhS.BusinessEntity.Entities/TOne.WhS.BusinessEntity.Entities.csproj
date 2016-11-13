@@ -152,9 +152,9 @@
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateQuery.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettingsType.cs" />
-    <Compile Include="SalePriceListTemplate\Sheet\MappedColumn.cs" />
-    <Compile Include="SalePriceListTemplate\Sheet\MappedSheet.cs" />
-    <Compile Include="SalePriceListTemplate\Sheet\MappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\MappedColumn.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\MappedSheet.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\MappedValue.cs" />
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />

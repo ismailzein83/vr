@@ -263,6 +263,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\Templates\GetCDPNsForZoneMatchStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\MappedValue\vr-whs-be-pricelisttemplate-settings-basic-mappedvalue-befield.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\MappedValue\vr-whs-be-pricelisttemplate-settings-basic-mappedvalue-constant.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\Templates\BasicSalePriceListTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-basic.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
@@ -303,6 +305,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaSettings\vr-whs-be-salearea-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\vr-whs-be-salecode-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedValue\Templates\BasicSalePriceListTemplateSettingsMappedValueSelectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedValue\vr-whs-be-pricelisttemplate-settings-basic-mappedvalue-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateSettingsSelectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-grid.js" />
@@ -546,6 +550,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
