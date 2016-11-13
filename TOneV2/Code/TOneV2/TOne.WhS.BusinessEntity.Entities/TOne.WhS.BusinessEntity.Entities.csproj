@@ -147,11 +147,12 @@
     <Compile Include="SalePLNotification\SalePLRateNotification.cs" />
     <Compile Include="SalePLNotification\SalePLZoneNotification.cs" />
     <Compile Include="SalePLNotification\SalePLZoneChange.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\BasicSalePriceListTemplateSettingsMappedValueExtensionConfig.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplate.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateDetail.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateQuery.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings.cs" />
-    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettingsType.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettingsExtensionConfig.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\MappedColumn.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\MappedSheet.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\MappedValue.cs" />
