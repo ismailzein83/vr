@@ -221,6 +221,7 @@
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SwitchConnectivityTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\VolumeCommitmentTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\WhS_BE_BasicSalePriceListTemplateSettingsBEFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ZoneRouteOptionsDisplayEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarrierGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarrier-grid.js" />
