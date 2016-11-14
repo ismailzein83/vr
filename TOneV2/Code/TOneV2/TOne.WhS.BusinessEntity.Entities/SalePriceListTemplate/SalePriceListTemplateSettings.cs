@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities.SalePriceListTemplate
+namespace TOne.WhS.BusinessEntity.Entities
 {
-	class SalePriceListTemplateSettings
+	public abstract class SalePriceListTemplateSettings
 	{
+
 	}
 }
