@@ -18,6 +18,9 @@
         var routingProductSelectorAPI;
         var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var routeStatusSelectorAPI;
+        var routeStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -42,6 +45,11 @@
             $scope.onRoutingProductSelectorReady = function (api) {
                 routingProductSelectorAPI = api;
                 routingProductReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onRouteStatusDirectiveReady = function (api) {
+                routeStatusSelectorAPI = api;
+                routeStatusSelectorReadyPromiseDeferred.resolve();
             }
 
             $scope.onRoutingDatabaseSelectorChange = function ()
@@ -83,6 +91,7 @@
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     FilteredPolicies: rpRoutePolicyAPI.getFilteredPoliciesIds(),
                     DefaultPolicyId: rpRoutePolicyAPI.getDefaultPolicyId(),
+                    RouteStatus: routeStatusSelectorAPI.getSelectedIds(),
                     LimitResult: $scope.limit
                 };
                 return query;
@@ -91,7 +100,7 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSaleZoneSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSaleZoneSection, loadRouteStatusSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -124,6 +133,15 @@
             });
 
             return loadSaleZonePromiseDeferred.promise;
+        }
+        function loadRouteStatusSelector() {
+            var loadRouteStatusPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            routeStatusSelectorReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(routeStatusSelectorAPI, undefined, loadRouteStatusPromiseDeferred);
+            });
+
+            return loadRouteStatusPromiseDeferred.promise;
         }
     }
 

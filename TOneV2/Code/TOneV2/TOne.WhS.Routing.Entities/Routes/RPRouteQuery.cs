@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Entities
 
         public List<int> SaleZoneIds { get; set; }
 
+        public RouteStatus? RouteStatus { get; set; }
+
         public int LimitResult { get; set; }
     }
 }

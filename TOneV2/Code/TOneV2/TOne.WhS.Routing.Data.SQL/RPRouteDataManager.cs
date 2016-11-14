@@ -67,7 +67,6 @@ namespace TOne.WhS.Routing.Data.SQL
                 string routingProductIdsFilter = " 1=1 ";
                 string saleZoneIdsFilter = " 1=1 ";
 
-
                 if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
                     routingProductIdsFilter = string.Format("RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
 
@@ -77,7 +76,14 @@ namespace TOne.WhS.Routing.Data.SQL
                 query_GetFilteredRPRoutes.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
                 query_GetFilteredRPRoutes.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
 
-                ExecuteNonQueryText(query_GetFilteredRPRoutes.ToString(), null);
+                bool? isBlocked = null;
+                if (input.Query.RouteStatus.HasValue)
+                    isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
+
+                ExecuteNonQueryText(query_GetFilteredRPRoutes.ToString(), (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
+                });
             };
 
             if (input.SortByColumnName != null)
@@ -148,6 +154,7 @@ namespace TOne.WhS.Routing.Data.SQL
             ExecuteNonQueryText(query, null);
             trackStep("Finished create Index on ProductRoute table (SaleZoneId).");
         }
+
         #region Private
 
         private RPRoute RPRouteMapper(IDataReader reader)
@@ -197,7 +204,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                   ,[OptionsByPolicy]
                                                                   ,[IsBlocked]
                                                             INTO #TEMPTABLE# FROM [dbo].[ProductRoute] with(nolock)
-                                                            Where #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS# 
+                                                            Where (@IsBlocked is null or IsBlocked = @IsBlocked) AND #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS#
                                                             END");
 
         private const string query_GetRouteOptions = @"SELECT [OptionsByPolicy]

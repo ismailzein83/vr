@@ -100,7 +100,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                 var serviceViewerPayload;
                 if (customerRoute.Entity != undefined) {
                     serviceViewerPayload = {
-                        selectedIds: customerRoute.Entity.CustomerServiceIds 
+                        selectedIds: customerRoute.Entity.SaleZoneServiceIds 
                     };
                 }
 

@@ -79,9 +79,14 @@ namespace TOne.WhS.Routing.Data.SQL
 
                 query_GetFilteredCustomerRoutes.Replace("#CUSTOMERIDS#", customerIdsFilter);
 
+                bool? isBlocked = null;
+                if (input.Query.RouteStatus.HasValue)
+                    isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
+
                 ExecuteNonQueryText(query_GetFilteredCustomerRoutes.ToString(), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
+                    cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
                 });
             };
 
@@ -227,7 +232,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]
                                                             INTO #TEMPTABLE# FROM [dbo].[CustomerRoute] with(nolock)
-                                                            Where (@Code is Null or Code like @Code)
+                                                            Where (@Code is Null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked)
                                                                 #CUSTOMERIDS#
                                                             END");
 

@@ -73,9 +73,6 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_Zon
             if (percentage) {
                 result = result + ' ' + percentage + '%';
             }
-
-            console.log(result);
-
             return result;
         }
         function buildTitleToDisplay(currentItem, display) {

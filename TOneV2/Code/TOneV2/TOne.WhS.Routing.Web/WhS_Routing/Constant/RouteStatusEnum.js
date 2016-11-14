@@ -1,4 +1,4 @@
 ﻿app.constant('WhS_Routing_RouteStatusEnum', {
-    Block: { value: 0, description: "Block" },
+    Blocked: { value: 0, description: "Blocked" },
     Standard: { value: 1, description: "Standard" }
 });

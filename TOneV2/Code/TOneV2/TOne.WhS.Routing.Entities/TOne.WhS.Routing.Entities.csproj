@@ -79,6 +79,7 @@
     <Compile Include="RouteRuleSettingsConfig.cs" />
     <Compile Include="RoutingOptimizerSettings.cs" />
     <Compile Include="RoutingOptimizerSettingsConfig.cs" />
+    <Compile Include="Routing\RouteStatus.cs" />
     <Compile Include="Settings\RouteBuildConfiguration.cs" />
     <Compile Include="Settings\RouteDatabaseConfiguration.cs" />
     <Compile Include="Settings\RouteDatabasesToKeep.cs" />

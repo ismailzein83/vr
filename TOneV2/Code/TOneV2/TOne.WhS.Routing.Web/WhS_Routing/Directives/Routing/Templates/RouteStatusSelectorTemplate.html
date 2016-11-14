@@ -1,0 +1,12 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-select on-ready="ctrl.onSelectorReady"
+               datasource="ctrl.datasource"
+               datatextfield="description"
+               datavaluefield="value"
+               selectedvalues="ctrl.selectedvalues"
+               onselectionchanged="ctrl.onselectionchanged"
+               customvalidate="ctrl.customvalidate"
+               isrequired="ctrl.isrequired"
+               label="Status">
+    </vr-select>
+</vr-columns>
