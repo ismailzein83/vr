@@ -30,13 +30,13 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
 
             $scope.scopeModel.accessTypes = UtilsService.getArrayEnum(VR_Analytic_AccessTypeEnum);
             $scope.scopeModel.onEditorDirectiveReady = function (api) {
                 editorDirectiveAPI = api;
                 editorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.saveAnalyticReport = function () {
                 if (isEditMode) {
@@ -131,7 +131,7 @@
             var analyticReportSettings = editorDirectiveAPI != undefined ? editorDirectiveAPI.getData() : undefined;
             if (analyticReportSettings != undefined)
             {
-                analyticReportSettings.ConfigId =   $scope.scopeModel.selectedAnalyticReportConfig.ExtensionConfigurationId
+                analyticReportSettings.ConfigId = $scope.scopeModel.selectedAnalyticReportConfig.ExtensionConfigurationId;
             }
         
             var analyticReport = {

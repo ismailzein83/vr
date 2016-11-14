@@ -42,13 +42,13 @@
                 ctrl.addItemAction = function () {
                     var onItemActionAdded = function (ItemActionObj) {
                         ctrl.itemActions.push(ItemActionObj);
-                    }
+                    };
                     VR_Analytic_AnalyticItemActionService.addItemAction(onItemActionAdded);
-                }
+                };
 
                 ctrl.removeItemAction = function (itemAction) {
                     ctrl.itemActions.splice(ctrl.itemActions.indexOf(itemAction), 1);
-                }
+                };
 
                 defineMenuActions();
             }
@@ -76,7 +76,7 @@
                         itemActions.push(itemAction);
                     }
                     return itemActions;
-                }
+                };
 
                 return api;
             }
@@ -91,7 +91,7 @@
             function editItemAction(itemAction) {
                 var onItemActionUpdated = function (itemActionObj) {
                     ctrl.itemActions[ctrl.itemActions.indexOf(itemAction)] = itemActionObj;
-                }
+                };
                 VR_Analytic_AnalyticItemActionService.editItemAction(itemAction, onItemActionUpdated);
             }
         }

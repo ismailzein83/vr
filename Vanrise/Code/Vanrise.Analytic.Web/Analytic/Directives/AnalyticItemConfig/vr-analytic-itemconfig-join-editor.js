@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
 
             templateUrl: function (element, attrs) {
@@ -53,15 +53,15 @@
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     var join = {
                         $type: "Vanrise.Analytic.Entities.AnalyticJoinConfig ,Vanrise.Analytic.Entities",
-                        JoinStatement: $scope.scopeModel.joinStatement,
+                        JoinStatement: $scope.scopeModel.joinStatement
                     };
                     return join;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

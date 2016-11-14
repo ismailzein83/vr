@@ -85,10 +85,9 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
 
-                $scope.scopeModel.onSelectionTableChanged = function()
-                {
+                $scope.scopeModel.onSelectionTableChanged = function () {
                     $scope.scopeModel.selectedTemplateConfig = undefined;
-                }
+                };
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -97,7 +96,7 @@
                 $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
                     tableSelectorAPI = api;
                     tableSelectorReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     directivePayload={
@@ -179,7 +178,7 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                            data.AnalyticTableId = $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined,
+                            data.AnalyticTableId = $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined;
                             data.WidgetTitle = $scope.scopeModel.widgetTitle;
                             data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
                             data.ShowTitle = $scope.scopeModel.showTitle;

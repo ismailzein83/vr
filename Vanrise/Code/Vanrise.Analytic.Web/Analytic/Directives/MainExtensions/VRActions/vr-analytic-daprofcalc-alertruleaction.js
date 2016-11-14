@@ -34,7 +34,7 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                 $scope.scopeModel.onMailMessageTemplateSelectorReady = function (api) {
                     mailMessageTemplateSelectorReadyAPI = api;
                     mailMessageTemplateSelectorReadyPromiseDeferred.resolve();
-                }
+                };
 
 
                 var promises = [mailMessageTemplateSelectorReadyPromiseDeferred.promise];
@@ -59,11 +59,11 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                     var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     var mailMessageTemplatePayload = {
                         selectedIds: mailMessageTemplate
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorReadyAPI, mailMessageTemplatePayload, mailMessageTemplateSelectorLoadPromiseDeferred);
 
                     return mailMessageTemplateSelectorLoadPromiseDeferred.promise;
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -71,7 +71,7 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                         ActionName: "Send Email",
                         MailMessageTemplateId: mailMessageTemplateSelectorReadyAPI.getSelectedIds()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -62,7 +62,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         if (style != undefined)
                             return style.styleCode;
                     }
-                }
+                };
 
                 ctrl.gridReady = function (api) {
                     gridApi = api;
@@ -93,7 +93,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             });;
                             return promiseReadyDeferred.promise;
 
-                        }
+                        };
 
                         return directiveAPI;
                     }
@@ -115,7 +115,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
-                            setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; UtilsService.safeApply($scope); })
+                            setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; UtilsService.safeApply($scope); });
 
                             if (response && response.Data) {
                                 if (ctrl.drillDownDimensions.length > 0) {
@@ -153,7 +153,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 FromTime: fromTime,
                                 FilterGroup: gridPayload.FilterGroup,
                                 ToTime: toTime
-                            }
+                            };
                             loadGrid(payload);
                         }
 
@@ -284,7 +284,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 FilterGroup: ctrl.filterGroups,
                                 GridMenuActions: $scope.gridMenuActions,
                                 ItemActions: itemActions
-                            }
+                            };
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
 
@@ -333,7 +333,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         WithSummary: payLoad.Settings == undefined ? false : payLoad.Settings.WithSummary,
                         TableId: payLoad.TableId,
                         MeasureStyleRules: measureStyleRules
-                    }
+                    };
                     return queryFinalized;
                 }
 
@@ -387,7 +387,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         ctrl.dimensions = payload.Dimensions;
                     }
                     if (payload.MeasureStyleRules != undefined)
-                        measureStyleRules = payload.MeasureStyleRules
+                        measureStyleRules = payload.MeasureStyleRules;
                     if (payload.DimensionsConfig != undefined) {
                         ctrl.dimensionsConfig = payload.DimensionsConfig;
                     }
@@ -410,7 +410,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     loadMeasures(payload);
                     if (payload.ParentDrillDownDimensions != undefined) {
-                        applyDimensionRules(payload.ParentDrillDownDimensions)
+                        applyDimensionRules(payload.ParentDrillDownDimensions);
                         ctrl.parentDrillDownDimensions = payload.ParentDrillDownDimensions;
                     }
                 }
@@ -532,7 +532,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function loadDimensionsConfig() {
                     var dimensionsFilter = {
                         TableIds: [tableId]
-                    }
+                    };
                     return VR_Analytic_AnalyticItemConfigAPIService.GetDimensionsInfo(UtilsService.serializetoJson(dimensionsFilter)).then(function (response) {
 
                         if (response) {
@@ -546,13 +546,13 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function loadMeasuresConfig() {
                     var measuresFilter = {
                         TableIds: [tableId]
-                    }
+                    };
                     return VR_Analytic_AnalyticItemConfigAPIService.GetMeasuresInfo(UtilsService.serializetoJson(measuresFilter)).then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.measuresConfig.push(response[i]);
                             }
-                        };
+                        }
                     });
                 }
 
@@ -604,7 +604,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             return selectedMeasures;
 
                         }
-                    }
+                    };
                     return context;
                 }
 
@@ -620,7 +620,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 ToDate: toTime,
                                 FilterGroup: filterGroup,
                                 TableId: tableId,
-                            }
+                            };
                             $scope.gridMenuActions.push({
                                 name: itemAction.Title,
                                 clicked: function (dataItem) {

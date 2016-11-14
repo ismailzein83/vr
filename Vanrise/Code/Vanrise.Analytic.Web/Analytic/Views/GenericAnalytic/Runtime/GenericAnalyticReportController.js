@@ -30,11 +30,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onDirectiveReady = function (api)
-            {
+            $scope.scopeModel.onDirectiveReady = function (api) {
                 directiveAPI = api;
                 directiveReadyDeferred.resolve();
-            }
+            };
         }
 
         function load() {

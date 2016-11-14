@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
 
             templateUrl: function (element, attrs) {
@@ -41,7 +41,7 @@
                 $scope.scopeModel.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
 
@@ -58,8 +58,7 @@
                     if (payload != undefined) {
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
-                        if (configEntity != undefined)
-                        {
+                        if (configEntity != undefined) {
                             $scope.scopeModel.sqlColumn = configEntity.SQLColumn;
                             $scope.scopeModel.selectedAnalyticAggregateType = UtilsService.getItemByVal($scope.scopeModel.analyticAggregateTypes, configEntity.AggregateType, "value");
                             $scope.scopeModel.currencySQLColumnName = configEntity.CurrencySQLColumnName;
@@ -79,11 +78,11 @@
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
-                   
-                }
+
+                };
 
                 api.getData = function () {
-                    var joinConfigNames  = joinSelectorAPI !=undefined?joinSelectorAPI.getSelectedIds():undefined;
+                    var joinConfigNames = joinSelectorAPI != undefined ? joinSelectorAPI.getSelectedIds() : undefined;
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticAggregateConfig ,Vanrise.Analytic.Entities",
                         SQLColumn: $scope.scopeModel.sqlColumn,
@@ -92,7 +91,7 @@
                         CurrencySQLColumnName: $scope.scopeModel.currencySQLColumnName,
                     };
                     return dimension;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

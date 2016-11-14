@@ -107,7 +107,7 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSelector', ['VR_Analytic_Data
                 '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="DataAnalysisItemDefinitionId" isrequired="ctrl.isrequired" label="' + label +
                     '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                     '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                '</vr-select>'
+                '</vr-select>';
 
             return template;
         }

@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 AnalyticreportManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VR_Analytic_AnalyticReportService', 'VR_Analytic_AnalyticReportAPIService', 'VRModalService'];
 
 function AnalyticreportManagementController($scope, UtilsService, VRNotificationService, VR_Analytic_AnalyticReportService, VR_Analytic_AnalyticReportAPIService, VRModalService) {
@@ -20,21 +20,21 @@ function AnalyticreportManagementController($scope, UtilsService, VRNotification
                 mainGridAPI.onAnalyticreportAdded(analyticreportObj);
             };
             VR_Analytic_AnalyticreportService.addAnalyticreport(onAnalyticreportAdded);
-        }
+        };
         $scope.hasAddAnalyticReportPermission = function () {
             return VR_Analytic_AnalyticReportAPIService.HasAddAnalyticReportPermission();
-        }
+        };
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
-        }
+        };
 
         $scope.addMenuActions = [];
     }
 
     function getFilterObject() {
         var query = {
-            Name: $scope.analyticReportName,
-        }
+            Name: $scope.analyticReportName
+        };
         return query;
     }
 
@@ -67,11 +67,10 @@ function AnalyticreportManagementController($scope, UtilsService, VRNotification
                     $scope.addMenuActions.push({
                         name: analyticReportConfigType.Title,
                         clicked: function () {
-                            var onAnalyticReportAdded = function(Obj)
-                            {
+                            var onAnalyticReportAdded = function (Obj) {
                                 if (mainGridAPI != undefined)
                                     mainGridAPI.onAnalyticReportAdded(Obj);
-                            }
+                        };
                             VR_Analytic_AnalyticReportService.addAnalyticReport(onAnalyticReportAdded, analyticReportConfigType.ExtensionConfigurationId);
                         }
                     });

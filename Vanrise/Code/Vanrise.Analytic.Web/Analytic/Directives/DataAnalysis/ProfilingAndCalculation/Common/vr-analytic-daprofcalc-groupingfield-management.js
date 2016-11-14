@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Common/Templates/DAProfCalcGroupingFieldManagementTemplate.html'
         };
@@ -55,7 +55,7 @@
                             ctrl.daProfCalcGroupingFields.splice(index, 1);
                         }
                     });
-                }
+                };
 
                 defineMenuActions();
             }

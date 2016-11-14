@@ -29,30 +29,26 @@
 
         function defineScope() {
 
-            $scope.scopeModel.removeMeasureStyle = function (measureStyle)
-            {
+            $scope.scopeModel.removeMeasureStyle = function (measureStyle) {
                 $scope.scopeModel.measureStyles.splice($scope.scopeModel.measureStyles.indexOf(measureStyle), 1);
-            }
+            };
 
           
-            $scope.scopeModel.onMeasureSelectionChanged = function()
-            {
+            $scope.scopeModel.onMeasureSelectionChanged = function () {
                 $scope.scopeModel.measureStyles.length = 0;
-            }
+            };
 
             $scope.scopeModel.styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
 
-            $scope.scopeModel.isValidMeasureStyles = function()
-            {
+            $scope.scopeModel.isValidMeasureStyles = function () {
                 if ($scope.scopeModel.measureStyles.length == 0)
                     return "At least one style should be added.";
                 return null;
-            }
+            };
 
-            $scope.scopeModel.addMeasureStyleRule = function ()
-            {
-                    addMeasureStyleRule();
-            }
+            $scope.scopeModel.addMeasureStyleRule = function () {
+                addMeasureStyleRule();
+            };
 
             $scope.scopeModel.saveMeasureStyle = function () {
                 if ($scope.scopeModel.isEditMode) {
@@ -86,7 +82,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                 }
-            }
+            };
             $scope.scopeModel.measureStyles.push(dataItem);
         }
         function load() {

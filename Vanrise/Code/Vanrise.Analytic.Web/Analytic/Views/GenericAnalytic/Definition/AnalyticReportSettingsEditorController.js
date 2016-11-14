@@ -37,36 +37,32 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.selectedTables = [];
 
-            $scope.scopeModel.onSearchSettingsDirectiveReady = function(api)
-            {
+            $scope.scopeModel.onSearchSettingsDirectiveReady = function (api) {
                 searchSettingDirectiveAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
-                    var payload = {
-                        tableIds: tableSelectorAPI.getSelectedIds()
-                    }
+                var payload = {
+                    tableIds: tableSelectorAPI.getSelectedIds()
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader, searchSettingReadyDeferred);
-            }
+            };
 
-            $scope.scopeModel.onTableSelectorDirectiveReady = function(api)
-            {
+            $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
                 tableSelectorAPI = api;
                 tableSelectorReadyDeferred.resolve();
-            }
+            };
 
-            $scope.scopeModel.onTableSelectionChanged = function()
-            {
-                if (searchSettingDirectiveAPI != undefined && tableSelectorAPI !=undefined)
-                {
+            $scope.scopeModel.onTableSelectionChanged = function () {
+                if (searchSettingDirectiveAPI != undefined && tableSelectorAPI != undefined) {
                     var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
                     var payload = {
                         tableIds: tableSelectorAPI.getSelectedIds()
-                    }
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader,searchSettingReadyDeferred);
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader, searchSettingReadyDeferred);
                 }
-            }
+            };
 
             $scope.scopeModel.SaveGenericBEEditor = function () {
                 if (isEditMode) {
@@ -77,30 +73,26 @@
                 }
             };
             $scope.scopeModel.widgets = [];
-            $scope.scopeModel.addWidget = function()
-            {
-                var onWidgetAdd=function(widget)
-                {
+            $scope.scopeModel.addWidget = function () {
+                var onWidgetAdd = function (widget) {
                     $scope.scopeModel.widgets.push({ widgetSettings: widget });
-                }
+                };
                 Analytic_AnalyticService.addWidget(onWidgetAdd, tableSelectorAPI.getSelectedIds());
-            }
+            };
 
-            $scope.scopeModel.removeWidget = function(dataItem)
-            {
+            $scope.scopeModel.removeWidget = function (dataItem) {
                 var datasourceIndex = $scope.scopeModel.widgets.indexOf(dataItem);
                 $scope.scopeModel.widgets.splice(datasourceIndex, 1);
-            }
-            $scope.scopeModel.isWidgetValid = function()
-            {
+            };
+            $scope.scopeModel.isWidgetValid = function () {
                 if ($scope.scopeModel.widgets.length > 0)
                     return null;
                 return "At least one widget should be selected.";
-            }
+            };
 
             $scope.widgetsGridMenuActions = function (dataItem) {
                 return getwidgetGridMenuActions();
-            }
+            };
            
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -129,7 +121,7 @@
             var onWidgetUpdated = function (widgetObj) {
                 var index = $scope.scopeModel.widgets.indexOf(dataItem);
                 $scope.scopeModel.widgets[index].widgetSettings = widgetObj;
-            }
+            };
             Analytic_AnalyticService.editWidget(dataItem.widgetSettings, onWidgetUpdated, tableSelectorAPI.getSelectedIds());
 
         }

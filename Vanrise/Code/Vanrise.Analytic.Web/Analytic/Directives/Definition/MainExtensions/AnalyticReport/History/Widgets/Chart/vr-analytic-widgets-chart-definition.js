@@ -49,12 +49,12 @@
                 $scope.scopeModel.onDimensionSelectorDirectiveReady = function (api) {
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     var dataItem = {
@@ -63,12 +63,12 @@
                         Name: measure.Name,
                     };
                     $scope.scopeModel.measures.push(dataItem);
-                }
+                };
 
                 $scope.scopeModel.onDeselectMeasureItem = function (dataItem) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.Name, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
-                }
+                };
 
                 $scope.scopeModel.onOrderTypeSelectorReady = function (api) {
                     orderTypeSelectorAPI = api;
@@ -168,7 +168,7 @@
                     return UtilsService.waitMultiplePromises(promises);
 
 
-                }
+                };
 
 
                 api.getData = getData;
@@ -181,8 +181,8 @@
                         TopRecords: $scope.scopeModel.topRecords,
                         OrderType: orderTypeSelectorAPI.getSelectedIds(),
                         ChartType: $scope.scopeModel.selectedChartType.value,
-                        RootDimensionsFromSearch:$scope.scopeModel.rootDimensionsFromSearch
-                    }
+                        RootDimensionsFromSearch: $scope.scopeModel.rootDimensionsFromSearch
+                    };
                     return data;
                 }
 

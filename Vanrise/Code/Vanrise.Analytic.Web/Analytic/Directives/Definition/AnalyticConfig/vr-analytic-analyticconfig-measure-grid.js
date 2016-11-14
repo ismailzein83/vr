@@ -46,10 +46,10 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
                             itemType = query.ItemType;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAnalyticMeasureAdded = function (measureObj) {
                         gridAPI.itemAdded(measureObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -77,7 +77,7 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
         function editMeasure(dataItem) {
             var onEditMeasure = function (measureObj) {
                 gridAPI.itemUpdated(measureObj);
-            }
+            };
 
             VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditMeasure, tableId, itemType);
 

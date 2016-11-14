@@ -46,7 +46,7 @@
 
             $scope.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
-            }
+            };
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -71,8 +71,7 @@
                 }
             };
 
-            $scope.onSelectedField = function(selectedField)
-            {
+            $scope.onSelectedField = function (selectedField) {
                 var dataItem = {
                     FieldName: selectedField.Name,
                     FieldTitle: selectedField.Title,
@@ -84,7 +83,7 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.gridWidthFactorAPI, dataItemPayload, setLoader);
                 };
                 $scope.selectedFieldsGrid.push(dataItem);
-            }
+            };
             $scope.onSelectedDetailItem = function (detailItem) {
                 var dataItem = {
                     FieldName: detailItem.Name,
@@ -92,7 +91,7 @@
                     SelectedDetailWidth: ColumnWidthEnum.QuarterRow
                 };
                 $scope.selectedDetailsGrid.push(dataItem);
-            }
+            };
             $scope.onSelectedSortColumn = function (sortColumn) {
                 var dataItem = {
                     FieldName: sortColumn.Name,
@@ -100,45 +99,45 @@
                     SelectedOrderDirection: VR_Analytic_OrderDirectionEnum.Ascending
                 };
                 $scope.selectedSortColumnsGrid.push(dataItem);
-            }
+            };
 
             $scope.onDeSelectedField = function (selectedField) {
-                var index = UtilsService.getItemIndexByVal($scope.selectedFieldsGrid, selectedField.Name, "FieldName")
+                var index = UtilsService.getItemIndexByVal($scope.selectedFieldsGrid, selectedField.Name, "FieldName");
                 $scope.selectedFieldsGrid.splice(index, 1);
-            }
+            };
             $scope.onDeSelectedDetailItem = function (detailItem) {
                 $scope.selectedDetailsGrid.splice(UtilsService.getItemIndexByVal($scope.selectedDetailsGrid, detailItem.Name, "FieldName"), 1);
-            }
+            };
             $scope.onDeSelectedSortColumn = function (sortColumn) {
                 $scope.selectedSortColumnsGrid.splice(UtilsService.getItemIndexByVal($scope.selectedSortColumnsGrid, sortColumn.Name, "FieldName"), 1);
-            }
+            };
 
             $scope.removeField = function (field) {
                 $scope.selectedFieldsGrid.splice($scope.selectedFieldsGrid.indexOf(field), 1);
                 $scope.selectedFields.splice(UtilsService.getItemIndexByVal($scope.selectedFields, field.FieldName, "Name"), 1);
 
-            }
+            };
 
             $scope.removeDetail = function (detail) {
                 $scope.selectedDetailsGrid.splice($scope.selectedDetailsGrid.indexOf(detail), 1);
                 $scope.selectedDetails.splice(UtilsService.getItemIndexByVal($scope.selectedDetails, detail.FieldName, "Name"), 1);
-            }
+            };
 
             $scope.removeSortColumn = function (sortColumn) {
                 $scope.selectedSortColumnsGrid.splice($scope.selectedSortColumnsGrid.indexOf(sortColumn), 1);
-                $scope.selectedSortColumns.splice(UtilsService.getItemIndexByVal($scope.selectedSortColumns,sortColumn.FieldName,"Name"), 1);
-            }
+                $scope.selectedSortColumns.splice(UtilsService.getItemIndexByVal($scope.selectedSortColumns, sortColumn.FieldName, "Name"), 1);
+            };
             
             $scope.isFieldGridValid = function () {
                 if ($scope.selectedFieldsGrid.length == 0) {
                     return 'At least one Field must be added.'
                 }
                 return null;
-            }
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
-            }
+            };
 
             $scope.saveDataRecordSource = function () {
                 if (validateData()) {
@@ -152,7 +151,7 @@
                 else {
                     VRNotificationService.showWarning('Same Source Title Exists');
                 }
-            }
+            };
         }
         function validateData() {
             if (!existingSources || existingSources.length == 0) {

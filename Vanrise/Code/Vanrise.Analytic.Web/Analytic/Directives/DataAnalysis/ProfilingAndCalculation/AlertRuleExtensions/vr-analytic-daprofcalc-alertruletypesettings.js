@@ -32,7 +32,7 @@
                 $scope.scopeModel.onDataAnalysisDefinitionSelectorReady = function (api) {
                     dataAnalysisDefinitionSelectorAPI = api;
                     dataAnalysisDefinitionSelectoReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -67,9 +67,9 @@
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
                         DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds()
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

@@ -53,7 +53,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -80,11 +80,11 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'AnalyticReportId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('AnalyticReportId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }

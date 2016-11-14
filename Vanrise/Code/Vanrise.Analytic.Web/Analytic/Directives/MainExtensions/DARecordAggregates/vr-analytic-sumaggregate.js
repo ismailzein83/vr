@@ -32,7 +32,7 @@
                 $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
                     dataRecordTypeFieldsSelectorAPI = api;
                     defineAPI();
-                }
+                };
             }
             function defineAPI() {
                 var api = {};
@@ -76,9 +76,9 @@
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.DARecordAggregates.SumAggregate, Vanrise.Analytic.MainExtensions",
                         SumFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds()
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

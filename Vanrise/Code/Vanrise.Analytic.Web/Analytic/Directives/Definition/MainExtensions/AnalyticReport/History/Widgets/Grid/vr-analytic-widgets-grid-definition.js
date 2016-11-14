@@ -47,7 +47,7 @@
                 $scope.scopeModel.onDimensionSelectorDirectiveReady = function (api) {
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
 
@@ -58,7 +58,7 @@
                     if ($scope.scopeModel.dimensions.length > 0 || $scope.scopeModel.rootDimensionsFromSearch)
                         return null;
                     return "At least one dimention should be selected.";
-                }
+                };
 
                 $scope.scopeModel.onSelectDimensionItem = function (dimension) {
                     var dataItem = {
@@ -84,12 +84,12 @@
 
                     };
                     $scope.scopeModel.dimensions.push(dataItem);
-                }
+                };
 
                 $scope.scopeModel.onDeselectDimensionItem = function (dataItem) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
-                }
+                };
 
                 $scope.scopeModel.removeDimension = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedDimensions, dataItem.Name, 'Name');
@@ -108,19 +108,19 @@
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.isValidMeasures = function () {
 
                     if ($scope.scopeModel.measures.length > 0)
                         return null;
                     return "At least one measure should be selected.";
-                }
+                };
 
                 $scope.scopeModel.onSelectionMeasureChanged = function (measure) {
                     if (measureStyleGridAPI != undefined)
                         measureStyleGridAPI.reloadMeasures();
-                }
+                };
               
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     var dataItem = {
@@ -135,14 +135,14 @@
                         var setLoader = function (value) { $scope.isLoadingDirective = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
-                     
+
                     $scope.scopeModel.measures.push(dataItem);
-                }
+                };
 
                 $scope.scopeModel.onDeselectMeasureItem = function (dataItem) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.Name, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
-                }
+                };
 
                 $scope.scopeModel.removeMeasure = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedMeasures, dataItem.Name, 'Name');
@@ -156,12 +156,12 @@
                 $scope.scopeModel.onMeasureStyleGridDirectiveReady = function (api) {
                     measureStyleGridAPI = api;
                     measureStyleGridReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onAnalyticItemActionDirectiveReady = function (api) {
                     itemActionGridAPI = api;
                     itemActionGridReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -319,7 +319,7 @@
                         WithSummary: $scope.scopeModel.withSummary,
                         OrderType: orderTypeSelectorAPI.getSelectedIds(),
                         ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined
-                    }
+                    };
                     return data;
                 }
 
@@ -356,7 +356,7 @@
                     });
                 dataItem.showFixedCol = function () {
                     return dataItem.fixedwidth == true;
-                }
+                };
                 $scope.scopeModel.dimensions.push(dataItem);
             }
             function addMeasureGridWidthAPI(gridField) {
@@ -382,7 +382,7 @@
                 var input = {
                     TableIds: tableIds,
                     ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
-                }
+                };
                 return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
                     measures = response;
                 });
@@ -404,7 +404,7 @@
                         return selectedMeasures;
 
                     }
-                }
+                };
                 return context;
             }
         }

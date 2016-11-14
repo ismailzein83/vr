@@ -54,7 +54,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                                 ResultKey: null,
                                 SortByColumnName: ctrl.sortField,
                                 Query: query
-                            }
+                            };
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
                                     renderCharts(response, payload.Settings.ChartType);
@@ -142,7 +142,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     TableId: payLoad.TableId,
                     TimeGroupingUnit: payLoad.TimeGroupingUnit,
                     FilterGroup: payLoad.FilterGroup,
-                }
+                };
                 return queryFinalized;
             }
         }

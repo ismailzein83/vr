@@ -22,12 +22,12 @@
 
             $scope.onGridReady = function (api) {
                 gridApi = api;
-            }
+            };
 
             $scope.onFilterDirectivectiveReady = function (api) {
                 filterDirectiveAPI = api;
                 filterReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.searchClicked = function () {
                 return UtilsService.waitMultipleAsyncOperations([loadGrid]).finally(function () {

@@ -34,7 +34,7 @@
             $scope.scopeModel.onItemConfigTypeDirectiveReady = function (api) {
                 itemConfigDirectiveAPI = api;
                 itemConfigDirectiveReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.saveItemConfig = function () {
                 if (isEditMode) {

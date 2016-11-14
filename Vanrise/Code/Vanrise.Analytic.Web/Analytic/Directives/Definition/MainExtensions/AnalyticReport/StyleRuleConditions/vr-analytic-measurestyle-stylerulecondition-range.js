@@ -50,7 +50,7 @@
                         $type: "Vanrise.Analytic.MainExtensions.StyleRuleConditions.RangeCondition, Vanrise.Analytic.MainExtensions ",
                         RangeStart: $scope.scopeModel.rangeStart,
                         RangeEnd: $scope.scopeModel.rangeEnd
-                    }
+                    };
                     return data;
                 }
             }

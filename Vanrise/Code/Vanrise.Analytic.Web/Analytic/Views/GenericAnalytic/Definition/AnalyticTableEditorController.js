@@ -36,17 +36,17 @@
             $scope.scopeModel = {};
             connectionStringType = {
                 ConnectionString: { value: 0, description: "Connection String" },
-                ConnectionStringName: { value: 1, description: "Connection String Name" },
-            }
+                ConnectionStringName: { value: 1, description: "Connection String Name" }
+            };
 
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRequiredPermissionReady = function (api) {
                 requiredPermissionAPI = api;
                 requiredPermissionReadyDeferred.resolve();
-            }
+            };
             $scope.onAnalyticDataProviderSettingsDirectiveReady = function (api) {
                 analyticDataProviderSettingsDirectiveAPI = api;
                 analyticDataProviderSettingsDirectiveReadyDeferred.resolve();
@@ -64,7 +64,7 @@
                     }
 
                 }
-            }
+            };
 
 
             $scope.scopeModel.saveTable = function () {
@@ -192,7 +192,7 @@
                     RequiredPermission: requiredPermissionAPI.getData(),
                     DataProvider: analyticDataProviderSettingsDirectiveAPI.getData()
                 }
-            }
+            };
             return table;
         }
 

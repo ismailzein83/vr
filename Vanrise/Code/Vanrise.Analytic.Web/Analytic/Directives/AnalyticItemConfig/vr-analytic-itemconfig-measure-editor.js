@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
 
             templateUrl: function (element, attrs) {
@@ -52,24 +52,24 @@
                 $scope.scopeModel.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onDependentAggregateSelectorDirectiveReady = function (api) {
                     dependentAggregateDimensionSelectorAPI = api;
                     dependentAggregateDimensionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onDependentDimensionSelectorDirectiveReady = function (api) {
                     dependentDimensionSelectorAPI = api;
                     dependentDimensionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onRequiredPermissionReady = function (api) {
                     requiredPermissionAPI = api;
                     requiredPermissionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onFieldTypeReady = function (api) {
                     fieldTypeAPI = api;
                     fieldTypeReadyDeferred.resolve();
-                }
+                };
 
 
                 defineAPI();
@@ -150,7 +150,7 @@
                     }
 
 
-                }
+                };
 
                 api.getData = function () {
                     var fieldType = fieldTypeAPI != undefined ? fieldTypeAPI.getData() : undefined;
@@ -168,7 +168,7 @@
                         RequiredPermission: requiredPermissionAPI.getData()
                     };
                     return dimension;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

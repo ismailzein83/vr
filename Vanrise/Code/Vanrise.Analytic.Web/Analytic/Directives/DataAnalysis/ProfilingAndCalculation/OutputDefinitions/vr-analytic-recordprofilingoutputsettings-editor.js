@@ -50,7 +50,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                 recordFilterDirectiveAPI = api;
                 recordFilterDirectiveReadyDeferred.resolve();
@@ -74,7 +74,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
 
             UtilsService.waitMultiplePromises(promises).then(function () {
                 defineAPI();
-            })
+            });
         }
         function defineAPI() {
             var api = {};
@@ -86,21 +86,21 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                 var context;
                 var recordTypeId;
                 var recordFilter;
-                var timeRangeFilter
+                var timeRangeFilter;
                 var groupingFields;
                 var aggregationFields;
                 var calculationFields;
 
                 if(payload != undefined){
-                    context = payload.context
+                    context = payload.context;
 
                     if (payload.dataAnalysisItemDefinitionSettings != undefined) {
                         recordTypeId = payload.dataAnalysisItemDefinitionSettings.RecordTypeId;
                         recordFilter = payload.dataAnalysisItemDefinitionSettings.RecordFilter;
-                        timeRangeFilter = payload.dataAnalysisItemDefinitionSettings.TimeRangeFilter
+                        timeRangeFilter = payload.dataAnalysisItemDefinitionSettings.TimeRangeFilter;
                         groupingFields = payload.dataAnalysisItemDefinitionSettings.GroupingFields;
                         aggregationFields = payload.dataAnalysisItemDefinitionSettings.AggregationFields;
-                        calculationFields = payload.dataAnalysisItemDefinitionSettings.CalculationFields
+                        calculationFields = payload.dataAnalysisItemDefinitionSettings.CalculationFields;
                     }
                 }
 
@@ -135,7 +135,6 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     dataRecordTypeSelectorReadyDeferred.promise.then(function () {
                         var dataRecordTypeSelectorPayload = {};
                         dataRecordTypeSelectorPayload.selectedIds = recordTypeId;
-                        
                         VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadDeferred);
                     });
 
@@ -147,12 +146,12 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     recordFilterDirectiveReadyDeferred.promise.then(function () {
                         var recordFilterDirectivePayload = {};
                         recordFilterDirectivePayload.context = buildContext();
-                        if(recordFilter != undefined){
+                        if (recordFilter != undefined) {
                             recordFilterDirectivePayload.FilterGroup = recordFilter;
                         }
 
                         VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
-                    })
+                    });
 
                     return recordFilterDirectiveLoadDeferred.promise;
                 }
@@ -166,7 +165,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                         }
 
                         VRUIUtilsService.callDirectiveLoad(timeRangeFilterSelectiveAPI, timeRangeFilterSelectivePayload, timeRangeFilterSelectiveLoadDeferred);
-                    })
+                    });
 
                     return timeRangeFilterSelectiveLoadDeferred.promise;
                 }
@@ -174,12 +173,12 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     var groupingFieldsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                     groupingFieldsDirectiveReadyDeferred.promise.then(function () {
-                        var groupingFieldsDirectivePayload = {}
+                        var groupingFieldsDirectivePayload = {};
                         groupingFieldsDirectivePayload.context = buildContext();
                         groupingFieldsDirectivePayload.groupingFields = groupingFields;
 
                         VRUIUtilsService.callDirectiveLoad(groupingFieldsDirectiveAPI, groupingFieldsDirectivePayload, groupingFieldsDirectiveLoadDeferred);
-                    })
+                    });
 
                     return groupingFieldsDirectiveLoadDeferred.promise;
                 }
@@ -187,12 +186,12 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     var aggregationFieldsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                     
                     aggregationFieldsDirectiveReadyDeferred.promise.then(function () {
-                        var aggregationFieldsDirectivePayload = {}
+                        var aggregationFieldsDirectivePayload = {};
                         aggregationFieldsDirectivePayload.context = buildContext();
                         aggregationFieldsDirectivePayload.aggregationFields = aggregationFields;
 
                         VRUIUtilsService.callDirectiveLoad(aggregationFieldsDirectiveAPI, aggregationFieldsDirectivePayload, aggregationFieldsDirectiveLoadDeferred);
-                    })
+                    });
 
                     return aggregationFieldsDirectiveLoadDeferred.promise;
                 }
@@ -200,12 +199,12 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     var calculationFieldsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                     calculationFieldsDirectiveReadyDeferred.promise.then(function () {
-                        var calculationFieldsDirectivePayload = {}
+                        var calculationFieldsDirectivePayload = {};
                         calculationFieldsDirectivePayload.context = buildContext();
                         calculationFieldsDirectivePayload.calculationFields = calculationFields;
 
                         VRUIUtilsService.callDirectiveLoad(calculationFieldsDirectiveAPI, calculationFieldsDirectivePayload, calculationFieldsDirectiveLoadDeferred);
-                    })
+                    });
 
                     return calculationFieldsDirectiveLoadDeferred.promise;
                 }
@@ -227,7 +226,7 @@ app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 
                     GroupingFields: groupingFieldsDirectiveAPI.getData(),
                     AggregationFields: aggregationFieldsDirectiveAPI.getData(),
                     CalculationFields: calculationFieldsDirectiveAPI.getData()
-                }
+                };
 
                 return data;
             };

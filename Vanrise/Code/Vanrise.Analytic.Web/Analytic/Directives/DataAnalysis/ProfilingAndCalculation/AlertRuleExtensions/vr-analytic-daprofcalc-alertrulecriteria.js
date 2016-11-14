@@ -42,7 +42,7 @@
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectorReady = function (api) {
                     dataAnalysisItemDefinitionSelectorAPI = api;
                     dataAnalysisItemDefinitionSelectoReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (api) {
                     daProfCalcOutputItemDefinitionId = dataAnalysisItemDefinitionSelectorAPI.getSelectedIds();
 
@@ -67,7 +67,7 @@
                             }
                         });
                     }
-                }
+                };
 
                 $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                     recordFilterDirectiveAPI = api;
@@ -76,7 +76,7 @@
 
                 UtilsService.waitMultiplePromises(promises).then(function () {
                     defineAPI();
-                })
+                });
             }
             function defineAPI() {
                 var api = {};
@@ -142,7 +142,7 @@
 
                                 VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
                             });
-                        })
+                        });
 
                         return recordFilterDirectiveLoadDeferred.promise.then(function () {
                             $scope.scopeModel.isDataanalysisitemdefinitionSelected = true;
@@ -157,9 +157,9 @@
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleCriteria, Vanrise.Analytic.Entities",
                         DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds(),
                         FilterGroup: recordFilterDirectiveAPI.getData().filterObj
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
@@ -169,7 +169,7 @@
             function buildContext() {
                 var context = {
                     getFields: function () {
-                        var fields = []
+                        var fields = [];
 
                         if (outputFields) {
                             for (var i = 0 ; i < outputFields.length; i++) {
@@ -179,11 +179,11 @@
                                     FieldTitle: field.Title,
                                     Type: field.Type
                                 })
-                            }   
+                            }
                         }
                         return fields;
                     }
-                }
+                };
                 return context;
             }
         }

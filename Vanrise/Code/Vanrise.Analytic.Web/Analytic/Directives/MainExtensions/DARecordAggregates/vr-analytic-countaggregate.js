@@ -37,9 +37,9 @@
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.DARecordAggregates.CountAggregate, Vanrise.Analytic.MainExtensions"
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

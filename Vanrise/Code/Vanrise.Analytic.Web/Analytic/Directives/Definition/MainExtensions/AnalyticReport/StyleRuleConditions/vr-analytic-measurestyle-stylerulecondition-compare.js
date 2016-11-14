@@ -30,12 +30,11 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.compareOperators = UtilsService.getArrayEnum(VR_Analytic_CompareOperatorEnum);
-                $scope.scopeModel.selectedCompareOperator = VR_Analytic_CompareOperatorEnum.Equals
-                $scope.scopeModel.onDirectiveReady = function(api)
-                {
+                $scope.scopeModel.selectedCompareOperator = VR_Analytic_CompareOperatorEnum.Equals;
+                $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     directiveReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -74,9 +73,9 @@
                 function getData() {  
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.StyleRuleConditions.CompareCondition, Vanrise.Analytic.MainExtensions ",
-                        CompareOperator:  $scope.scopeModel.selectedCompareOperator.value,
-                        CompareValue: directiveAPI !=undefined?directiveAPI.getData():undefined
-                    }
+                        CompareOperator: $scope.scopeModel.selectedCompareOperator.value,
+                        CompareValue: directiveAPI != undefined ? directiveAPI.getData() : undefined
+                    };
                     return data;
                 }
             }

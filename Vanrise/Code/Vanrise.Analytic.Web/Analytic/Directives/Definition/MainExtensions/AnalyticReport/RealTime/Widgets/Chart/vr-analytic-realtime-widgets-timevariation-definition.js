@@ -32,7 +32,7 @@
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
-                }
+                };
                 loadChartTypes();
                 defineAPI();
             }
@@ -93,7 +93,7 @@
                         $type: "Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets.TimeVariationChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),
                         ChartType: $scope.scopeModel.selectedChartType.value,
-                    }
+                    };
                     return data;
                 }
 

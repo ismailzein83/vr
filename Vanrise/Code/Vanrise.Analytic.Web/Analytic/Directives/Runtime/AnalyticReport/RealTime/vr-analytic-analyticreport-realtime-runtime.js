@@ -53,14 +53,14 @@
                             case VR_Analytic_SinceTimeEnum.Last.value: $scope.scopeModel.showSinceLast = true; $scope.scopeModel.showSinceTime = false; break;
                         }
                     }
-                }
+                };
 
 
                 $scope.scopeModel.addFilter = function () {
                     var onFilterAdded = function (filter, expression) {
                         filterObj = filter;
                         $scope.scopeModel.expression = expression;
-                    }
+                    };
                     var fields = [];
                     for (var i = 0; i < dimensions.length; i++) {
                         var dimension = dimensions[i];
@@ -76,7 +76,7 @@
                 $scope.scopeModel.resetFilter = function () {
                     $scope.scopeModel.expression = undefined;
                     filterObj = null;
-                }
+                };
 
 
                 $scope.scopeModel.templateConfigs = [];
@@ -241,7 +241,7 @@
                 var input = {
                     TableIds: settings.AnalyticTableIds,
                     ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
-                }
+                };
                 return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
                     measures = response;
                 });
@@ -251,7 +251,7 @@
                 var input = {
                     TableIds: settings.AnalyticTableIds,
                     ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
-                }
+                };
                 return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
                     dimensions = response;
                 });

@@ -35,7 +35,7 @@
                         return 'At least one Souce must be added.'
                     }
                     return null;
-                }
+                };
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -49,13 +49,13 @@
                         counter++;
                         sourceObj.id = counter;
                         ctrl.sources.push(sourceObj);
-                    }
+                    };
                     Analytic_RecordSearchService.addDataRecordSource(onDataRecordSrouceAdded, getSourceNames(null));
-                }
+                };
 
                 ctrl.removeSource = function (source) {
                     ctrl.sources.splice(ctrl.sources.indexOf(source), 1);
-                }
+                };
 
                 defineMenuActions();
             }
@@ -79,7 +79,7 @@
 
                 api.getData = function () {
                     return ctrl.sources;
-                }
+                };
                 return api;
             }
 
@@ -92,7 +92,7 @@
             function editSource(source) {
                 var onDataRecordSrouceUpdated = function (sourceObj) {
                     ctrl.sources[ctrl.sources.indexOf(source)] = sourceObj;
-                }
+                };
 
                 Analytic_RecordSearchService.editDataRecordSource(source, getSourceNames(source), onDataRecordSrouceUpdated);
             }

@@ -35,16 +35,13 @@
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     directiveReadyDeferred.resolve();
-                }
-                $scope.scopeModel.onSelectorReady = function(api)
-                {
+                };
+                $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
-                }
-                $scope.scopeModel.onReportSelectionChanged = function()
-                {
+                };
+                $scope.scopeModel.onReportSelectionChanged = function () {
                     var selectedReportId = directiveAPI.getSelectedIds();
-                    if (selectedReportId != undefined)
-                    {
+                    if (selectedReportId != undefined) {
                         if (selectedReportPromiseDeferred != undefined) {
                             selectedReportPromiseDeferred.resolve();
                         } else {
@@ -54,7 +51,7 @@
                             });
                         }
                     }
-                }
+                };
                 defineAPI();
             }
             function getReportDefinition(reportId)
@@ -101,15 +98,15 @@
                            
                            var  loadReportPromiseDeferred = UtilsService.createPromiseDeferred();
                            selectedReportPromiseDeferred.promise.then(function () {
-                              
-                                getReportDefinition(payload.ReportId).then(function () {
-                                    if (mainPayload != undefined && mainPayload.SourceName != undefined) {
-                                        $scope.scopeModel.selectedSource = UtilsService.getItemByVal($scope.scopeModel.sources, mainPayload.SourceName, "Name");
-                                    }
-                                    loadReportPromiseDeferred.resolve();
-                                    selectedReportPromiseDeferred = undefined;
-                                });
-                            })
+
+                               getReportDefinition(payload.ReportId).then(function () {
+                                   if (mainPayload != undefined && mainPayload.SourceName != undefined) {
+                                       $scope.scopeModel.selectedSource = UtilsService.getItemByVal($scope.scopeModel.sources, mainPayload.SourceName, "Name");
+                                   }
+                                   loadReportPromiseDeferred.resolve();
+                                   selectedReportPromiseDeferred = undefined;
+                               });
+                           });
                            
                             promises.push(loadReportPromiseDeferred.promise);
                         }
@@ -127,7 +124,7 @@
                         $type: "Vanrise.Analytic.MainExtensions.AnalyticItemAction.OpenRecordSearchItemAction, Vanrise.Analytic.MainExtensions ",
                         ReportId: directiveAPI.getSelectedIds(),
                         SourceName: $scope.scopeModel.selectedSource.Name
-                    }
+                    };
                     return data;
                 }
             }

@@ -30,7 +30,7 @@
             $scope.onWidgetSelectiveDirectiveReady = function (api) {
                 widgetSelectiveAPI = api;
                 widgetSelectiveReadyDeferred.resolve();
-            }
+            };
 
 
             $scope.SaveWidget = function () {

@@ -40,23 +40,22 @@
                 };
 
                 ctrl.addMeasureStyle = function () {
-                    if (ctrl.selectedMeasureName != undefined)
-                    {
+                    if (ctrl.selectedMeasureName != undefined) {
                         var onMeasureStyleAdded = function (measureStyleObj) {
                             ctrl.measureStyles.push(measureStyleObj);
                             ctrl.measureFields = getMeasureNames();
                             ctrl.selectedMeasureName = undefined;
-                        }
+                        };
                         Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName);
                     }
-                   
-                }
+
+                };
 
                 ctrl.removeMeasureStyle = function (measureStyle) {
                     var measures = getMeasureNames();
                     ctrl.measureFields = getMeasureNames(measureStyle);
                     ctrl.measureStyles.splice(ctrl.measureStyles.indexOf(measureStyle), 1);
-                }
+                };
 
                 defineMenuActions();
             }
@@ -81,18 +80,16 @@
 
                     ctrl.measureFields = getMeasureNames();
                     var measureFields = context.getMeasures();
-                    if (ctrl.measureStyles.length > 0)
-                    {
+                    if (ctrl.measureStyles.length > 0) {
                         for (var i = 0; i < ctrl.measureStyles.length ; i++) {
                             var measureStyle = ctrl.measureStyles[i];
-                            if (UtilsService.getItemByVal(measureFields, measureStyle.MeasureName, "Name") == undefined)
-                            {
+                            if (UtilsService.getItemByVal(measureFields, measureStyle.MeasureName, "Name") == undefined) {
                                 ctrl.measureStyles.splice(ctrl.measureStyles.indexOf(measureStyle), 1);
                             }
                         }
                     }
-                   
-                }
+
+                };
                 api.getData = function () {
                     var measureStyles = [];
                     for (var i = 0; i < ctrl.measureStyles.length ; i++) {
@@ -103,7 +100,7 @@
                         });
                     }
                     return measureStyles;
-                }
+                };
                 return api;
             }
 
@@ -117,7 +114,7 @@
             function editMeasureStyle(measureStyle) {
                 var onMeasureStyleUpdated = function (measureStyleObj) {
                     ctrl.measureStyles[ctrl.measureStyles.indexOf(measureStyle)] = measureStyleObj;
-                }
+                };
                 var selectedMeasure = UtilsService.getItemByVal(getMeasureNames(measureStyle), measureStyle.MeasureName, "Name");
                 Analytic_AnalyticService.editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure);
             }

@@ -32,7 +32,7 @@
                 $scope.scopeModel.onDAProfCalcSettingsSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
             function defineAPI() {
                 var api = {};
@@ -55,9 +55,9 @@
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcSettings, Vanrise.Analytic.Entities",
                         DataRecordTypeId: selectorAPI.getSelectedIds()
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

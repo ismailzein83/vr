@@ -35,14 +35,14 @@
                 $scope.scopeModel.onGroupingDimensionSelectorDirectiveReady = function (api) {
                     groupingDimensionSelectorAPI = api;
                     groupingDimensionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.isValidGroupingDimensions = function () {
 
                     if ($scope.scopeModel.groupingDimensions.length > 0 || !$scope.scopeModel.isRequiredGroupingDimensions)
                         return null;
                     return "At least one dimention should be selected.";
-                }
+                };
                 $scope.scopeModel.onSelectGroupingDimensionItem = function (dimension) {
                     var dataItem = {
 
@@ -52,11 +52,11 @@
                         IsSelected: false
                     };
                     $scope.scopeModel.groupingDimensions.push(dataItem);
-                }
+                };
                 $scope.scopeModel.onDeselectGroupingDimensionItem = function (dataItem) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.groupingDimensions.splice(datasourceIndex, 1);
-                }
+                };
                 $scope.scopeModel.removeGroupingDimension = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.selectedGroupingDimensions.splice(index, 1);
@@ -69,7 +69,7 @@
                 $scope.scopeModel.onFilterDimensionSelectorDirectiveReady = function (api) {
                     filterDimensionSelectorAPI = api;
                     filterDimensionReadyDeferred.resolve();
-                }
+                };
                 //$scope.scopeModel.isValidFilterDimensions = function () {
 
                 //    if ($scope.scopeModel.filterDimensions.length > 0)
@@ -81,14 +81,14 @@
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
-                        IsRequired: false,
+                        IsRequired: false
                     };
                     $scope.scopeModel.filterDimensions.push(dataItem);
-                }
+                };
                 $scope.scopeModel.onDeselectFilterDimensionItem = function (dataItem) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
-                }
+                };
                 $scope.scopeModel.removeFilterDimension = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFilterDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.selectedFilterDimensions.splice(index, 1);
@@ -140,7 +140,7 @@
                                         Name: filterDimension.DimensionName,
                                         Title: filterDimension.Title,
                                         IsRequired: filterDimension.IsRequired,
-                                    }
+                                    };
                                     $scope.scopeModel.filterDimensions.push(dataItem);
 
                                 }
@@ -216,8 +216,8 @@
                         GroupingDimensions: groupingDimensions,
                         Filters: filterDimensions,
                         IsRequiredGroupingDimensions: $scope.scopeModel.isRequiredGroupingDimensions,
-                        ShowCurrency:$scope.scopeModel.showCurrency
-                    }
+                        ShowCurrency: $scope.scopeModel.showCurrency
+                    };
                     return data;
                 }
             }

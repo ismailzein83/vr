@@ -31,7 +31,7 @@
 
                 $scope.scopeModel.validateTimeOffset = function (value) {
                     return UtilsService.validateTimeOffset(value);
-                }
+                };
 
                 defineAPI();
             }
@@ -50,9 +50,9 @@
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.TimeRangeFilters.LastPeriodFilter, Vanrise.Analytic.MainExtensions",
                         PeriodLength: $scope.scopeModel.periodLength
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

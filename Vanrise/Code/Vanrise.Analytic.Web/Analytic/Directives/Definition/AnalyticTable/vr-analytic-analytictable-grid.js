@@ -43,11 +43,11 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAnalyticTableAdded = function (tableObj) {
                         gridDrillDownTabs.setDrillDownExtensionObject(tableObj);
                         gridAPI.itemAdded(tableObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -88,7 +88,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
             var onEditTable = function (tableObj) {
                 gridDrillDownTabs.setDrillDownExtensionObject(tableObj);
                 gridAPI.itemUpdated(tableObj);
-            }
+            };
             VR_Analytic_AnalyticTableService.editAnalyticTable(dataItem.Entity.AnalyticTableId, onEditTable);
         }
 

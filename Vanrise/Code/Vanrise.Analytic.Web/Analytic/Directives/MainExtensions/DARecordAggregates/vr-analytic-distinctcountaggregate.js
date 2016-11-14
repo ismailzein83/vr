@@ -32,7 +32,7 @@
                 $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
                     dataRecordTypeFieldsSelectorAPI = api;
                     defineAPI();
-                }
+                };
 
 
             }
@@ -78,9 +78,9 @@
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.DARecordAggregates.DistinctCountAggregate, Vanrise.Analytic.MainExtensions",
                         CountFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds()
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

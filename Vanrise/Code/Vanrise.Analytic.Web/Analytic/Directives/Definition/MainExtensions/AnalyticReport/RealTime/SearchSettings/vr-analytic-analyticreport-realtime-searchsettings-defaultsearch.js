@@ -36,22 +36,22 @@
                 $scope.scopeModel.onFilterDimensionSelectorDirectiveReady = function (api) {
                     filterDimensionSelectorAPI = api;
                     filterDimensionReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onSelectFilterDimensionItem = function (dimension) {
                     var dataItem = {
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
-                        IsRequired: false,
+                        IsRequired: false
                     };
                     $scope.scopeModel.filterDimensions.push(dataItem);
-                }
+                };
 
                 $scope.scopeModel.onDeselectFilterDimensionItem = function (dataItem) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
-                }
+                };
 
                 $scope.scopeModel.removeFilterDimension = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFilterDimensions, dataItem.Name, 'Name');
@@ -84,7 +84,7 @@
                                         Name: filterDimension.DimensionName,
                                         Title: filterDimension.Title,
                                         IsRequired: filterDimension.IsRequired,
-                                    }
+                                    };
                                     $scope.scopeModel.filterDimensions.push(dataItem);
 
                                 }
@@ -131,7 +131,7 @@
                         $type: "Vanrise.Analytic.MainExtensions.RealTimeReport.SearchSettings.DefaultRealTimeReportSearch, Vanrise.Analytic.MainExtensions ",
                         Filters: filterDimensions,
                         TimeIntervalInMin: $scope.scopeModel.timeInterval
-                    }
+                    };
                     return data;
                 }
             }

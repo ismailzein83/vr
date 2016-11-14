@@ -97,7 +97,7 @@
                     }
 
                     VRUIUtilsService.callDirectiveLoad(recordAggregateSelectiveAPI, recordAggregateSelectivePayload, recordAggregateSelectiveLoadDeferred);
-                })
+                });
 
                 return recordAggregateSelectiveLoadDeferred.promise;
             }
@@ -111,7 +111,7 @@
                     }
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeFilterSelectiveAPI, timeRangeFilterSelectivePayload, timeRangeFilterSelectiveLoadDeferred);
-                })
+                });
 
                 return timeRangeFilterSelectiveLoadDeferred.promise;
             }
@@ -126,7 +126,7 @@
                     }
 
                     VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
-                })
+                });
 
                 return recordFilterDirectiveLoadDeferred.promise;
             }

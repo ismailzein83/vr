@@ -45,21 +45,20 @@
 
                 $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
                     timeRangeDirectiveAPI = api;
-                     timeRangeReadyPromiseDeferred.resolve();
-                }
+                    timeRangeReadyPromiseDeferred.resolve();
+                };
 
 
-                $scope.scopeModel.onCurrencySelectorReady = function(api)
-                    {
+                $scope.scopeModel.onCurrencySelectorReady = function (api) {
                     currencySelectorAPI = api;
                     currencySelectorReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.addFilter = function () {
                     var onDimensionFilterAdded = function (filter, expression) {
                         filterObj = filter;
                         $scope.scopeModel.expression = expression;
-                    }
+                    };
                     var fields = [];
                     for (var i = 0; i < dimensions.length; i++)
                     {
@@ -77,7 +76,7 @@
                 $scope.scopeModel.resetFilter = function () {
                     $scope.scopeModel.expression = undefined;
                     filterObj = null;
-                }
+                };
 
                 $scope.search = function () {
                     if (!$scope.scopeModel.isLoadedData)
@@ -199,7 +198,7 @@
                                 DimensionName: groupingDimention.DimensionName,
                                 IsSelected: groupingDimention.IsSelected,
                                 Title: dimension.Title
-                        }
+                            };
                             $scope.scopeModel.groupingDimentions.push(dimensionObj);
                             if (groupingDimention.IsSelected) {
                                 $scope.scopeModel.selectedGroupingDimentions.push(dimensionObj);
@@ -260,7 +259,7 @@
                 var input = {
                     TableIds: settings.AnalyticTableIds,
                     ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
-                }
+                };
                 return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
                     measures = response;
                 });
@@ -270,7 +269,7 @@
                 var input = {
                     TableIds: settings.AnalyticTableIds,
                     ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
-                }
+                };
                 return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
                     dimensions = response;
                 });

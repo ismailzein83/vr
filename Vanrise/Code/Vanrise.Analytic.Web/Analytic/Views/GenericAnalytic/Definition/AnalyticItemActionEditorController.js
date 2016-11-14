@@ -26,12 +26,12 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
 
             $scope.scopeModel.onEditorDirectiveReady = function (api) {
                 editorDirectiveAPI = api;
                 editorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.saveAnalyticItemAction = function () {
                 if (isEditMode) {
@@ -43,7 +43,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }

@@ -83,10 +83,9 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
 
-                $scope.scopeModel.onSelectionTableChanged = function()
-                {
+                $scope.scopeModel.onSelectionTableChanged = function () {
                     $scope.scopeModel.selectedTemplateConfig = undefined;
-                }
+                };
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -95,7 +94,7 @@
                 $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
                     tableSelectorAPI = api;
                     tableSelectorReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     directivePayload={

@@ -54,7 +54,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                                 ResultKey: null,
                                 SortByColumnName: ctrl.sortField,
                                 Query: query
-                            }
+                            };
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
    
@@ -168,7 +168,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                     ToTime: toTime,
                     FilterGroup: payLoad.FilterGroup,
                     TableId: payLoad.TableId
-                }
+                };
                 return queryFinalized;
             }
         }

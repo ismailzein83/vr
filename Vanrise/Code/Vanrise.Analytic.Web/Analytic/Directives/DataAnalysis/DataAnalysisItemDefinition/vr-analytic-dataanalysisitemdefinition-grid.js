@@ -52,7 +52,7 @@ app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnal
 
                 api.onItemAdded = function (addedDataAnalysisItemDefinition) {
                     gridAPI.itemAdded(addedDataAnalysisItemDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -61,7 +61,7 @@ app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnal
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
-                    clicked: editDataAnalysisItemDefinition,
+                    clicked: editDataAnalysisItemDefinition
                 });
             }
             function editDataAnalysisItemDefinition(dataAnalysisItemDefinition) {

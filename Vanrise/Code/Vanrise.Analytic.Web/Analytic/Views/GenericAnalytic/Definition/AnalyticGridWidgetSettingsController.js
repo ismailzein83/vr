@@ -30,7 +30,7 @@
             $scope.scopeModel.onMeasureStyleGridDirectiveReady = function (api) {
                 measureStyleGridAPI = api;
                 measureStyleGridReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.saveSettings = function () {
                     return save();
@@ -77,7 +77,7 @@
         function buildSettingsObjectFromScope() {
             var obj = {
                 MeasureStyleRules: measureStyleGridAPI != undefined ? measureStyleGridAPI.getData() : undefined,
-            }
+            };
             return obj;
         }
 

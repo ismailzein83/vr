@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Common/Templates/DAProfCalcAggregationFieldManagementTemplate.html'
         };
@@ -55,7 +55,7 @@
                             ctrl.daProfCalcAggregationFields.splice(index, 1);
                         }
                     });
-                }
+                };
 
                 defineMenuActions();
             }

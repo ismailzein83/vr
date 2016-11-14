@@ -30,8 +30,8 @@
 
             if (parameters != undefined) {
                 dataAnalysisItemDefinitionId = parameters.dataAnalysisItemDefinitionId;
-                dataAnalysisDefinitionId = parameters.dataAnalysisDefinitionId
-                itemDefinitionTypeId = parameters.itemDefinitionTypeId
+                dataAnalysisDefinitionId = parameters.dataAnalysisDefinitionId;
+                itemDefinitionTypeId = parameters.itemDefinitionTypeId;
             }
 
             isEditMode = (dataAnalysisItemDefinitionId != undefined);
@@ -112,7 +112,7 @@
                 $scope.scopeModel.isLoading = false;
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            })
+            });
 
             function setTitle() {
                 if (isEditMode) {
@@ -182,7 +182,7 @@
         {
             var context = {
                 getFields: function () {
-                    var fields = []
+                    var fields = [];
 
                     for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
                         var field = dataRecordTypeEntity.Fields[i];
@@ -197,7 +197,7 @@
                 getDataRecordTypeId: function () {
                     return dataRecordTypeId;
                 }
-            }
+            };
             return context;
         }
         function buildDataAnalysisItemDefinitionObjFromScope() {

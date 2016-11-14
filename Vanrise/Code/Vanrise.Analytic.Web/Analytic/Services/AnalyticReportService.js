@@ -18,7 +18,7 @@
             };
             var parameters = {
                 configId: configId
-            }
+            };
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticReportEditor.html', parameters, modalSettings);
         }
 

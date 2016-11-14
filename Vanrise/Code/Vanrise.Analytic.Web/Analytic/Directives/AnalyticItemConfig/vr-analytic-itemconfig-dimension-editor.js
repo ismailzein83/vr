@@ -62,28 +62,28 @@
                         }
 
                     }
-                }
+                };
 
                 $scope.scopeModel.onParentDimensionSelectorDirectiveReady = function (api) {
                     parentDimensionSelectorAPI = api;
                     parentDimensionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onDependentDimensionSelectorDirectiveReady = function (api) {
                     dependentDimensionSelectorAPI = api;
                     dependentDimensionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onRequiredParentDimensionSelectorDirectiveReady = function (api) {
                     requiredParentDimensionSelectorAPI = api;
                     requiredParentDimensionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onFieldTypeReady = function (api) {
                     fieldTypeAPI = api;
                     fieldTypeReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
 
@@ -100,9 +100,8 @@
                     if (payload != undefined) {
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
-                        if (configEntity != undefined)
-                        {
-                           
+                        if (configEntity != undefined) {
+
                             $scope.scopeModel.sqlExpression = configEntity.SQLExpression;
                             $scope.scopeModel.sqlExpressionMethod = configEntity.GetValueMethod;
 
@@ -111,14 +110,13 @@
                             } else if ($scope.scopeModel.sqlExpressionMethod != undefined) {
                                 $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
                             }
-                          
+
                         }
 
 
                         getAnalyticDimensionEditorRuntime(tableId).then(function (response) {
                             $scope.scopeModel.dimensionFieldMappings.length = 0;
-                            if (response && response.DataRecordTypeInfo != undefined)
-                            {
+                            if (response && response.DataRecordTypeInfo != undefined) {
                                 for (var i = 0; i < response.DataRecordTypeInfo.length; i++) {
                                     var filterItem = {
                                         payload: response.DataRecordTypeInfo[i],
@@ -129,20 +127,19 @@
                                     addFilterItemToGrid(filterItem);
                                 }
                             }
-                                
-                          });
+
+                        });
 
                         function addFilterItemToGrid(filterItem) {
-                          
+
                             var dataItem = {
                                 Name: filterItem.payload.Name,
-                                DataRecordTypeId: filterItem.payload.DataRecordTypeId,
+                                DataRecordTypeId: filterItem.payload.DataRecordTypeId
                             };
-                            var dataItemPayload = { dataRecordTypeId: filterItem.payload.DataRecordTypeId,  };
+                            var dataItemPayload = { dataRecordTypeId: filterItem.payload.DataRecordTypeId };
 
-                            if (configEntity != undefined && configEntity.DimensionFieldMappings !=undefined)
-                            {
-                                var selectedRecordField = UtilsService.getItemByVal(configEntity.DimensionFieldMappings,filterItem.payload.DataRecordTypeId,"DataRecordTypeId");
+                            if (configEntity != undefined && configEntity.DimensionFieldMappings != undefined) {
+                                var selectedRecordField = UtilsService.getItemByVal(configEntity.DimensionFieldMappings, filterItem.payload.DataRecordTypeId, "DataRecordTypeId");
                                 if (selectedRecordField != undefined)
                                     dataItemPayload.selectedIds = selectedRecordField.FieldName;
                             }
@@ -208,7 +205,7 @@
 
                         var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
                         fieldTypeReadyDeferred.promise.then(function () {
-                            var payloadFieldTypeDirective = configEntity!=undefined?configEntity.FieldType:undefined;
+                            var payloadFieldTypeDirective = configEntity != undefined ? configEntity.FieldType : undefined;
 
                             VRUIUtilsService.callDirectiveLoad(fieldTypeAPI, payloadFieldTypeDirective, loadFieldTypePromiseDeferred);
                         });
@@ -216,24 +213,22 @@
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
-                   
-                }
+
+                };
 
                 api.getData = function () {
-                    var fieldType = fieldTypeAPI!=undefined?fieldTypeAPI.getData():undefined; 
-                    var joinConfigNames  = joinSelectorAPI !=undefined?joinSelectorAPI.getSelectedIds():undefined;
+                    var fieldType = fieldTypeAPI != undefined ? fieldTypeAPI.getData() : undefined;
+                    var joinConfigNames = joinSelectorAPI != undefined ? joinSelectorAPI.getSelectedIds() : undefined;
                     var parents = parentDimensionSelectorAPI != undefined ? parentDimensionSelectorAPI.getSelectedIds() : undefined;
                     var requiredParentDimension = requiredParentDimensionSelectorAPI != undefined ? requiredParentDimensionSelectorAPI.getSelectedIds() : undefined;
                     var dependentDimensions = dependentDimensionSelectorAPI != undefined ? dependentDimensionSelectorAPI.getSelectedIds() : undefined;
 
                     var dimensionFieldMappings = [];
-                    if ($scope.scopeModel.dimensionFieldMappings.length > 0)
-                    {
-                        for (var i = 0; i < $scope.scopeModel.dimensionFieldMappings.length; i++)
-                        {
+                    if ($scope.scopeModel.dimensionFieldMappings.length > 0) {
+                        for (var i = 0; i < $scope.scopeModel.dimensionFieldMappings.length; i++) {
                             var dimensionFieldMapping = $scope.scopeModel.dimensionFieldMappings[i];
                             dimensionFieldMappings.push({
-                                DataRecordTypeId:dimensionFieldMapping.DataRecordTypeId,
+                                DataRecordTypeId: dimensionFieldMapping.DataRecordTypeId,
                                 FieldName: dimensionFieldMapping.directiveAPI.getSelectedIds()
                             });
                         }
@@ -243,16 +238,16 @@
                         $type: "Vanrise.Analytic.Entities.AnalyticDimensionConfig ,Vanrise.Analytic.Entities",
                         SQLExpression: $scope.scopeModel.showSQLExpression ? $scope.scopeModel.sqlExpression : undefined,
                         GetValueMethod: $scope.scopeModel.showSQLExpressionMethod ? $scope.scopeModel.sqlExpressionMethod : undefined,
-                        DependentDimensions:dependentDimensions,
+                        DependentDimensions: dependentDimensions,
                         JoinConfigNames: joinConfigNames,
                         Parents: parents,
                         RequiredParentDimension: requiredParentDimension,
                         FieldType: fieldType,
                         DimensionFieldMappings: dimensionFieldMappings
-                     
+
                     };
                     return dimension;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

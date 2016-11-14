@@ -41,10 +41,10 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAnalyticReportAdded = function (tableObj) {
                         gridAPI.itemAdded(tableObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -76,7 +76,7 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
         function editAnalyticReport(dataItem) {
             var onEditAnalyticReport = function (analyticReportObj) {
                 gridAPI.itemUpdated(analyticReportObj);
-            }
+            };
             VR_Analytic_AnalyticReportService.editAnalyticReport(dataItem.Entity.AnalyticReportId, onEditAnalyticReport, dataItem.Entity.Settings.ConfigId);
         }
     }

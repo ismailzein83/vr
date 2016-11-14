@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 AnalyticTableManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'VR_Analytic_AnalyticTableAPIService'];
 
 function AnalyticTableManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Analytic_AnalyticTableService, VR_Analytic_AnalyticTableAPIService) {
@@ -14,25 +14,24 @@ function AnalyticTableManagementController($scope, UtilsService, VRNotificationS
         };
         $scope.hasAddAnalyticTablePermission = function () {
             return VR_Analytic_AnalyticTableAPIService.HasAddAnalyticTablePermission();
-        }
-        $scope.addTable = function()
-        {
+        };
+        $scope.addTable = function () {
             var onAnalyticTableAdded = function (tableObj) {
                 mainGridAPI.onAnalyticTableAdded(tableObj);
             };
 
             VR_Analytic_AnalyticTableService.addAnalyticTable(onAnalyticTableAdded);
-        }
+        };
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
-        }
+        };
 
     }
 
     function getFilterObject() {
         var query = {
-            Name: $scope.viewName,
-        }
+            Name: $scope.viewName
+        };
         return query;
     }
 

@@ -33,7 +33,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -80,11 +80,11 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'AnalyticTableId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('AnalyticTableId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }

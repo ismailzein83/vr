@@ -33,7 +33,7 @@
                 $scope.scopeModel.onDataRecordSourceReady = function (api) {
                     sourceAPI = api;
                     sourceReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -84,7 +84,7 @@
                     };
 
                     return viewSettings;
-                }
+                };
             }
         }
     }

@@ -35,7 +35,7 @@
             $scope.scopeModel.onFieldTypeSelectiveReady = function (api) {
                 fieldTypeSelectiveAPI = api;
                 fieldTypeSelectiveReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)

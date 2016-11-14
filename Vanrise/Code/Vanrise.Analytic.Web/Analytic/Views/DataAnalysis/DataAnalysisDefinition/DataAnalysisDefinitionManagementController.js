@@ -22,14 +22,14 @@
             $scope.scopeModel.add = function () {
                 var onDataAnalysisDefinitionAdded = function (addedDataAnalysisDefinition) {
                     gridAPI.onDataAnalysisDefinitionAdded(addedDataAnalysisDefinition);
-                }
+                };
 
                 VR_Analytic_DataAnalysisDefinitionService.addDataAnalysisDefinition(onDataAnalysisDefinitionAdded);
             };
 
             $scope.hasAddDataAnalysisDefinitionPermission = function () {
                 return VR_Analytic_DataAnalysisDefinitionAPIService.HasAddDataAnalysisDefinitionPermission()
-            }
+            };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;

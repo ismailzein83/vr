@@ -38,7 +38,7 @@
                 $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
                     timeRangeDirectiveAPI = api;
                     timeRangeReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -60,45 +60,41 @@
                             var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
                                 filterObj = filter;
                                 $scope.expression = expression;
-                            }
+                            };
                             VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, filterObj, onDataRecordFieldTypeFilterAdded);
                         }
                     }
                 };
-                $scope.checkMaxNumberResords = function()
-                {
-                    if($scope.limit <=  $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined)
-                    {
+                $scope.checkMaxNumberResords = function () {
+                    if ($scope.limit <= $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined) {
                         return null;
                     }
-                    else
-                    {
+                    else {
                         return "Max number can be entered is: " + $scope.maxNumberOfRecords;
                     }
-                }
+                };
                 $scope.onDRSearchPageStorageSourceChanged = function () {
                     filterObj = null;
                     $scope.expression = undefined;
-                    if ($scope.selectedDRSearchPageStorageSource != undefined)
-                    {
+                    if ($scope.selectedDRSearchPageStorageSource != undefined) {
                         $scope.isloadingFilter = true;
                         loadFields().then(function () {
-                           
+
                             $scope.isloadingFilter = false;
-                            
+
                         });
                     }
-                   
-                }
+
+                };
 
                 $scope.resetFilter = function () {
                     $scope.expression = undefined;
                     filterObj = null;
-                }
+                };
 
                 $scope.validateTimeRange = function () {
                     return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-                }
+                };
 
                 defineAPI();
             }
@@ -209,7 +205,7 @@
                     // $scope.drSearchPageStorageSources = settings.Sources;
                     for (var i = 0; i < settings.Sources.length ; i++) {
                         for (var j = 0; j < settings.Sources[i].RecordStorageIds.length ; j++) {
-                            var id = settings.Sources[i].RecordStorageIds[j]
+                            var id = settings.Sources[i].RecordStorageIds[j];
                             if (tabids.indexOf(id) == -1)
                                 tabids[tabids.length] = id;
                         }

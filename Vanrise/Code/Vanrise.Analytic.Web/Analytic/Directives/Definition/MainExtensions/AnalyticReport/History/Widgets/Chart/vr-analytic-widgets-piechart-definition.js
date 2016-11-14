@@ -46,16 +46,16 @@
                 $scope.scopeModel.onDimensionSelectorDirectiveReady = function (api) {
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onMeasureSelectionChanged = function () {
-                    
-                }
+
+                };
 
                 defineAPI();
             }
@@ -131,7 +131,7 @@
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
                         Measure: getMeasure($scope.scopeModel.Measure)
-                    }
+                    };
                     return data;
                 }
 

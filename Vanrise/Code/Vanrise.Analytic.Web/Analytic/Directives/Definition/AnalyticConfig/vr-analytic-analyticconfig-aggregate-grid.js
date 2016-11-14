@@ -41,16 +41,15 @@ app.directive("vrAnalyticAnalyticconfigAggregateGrid", ['VRNotificationService',
                     var directiveAPI = {};
 
                     directiveAPI.loadGrid = function (query) {
-                        if(query !=undefined)
-                        {
+                        if (query != undefined) {
                             tableId = query.TableId;
                             itemType = query.ItemType;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAnalyticAggregateAdded = function (aggregateObj) {
                         gridAPI.itemAdded(aggregateObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -78,7 +77,7 @@ app.directive("vrAnalyticAnalyticconfigAggregateGrid", ['VRNotificationService',
         function editAggregate(dataItem) {
             var onEditAggregate = function (aggregateObj) {
                 gridAPI.itemUpdated(aggregateObj);
-            }
+            };
 
             VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditAggregate, tableId, itemType);
 

@@ -46,10 +46,10 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
                             itemType = query.ItemType;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAnalyticJoinAdded = function (joinObj) {
                         gridAPI.itemAdded(joinObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -77,7 +77,7 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
         function editJoin(dataItem) {
             var onEditJoin = function (joinObj) {
                 gridAPI.itemUpdated(joinObj);
-            }
+            };
 
             VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditJoin, tableId, itemType);
 

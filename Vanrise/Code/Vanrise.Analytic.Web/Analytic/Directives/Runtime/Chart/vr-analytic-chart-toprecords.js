@@ -53,7 +53,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                 ResultKey: null,
                                 SortByColumnName: ctrl.sortField,
                                 Query: query
-                            }
+                            };
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
                                     renderCharts(response, payload.Settings.ChartType);
@@ -165,7 +165,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     TopRecords: payLoad.Settings.TopRecords,
                     OrderBy: [payLoad.Settings.TopMeasure],
                     OrderType: payLoad.Settings.OrderType
-                }
+                };
                 return queryFinalized;
             }
         }

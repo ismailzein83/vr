@@ -70,7 +70,7 @@ app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysis
                 api.onDataAnalysisDefinitionAdded = function (addedDataAnalysisDefinition) {
                     VR_Analytic_DataAnalysisDefinitionService.defineDataAnalysisItemDefinitionTabsAndMenuActions(addedDataAnalysisDefinition, gridAPI);
                     gridAPI.itemAdded(addedDataAnalysisDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -36,15 +36,15 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.onReportSelectorDirectiveReady = function (api) {
                 reportDirectiveAPI = api;
-            }
+            };
 
             $scope.scopeModel.onReportTypeSelectorDirectiveReady = function (api) {
                 reportTypeSelectorAPI = api;
                 reportTypeSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onReportTypeSelectionChanged = function () {
                 if (reportDirectiveAPI != undefined && reportTypeSelectorAPI != undefined) {
@@ -52,11 +52,11 @@
                     var payload = {
                         filter: {
                             TypeId: reportTypeSelectorAPI.getSelectedIds()
-                        },
-                    }
+                        }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, reportDirectiveAPI, payload, setLoader, reportReadyDeferred);
                 }
-            }
+            };
 
             $scope.scopeModel.SaveView = function () {
                 if (isEditMode) {
