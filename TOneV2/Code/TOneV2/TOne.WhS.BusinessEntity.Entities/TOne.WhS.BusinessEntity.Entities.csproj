@@ -210,6 +210,7 @@
     <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="SaleZone\SaleZonesToSellQuery.cs" />
     <Compile Include="SaleZone\SaleEntityService.cs" />
+    <Compile Include="Settings\BusinessEntitySettingsData.cs" />
     <Compile Include="Settings\BusinessEntityTechnicalSettingsData.cs" />
     <Compile Include="StateBackup\Filters\AllSaleEntitiesStateBackupFilter.cs" />
     <Compile Include="StateBackup\Filters\SaleEntityStateBackupFilter.cs" />
