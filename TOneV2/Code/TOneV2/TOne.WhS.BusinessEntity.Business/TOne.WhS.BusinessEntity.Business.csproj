@@ -122,6 +122,7 @@
     <Compile Include="SaleCode\SaleCodeExistingEntity.cs" />
     <Compile Include="SalePLNotification\NotificationManager.cs" />
     <Compile Include="SalePriceListTemplate\Context\BasicSalePriceListTemplateSettingsMappedValueContext.cs" />
+    <Compile Include="SalePriceListTemplate\Context\SalePriceListTemplateSettingsContext.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateManager.cs" />
     <Compile Include="SaleRate\FutureSaleRateReadWithCache.cs" />
     <Compile Include="SaleRate\ISaleRateReader.cs" />
