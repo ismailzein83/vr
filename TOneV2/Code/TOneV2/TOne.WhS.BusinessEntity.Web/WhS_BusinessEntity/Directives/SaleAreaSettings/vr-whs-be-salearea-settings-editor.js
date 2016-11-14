@@ -43,7 +43,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     ctrl.disabledAddFixedKeyword = (value == undefined && ctrl.fixedKeywordvalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.fixedKeywords, value, "fixedKeyword") != -1;
                 };
 
-                $scope.scopeModel.onPriceListEmailTemplateSelectorReady = function (api) {
+                $scope.onPriceListEmailTemplateSelectorReady = function (api) {
                     salePriceListSelectorReadyAPI = api;
                     salePriceListReadyPromiseDeferred.resolve();
                 }
@@ -105,7 +105,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                             }
                         }
                         VRUIUtilsService.callDirectiveLoad(salePriceListSelectorReadyAPI, payload, salePriceListSelectorLoadPromiseDeferred);
-                        promises.push(salePriceListSelectorLoadPromiseDeferred.promise);
+                        return salePriceListSelectorLoadPromiseDeferred.promise ;
                     }
                 };
 
