@@ -24,6 +24,7 @@
 
             $scope.scopeModel = {};
             $scope.scopeModel.customers = [];
+            $scope.scopeModel.showCustomers = false;
 
             $scope.scopeModel.customerSelectionTypes = UtilsService.getArrayEnum(WhS_Sales_CustomerSelectionTypeEnum);
             $scope.scopeModel.selectedCustomerSelectionType = WhS_Sales_CustomerSelectionTypeEnum.All;
@@ -31,10 +32,12 @@
             $scope.scopeModel.onSelectionChanged = function () {
                 if ($scope.scopeModel.selectedCustomerSelectionType == undefined)
                     return;
-                if ($scope.scopeModel.selectedCustomerSelectionType.value != WhS_Sales_CustomerSelectionTypeEnum.All.value)
-                    selectOrClearAllCustomers(false);
+                if ($scope.scopeModel.selectedCustomerSelectionType.value != WhS_Sales_CustomerSelectionTypeEnum.All.value) {
+                    clearAllCustomers();
+                    $scope.scopeModel.showCustomers = true;
+                }
                 else
-                    selectOrClearAllCustomers(true);
+                    $scope.scopeModel.showCustomers = false;
             };
 
             $scope.scopeModel.save = function () {
@@ -93,7 +96,6 @@
                         $scope.scopeModel.customers.push(response[i]);
                     }
                 }
-                selectOrClearAllCustomers(true);
             });
 
         }
@@ -123,9 +125,9 @@
             });
         }
 
-        function selectOrClearAllCustomers(isSelected) {
+        function clearAllCustomers() {
             for (var i = 0; i < $scope.scopeModel.customers.length; i++)
-                $scope.scopeModel.customers[i].isSelected = isSelected;
+                $scope.scopeModel.customers[i].isSelected = false;
         }
     }
 
