@@ -96,7 +96,7 @@
             var context = {
                 getFields: function () { return fields },
                 getRuleEditor: getRuleFilterEditorByFieldType
-            }
+            };
             return context;
         }
 

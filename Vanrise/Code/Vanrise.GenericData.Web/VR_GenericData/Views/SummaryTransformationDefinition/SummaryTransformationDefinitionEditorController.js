@@ -74,7 +74,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
             $scope.scopeModal.enableColumnGrouping = true;
             $scope.scopeModal.enableTransformationforInsert = true;
             $scope.scopeModal.enableTransformationforUpdate = true;
@@ -206,7 +206,7 @@
                     if (dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI != undefined)
                         dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI.clearDataSource();
                 }
-            }
+            };
 
             $scope.scopeModal.selectedDataTransformationDefinitionRecordExistingSummaryUpdate;
             $scope.scopeModal.onDataTransformationDefinitionRecordRawUpdateReady = function (api) {
@@ -251,7 +251,7 @@
                 else $scope.scopeModal.enableTransformationforInsert = true;
 
                 enableColumnGrouping();
-            }
+            };
 
             $scope.scopeModal.selectedDataRecordStorage;
             $scope.scopeModal.onDataRecordStorageSelectorReady = function (api) {

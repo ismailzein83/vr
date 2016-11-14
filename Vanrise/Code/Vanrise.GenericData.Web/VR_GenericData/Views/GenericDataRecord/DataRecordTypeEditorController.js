@@ -25,7 +25,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
 
             $scope.scopeModal.onDataRecordFieldDirectiveReady = function (api) {
                 dataRecordFieldAPI = api;
@@ -98,8 +98,8 @@
             var dataRecordType = {
                 Name: $scope.scopeModal.name,
                 DataRecordTypeId: dataRecordTypeId,
-                Fields: obj !=undefined ? obj.Fields:undefined
-            }
+                Fields: obj != undefined ? obj.Fields : undefined
+            };
             return dataRecordType;
         }
         function loadDataRecordField()
@@ -109,7 +109,7 @@
 
             dataRecordFieldReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields } : undefined
+                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields } : undefined;
 
                     VRUIUtilsService.callDirectiveLoad(dataRecordFieldAPI, directivePayload, loadDataRecordFieldPromiseDeferred);
                 });

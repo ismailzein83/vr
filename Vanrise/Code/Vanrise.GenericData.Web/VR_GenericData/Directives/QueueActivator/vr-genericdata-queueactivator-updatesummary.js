@@ -59,7 +59,7 @@
                     function loadSelector() {
                         var dataSummaryTransformationDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         var selectorPayload = {};
-                        var filter = {}
+                        var filter = {};
                         filter.SummaryItemRecordTypeId = payload.DataRecordTypeId;
                         selectorPayload.filter = filter;
 

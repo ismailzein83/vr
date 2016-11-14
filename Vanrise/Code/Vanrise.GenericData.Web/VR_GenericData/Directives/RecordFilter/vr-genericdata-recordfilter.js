@@ -36,7 +36,7 @@
                         var onFilterAdded = function (filter, expression) {
                             filterObj = filter;
                             ctrl.expression = expression;
-                        }
+                        };
                         VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(context.getFields(), filterObj, onFilterAdded);
                     }
                  
@@ -44,7 +44,7 @@
                 ctrl.resetFilter = function () {
                     ctrl.expression = undefined;
                     filterObj = null;
-                }
+                };
                 defineAPI();
             }
 

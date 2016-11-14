@@ -110,7 +110,7 @@
                         }
 
                         var selectorPayload = {};
-                        var filter = {}
+                        var filter = {};
                         filter.RawItemRecordTypeId = payload.DataRecordTypeId;
                         selectorPayload.filter = filter;
 

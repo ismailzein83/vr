@@ -63,7 +63,7 @@
                     var data = {
                         $type: "Vanrise.GenericData.MainExtensions.VRObjectTypes.VRDataRecordFieldPropertyEvaluator, Vanrise.GenericData.MainExtensions",
                         FieldName: selectorAPI.getSelectedIds()
-                    }
+                    };
                     return data;
                 };
 

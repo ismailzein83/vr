@@ -117,7 +117,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     $scope.dynamic.onDirectiveReady = function (api) {
                                         $scope.dynamic.directiveAPI = api;
                                         $scope.dynamic.directiveReadyPromiseDeferred.resolve();
-                                    }
+                                    };
 
                                     $scope.dynamic.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                                     innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);

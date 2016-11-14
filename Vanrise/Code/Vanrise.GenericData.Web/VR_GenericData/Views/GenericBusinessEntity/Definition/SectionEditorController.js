@@ -24,7 +24,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
 
             $scope.scopeModal.SaveSection = function () {
                 if (isEditMode) {
@@ -45,7 +45,7 @@
                 return null;
             };
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
        

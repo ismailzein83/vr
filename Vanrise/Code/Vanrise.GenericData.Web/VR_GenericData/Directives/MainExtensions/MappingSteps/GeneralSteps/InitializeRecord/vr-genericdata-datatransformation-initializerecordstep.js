@@ -38,7 +38,7 @@ app.directive('vrGenericdataDatatransformationInitializerecordstep', ['UtilsServ
                 ctrl.onRecordNameSelectorReady = function (api) {
                     recordNameSelectorDirectiveReadyAPI = api;
                     recordNameSelectorDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 

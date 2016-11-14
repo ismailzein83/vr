@@ -41,7 +41,7 @@ app.directive("vrGenericdataSummarytransformationSummarybatchstartidentification
             $scope.onSummaryBatchIntervalSourceTypeDirectiveReady = function (api) {
                 summaryBatchIntervalSourceDirectiveAPI = api;
                 summaryBatchIntervalSourceDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
 
             function initializeController() {
                 defineAPI();

@@ -15,7 +15,7 @@
         defineScope();
         load();
 
-        var ruleDefinitionId
+        var ruleDefinitionId;
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);

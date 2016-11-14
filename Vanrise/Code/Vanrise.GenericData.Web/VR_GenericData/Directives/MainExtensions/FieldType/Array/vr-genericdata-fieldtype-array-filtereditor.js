@@ -91,10 +91,9 @@
                         });
                     }
                 };
-                api.getValuesAsArray = function ()
-                {
+                api.getValuesAsArray = function () {
                     return directiveAPI.getData();
-                }
+                };
                 api.getData = function () {
                     return fieldTypeFilterEditorAPI.getData();
                 };

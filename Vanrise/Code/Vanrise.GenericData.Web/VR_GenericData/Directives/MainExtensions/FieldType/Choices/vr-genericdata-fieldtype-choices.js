@@ -38,10 +38,10 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                 
                 ctrl.Id = ctrl.values.length+1;
                 ctrl.isValid = function () {
-                    if (ctrl.values !=undefined && ctrl.values.length > 0)
+                    if (ctrl.values != undefined && ctrl.values.length > 0)
                         return null;
                     return "You Should Add At Least One Choice.";
-                } 
+                };
                 ctrl.disableAddButton = true;
                 ctrl.addValue = function () {
                     ctrl.values.push(AddChoice(ctrl.value));

@@ -86,7 +86,7 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                         if (payload != undefined && payload.stepDetails != undefined)
                             payloadSelector = {
                                 selectedIds: payload.stepDetails.DataTransformationId
-                            }
+                            };
                         VRUIUtilsService.callDirectiveLoad(dataTransformationSelectorDirectiveReadyAPI, payloadSelector, loadDataTransformationSelectorPromiseDeferred);
                     });
                     promises.push(loadDataTransformationSelectorPromiseDeferred.promise);

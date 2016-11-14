@@ -53,7 +53,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
 
             $scope.scopeModal.onGridFieldDesignReady = function (api) {
                 gridFieldsDirectiveAPI = api;
@@ -223,7 +223,7 @@
                             .then(function () {
                                 recordTypeSelectedPromiseDeferred = undefined;
 
-                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings.ManagementDesign != undefined && recordTypeEntity != undefined) ? { selectedColumns: businessEntityDefinitionEntity.Settings.ManagementDesign.GridDesign.Columns, recordTypeFields: recordTypeEntity.Fields } : undefined
+                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings.ManagementDesign != undefined && recordTypeEntity != undefined) ? { selectedColumns: businessEntityDefinitionEntity.Settings.ManagementDesign.GridDesign.Columns, recordTypeFields: recordTypeEntity.Fields } : undefined;
                                 gridFieldsDesignReadyPromiseDeferred = undefined;
                                 VRUIUtilsService.callDirectiveLoad(gridFieldsDirectiveAPI, directivePayload, loadGridDesignPromiseDeferred);
                             });
@@ -238,7 +238,7 @@
 
                             .then(function () {
                                 recordTypeSelectedPromiseDeferred = undefined;
-                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ? { selectedFields: businessEntityDefinitionEntity.Settings.ManagementDesign.FilterDesign.Fields, recordTypeFields: recordTypeEntity.Fields } : undefined
+                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ? { selectedFields: businessEntityDefinitionEntity.Settings.ManagementDesign.FilterDesign.Fields, recordTypeFields: recordTypeEntity.Fields } : undefined;
                                 filterFieldsDesignReadyPromiseDeferred = undefined;
                                 VRUIUtilsService.callDirectiveLoad(filterFieldsDirectiveAPI, directivePayload, loadFilterDesignPromiseDeferred);
                             });
@@ -251,7 +251,7 @@
 
                     dataRecordTypeSelectorReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) ? { selectedIds: businessEntityDefinitionEntity.Settings.DataRecordTypeId } : undefined
+                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) ? { selectedIds: businessEntityDefinitionEntity.Settings.DataRecordTypeId } : undefined;
 
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, directivePayload, loadDataRecordTypeSelectorPromiseDeferred);
                         });

@@ -110,7 +110,7 @@
                 if (dataStoreEntity != undefined && dataStoreEntity.Settings != undefined)
                     var payLoad = {
                         selectedIds: (dataStoreEntity != undefined && dataStoreEntity.Settings != undefined && dataStoreEntity.Settings.ConfigId != undefined) ? dataStoreEntity.Settings.ConfigId : undefined
-                    }
+                    };
                 VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, payLoad, loadDataStorePromiseDeferred);
             });
             return loadDataStorePromiseDeferred.promise;
@@ -123,7 +123,7 @@
                     dataStoreConfigReadyPromiseDeferred = undefined;
                     var directivePayLoad = {
                         data: dataStoreEntity.Settings
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(dataStoreDirectiveAPI, directivePayLoad, loadDataStoreConfigPromiseDeferred);
                 });
                 return loadDataStoreConfigPromiseDeferred.promise;

@@ -70,7 +70,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                         CompareOperator: $scope.selectedFilter.value,
                         Value: dateFilterEditorApi.getData()
                     };
-                }
+                };
 
                 api.getExpression = function () {
                     return $scope.selectedFilter.description + ' ' + dateFilterEditorApi.getData();

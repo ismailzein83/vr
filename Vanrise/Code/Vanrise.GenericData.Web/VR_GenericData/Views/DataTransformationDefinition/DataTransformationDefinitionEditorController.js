@@ -35,7 +35,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
 
             $scope.scopeModal.onEditorRemove = function () {
                 $scope.scopeModal.selectedStep.isSelected = false;
@@ -131,10 +131,9 @@
                 return VR_GenericData_DataTransformationDefinitionAPIService.HasTryCompileSteps();
             };
 
-            $scope.scopeModal.refreshEditor = function ()
-            {
+            $scope.scopeModal.refreshEditor = function () {
                 refreshEditor();
-            }
+            };
         }
 
         function load() {
@@ -191,7 +190,7 @@
 
                     dataRecordTypeReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (dataTransformationDefinitionEntity != undefined) ? { RecordTypes: dataTransformationDefinitionEntity.RecordTypes } : undefined
+                            var directivePayload = (dataTransformationDefinitionEntity != undefined) ? { RecordTypes: dataTransformationDefinitionEntity.RecordTypes } : undefined;
 
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeAPI, directivePayload, loadDataRecordTypePromiseDeferred);
                         });
@@ -259,15 +258,15 @@
             };
             stepItem.onPreviewDirectiveReady = function (api) {
                 stepItem.previewAPI = api;
-               
+
                 var setLoader = function (value) {
                     stepItem.isLoadingPreviewDirective = value;
-                    if(!value)
-                      context.checkValidation(stepItem);
+                    if (!value)
+                        context.checkValidation(stepItem);
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stepItem.previewAPI, payload, setLoader, stepItem.readyPromiseDeferred);
-              
-            }
+
+            };
 
             if (stepItem.readyPromiseDeferred != undefined)
             {

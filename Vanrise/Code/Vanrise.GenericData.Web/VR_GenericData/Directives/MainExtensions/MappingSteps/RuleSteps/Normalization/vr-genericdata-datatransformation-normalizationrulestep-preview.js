@@ -41,7 +41,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                 ctrl.onCommonDirectiveReady = function (api) {
                     commonDirectiveAPI = api;
                     commonDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }

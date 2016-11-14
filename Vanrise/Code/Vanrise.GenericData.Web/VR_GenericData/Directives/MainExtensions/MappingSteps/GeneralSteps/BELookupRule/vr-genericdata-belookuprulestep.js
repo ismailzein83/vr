@@ -102,7 +102,7 @@ app.directive('vrGenericdataBelookuprulestep', ['UtilsService', 'VRUIUtilsServic
                         if (payload != undefined && payload.stepDetails != undefined)
                             payloadSelector = {
                                 selectedIds: payload.stepDetails.BELookupRuleDefinitionId
-                            }
+                            };
                         VRUIUtilsService.callDirectiveLoad(beLookupRuleDefinitionSelectorDirectiveReadyAPI, payloadSelector, loadBeLookupRuleDefinitionSelectorPromiseDeferred);
                     });
                     promises.push(loadBeLookupRuleDefinitionSelectorPromiseDeferred.promise);

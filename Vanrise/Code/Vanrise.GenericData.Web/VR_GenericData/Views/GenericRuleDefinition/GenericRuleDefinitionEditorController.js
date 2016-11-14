@@ -232,10 +232,10 @@
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
                     var payload;
-                    if(genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.SettingsDefinition != null)
+                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.SettingsDefinition != null)
                         payload = genericRuleDefinitionEntity.SettingsDefinition;
                     else if (settingsTypeName != undefined)
-                        payload = { settingsTypeName: settingsTypeName }
+                        payload = { settingsTypeName: settingsTypeName };
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
                 });
 
@@ -381,9 +381,9 @@
 
         function buildContext() {
 
-            var context =  {
+            var context = {
                 getObjectVariables: function () { return objectDirectiveAPI.getData(); }
-            }
+            };
             return context;
         }
         function buildGenericRuleDefinitionObjectFromScope() {

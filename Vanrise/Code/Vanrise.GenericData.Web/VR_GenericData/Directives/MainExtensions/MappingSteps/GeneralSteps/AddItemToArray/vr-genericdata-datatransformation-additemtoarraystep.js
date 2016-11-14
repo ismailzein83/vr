@@ -54,9 +54,8 @@ app.directive('vrGenericdataDatatransformationAdditemtoarraystep', ['UtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
-                        if(payload.context != undefined)
+                    if (payload != undefined) {
+                        if (payload.context != undefined)
                             ctrl.records = payload.context.getArrayRecordNames();
                         if (payload.stepDetails != undefined)
                             ctrl.selectedRecordName = UtilsService.getItemByVal(ctrl.records, payload.stepDetails.RecordName, "Name");
@@ -67,7 +66,7 @@ app.directive('vrGenericdataDatatransformationAdditemtoarraystep', ['UtilsServic
 
                     variableDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadVariable = { context: payload.context };
-                        if (payload != undefined &&  payload.stepDetails != undefined)
+                        if (payload != undefined && payload.stepDetails != undefined)
                             payloadVariable.selectedRecords = payload.stepDetails.VariableName;
                         VRUIUtilsService.callDirectiveLoad(variableDirectiveReadyAPI, payloadVariable, loadVariableDirectivePromiseDeferred);
                     });
@@ -76,7 +75,7 @@ app.directive('vrGenericdataDatatransformationAdditemtoarraystep', ['UtilsServic
                     var loadRecordNameSelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
                     recordNameSelectorDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var payloadRecordName = { context: payload.context,getArray:true };
+                        var payloadRecordName = { context: payload.context, getArray: true };
                         if (payload != undefined && payload.stepDetails != undefined)
                             payloadRecordName.selectedIds = payload.stepDetails.ArrayVariableName;
                         VRUIUtilsService.callDirectiveLoad(recordNameSelectorDirectiveReadyAPI, payloadRecordName, loadRecordNameSelectorDirectivePromiseDeferred);
@@ -84,7 +83,7 @@ app.directive('vrGenericdataDatatransformationAdditemtoarraystep', ['UtilsServic
                     promises.push(loadRecordNameSelectorDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.getData = function () {
                     return {

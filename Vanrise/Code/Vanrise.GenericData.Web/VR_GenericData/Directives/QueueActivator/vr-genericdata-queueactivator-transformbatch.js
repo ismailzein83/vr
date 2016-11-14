@@ -163,7 +163,7 @@
                     }
 
                     if (payload != undefined && payload.DataRecordTypeId != undefined)
-                        dataRecordTypeId = payload.DataRecordTypeId
+                        dataRecordTypeId = payload.DataRecordTypeId;
 
 
                     if (payload != undefined && payload.QueueActivator != undefined) {
@@ -188,7 +188,7 @@
                                     var selectedValue = UtilsService.getItemByVal($scope.transformationRecords, payload.QueueActivator.SourceRecordName, "RecordName");
                                     $scope.selectedTransformationRecord = selectedValue;
                                     loadNextRecordsSection();
-                                })
+                                });
                             });
                         }
 

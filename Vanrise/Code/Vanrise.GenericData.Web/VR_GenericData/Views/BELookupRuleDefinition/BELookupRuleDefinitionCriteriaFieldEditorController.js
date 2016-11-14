@@ -67,7 +67,7 @@
             {
                 var crietriaField = buildCriteriaFieldFromScope();
                 if (isEditMode) 
-                    $scope.onBELookupRuleDefinitionCriteriaFieldUpdated(crietriaField)
+                    $scope.onBELookupRuleDefinitionCriteriaFieldUpdated(crietriaField);
                 else
                     $scope.onBELookupRuleDefinitionCriteriaFieldAdded(crietriaField);
                 $scope.modalContext.closeModal();

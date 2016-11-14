@@ -212,7 +212,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                                 payloadRuleDefinition.specificTypeName = ruleTypeName;
                                 VRUIUtilsService.callDirectiveLoad(ruleDefinitionDirectiveAPI, payloadRuleDefinition, loadRuleDefinitionDirectivePromiseDeferred);
                             });
-                        })
+                        });
                         promises.push(loadRuleDefinitionDirectivePromiseDeferred.promise);
 
                         var loadEffectiveTimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();

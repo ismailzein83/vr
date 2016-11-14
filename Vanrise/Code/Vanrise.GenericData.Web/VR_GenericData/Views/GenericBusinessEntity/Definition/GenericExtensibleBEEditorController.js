@@ -36,7 +36,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
             $scope.scopeModal.isRecordTypeDisbled = (isEditMode ==true);
             $scope.scopeModal.onRecordTypeSelectionChanged = function () {
                 var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
@@ -118,7 +118,7 @@
 
                     extensibleBEItemDesignReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (extensibleBEItemEntity != undefined && extensibleBEItemEntity != undefined && recordTypeEntity != undefined) ? { sections: extensibleBEItemEntity.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined
+                            var directivePayload = (extensibleBEItemEntity != undefined && extensibleBEItemEntity != undefined && recordTypeEntity != undefined) ? { sections: extensibleBEItemEntity.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined;
                             extensibleBEItemDesignReadyPromiseDeferred = undefined;
                             VRUIUtilsService.callDirectiveLoad(extensibleBEItemDesignAPI, directivePayload, loadExtensibleBEItemDesignPromiseDeferred);
                         });
@@ -133,7 +133,7 @@
 
                     dataRecordTypeSelectorReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (extensibleBEItemEntity != undefined) ? { selectedIds: extensibleBEItemEntity.DataRecordTypeId } : undefined
+                            var directivePayload = (extensibleBEItemEntity != undefined) ? { selectedIds: extensibleBEItemEntity.DataRecordTypeId } : undefined;
 
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, directivePayload, loadDataRecordTypeSelectorPromiseDeferred);
                         });
