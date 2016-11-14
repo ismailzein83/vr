@@ -184,10 +184,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport_.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport_.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\AccountInvoice.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoice.rdlc" />
