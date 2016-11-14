@@ -21,7 +21,7 @@ namespace Vanrise.AccountBalance.Business.Extensions
             get;set;
         }
 
-        static AccountBalanceAlertRuleBehavior _behavior;
+        static AccountBalanceAlertRuleBehavior _behavior = new AccountBalanceAlertRuleBehavior();
         public override VRBalanceAlertRuleBehavior Behavior
         {
             get { return _behavior; }
