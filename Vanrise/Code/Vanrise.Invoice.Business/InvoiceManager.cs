@@ -50,57 +50,71 @@ namespace Vanrise.Invoice.Business
             insertOperationOutput.InsertedObject = null;
             long insertedInvoiceId = -1;
 
-
-            InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
-
-            InvoiceGenerationContext context = new InvoiceGenerationContext
+            try
             {
-                CustomSectionPayload = createInvoiceInput.CustomSectionPayload,
-                FromDate = createInvoiceInput.FromDate,
-                PartnerId = createInvoiceInput.PartnerId,
-                ToDate = createInvoiceInput.ToDate,
-                InvoiceTypeId = createInvoiceInput.InvoiceTypeId
-            };
-            invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
-            
-            Entities.Invoice invoice = new Entities.Invoice
-            {
-                UserId = new SecurityContext().GetLoggedInUserId(),
-                Details = context.Invoice.InvoiceDetails,
-                InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
-                FromDate = createInvoiceInput.FromDate,
-                PartnerId = createInvoiceInput.PartnerId,
-                ToDate = createInvoiceInput.ToDate,
-                IssueDate = createInvoiceInput.IssueDate,
-            };
-            PartnerManager partnerManager = new PartnerManager();
-            var duePeriod = partnerManager.GetPartnerDuePeriod(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);
-            invoice.DueDate = createInvoiceInput.IssueDate.AddDays(duePeriod);
-            var serialNumber = invoiceType.Settings.SerialNumberPattern;
-            InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext{
-                Invoice = invoice,
-                InvoiceTypeId = createInvoiceInput.InvoiceTypeId
-            };
-            foreach(var part in invoiceType.Settings.SerialNumberParts)
-            {
-                if(invoiceType.Settings.SerialNumberPattern != null && invoiceType.Settings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                InvoiceTypeManager manager = new InvoiceTypeManager();
+                var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
+                InvoiceGenerationContext context = new InvoiceGenerationContext
                 {
-                    serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
+                    CustomSectionPayload = createInvoiceInput.CustomSectionPayload,
+                    FromDate = createInvoiceInput.FromDate,
+                    PartnerId = createInvoiceInput.PartnerId,
+                    ToDate = createInvoiceInput.ToDate,
+                    InvoiceTypeId = createInvoiceInput.InvoiceTypeId
+                };
+                invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
+
+                Entities.Invoice invoice = new Entities.Invoice
+                {
+                    UserId = new SecurityContext().GetLoggedInUserId(),
+                    Details = context.Invoice.InvoiceDetails,
+                    InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
+                    FromDate = createInvoiceInput.FromDate,
+                    PartnerId = createInvoiceInput.PartnerId,
+                    ToDate = createInvoiceInput.ToDate,
+                    IssueDate = createInvoiceInput.IssueDate,
+                };
+                PartnerManager partnerManager = new PartnerManager();
+                var duePeriod = partnerManager.GetPartnerDuePeriod(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);
+                invoice.DueDate = createInvoiceInput.IssueDate.AddDays(duePeriod);
+                var serialNumber = invoiceType.Settings.SerialNumberPattern;
+                InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
+                {
+                    Invoice = invoice,
+                    InvoiceTypeId = createInvoiceInput.InvoiceTypeId
+                };
+                foreach (var part in invoiceType.Settings.SerialNumberParts)
+                {
+                    if (invoiceType.Settings.SerialNumberPattern != null && invoiceType.Settings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                    {
+                        serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
+                    }
+                }
+                invoice.SerialNumber = serialNumber;
+                IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+                if (dataManager.SaveInvoices(context.Invoice.InvoiceItemSets, invoice, out insertedInvoiceId))
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertOperationOutput.InsertedObject = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
+                    insertOperationOutput.Message = "Invoice Generated Successfully.";
+                    insertOperationOutput.ShowExactMessage = true;
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
                 }
             }
-            invoice.SerialNumber = serialNumber;
-            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            if (dataManager.SaveInvoices(context.Invoice.InvoiceItemSets,invoice,out insertedInvoiceId))
+            catch (Exception e)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
-                insertOperationOutput.Message = "Invoice Generated Successfully.";
-                insertOperationOutput.ShowExactMessage = true;
-            }
-            else
-            {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                if (e as InvoiceGeneratorException != null)
+                {
+                    insertOperationOutput.Message = e.Message;
+                    insertOperationOutput.ShowExactMessage = true;
+                }
+
+
+                else
+                    throw e;
             }
 
             return insertOperationOutput;

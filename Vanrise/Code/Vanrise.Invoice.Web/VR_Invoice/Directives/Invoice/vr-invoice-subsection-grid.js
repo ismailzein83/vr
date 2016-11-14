@@ -115,7 +115,7 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                     for (var i = 0; i < gridColumns.length ; i++) {
                         var gridColumn = gridColumns[i];
                         var gridAttribute = UtilsService.getItemByVal(gridAttributes, gridColumn.FieldName, "Field");
-                       
+                        console.log(gridAttribute)
                         if (gridAttribute != undefined)
                         {
                             gridAttribute.Field = "Items["+i+"].Description";

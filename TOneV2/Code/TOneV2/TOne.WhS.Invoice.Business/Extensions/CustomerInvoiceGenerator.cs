@@ -49,21 +49,28 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
+            if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
+            {
+                throw new InvoiceGeneratorException("No data available between the selected period.");
+            }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, isGroupedByCustomer);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
             #region BuildCustomerInvoiceDetails
             CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0]);
-            customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
-            if (carrierProfile.Settings.TaxSetting != null)
+            if (customerInvoiceDetails != null)
             {
-                if (carrierProfile.Settings.TaxSetting.Items != null)
+                customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
+                if (carrierProfile.Settings.TaxSetting != null)
                 {
-                    foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
+                    if (carrierProfile.Settings.TaxSetting.Items != null)
                     {
-                        customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDouble(tax.Value)) / 100);
+                        foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
+                        {
+                            customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDouble(tax.Value)) / 100);
+                        }
                     }
+                    customerInvoiceDetails.TotalAmount += (customerInvoiceDetails.SaleAmount * Convert.ToDouble(carrierProfile.Settings.TaxSetting.VAT)) / 100;
                 }
-                customerInvoiceDetails.TotalAmount += (customerInvoiceDetails.SaleAmount * Convert.ToDouble(carrierProfile.Settings.TaxSetting.VAT)) / 100;
             }
            
             #endregion
@@ -103,8 +110,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                 }
             }
-            customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencyName(customerInvoiceDetails.OriginalSaleCurrencyId);
-            customerInvoiceDetails.SaleCurrency  =currencyManager.GetCurrencyName(customerInvoiceDetails.SaleCurrencyId);
+            customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.OriginalSaleCurrencyId);
+            customerInvoiceDetails.SaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.SaleCurrencyId);
             return customerInvoiceDetails;
         }
         private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
@@ -138,7 +145,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SaleRateTypeId = item.SaleRateTypeId,
                             FromDate = item.InvoiceMeasures.BillingPeriodFrom,
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
-                            SaleCurrency = currencyManager.GetCurrencyName(item.SaleCurrencyId),
+                            SaleCurrency = currencyManager.GetCurrencySymbol(item.SaleCurrencyId),
                             OriginalSaleCurrency = currencyManager.GetCurrencySymbol(item.OriginalSaleCurrencyId),
                             CustomerName = carrierAccountManager.GetCarrierAccountName(item.CustomerId),
                             SaleZoneName = saleZoneManager.GetSaleZoneName(item.SaleZoneId),
@@ -201,7 +208,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
                     DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
                     DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
-                    DimensionValue originalSaleRate = analyticRecord.DimensionValues.ElementAtOrDefault(5);
 
                     MeasureValue saleNet_OrigCurr = GetMeasureValue(analyticRecord, "SaleNet_OrigCurr");
                     MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");

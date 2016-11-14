@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Invoice.Business
 {
@@ -13,6 +15,7 @@ namespace Vanrise.Invoice.Business
         public string PartnerId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public DateTime IssueDate { get; set; }
         public dynamic CustomSectionPayload { get; set; }
         private bool IsLoaded { get; set; }
 
@@ -29,6 +32,8 @@ namespace Vanrise.Invoice.Business
                 ToDate = this.ToDate
             };
             invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
+            PartnerManager partnerManager = new PartnerManager();
+            var duePeriod = partnerManager.GetPartnerDuePeriod(this.InvoiceTypeId, this.PartnerId);
             this.GeneratedInvoice = context.Invoice;
             this._Invoice = new Entities.Invoice
             {
@@ -36,7 +41,9 @@ namespace Vanrise.Invoice.Business
                 ToDate = this.ToDate,
                 PartnerId = this.PartnerId,
                 FromDate = this.FromDate,
-                InvoiceTypeId = this.InvoiceTypeId
+                InvoiceTypeId = this.InvoiceTypeId,
+                IssueDate = this.IssueDate,
+                DueDate = this.IssueDate.AddDays(duePeriod)
             };
             this.IsLoaded = true;
         }

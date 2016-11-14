@@ -1583,6 +1583,12 @@
                             <Parameter Name="DueDate">
                               <Value>=Parameters!InvoiceDueDate.Value</Value>
                             </Parameter>
+                            <Parameter Name="TotalDuration">
+                              <Value>=Parameters!Minutes.Value</Value>
+                            </Parameter>
+                            <Parameter Name="TotalAmount">
+                              <Value>=Parameters!Total.Value</Value>
+                            </Parameter>
                           </Parameters>
                           <Height>4.11458in</Height>
                           <Width>6.93958in</Width>

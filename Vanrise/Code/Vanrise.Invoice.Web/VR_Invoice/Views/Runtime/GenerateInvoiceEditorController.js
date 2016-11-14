@@ -25,6 +25,13 @@
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
             }
+            $scope.validateToDate = function()
+            {
+                var date = new Date();
+                if ($scope.toDate < new Date(date.getFullYear(), date.getMonth(), date.getDate()))
+                    return "Date connot be less than date of today.";
+                return null;
+            }
 
             $scope.preview = function()
             {
@@ -41,7 +48,7 @@
 
                 var paramsurl = "";
                 paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
-                paramsurl += "&actionTypeName=" + "Download";
+                paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
               //  paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
                 window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
             }
