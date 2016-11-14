@@ -20,8 +20,8 @@
     <x:Property Name="FromTime" Type="InArgument(s:DateTime)" />
     <x:Property Name="ToTime" Type="InArgument(s:DateTime)" />
     <x:Property Name="OutputRecordsQueue" Type="InArgument(vq:BaseQueue(vae:DAProfCalcOutputRecordBatch))" />
-    <x:Property Name="IncludedDAProfCalcItemDefinitionIds" Type="InArgument(scg:List(s:Guid))" />
     <x:Property Name="OutputRecordProcessor" Type="InArgument(vae:IDAProfCalcOutputRecordProcessor)" />
+    <x:Property Name="DAProfCalcExecInputs" Type="InArgument(scg:List(vae:DAProfCalcExecInput))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Analytic.BP.DAProfCalcSubProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -52,6 +52,7 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
@@ -61,7 +62,6 @@
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
     </sco:Collection>
@@ -126,7 +126,7 @@
                 <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Analytic.BP.Arguments.DAProfCalcForRangeProcessInput
             {
                 DAProfCalcDefinitionId = DAProfCalcDefinitionId,
-                IncludedDAProfCalcItemDefinitionIds = IncludedDAProfCalcItemDefinitionIds,
+                DAProfCalcExecInputs = DAProfCalcExecInputs,
                 FromTime = timeRange.From,
                 ToTime = timeRange.To,
                 RecordStorageIds = RecordStorageIds,

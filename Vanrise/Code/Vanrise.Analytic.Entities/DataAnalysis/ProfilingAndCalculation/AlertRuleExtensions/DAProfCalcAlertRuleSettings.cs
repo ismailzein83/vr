@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class DAProfCalcAlertRuleSettings : VRAlertRuleExtendedSettings
     {
-        public Guid DAProfCalcOutputItemDefinitionId { get; set; }
+        public DAProfCalcExecInput DAProfCalcExecInput { get; set; }
 
         public RecordFilterGroup FilterGroup { get; set; }
 

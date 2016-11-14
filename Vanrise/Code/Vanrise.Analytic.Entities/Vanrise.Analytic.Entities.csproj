@@ -126,6 +126,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcCalculationField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcGroupingField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\IDAProfCalcOutputRecordProcessor.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Input\DAProfCalcExecInput.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Output\DAProfCalcOutputRecord.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcOutputSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcSettings.cs" />

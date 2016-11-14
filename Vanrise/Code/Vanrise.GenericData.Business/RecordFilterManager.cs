@@ -63,6 +63,12 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, Dictionary<Guid, dynamic> parameterValues, IRecordFilterGenericFieldMatchContext context)
+        {
+            if (parameterValues != null)
+                ApplyParametersToFilterGroup(filterGroup, parameterValues);
+            return IsFilterGroupMatch(filterGroup, context);
+        }
         public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, IRecordFilterGenericFieldMatchContext context)
         {
             if(filterGroup == null)
@@ -118,6 +124,12 @@ namespace Vanrise.GenericData.Business
             return IsFilterMatch(filter, new SingleFieldRecordFilterGenericFieldMatchContext(fieldValue, fieldType));
         }
 
+        public void ApplyParametersToFilterGroup(RecordFilterGroup filterGroup, Dictionary<Guid, dynamic> parameterValues)
+        {
+            var context = new RecordFilterSetValueFromParametersContext(parameterValues);
+            filterGroup.SetValueFromParameters(context);
+        }
+
         #region Private Classes
 
         private class SingleFieldRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
@@ -135,6 +147,26 @@ namespace Vanrise.GenericData.Business
             {
                 fieldType = _fieldType;
                 return _fieldValue;
+            }
+        }
+
+        public class RecordFilterSetValueFromParametersContext :IRecordFilterSetValueFromParametersContext
+        {
+            Dictionary<Guid, dynamic> _parameterValues;
+
+            public RecordFilterSetValueFromParametersContext(Dictionary<Guid, dynamic> parameterValues)
+            {
+                _parameterValues = parameterValues;
+            }
+            public bool TryGetParameterValue(Guid parameterId, out dynamic value)
+            {
+                if (_parameterValues != null)
+                    return _parameterValues.TryGetValue(parameterId, out value);
+                else
+                {
+                    value = null;
+                    return false;
+                }
             }
         }
 

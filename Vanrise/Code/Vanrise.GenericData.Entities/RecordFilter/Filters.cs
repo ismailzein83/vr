@@ -41,6 +41,18 @@ namespace Vanrise.GenericData.Entities
         public StringRecordFilterOperator CompareOperator { get; set; }
 
         public string Value { get; set; }
+
+        public Guid? ValueParameterId { get; set; }
+
+        public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
+        {
+            if (ValueParameterId.HasValue)
+            {
+                dynamic parameterValue;
+                if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
+                    this.Value = parameterValue as string;
+            }
+        }
     }
 
     public enum NumberRecordFilterOperator
@@ -63,6 +75,18 @@ namespace Vanrise.GenericData.Entities
         public NumberRecordFilterOperator CompareOperator { get; set; }
 
         public Decimal Value { get; set; }
+
+        public Guid? ValueParameterId { get; set; }
+
+        public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
+        {
+            if (this.ValueParameterId.HasValue)
+            {
+                dynamic parameterValue;
+                if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
+                    this.Value = (Decimal)parameterValue;
+            }
+        }
     }
 
     public enum DateTimeRecordFilterOperator
@@ -85,11 +109,35 @@ namespace Vanrise.GenericData.Entities
         public DateTimeRecordFilterOperator CompareOperator { get; set; }
 
         public DateTime Value { get; set; }
+
+        public Guid? ValueParameterId { get; set; }
+
+        public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
+        {
+            if (this.ValueParameterId.HasValue)
+            {
+                dynamic parameterValue;
+                if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
+                    this.Value = (DateTime)parameterValue;
+            }
+        }
     }
 
     public class BooleanRecordFilter : RecordFilter
     {
         public bool IsTrue { get; set; }
+
+        public Guid? ValueParameterId { get; set; }
+
+        public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
+        {
+            if (this.ValueParameterId.HasValue)
+            {
+                dynamic parameterValue;
+                if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
+                    this.IsTrue = (bool)parameterValue;
+            }
+        }
     }
 
     public enum ListRecordFilterOperator
@@ -104,6 +152,26 @@ namespace Vanrise.GenericData.Entities
         public ListRecordFilterOperator CompareOperator { get; set; }
 
         public List<T> Values { get; set; }
+
+        public List<Guid> ValueParameterIds { get; set; }
+
+        public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
+        {
+            if(this.ValueParameterIds != null)
+            {
+                foreach(var valueParameterId in this.ValueParameterIds)
+                {
+                    dynamic parameterValue;
+                    if (context.TryGetParameterValue(valueParameterId, out parameterValue))
+                    {
+                        if (this.Values == null)
+                            this.Values = new List<T>();
+                        this.Values.Add(parameterValue);
+                    }
+                }
+            }
+            base.SetValueFromParameters(context);
+        }
     }
 
     public class NumberListRecordFilter : ListRecordFilter<Decimal>

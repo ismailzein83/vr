@@ -25,6 +25,8 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 
         public List<DAProfCalcCalculationField> CalculationFields { get; set; }
 
+        public FilterParameterCollection FilterParameters { get; set; }
+
         public override List<DataRecordField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
         {
             List<DataRecordField> fields = new List<DataRecordField>();

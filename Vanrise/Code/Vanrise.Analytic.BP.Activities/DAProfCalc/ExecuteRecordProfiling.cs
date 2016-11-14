@@ -30,7 +30,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public InArgument<Guid> DAProfCalcDefinitionId { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<Guid>> IncludedDAProfCalcItemDefinitionIds { get; set; }
+        public InArgument<List<DAProfCalcExecInput>> DAProfCalcExecInputs { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<RecordBatch>> InputQueue { get; set; }

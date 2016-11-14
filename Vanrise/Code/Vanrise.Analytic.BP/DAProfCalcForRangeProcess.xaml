@@ -112,11 +112,11 @@
             <mca:CSharpValue x:TypeArguments="s:Guid">Input.DAProfCalcDefinitionId</mca:CSharpValue>
           </InArgument>
         </vabad:ExecuteRecordProfiling.DAProfCalcDefinitionId>
-        <vabad:ExecuteRecordProfiling.IncludedDAProfCalcItemDefinitionIds>
-          <InArgument x:TypeArguments="scg:List(s:Guid)">
-            <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">Input.IncludedDAProfCalcItemDefinitionIds</mca:CSharpValue>
+        <vabad:ExecuteRecordProfiling.DAProfCalcExecInputs>
+          <InArgument x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">
+            <mca:CSharpValue x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">Input.DAProfCalcExecInputs</mca:CSharpValue>
           </InArgument>
-        </vabad:ExecuteRecordProfiling.IncludedDAProfCalcItemDefinitionIds>
+        </vabad:ExecuteRecordProfiling.DAProfCalcExecInputs>
         <vabad:ExecuteRecordProfiling.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">queueRecords</mca:CSharpValue>
@@ -144,7 +144,7 @@
         </vabad:ExecuteRecordProfiling.Status>
       </vabad:ExecuteRecordProfiling>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sEkEDlAEOAgEBQgWSARACAQJJDUnBAQIBCk4NTr4BAgEDUgdsJgIBQ20HkQEmAgERXw1faQIBYGQNZHICAVlaDVp0AgFSVQ1VWwIBS2kNaVkCAUSJAQ2JAWoCATx6DXpsAgE1cA1wZQIBLoQBDYQBggECASd/DX+VAQIBII4BDY4BfgIBGXUNdXwCARI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sEkEDlAEOAgEBQgWSARACAQJJDUnBAQIBCk4NTr4BAgEDUgdsJgIBQ20HkQEmAgERXw1faQIBYGQNZHICAVlaDVp0AgFSVQ1VWwIBS2kNaVkCAUSJAQ2JAWoCATx6DXpsAgE1cA1wZQIBLoQBDYQBggECASd1DXV+AgEgfw1/lQECARmOAQ2OAX4CARI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
