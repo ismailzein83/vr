@@ -9,15 +9,13 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class BusinessEntitySettingsData : SettingData
     {
-        public const string BusinessEntityTechnicalSettings = "WhS_BE_Settings";
-
-
+        public CachingExpirationIntervals CachingExpirationIntervals { get; set; }
     }
 
     public class CachingExpirationIntervals
     {
-        public int? TodayEntites { get; set; }
+        public int? TodayEntities { get; set; }
 
-        public int? PreviousEntites { get; set; }
+        public int? PreviousEntities { get; set; }
     }
 }
