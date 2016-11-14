@@ -67,6 +67,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 ZoneName = rateToAdd.ZoneName,
                 OnwerType = rateToAdd.PriceListToAdd.OwnerType,
+                ChangeType = RateChangeType.New,
                 OwnerId = rateToAdd.PriceListToAdd.OwnerId,
                 Rate = rateToAdd.Rate,
                 BED = GetRateToAddBED(rateToAdd.AddedRates),
@@ -80,6 +81,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 ZoneName = notImportedRate.ZoneName,
                 OnwerType = notImportedRate.OwnerType,
+                ChangeType = RateChangeType.NotChanged,
                 OwnerId = notImportedRate.OwnerId,
                 Rate = notImportedRate.Rate,
                 BED = notImportedRate.BED,

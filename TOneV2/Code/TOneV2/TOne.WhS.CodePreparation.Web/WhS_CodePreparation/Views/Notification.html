@@ -21,7 +21,8 @@
                                  datasource="scopeModel.customers"
                                  hidegridmenu="true"
                                  maxheight="300px"
-                                 norowhighlightonclick="true">
+                                 norowhighlightonclick="true"
+                                 ng-show="scopeModel.showCustomers">
                         <vr-datagridcolumn widthfactor="1" disablesorting="true">
                             <vr-check value="dataItem.isSelected"></vr-check>
                         </vr-datagridcolumn>

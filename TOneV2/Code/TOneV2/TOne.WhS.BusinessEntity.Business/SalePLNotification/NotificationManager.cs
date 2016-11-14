@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -20,9 +26,12 @@ namespace TOne.WhS.BusinessEntity.Business
             _SaleZoneManager = new SaleZoneManager();
         }
 
-        public void BuildNotifications(int sellingNumberPlanId, IEnumerable<int> customerIds, IEnumerable<SalePLZoneChange> zoneChanges, DateTime effectiveDate, SalePLChangeType changeType)
+        public void BuildNotifications(INotificationContext context)
         {
-            IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(sellingNumberPlanId, Vanrise.Common.Utilities.Min(effectiveDate, DateTime.Today));
+            if (context.CustomerIds == null)
+                throw new NullReferenceException("CustomerIds");
+
+            IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, Vanrise.Common.Utilities.Min(context.EffectiveDate, DateTime.Today));
             IEnumerable<SaleCodeExistingEntity> saleCodesExistingEntities = saleCodes.MapRecords(SaleCodeExistingEntityMapper);
 
             if (saleCodesExistingEntities == null)
@@ -30,15 +39,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             Dictionary<string, Dictionary<string, List<SaleCodeExistingEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(saleCodesExistingEntities);
             Dictionary<int, List<ZoneWrapper>> zonesWrapperByCountry = StructureZonesWrapperByCountry(existingSaleCodesByZoneName);
-            Dictionary<int, List<SalePLZoneChange>> zoneChangesByCountryId = StructureZoneChangesByCountry(zoneChanges);
+            Dictionary<int, List<SalePLZoneChange>> zoneChangesByCountryId = StructureZoneChangesByCountry(context.ZoneChanges);
 
             List<RoutingCustomerInfoDetails> routingCustomersInfoDetails = new List<RoutingCustomerInfoDetails>();
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             Dictionary<int, int> carrierAccounts = new Dictionary<int, int>();
 
-            foreach (int customerId in customerIds)
+            foreach (int customerId in context.CustomerIds)
             {
-                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveDate, false);
+                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, context.EffectiveDate, false);
                 if (customerSellingProduct == null)
                     continue;
 
@@ -52,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
             }
 
-            SaleRateReadAllNoCache saleRateReadWithNoCache = new SaleRateReadAllNoCache(routingCustomersInfoDetails, effectiveDate, false);
+            SaleRateReadAllNoCache saleRateReadWithNoCache = new SaleRateReadAllNoCache(routingCustomersInfoDetails, context.EffectiveDate, false);
             SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(saleRateReadWithNoCache);
 
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
@@ -62,15 +71,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
-            foreach (int customerId in customerIds)
+            foreach (int customerId in context.CustomerIds)
             {
-                CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(customerId);
+                CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerId);
                 List<SalePLZoneNotification> customerZonesNotifications = new List<SalePLZoneNotification>();
 
-                IEnumerable<SaleZone> saleZones = customerZoneManager.GetCustomerSaleZones(customerId, sellingNumberPlanId, effectiveDate, false);
+                IEnumerable<SaleZone> saleZones = customerZoneManager.GetCustomerSaleZones(customerId, context.SellingNumberPlanId, context.EffectiveDate, false);
                 if (saleZones == null)
                     continue;
 
+                SalePriceListType customerSalePriceListType = GetSalePriceListType(customer.CustomerSettings.IsAToZ, context.ChangeType);
                 IEnumerable<int> customerSoldCountries = saleZones.Select(item => item.CountryId).Distinct();
 
                 foreach (int soldCountryId in customerSoldCountries)
@@ -78,13 +88,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     List<ZoneWrapper> zonesWrapperForCountry = zonesWrapperByCountry.GetRecord(soldCountryId);
                     IEnumerable<SalePLZoneChange> countryZonesChanges = zoneChangesByCountryId.GetRecord(soldCountryId);
 
-                    if (carrierAccount.CustomerSettings.IsAToZ || countryZonesChanges != null)
+                    if (customer.CustomerSettings.IsAToZ || countryZonesChanges != null)
                     {
-
-
-                        if (changeType == SalePLChangeType.CodeAndRate)
+                        if (context.ChangeType == SalePLChangeType.CodeAndRate)
+                        {
                             CreateSalePLZoneNotifications(customerZonesNotifications, zonesWrapperForCountry, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
-                        else if (changeType == SalePLChangeType.Rate)
+                        }
+                        else if (context.ChangeType == SalePLChangeType.Rate)
                         {
                             IEnumerable<SalePLZoneChange> countryZoneChanges = zoneChangesByCountryId.GetRecord(soldCountryId);
                             if (zonesWrapperForCountry != null)
@@ -105,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 }
 
-                SendEmailMockFunction(customerZonesNotifications);
+                SendPriceList(customer, customerSalePriceListType, context.InitiatorId, customerZonesNotifications);
             }
         }
 
@@ -113,6 +123,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #region Private Methods And Classes
+
+        private SalePriceListType GetSalePriceListType(bool isAtoZ, SalePLChangeType changeType)
+        {
+            if (isAtoZ)
+                return SalePriceListType.Full;
+
+            return (changeType == SalePLChangeType.CodeAndRate) ? SalePriceListType.Country : SalePriceListType.RateChange;
+        }
+        
 
         private class ZoneWrapper
         {
@@ -138,9 +157,66 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        private void SendEmailMockFunction(List<SalePLZoneNotification> customerZonesNotifications)
+        private void SendPriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, int initiatorId, List<SalePLZoneNotification> customerZonesNotifications)
         {
-            return;
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            int priceListTemplateId = carrierAccountManager.GetSalePriceListTemplateId(customer.CarrierAccountId);
+
+            SalePriceListTemplateManager salePriceListTemplateManager = new SalePriceListTemplateManager();
+            SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(priceListTemplateId);
+
+            if (template == null)
+                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", customer.CarrierAccountId));
+
+            ISalePriceListTemplateSettingsContext salePLTemplateSettingsContext = new SalePriceListTemplateSettingsContext()
+            {
+                Zones = customerZonesNotifications
+            };
+
+            byte [] salePLTemplateBytes = template.Settings.Execute(salePLTemplateSettingsContext);
+
+            Guid salePLMailTemplateId = carrierAccountManager.GetSalePLMailTemplateId(customer.CarrierAccountId);
+            
+            UserManager userManager = new UserManager();
+            Vanrise.Security.Entities.User initiator = userManager.GetUserbyId(initiatorId);
+
+            this.SendMail(salePLMailTemplateId, salePLTemplateBytes, initiator, customer);
+
+        }
+
+        private void SendMail(Guid salePLMailTemplateId, byte[] salePLTemplateBytes, Vanrise.Security.Entities.User initiator, CarrierAccount customer)
+        {
+            MemoryStream memoryStream = new MemoryStream(salePLTemplateBytes);
+            memoryStream.Position = 0;
+
+            var attachment = new Attachment(memoryStream, "SalePriceList.xls");
+            attachment.ContentType = new ContentType("application/vnd.ms-excel");
+            attachment.TransferEncoding = TransferEncoding.Base64;
+            attachment.NameEncoding = Encoding.UTF8;
+            attachment.Name = "SalePriceList.xls";
+
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            objects.Add("Customer", customer);
+            objects.Add("User", initiator);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            VRMailEvaluatedTemplate evaluatedTemplate = vrMailManager.EvaluateMailTemplate(salePLMailTemplateId, objects);
+
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            EmailSettingData emailSettingData = configManager.GetSystemEmail();
+
+            MailMessage objMail = new MailMessage();
+
+            objMail.From = new MailAddress(emailSettingData.SenderEmail);
+            objMail.To.Add(evaluatedTemplate.To);
+            objMail.Subject = evaluatedTemplate.Subject;
+            objMail.Body = evaluatedTemplate.Body;
+            objMail.IsBodyHtml = true;
+            objMail.Priority = MailPriority.High;
+            objMail.Attachments.Add(attachment);
+
+            SmtpClient client = vrMailManager.GetSMTPClient(emailSettingData);
+            client.Send(objMail);
         }
 
         private void CreateSalePLZoneNotifications(List<SalePLZoneNotification> salePLZoneNotifications, List<ZoneWrapper> zonesWrappers, SaleEntityZoneRateLocator rateLocator, int sellingProductId,

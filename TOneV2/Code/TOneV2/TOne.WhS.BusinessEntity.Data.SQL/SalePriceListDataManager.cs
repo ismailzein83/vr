@@ -45,7 +45,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
                 OwnerType = (Entities.SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
+                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn"),
+                PriceListType = (SalePriceListType)GetReaderValue<int>(reader, "PriceListType")
             };
+
             return salePriceList;
         }
 

@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.CodePreparation.Business;
 using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -32,9 +34,18 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
             IEnumerable<SalePLZoneChange> salePLZonesChanges = this.SalePLZonesChanges.Get(context);
 
+            INotificationContext notificationContext = new NotificationContext()
+            {
+                SellingNumberPlanId = sellingNumberPlanId,
+                CustomerIds = customerIds,
+                ZoneChanges = salePLZonesChanges,
+                EffectiveDate = minimumDate,
+                ChangeType = SalePLChangeType.CodeAndRate,
+                InitiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
+            };
+
             NotificationManager notificationManager = new NotificationManager();
-            notificationManager.BuildNotifications(sellingNumberPlanId, customerIds, salePLZonesChanges, minimumDate, SalePLChangeType.CodeAndRate);
-           
+            notificationManager.BuildNotifications(notificationContext);
         }
 
     }

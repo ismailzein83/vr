@@ -35,7 +35,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             List<SalePLZoneChange> salePLZonesChanges = this.SalePLZonesChanges.Get(context);
 
             IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(ratesPreview, existingZones, addedZones);
-           
+
             salePLZonesChanges.AddRange(zoneChanges);
         }
 
@@ -43,8 +43,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private IEnumerable<SalePLZoneChange> GetZoneChanges(IEnumerable<RatePreview> ratesPreview, IEnumerable<ExistingZone> existingZones, IEnumerable<AddedZone> addedZones)
         {
-            IEnumerable<RatePreview> customersRatesPreview = ratesPreview != null ? ratesPreview.FindAllRecords(item => item.OnwerType == SalePriceListOwnerType.Customer) : null;
-            Dictionary<string, List<RatePreview>> ratesPreviewByZoneName = StructureRatesPreviewByZoneName(customersRatesPreview);
+            Dictionary<string, List<RatePreview>> ratesPreviewByZoneName = new Dictionary<string, List<RatePreview>>();
+
+            if (ratesPreview != null)
+            {
+                IEnumerable<RatePreview> newRatesPreview = ratesPreview.FindAllRecords(item => item.ChangeType == RateChangeType.New);
+                ratesPreviewByZoneName = StructureRatesPreviewByZoneName(newRatesPreview);
+            }
 
             List<RatePreview> ratesPreviewForZone;
             List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
@@ -56,13 +61,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     if (existingZone.AddedCodes.Count > 0 || existingZone.ExistingCodes.Any(item => item.ChangedEntity != null))
                     {
-                        ratesPreviewForZone = ratesPreviewByZoneName.GetRecord(existingZone.Name);
+
                         SalePLZoneChange zoneChange = new SalePLZoneChange()
                         {
                             ZoneName = existingZone.Name,
                             CountryId = existingZone.CountryId,
                             HasCodeChange = true,
-                            CustomersHavingRateChange = ratesPreviewForZone != null ? ratesPreviewForZone.Select(item => item.OwnerId) : null
+                            CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, existingZone.Name)
                         };
                         zonesChanges.Add(zoneChange);
                     }
@@ -79,13 +84,44 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         ZoneName = addedZone.Name,
                         CountryId = addedZone.CountryId,
                         HasCodeChange = true,
-                        CustomersHavingRateChange = ratesPreviewForZone != null ? ratesPreviewForZone.Select(item => item.OwnerId) : null
+                        CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, addedZone.Name)
                     };
                     zonesChanges.Add(zoneChange);
                 }
             }
 
             return zonesChanges;
+        }
+
+        private IEnumerable<int> GetCustomersHavingRateChange(Dictionary<string, List<RatePreview>> ratesPreviewByZoneName, string zoneName)
+        {
+            HashSet<int> customersIds = new HashSet<int>();
+            IEnumerable<RatePreview> newRates = ratesPreviewByZoneName.GetRecord(zoneName);
+
+            if (newRates != null)
+            {
+                foreach (RatePreview rate in newRates)
+                {
+                    if (rate.OnwerType == SalePriceListOwnerType.Customer)
+                        customersIds.Add(rate.OwnerId);
+                    else
+                    {
+                        CustomerSellingProductManager manager = new CustomerSellingProductManager();
+                        IEnumerable<CarrierAccountInfo> customersAssignedToSellingProduct = manager.GetCustomersBySellingProductId(rate.OwnerId);
+                        if (customersAssignedToSellingProduct != null)
+                        {
+                            IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
+                            foreach (int id in ids)
+                            {
+                                customersIds.Add(id);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            return customersIds;
         }
 
         private Dictionary<string, List<RatePreview>> StructureRatesPreviewByZoneName(IEnumerable<RatePreview> ratesPreview)

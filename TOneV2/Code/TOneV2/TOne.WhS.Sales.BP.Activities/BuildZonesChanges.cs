@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -48,7 +50,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 sellingNumberPlanId = sellingNumberPlanManager.GetSellingNumberPlanId(ownerId).Value;
                 CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
                 List<RoutingCustomerInfoDetails> routingCustomersInfoDetails = new List<RoutingCustomerInfoDetails>();
-                IEnumerable<CarrierAccountInfo> carrierAccounts = customerSellingProductManager.GetCustomerNamesBySellingProductId(ownerId);
+                IEnumerable<CarrierAccountInfo> carrierAccounts = customerSellingProductManager.GetCustomersBySellingProductId(ownerId);
                 foreach (CarrierAccountInfo carrierAccountInfo in carrierAccounts)
                 {
                     routingCustomersInfoDetails.Add(new RoutingCustomerInfoDetails()
@@ -61,12 +63,19 @@ namespace TOne.WhS.Sales.BP.Activities
                 SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(saleRateReadWithNoCache);
                 zoneChanges = this.GetZoneChangesForSellingProduct(existingZones, rateLocator, routingCustomersInfoDetails);
             }
-
-
+            
+            INotificationContext notificationContext = new NotificationContext()
+            {
+                SellingNumberPlanId = sellingNumberPlanId,
+                CustomerIds = customerIds,
+                ZoneChanges = zoneChanges,
+                EffectiveDate = DateTime.Today,
+                ChangeType = SalePLChangeType.Rate,
+                InitiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
+            };
 
             NotificationManager notificationManager = new NotificationManager();
-            notificationManager.BuildNotifications(sellingNumberPlanId, customerIds, zoneChanges, DateTime.Today, SalePLChangeType.Rate);
-           
+            notificationManager.BuildNotifications(notificationContext);
         }
 
         #region Private Methods

@@ -61,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
-        public IEnumerable<CarrierAccountInfo> GetCustomerNamesBySellingProductId(int sellingProductId)
+        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingProductId(int sellingProductId)
         {
             IEnumerable<CustomerSellingProduct> customerSellingProducts = GetCachedCustomerSellingProducts().Values;
             if(customerSellingProducts != null)

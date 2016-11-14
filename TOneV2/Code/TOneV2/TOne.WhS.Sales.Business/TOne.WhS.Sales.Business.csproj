@@ -88,6 +88,7 @@
     <Compile Include="BusinessRules\Conditions\ServiceBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ServiceEEDGreaterThanZoneEED.cs" />
     <Compile Include="DefaultItemManager.cs" />
+    <Compile Include="NotificationContext.cs" />
     <Compile Include="Reader\RatePlanServiceReadWithCache.cs" />
     <Compile Include="Preview\DefaultServicePreviewManager.cs" />
     <Compile Include="Preview\SaleZoneServicePreviewManager.cs" />
