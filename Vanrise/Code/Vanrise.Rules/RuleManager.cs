@@ -17,6 +17,7 @@ namespace Vanrise.Rules
             return rule;
         }
     }
+
     public abstract class RuleManager<T, Q>
         where T : BaseRule
         where Q : class
@@ -175,7 +176,10 @@ namespace Vanrise.Rules
 
         public void AddRuleCachingExpirationChecker(RuleCachingExpirationChecker ruleCachingExpirationChecker)
         {
-            GetCacheManager().ruleCachingExpirationCheckerDict.Add(GetRuleTypeId(), ruleCachingExpirationChecker);
+            lock (GetCacheManager().ruleCachingExpirationCheckerDict)
+            {
+                GetCacheManager().ruleCachingExpirationCheckerDict.Add(GetRuleTypeId(), ruleCachingExpirationChecker);
+            }
         }
 
         #endregion
@@ -207,36 +211,43 @@ namespace Vanrise.Rules
 
         #region Private Classes
 
-        public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
+        #endregion
+    }
+
+    public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
+    {
+        public CacheManager()
         {
-            IRuleDataManager _dataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
-            public Dictionary<int, RuleCachingExpirationChecker> ruleCachingExpirationCheckerDict = new Dictionary<int, RuleCachingExpirationChecker>();
-
-            protected override bool ShouldSetCacheExpired(int parameter)
-            {
-                Object updateHandle;
-
-                _updateHandlesByRuleType.TryGetValue(parameter, out updateHandle);
-                bool isCacheExpired = _dataManager.AreRulesUpdated(parameter, ref updateHandle);
-                _updateHandlesByRuleType.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
-
-                RuleCachingExpirationChecker ruleCachingExpirationChecker;
-                bool isRuleDependenciesCacheExpired= false;
-                if (ruleCachingExpirationCheckerDict.TryGetValue(parameter, out ruleCachingExpirationChecker))
-                    isRuleDependenciesCacheExpired = ruleCachingExpirationChecker.IsRuleDependenciesCacheExpired();
-
-                return isCacheExpired || isRuleDependenciesCacheExpired;
-            }
-
-            private class RuleTypeUpdateHandle
-            {
-                public object UpdateHandle { get; set; }
-            }
+            Vanrise.Common.LoggerFactory.GetLogger().WriteInformation("CacheManager");
         }
 
-        #endregion
+        IRuleDataManager _dataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+        ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
+        public VRDictionary<int, RuleCachingExpirationChecker> ruleCachingExpirationCheckerDict = new VRDictionary<int, RuleCachingExpirationChecker>(true);
 
+
+        protected override bool ShouldSetCacheExpired(int parameter)
+        {
+            Object updateHandle;
+
+            _updateHandlesByRuleType.TryGetValue(parameter, out updateHandle);
+            bool isCacheExpired = _dataManager.AreRulesUpdated(parameter, ref updateHandle);
+            _updateHandlesByRuleType.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
+
+            RuleCachingExpirationChecker ruleCachingExpirationChecker;
+            bool isRuleDependenciesCacheExpired = false;
+            if (ruleCachingExpirationCheckerDict.TryGetValue(parameter, out ruleCachingExpirationChecker))
+            {
+                isRuleDependenciesCacheExpired = ruleCachingExpirationChecker.IsRuleDependenciesCacheExpired();
+            }
+
+            return isCacheExpired || isRuleDependenciesCacheExpired;
+        }
+
+        private class RuleTypeUpdateHandle
+        {
+            public object UpdateHandle { get; set; }
+        }
     }
 
     public abstract class RuleCachingExpirationChecker

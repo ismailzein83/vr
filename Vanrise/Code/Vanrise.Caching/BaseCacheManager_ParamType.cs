@@ -206,7 +206,7 @@ namespace Vanrise.Caching
                 if ((VRClock.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 4)
                     return;
                 bool isExpired;
-                if (!RuntimeCacheFactory.GetCacheExpirationChecker().TryCheckExpirationFromRuntimeService(this.GetType(), parameter, out isExpired))
+                //if (!RuntimeCacheFactory.GetCacheExpirationChecker().TryCheckExpirationFromRuntimeService(this.GetType(), parameter, out isExpired))
                     isExpired = ShouldSetCacheExpired(parameter);
                 if (isExpired)
                 {
