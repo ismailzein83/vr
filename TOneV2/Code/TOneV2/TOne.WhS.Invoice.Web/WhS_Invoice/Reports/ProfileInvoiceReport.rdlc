@@ -1334,7 +1334,7 @@
         <ZIndex>13</ZIndex>
         <Style>
           <Border>
-            <Style>Solid</Style>
+            <Style>None</Style>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -1360,14 +1360,14 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox20</rd:DefaultName>
-        <Top>3.61458in</Top>
+        <Top>3.67708in</Top>
         <Left>4.39167in</Left>
         <Height>0.22in</Height>
         <Width>1.37in</Width>
         <ZIndex>14</ZIndex>
         <Style>
           <Border>
-            <Style>Solid</Style>
+            <Style>None</Style>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -1400,7 +1400,7 @@
         <ZIndex>15</ZIndex>
         <Style>
           <Border>
-            <Style>Solid</Style>
+            <Style>None</Style>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -1426,14 +1426,14 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox20</rd:DefaultName>
-        <Top>3.61458in</Top>
+        <Top>3.67708in</Top>
         <Left>5.75488in</Left>
         <Height>0.22in</Height>
         <Width>1.37in</Width>
         <ZIndex>16</ZIndex>
         <Style>
           <Border>
-            <Style>Solid</Style>
+            <Style>None</Style>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -1584,7 +1584,6 @@
                               <Value>=Parameters!InvoiceDueDate.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Left>0in</Left>
                           <Height>4.11458in</Height>
                           <Width>6.93958in</Width>
                           <Style>
@@ -1631,6 +1630,18 @@
           </Border>
         </Style>
       </Tablix>
+      <Line Name="Line2">
+        <Top>3.64236in</Top>
+        <Left>7.12375in</Left>
+        <Height>0in</Height>
+        <Width>-2.70833in</Width>
+        <ZIndex>21</ZIndex>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Line>
     </ReportItems>
     <Height>12.16542in</Height>
     <Style />
