@@ -7,8 +7,9 @@
     function LiveBalanceAPIService(BaseAPIService, UtilsService, VR_AccountBalance_ModuleConfig, SecurityService) {
         var controllerName = 'LiveBalance';
 
-        function GetCurrentAccountBalance(accountId) {
+        function GetCurrentAccountBalance(accountId, accountTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetCurrentAccountBalance"), {
+                accountTypeId: accountTypeId,
                 accountId: accountId
             });
         }

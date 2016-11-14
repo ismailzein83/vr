@@ -16,15 +16,15 @@ namespace Vanrise.AccountBalance.Business
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             return dataManager.GetLiveBalanceAccountsInfo(accountTypeId);
         }
-        public LiveBalance GetLiveBalance(long accountId)
+        public LiveBalance GetLiveBalance(Guid accountTypeId, long accountId)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            return dataManager.GetLiveBalance(accountId);
+            return dataManager.GetLiveBalance(accountTypeId, accountId);
         }
 
-        public CurrentAccountBalance GetCurrentAccountBalance(long accountId)
+        public CurrentAccountBalance GetCurrentAccountBalance(Guid accountTypeId, long accountId)
         {
-            var liveBalance = GetLiveBalance(accountId);
+            var liveBalance = GetLiveBalance(accountTypeId,accountId);
             CurrencyManager currencyManager = new CurrencyManager();
             if (liveBalance == null)
                 return null;

@@ -29,11 +29,9 @@ app.directive('vrLivebalanceCurrentaccountbalance', ['VR_AccountBalance_LiveBala
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.accountId != undefined)
-                    {
-                        return VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(payload.accountId).then(function (response) {
-                            if (response)
-                            {
+                    if (payload != undefined && payload.accountId != undefined) {
+                        return VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(payload.accountId, payload.accountTypeId).then(function (response) {
+                            if (response) {
                                 $scope.scopeModel.balance = response.CurrentBalance;
                                 $scope.scopeModel.currency = response.CurrencyDescription;
                             }

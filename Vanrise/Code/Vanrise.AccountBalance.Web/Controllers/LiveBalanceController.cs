@@ -10,14 +10,14 @@ using Vanrise.Web.Base;
 namespace Vanrise.AccountBalance.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "LiveBalance")]
-    public class LiveBalanceController:BaseAPIController
+    public class LiveBalanceController : BaseAPIController
     {
         [HttpGet]
         [Route("GetCurrentAccountBalance")]
-        public CurrentAccountBalance GetCurrentAccountBalance(long accountId)
+        public CurrentAccountBalance GetCurrentAccountBalance(long accountId, Guid accountTypeId)
         {
             LiveBalanceManager manager = new LiveBalanceManager();
-            return manager.GetCurrentAccountBalance(accountId);
+            return manager.GetCurrentAccountBalance(accountTypeId, accountId);
         }
     }
 }

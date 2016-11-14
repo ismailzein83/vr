@@ -60,8 +60,10 @@
         }
 
         function loadGrid() {
-            var query = buildGridQuery();
-            return gridAPI.load(query);
+            if (gridAPI != undefined) {
+                var query = buildGridQuery();
+                return gridAPI.load(query);
+            }
         }
         function loadVRComponentTypes() {
             var loadComponentTypesPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -75,7 +77,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
-                ExtensionConfigId: $scope.scopeModel.selectedComponentType.ExtensionConfigurationId
+                ExtensionConfigId: $scope.scopeModel.selectedComponentType == undefined ? undefined : $scope.scopeModel.selectedComponentType.ExtensionConfigurationId
             };
         }
     }

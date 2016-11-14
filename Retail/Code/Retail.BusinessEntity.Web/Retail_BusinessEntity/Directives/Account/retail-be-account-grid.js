@@ -269,7 +269,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 balanceTab.loadDirective = function (balanceAPI, account) {
                     account.balanceAPI = balanceAPI;
                     var balancePayload = {
-                        accountId: [account.Entity.AccountId]
+                        accountId: [account.Entity.AccountId],
+                        accountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
                     };
                     return account.balanceAPI.load(balancePayload);
                 };
@@ -285,7 +286,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 billingTransactionTab.loadDirective = function (billingTransactionGridAPI, account) {
                     account.billingTransactioGridAPI = billingTransactionGridAPI;
                     var billingTransactionGridPayload = {
-                        AccountsIds: [account.Entity.AccountId]
+                        AccountsIds: [account.Entity.AccountId],
+                        AccountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
                     };
                     return account.billingTransactioGridAPI.loadGrid(billingTransactionGridPayload);
                 };
