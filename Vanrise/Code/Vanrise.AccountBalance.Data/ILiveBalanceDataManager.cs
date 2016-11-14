@@ -9,13 +9,13 @@ namespace Vanrise.AccountBalance.Data
 {
     public interface ILiveBalanceDataManager : IDataManager
     {
-        LiveBalance GetLiveBalance(long accountId);
+        LiveBalance GetLiveBalance(Guid accountTypeId, long accountId);
         void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady);
-        bool UpdateLiveBalanceFromBillingTransaction(long accountId, List<long> billingTransactionIds, decimal amount);
-        bool UpdateLiveBalanceFromBalanceUsageQueue(IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId);
+        bool UpdateLiveBalanceFromBillingTransaction(Guid accountTypeId, long accountId, List<long> billingTransactionIds, decimal amount);
+        bool UpdateLiveBalanceFromBalanceUsageQueue(Guid accountTypeId, IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId);
         IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId);
-        bool AddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);
-        bool UpdateLiveBalanceThreshold(List<BalanceAccountThreshold> balanceAccountsThresholds);
+        bool TryAddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);
+        bool UpdateLiveBalanceThreshold(Guid accountTypeId, List<BalanceAccountThreshold> balanceAccountsThresholds);
         void UpdateLiveBalanceAlertRule(List<AccountBalanceAlertRule> accountBalanceAlertRules);
     }
 }

@@ -22,11 +22,11 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
         #region Public Methods
-        public LiveBalance GetLiveBalance(long accountId)
+        public LiveBalance GetLiveBalance(Guid accountTypeId, long accountId)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_GetById]", LiveBalanceMapper, accountId);
+            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_GetById]", LiveBalanceMapper, accountTypeId, accountId);
         }
-        public bool UpdateLiveBalanceFromBillingTransaction(long accountId, List<long> billingTransactionIds, decimal amount)
+        public bool UpdateLiveBalanceFromBillingTransaction(Guid accountTypeId, long accountId, List<long> billingTransactionIds, decimal amount)
         {
             var options = new TransactionOptions
             {
@@ -36,7 +36,7 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBillingTransaction]", accountId, amount);
+                ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBillingTransaction]", accountTypeId, accountId, amount);
 
                 BillingTransactionDataManager dataManager = new BillingTransactionDataManager();
                 dataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
@@ -44,7 +44,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             return true;
         }
-        public bool UpdateLiveBalanceFromBalanceUsageQueue(IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId)
+        public bool UpdateLiveBalanceFromBalanceUsageQueue(Guid accountTypeId, IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId)
         {
             var options = new TransactionOptions
             {
@@ -65,7 +65,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                     ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBalanceUsageQueue]",
                            (cmd) =>
                            {
-                               var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceTable", SqlDbType.Structured);
+                               var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", SqlDbType.UniqueIdentifier);
+                               dtPrm.Value = accountTypeId;
+                               cmd.Parameters.Add(dtPrm);
+
+                               dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceTable", SqlDbType.Structured);
                                dtPrm.Value = liveBalanceToUpdate;
                                cmd.Parameters.Add(dtPrm);
                            });
@@ -90,16 +94,16 @@ namespace Vanrise.AccountBalance.Data.SQL
                    }
                });
         }
-        public bool AddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
+        public bool TryAddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_Insert]", accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_InsertIfNotExists]", accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
         }
-        public bool UpdateLiveBalanceBalance(Guid accountTypeId)
+        public bool ResetInitialAndUsageBalance(Guid accountTypeId)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]", accountTypeId) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_ResetInitialAndUsage]", accountTypeId) > 0);
         }
 
-        public bool UpdateLiveBalanceThreshold(List<BalanceAccountThreshold> balanceAccountsThresholds)
+        public bool UpdateLiveBalanceThreshold(Guid accountTypeId, List<BalanceAccountThreshold> balanceAccountsThresholds)
         {
             var options = new TransactionOptions
             {
@@ -120,7 +124,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                     ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThreshold]",
                            (cmd) =>
                            {
-                               var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdTable", SqlDbType.Structured);
+                               var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", SqlDbType.UniqueIdentifier);
+                               dtPrm.Value = accountTypeId;
+                               cmd.Parameters.Add(dtPrm);
+
+                               dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdTable", SqlDbType.Structured);
                                dtPrm.Value = liveBalanceThresholdToUpdate;
                                cmd.Parameters.Add(dtPrm);
                            });

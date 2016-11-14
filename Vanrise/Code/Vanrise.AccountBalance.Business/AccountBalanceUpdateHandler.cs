@@ -12,13 +12,18 @@ namespace Vanrise.AccountBalance.Business
 {
     public class AccountBalanceUpdateHandler
     {
+        #region Fields
+
         static ConcurrentDictionary<Guid, AccountBalanceUpdateHandler> _handlersByAccountTypeId = new ConcurrentDictionary<Guid, AccountBalanceUpdateHandler>();
+
         Dictionary<long, LiveBalanceAccountInfo> AccountsInfo;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
         ILiveBalanceDataManager dataManager;
-        bool LoadingError;
         Guid _accountTypeId;
+
+        #endregion
+
         #region ctor
         private AccountBalanceUpdateHandler(Guid accountTypeId)
         {
@@ -28,8 +33,16 @@ namespace Vanrise.AccountBalance.Business
             _accountTypeId = accountTypeId;
             IntializeAccountsInfo();
         }
+
         #endregion
 
+        #region Public Methods
+
+        /// <summary>
+        /// A factory like method that will return a new instance if not exists for passed AccountTypeId
+        /// </summary>
+        /// <param name="accountTypeId">Account Type Id</param>
+        /// <returns>New instance if AccountTypeId is not exist in dictionary, else return instance of passed AccountTypeId</returns>
         public static AccountBalanceUpdateHandler GetHandlerByAccountTypeId(Guid accountTypeId)
         {
             AccountBalanceUpdateHandler handler;
@@ -41,39 +54,29 @@ namespace Vanrise.AccountBalance.Business
             return handler;
         }
 
-        #region Public Methods
         public void AddAndUpdateLiveBalanceFromBillingTransction(List<BillingTransaction> billingTransactions)
         {
-            if (this.LoadingError)
-            {
-                IntializeAccountsInfo();
-            }
+            var accountsToInsert = billingTransactions.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Select(a => a.AccountId).Distinct();
+            InsertAccountInfos(accountsToInsert);
 
-            long accountId = billingTransactions.FirstOrDefault().AccountId;
-            LiveBalanceAccountInfo accountInfo = null;
-            if (!AccountsInfo.TryGetValue(accountId, out accountInfo))
-            {
-                accountInfo = AddLiveAccountInfo(accountId);
-            }
-            UpdateLiveBalanceFromBillingTransaction(billingTransactions, accountId, accountInfo);
+            UpdateLiveBalanceFromBillingTransaction(billingTransactions);
 
         }
         public void AddAndUpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<UsageBalanceUpdate> usageBalanceUpdates)
         {
-            if (this.LoadingError)
-            {
-                IntializeAccountsInfo();
-            }
-            var accountsToInsert = usageBalanceUpdates.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Distinct();
-            foreach (var accountToInsert in accountsToInsert)
-            {
-                AddLiveAccountInfo(accountToInsert.AccountId);
-            }
+            var accountsToInsert = usageBalanceUpdates.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Select(a => a.AccountId).Distinct();
+            InsertAccountInfos(accountsToInsert);
             UpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueueId, usageBalanceUpdates);
         }
-        public bool AddLiveBalance(long accountId, int currencyId)
+
+        private void InsertAccountInfos(IEnumerable<long> accountsToInsert)
         {
-            return dataManager.AddLiveBalance(accountId, _accountTypeId, 0, currencyId, 0, 0);
+            foreach (var accountToInsert in accountsToInsert)
+                AddLiveAccountInfo(accountToInsert);
+        }
+        public bool TryAddLiveBalance(long accountId, int currencyId)
+        {
+            return dataManager.TryAddLiveBalance(accountId, _accountTypeId, 0, currencyId, 0, 0);
         }
         #endregion
 
@@ -83,16 +86,11 @@ namespace Vanrise.AccountBalance.Business
             var account = manager.GetAccountInfo(accountId);
             var accountInfo = new LiveBalanceAccountInfo { AccountId = accountId, CurrencyId = account.CurrencyId };
 
-            if (AddLiveBalance(accountId, accountInfo.CurrencyId))
+            if (TryAddLiveBalance(accountId, accountInfo.CurrencyId))
             {
                 AccountsInfo.Add(accountId, accountInfo);
-                return accountInfo;
             }
-            else
-            {
-                LoadingError = true;
-                throw new Exception(string.Format("Same account id {0} Exist.", accountId));
-            }
+            return accountInfo;
         }
         private void IntializeAccountsInfo()
         {
@@ -109,23 +107,29 @@ namespace Vanrise.AccountBalance.Business
                 itm.Value = itm.CurrencyId != accountInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(itm.Value, itm.CurrencyId, accountInfo.CurrencyId, itm.EffectiveOn) : itm.Value;
             }
             var groupedResult = usageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value) });
-            return dataManager.UpdateLiveBalanceFromBalanceUsageQueue(groupedResult, balanceUsageQueueId);
+            return dataManager.UpdateLiveBalanceFromBalanceUsageQueue(_accountTypeId, groupedResult, balanceUsageQueueId);
         }
         private decimal ConvertValueToCurrency(decimal amount, int fromCurrencyId, int currencyId, DateTime effectiveOn)
         {
             return currencyExchangeRateManager.ConvertValueToCurrency(amount, fromCurrencyId, currencyId, effectiveOn);
         }
-        private bool UpdateLiveBalanceFromBillingTransaction(List<BillingTransaction> billingTransactions, long accountId, LiveBalanceAccountInfo accountInfo)
+        private void UpdateLiveBalanceFromBillingTransaction(List<BillingTransaction> billingTransactions)
         {
             decimal amount = 0;
+            var groupedResult = billingTransactions.GroupBy(elt => elt.AccountId);
             List<long> billingTransactionIds = new List<long>();
-            foreach (var billingTransaction in billingTransactions)
+            foreach (var group in groupedResult)
             {
-                billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
-                accountId = billingTransaction.AccountId;
-                amount += billingTransaction.CurrencyId != accountInfo.CurrencyId ? ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
+                LiveBalanceAccountInfo accountInfo = null;
+                AccountsInfo.TryGetValue(group.Key, out accountInfo);
+                foreach (var billingTransaction in group)
+                {
+                    billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
+                    amount += billingTransaction.CurrencyId != accountInfo.CurrencyId ? ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
+                }
+                dataManager.UpdateLiveBalanceFromBillingTransaction(_accountTypeId, accountInfo.AccountId, billingTransactionIds, amount);
             }
-            return dataManager.UpdateLiveBalanceFromBillingTransaction(accountId, billingTransactionIds, amount);
+
         }
 
         #endregion

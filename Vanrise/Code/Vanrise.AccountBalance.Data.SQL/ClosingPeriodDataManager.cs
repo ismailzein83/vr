@@ -38,11 +38,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                 if (Insert(balanceClosingPeriod, accountTypeId, out closingPeriodID))
                 {
                     BillingTransactionDataManager billingTransactionDataManager = new BillingTransactionDataManager();
-                    billingTransactionDataManager.InsertBillingTransactionFromLiveBalance(balanceClosingPeriod, accountTypeId, usageTransactionTypeId, closingPeriodID);
+                    billingTransactionDataManager.CreateBillingUsageTransactionFromLiveBalance(balanceClosingPeriod, accountTypeId, usageTransactionTypeId, closingPeriodID);
                     BalanceHistoryDataManager balanceHistoryDataManager = new BalanceHistoryDataManager();
-                    balanceHistoryDataManager.InsertBalanceHistoryFromLiveBalance(closingPeriodID);
+                    balanceHistoryDataManager.InsertBalanceHistoryFromLiveBalance(closingPeriodID, accountTypeId);
                     LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
-                    liveBalanceDataManager.UpdateLiveBalanceBalance(accountTypeId);
+                    liveBalanceDataManager.ResetInitialAndUsageBalance(accountTypeId);
                     billingTransactionDataManager.UpdateBillingTransactionClosingPeriod(closingPeriodID, accountTypeId);
                 };
                 scope.Complete();

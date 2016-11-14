@@ -21,7 +21,7 @@ namespace Vanrise.AccountBalance.MainExtensions.BalancePeriod
 
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("2D2AA73B-202E-4B9E-ABBA-E7F2CAA0E863"); }
         }
     }
 }

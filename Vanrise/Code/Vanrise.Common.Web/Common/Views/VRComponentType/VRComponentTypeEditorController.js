@@ -143,7 +143,7 @@
             $scope.scopeModel.isLoading = true;
 
             var settingObject = buildComponentTypeObjFromScope();
-
+            settingObject.VRComponentTypeId = componentTypeEntity.VRComponentTypeId;
             VRCommon_VRComponentTypeAPIService.UpdateVRComponentType(settingObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Component Type", response, "Name")) {

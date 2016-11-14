@@ -75,7 +75,8 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     $type: "Vanrise.AccountBalance.Entities.AccountTypeSettings,  Vanrise.AccountBalance.Entities",
                     AccountBusinessEntityDefinitionId: genericBESelectorAPI.getSelectedIds(),
                     AccountSelector: $scope.scopeModel.AccountSelector,
-                    UsageTransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds()
+                    UsageTransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds(),
+                    BalancePeriodSettings: getBalancePeriodSettings()
                 };
             }
 
@@ -112,6 +113,13 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, selectorPayload, billingTransactionTypeLoadDeferred);
                 });
                 return billingTransactionTypeLoadDeferred.promises;
+            }
+
+            function getBalancePeriodSettings() {
+                return {
+                    $type: " Vanrise.AccountBalance.MainExtensions.BalancePeriod.MonthlyBalancePeriodSettings,  Vanrise.AccountBalance.MainExtensions",
+                    DayOfMonth: 1
+                };
             }
         }
     }]);
