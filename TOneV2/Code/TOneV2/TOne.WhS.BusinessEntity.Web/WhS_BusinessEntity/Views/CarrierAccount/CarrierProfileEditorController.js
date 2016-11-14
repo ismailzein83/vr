@@ -224,7 +224,7 @@
 
         function loadTaxes() {
 
-            $scope.scopeModal.vat = carrierProfileEntity.Settings.TaxSetting.VAT;
+            $scope.scopeModal.vat = carrierProfileEntity != undefined && carrierProfileEntity.Settings!=undefined && carrierProfileEntity.Settings.TaxSetting!=undefined ? carrierProfileEntity.Settings.TaxSetting.VAT : undefined;
             WhS_BE_CarrierProfileAPIService.GetTaxesDefinition().then(function (response) {
                 if (response.length > 0) {
                     for (var i = 0; i < response.length; i++) {
