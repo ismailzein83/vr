@@ -143,6 +143,7 @@
     <Compile Include="SaleAreaSettings\SaleAreaSettingsData.cs" />
     <Compile Include="SaleCode\Query\SaleCodeQuery.cs" />
     <Compile Include="SaleCode\Query\SaleCodeQueryByZone.cs" />
+    <Compile Include="SalePLNotification\INotificationContext.cs" />
     <Compile Include="SalePLNotification\SalePLCodeNotification.cs" />
     <Compile Include="SalePLNotification\SalePLRateNotification.cs" />
     <Compile Include="SalePLNotification\SalePLZoneNotification.cs" />
