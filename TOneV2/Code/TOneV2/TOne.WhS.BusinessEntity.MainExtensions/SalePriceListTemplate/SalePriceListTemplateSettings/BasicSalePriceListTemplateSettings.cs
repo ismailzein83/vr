@@ -59,7 +59,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 			foreach (SalePLZoneNotification zone in context.Zones)
 			{
 				foreach (var code in zone.Codes)
-					SetRecordData(worksheet, mappedSheet.MappedColumns, zone, code, zone.Rate, currentRowIndex++);
+					if (!code.EED.HasValue)
+						SetRecordData(worksheet, mappedSheet.MappedColumns, zone, code, zone.Rate, currentRowIndex++);
 			}
 		}
 
