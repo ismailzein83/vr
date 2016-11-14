@@ -10,10 +10,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 	{
 		string Zone { get; set; }
 		string Code { get; set; }
-		DateTime CodeBED { get; set; }
+		DateTime? CodeBED { get; set; }
 		DateTime? CodeEED { get; set; }
-		decimal Rate { get; set; }
-		DateTime RateBED { get; set; }
+		decimal? Rate { get; set; }
+		DateTime? RateBED { get; set; }
 		DateTime? RateEED { get; set; }
 		object Value { get; set; }
 	}

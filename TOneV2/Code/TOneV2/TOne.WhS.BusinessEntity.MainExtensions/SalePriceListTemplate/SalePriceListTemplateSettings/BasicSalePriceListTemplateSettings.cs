@@ -71,20 +71,31 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
 		private void SetCellData(Worksheet worksheet, MappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex)
 		{
+			if (zone == null)
+				throw new ArgumentNullException("zone");
+
 			var mappedValueContext = new BasicSalePriceListTemplateSettingsMappedValueContext()
 			{
-				Zone = zone.ZoneName,
-				Code = code.Code,
-				CodeBED = code.BED,
-				CodeEED = code.EED,
-				Rate = rate.Rate,
-				RateBED = rate.BED,
-				RateEED = rate.EED
+				Zone = zone.ZoneName
 			};
+
+			if (code != null)
+			{
+				mappedValueContext.Code = code.Code;
+				mappedValueContext.CodeBED = code.BED;
+				mappedValueContext.CodeEED = code.EED;
+			}
+
+			if (rate != null)
+			{
+				mappedValueContext.Rate = rate.Rate;
+				mappedValueContext.RateBED = rate.BED;
+				mappedValueContext.RateEED = rate.EED;
+			}
 
 			mappedCol.MappedValue.Execute(mappedValueContext);
 
-			if (mappedValueContext.Value is DateTime)
+			if (mappedValueContext.Value != null && mappedValueContext.Value is DateTime)
 				mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(DateTimeFormat);
 
 			worksheet.Cells[rowIndex, mappedCol.ColumnIndex].PutValue(mappedValueContext.Value);
