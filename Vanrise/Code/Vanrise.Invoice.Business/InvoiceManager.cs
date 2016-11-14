@@ -7,6 +7,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
@@ -20,15 +21,16 @@ namespace Vanrise.Invoice.Business
         #region Public Methods
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
-         
-            var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
+            InvoiceTypeManager manager = new InvoiceTypeManager();
+            var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
+        
+            var result = BigDataManager.Instance.RetrieveData(input,  new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
+
             if(result != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                 RecordFilterManager recordFilterManager = new RecordFilterManager();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(input.Query.InvoiceTypeId);
                 foreach(var data in result.Data)
-                { 
+                {
                     FillNeededDetailData(data, invoiceType);
                 }
             }
@@ -147,6 +149,22 @@ namespace Vanrise.Invoice.Business
                     if (invoiceDetail.ActionTypeNames == null)
                         invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
                     invoiceDetail.ActionTypeNames.Add(action);
+                }
+            }
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            var dataRecordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            invoiceDetail.Items = new List<InvoiceDetailObject>();
+            foreach (var field in dataRecordType.Fields)
+            {
+                var fieldValue = Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
+                if (fieldValue != null)
+                {
+                    invoiceDetail.Items.Add(new InvoiceDetailObject
+                    {
+                        FieldName = field.Name,
+                        Description = field.Type.GetDescription(fieldValue),
+                        Value = fieldValue
+                    });
                 }
             }
         }

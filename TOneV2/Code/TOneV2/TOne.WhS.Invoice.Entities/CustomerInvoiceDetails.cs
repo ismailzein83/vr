@@ -19,6 +19,7 @@ namespace TOne.WhS.Invoice.Entities
         public string OriginalSaleCurrency { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public Double TotalAmount { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {

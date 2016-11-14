@@ -119,6 +119,7 @@
         function getContext()
         {
             var currentContext = context;
+          
             if (currentContext == undefined)
                 currentContext = {};
             currentContext.showItemsFilter =function()

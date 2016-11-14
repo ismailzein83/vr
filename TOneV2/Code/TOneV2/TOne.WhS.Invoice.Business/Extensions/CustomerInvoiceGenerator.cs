@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Invoice.Entities;
-
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
@@ -25,20 +25,26 @@ namespace TOne.WhS.Invoice.Business.Extensions
             string dimentionName = null;
 
             string partnerType = partner[0];
+            int parterId = Convert.ToInt32(partner[1]);
             int currencyId = -1;
             bool isGroupedByCustomer = false;
+           CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
+            CarrierProfile carrierProfile = null;
             if (partnerType.Equals("Profile"))
             {
                 dimentionName = "CustomerProfile";
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(Convert.ToInt32(partner[1]));
+                carrierProfile = carrierProfileManager.GetCarrierProfile(parterId);
+                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(parterId);
                 isGroupedByCustomer = true;
             }
             else if (partnerType.Equals("Account"))
             {
                 dimentionName = "Customer";
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(Convert.ToInt32(partner[1]));
+                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(parterId);
+                var carrierAccount  = carrierAccountManager.GetCarrierAccount(parterId);
+                carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
                 isGroupedByCustomer = false;
             }
 
@@ -47,6 +53,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
             #region BuildCustomerInvoiceDetails
             CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0]);
+            customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
+            if (carrierProfile.Settings.TaxSetting != null)
+            {
+                if (carrierProfile.Settings.TaxSetting.Items != null)
+                {
+                    foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
+                    {
+                        customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDouble(tax.Value)) / 100);
+                    }
+                }
+                customerInvoiceDetails.TotalAmount += (customerInvoiceDetails.SaleAmount * Convert.ToDouble(carrierProfile.Settings.TaxSetting.VAT)) / 100;
+            }
+           
             #endregion
 
             context.Invoice = new GeneratedInvoice
@@ -120,7 +139,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             FromDate = item.InvoiceMeasures.BillingPeriodFrom,
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
                             SaleCurrency = currencyManager.GetCurrencyName(item.SaleCurrencyId),
-                            OriginalSaleCurrency = currencyManager.GetCurrencyName(item.OriginalSaleCurrencyId),
+                            OriginalSaleCurrency = currencyManager.GetCurrencySymbol(item.OriginalSaleCurrencyId),
                             CustomerName = carrierAccountManager.GetCarrierAccountName(item.CustomerId),
                             SaleZoneName = saleZoneManager.GetSaleZoneName(item.SaleZoneId),
                         };

@@ -1616,34 +1616,60 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>4.4375in</Width>
+              <Width>6.93958in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>2.1875in</Height>
+              <Height>4.11458in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Subreport Name="ProfileInvoiceItemsReportName">
-                      <ReportName>ProfileInvoiceItemsReport</ReportName>
-                      <Parameters>
-                        <Parameter Name="FromDate">
-                          <Value>=Parameters!FromDate.Value</Value>
-                        </Parameter>
-                        <Parameter Name="ToDate">
-                          <Value>=Parameters!ToDate.Value</Value>
-                        </Parameter>
-                        <Parameter Name="CustomerId">
-                          <Value>12</Value>
-                        </Parameter>
-                      </Parameters>
+                    <Rectangle Name="Rectangle1">
+                      <ReportItems>
+                        <Subreport Name="Subreport1">
+                          <ReportName>ProfileInvoiceItemsReport</ReportName>
+                          <Parameters>
+                            <Parameter Name="CustomerId">
+                              <Value>=Fields!CustomerId.Value</Value>
+                            </Parameter>
+                            <Parameter Name="FromDate">
+                              <Value>=Parameters!FromDate.Value</Value>
+                            </Parameter>
+                            <Parameter Name="ToDate">
+                              <Value>=Parameters!ToDate.Value</Value>
+                            </Parameter>
+                            <Parameter Name="Image">
+                              <Value>=Parameters!Image.Value</Value>
+                            </Parameter>
+                            <Parameter Name="InvoiceNb">
+                              <Value>=Parameters!InvoiceNb.Value</Value>
+                            </Parameter>
+                            <Parameter Name="InvoiceDate">
+                              <Value>=Parameters!InvoiceDate.Value</Value>
+                            </Parameter>
+                            <Parameter Name="DueDate">
+                              <Value>=Parameters!InvoiceDueDate.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                          <Top>0.28125in</Top>
+                          <Left>1.1629in</Left>
+                          <Height>3in</Height>
+                          <Width>3in</Width>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
+                      </ReportItems>
+                      <KeepTogether>true</KeepTogether>
                       <Style>
                         <Border>
                           <Style>None</Style>
                         </Border>
                       </Style>
-                    </Subreport>
+                    </Rectangle>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -1663,10 +1689,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>8.97792in</Top>
-        <Left>1.16542in</Left>
-        <Height>2.1875in</Height>
-        <Width>4.4375in</Width>
+        <Top>6.89458in</Top>
+        <Left>0.1425in</Left>
+        <Height>4.11458in</Height>
+        <Width>6.93958in</Width>
         <ZIndex>22</ZIndex>
         <Style>
           <Border>
@@ -1675,7 +1701,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>12.58208in</Height>
+    <Height>12.16542in</Height>
     <Style />
   </Body>
   <Width>7.28917in</Width>
@@ -1780,11 +1806,72 @@
       </ConnectionProperties>
       <rd:DataSourceID>fb05ec18-6748-4153-b858-4873e80e8ed4</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSInvoiceEntities2">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>41638e64-11ab-4529-a225-b8a451a7cfb0</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
+    <DataSet Name="BankDetails">
+      <Query>
+        <DataSourceName>VanriseInvoiceEntities1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Bank">
+          <DataField>Bank</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyId">
+          <DataField>CurrencyId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyName">
+          <DataField>CurrencyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountCode">
+          <DataField>AccountCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountHolder">
+          <DataField>AccountHolder</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IBAN">
+          <DataField>IBAN</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Address">
+          <DataField>Address</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountNumber">
+          <DataField>AccountNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SwiftCode">
+          <DataField>SwiftCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SortCode">
+          <DataField>SortCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>Vanrise.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>DataSourceBankDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetBankDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.DataSourceBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
     <DataSet Name="ItemsDetails">
       <Query>
-        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
+        <DataSourceName>TOneWhSInvoiceEntities2</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -1858,60 +1945,6 @@
         <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
         <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="BankDetails">
-      <Query>
-        <DataSourceName>VanriseInvoiceEntities1</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="Bank">
-          <DataField>Bank</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CurrencyId">
-          <DataField>CurrencyId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CurrencyName">
-          <DataField>CurrencyName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AccountCode">
-          <DataField>AccountCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AccountHolder">
-          <DataField>AccountHolder</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="IBAN">
-          <DataField>IBAN</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Address">
-          <DataField>Address</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AccountNumber">
-          <DataField>AccountNumber</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SwiftCode">
-          <DataField>SwiftCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SortCode">
-          <DataField>SortCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>Vanrise.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>DataSourceBankDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetBankDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.DataSourceBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

@@ -32,6 +32,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             var subSections = [];
             var invoiceTypeId;
             var invoiceGridActions = [];
+            var mainGridColumns = [];
             function initializeController() {
 
                 $scope.datastore = [];
@@ -64,7 +65,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     subSectionConfigs = response;
                                 }
                                 if (payload != undefined) {
-                                    buildGridFields(payload.mainGridColumns);
+                                    mainGridColumns = payload.mainGridColumns;
                                     subSections = payload.subSections;
                                     query = payload.query;
                                     invoiceGridActions = payload.invoiceGridActions;
@@ -97,6 +98,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             if (response.Data != undefined) {
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var dataItem = response.Data[i];
+                                    buildGridFields(dataItem);
                                     VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId);
                                 }
                             }
@@ -108,9 +110,8 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                 };
             }
 
-            function buildGridFields(mainGridColumns)
+            function buildGridFields(dataItem)
             {
-              
                 $scope.gridFields = [];
                 if (mainGridColumns != undefined) {
                     for (var i = 0; i < mainGridColumns.length ; i++) {
@@ -123,7 +124,15 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                         };
                         switch (mainGridColumn.Field) {
                             case VR_Invoice_InvoiceFieldEnum.CustomField.value:
-                                field = field = "Entity." + VR_Invoice_InvoiceFieldEnum.CustomField.fieldName + "." + mainGridColumn.CustomFieldName;
+                                if (dataItem != undefined && dataItem.Items != undefined) {
+                                    for (var j = 0; j < dataItem.Items.length; j++) {
+                                        var item = dataItem.Items[j];
+                                        if (item.FieldName == mainGridColumn.CustomFieldName)
+                                        {
+                                            field = "Items[" + j + "].Description";
+                                        }
+                                    }
+                                }
                                 attribute = {
                                     type: mainGridColumn.Attribute.Type,
                                     numberprecision: mainGridColumn.Attribute.NumberPrecision
@@ -172,41 +181,9 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                         }
                         $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, NumberPrecision: attribute.numberprecision });
                     }
+                   
                 }
             }
-
-            //function buildGridSubSections(subSections) {
-            //    if (subSections != undefined) {
-            //        for (var i = 0; i < subSections.length ; i++) {
-            //            var subSection = subSections[i];
-            //            var tab = buildInvoiceItemsTab(subSection);
-            //            if (tab != undefined)
-            //                drillDownTabs.push(tab);
-            //        }
-            //        function buildInvoiceItemsTab(subSection) {
-            //            var invoiceItemsTab = {};
-            //            var cofigItem = UtilsService.getItemByVal(subSectionConfigs, subSection.Settings.ConfigId, "ExtensionConfigurationId");
-            //            if(cofigItem != undefined)
-            //            {
-            //                invoiceItemsTab.title = subSection.SectionTitle;
-            //                invoiceItemsTab.directive = cofigItem.RuntimeEditor;
-            //                invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoice) {
-            //                    invoice.invoiceItemGridAPI = invoiceItemGridAPI;
-            //                    var invoiceItemGridPayload = {
-            //                        query: {
-            //                            InvoiceId: invoice.Entity.InvoiceId,
-            //                        },
-            //                        settings: subSection.Settings,
-            //                        invoiceId: invoice.Entity.InvoiceId,
-            //                    };
-            //                    return invoice.invoiceItemGridAPI.load(invoiceItemGridPayload);
-            //                };
-            //                invoiceItemsTab.parentMenuActions = [];
-            //                return invoiceItemsTab;
-            //            }
-            //        }
-            //    }
-            //}
 
             function defineMenuActions(invoiceGridActions) {
                 $scope.gridMenuActions.length = 0;

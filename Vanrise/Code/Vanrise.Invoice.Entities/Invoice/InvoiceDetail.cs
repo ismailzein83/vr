@@ -14,5 +14,13 @@ namespace Vanrise.Invoice.Entities
         public List<InvoiceGridAction> ActionTypeNames { get; set; }
         public Boolean Paid { get; set; }
         public string UserName { get; set; }
+        public List<InvoiceDetailObject> Items { get; set; }
+
+    }
+    public class InvoiceDetailObject
+    {
+        public string FieldName { get; set; }
+        public Object Value { get; set; }
+        public string Description { get; set; }
     }
 }

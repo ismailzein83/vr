@@ -24,7 +24,8 @@
         }
 
         function defineScope() {
-
+            var date = new Date();
+            $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
                 gridAPI = api;
             };

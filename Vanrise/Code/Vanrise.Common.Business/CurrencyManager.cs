@@ -59,6 +59,8 @@ namespace Vanrise.Common.Business
         public string GetCurrencySymbol(int currencyId)
         {
             Currency currency = this.GetCurrency(currencyId);
+            if (currency == null)
+                return null;
             return currency.Symbol;
         }
 
@@ -148,7 +150,7 @@ namespace Vanrise.Common.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetCurrencyName(Convert.ToInt32(context.EntityId));
+            return GetCurrencySymbol(Convert.ToInt32(context.EntityId));
         }
 
 

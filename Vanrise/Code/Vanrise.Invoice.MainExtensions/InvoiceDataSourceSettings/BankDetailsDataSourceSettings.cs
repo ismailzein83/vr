@@ -30,7 +30,7 @@ namespace Vanrise.Invoice.MainExtensions
                     Bank = item.Bank,
                     IBAN = item.IBAN,
                     CurrencyId = item.CurrencyId,
-                    CurrencyName = currencyManager.GetCurrencyName(item.CurrencyId)
+                    CurrencyName = currencyManager.GetCurrencySymbol(item.CurrencyId)
                 });
             }
             return dataSourceBankDetails;

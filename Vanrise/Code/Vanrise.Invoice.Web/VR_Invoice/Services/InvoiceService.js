@@ -95,7 +95,6 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
             setDrillDownTabs();
             setMenuActions();
             function addDrillDownTab(subSection) {
-                console.log(subSection);
                 var drillDownTab = {};
                 var cofigItem = UtilsService.getItemByVal(subSectionConfigs, subSection.Settings.ConfigId, "ExtensionConfigurationId");
                 if (cofigItem != undefined) {
@@ -125,7 +124,6 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
 
             function setMenuActions() {
                 dataItem.menuActions = [];
-
                 for (var j = 0; j < dataItem.ActionTypeNames.length; j++)
                 {
                     var invoiceGridAction = dataItem.ActionTypeNames[j];
