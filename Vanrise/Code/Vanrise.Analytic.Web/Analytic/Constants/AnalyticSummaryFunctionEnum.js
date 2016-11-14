@@ -3,5 +3,5 @@
     Sum: { value: 1, description: "Sum" },
     Avg: { value: 2, description: "Avg" },
     Max: { value: 3, description: "Max" },
-    Min: { value: 4, description: "Min" },
+    Min: { value: 4, description: "Min" }
 });
