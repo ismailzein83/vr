@@ -8,13 +8,13 @@
                  defaultsortbyfieldname="'RoutingProductId'"
                  getrowstyle="getRowStyle">
 
-        <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Services'" disablesorting="true">
+        <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" disablesorting fixedwidth="100"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" disablesorting fixedwidth="200"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Route Options'" disablesorting>
+        <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'" widthfactor="1" fixedwidth="50"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Route Options'" disablesorting >
             <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
         </vr-datagridcolumn>
 
