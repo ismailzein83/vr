@@ -74,7 +74,7 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (int customerId in context.CustomerIds)
             {
                 CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerId);
-                List<SalePLZoneNotification> customerZonesNotifications = new List<SalePLZoneNotification>();
+                List<SalePLZoneNotification> customerZoneNotifications = new List<SalePLZoneNotification>();
 
                 IEnumerable<SaleZone> saleZones = customerZoneManager.GetCustomerSaleZones(customerId, context.SellingNumberPlanId, context.EffectiveDate, false);
                 if (saleZones == null)
@@ -92,7 +92,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         if (context.ChangeType == SalePLChangeType.CodeAndRate)
                         {
-                            CreateSalePLZoneNotifications(customerZonesNotifications, zonesWrapperForCountry, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
+                            CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperForCountry, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
                         }
                         else if (context.ChangeType == SalePLChangeType.Rate)
                         {
@@ -108,14 +108,15 @@ namespace TOne.WhS.BusinessEntity.Business
                                         zonesWrapperHaveChanges.Add(zoneWrapper);
                                     }
                                 }
-                                CreateSalePLZoneNotifications(customerZonesNotifications, zonesWrapperHaveChanges, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
+                                CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperHaveChanges, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
                             }
                         }
                     }
 
                 }
 
-                SendPriceList(customer, customerSalePriceListType, context.InitiatorId, customerZonesNotifications);
+				if (customerZoneNotifications.Count > 0)
+					SendPriceList(customer, customerSalePriceListType, context.InitiatorId, customerZoneNotifications);
             }
         }
 
@@ -189,7 +190,7 @@ namespace TOne.WhS.BusinessEntity.Business
             MemoryStream memoryStream = new MemoryStream(salePLTemplateBytes);
             memoryStream.Position = 0;
 
-            var attachment = new Attachment(memoryStream, "SalePriceList.xls");
+            var attachment = new Attachment(memoryStream, "SalePriceList.xlsx");
             attachment.ContentType = new ContentType("application/vnd.ms-excel");
             attachment.TransferEncoding = TransferEncoding.Base64;
             attachment.NameEncoding = Encoding.UTF8;
@@ -207,8 +208,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
             MailMessage objMail = new MailMessage();
 
+			if (evaluatedTemplate.To != null)
+			{
+				foreach (string toEmail in evaluatedTemplate.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+					objMail.To.Add(toEmail);
+			}
+			if (evaluatedTemplate.CC != null)
+			{
+				foreach (string ccEmail in evaluatedTemplate.CC.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+					objMail.CC.Add(ccEmail);
+			}
             objMail.From = new MailAddress(emailSettingData.SenderEmail);
-            objMail.To.Add(evaluatedTemplate.To);
             objMail.Subject = evaluatedTemplate.Subject;
             objMail.Body = evaluatedTemplate.Body;
             objMail.IsBodyHtml = true;

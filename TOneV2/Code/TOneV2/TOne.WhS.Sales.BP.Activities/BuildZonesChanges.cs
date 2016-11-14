@@ -34,7 +34,11 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<int> customerIds = this.CustomerIds.Get(context);
             int ownerId = this.OwnerId.Get(context);
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
-            IEnumerable<SalePLZoneChange> zoneChanges = null;
+
+			if (customerIds == null || customerIds.Count() == 0)
+				throw new NullReferenceException("customerIds");
+
+			IEnumerable<SalePLZoneChange> zoneChanges = null;
             int sellingNumberPlanId;
             if (ownerType == SalePriceListOwnerType.Customer)
             {
@@ -69,7 +73,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 SellingNumberPlanId = sellingNumberPlanId,
                 CustomerIds = customerIds,
                 ZoneChanges = zoneChanges,
-                EffectiveDate = DateTime.Today,
+                EffectiveDate = DateTime.Now,
                 ChangeType = SalePLChangeType.Rate,
                 InitiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
             };
