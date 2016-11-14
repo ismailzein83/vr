@@ -1,9 +1,17 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<span>
+	<vr-columns colnum="{{mappedValueCtrl.normalColNum}}">
+		<vr-select on-ready="onSelectorReady"
+				   datasource="extensionConfigs"
+				   selectedvalues="selectedExtensionConfig"
+				   datavaluefield="ExtensionConfigurationId"
+				   datatextfield="Title"
+				   isrequired="mappedValueCtrl.isrequired"
+				   hideremoveicon="mappedValueCtrl.isrequired">
+		</vr-select>
+	</vr-columns>
+	<vr-directivewrapper on-ready="onDirectiveReady"
+						 directive="selectedExtensionConfig.Editor"
+						 normal-col-num="{{mappedValueCtrl.normalColNum}}"
+						 isrequired="mappedValueCtrl.isrequired">
+	</vr-directivewrapper>
+</span>

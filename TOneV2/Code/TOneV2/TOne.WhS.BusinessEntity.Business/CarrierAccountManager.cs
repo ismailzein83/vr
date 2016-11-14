@@ -386,6 +386,24 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
+		public Guid GetSalePLMailTemplateId(int customerId)
+		{
+			var settingsManager = new Vanrise.Common.Business.SettingManager();
+			var saleAreaSettingsData = settingsManager.GetSetting<SaleAreaSettingsData>(Constants.SaleAreaSettings);
+			if (saleAreaSettingsData == null)
+				throw new NullReferenceException("saleAreaSettingsData");
+			return saleAreaSettingsData.DefaultSalePLMailTemplateId;
+		}
+
+		public int GetSalePriceListTemplateId(int carrierAccountId)
+		{
+			var settingsManager = new Vanrise.Common.Business.SettingManager();
+			var saleAreaSettingsData = settingsManager.GetSetting<SaleAreaSettingsData>(Constants.SaleAreaSettings);
+			if (saleAreaSettingsData == null)
+				throw new NullReferenceException("saleAreaSettingsData");
+			return saleAreaSettingsData.DefaultSalePLTemplateId;
+		}
+
         #endregion
 
         #region ICarrierAccountManager Memebers

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-	public abstract class SalePriceListTemplateSettings
+	public class SalePriceListTemplateInfo
 	{
-		public abstract byte[] Execute(ISalePriceListTemplateSettingsContext context);
+		public int SalePriceListTemplateId { get; set; }
+
+		public string Name { get; set; }
 	}
 }

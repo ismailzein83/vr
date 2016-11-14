@@ -20,6 +20,10 @@ namespace TOne.WhS.BusinessEntity.Entities
             {
                 return this._codes;
             }
+			set
+			{
+				_codes = value;
+			}
         }
 
         public SalePLRateNotification Rate { get; set; }    

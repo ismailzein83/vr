@@ -1,9 +1,22 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<div>
+	<vr-row removeline="true" ng-show="extensionConfigs.length > 1">
+		<vr-columns colnum="{{selectiveCtrl.normalColNum}}">
+			<vr-select on-ready="onSelectorReady"
+					   label="Type"
+					   datasource="extensionConfigs"
+					   selectedvalues="selectedExtensionConfig"
+					   datavaluefield="ExtensionConfigurationId"
+					   datatextfield="Title"
+					   isrequired="selectiveCtrl.isrequired"
+					   hideremoveicon="selectiveCtrl.isrequired">
+			</vr-select>
+		</vr-columns>
+	</vr-row>
+	<div vr-loader="isLoadingDirective">
+		<vr-directivewrapper on-ready="onDirectiveReady"
+							 directive="selectedExtensionConfig.Editor"
+							 normal-col-num="{{selectiveCtrl.normalColNum}}"
+							 isrequired="selectiveCtrl.isrequired">
+		</vr-directivewrapper>
+	</div>
+</div>

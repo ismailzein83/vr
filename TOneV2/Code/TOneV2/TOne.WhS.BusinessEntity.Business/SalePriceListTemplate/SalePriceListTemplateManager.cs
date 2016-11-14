@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -23,6 +28,11 @@ namespace TOne.WhS.BusinessEntity.Business
 		public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId)
 		{
 			return GetCachedSalePriceListTemplates().GetRecord(salePriceListTemplateId);
+		}
+
+		public IEnumerable<SalePriceListTemplateInfo> GetSalePriceListTemplatesInfo()
+		{
+			return GetCachedSalePriceListTemplates().MapRecords(SalePriceListTemplateInfoMapper).OrderBy(x => x.Name);
 		}
 
 		public IEnumerable<SalePriceListTemplateSettingsExtensionConfig> GetSalePriceListTemplateSettingsExtensionConfigs()
@@ -102,7 +112,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		#region Private Methods
 
-		Dictionary<int, SalePriceListTemplate> GetCachedSalePriceListTemplates()
+		private Dictionary<int, SalePriceListTemplate> GetCachedSalePriceListTemplates()
 		{
 			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSalePriceListTemplates", () =>
 			{
@@ -110,6 +120,34 @@ namespace TOne.WhS.BusinessEntity.Business
 				IEnumerable<SalePriceListTemplate> salePriceListTemplates = dataManager.GetAll();
 				return salePriceListTemplates.ToDictionary(x => x.SalePriceListTemplateId);
 			});
+		}
+
+		private IEnumerable<SalePLZoneNotification> GetZoneNotifications()
+		{
+			var zones = new List<SalePLZoneNotification>();
+			for (int i = 0; i < 3; i++)
+			{
+				var zone = new SalePLZoneNotification()
+				{
+					ZoneName = "Zone " + (i + 1)
+				};
+
+				zone.Codes = new List<SalePLCodeNotification>();
+				zone.Codes.Add(new SalePLCodeNotification()
+				{
+					Code = "Code " + (i + 1),
+					BED = DateTime.Now.Date
+				});
+
+				zone.Rate = new SalePLRateNotification()
+				{
+					Rate = (i + 1),
+					BED = DateTime.Now.Date
+				};
+
+				zones.Add(zone);
+			}
+			return zones;
 		}
 
 		#endregion
@@ -121,6 +159,15 @@ namespace TOne.WhS.BusinessEntity.Business
 			return new SalePriceListTemplateDetail()
 			{
 				Entity = salePriceListTemplate
+			};
+		}
+
+		private SalePriceListTemplateInfo SalePriceListTemplateInfoMapper(SalePriceListTemplate entity)
+		{
+			return new SalePriceListTemplateInfo()
+			{
+				SalePriceListTemplateId = entity.SalePriceListTemplateId,
+				Name = entity.Name
 			};
 		}
 

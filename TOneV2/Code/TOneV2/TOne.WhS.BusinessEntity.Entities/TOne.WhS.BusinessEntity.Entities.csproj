@@ -152,6 +152,7 @@
     <Compile Include="SalePriceListTemplate\MappedSheet\IBasicSalePriceListTemplateSettingsMappedValueContext.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplate.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateDetail.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateInfo.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateQuery.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettingsExtensionConfig.cs" />

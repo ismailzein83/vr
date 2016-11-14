@@ -1,9 +1,59 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div>
+	<vr-row>
+		<vr-columns colnum="{{basicSettingsCtrl.normalColNum}}">
+			<vr-fileupload label="Excel Template" extension="xls,xlsx,csv,xlsb" value="scopeModel.file" isrequired="true"></vr-fileupload>
+		</vr-columns>
+	</vr-row>
 
-</body>
-</html>
+	<vr-row>
+		<vr-columns width="1/2row">
+			<vr-section title="Excel Template Viewer">
+				<vr-excel-wb on-ready="scopeModel.onExcelWorkbookReady" fileid="scopeModel.file.fileId"></vr-excel-wb>
+			</vr-section>
+		</vr-columns>
+
+		<vr-columns width="1/2row">
+			<vr-section title="Mapped Sheets">
+				<vr-row>
+					<vr-excelconversion-fieldmapping-cellfieldmapping on-ready="scopeModel.onFirstRowMappingReady"
+																	  label="First Row"
+																	  type="'row'"
+																	  isrequired="true">
+					</vr-excelconversion-fieldmapping-cellfieldmapping>
+				</vr-row>
+				<vr-row removeline="true">
+					<vr-columns colnum="{{basicSettingsCtrl.normalColNum}}">
+						<vr-button type="Add" data-onclick="scopeModel.addMappedCol" standalone="true"></vr-button>
+					</vr-columns>
+				</vr-row>
+				<vr-row vr-loader="scopeModel.isLoadingMappedCol">
+					<vr-columns width="fullrow">
+						<vr-datagrid on-ready="scopeModel.onGridReady"
+									 datasource="scopeModel.mappedCols"
+									 ondeleterow="scopeModel.removeMappedCol"
+									 hidegridmenu="true"
+									 norowhighlightonclick="true">
+							<vr-datagridcolumn headertext="'Cell'" widthfactor="30" disablesorting="true">
+								<vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onDirectiveReady"
+																				  isrequired="true"
+																				  normal-col-num="6">
+								</vr-excelconversion-fieldmapping-cellfieldmapping>
+							</vr-datagridcolumn>
+							<vr-datagridcolumn headertext="'Value'" widthfactor="70" disablesorting="true">
+								<vr-whs-be-salepricelisttemplate-settings-basic-mappedvalue-selective on-ready="dataItem.onMappedValueSelectiveReady"
+																									  isrequired="true"
+																									  normal-col-num="6">
+								</vr-whs-be-salepricelisttemplate-settings-basic-mappedvalue-selective>
+							</vr-datagridcolumn>
+						</vr-datagrid>
+					</vr-columns>
+				</vr-row>
+				<vr-row>
+					<vr-columns colnum="{{basicSettingsCtrl.normalColNum * 2}}">
+						<vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="true"></vr-textbox>
+					</vr-columns>
+				</vr-row>
+			</vr-section>
+		</vr-columns>
+	</vr-row>
+</div>

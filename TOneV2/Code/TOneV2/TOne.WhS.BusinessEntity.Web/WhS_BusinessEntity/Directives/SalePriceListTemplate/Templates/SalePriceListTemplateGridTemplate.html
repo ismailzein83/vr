@@ -1,9 +1,8 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+			 datasource="scopeModel.salePriceListTemplates"
+			 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+			 menuactions="scopeModel.menuActions"
+			 pagingtype="'PagingOnScroll'"
+			 idfield="Entity.SalePriceListTemplateId">
+	<vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

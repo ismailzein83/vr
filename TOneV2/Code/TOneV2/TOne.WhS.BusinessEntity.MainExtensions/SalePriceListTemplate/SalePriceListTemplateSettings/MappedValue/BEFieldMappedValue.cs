@@ -20,11 +20,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
 	public class BEFieldMappedValue : MappedValue
 	{
-		public BasicSalePriceListTemplateSettingsBEFieldType BEFieldType { get; set; }
+		public BasicSalePriceListTemplateSettingsBEFieldType BEField { get; set; }
 
 		public override void Execute(IBasicSalePriceListTemplateSettingsMappedValueContext context)
 		{
-			switch (BEFieldType)
+			switch (BEField)
 			{
 				case BasicSalePriceListTemplateSettingsBEFieldType.Zone:
 					context.Value = context.Zone;

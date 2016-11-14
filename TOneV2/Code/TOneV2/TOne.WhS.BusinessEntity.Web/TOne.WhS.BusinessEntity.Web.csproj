@@ -311,6 +311,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateSettingsSelectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePriceListGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelist-grid.js" />
