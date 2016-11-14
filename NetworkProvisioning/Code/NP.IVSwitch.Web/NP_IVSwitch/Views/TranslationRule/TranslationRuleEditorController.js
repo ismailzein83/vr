@@ -90,8 +90,8 @@
                 if (translationRuleEntity == undefined)
                     return;
                 $scope.scopeModel.name = translationRuleEntity.Name;
-                $scope.scopeModel.dnisPattern = translationRuleEntity.DNIS_Pattern;
-                $scope.scopeModel.cliPattern = translationRuleEntity.CLI_Pattern;
+                $scope.scopeModel.dnisPattern = translationRuleEntity.DNISPattern;
+                $scope.scopeModel.cliPattern = translationRuleEntity.CLIPattern;
 
             }
         }
@@ -100,7 +100,7 @@
             $scope.scopeModel.isLoading = true;
 
             return NP_IVSwitch_TranslationRuleAPIService.AddTranslationRule(buildTranslationRuleObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('TranslationRule', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemAdded('Translation Rule', response, 'Name')) {
  
                     if ($scope.onTranslationRuleAdded != undefined)
                         $scope.onTranslationRuleAdded(response.InsertedObject);
@@ -115,7 +115,7 @@
         function update() {
             $scope.scopeModel.isLoading = true;
             return NP_IVSwitch_TranslationRuleAPIService.UpdateTranslationRule(buildTranslationRuleObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('TranslationRule', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemUpdated('Translation Rule', response, 'Name')) {
 
                     if ($scope.onTranslationRuleUpdated != undefined) {
                         $scope.onTranslationRuleUpdated(response.UpdatedObject);
@@ -133,8 +133,8 @@
             return {
                 TranslationRuleId: translationRuleEntity != undefined ? translationRuleEntity.TranslationRuleId : undefined,
                 Name: $scope.scopeModel.name,
-                DNIS_Pattern: $scope.scopeModel.dnisPattern,
-                CLI_Pattern: $scope.scopeModel.cliPattern,
+                DNISPattern: $scope.scopeModel.dnisPattern,
+                CLIPattern: $scope.scopeModel.cliPattern,
             };
         }
     }

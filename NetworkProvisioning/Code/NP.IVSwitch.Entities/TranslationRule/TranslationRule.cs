@@ -10,7 +10,8 @@ namespace NP.IVSwitch.Entities
     {
         public int TranslationRuleId { get; set; }
         public String Name { get; set; }
-        public String DNIS_Pattern { get; set; }
-        public String CLI_Pattern { get; set; }
+        public String DNISPattern { get; set; }
+        public String CLIPattern { get; set; }
+        public String CreationDate { get; set; }
     }
 }
