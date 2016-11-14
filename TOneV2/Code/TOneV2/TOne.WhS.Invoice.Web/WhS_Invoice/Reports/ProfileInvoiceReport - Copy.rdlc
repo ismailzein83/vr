@@ -1628,14 +1628,29 @@
                     <Subreport Name="ProfileInvoiceItemsReportName">
                       <ReportName>ProfileInvoiceItemsReport</ReportName>
                       <Parameters>
+                        <Parameter Name="Image">
+                          <Value>=Parameters!Image.Value</Value>
+                        </Parameter>
+                        <Parameter Name="InvoiceNb">
+                          <Value>=Parameters!InvoiceNb.Value</Value>
+                        </Parameter>
+                        <Parameter Name="InvoiceDate">
+                          <Value>=Parameters!InvoiceDate.Value</Value>
+                        </Parameter>
+                        <Parameter Name="DueDate">
+                          <Value>=Parameters!InvoiceDueDate.Value</Value>
+                        </Parameter>
                         <Parameter Name="FromDate">
                           <Value>=Parameters!FromDate.Value</Value>
                         </Parameter>
                         <Parameter Name="ToDate">
                           <Value>=Parameters!ToDate.Value</Value>
                         </Parameter>
+                        <Parameter Name="Currency">
+                          <Value>=Parameters!Currency.Value</Value>
+                        </Parameter>
                         <Parameter Name="CustomerId">
-                          <Value>12</Value>
+                          <Value>=Fields!CustomerId.Value</Value>
                         </Parameter>
                       </Parameters>
                       <Style>
@@ -1663,8 +1678,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>8.97792in</Top>
-        <Left>1.16542in</Left>
+        <Top>6.86333in</Top>
+        <Left>0.72792in</Left>
         <Height>2.1875in</Height>
         <Width>4.4375in</Width>
         <ZIndex>22</ZIndex>
@@ -1675,7 +1690,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>12.58208in</Height>
+    <Height>12.16542in</Height>
     <Style />
   </Body>
   <Width>7.28917in</Width>

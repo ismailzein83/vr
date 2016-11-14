@@ -183,8 +183,10 @@
     <Folder Include="WhS_Invoice\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport - Copy.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport - Copy.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\AccountInvoice.rdlc" />
