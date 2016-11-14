@@ -1,5 +1,6 @@
-CREATE TABLE [TOneWhS_CDR].[BillingCDR_Failed] (
+﻿CREATE TABLE [TOneWhS_CDR].[BillingCDR_Failed] (
     [ID]                          BIGINT          IDENTITY (1, 1) NOT NULL,
+    [CDRId]                       BIGINT          NOT NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
     [ConnectDateTime]             DATETIME        NULL,
@@ -14,6 +15,7 @@ CREATE TABLE [TOneWhS_CDR].[BillingCDR_Failed] (
     [SaleCode]                    VARCHAR (20)    NULL,
     [SupplierCode]                VARCHAR (20)    NULL,
     [CDPNOut]                     VARCHAR (50)    NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
     [IDonSwitch]                  BIGINT          NULL,
     [Tag]                         VARCHAR (100)   NULL,
     [SIP]                         VARCHAR (100)   NULL,
@@ -27,8 +29,11 @@ CREATE TABLE [TOneWhS_CDR].[BillingCDR_Failed] (
     [MasterPlanOriginatingZoneId] BIGINT          NULL,
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
-    [SwitchId]                    INT             NULL
+    [SwitchId]                    INT             NULL,
+    [CountryId]                   INT             NULL
 );
+
+
 
 
 
@@ -36,4 +41,9 @@ CREATE TABLE [TOneWhS_CDR].[BillingCDR_Failed] (
 GO
 CREATE CLUSTERED INDEX [IX_BillingCDR_Failed_AttemptDateTime]
     ON [TOneWhS_CDR].[BillingCDR_Failed]([AttemptDateTime] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BillingCDR_Failed_CDRId]
+    ON [TOneWhS_CDR].[BillingCDR_Failed]([CDRId] ASC);
 

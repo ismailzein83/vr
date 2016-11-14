@@ -1,4 +1,5 @@
 ﻿CREATE TYPE [TOneWhS_CDR].[BillingCDR_InvalidType] AS TABLE (
+    [CDRId]                       BIGINT          NULL,
     [SwitchId]                    INT             NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
@@ -28,7 +29,11 @@
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
     [CostRateId]                  BIGINT          NULL,
-    [SaleRateId]                  BIGINT          NULL);
+    [SaleRateId]                  BIGINT          NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
+    [CountryId]                   INT             NULL);
+
+
 
 
 

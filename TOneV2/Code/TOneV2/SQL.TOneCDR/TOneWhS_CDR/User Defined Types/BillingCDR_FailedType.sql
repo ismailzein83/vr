@@ -1,4 +1,5 @@
 ﻿CREATE TYPE [TOneWhS_CDR].[BillingCDR_FailedType] AS TABLE (
+    [CDRId]                       BIGINT          NULL,
     [SwitchId]                    INT             NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
@@ -26,7 +27,11 @@
     [ReleaseCode]                 VARCHAR (50)    NULL,
     [ReleaseSource]               VARCHAR (10)    NULL,
     [PortIN]                      VARCHAR (42)    NULL,
-    [PortOUT]                     VARCHAR (42)    NULL);
+    [PortOUT]                     VARCHAR (42)    NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
+    [CountryId]                   INT             NULL);
+
+
 
 
 

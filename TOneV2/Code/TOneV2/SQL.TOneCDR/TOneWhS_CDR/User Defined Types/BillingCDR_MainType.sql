@@ -1,4 +1,5 @@
 ﻿CREATE TYPE [TOneWhS_CDR].[BillingCDR_MainType] AS TABLE (
+    [CDRId]                       BIGINT          NULL,
     [SwitchId]                    INT             NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
@@ -46,7 +47,11 @@
     [CostExtraChargeRuleId]       INT             NULL,
     [SaleExtraChargeRuleId]       INT             NULL,
     [CostExtraChargeValue]        DECIMAL (20, 4) NULL,
-    [SaleExtraChargeValue]        DECIMAL (20, 4) NULL);
+    [SaleExtraChargeValue]        DECIMAL (20, 4) NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
+    [CountryId]                   INT             NULL);
+
+
 
 
 
