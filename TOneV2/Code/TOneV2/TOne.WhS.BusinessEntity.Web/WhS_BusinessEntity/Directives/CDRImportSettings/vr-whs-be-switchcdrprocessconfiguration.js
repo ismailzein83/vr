@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService, WhS_BE_PrimarySaleEntityEnum) {
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',

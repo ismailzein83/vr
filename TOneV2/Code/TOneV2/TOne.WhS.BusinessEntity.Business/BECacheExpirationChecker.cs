@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Caching;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class BECacheExpirationChecker : Vanrise.Caching.SlidingWindowCacheExpirationChecker
+    public class BECacheExpirationChecker : CacheExpirationChecker
     {
         static BECacheExpirationChecker s_instance = new BECacheExpirationChecker();
         public static BECacheExpirationChecker Instance
@@ -16,18 +14,38 @@ namespace TOne.WhS.BusinessEntity.Business
                 return s_instance;
             }
         }
-        public BECacheExpirationChecker() : base(TimeSpan.FromMinutes(10))//10 should be retrieved from the ConfigManager
-        {
 
+        SlidingWindowCacheExpirationChecker todayBECacheExpirationChecker;
+        SlidingWindowCacheExpirationChecker previousBECacheExpirationChecker;
+        public BECacheExpirationChecker()
+        {
+            InitializeSlidingWindowCacheExpirationCheckers();
         }
 
         public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
         {
             IBEDayFilterCacheName dayFilterCacheName = context.CachedObject.CacheName as IBEDayFilterCacheName;
             if (dayFilterCacheName != null && dayFilterCacheName.FilterDay == DateTime.Today)
-                return false;
+                return todayBECacheExpirationChecker.IsCacheExpired(context);
             else
-                return base.IsCacheExpired(context);
+                return previousBECacheExpirationChecker.IsCacheExpired(context);
+        }
+
+        private void InitializeSlidingWindowCacheExpirationCheckers()
+        {
+            ConfigManager configManager = new ConfigManager();
+            CachingExpirationIntervals cachingExpirationIntervals = configManager.GetCachingExpirationIntervals();
+
+            TimeSpan? todayEntitesTimeSpan = null;
+            if (cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.HasValue)
+                todayEntitesTimeSpan = TimeSpan.FromMinutes(cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.Value);
+
+            TimeSpan? previousEntitesTimeSpan = null;
+            if (cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes.HasValue)
+                previousEntitesTimeSpan = TimeSpan.FromMinutes(cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes.Value);
+
+            todayBECacheExpirationChecker = new SlidingWindowCacheExpirationChecker(todayEntitesTimeSpan);
+            previousBECacheExpirationChecker = new SlidingWindowCacheExpirationChecker(previousEntitesTimeSpan);
         }
     }
 

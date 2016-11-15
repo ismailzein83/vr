@@ -303,11 +303,11 @@ namespace TOne.WhS.Routing.Business
 
     public class RouteOptionRuleCachingExpirationChecker : RuleCachingExpirationChecker
     {
-        DateTime? _dataRecordTypeCacheLastCheck;
-
+        DateTime? _settingsCacheLastCheck;
+         
         public override bool IsRuleDependenciesCacheExpired()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _dataRecordTypeCacheLastCheck);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingsCacheLastCheck);
         }
     }
 }

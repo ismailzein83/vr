@@ -130,6 +130,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return supplierZoneIdentification;
         }
+
+        public CachingExpirationIntervals GetCachingExpirationIntervals()
+        {
+            BusinessEntitySettingsData businessEntitySettingsData = GetBusinessEntitySettingsData();
+            if (businessEntitySettingsData.CachingExpirationIntervals == null)
+                throw new NullReferenceException("businessEntitySettingsData.CachingExpirationIntervals");
+
+            return businessEntitySettingsData.CachingExpirationIntervals;
+        }
+
         #endregion
 
         #region Private Method
@@ -162,6 +172,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("cdrImportSettings.SwitchCDRProcessConfiguration");
 
             return cdrImportSettings.SwitchCDRProcessConfiguration;
+        }
+
+        private BusinessEntitySettingsData GetBusinessEntitySettingsData()
+        {
+            SettingManager settingManager = new SettingManager();
+            BusinessEntitySettingsData businessEntitySettingsData = settingManager.GetSetting<BusinessEntitySettingsData>(Constants.BusinessEntitySettingsData);
+
+            if (businessEntitySettingsData == null)
+                throw new NullReferenceException("businessEntitySettingsData");
+
+            return businessEntitySettingsData;
         }
 
         #endregion

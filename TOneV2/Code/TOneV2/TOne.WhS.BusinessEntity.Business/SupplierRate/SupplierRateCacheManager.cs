@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -13,6 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         ISupplierRateDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
         object _updateHandle;
+        DateTime? _settingCacheLastCheck;
 
         public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
         {
@@ -30,7 +32,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
         protected override bool ShouldSetCacheExpired(object parameter)
         {
-            return _dataManager.AreSupplierRatesUpdated(ref _updateHandle);
+            return _dataManager.AreSupplierRatesUpdated(ref _updateHandle)
+                        |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingCacheLastCheck);
         }
         
         public SupplierRate CacheAndGetRate(SupplierRate rate)

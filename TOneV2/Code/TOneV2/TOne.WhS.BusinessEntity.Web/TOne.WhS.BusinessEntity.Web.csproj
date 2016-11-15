@@ -348,6 +348,10 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleEntityZoneService\Templates\SaleEntityZoneServiceGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleEntityZoneService\vr-whs-be-saleentityzoneservice-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\BESettingsCachingExpirationIntervalsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\BESettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-settings-cachingexpirationintervals.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\StateBackup\Templates\StateBackupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\StateBackup\vr-whs-be-statebackup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierPriceListSettings\Templates\SupplierPriceListSettingsTemplate.html" />
