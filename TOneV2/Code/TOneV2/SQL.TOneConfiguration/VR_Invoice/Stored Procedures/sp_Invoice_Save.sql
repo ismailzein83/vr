@@ -1,4 +1,5 @@
-﻿create PROCEDURE [VR_Invoice].[sp_Invoice_Save]
+﻿CREATE PROCEDURE [VR_Invoice].[sp_Invoice_Save]
+	@UserId int,
 	@InvoiceTypeId  uniqueidentifier,
 	@PartnerID nvarchar(50),
 	@SerialNumber nvarchar(255),
@@ -10,7 +11,7 @@
 	@ID bigint out
 AS
 BEGIN
-	Insert INTO VR_Invoice.Invoice (InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details)
-	VALUES ( @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details)
+	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details)
+	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details)
 	SET @ID = @@Identity
 END

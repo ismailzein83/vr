@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [VR_Invoice].[Invoice] (
     [ID]            BIGINT           IDENTITY (1, 1) NOT NULL,
+    [UserId]        INT              NOT NULL,
     [InvoiceTypeID] UNIQUEIDENTIFIER NOT NULL,
     [PartnerID]     VARCHAR (50)     NOT NULL,
     [SerialNumber]  NVARCHAR (255)   NOT NULL,
@@ -12,6 +13,8 @@
     [CreatedTime]   DATETIME         CONSTRAINT [DF_Invoice_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Invoice] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
