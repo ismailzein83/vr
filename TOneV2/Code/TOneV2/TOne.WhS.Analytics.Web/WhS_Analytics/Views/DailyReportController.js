@@ -1,4 +1,5 @@
-﻿dailyReportController.$inject = ['$scope', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRNotificationService', 'UtilsService','VRUIUtilsService'];
+﻿"use strict";
+dailyReportController.$inject = ['$scope', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
 function dailyReportController($scope, WhS_Analytics_GenericAnalyticDimensionEnum, WhS_Analytics_GenericAnalyticMeasureEnum, VRNotificationService, UtilsService, VRUIUtilsService) {
 

@@ -1,4 +1,5 @@
-﻿carrierSummaryController.$inject = ['$scope', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRNotificationService', 'UtilsService','VRUIUtilsService'];
+﻿"use strict";
+carrierSummaryController.$inject = ['$scope', 'WhS_Analytics_GenericAnalyticDimensionEnum', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
 function carrierSummaryController($scope, WhS_Analytics_GenericAnalyticDimensionEnum, WhS_Analytics_GenericAnalyticMeasureEnum, VRNotificationService, UtilsService, VRUIUtilsService) {
     var chartApi;

@@ -1,4 +1,5 @@
-﻿RepeatedNumberController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'PeriodEnum'];
+﻿"use strict";
+RepeatedNumberController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'PeriodEnum'];
 
 function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum) {
 

@@ -1,4 +1,5 @@
-﻿rawCDRLogController.$inject = ['$scope', 'UtilsService', '$q', 'VRModalService', 'VRNotificationService', 'WhS_Analytics_DurationEnum','VRUIUtilsService'];
+﻿"use strict";
+rawCDRLogController.$inject = ['$scope', 'UtilsService', '$q', 'VRModalService', 'VRNotificationService', 'WhS_Analytics_DurationEnum', 'VRUIUtilsService'];
 
 function rawCDRLogController($scope, UtilsService, $q, VRModalService, VRNotificationService, WhS_Analytics_DurationEnum, VRUIUtilsService) {
     var mainGridAPI;

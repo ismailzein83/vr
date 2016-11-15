@@ -1,4 +1,5 @@
-﻿BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'AnalyticsService',
+﻿"use strict";
+BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'AnalyticsService',
     'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService'];
 
 function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, analyticsService, SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {

@@ -1,4 +1,5 @@
-﻿rawCDRLogTemplateController.$inject = ['$scope', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'WhS_Analytics_RawCDRLogWhereInfoEnum'];
+﻿"use strict";
+rawCDRLogTemplateController.$inject = ['$scope', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'WhS_Analytics_RawCDRLogWhereInfoEnum'];
 
 function rawCDRLogTemplateController($scope, UtilsService, VRModalService, VRNotificationService, VRNavigationService, WhS_Analytics_RawCDRLogWhereInfoEnum) {
     loadParameters();

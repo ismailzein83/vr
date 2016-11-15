@@ -1,4 +1,5 @@
-﻿CDRLogController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$q', 'WhS_BE_SaleZoneAPIService', 'VRNotificationService', 'WhS_Analytics_BillingCDROptionMeasureEnum', 'VRUIUtilsService', 'VRValidationService'];
+﻿"use strict";
+CDRLogController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$q', 'WhS_BE_SaleZoneAPIService', 'VRNotificationService', 'WhS_Analytics_BillingCDROptionMeasureEnum', 'VRUIUtilsService', 'VRValidationService'];
 
 function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_SaleZoneAPIService, VRNotificationService, BillingCDROptionMeasureEnum, VRUIUtilsService, VRValidationService) {
 
