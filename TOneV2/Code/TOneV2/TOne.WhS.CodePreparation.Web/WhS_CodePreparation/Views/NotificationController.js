@@ -9,6 +9,8 @@
         var taskId;
         var sellingNumberPlanId;
 
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -25,38 +27,22 @@
             $scope.scopeModel = {};
             $scope.scopeModel.customers = [];
 
-            $scope.scopeModel.showCustomers = false;
-
-            $scope.scopeModel.customerSelectionTypes = UtilsService.getArrayEnum(WhS_Sales_CustomerSelectionTypeEnum);
-            $scope.scopeModel.selectedCustomerSelectionType = WhS_Sales_CustomerSelectionTypeEnum.All;
-
-            $scope.scopeModel.onSelectionChanged = function () {
-                if ($scope.scopeModel.selectedCustomerSelectionType == undefined)
-                    return;
-                if ($scope.scopeModel.selectedCustomerSelectionType.value != WhS_Sales_CustomerSelectionTypeEnum.All.value) {
-                    clearAllCustomers();
-                    $scope.scopeModel.showCustomers = true;
-                }
-                else
-                    $scope.scopeModel.showCustomers = false;
+            $scope.scopeModel.onGridReady = function (api) {
+            	gridReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.save = function () {
-                var customerIds = [];
-                if ($scope.scopeModel.selectedCustomerSelectionType.value == WhS_Sales_CustomerSelectionTypeEnum.All.value) {
-                    for (var i = 0; i < $scope.scopeModel.customers.length; i++)
-                        customerIds.push($scope.scopeModel.customers[i].CarrierAccountId);
-                }
-                else {
-                    for (var i = 0; i < $scope.scopeModel.customers.length; i++)
-                        if ($scope.scopeModel.customers[i].isSelected)
-                            customerIds.push($scope.scopeModel.customers[i].CarrierAccountId);
-                }
+            $scope.scopeModel.selectAll = function () {
+            	toggleSelection(true);
+            };
+            $scope.scopeModel.deselectAll = function () {
+            	toggleSelection(false);
+            };
 
+            $scope.scopeModel.sendMail = function () {
+            	var customerIds = getSelectedCustomerIds();
                 return executeTask(customerIds, true);
             };
-
-            $scope.scopeModel.close = function () {
+            $scope.scopeModel.skip = function () {
                 return executeTask(undefined, false);
             };
         }
@@ -89,13 +75,21 @@
             $scope.title = 'Notify Customers';
         }
         function loadGrid() {
-            return WhS_BE_CarrierAccountAPIService.GetCustomersBySellingNumberPlanId(sellingNumberPlanId).then(function (response) {
-                if (response != null) {
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.scopeModel.customers.push(response[i]);
-                    }
-                }
-            });
+
+        	var promises = [];
+        	promises.push(gridReadyDeferred.promise);
+
+        	var getCustomersPromise = WhS_BE_CarrierAccountAPIService.GetCustomersBySellingNumberPlanId(sellingNumberPlanId).then(function (response) {
+        		if (response != null) {
+        			for (var i = 0; i < response.length; i++) {
+        				$scope.scopeModel.customers.push(response[i]);
+        			}
+        			toggleSelection(true);
+        		}
+        	});
+        	promises.push(getCustomersPromise);
+
+        	return UtilsService.waitMultiplePromises(promises);
         }
 
         function executeTask(customerIds, taskAction) {
@@ -117,15 +111,23 @@
             return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
                 $scope.modalContext.closeModal();
             }).catch(function (error) {
-                VRNotificationService.notifyException(error);
+                VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function clearAllCustomers(isSelected) {
-            for (var i = 0; i < $scope.scopeModel.customers.length; i++)
-                $scope.scopeModel.customers[i].isSelected = isSelected;
+        function getSelectedCustomerIds() {
+        	var customerIds = [];
+        	for (var i = 0; i < $scope.scopeModel.customers.length; i++) {
+        		if ($scope.scopeModel.customers[i].isSelected)
+        			customerIds.push($scope.scopeModel.customers[i].CarrierAccountId);
+        	}
+        	return customerIds;
+        }
+        function toggleSelection(toggleValue) {
+        	for (var i = 0; i < $scope.scopeModel.customers.length; i++)
+        		$scope.scopeModel.customers[i].isSelected = toggleValue;
         }
     }
 

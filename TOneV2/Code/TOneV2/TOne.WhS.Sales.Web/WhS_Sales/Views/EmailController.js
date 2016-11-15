@@ -49,7 +49,7 @@
 		function load() {
 			$scope.scopeModel.isLoading = true;
 
-			getSellingProduct().then(function () {
+			getSellingProductId().then(function () {
 				loadAllControls();
 			}).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -57,7 +57,7 @@
 			});
 		}
 
-		function getSellingProduct() {
+		function getSellingProductId() {
 			return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
 				if (response != null && response.TaskData != null) {
 					sellingProductId = response.TaskData.SellingProductId;
