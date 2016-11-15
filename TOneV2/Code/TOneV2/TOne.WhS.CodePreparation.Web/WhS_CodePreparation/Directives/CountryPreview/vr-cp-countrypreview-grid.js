@@ -48,7 +48,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, VRUIUtilsService, VRNotificat
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

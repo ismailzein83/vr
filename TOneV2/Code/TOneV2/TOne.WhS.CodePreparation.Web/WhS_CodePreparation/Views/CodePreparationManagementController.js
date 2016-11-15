@@ -44,23 +44,23 @@
                     onSellingNumberPlanSelectorChanged();
                 };
                 return WhS_CP_CodePrepAPIService.ApplyCodePreparationState(filter.sellingNumberPlanId, onCodePreparationApplied);
-            }
+            };
 
             $scope.uploadCodePreparation = function () {
                 var onCodePreparationUpdated = function () {
                     onSellingNumberPlanSelectorChanged();
                 };
                 return WhS_CP_CodePrepAPIService.UploadCodePreparationSheet(filter.sellingNumberPlanId, onCodePreparationUpdated);
-            }
+            };
 
             $scope.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.countriesTreeReady = function (api) {
                 treeAPI = api;
-            }
+            };
 
             $scope.onNodeSelection = function () {
 
@@ -78,7 +78,7 @@
 
                 return promise;
 
-            }
+            };
 
             $scope.loadEffectiveSaleZones = function (countryNode) {
                 var effectiveZonesPromiseDeffered = UtilsService.createPromiseDeferred();
@@ -95,17 +95,17 @@
                     effectiveZonesPromiseDeffered.resolve(effectiveZones);
                 });
                 return effectiveZonesPromiseDeffered.promise;
-            }
+            };
 
             $scope.onSellingNumberPlanSelectorChanged = function () {
                 onSellingNumberPlanSelectorChanged();
-            }
+            };
 
 
             $scope.saleCodesGridReady = function (api) {
 
                 codesGridAPI = api;
-            }
+            };
 
             $scope.newZoneClicked = function () {
                 var parameters = {
@@ -119,7 +119,7 @@
                 };
 
                 VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewZoneDialog.html", parameters, settings);
-            }
+            };
 
             $scope.newCodeClicked = function () {
                 var parameters = {
@@ -135,7 +135,7 @@
                 };
 
                 VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewCodeDialog.html", parameters, settings);
-            }
+            };
 
             $scope.moveCodesClicked = function () {
                 var codes = codesGridAPI.getSelectedCodes();
@@ -153,11 +153,11 @@
                 };
 
                 VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/MoveCodeDialog.html", parameters, settings);
-            }
+            };
 
             $scope.endClicked = function () {
                 return ($scope.selectedCodes.length > 0) ? closeCodes() : closeZone();
-            }
+            };
 
             $scope.cancelState = function () {
                 return VRNotificationService.showConfirmation().then(function (result) {
@@ -170,7 +170,7 @@
                     }
                 });
 
-            }
+            };
 
             $scope.renameZoneClicked = function () {
                 var parameters = {
@@ -186,7 +186,7 @@
 
                 VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/RenameZoneDialog.html", parameters, settings);
 
-            }
+            };
 
             $scope.buildTreeId = function (item) {
                 return buildTreeId(item);

@@ -53,7 +53,7 @@
                 Codes: $scope.codes,
                 ZoneName: currentZoneName,
                 ZoneId: zoneId
-            }
+            };
         }
 
         function closeCodes() {

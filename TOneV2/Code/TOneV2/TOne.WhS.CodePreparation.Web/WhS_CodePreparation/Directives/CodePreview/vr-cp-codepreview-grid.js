@@ -43,7 +43,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
                     directiveAPI.load = function (query) {
                         zoneName = query.ZoneName;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

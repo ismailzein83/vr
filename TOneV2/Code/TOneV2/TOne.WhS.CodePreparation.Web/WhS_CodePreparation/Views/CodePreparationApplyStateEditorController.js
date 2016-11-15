@@ -41,12 +41,12 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         $scope.modalContext.closeModal();
                         var context = {
-                            onClose:  $scope.onCodePreparationApplied
-                        }
+                            onClose: $scope.onCodePreparationApplied
+                        };
                     }
                     return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                 });
-        }
+            };
     }
 
     function load() {
@@ -74,10 +74,10 @@
     function loadEffectiveDate() {
 
         return WhS_CP_CodePrepAPIService.GetCPSettings().then(function (response) {
-            var effectiveDate= new Date();
+            var effectiveDate = new Date();
             effectiveDate.setDate(effectiveDate.getDate() + response.EffectiveDateOffset);
             $scope.effectiveDate = effectiveDate;
-        })
+        });
     }
 
 };

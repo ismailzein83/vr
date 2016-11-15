@@ -34,14 +34,14 @@ app.directive('vrCpSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     if (payload != undefined && payload.data != undefined) {
                         ctrl.effectiveDateOffset = payload.data.EffectiveDateOffset;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.CodePreparation.Entities.CPSettingsData, TOne.WhS.CodePreparation.Entities",
                         EffectiveDateOffset: ctrl.effectiveDateOffset
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

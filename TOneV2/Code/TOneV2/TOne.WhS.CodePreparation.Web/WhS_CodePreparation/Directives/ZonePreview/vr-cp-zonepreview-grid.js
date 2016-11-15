@@ -47,7 +47,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

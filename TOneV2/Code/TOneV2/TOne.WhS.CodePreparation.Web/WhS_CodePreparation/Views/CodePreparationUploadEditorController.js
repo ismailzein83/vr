@@ -47,17 +47,17 @@
                         $scope.modalContext.closeModal();
                         var context = {
                             onClose: $scope.onCodePreparationUpdated
-                            }
                         }
-                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
-                    });
-            }
+                    }
+                    return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
+                });
+            };
 
             $scope.downloadTemplate = function () {
                 return WhS_CP_CodePrepAPIService.DownloadImportCodePreparationTemplate().then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
-            }
+            };
 
         }
 
@@ -77,7 +77,7 @@
         }
 
         function setTitle() {
-            $scope.title = UtilsService.buildTitleForUploadEditor("Numbering Plan Sheet")
+            $scope.title = UtilsService.buildTitleForUploadEditor("Numbering Plan Sheet");
         }
 
 
@@ -87,7 +87,7 @@
                 var effectiveDate = new Date();
                 effectiveDate.setDate(effectiveDate.getDate() + response.EffectiveDateOffset);
                 $scope.effectiveDate = effectiveDate;
-            })
+            });
         }
 
     };

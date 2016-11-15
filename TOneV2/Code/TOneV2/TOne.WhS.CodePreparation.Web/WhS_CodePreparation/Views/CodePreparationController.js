@@ -26,7 +26,7 @@
                 sellingNumberPlanDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader, sellingNumberPlanReadyPromiseDeferred);
-            }
+            };
             $scope.upload = function () {
 
                 var inputArguments = {
@@ -46,12 +46,12 @@
                         return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
 
                 });
-            }
+            };
             $scope.downloadTemplate = function () {
                 return WhS_CP_CodePrepAPIService.DownloadImportCodePreparationTemplate().then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
-            }
+            };
         }
         function load() {
         }

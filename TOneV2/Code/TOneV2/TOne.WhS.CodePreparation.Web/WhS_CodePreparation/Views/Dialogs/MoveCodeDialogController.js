@@ -88,7 +88,7 @@
                 CurrentZoneName: moveItem.CurrentZoneName,
                 NewZoneName: moveItem.NewZoneName,
                 ZoneId: zoneId
-            }
+            };
         }
 
         function moveCodes() {

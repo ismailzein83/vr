@@ -45,15 +45,15 @@ function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, Ut
                         $scope.ShowDraftStatus = query.ShowDraftStatus;
                         $scope.ShowSelectCode = query.ShowSelectCode;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onCodeAdded = function (codeItemObject) {
                         gridAPI.itemAdded(codeItemObject);
-                    }
+                    };
 
                     directiveAPI.onCodeClosed = function (codeItemObject) {
                         gridAPI.itemDeleted(codeItemObject);
-                    }
+                    };
                     directiveAPI.clearUpdatedItems = gridAPI.clearUpdatedItems;
                     directiveAPI.getSelectedCodes = function () {
                         return ctrl.selectedcodes;
@@ -89,7 +89,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, Ut
                         ctrl.selectedcodes.push(dataItem);
                     }
                 }
-            }
+            };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_CP_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
@@ -125,7 +125,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, Ut
                     case WhS_CP_CodeItemDraftStatusEnum.MovedTo.value:
                         dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.MovedTo.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.MovedFrom.label + " " + dataItem.OtherCodeZoneName;
-                        break
+                        break;
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.value:
                         dataItem.DraftStatusIconUrl = WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.icon;
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.label;

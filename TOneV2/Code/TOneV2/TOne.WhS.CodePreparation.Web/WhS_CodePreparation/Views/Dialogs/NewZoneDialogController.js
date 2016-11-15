@@ -50,7 +50,7 @@
 
             $scope.onZoneValueChange = function (value) {
                 $scope.disabledZone = (value == undefined) || UtilsService.getItemIndexByStringVal($scope.zones, value, "zone", true) != -1;
-            }
+            };
 
             $scope.addZoneValue = function () {
                 $scope.zones.push({ zone: $scope.zoneValue });
@@ -80,7 +80,7 @@
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
                 NewZones: buildZoneObjFromScope()
-            }
+            };
         }
 
         function insertZone() {

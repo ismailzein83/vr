@@ -52,7 +52,7 @@
 
                 if (value != undefined)
                     $scope.disabledCode = UtilsService.getItemIndexByVal($scope.codes, value, "code") != -1;
-            }
+            };
 
             $scope.addCodeValue = function () {
                 $scope.codes.push({ code: $scope.codeValue });
@@ -90,8 +90,8 @@
                 SellingNumberPlanId: sellingNumberPlanId,
                 CountryId: countryId,
                 ZoneId: zoneId,
-                NewCodes: buildCodesObjFromScope(),
-            }
+                NewCodes: buildCodesObjFromScope()
+            };
         }
 
         function insertCode() {
