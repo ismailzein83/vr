@@ -80,6 +80,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (saleZones == null)
                     continue;
 
+                int assignedSellingProductId = carrierAccounts.GetRecord(customerId);
+
                 SalePriceListType customerSalePriceListType = GetSalePriceListType(customer.CustomerSettings.IsAToZ, context.ChangeType);
                 IEnumerable<int> customerSoldCountries = saleZones.Select(item => item.CountryId).Distinct();
 
@@ -88,31 +90,33 @@ namespace TOne.WhS.BusinessEntity.Business
                     List<ZoneWrapper> zonesWrapperForCountry = zonesWrapperByCountry.GetRecord(soldCountryId);
                     IEnumerable<SalePLZoneChange> countryZonesChanges = zoneChangesByCountryId.GetRecord(soldCountryId);
 
-                    if (customer.CustomerSettings.IsAToZ || countryZonesChanges != null)
+                    if (customer.CustomerSettings.IsAToZ)
                     {
-                        if (context.ChangeType == SalePLChangeType.CodeAndRate)
+                        CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperForCountry, rateLocator, assignedSellingProductId, customerId);
+                    }
+                    else if (countryZonesChanges != null)
+                    {
+                        if(context.ChangeType == SalePLChangeType.CodeAndRate)
                         {
-                            CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperForCountry, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
+                            CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperForCountry, rateLocator, assignedSellingProductId, customerId);
                         }
                         else if (context.ChangeType == SalePLChangeType.Rate)
                         {
-                            IEnumerable<SalePLZoneChange> countryZoneChanges = zoneChangesByCountryId.GetRecord(soldCountryId);
                             if (zonesWrapperForCountry != null)
                             {
                                 List<ZoneWrapper> zonesWrapperHaveChanges = new List<ZoneWrapper>();
                                 foreach (ZoneWrapper zoneWrapper in zonesWrapperForCountry)
                                 {
-                                    SalePLZoneChange salePLZoneChange = countryZoneChanges.FindRecord(item => item.ZoneName.Equals(zoneWrapper.ZoneName));
+                                    SalePLZoneChange salePLZoneChange = countryZonesChanges.FindRecord(item => item.ZoneName.Equals(zoneWrapper.ZoneName));
                                     if (salePLZoneChange != null && salePLZoneChange.CustomersHavingRateChange.Contains(customerId))
                                     {
                                         zonesWrapperHaveChanges.Add(zoneWrapper);
                                     }
                                 }
-                                CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperHaveChanges, rateLocator, carrierAccounts.GetRecord(customerId), customerId);
+                                CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperHaveChanges, rateLocator, assignedSellingProductId, customerId);
                             }
                         }
                     }
-
                 }
 
 				if (customerZoneNotifications.Count > 0)
