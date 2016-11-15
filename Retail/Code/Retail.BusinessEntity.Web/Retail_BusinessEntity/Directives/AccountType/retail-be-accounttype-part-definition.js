@@ -124,10 +124,10 @@
 
         function getTamplate(attrs)
         {
-            var label = "label='Part Definition'";
+            var label = "label='Section Definition'";
 
             if (attrs.hidelabel != undefined) {
-                label = "label='Part Definitions'";
+                label = "label='Section Definitions'";
             }
 
             return '<vr-row><vr-columns colnum="{{partDefinitionCtrl.normalColNum * 2}}">'

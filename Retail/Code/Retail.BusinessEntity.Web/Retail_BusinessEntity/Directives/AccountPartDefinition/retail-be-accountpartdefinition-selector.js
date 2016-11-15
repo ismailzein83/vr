@@ -87,10 +87,10 @@ app.directive('retailBeAccountpartdefinitionSelector', ['Retail_BE_AccountPartDe
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Account Part Definition";
+        var label = "Account Section Definition";
 
         if (attrs.ismultipleselection != undefined) {
-            label = "Account Part Definition";
+            label = "Account Section Definition";
             multipleselection = "ismultipleselection";
         }
         if (attrs.customlabel != undefined)
