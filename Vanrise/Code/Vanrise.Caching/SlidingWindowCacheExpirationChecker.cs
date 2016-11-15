@@ -9,15 +9,18 @@ namespace Vanrise.Caching
 {
     public class SlidingWindowCacheExpirationChecker : CacheExpirationChecker
     {
-        TimeSpan _cacheIntervalAfterLastAccess;
-        public SlidingWindowCacheExpirationChecker(TimeSpan cacheIntervalAfterLastAccess)
+        TimeSpan? _cacheIntervalAfterLastAccess;
+        public SlidingWindowCacheExpirationChecker(TimeSpan? cacheIntervalAfterLastAccess)
         {
             _cacheIntervalAfterLastAccess = cacheIntervalAfterLastAccess;
         }
 
         public override bool IsCacheExpired(ICacheExpirationCheckerContext context)
         {
-            return (VRClock.Now - context.CachedObject.LastAccessedTime) > _cacheIntervalAfterLastAccess;
+            if (!_cacheIntervalAfterLastAccess.HasValue)
+                return false;
+
+            return (VRClock.Now - context.CachedObject.LastAccessedTime) > _cacheIntervalAfterLastAccess.Value;
         }
     }
 }
