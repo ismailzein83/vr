@@ -53,9 +53,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private struct GetCachedSupplierDefaultServicesCacheName
+        private struct GetCachedSupplierDefaultServicesCacheName : IBEDayFilterCacheName
         {
             public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
         }
 
         private Dictionary<int, List<SupplierDefaultService>> GetCachedSupplierDefaultServices()
@@ -82,11 +87,16 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-        private struct GetCachedSupplierZoneServicesCacheName
+        private struct GetCachedSupplierZoneServicesCacheName : IBEDayFilterCacheName
         {
+            public DateTime EffectiveOn { get; set; }
+
             public int SupplierId { get; set; }
 
-            public DateTime EffectiveOn { get; set; }
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
         }
 
         private SupplierZoneServicesByZoneData GetCachedSupplierZoneServices(int supplierId)

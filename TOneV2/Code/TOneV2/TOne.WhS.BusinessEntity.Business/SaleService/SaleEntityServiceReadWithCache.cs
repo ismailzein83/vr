@@ -41,9 +41,24 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
+        private struct GetCachedSaleEntityDefaultServicesCacheName : IBEDayFilterCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
+        }
+
         private SaleEntityDefaultServicesByOwner GetCachedSaleEntityDefaultServicesByOwner()
         {
-            string cacheName = String.Format("GetCachedSaleEntityDefaultServicesByOwner_{0}", _effectiveOn.Date);
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityServiceCacheManager>();
+            var cacheName = new GetCachedSaleEntityDefaultServicesCacheName
+            {
+                EffectiveOn = _effectiveOn.Date
+            };
+
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityServiceCacheManager>().GetOrCreateObject(cacheName, () =>
             {
                 var defaultServicesByOwner = new SaleEntityDefaultServicesByOwner();
@@ -80,9 +95,31 @@ namespace TOne.WhS.BusinessEntity.Business
                 return defaultServicesByOwner;
             });
         }
+
+        private struct GetCachedSaleEntityZoneServicesCacheName : IBEDayFilterCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+
+            public SalePriceListOwnerType OwnerType { get; set; }
+
+            public int OwnerId { get; set; }
+
+            public DateTime FilterDay
+            {
+                get { return this.EffectiveOn; }
+            }
+        }
+
         private SaleEntityZoneServicesByZone GetCachedSaleEntityZoneServicesByZone(SalePriceListOwnerType ownerType, int ownerId)
         {
-            string cacheName = String.Format("GetSaleEntityZoneServicesByZone_{0}_{1}_{2}", ownerType, ownerId, _effectiveOn.Date);
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityServiceCacheManager>();
+            var cacheName = new GetCachedSaleEntityZoneServicesCacheName
+            {
+                EffectiveOn = _effectiveOn.Date,
+                OwnerType = ownerType,
+                OwnerId = ownerId
+            };
+
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityServiceCacheManager>().GetOrCreateObject(cacheName, () =>
             {
                 var zoneServicesByZone = new SaleEntityZoneServicesByZone();
