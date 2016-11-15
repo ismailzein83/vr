@@ -28,8 +28,8 @@
             $scope.validateToDate = function()
             {
                 var date = new Date();
-                if ($scope.toDate < new Date(date.getFullYear(), date.getMonth(), date.getDate()))
-                    return "Date connot be less than date of today.";
+                if ($scope.toDate >= new Date(date.getFullYear(), date.getMonth(), date.getDate()))
+                    return "Date must be less than date of today.";
                 return null;
             }
 
