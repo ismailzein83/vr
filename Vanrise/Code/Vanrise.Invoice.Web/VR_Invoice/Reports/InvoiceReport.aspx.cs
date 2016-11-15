@@ -35,6 +35,10 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
 
                     string actionTypeName = Request.QueryString["actionTypeName"];
                     InvoiceManager invoiceManager = new InvoiceManager();
+                    string actionIdString = Request.QueryString["actionId"];
+                    Guid actionId = Guid.Empty;
+                    if (actionIdString != null)
+                        actionId = new Guid(actionIdString);
 
                     invoice = invoiceActionContext.GetInvoice;
                     InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
@@ -50,7 +54,8 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                         if (action.InvoiceFilterCondition.IsFilterMatch(context) && action.Settings.ActionTypeName == actionTypeName)
                         {
                             openRDLCReportAction = action.Settings as OpenRDLCReportAction;
-                            break;
+                            if (actionId == Guid.Empty || actionId == openRDLCReportAction.ActionId)
+                              break;
                         }
                     }
                     List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();

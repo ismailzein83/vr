@@ -39,12 +39,13 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                 actionMethod: function (payload) {
                     var context = {
                         $type: "Vanrise.Invoice.Business.PhysicalInvoiceActionContext,Vanrise.Invoice.Business",
-                        InvoiceId: payload.invoice.Entity.InvoiceId
+                        InvoiceId: payload.invoice.Entity.InvoiceId,
                     };
 
                     var paramsurl = "";
                     paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
                     paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
+                    paramsurl += "&actionId=" + payload.invoiceGridAction.Settings.ActionId;
                     paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
                     window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
                 }

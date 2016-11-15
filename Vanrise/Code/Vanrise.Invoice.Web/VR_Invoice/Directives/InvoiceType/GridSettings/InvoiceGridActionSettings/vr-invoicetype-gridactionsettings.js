@@ -113,6 +113,8 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                            data.ActionId = UtilsService.guid();
+
                         }
                     }
                     return data;

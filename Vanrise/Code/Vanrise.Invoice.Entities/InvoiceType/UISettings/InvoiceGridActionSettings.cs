@@ -10,5 +10,6 @@ namespace Vanrise.Invoice.Entities
     {
         public abstract string ActionTypeName { get;}
         public abstract Guid ConfigId { get; }
+        public virtual Guid ActionId { get; set; }
     }
 }
