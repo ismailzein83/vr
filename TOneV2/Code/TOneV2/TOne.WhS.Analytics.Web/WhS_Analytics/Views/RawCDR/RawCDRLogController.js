@@ -22,12 +22,12 @@ function rawCDRLogController($scope, UtilsService, $q, VRModalService, VRNotific
         $scope.minDuration;
         $scope.maxDuration;
         $scope.whereCondtion;
-        $scope.nRecords = '100'
+        $scope.nRecords = '100';
      
         $scope.onSwitchDirectiveReady = function (api) {
             switchDirectiveAPI = api;
             switchReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onInfoClick = function () {
             var settings = {};
@@ -36,11 +36,11 @@ function rawCDRLogController($scope, UtilsService, $q, VRModalService, VRNotific
             };
             VRModalService.showModal('/Client/Modules/WhS_Analytics/Views/RawCDR/RawCDRLogTemplate.html', null, settings);
 
-        }
+        };
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-        }
+        };
 
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -53,7 +53,7 @@ function rawCDRLogController($scope, UtilsService, $q, VRModalService, VRNotific
         var query = {
             Switches: filter.SwitchIds,
             FromDate: $scope.fromDate,
-            ToDate:  $scope.toDate,
+            ToDate: $scope.toDate,
             NRecords: $scope.nRecords,
             InCarrier: $scope.inCarrier,
             OutCarrier: $scope.outCarrier,
@@ -64,7 +64,7 @@ function rawCDRLogController($scope, UtilsService, $q, VRModalService, VRNotific
             MaxDuration: $scope.maxDuration,
             DurationType: $scope.selectedDurationType.value,
             WhereCondition: $scope.whereCondtion
-        }
+        };
         return query;
        
     }

@@ -49,7 +49,7 @@ function (WhS_Analytics_GenericAnalyticMeasureEnum) {
                 }
 
                 return selectedThresholds;
-            }
+            };
 
             api.load = function (payload) {
 
@@ -66,7 +66,7 @@ function (WhS_Analytics_GenericAnalyticMeasureEnum) {
                 }
                 console.log(ctrl.measureThresholds);
 
-            }
+            };
 
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);

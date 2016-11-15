@@ -58,60 +58,52 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
 
             ctrl.validateDateTime = function () {
                 return VRValidationService.validateTimeRange(ctrl.fromdate, ctrl.todate);
-            }
+            };
 
-            ctrl.onCustomerAccountDirectiveReady = function (api)
-            {
+            ctrl.onCustomerAccountDirectiveReady = function (api) {
                 customerAccountDirectiveAPI = api;
                 customerAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
-            ctrl.onSupplierAccountDirectiveReady = function (api)
-            {
+            ctrl.onSupplierAccountDirectiveReady = function (api) {
                 supplierAccountDirectiveAPI = api;
                 supplierAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
-            ctrl.onCurrencyDirectiveReady = function (api)
-            {
+            ctrl.onCurrencyDirectiveReady = function (api) {
                 currencyDirectiveAPI = api;
                 currencyReadyPromiseDeferred.resolve();
-            }
+            };
 
-            ctrl.onCountryDirectiveReady = function (api)
-            {
+            ctrl.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
-            ctrl.onSellingNumberPlanDirectiveReady = function (api)
-            {
+            ctrl.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
 
-            ctrl.onSaleZoneDirectiveReady = function (api)
-            {
+            ctrl.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
-            ctrl.onSelectSellingNumberPlan = function (selectedItem)
-            {
+            ctrl.onSelectSellingNumberPlan = function (selectedItem) {
                 ctrl.showSaleZoneSelector = true;
 
                 var payload = {
                     sellingNumberPlanId: selectedItem.SellingNumberPlanId,
-                }
+                };
 
                 var setLoader = function (value) { ctrl.isLoadingSaleZonesSection = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-            }
+            };
 
-            ctrl.isrequired = function ()
-            {
-                return ctrl.periods.length==0;
-            }
+            ctrl.isrequired = function () {
+                return ctrl.periods.length == 0;
+            };
 
             defineAPI();
       
@@ -120,8 +112,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
         function defineAPI() {
             var api = {};
 
-            api.getData = function ()
-            {
+            api.getData = function () {
                 var filterCustomer = {
                     Dimension: WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value,
                     FilterValues: customerAccountDirectiveAPI.getSelectedIds()
@@ -156,24 +147,19 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                     currency: currencyDirectiveAPI != undefined ? currencyDirectiveAPI.getSelectedIds() : undefined
                 };
                 return selectedobject;
-            }
+            };
 
-            api.load = function (payload)
-            {
+            api.load = function (payload) {
                 ctrl.isLoadCustomers;
                 ctrl.isLoadSuppliers;
                 ctrl.isLoadSellingNumberPlan;
                 ctrl.isLoadCountries;
                 ctrl.isLoadCurrencies;
 
-                if (payload != undefined)
-                {
-                    if (payload.filters != undefined)
-                    {
-                        for (var i = 0; i < payload.filters.length; i++)
-                        {
-                            switch (payload.filters[i])
-                            {
+                if (payload != undefined) {
+                    if (payload.filters != undefined) {
+                        for (var i = 0; i < payload.filters.length; i++) {
+                            switch (payload.filters[i]) {
                                 case WhS_Analytics_GenericAnalyticDimensionEnum.Customer.value: ctrl.isLoadCustomers = true; break;
                                 case WhS_Analytics_GenericAnalyticDimensionEnum.Supplier.value: ctrl.isLoadSuppliers = true; break;
                                 case WhS_Analytics_GenericAnalyticDimensionEnum.Zone.value: ctrl.isLoadSellingNumberPlan = true; break;
@@ -183,73 +169,59 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                         }
                     }
 
-                    for (var p in WhS_Analytics_GenericAnalyticDimensionEnum)
-                    {
-                        if (payload.dimensions != undefined || payload.dimensions.length > 0)
-                        {
-                            for (var i = 0; i < payload.dimensions.length; i++)
-                            {
+                    for (var p in WhS_Analytics_GenericAnalyticDimensionEnum) {
+                        if (payload.dimensions != undefined || payload.dimensions.length > 0) {
+                            for (var i = 0; i < payload.dimensions.length; i++) {
                                 if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.dimensions[i])
                                     ctrl.dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
 
                             }
 
-                           
+
                         }
 
-                        if (payload.periods != undefined && payload.periods.length > 0)
-                        {
-                            for (var i = 0; i < payload.periods.length; i++)
-                            {
+                        if (payload.periods != undefined && payload.periods.length > 0) {
+                            for (var i = 0; i < payload.periods.length; i++) {
                                 if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.periods[i])
                                     ctrl.periods.push(WhS_Analytics_GenericAnalyticDimensionEnum[p]);
                             }
                         }
                     }
-                    if(ctrl.dimensions.length>0)
-                    {
+                    if (ctrl.dimensions.length > 0) {
                         ctrl.selecteddimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Zone);
                     }
                 }
 
                 var promises = [];
 
-                function loadSellingNumberPlanSection()
-                {
+                function loadSellingNumberPlanSection() {
                     var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadSellingNumberPlanPromiseDeferred.promise);
-                    sellingNumberPlanReadyPromiseDeferred.promise.then(function ()
-                    {
+                    sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
                     });
                 }
 
-                function loadCustomers()
-                {
+                function loadCustomers() {
                     var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadCustomerAccountPromiseDeferred.promise);
-                    customerAccountReadyPromiseDeferred.promise.then(function ()
-                    {
+                    customerAccountReadyPromiseDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
                     });
                 }
 
-                function loadSuppliers()
-                {
+                function loadSuppliers() {
                     var loadSupplierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadSupplierAccountPromiseDeferred.promise);
-                    supplierAccountReadyPromiseDeferred.promise.then(function ()
-                    {
+                    supplierAccountReadyPromiseDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(supplierAccountDirectiveAPI, undefined, loadSupplierAccountPromiseDeferred);
                     });
                 }
 
-                function loadCountries()
-                {
+                function loadCountries() {
                     var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadCountryPromiseDeferred.promise);
-                    countryReadyPromiseDeferred.promise.then(function ()
-                    {
+                    countryReadyPromiseDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, loadCountryPromiseDeferred);
                     });
                 }
@@ -257,8 +229,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                 function loadCurrencies() {
                     var loadCurrencyPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadCurrencyPromiseDeferred.promise);
-                    currencyReadyPromiseDeferred.promise.then(function ()
-                    {
+                    currencyReadyPromiseDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencyPromiseDeferred);
                     });
                 }
@@ -274,7 +245,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_GenericAnalyticDime
                 if (ctrl.isLoadCurrencies)
                     loadCurrencies();
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);

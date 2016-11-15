@@ -30,26 +30,26 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onCustomerAccountDirectiveReady = function (api) {
             customerAccountDirectiveAPI = api;
             customerAccountReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSwitchDirectiveReady = function (api) {
             switchDirectiveAPI = api;
             switchReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSaleZoneDirectiveReady = function (api) {
             saleZoneDirectiveAPI = api;
             saleZoneReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-        }
+        };
 
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -63,7 +63,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate
-        }
+        };
         return query;
     }
 

@@ -18,16 +18,16 @@
         function defineScope() {
             $scope.onReadyGenericChart = function (api) {
                 chartApi = api;
-            }
+            };
 
             $scope.onReadyGenericGrid = function (api) {
                 gridApi = api;
-            }
+            };
 
             $scope.onFilterDirectivectiveReady = function (api) {
                 filterDirectiveAPI = api;
                 filterReadyPromiseDeferred.resolve();
-            }
+            };
          
             $scope.searchClicked = function () { 
                 return UtilsService.waitMultipleAsyncOperations([loadGrid,loadCharts]).finally(function () {

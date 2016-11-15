@@ -15,12 +15,12 @@ function carrierSummaryController($scope, WhS_Analytics_GenericAnalyticDimension
     function defineScope() {
         $scope.onReadyGenericGrid = function (api) {
             gridApi = api;
-        }
+        };
 
         $scope.onFilterDirectivectiveReady = function (api) {
             filterDirectiveAPI = api;
             filterReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.searchClicked = function () {
             return UtilsService.waitMultipleAsyncOperations([loadGrid]).finally(function () {

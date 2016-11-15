@@ -29,9 +29,9 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
         var gridAPI;
         this.initializeController = initializeController;
         ctrl.showDimessionCol = function (d) {
-            
-            return ctrl.dimenssion != undefined && ctrl.dimenssion.indexOf(d) > -1  ;
-        }
+
+            return ctrl.dimenssion != undefined && ctrl.dimenssion.indexOf(d) > -1;
+        };
 
         function initializeController() {
 
@@ -48,7 +48,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

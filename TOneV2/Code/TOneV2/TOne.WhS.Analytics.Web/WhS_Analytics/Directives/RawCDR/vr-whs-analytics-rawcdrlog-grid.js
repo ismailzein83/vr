@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RawCDRLogAPIService
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

@@ -55,52 +55,52 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
             ctrl.validateDateTime = function () {
                 return VRValidationService.validateTimeRange(ctrl.fromdate, ctrl.todate);
-            }
+            };
 
             ctrl.onCustomerAccountDirectiveReady = function (api) {
                 customerAccountDirectiveAPI = api;
                 customerAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onSupplierAccountDirectiveReady = function (api) {
                 supplierAccountDirectiveAPI = api;
                 supplierAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onCurrencyDirectiveReady = function (api) {
                 currencyDirectiveAPI = api;
                 currencyReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onSelectSellingNumberPlan = function (selectedItem) {
                 ctrl.showSaleZoneSelector = true;
 
                 var payload = {
                     sellingNumberPlanId: selectedItem.SellingNumberPlanId,
-                }
+                };
 
                 var setLoader = function (value) { ctrl.isLoadingSaleZonesSection = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-            }
+            };
 
             ctrl.isrequired = function () {
                 return ctrl.periods.length == 0;
-            }
+            };
 
             defineAPI();
 
@@ -144,7 +144,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
                     currency: currencyDirectiveAPI != undefined ? currencyDirectiveAPI.getSelectedIds() : undefined
                 };
                 return selectedobject;
-            }
+            };
 
             api.load = function (payload) {
                 ctrl.isLoadCustomers;
@@ -219,7 +219,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
                 if (ctrl.isLoadCurrencies)
                     loadCurrencies();
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);

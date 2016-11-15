@@ -27,7 +27,7 @@
             $scope.onGenericSettingsReady = function (api) {
                 genericSettingsAPI = api;
                 genericSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();

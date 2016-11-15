@@ -76,7 +76,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                 ctrl.getColor = function (dataItem, coldef) {
                     if (ctrl.parameters != undefined)
                         return WhS_Analytics_GenericAnalyticService.getMeasureColor(dataItem, coldef, ctrl.parameters);
-                }
+                };
 
              
 
@@ -146,7 +146,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                                         ToTime: ctrl.toTime,
                                         Currency: ctrl.Currency,
                                         WithSummary: isSummary
-                                    }
+                                    };
                                     return dataItem.gridAPI.loadGrid(query);
                                 };
 
@@ -157,7 +157,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
 
                             return gridApi.retrieveData(queryFinalized);
 
-                        }
+                        };
 
                         return directiveAPI;
                     }
@@ -254,7 +254,7 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
                         ToTime: query.ToTime,
                         Currency: query.Currency,
                         WithSummary: isSummary
-                    }
+                    };
                     if (ctrl.selectedPeriods.length > 0 || ctrl.selectedDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else

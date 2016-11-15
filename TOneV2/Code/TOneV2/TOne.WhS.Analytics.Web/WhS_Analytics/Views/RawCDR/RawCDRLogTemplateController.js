@@ -12,7 +12,7 @@ function rawCDRLogTemplateController($scope, UtilsService, VRModalService, VRNot
 
         $scope.InfoData = [];
         $scope.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
 
     }

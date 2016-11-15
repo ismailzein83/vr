@@ -52,37 +52,37 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
 
         $scope.validateDateTime = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-        }
+        };
 
         $scope.onSupplierZoneDirectiveReady = function (api) {
             supplierZoneDirectiveAPI = api;
             supplierZoneReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onCustomerAccountDirectiveReady = function (api) {
             customerAccountDirectiveAPI = api;
             customerAccountReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSwitchDirectiveReady = function (api) {
             switchDirectiveAPI = api;
             switchReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSupplierAccountDirectiveReady = function (api) {
             supplierAccountDirectiveAPI = api;
             supplierAccountReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSellingNumberPlanDirectiveReady = function (api) {
             sellingNumberPlanDirectiveAPI = api;
             sellingNumberPlanReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSaleZoneDirectiveReady = function (api) {
             saleZoneDirectiveAPI = api;
             saleZoneReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSelectSellingNumberPlan = function () {
             if ($scope.selectedSellingNumberPlan != undefined) {
@@ -91,13 +91,13 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
                 var payload = {
                     sellingNumberPlanId: $scope.selectedSellingNumberPlan.SellingNumberPlanId,
                     selectedIds: receivedSaleZoneIds
-                }
+                };
                 var setLoader = function (value) {
                     $scope.isLoadingSaleZonesSection = value
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             }
-        }
+        };
 
         $scope.useOneTime = true;
         $scope.onSelectSupplier = function () {
@@ -108,30 +108,30 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
                         SupplierId: $scope.selectedSuppliers[0].CarrierAccountId
                     },
                     selectedIds: receivedSupplierZoneIds
-                }
+                };
                 console.log(payload);
                 var setLoader = function (value) {
-                    $scope.isLoadingSupplierZonesSection = value
+                    $scope.isLoadingSupplierZonesSection = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
             }
             $scope.useOneTime = !$scope.useOneTime;
-        }
+        };
 
-        $scope.nRecords = '100'
+        $scope.nRecords = '100';
 
         var date = new Date();
         $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 00, 00, 00, 00);
 
         $scope.CDROption = [];
-        $scope.selectedCDROption = BillingCDROptionMeasureEnum.All.value
+        $scope.selectedCDROption = BillingCDROptionMeasureEnum.All.value;
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
             if (isModalMode && !$scope.isLoading) {
                 mainGridAPI.loadGrid(getQuery());
             }
-        }
+        };
 
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -147,7 +147,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
             To: $scope.toDate,
             NRecords: $scope.nRecords,
             CDRType: $scope.selectedCDROption.value,
-        }
+        };
         return query;
     }
 

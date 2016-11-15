@@ -45,7 +45,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                     directiveAPI.loadGrid = function (query) {
                         ctrl.parameters = query;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

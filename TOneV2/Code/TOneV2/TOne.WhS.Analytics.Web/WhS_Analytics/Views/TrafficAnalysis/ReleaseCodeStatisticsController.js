@@ -39,36 +39,36 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
-        }
+        };
         $scope.onReleaseCodeDimenssionDirectiveReady = function (api) {
             releaseCodeDimenssionDirectiveAPI = api;
             releaseCodReadyPromiseDeferred.resolve();
-        }
+        };
         
         $scope.onCustomerDirectiveReady = function (api) {
             customerDirectiveAPI = api;
             customerReadyPromiseDeferred.resolve();
-        }
+        };
         $scope.onSupplierDirectiveReady = function (api) {
             supplierDirectiveAPI = api;
             supplierReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSwitchDirectiveReady = function (api) {
             switchDirectiveAPI = api;
             switchReadyPromiseDeferred.resolve();
-        }
+        };
         $scope.onCountryDirectiveReady = function (api) {
             countryDirectiveAPI = api;
             countryReadyPromiseDeferred.resolve();
-        }
+        };
         $scope.onCodeGroupDirectiveReady = function (api) {
             codeGroupDirectiveAPI = api;
             codeGroupReadyPromiseDeferred.resolve();
-        }
+        };
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-        }
+        };
 
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -82,7 +82,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate
-        }
+        };
         return query;
     }
 

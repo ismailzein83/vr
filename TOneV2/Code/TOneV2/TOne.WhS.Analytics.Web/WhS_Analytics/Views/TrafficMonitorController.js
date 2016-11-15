@@ -21,16 +21,16 @@
             $scope.showCharts = false;
             $scope.onReadyGenericChart = function (api) {
                 chartApi = api;
-            }
+            };
 
             $scope.onReadyGenericGrid = function (api) {
                 gridApi = api;
-            }
+            };
 
             $scope.onFilterDirectivectiveReady = function (api) {
                 filterDirectiveAPI = api;
                 filterReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.searchClicked = function () {
                 $scope.showCharts = true;

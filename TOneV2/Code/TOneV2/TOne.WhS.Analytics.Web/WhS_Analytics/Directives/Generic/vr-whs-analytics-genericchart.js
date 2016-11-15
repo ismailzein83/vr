@@ -37,32 +37,26 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                     ctrl.measures.length = 0;
                     if (payload != undefined) {
 
-                        if (payload.FixedDimensionFields != undefined)
-                        {
+                        if (payload.FixedDimensionFields != undefined) {
                             dimensions.push(payload.FixedDimensionFields);
-                            for (var p in WhS_Analytics_GenericAnalyticDimensionEnum)
-                            {
+                            for (var p in WhS_Analytics_GenericAnalyticDimensionEnum) {
                                 if (WhS_Analytics_GenericAnalyticDimensionEnum[p].value == payload.FixedDimensionFields)
                                     period = WhS_Analytics_GenericAnalyticDimensionEnum[p];
-                            }   
+                            }
 
-                            if (payload.FixedDimensionFields == WhS_Analytics_GenericAnalyticDimensionEnum.Hour.value)
-                            {
+                            if (payload.FixedDimensionFields == WhS_Analytics_GenericAnalyticDimensionEnum.Hour.value) {
                                 dimensions.push(WhS_Analytics_GenericAnalyticDimensionEnum.Date.value);
                                 isHour = true;
                             }
                         }
 
-                        if (payload.DimensionFields != undefined)
-                        {
+                        if (payload.DimensionFields != undefined) {
                             for (var i = 0; i < payload.DimensionFields.length; i++)
                                 dimensions.push(payload.DimensionFields[i]);
                         }
 
-                        if (payload.measures != undefined)
-                        {
-                            for (var i = 0; i < payload.measures.length; i++)
-                            {
+                        if (payload.measures != undefined) {
+                            for (var i = 0; i < payload.measures.length; i++) {
                                 for (var p in WhS_Analytics_GenericAnalyticMeasureEnum)
                                     if (WhS_Analytics_GenericAnalyticMeasureEnum[p].value == payload.measures[i])
                                         ctrl.measures.push(WhS_Analytics_GenericAnalyticMeasureEnum[p]);
@@ -70,8 +64,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                         }
 
 
-                        for (var i = 0; i < ctrl.measures.length; i++)
-                        {
+                        for (var i = 0; i < ctrl.measures.length; i++) {
                             ctrl.measures[i].isGettingEntityStatistics = true;
                             setChartApi(ctrl.measures[i]);
                         }
@@ -82,8 +75,8 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                             FromTime: payload.FromTime,
                             ToTime: payload.ToTime,
                             Currency: payload.Currency,
-                            TopRecords:10
-                        }
+                            TopRecords: 10
+                        };
                         var sortField;
 
                         if (dimensions.length > 0)
@@ -96,7 +89,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                             ResultKey: null,
                             SortByColumnName: sortField,
                             Query: query
-                        }
+                        };
                         return WhS_Analytics_GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                             .then(function (response) {
                                 renderCharts(response);
@@ -104,15 +97,13 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                             });
                     }
 
-                    function setChartApi(chartObject)
-                    {
+                    function setChartApi(chartObject) {
                         chartObject.chartSelectedEntityReady = function (api) {
                             chartObject.API = api;
-                        }
+                        };
                     }
 
-                    function renderCharts(response)
-                    {
+                    function renderCharts(response) {
                         ctrl.isGettingEntityStatistics = true;
 
                         var arrayOfAllChartsData = new Array();
@@ -122,11 +113,9 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                         var seriesDefinitions = new Array();
                         var countDates = 0;
 
-                        if (isHour)
-                        {
-                            
-                            for (var i = 0; i < response.Data.length; i++)
-                            {
+                        if (isHour) {
+
+                            for (var i = 0; i < response.Data.length; i++) {
                                 if (!UtilsService.contains(dates, response.Data[i].DimensionValues[1].Name)) {
                                     dates.push(response.Data[i].DimensionValues[1].Name);
 
@@ -140,18 +129,16 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                                 }
                             }
 
-                            seriesDefinitions.sort(function (a, b)
-                            {
+                            seriesDefinitions.sort(function (a, b) {
                                 return new Date(b.title) - new Date(a.title);
                             });
 
-                            for (var x = 0; x < ctrl.measures.length; x++)
-                            {
+                            for (var x = 0; x < ctrl.measures.length; x++) {
                                 arrayOfAllChartsData[x] = new Array();
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var index = contain(arrayOfAllChartsData[x], response.Data[i].DimensionValues[0].Name);
                                     var dateIndex;
-                                    if (index==-1 && period != undefined) {
+                                    if (index == -1 && period != undefined) {
                                         //insert new data values
                                         var values = {};
                                         values[period.name] = response.Data[i].DimensionValues[0].Name;
@@ -187,25 +174,20 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                                 titlePath: period != undefined ? period.name : ctrl.measures[0].description,
                                 isDateTime: false
                             };
-                            for (var i = 0; i < ctrl.measures.length; i++)
-                            {
-                                if (ctrl.measures[i].API != undefined)
-                                {
+                            for (var i = 0; i < ctrl.measures.length; i++) {
+                                if (ctrl.measures[i].API != undefined) {
                                     ctrl.measures[i].API.renderChart(arrayOfAllChartsData[i], chartDefinition[i], seriesDefinitions, xAxisDefinition);
                                     ctrl.measures[i].isGettingEntityStatistics = false;
                                 }
-                                  
+
                             }
 
                         }
-                        else
-                        {
+                        else {
 
-                            for (var x = 0; x < ctrl.measures.length; x++)
-                            {
+                            for (var x = 0; x < ctrl.measures.length; x++) {
                                 arrayOfAllChartsData[x] = new Array();
-                                for (var i = 0; i < response.Data.length; i++)
-                                {
+                                for (var i = 0; i < response.Data.length; i++) {
                                     var values = {};
                                     if (period != undefined)
                                         values[period.name] = response.Data[i].DimensionValues[0].Name;
@@ -244,18 +226,15 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
                                 isDateTime: false
                             };
 
-                            for (var i = 0; i < ctrl.measures.length; i++)
-                            {
-                                if (ctrl.measures[i].API != undefined)
-                                {
+                            for (var i = 0; i < ctrl.measures.length; i++) {
+                                if (ctrl.measures[i].API != undefined) {
                                     ctrl.measures[i].API.renderSingleDimensionChart(arrayOfAllChartsData[i], chartDefinition[i], seriesDefinitions[i]);
                                     ctrl.measures[i].isGettingEntityStatistics = false;
                                 }
                             }
                         }
                         function contain(array, obj) {
-                            for(var i=0;i<array.length;i++)
-                            {
+                            for (var i = 0; i < array.length; i++) {
                                 if (array[i].Hour == obj)
                                     return i;
                             }
@@ -264,7 +243,7 @@ app.directive("vrWhsAnalyticsGenericchart", ['WhS_Analytics_GenericAnalyticAPISe
 
                         ctrl.isGettingEntityStatistics = false;
                     }
-                }
+                };
 
                 if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);

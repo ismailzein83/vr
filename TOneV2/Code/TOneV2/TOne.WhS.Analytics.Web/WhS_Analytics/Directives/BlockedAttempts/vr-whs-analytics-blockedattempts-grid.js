@@ -44,7 +44,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

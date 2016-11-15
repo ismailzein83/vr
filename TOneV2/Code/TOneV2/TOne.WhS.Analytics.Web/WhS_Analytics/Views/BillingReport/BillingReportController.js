@@ -47,22 +47,22 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     $scope.onCustomerAccountDirectiveReady = function (api) {
         customerAccountDirectiveAPI = api;
         customerAccountReadyPromiseDeferred.resolve();
-    }
+    };
     $scope.onSingleCustomerAccountDirectiveReady = function (api) {
         singleCustomerAccountDirectiveAPI = api;
         singleCustomerAccountReadyPromiseDeferred.resolve();
-    }
+    };
     $scope.validateBusinessCaseStatus = function () {
-            if ( $scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 28) {
-                return 'At least you have to choose 28 days.';
-            }
-            return null;
-          
-    }
+        if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 28) {
+            return 'At least you have to choose 28 days.';
+        }
+        return null;
+
+    };
     $scope.onSupplierAccountDirectiveReady = function (api) {
         supplierAccountDirectiveAPI = api;
         supplierAccountReadyPromiseDeferred.resolve();
-    }
+    };
 
     $scope.params = {
         groupByCustomer: false,
@@ -80,7 +80,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         isExchange: false,
         top: 10,
         pageBreak: false
-    }
+    };
 
 
     function defineScope() {
@@ -90,17 +90,17 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onCurrencySelectReady = function (api) {
             currencySelectorAPI = api;
             currencyReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSaleZoneDirectiveReady = function (api) {
             saleZoneDirectiveAPI = api;
             saleZoneReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.openReport = function () {
             var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
@@ -133,11 +133,11 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
             else
                 return $scope.export();
-        }
+        };
 
         $scope.resetGroupBySupplier = function () {
             $scope.params.bySupplier = false;
-        }
+        };
         $scope.resetReportParams = function () {
             $scope.singleCustomer = null;
             $scope.customers = [];
@@ -146,12 +146,12 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
             if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true) {
                 setTimeout(function () {
-                     $scope.selectedPeriod = $scope.periods[1];
+                    $scope.selectedPeriod = $scope.periods[1];
                 })
 
             }
             else {
-                    $scope.selectedPeriod = $scope.periods[6];
+                $scope.selectedPeriod = $scope.periods[6];
             }
             $scope.params = {
                 groupByCustomer: false,
@@ -168,10 +168,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 isExchange: false,
                 top: 10,
                 pageBreak: false
-            }
+            };
             if (saleZoneDirectiveAPI != undefined)
                 saleZoneDirectiveAPI.load();
-        }
+        };
     }
 
     function load() {
@@ -236,8 +236,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         timeRangeReadyPromiseDeferred.promise.then(function () {
             var payload = {
                 period: PeriodEnum.LastMonth.value
-
-            }
+            };
             VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, payload, timeRangeLoadPromiseDeferred);
         });
         return timeRangeLoadPromiseDeferred.promise;

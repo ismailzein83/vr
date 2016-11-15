@@ -61,14 +61,14 @@ app.directive('vrWhsAnalyticsReleasecodeDimenssionSelector', ['WhS_Analytics_Gen
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {
@@ -78,7 +78,7 @@ app.directive('vrWhsAnalyticsReleasecodeDimenssionSelector', ['WhS_Analytics_Gen
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
