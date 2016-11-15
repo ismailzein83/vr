@@ -30,7 +30,18 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
-                        return null;
+                    {
+                        for(var i=0;i<ctrl.datasource.length;i++)
+                        {
+                            var item = ctrl.datasource[i];
+                            if(item.Entity.IsDefault)
+                            {
+                                return null;
+                            }
+                        }
+                        return "You Should add at least one defualt setting.";
+
+                    }
                     return "You Should add at least one setting.";
                 }
                 ctrl.addCompanySetting = function () {
