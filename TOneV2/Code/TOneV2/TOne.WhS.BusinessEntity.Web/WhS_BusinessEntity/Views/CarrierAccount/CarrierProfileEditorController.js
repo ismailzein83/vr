@@ -231,10 +231,13 @@
                         var item = response[i];
                         $scope.scopeModal.taxes.push(item);
 
-                        for (var j = 0; j < carrierProfileEntity.Settings.TaxSetting.Items.length; j++) {
-                            if (carrierProfileEntity.Settings.TaxSetting.Items[j].ItemId === item.ItemId) {
-                                item.value = carrierProfileEntity.Settings.TaxSetting.Items[j].Value;
+                        if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined) {                         
+                            for (var j = 0; j < carrierProfileEntity.Settings.TaxSetting.Items.length; j++) {
+                                if (carrierProfileEntity.Settings.TaxSetting.Items[j].ItemId === item.ItemId) {
+                                    item.value = carrierProfileEntity.Settings.TaxSetting.Items[j].Value;
+                                }
                             }
+
                         }
                     };
                 }
