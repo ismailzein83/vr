@@ -13,6 +13,6 @@
     ReleaseSource: { value: 11, propertyName: "ReleaseSource", description: "Release Source", type: "Text" },
     SupplierName: { value: 12, propertyName: "SupplierName", description: "Supplier Name", type: "Text" },
     SupplierZoneName: { value: 13, propertyName: "SupplierZoneName", description: "Supplier Zone Name", type: "Text" },
-    IsRerouted: { value: 13, propertyName: "IsRerouted", description: "Re.Routed", type: "Text" },
+    IsRerouted: { value: 13, propertyName: "IsRerouted", description: "Re.Routed", type: "Text" }
  
 });

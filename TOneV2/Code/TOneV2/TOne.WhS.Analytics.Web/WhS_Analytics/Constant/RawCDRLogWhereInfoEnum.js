@@ -17,7 +17,7 @@
     OUT_CARRIER: { value: 2, column: "OutCarrier", type: "[varchar](100) NULL" },
     OUT_IP: { value: 2, column: "PortOut", type: "[varchar](21) NULL" },
     CGPN: { value: 2, column: "CGPN", type: "[varchar](40) NULL" },
-    CDPN: { value: 2, column: "CDPN", type: "[varchar](40) NULL" },
+    CDPN: { value: 2, column: "CDPN", type: "[varchar](40) NULL" }
   //  CAUSE_FROM_RELEASE_CODE: { value: 2, column: "CAUSE_FROM_RELEASE_CODE", type: "[varchar](20) NULL" },
    // CAUSE_FROM: { value: 2, column: "CAUSE_FROM", type: "[varchar](10) NULL" },
    // CAUSE_TO_RELEASE_CODE: { value: 2, column: "CAUSE_TO_RELEASE_CODE", type: "[varchar](20) NULL" },
