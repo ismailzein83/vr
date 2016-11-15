@@ -36,7 +36,7 @@ namespace Vanrise.Caching
 
         public bool TryGetValue(Object key, out CachedObject cachedObject)
         {
-            if (_hasFirstItem && _firstItemKey == key)
+            if (_hasFirstItem && _firstItemKey.Equals(key))
             {
                 cachedObject = _firstItemValue;
                 return true;
@@ -49,7 +49,7 @@ namespace Vanrise.Caching
         {
             lock (this)
             {
-                if (_hasFirstItem && _firstItemKey == key)
+                if (_hasFirstItem && _firstItemKey.Equals(key))
                 {
                     _firstItemKey = null;
                     _firstItemValue = null;
