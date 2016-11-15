@@ -51,8 +51,8 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
 		[HttpGet]
-		[Route("GetCustomerNamesBySellingProductId")]
-		public IEnumerable<CarrierAccountInfo> GetCustomerNamesBySellingProductId(int sellingProductId)
+		[Route("GetCustomersBySellingProductId")]
+		public IEnumerable<CarrierAccountInfo> GetCustomersBySellingProductId(int sellingProductId)
 		{
 			CustomerSellingProductManager manager = new CustomerSellingProductManager();
 			return manager.GetCustomersBySellingProductId(sellingProductId);

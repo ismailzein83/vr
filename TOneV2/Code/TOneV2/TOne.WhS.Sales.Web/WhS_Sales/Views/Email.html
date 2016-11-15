@@ -1,34 +1,19 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_EmailController" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_EmailController" vr-loader="scopeModel.isLoading">
 	<vr-modalbody>
 		<vr-form name="formEmail">
-			<vr-row>
-				<vr-columns width="1/3row">
-					<vr-select on-ready="scopeModel.onSelectorReady"
-							   label="Customers"
-							   datasource="scopeModel.customerSelectionTypes"
-							   selectedvalues="scopeModel.selectedCustomerSelectionType"
-							   onselectionchanged="scopeModel.onSelectionChanged"
-							   datatextfield="description"
-							   datavaluefield="value"
-							   isrequired="true"
-							   hideremoveicon="true">
-					</vr-select>
-				</vr-columns>
-			</vr-row>
-			<vr-row>
+			<vr-row removeline="true">
 				<vr-columns width="fullrow">
-                    <vr-datagrid on-ready="scopeModel.onGridReady"
-                                 datasource="scopeModel.customers"
-                                 hidegridmenu="true"
-                                 maxheight="300px"
-                                 norowhighlightonclick="true"
-                                 ng-show="scopeModel.showCustomers">
-                        <vr-datagridcolumn widthfactor="1" disablesorting="true">
-                            <vr-check value="dataItem.isSelected"></vr-check>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Customer'" field="'Name'"></vr-datagridcolumn>
-                    </vr-datagrid>
+					<vr-datagrid on-ready="scopeModel.onGridReady"
+								 datasource="scopeModel.customers"
+								 hidegridmenu="true"
+								 norowhighlightonclick="true"
+								 maxheight="300px">
+						<vr-datagridcolumn widthfactor="1" disablesorting="true">
+							<vr-check value="dataItem.isSelected"></vr-check>
+						</vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Id'" field="'CarrierAccountId'" disablesorting="true"></vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Customer'" field="'Name'" disablesorting="true"></vr-datagridcolumn>
+					</vr-datagrid>
 				</vr-columns>
 			</vr-row>
 		</vr-form>
@@ -36,7 +21,10 @@
 	<div>
 		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
 			<div transclude-to="buttons">
-				<vr-button type="SendEmail" formname="formEmail" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="SelectAll" data-onclick="scopeModel.selectAll"></vr-button>
+				<vr-button type="DeselectAll" data-onclick="scopeModel.deselectAll"></vr-button>
+				<vr-button type="SendEmail" formname="formEmail" data-onclick="scopeModel.sendMail"></vr-button>
+				<vr-button type="Skip" formname="formEmail" data-onclick="scopeModel.skip"></vr-button>
 			</div>
 		</vr-actionbar>
 	</div>

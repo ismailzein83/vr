@@ -7,7 +7,6 @@
 
         var controllerName = "CustomerSellingProduct";
 
-
         function GetFilteredCustomerSellingProducts(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerSellingProducts"), input);
         }
@@ -45,8 +44,8 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCustomerSellingProduct']));
         }
 
-        function GetCustomerNamesBySellingProductId(sellingProductId) {
-        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerNamesBySellingProductId"), {
+        function GetCustomersBySellingProductId(sellingProductId) {
+        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomersBySellingProductId"), {
         		sellingProductId: sellingProductId
         	});
         }
@@ -60,7 +59,7 @@
             IsCustomerAssignedToSellingProduct: IsCustomerAssignedToSellingProduct,
             HasUpdateCustomerSellingProductPermission: HasUpdateCustomerSellingProductPermission,
             HasAddCustomerSellingProductPermission: HasAddCustomerSellingProductPermission,
-            GetCustomerNamesBySellingProductId: GetCustomerNamesBySellingProductId
+            GetCustomersBySellingProductId: GetCustomersBySellingProductId
         });
     }
 
