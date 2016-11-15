@@ -28,40 +28,48 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
             
             if (!IsPostBack)
             {
-                repeatedReports = new Dictionary<string, RepeatedReportDetails>();
-                invoiceActionContext = Vanrise.Common.Serializer.Deserialize<IInvoiceActionContext>(Request.QueryString["invoiceActionContext"]);
-              
-                string actionTypeName = Request.QueryString["actionTypeName"];
-                InvoiceManager invoiceManager = new InvoiceManager();
+                try
+                {
+                    repeatedReports = new Dictionary<string, RepeatedReportDetails>();
+                    invoiceActionContext = Vanrise.Common.Serializer.Deserialize<IInvoiceActionContext>(Request.QueryString["invoiceActionContext"]);
 
-                 invoice = invoiceActionContext.GetInvoice;
-                InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
-                invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
-                
-                foreach(var action in invoiceType.Settings.UISettings.InvoiceGridActions)
-                {
-                    InvoiceFilterConditionContext context = new InvoiceFilterConditionContext
+                    string actionTypeName = Request.QueryString["actionTypeName"];
+                    InvoiceManager invoiceManager = new InvoiceManager();
+
+                    invoice = invoiceActionContext.GetInvoice;
+                    InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
+                    invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
+
+                    foreach (var action in invoiceType.Settings.UISettings.InvoiceGridActions)
                     {
-                        Invoice = invoice,
-                        InvoiceType = invoiceType
-                    };
-                    if (action.InvoiceFilterCondition.IsFilterMatch(context) && action.Settings.ActionTypeName == actionTypeName)
-                    {
-                        openRDLCReportAction = action.Settings as OpenRDLCReportAction;
-                        break;
+                        InvoiceFilterConditionContext context = new InvoiceFilterConditionContext
+                        {
+                            Invoice = invoice,
+                            InvoiceType = invoiceType
+                        };
+                        if (action.InvoiceFilterCondition.IsFilterMatch(context) && action.Settings.ActionTypeName == actionTypeName)
+                        {
+                            openRDLCReportAction = action.Settings as OpenRDLCReportAction;
+                            break;
+                        }
                     }
+                    List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
+                    if (openRDLCReportAction != null)
+                    {
+                        ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                        ReportViewer1.LocalReport.ReportPath = Server.MapPath(openRDLCReportAction.ReportURL);
+                        this.ReportViewer1.LocalReport.DisplayName = String.Format("Invoice");
+                        SetDataSources(ReportViewer1.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources, true, null);
+                        invoiceReportParameters = GetParameters(ReportViewer1.LocalReport.GetParameters(), openRDLCReportAction.MainReportParameters);
+                    }
+                    ReportViewer1.LocalReport.SetParameters(invoiceReportParameters.ToArray());
+                    ReportViewer1.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
                 }
-                List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
-                if (openRDLCReportAction != null)
+                catch(Exception error)
                 {
-                    ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                    ReportViewer1.LocalReport.ReportPath = Server.MapPath(openRDLCReportAction.ReportURL);
-                    this.ReportViewer1.LocalReport.DisplayName = String.Format("Invoice");
-                    SetDataSources(ReportViewer1.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources, true, null);
-                    invoiceReportParameters = GetParameters(ReportViewer1.LocalReport.GetParameters(), openRDLCReportAction.MainReportParameters);
+                    labelError.Text = error.Message;
                 }
-                ReportViewer1.LocalReport.SetParameters(invoiceReportParameters.ToArray());
-                ReportViewer1.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
+
             }
         }
         void SubreportProcessingEventHandler(object sender,SubreportProcessingEventArgs e)

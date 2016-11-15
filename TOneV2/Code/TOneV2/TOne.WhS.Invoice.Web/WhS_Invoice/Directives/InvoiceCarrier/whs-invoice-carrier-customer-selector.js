@@ -30,7 +30,7 @@ app.directive('whsInvoiceCarrierCustomerSelector', ['UtilsService', 'VRUIUtilsSe
         };
 
         function getTemplate(attrs) {
-            return '<whs-invoice-carrier-selector isrequired="carrierCustomerCtrl.isrequired" normal-col-num="{{carrierCustomerCtrl.normalColNum}}" on-ready="carrierCustomerCtrl.onDirectiveReady" getcustomers="true"></whs-invoice-carrier-selector>';
+            return '<whs-invoice-carrier-selector isrequired="carrierCustomerCtrl.isrequired" normal-col-num="{{carrierCustomerCtrl.normalColNum}}" on-ready="carrierCustomerCtrl.onDirectiveReady" getcustomers="true" hideremoveicon></whs-invoice-carrier-selector>';
         }
 
         function carriersCtor(ctrl, $scope, attrs) {

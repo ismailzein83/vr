@@ -32,7 +32,11 @@
                     return "Date must be less than date of today.";
                 return null;
             }
-
+            $scope.validateFromDate = function () {
+                if ($scope.toDate < $scope.fromDate)
+                    return "From date must be less than to date.";
+                return null;
+            }
             $scope.preview = function()
             {
                 var partnerObject = partnerSelectorAPI.getData();
