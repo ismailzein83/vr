@@ -73,7 +73,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 SellingNumberPlanId = sellingNumberPlanId,
                 CustomerIds = customerIds,
                 ZoneChanges = zoneChanges,
-                EffectiveDate = DateTime.Now,
+                EffectiveDate = DateTime.Today,
                 ChangeType = SalePLChangeType.Rate,
                 InitiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
             };

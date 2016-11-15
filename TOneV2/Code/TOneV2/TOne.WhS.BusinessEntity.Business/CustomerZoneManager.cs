@@ -14,25 +14,22 @@ namespace TOne.WhS.BusinessEntity.Business
 	public class CustomerZoneManager
 	{
 		#region Public Methods
+
 		public CustomerZones GetCustomerZones(int customerId, DateTime? effectiveOn, bool futureEntities)
 		{
-			CustomerZones customerZones = null;
-			var cached = this.GetAllCachedCustomerZones();
-
-			var filtered = cached.FindAllRecords
-			(
-				x => x.CustomerId == customerId
-				&& (effectiveOn == null || (x.StartEffectiveTime <= effectiveOn))
-			);
-
-			if (filtered != null)
+			Dictionary<int, CustomerZones> cachedEntities = this.GetAllCachedCustomerZones();
+			Func<CustomerZones, bool> filterFunc = (entity) =>
 			{
-				var ordered = filtered.OrderByDescending(item => item.StartEffectiveTime);
-				customerZones = ordered.FirstOrDefault();
-			}
-
-			return customerZones;
+				if (entity.CustomerId != customerId)
+					return false;
+				if (effectiveOn != null && entity.StartEffectiveTime > effectiveOn)
+					return false;
+				return true;
+			};
+			IEnumerable<CustomerZones> filteredEntities = cachedEntities.FindAllRecords(filterFunc).OrderByDescending(x => x.CustomerZonesId);
+			return filteredEntities.FirstOrDefault();
 		}
+
 		public IEnumerable<Vanrise.Entities.Country> GetCountriesToSell(int customerId)
 		{
 			IEnumerable<Vanrise.Entities.Country> countriesToSell = null;
@@ -53,6 +50,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			return countriesToSell;
 		}
+
 		public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, int sellingNumberPlanId, DateTime effectiveOn, bool withFutureZones)
 		{
 			CustomerZones customerZones = GetCustomerZones(customerId, effectiveOn, withFutureZones);
@@ -63,6 +61,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			}
 			return null;
 		}
+
 		public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
 		{
 			CustomerZones currentCustomerZones = this.GetCustomerZones(customerZones.CustomerId, DateTime.Now, false);
@@ -97,6 +96,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			return insertOperationOutput;
 		}
+
 		public IEnumerable<int> GetCustomerIdsByCountryId(IEnumerable<int> customerIds, int countryId)
 		{
 			if (customerIds == null)
@@ -112,6 +112,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			};
 			return customerIds.FindAllRecords(filterFunc);
 		}
+
 		#endregion
 
 		#region Private Members
