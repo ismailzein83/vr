@@ -60,7 +60,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
             if (attrs.ismultipleselection != undefined)
                 ismultipleselection = "ismultipleselection";
 
-            return '<vr-columns colnum="{{carrierCtrl.normalColNum}}"> <vr-select  datasource="carrierCtrl.carrierTypes" selectedvalues="carrierCtrl.selectedCarrierTypes" onselectionchanged="carrierCtrl.carrierTypeSelectionChanged"   datatextfield="description" datavaluefield="value" label="Invoice Type" ismultipleselection'
+            return '<vr-columns colnum="{{carrierCtrl.normalColNum}}"> <vr-select  datasource="carrierCtrl.carrierTypes" selectedvalues="carrierCtrl.selectedCarrierTypes" onselectionchanged="carrierCtrl.carrierTypeSelectionChanged"   datatextfield="description" datavaluefield="value" label="Invoice Type" ' +ismultipleselection + ' '
               + hideremoveicon + '></vr-select></vr-columns> '
                + ' <vr-columns vr-loader="carrierCtrl.isloadingCarriers" colnum="{{carrierCtrl.normalColNum}}"> <vr-select isrequired="carrierCtrl.isrequired" on-ready="carrierCtrl.onSelectorReady" datasource="carrierCtrl.datasource" selectedvalues="carrierCtrl.selectedvalues" onselectionchanged="carrierCtrl.onselectionchanged"  datatextfield="Name" datavaluefield="InvoiceCarrierId" label="'
                 + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></vr-columns>';
@@ -118,13 +118,20 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
             function loadCarrierAccounts(attrs) {
                 ctrl.isloadingCarriers = true
                 var filter = {};
-                if (ctrl.selectedCarrierTypes.length > 0) {
+                if (ctrl.selectedCarrierTypes != undefined)
+                {
                     filter.CarrierTypes = [];
-                    for (var i = 0; i < ctrl.selectedCarrierTypes.length; i++) {
-                        var selectedCarrierType = ctrl.selectedCarrierTypes[i];
-                        filter.CarrierTypes.push(selectedCarrierType.value)
+                    if (ctrl.selectedCarrierTypes.length > 0) {
+                        for (var i = 0; i < ctrl.selectedCarrierTypes.length; i++) {
+                            var selectedCarrierType = ctrl.selectedCarrierTypes[i];
+                            filter.CarrierTypes.push(selectedCarrierType.value)
+                        }
+                    }else
+                    {
+                        filter.CarrierTypes.push(ctrl.selectedCarrierTypes.value)
                     }
                 }
+                
                 filter.GetCustomers = attrs.getcustomers != undefined;
                 filter.GetSuppliers = attrs.getsuppliers != undefined;
                 var serializedFilter = {};
