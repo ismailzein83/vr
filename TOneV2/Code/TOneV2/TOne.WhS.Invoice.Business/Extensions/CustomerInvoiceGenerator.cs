@@ -56,7 +56,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, isGroupedByCustomer);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
             #region BuildCustomerInvoiceDetails
-            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0]);
+            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0],context.FromDate,context.ToDate);
             if (customerInvoiceDetails != null)
             {
                 customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
@@ -81,7 +81,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 InvoiceItemSets = generatedInvoiceItemSets,
             };
         }
-        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType)
+        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType,DateTime fromDate,DateTime toDate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
@@ -104,9 +104,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
                             customerInvoiceDetails.OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId;
                             customerInvoiceDetails.SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId;
-                            customerInvoiceDetails.ToDate = customerInvoiceDetails.ToDate > invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? customerInvoiceDetails.ToDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
-                            customerInvoiceDetails.FromDate = customerInvoiceDetails.FromDate != DateTime.MinValue && customerInvoiceDetails.FromDate < invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? customerInvoiceDetails.FromDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
                         }
+                        customerInvoiceDetails.ToDate = toDate;
+                        customerInvoiceDetails.FromDate = fromDate;
                     };
                 }
             }
