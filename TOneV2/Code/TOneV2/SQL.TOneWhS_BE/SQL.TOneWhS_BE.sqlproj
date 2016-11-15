@@ -431,5 +431,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetEffectiveDefaultServices.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_GetDefaultServiceBySupplier.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_CloseOverlappedDefaultService.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePriceListTemplate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListTemplate_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListTemplate_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListTemplate_GetAll.sql" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-SELECT	[ID],[OwnerID],[OwnerType] ,[CurrencyID]
+SELECT	[ID],[OwnerID],[OwnerType],[CurrencyID], [EffectiveOn], [PriceListType]
 from	[TOneWhS_BE].SalePriceList WITH(NOLOCK) 
 
 END

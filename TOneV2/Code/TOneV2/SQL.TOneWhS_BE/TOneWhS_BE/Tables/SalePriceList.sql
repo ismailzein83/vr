@@ -1,13 +1,16 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SalePriceList] (
-    [ID]          INT          NOT NULL,
-    [OwnerType]   INT          NOT NULL,
-    [OwnerID]     INT          NOT NULL,
-    [CurrencyID]  INT          NOT NULL,
-    [EffectiveOn] DATETIME     NULL,
-    [timestamp]   ROWVERSION   NULL,
-    [SourceID]    VARCHAR (50) NULL,
+    [ID]            INT          NOT NULL,
+    [OwnerType]     INT          NOT NULL,
+    [OwnerID]       INT          NOT NULL,
+    [CurrencyID]    INT          NOT NULL,
+    [EffectiveOn]   DATETIME     NULL,
+    [PriceListType] TINYINT      NULL,
+    [timestamp]     ROWVERSION   NULL,
+    [SourceID]      VARCHAR (50) NULL,
     CONSTRAINT [PK_SalePriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
