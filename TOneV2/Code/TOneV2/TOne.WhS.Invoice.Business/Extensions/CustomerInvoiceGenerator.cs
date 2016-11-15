@@ -105,7 +105,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId;
                             customerInvoiceDetails.SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId;
                             customerInvoiceDetails.ToDate = customerInvoiceDetails.ToDate > invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? customerInvoiceDetails.ToDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
-                            customerInvoiceDetails.FromDate = customerInvoiceDetails.FromDate < invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? customerInvoiceDetails.FromDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
+                            customerInvoiceDetails.FromDate = customerInvoiceDetails.FromDate != DateTime.MinValue && customerInvoiceDetails.FromDate < invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? customerInvoiceDetails.FromDate : invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
                         }
                     };
                 }
