@@ -32,6 +32,11 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
         }
+        public bool CheckInvoiceOverlaping(Guid invoiceTypeId,string partnerId,DateTime fromDate,DateTime toDate)
+        {
+            int numberOfRecords = GetItemSP("VR_Invoice.sp_Invoice_CheckOverlaping", (reader) => { return (int)reader["CountNb"]; }, invoiceTypeId, partnerId,fromDate, toDate);
+            return (numberOfRecords > 0);
+        }
         public IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
             string partnerIds = null;

@@ -14,6 +14,7 @@ namespace Vanrise.Invoice.Data
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
         bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, out long insertedInvoiceId);
         Entities.Invoice GetInvoice(long invoiceId);
+        bool CheckInvoiceOverlaping(Guid invoiceTypeId,string partnerId,DateTime fromDate, DateTime toDate);
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
     }
 }

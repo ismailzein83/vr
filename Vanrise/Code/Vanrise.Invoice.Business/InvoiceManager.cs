@@ -52,6 +52,10 @@ namespace Vanrise.Invoice.Business
 
             try
             {
+                if (CheckInvoiceOverlaping(createInvoiceInput.InvoiceTypeId,createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate))
+                {
+                    throw new InvoiceGeneratorException("Invoices must not overlapped.");
+                }
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
                 InvoiceGenerationContext context = new InvoiceGenerationContext
@@ -183,6 +187,11 @@ namespace Vanrise.Invoice.Business
                     });
                 }
             }
+        }
+        private bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId,fromDate, toDate);
         }
         #endregion
 

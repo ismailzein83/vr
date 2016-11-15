@@ -6,7 +6,8 @@
                  menuactions="menuActions"
                  idfield="Entity.InvoiceId">
         <vr-datagridcolumn headertext="'Invoice Id'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
-        <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
+        </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
