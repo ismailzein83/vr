@@ -95,7 +95,9 @@ namespace Vanrise.Invoice.Business
                 if (dataManager.SaveInvoices(context.Invoice.InvoiceItemSets, invoice, out insertedInvoiceId))
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    insertOperationOutput.InsertedObject = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
+                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
+                    FillNeededDetailData(invoiceDetail, invoiceType);
+                    insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
                 }
