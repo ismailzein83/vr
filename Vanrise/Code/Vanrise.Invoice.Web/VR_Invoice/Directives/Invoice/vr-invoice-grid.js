@@ -86,6 +86,8 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
 
                         directiveAPI.onGenerateInvoice = function (invoice)
                         {
+                            buildGridFields(invoice);
+                            VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(invoice, gridAPI, subSections, subSectionConfigs, invoiceTypeId);
                             gridAPI.itemAdded(invoice);
                         }
 

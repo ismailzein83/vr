@@ -63,7 +63,7 @@ app.directive('whsInvoiceCarrierCustomerFilterSelector', ['UtilsService', 'VRUIU
                 }
 
                 api.getData = function () {
-                    var data = directiveReadyAPI.getData();
+                    var data = directiveReadyAPI !=undefined? directiveReadyAPI.getData():undefined;
                     return {
                         partnerPrefix: data != undefined ? data.partnerPrefix : undefined,
                         selectedIds: data != undefined ? data.selectedIds : undefined,
