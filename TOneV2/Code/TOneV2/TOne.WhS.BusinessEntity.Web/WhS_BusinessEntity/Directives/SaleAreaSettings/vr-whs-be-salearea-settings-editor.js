@@ -50,9 +50,9 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
     			};
 
     			$scope.onPriceListEmailTemplateSelectorReady = function (api) {
-    				mailMsgTemplateSelectorAPI = api;
-    				mailMsgTemplateSelectorReadyDeferred.resolve();
-    			}
+    			    mailMsgTemplateSelectorAPI = api;
+    			    mailMsgTemplateSelectorReadyDeferred.resolve();
+    			};
     			ctrl.validateAddFixedKeyWords = function () {
     				if (ctrl.fixedKeywords != undefined && ctrl.fixedKeywords.length == 0)
     					return "Enter at least one keyword.";
@@ -157,12 +157,12 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
     		function loadMailMsgTemplateSelector(selectedId) {
     			var mailMsgTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
     			mailMsgTemplateSelectorReadyDeferred.promise.then(function () {
-    				var mailMsgTemplateSelectorPayload = {
-    					selectedIds: selectedId,
-    					filter: {
-    						VRMailMessageTypeId: "f61f0b87-ee5b-4794-8b0f-6c0777006441",
-    					}
-    				}
+    			    var mailMsgTemplateSelectorPayload = {
+    			        selectedIds: selectedId,
+    			        filter: {
+    			            VRMailMessageTypeId: "f61f0b87-ee5b-4794-8b0f-6c0777006441"
+    			        }
+    			    };
     				VRUIUtilsService.callDirectiveLoad(mailMsgTemplateSelectorAPI, mailMsgTemplateSelectorPayload, mailMsgTemplateSelectorLoadDeferred);
     			});
     			return mailMsgTemplateSelectorLoadDeferred.promise;

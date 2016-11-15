@@ -54,7 +54,7 @@
                     var data = {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerPropertyEvaluator, TOne.WhS.BusinessEntity.MainExtensions",
                         CustomerField: $scope.scopeModel.selectedCustomerField.value
-                    }
+                    };
                     return data;
                 };
 

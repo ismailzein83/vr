@@ -37,10 +37,10 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerObjectType, TOne.WhS.BusinessEntity.MainExtensions",
-                    }
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerObjectType, TOne.WhS.BusinessEntity.MainExtensions"
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

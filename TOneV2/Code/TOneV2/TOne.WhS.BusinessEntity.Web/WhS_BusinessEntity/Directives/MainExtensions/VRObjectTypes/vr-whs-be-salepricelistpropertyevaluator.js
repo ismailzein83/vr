@@ -54,7 +54,7 @@
                     var data = {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SalePriceListPropertyEvaluator, TOne.WhS.BusinessEntity.MainExtensions",
                         SalePriceListField: $scope.scopeModel.selectedSalePriceListField.value
-                    }
+                    };
                     return data;
                 };
 
