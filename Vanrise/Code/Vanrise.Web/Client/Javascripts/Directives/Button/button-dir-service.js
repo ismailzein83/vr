@@ -224,13 +224,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Compile',
                     class: "glyphicon glyphicon-tasks"
                 }
-
-
             case 'SelectAll':
                 return {
                     text: 'Select All',
                     class: "glyphicon glyphicon-check"
                 }
+        	case 'DeselectAll':
+        		return {
+        			text: 'Deselect All',
+        			class: "glyphicon glyphicon-unchecked"
+        		}
             case 'Export':
                 return {
                     text: 'Export',
@@ -325,6 +328,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         		return {
         			text: "Calculate Rate",
         			class: "glyphicon glyphicon-play"
+        		};
+        	case "Skip":
+        		return {
+        			text: "Skip",
+        			class: "glyphicon glyphicon-step-forward"
         		};
         } 
     }
