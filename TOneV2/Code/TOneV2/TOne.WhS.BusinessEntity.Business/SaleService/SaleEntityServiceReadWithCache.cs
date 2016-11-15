@@ -7,12 +7,18 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleEntityServiceReadWithCache : ISaleEntityServiceReader
     {
-        private DateTime _effectiveOn;
+        #region Variables/Ctor
+
+        DateTime _effectiveOn;
 
         public SaleEntityServiceReadWithCache(DateTime effectiveOn)
         {
             _effectiveOn = effectiveOn;
         }
+
+        #endregion
+
+        #region Private Methods
 
         public SaleEntityDefaultService GetSaleEntityDefaultService(BusinessEntity.Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
@@ -30,6 +36,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedSaleEntityZoneServicesByZone(ownerType, ownerId);
         }
+
+        #endregion
+
+        #region Private Methods
 
         private SaleEntityDefaultServicesByOwner GetCachedSaleEntityDefaultServicesByOwner()
         {
@@ -92,5 +102,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return zoneServicesByZone;
             });
         }
+
+        #endregion
     }
 }
