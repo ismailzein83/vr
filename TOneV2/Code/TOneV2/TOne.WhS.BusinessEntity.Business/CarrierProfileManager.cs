@@ -135,7 +135,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierProfile.Settings");
             return carrierProfile.Settings.CurrencyId;
         }
-
+        public CompanySetting GetCompanySetting(int carrierProfileId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            return configManager.GetDefaultCompanySetting();
+        }
         #endregion
 
         #region Validation Methods

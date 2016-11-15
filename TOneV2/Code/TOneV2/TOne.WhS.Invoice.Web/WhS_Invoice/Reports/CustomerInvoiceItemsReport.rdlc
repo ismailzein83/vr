@@ -1069,8 +1069,8 @@
         </Style>
       </Tablix>
       <Image Name="Image2">
-        <Source>Embedded</Source>
-        <Value>ID1111201655117PM</Value>
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
         <MIMEType>image/png</MIMEType>
         <Sizing>Fit</Sizing>
         <Top>0.23722in</Top>

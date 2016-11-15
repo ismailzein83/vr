@@ -22,8 +22,11 @@ namespace TOne.WhS.Invoice.Business
             Phone1 = 4,
             Fax = 5,
             Image = 6,
-            CustomerRegNo = 7
-            
+            CustomerRegNo = 7,
+            RegNo = 8,
+            RegAddress = 9,
+            Name = 10,
+            VatID = 11
         }
         public dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
@@ -31,23 +34,26 @@ namespace TOne.WhS.Invoice.Business
             {
                 case "InvoiceRDLCReport":
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
-                     string[] partnerId = context.PartnerId.Split('_');
+                     string[] partner = context.PartnerId.Split('_');
                      CurrencyManager currencyManager = new CurrencyManager();
                      CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
                      CarrierProfile carrierProfile = null;
                      string carrierName = null;
                      string currencySymbol = null;
-
-                     if (partnerId[0].Equals("Profile"))
+                     CompanySetting companySetting = null;
+                     int partnerId = Convert.ToInt32(partner[1]);
+                     if (partner[0].Equals("Profile"))
                      {
-                         carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partnerId[1]));
+                         companySetting = carrierProfileManager.GetCompanySetting(partnerId);
+                         carrierProfile = carrierProfileManager.GetCarrierProfile(partnerId);
                          carrierName = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
                          currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
                      }
-                     else if (partnerId[0].Equals("Account"))
+                     else if (partner[0].Equals("Account"))
                      {
                          CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                         var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId[1]));
+                         companySetting = carrierAccountManager.GetCompanySetting(partnerId);
+                         var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId));
                          carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
                          carrierName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
                          currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
@@ -68,19 +74,22 @@ namespace TOne.WhS.Invoice.Business
                          {
                              AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, carrierProfile.Settings.Faxes.ElementAtOrDefault(0), true);
                          }
-                         if (carrierProfile.Settings.CompanyLogo != null)
-                         {
-                             VRFileManager fileManager = new VRFileManager();
-                             var logo = fileManager.GetFile(carrierProfile.Settings.CompanyLogo);
-                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
-                         }
                          if(carrierProfile.Settings.RegistrationNumber != null)
                          {
                              AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerRegNo, carrierProfile.Settings.RegistrationNumber, true);
-
                          }
                      }
+                     if (companySetting != null)
+                     {
+                         VRFileManager fileManager = new VRFileManager();
+                         var logo = fileManager.GetFile(companySetting.CompanyLogo);
+                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
+                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
+                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
+                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);
+                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
 
+                     }
                     return rdlcReportParameters;
             }
             return null;

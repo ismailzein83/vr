@@ -104,7 +104,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper), resultProcessingHandler);
         }
-
+        public CompanySetting GetCompanySetting(int carrierAccountId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            return configManager.GetDefaultCompanySetting();
+        }
         public IEnumerable<CarrierAccount> GetAllCarriers()
         {
             return GetCachedCarrierAccounts().Values;

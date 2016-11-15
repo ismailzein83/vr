@@ -205,8 +205,8 @@
         </Style>
       </Textbox>
       <Image Name="Image1">
-        <Source>Embedded</Source>
-        <Value>ID1111201655117PM</Value>
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
         <MIMEType>image/png</MIMEType>
         <Sizing>Fit</Sizing>
         <Top>0.19097in</Top>
@@ -885,20 +885,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Via della Giustiniana n 1012 00189</Value>
-                <Style>
-                  <FontStyle>Italic</FontStyle>
-                  <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>9pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Roma Italia</Value>
+                <Value>=Parameters!RegAddress.Value</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Times New Roman</FontFamily>
@@ -965,7 +952,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>12-19856</Value>
+                <Value>=Parameters!RegNo.Value</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Times New Roman</FontFamily>
@@ -1000,7 +987,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>VAT13066101000</Value>
+                <Value>=Parameters!VatID.Value</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Times New Roman</FontFamily>

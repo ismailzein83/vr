@@ -53,6 +53,28 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException("BankDetailsSettings.BankDetails NullReferenceException");
             return bankDetails;
         }
+
+        public IEnumerable<CompanySetting> GetCompanySetting()
+        {
+            SettingManager settingManager = new SettingManager();
+            CompanySettings companySettings = settingManager.GetSetting<CompanySettings>(CompanySettings.SETTING_TYPE);
+            IEnumerable<CompanySetting> settings = companySettings.Settings;
+            if (settings == null)
+                throw new NullReferenceException("companySettings.Settings NullReferenceException");
+            return settings;
+        }
+        public CompanySetting GetDefaultCompanySetting()
+        {
+
+            IEnumerable<CompanySetting> settings = GetCompanySetting();
+
+            foreach(var setting in settings)
+            {
+                if (setting.IsDefault)
+                    return setting;
+            }
+            return null;
+        }
         #endregion
 
     }
