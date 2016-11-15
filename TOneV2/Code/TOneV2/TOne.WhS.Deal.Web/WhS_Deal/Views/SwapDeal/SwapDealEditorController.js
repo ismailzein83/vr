@@ -1,9 +1,10 @@
 ﻿(function (app) {
 
-    'use strict'
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService', 'VRValidationService'];
+    'use strict';
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService, VRValidationService) {
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService', 'VRValidationService'];
+
+    function SwapDealEditorController($scope, WhS_Deal_DealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService, VRValidationService) {
         var isEditMode;
 
         var dealId;
@@ -50,13 +51,13 @@
                 if (carrierAccountInfo != undefined) {
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
-                    }
+                    };
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId
-                    }
+                    };
                     if (carrierAccountSelectedPromise != undefined){
                         carrierAccountSelectedPromise.resolve();
-                        oldselectedCarrier = $scope.scopeModel.carrierAccount;
+                        oldselectedCarrier = $scope.scopeModel.carrierAcount;
                     }
                     else if (oldselectedCarrier != undefined && oldselectedCarrier.CarrierAccountId != carrierAccountInfo.CarrierAccountId) {                       
                         if (dealInboundAPI.hasData() || dealOutboundAPI.hasData()) {
@@ -65,34 +66,24 @@
                                         dealInboundAPI.load(payload);
                                         dealOutboundAPI.load(payloadOutbound);
                                         oldselectedCarrier = carrierAccountInfo;
-                                        updateDescription();
                                     }
                                     else {
-                                    $scope.scopeModel.carrierAccount = oldselectedCarrier;
-                                    updateDescription();
+                                        $scope.scopeModel.carrierAcount = oldselectedCarrier;
                                     }
                               });
                         }
                         else {
                             dealInboundAPI.load(payload);
                             dealOutboundAPI.load(payloadOutbound);
-                            updateDescription();
                         }
                     }
                     else if (oldselectedCarrier==undefined) {
                         oldselectedCarrier = carrierAccountInfo;
                         dealInboundAPI.load(payload);
                         dealOutboundAPI.load(payloadOutbound);
-                        updateDescription();
                     }
                 }
             };
-            function updateDescription() {
-                setTimeout(function () {
-                    $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(new Date());
-                });
-            }
-
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
             };
@@ -121,25 +112,20 @@
             };
 
             $scope.scopeModel.validateSwapDealInbounds = function () {
-                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues()
+                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
-                if(dealInboundAPI != undefined && dealInboundAPI.getData().length == 0)
-                    return 'Please, one record must be added at least.'
+                if (dealInboundAPI != undefined && dealInboundAPI.getData().length == 0)
+                    return 'Please, one record must be added at least.';
                 return null;
             };
-            $scope.scopeModel.validateGracePeriod = function () {
 
-                if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.gracePeriod != undefined && UtilsService.diffDays(new Date($scope.scopeModel.beginDate), new Date($scope.scopeModel.endDate)) < parseInt($scope.scopeModel.gracePeriod))
-                    return "Grace period must be less than deal d period";
-                return null;
-            }
             $scope.scopeModel.validateSwapDealOutbounds = function () {
-                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues()
+                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
-                if(dealOutboundAPI!=undefined && dealOutboundAPI.getData().length == 0)
-                    return 'Please,one record must be added at least.'
+                if (dealOutboundAPI != undefined && dealOutboundAPI.getData().length == 0)
+                    return 'Please,one record must be added at least.';
                 return null;
             };
         }
@@ -162,7 +148,7 @@
         }
 
         function getSwapDeal() {
-            return WhS_Deal_SwapDealAPIService.GetDeal(dealId).then(function (response) {
+            return WhS_Deal_DealAPIService.GetDeal(dealId).then(function (response) {
                 dealEntity = response;
             });
         }
@@ -207,12 +193,12 @@
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
                         Inbounds: dealEntity.Settings.Inbounds
-                    }
+                    };
                   
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId,
                         Outbounds: dealEntity.Settings.Outbounds
-                    }
+                    };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
                     VRUIUtilsService.callDirectiveLoad(dealInboundAPI, payload, loadSwapDealInboundPromiseDeferred);
@@ -237,22 +223,20 @@
             if (dealEntity == undefined)
                 return;
             $scope.scopeModel.description = dealEntity.Name;
-            $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
+            //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
             $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
             $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
-            //$scope.scopeModel.active = dealEntity.Settings.Active;
-            $scope.scopeModel.difference = dealEntity.Settings.Difference;
-
+            $scope.scopeModel.active = dealEntity.Settings.Active;
         }
 
         function loadGraceperiod() {
             if (dealEntity != undefined && dealEntity.Settings.GracePeriod != undefined){
-                $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod ; 
+                $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
                return;
             }
-            return WhS_Deal_SwapDealAPIService.GetSwapDealSettingData().then(function (response) {
+            return WhS_Deal_DealAPIService.GetSwapDealSettingData().then(function (response) {
                 $scope.scopeModel.gracePeriod = response.GracePeriod;
             })
                
@@ -271,7 +255,7 @@
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;
-            return WhS_Deal_SwapDealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
+            return WhS_Deal_DealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
                         $scope.onSwapDealAdded(response.InsertedObject);
@@ -286,7 +270,7 @@
 
         function updateSwapDeal() {
             $scope.scopeModel.isLoading = true;
-            return WhS_Deal_SwapDealAPIService.UpdateDeal(buildSwapDealObjFromScope()).then(function (response) {
+            return WhS_Deal_DealAPIService.UpdateDeal(buildSwapDealObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealUpdated != undefined)
                         $scope.onSwapDealUpdated(response.UpdatedObject);
@@ -311,7 +295,6 @@
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     DealContract: $scope.scopeModel.selectedContractType.value,
                     DealType: $scope.scopeModel.selectedAgreementType.value,
-                    Difference:$scope.scopeModel.difference,
                     Inbounds: dealInboundAPI.getData(),
                     Outbounds: dealOutboundAPI.getData()
                 }

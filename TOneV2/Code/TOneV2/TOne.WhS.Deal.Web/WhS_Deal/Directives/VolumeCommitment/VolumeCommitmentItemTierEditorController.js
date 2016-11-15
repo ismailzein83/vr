@@ -51,13 +51,13 @@
             };
 
             $scope.scopeModel.disabelIsLastTier = function () {
-                if (!isEditMode && tiers.length == 0 )
-                    return true ;
-                if (isEditMode && tiers.length == 1 && $scope.scopeModel.upToVolume!=undefined)
-                    return true ;
+                if (!isEditMode && tiers.length == 0)
+                    return true;
+                if (isEditMode && tiers.length == 1 && $scope.scopeModel.upToVolume != undefined)
+                    return true;
                 else
                     return getNextTier() != undefined;
-            }
+            };
 
             $scope.scopeModel.removeException = function (dataItem) {
                 var index = $scope.scopeModel.exceptions.indexOf(dataItem);
@@ -67,13 +67,13 @@
             $scope.scopeModel.addException  = function () {
                 var onVolumeCommitmentItemTierExRateAdded = function (addedObj) {
                     $scope.scopeModel.exceptions.push(addedObj);
-                }
+                };
                 WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, getContext());
             };
 
             $scope.scopeModel.disabelAddException = function () {
-                return getContext().getExceptionsZoneIds()!= undefined ? getContext().getExceptionsZoneIds().length == getContext().getSelectedZonesIds().length : false;
-            }
+                return getContext().getExceptionsZoneIds() != undefined ? getContext().getExceptionsZoneIds().length == getContext().getSelectedZonesIds().length : false;
+            };
 
             $scope.scopeModel.exceptionGridMenuActions = [
            {
@@ -94,7 +94,7 @@
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
+            });
         }
 
         function setTitle() {

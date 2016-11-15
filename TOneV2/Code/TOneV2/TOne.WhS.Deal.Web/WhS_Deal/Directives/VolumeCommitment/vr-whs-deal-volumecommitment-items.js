@@ -37,12 +37,12 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one item.";
-                }
+                };
 
                 ctrl.addItem = function () {
                     var onVolumeCommitmentItemAdded = function (volumeCommitmentItem) {
                         ctrl.datasource.push({ Entity: volumeCommitmentItem });
-                    }
+                    };
                     WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext());
                 };
 
@@ -53,8 +53,8 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                             ctrl.datasource.splice(index, 1);
                         }
                     });
-                    
-                }
+
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -76,7 +76,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                         }
                     }
                     return volumeCommitmentItems;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -90,7 +90,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                         else
                             ctrl.datasource.length = 0;
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -105,14 +105,14 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editVolumeCommitmentItem(volumeCommitmentItemObj) {
                 var onVolumeCommitmentItemUpdated = function (volumeCommitmentItem) {
                     var index = ctrl.datasource.indexOf(volumeCommitmentItemObj);
                     ctrl.datasource[index] = { Entity: volumeCommitmentItem };
-                }
+                };
                 WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext());
             }
             function getContext()

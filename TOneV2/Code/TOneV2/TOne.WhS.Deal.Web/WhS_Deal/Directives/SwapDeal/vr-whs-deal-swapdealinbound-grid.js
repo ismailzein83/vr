@@ -64,7 +64,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 };
 
                 api.getData = function () {
-                    var inbounds = []
+                    var inbounds = [];
 
                     if (ctrl.datasource != undefined) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
@@ -76,15 +76,15 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                                 SaleZoneIds: currentItem.SaleZoneIds,
                                 CountryId: currentItem.CountryId
                             });
-                           
+
                         }
 
                     }
                     return inbounds;
-                }
+                };
                 api.hasData = function () {
                     return ctrl.datasource.length > 0;
-                }
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }
@@ -102,14 +102,14 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editSwapDealInbound(dealInboundObj) {
                 var onDealInboundUpdated = function (dealInbound) {
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealInboundObj.Name, 'Name');
                     ctrl.datasource[index] = dealInbound;
-                }
+                };
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
                 WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated);

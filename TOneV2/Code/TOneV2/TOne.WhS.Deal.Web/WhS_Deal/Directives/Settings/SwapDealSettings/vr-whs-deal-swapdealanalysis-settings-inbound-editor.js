@@ -67,7 +67,7 @@ app.directive('vrWhsDealSwapdealanalysisSettingsInboundEditor', ['WhS_Deal_SwapD
 					for (var key in payload.inboundCalculationMethods) {
 						if (key == '$type')
 							continue;
-						var rateCalcMethod = { Entity: payload.inboundCalculationMethods[key] }
+						var rateCalcMethod = { Entity: payload.inboundCalculationMethods[key] };
 						if (payload.inboundCalculationMethods[key].CalculationMethodId == payload.defaultCalculationMethodId)
 							rateCalcMethod.isSelected = true;
 						$scope.scopeModel.rateCalcMethods.push(rateCalcMethod);

@@ -65,13 +65,13 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                     var outbounds = [];
 
 
-                    if (ctrl.datasource != undefined ) {
+                    if (ctrl.datasource != undefined) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
                             outbounds.push({
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
-                                Rate: currentItem.Rate,                               
+                                Rate: currentItem.Rate,
                                 SupplierZoneIds: currentItem.SupplierZoneIds,
                                 CountryId: currentItem.CountryId
                             });
@@ -79,10 +79,10 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
 
                     }
                     return outbounds;
-                }
+                };
                 api.hasData = function () {
                     return ctrl.datasource.length > 0;
-                }
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }
@@ -100,14 +100,14 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editSwapDealOutbound(swapDealOutboundObj) {
                 var onSwapDealOutboundUpdated = function (swapDealOutbound) {
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, swapDealOutboundObj.Name, 'Name');
                     ctrl.datasource[index] = swapDealOutbound;
-                }
+                };
                 var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
 
                 WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated);

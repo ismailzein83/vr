@@ -36,7 +36,7 @@
             $scope.scopeModel.onZoneSelectorReady = function (api) {
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -53,7 +53,7 @@
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
+            });
         }
 
 

@@ -57,23 +57,23 @@
                         filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
                         selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined
 
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
                 }
                 else if (saleZoneDirectiveAPI != undefined)
                     $scope.salezones.length = 0;
-            }
+            };
 
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
 
-            }
+            };
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {
@@ -128,7 +128,7 @@
                         sellingNumberPlanId: sellingNumberPlanId,
                         filter: { CountryIds: [swapDealInboundEntity.CountryId] },
                         selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, salezonePayload, loadSalesZonesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;

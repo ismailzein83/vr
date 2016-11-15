@@ -37,7 +37,7 @@ app.directive('vrWhsDealSwapdealanalysisSettings', ['UtilsService', 'VRUIUtilsSe
 
 			$scope.scopeModel.onCarrierAccountSelectionChanged = function (selectedCarrierAccount) {
 
-				var carrierAccountId = carrierAccountSelectorAPI.getSelectedIds()
+			    var carrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
 				if (carrierAccountId == undefined)
 					return;
 

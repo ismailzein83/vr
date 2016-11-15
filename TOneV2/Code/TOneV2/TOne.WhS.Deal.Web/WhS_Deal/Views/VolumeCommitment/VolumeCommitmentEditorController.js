@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_DealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService) {
         var isEditMode;
 
         var dealId;
@@ -71,7 +71,7 @@
             $scope.scopeModel.onVolumeCommitmenetItemsReady = function (api) {
                 volumeCommitmenetItemsAPI = api;
                 volumeCommitmenetItemsReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateVolumeCommitment() : insertVolumeCommitment();
@@ -104,7 +104,7 @@
         };
 
         function getVolumeCommitment() {
-            return WhS_Deal_VolCommitmentDealAPIService.GetDeal(dealId).then(function (response) {
+            return WhS_Deal_DealAPIService.GetDeal(dealId).then(function (response) {
                 volumeCommitmentEntity = response;
             });
         };
@@ -160,7 +160,7 @@
                 promises.push(volumeCommitmenetItemsLoadDeferred.promise);
                 UtilsService.waitMultiplePromises([volumeCommitmenetItemsReadyDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
 
-                    var payload = { context: getContext() }
+                    var payload = { context: getContext() };
                     if (volumeCommitmentEntity != undefined) {
                         payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
                     }
@@ -186,7 +186,7 @@
         //};
         function insertVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
-            return WhS_Deal_VolCommitmentDealAPIService.AddDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
+            return WhS_Deal_DealAPIService.AddDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Volume Commitment', response, 'Description')) {
                     if ($scope.onVolumeCommitmentAdded != undefined)
                         $scope.onVolumeCommitmentAdded(response.InsertedObject);
@@ -200,7 +200,7 @@
         };
         function updateVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
-            return WhS_Deal_VolCommitmentDealAPIService.UpdateDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
+            return WhS_Deal_DealAPIService.UpdateDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Volume Commitment', response, 'Description')) {
                     if ($scope.onVolumeCommitmentUpdated != undefined)
                         $scope.onVolumeCommitmentUpdated(response.UpdatedObject);
@@ -241,7 +241,7 @@
 
                                 payload = {
                                     supplierId: carrierAccountSelectorAPI.getSelectedIds(),
-                                }
+                                };
                                 if (item != undefined) {
                                     payload.selectedIds = item.ZoneIds;
                                     payload.filter = {
@@ -257,7 +257,7 @@
                                 var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
                                 payload = {
                                     sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
-                                }
+                                };
                                 if (item != undefined) {
                                     payload.selectedIds = item.ZoneIds;
                                     payload.filter = {
@@ -278,10 +278,10 @@
                         var idName;
                         switch ($scope.scopeModel.selectedVolumeCommitmentType.value) {
                             case WhS_Deal_VolumeCommitmentTypeEnum.Buy.value:
-                                idName = 'SupplierZoneId'
+                                idName = 'SupplierZoneId';
                                 break;
                             case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
-                                idName = 'SaleZoneId'
+                                idName = 'SaleZoneId';
                                 break;
                         }
                         return idName;

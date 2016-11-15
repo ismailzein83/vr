@@ -49,11 +49,11 @@ app.directive('vrWhsDealVolcommitmenttypeSelector', ['UtilsService', '$compile',
                 label = attrs.ismultipleselection != undefined ? 'label="Types"' : 'label="Type"';
             var disabled = "";
             if (attrs.isdisabled)
-                disabled = "vr-disabled='true'"
+                disabled = "vr-disabled='true'";
 
             var hideremoveicon = "";
             if (attrs.hideremoveicon)
-                hideremoveicon = "hideremoveicon"
+                hideremoveicon = "hideremoveicon";
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
@@ -86,7 +86,7 @@ app.directive('vrWhsDealVolcommitmenttypeSelector', ['UtilsService', '$compile',
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {
@@ -94,7 +94,7 @@ app.directive('vrWhsDealVolcommitmenttypeSelector', ['UtilsService', '$compile',
                     }
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

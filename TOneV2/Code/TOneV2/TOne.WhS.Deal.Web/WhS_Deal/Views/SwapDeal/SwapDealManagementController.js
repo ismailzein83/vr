@@ -26,7 +26,7 @@
 			};
 			$scope.scopeModel.hasAddSwapDealPermission = function () {
 			    return WhS_Deal_SwapDealAPIService.HasAddDealPermission();
-			}
+			};
 			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
 			    carrierAccountSelectorAPI = api;
 			    carrierAccountSelectorReadyDeferred.resolve();

@@ -50,12 +50,12 @@
             $scope.onSupplierZoneDirectiveReady = function (api) {
                 supplierZoneDirectiveAPI = api;
                 supplierZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.onCountrySelectionChanged = function () {
@@ -67,13 +67,13 @@
                         filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
                         selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
 
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
                 }
                 else if (supplierZoneDirectiveAPI != undefined)
                     $scope.supplierzones.length = 0;
-            }
+            };
         }
 
         function load() {
@@ -127,7 +127,7 @@
                         supplierId: supplierId,
                         filter: { CountryIds: [swapDealOutboundEntity.CountryId] },
                         selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, supplierZonePayload, loadSupplierZonePromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;
