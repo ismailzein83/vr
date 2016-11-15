@@ -1,8 +1,7 @@
 ﻿"use strict";
-BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'AnalyticsService',
-    'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService'];
+BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService'];
 
-function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, analyticsService, SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {
+function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService,  SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {
 
     var currencySelectorAPI;
     var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -42,9 +41,9 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     $scope.optionsSuppliers = [];
     $scope.optionsCurrencies = [];
 
-    $scope.periods = analyticsService.getPeriods();
+    $scope.periods = UtilsService.getArrayEnum(PeriodEnum);
     $scope.selectedPeriod = $scope.periods[6];
-    
+
     $scope.onCustomerAccountDirectiveReady = function (api) {
         customerAccountDirectiveAPI = api;
         customerAccountReadyPromiseDeferred.resolve();
@@ -85,7 +84,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
 
     function defineScope() {
-       
+
         $scope.today = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
@@ -195,7 +194,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
         currencyReadyPromiseDeferred.promise
             .then(function () {
-                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, {selectSystemCurrency:true}, currencyLoadPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, { selectSystemCurrency: true }, currencyLoadPromiseDeferred);
             });
         return currencyLoadPromiseDeferred.promise;
     }

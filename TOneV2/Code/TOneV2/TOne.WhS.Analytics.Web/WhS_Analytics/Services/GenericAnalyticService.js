@@ -2,9 +2,9 @@
 
     "use strict";
 
-    analyticsServiceObj.$inject = ['LabelColorsEnum', 'GenericAnalyticMeasureEnum','VRModalService','WhS_Analytics_GenericAnalyticDimensionEnum'];
+    analyticsServiceObj.$inject = ['LabelColorsEnum', 'WhS_Analytics_GenericAnalyticMeasureEnum', 'VRModalService', 'WhS_Analytics_GenericAnalyticDimensionEnum'];
 
-    function analyticsServiceObj(LabelColorsEnum, GenericAnalyticMeasureEnum, VRModalService, WhS_Analytics_GenericAnalyticDimensionEnum) {
+    function analyticsServiceObj(LabelColorsEnum, WhS_Analytics_GenericAnalyticMeasureEnum, VRModalService, WhS_Analytics_GenericAnalyticDimensionEnum) {
    
         function getACDColor(acdValue, attemptsValue, parameters)
         {
@@ -22,10 +22,10 @@
 
         function getMeasureColor(dataItem, coldef, parameters)
         {
-            if (coldef.tag.value === GenericAnalyticMeasureEnum.ACD.value)
-                return getACDColor(dataItem.MeasureValues[GenericAnalyticMeasureEnum.ACD.name], dataItem.MeasureValues[GenericAnalyticMeasureEnum.Attempts.name], parameters);
-            else if (coldef.tag.value === GenericAnalyticMeasureEnum.ASR.value)
-                return getASRColor(dataItem.MeasureValues[GenericAnalyticMeasureEnum.ASR.name], dataItem.MeasureValues[GenericAnalyticMeasureEnum.Attempts.name], parameters);
+            if (coldef.tag.value === WhS_Analytics_GenericAnalyticMeasureEnum.ACD.value)
+                return getACDColor(dataItem.MeasureValues[WhS_Analytics_GenericAnalyticMeasureEnum.ACD.name], dataItem.MeasureValues[WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.name], parameters);
+            else if (coldef.tag.value === WhS_Analytics_GenericAnalyticMeasureEnum.ASR.value)
+                return getASRColor(dataItem.MeasureValues[WhS_Analytics_GenericAnalyticMeasureEnum.ASR.name], dataItem.MeasureValues[WhS_Analytics_GenericAnalyticMeasureEnum.Attempts.name], parameters);
             return undefined;
         }
 
