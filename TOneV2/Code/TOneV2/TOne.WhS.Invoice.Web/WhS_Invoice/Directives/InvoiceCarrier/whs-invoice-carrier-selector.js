@@ -106,8 +106,17 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                 }
                 api.getData = function()
                 {
+                    var partnerPrefix;
+                    if (ctrl.selectedCarrierTypes != undefined)
+                    {
+                        if (ctrl.selectedCarrierTypes.length == 1)
+                            partnerPrefix = ctrl.selectedCarrierTypes[0].description;
+                        else
+                            partnerPrefix = ctrl.selectedCarrierTypes.description;
+
+                    }
                     return {
-                        partnerPrefix: ctrl.selectedCarrierTypes != undefined && ctrl.selectedCarrierTypes.length == 1 ? ctrl.selectedCarrierTypes[0].description : undefined,
+                        partnerPrefix: partnerPrefix,
                         selectedIds: VRUIUtilsService.getIdSelectedIds('InvoiceCarrierId', attrs, ctrl)
                     };
                 }
