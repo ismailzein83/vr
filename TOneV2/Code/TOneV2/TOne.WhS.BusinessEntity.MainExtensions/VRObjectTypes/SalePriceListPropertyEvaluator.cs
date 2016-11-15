@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             SalePriceList salePriceList = context.Object as SalePriceList;
 
             if (salePriceList == null)
-                throw new NullReferenceException("Sale Price List");
+                throw new NullReferenceException("Sale Pricelist");
 
             switch (this.SalePriceListField)
             {

@@ -10,7 +10,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum CustomerField { CarrierName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3 }
+    public enum CustomerField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3 }
 
     public class CustomerPropertyEvaluator : VRObjectPropertyEvaluator
     {
@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             switch (this.CustomerField)
             {
-                case MainExtensions.CustomerField.CarrierName:
+                case MainExtensions.CustomerField.CustomerName:
                     return new CarrierAccountManager().GetCarrierAccountName(customer.CarrierAccountId);
                 case MainExtensions.CustomerField.BillingEmail:
                     return this.GetCarrierContactDescritpion(customer.CarrierProfileId, CarrierContactType.BillingEmail);
