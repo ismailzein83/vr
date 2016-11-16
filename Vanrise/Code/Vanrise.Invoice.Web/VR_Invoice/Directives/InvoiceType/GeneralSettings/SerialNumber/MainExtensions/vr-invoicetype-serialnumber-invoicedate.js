@@ -48,7 +48,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicedate", ["UtilsService", "VRNotifi
                         var promises = [];
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -56,7 +56,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicedate", ["UtilsService", "VRNotifi
                         DateFormat: $scope.scopeModel.dateFormat,
                         InvoiceDate: $scope.scopeModel.selectedInvoiceDate != undefined ? $scope.scopeModel.selectedInvoiceDate.value : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

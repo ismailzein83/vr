@@ -43,7 +43,7 @@ app.directive("vrInvoicetypeDatasourceItemsfilterGeneric", ["UtilsService", "VRN
 
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -51,7 +51,7 @@ app.directive("vrInvoicetypeDatasourceItemsfilterGeneric", ["UtilsService", "VRN
                         FieldName: ctrl.fieldName,
                         ComparedFieldName: ctrl.comparedFieldName
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

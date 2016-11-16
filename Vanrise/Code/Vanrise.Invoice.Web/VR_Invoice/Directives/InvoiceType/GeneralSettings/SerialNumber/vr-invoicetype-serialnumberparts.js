@@ -37,12 +37,12 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one part.";
-                }
+                };
 
                 ctrl.addSerialNumberPart = function () {
                     var onSerialNumberPartAdded = function (serialNumberPart) {
                         ctrl.datasource.push({ Entity: serialNumberPart });
-                    }
+                    };
 
                     VR_Invoice_InvoiceTypeService.addSerialNumberPart(onSerialNumberPartAdded, getContext());
                 };
@@ -50,7 +50,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 ctrl.removeSerialNumberPart = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -68,7 +68,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                         }
                     }
                     return serialNumberParts;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -80,7 +80,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -95,14 +95,14 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editSerialNumberPart(serialNumberPartObj) {
                 var onSerialNumberPartUpdated = function (serialNumberPart) {
                     var index = ctrl.datasource.indexOf(serialNumberPartObj);
                     ctrl.datasource[index] = { Entity: serialNumberPart };
-                }
+                };
 
                 VR_Invoice_InvoiceTypeService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
             }

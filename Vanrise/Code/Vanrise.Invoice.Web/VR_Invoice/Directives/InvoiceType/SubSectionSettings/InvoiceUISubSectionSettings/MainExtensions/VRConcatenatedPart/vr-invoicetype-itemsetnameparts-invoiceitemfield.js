@@ -42,14 +42,14 @@ app.directive("vrInvoicetypeItemsetnamepartsInvoiceitemfield", ["UtilsService", 
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.InvoiceItemFieldValueConcatenatedPart ,Vanrise.Invoice.MainExtensions",
                         FieldName: $scope.scopeModel.fieldName,
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

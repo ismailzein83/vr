@@ -42,14 +42,14 @@ app.directive("vrInvoicetypeItemsetnamepartsConstant", ["UtilsService", "VRNotif
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.ConstantConatenatedPartSettings ,Vanrise.Invoice.MainExtensions",
                         Constant: $scope.scopeModel.constant,
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -42,7 +42,7 @@ app.directive("vrInvoicetypeGrid", ["UtilsService", "VRNotificationService", "VR
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -70,10 +70,9 @@ app.directive("vrInvoicetypeGrid", ["UtilsService", "VRNotificationService", "VR
             }
             function editInvoiceType(dataItem)
             {
-                var onInvoiceTypeUpdated = function (invoiceType)
-                {
+                var onInvoiceTypeUpdated = function (invoiceType) {
                     gridAPI.itemUpdated(invoiceType);
-                }
+                };
                 VR_Invoice_InvoiceTypeService.editInvoiceType(onInvoiceTypeUpdated,dataItem.Entity.InvoiceTypeId)
             }
         }

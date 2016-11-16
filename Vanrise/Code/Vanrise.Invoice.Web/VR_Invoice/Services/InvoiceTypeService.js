@@ -1,4 +1,4 @@
-﻿
+﻿"use strict";
 app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
     function (VRModalService) {
 

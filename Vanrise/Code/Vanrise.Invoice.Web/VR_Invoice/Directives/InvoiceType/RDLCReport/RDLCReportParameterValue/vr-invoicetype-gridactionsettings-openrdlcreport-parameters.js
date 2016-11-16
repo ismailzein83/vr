@@ -37,19 +37,19 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one parameter.";
-                }
+                };
 
                 ctrl.addParameter = function () {
                     var onParameterAdded = function (parameter) {
                         ctrl.datasource.push({ Entity: parameter });
-                    }
+                    };
                     VR_Invoice_InvoiceTypeService.addParameter(onParameterAdded, getContext());
                 };
 
                 ctrl.removeParameter = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -71,7 +71,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
                         }
                     }
                     return parameters;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -83,7 +83,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -98,14 +98,14 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportParameters", ["Utils
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editParameter(parameterObj) {
                 var onParameterUpdated = function (parameter) {
                     var index = ctrl.datasource.indexOf(parameterObj);
                     ctrl.datasource[index] = { Entity: parameter };
-                }
+                };
                 VR_Invoice_InvoiceTypeService.editParameter(parameterObj.Entity, onParameterUpdated, getContext());
             }
             function getContext()

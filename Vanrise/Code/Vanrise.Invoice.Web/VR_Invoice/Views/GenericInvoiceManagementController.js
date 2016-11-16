@@ -10,7 +10,7 @@
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var gridAPI
+        var gridAPI;
         loadParameters();
         defineScope();
         load();
@@ -31,11 +31,10 @@
                 gridAPI.loadGrid(getFilterObject());
 
             };
-            $scope.onPartnerSelectorReady = function(api)
-            {
+            $scope.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
 

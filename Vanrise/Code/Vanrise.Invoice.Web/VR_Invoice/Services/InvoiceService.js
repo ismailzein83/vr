@@ -1,4 +1,4 @@
-﻿
+﻿"use strict";
 app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService','VRUIUtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService',
     function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService) {
 

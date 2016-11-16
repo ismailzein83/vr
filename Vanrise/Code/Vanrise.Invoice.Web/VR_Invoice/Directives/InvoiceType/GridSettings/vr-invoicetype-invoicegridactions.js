@@ -43,7 +43,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                 ctrl.addGridAction = function () {
                     var onGridActionAdded = function (gridAction) {
                         ctrl.datasource.push({ Entity: gridAction });
-                    }
+                    };
 
                     VR_Invoice_InvoiceTypeService.addGridAction(onGridActionAdded, getContext());
                 };
@@ -51,7 +51,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                 ctrl.removeAction = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -74,7 +74,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                         }
                     }
                     return actions;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -86,7 +86,7 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -101,14 +101,14 @@ app.directive("vrInvoicetypeInvoicegridactions", ["UtilsService", "VRNotificatio
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editAction(actionObj) {
                 var onGridActionUpdated = function (action) {
                     var index = ctrl.datasource.indexOf(actionObj);
                     ctrl.datasource[index] = { Entity: action };
-                }
+                };
                 VR_Invoice_InvoiceTypeService.editGridAction(actionObj.Entity, onGridActionUpdated, getContext());
             }
             function getContext()

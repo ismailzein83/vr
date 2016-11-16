@@ -41,14 +41,14 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsCustomfield", ["Utils
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.CustomFieldRDLReportParameterValue ,Vanrise.Invoice.MainExtensions",
                         FieldValue: $scope.scopeModel.fieldValue
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

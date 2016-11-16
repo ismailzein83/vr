@@ -29,11 +29,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onInvoiceItemSubSectionReady = function (api)
-            {
+            $scope.scopeModel.onInvoiceItemSubSectionReady = function (api) {
                 invoiceItemSubSectionGridColumnsAPI = api;
                 invoiceItemSubSectionGridColumnsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSubSection() : addeSubSection();

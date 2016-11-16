@@ -37,19 +37,19 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one column.";
-                }
+                };
 
                 ctrl.addGridColumn = function () {
                     var onSubSectionGridColumnAdded = function (gridColumn) {
                         ctrl.datasource.push({ Entity: gridColumn });
-                    }
+                    };
                     VR_Invoice_InvoiceTypeService.addSubSectionGridColumn(onSubSectionGridColumnAdded, ctrl.datasource);
                 };
 
                 ctrl.removeColumn = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -72,7 +72,7 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
                         }
                     }
                     return columns;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -83,7 +83,7 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -98,14 +98,14 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editColumn(columnObj) {
                 var onSubSectionGridColumnUpdated = function (column) {
                     var index = ctrl.datasource.indexOf(columnObj);
                     ctrl.datasource[index] = { Entity: column };
-                }
+                };
                 VR_Invoice_InvoiceTypeService.editSubSectionGridColumn(columnObj.Entity, onSubSectionGridColumnUpdated, ctrl.datasource);
             }
         }

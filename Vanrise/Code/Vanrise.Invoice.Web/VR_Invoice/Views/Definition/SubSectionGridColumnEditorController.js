@@ -29,15 +29,14 @@
             isEditMode = (gridColumnEntity != undefined);
         }
         function defineScope() {
-            $scope.onFieldTypeSelectiveReady = function(api)
-            {
+            $scope.onFieldTypeSelectiveReady = function (api) {
                 fieldTypeAPI = api;
                 fieldTypeReadyDeferred.resolve();
-            }
+            };
             $scope.onGridWidthFactorSelector = function (api) {
                 gridWidthFactorAPI = api;
                 gridWidthFactorReadyDeferred.resolve();
-            }
+            };
             $scope.save = function () {
                 return (isEditMode) ? updateGridColumn() : addGridColumn();
             };
@@ -57,7 +56,7 @@
                 $scope.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
+            });
         }
 
         function setTitle() {

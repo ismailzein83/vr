@@ -36,18 +36,16 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onSubSectionGridColumnsReady = function(api)
-                {
+                $scope.scopeModel.onSubSectionGridColumnsReady = function (api) {
                     subSectionGridColumnsAPI = api;
                     subSectionGridColumnsReadyPromiseDeferred.resolve();
-                }
+                };
 
-                $scope.scopeModel.onInvoiceItemSubSectionGridColumnsReady = function(api)
-                {
+                $scope.scopeModel.onInvoiceItemSubSectionGridColumnsReady = function (api) {
                     invoiceItemSubSectionGridColumnsAPI = api;
                     invoiceItemSubSectionGridColumnsReadyPromiseDeferred.resolve();
 
-                }
+                };
                 defineAPI();
             }
 
@@ -74,7 +72,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
                     promises.push(invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -83,7 +81,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
                         GridColumns: subSectionGridColumnsAPI.getData(),
                         SubSections: invoiceItemSubSectionGridColumnsAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

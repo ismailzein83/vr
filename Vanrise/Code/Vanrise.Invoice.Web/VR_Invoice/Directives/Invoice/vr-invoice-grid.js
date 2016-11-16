@@ -60,8 +60,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             var query;
                             var promiseDeferred = UtilsService.createPromiseDeferred();
                             VR_Invoice_InvoiceTypeAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
-                                if (response != undefined)
-                                {
+                                if (response != undefined) {
                                     subSectionConfigs = response;
                                 }
                                 if (payload != undefined) {
@@ -72,8 +71,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     invoiceTypeId = payload.InvoiceTypeId;
                                     //defineMenuActions(payload.invoiceGridActions);
                                 }
-                                gridAPI.retrieveData(query).then(function()
-                                {
+                                gridAPI.retrieveData(query).then(function () {
                                     promiseDeferred.resolve();
                                 }).catch(function (error) {
                                     promiseDeferred.reject(error);
@@ -82,14 +80,13 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 promiseDeferred.reject(error);
                             });
                             return promiseDeferred.promise;
-                        }
+                        };
 
-                        directiveAPI.onGenerateInvoice = function (invoice)
-                        {
+                        directiveAPI.onGenerateInvoice = function (invoice) {
                             buildGridFields(invoice);
                             VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(invoice, gridAPI, subSections, subSectionConfigs, invoiceTypeId);
                             gridAPI.itemAdded(invoice);
-                        }
+                        };
 
                         return directiveAPI;
                     }

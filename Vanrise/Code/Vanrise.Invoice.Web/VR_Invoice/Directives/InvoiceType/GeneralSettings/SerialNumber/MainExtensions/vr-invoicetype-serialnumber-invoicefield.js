@@ -40,7 +40,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicefield", ["UtilsService", "VRNotif
                             return true;
                     }
                     return false;
-                }
+                };
 
                 defineAPI();
             }
@@ -64,7 +64,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicefield", ["UtilsService", "VRNotif
                         var promises = [];
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -72,7 +72,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicefield", ["UtilsService", "VRNotif
                         Field: $scope.scopeModel.selectedInvoiceField.value,
                         FieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

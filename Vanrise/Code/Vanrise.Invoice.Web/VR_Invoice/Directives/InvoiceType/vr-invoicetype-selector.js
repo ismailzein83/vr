@@ -34,7 +34,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -53,7 +53,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -80,11 +80,11 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'InvoiceTypeId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('InvoiceTypeId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }

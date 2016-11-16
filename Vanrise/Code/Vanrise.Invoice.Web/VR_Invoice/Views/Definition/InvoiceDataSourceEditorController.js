@@ -34,13 +34,12 @@
             $scope.scopeModel.onDataSourceSettingsReady = function (api) {
                 dataSourceSettingsAPI = api;
                 dataSourceSettingsReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.showItemsFilter = false;
-            $scope.scopeModel.onItemsFilterReady = function(api)
-            {
+            $scope.scopeModel.onItemsFilterReady = function (api) {
                 itemsFilterAPI = api;
                 itemsFilterReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateDataSource() : addDataSource();

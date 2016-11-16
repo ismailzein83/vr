@@ -40,13 +40,13 @@ app.directive("vrInvoicetypeDatasourcesettingsInvoice", ["UtilsService", "VRNoti
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceDataSourceItems ,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.MainExtensions.InvoiceDataSourceItems ,Vanrise.Invoice.MainExtensions"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

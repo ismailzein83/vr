@@ -33,11 +33,11 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.onInvoiceTypeSelectorDirectiveReady = function (api) {
                 invoiceTypeSelectorAPI = api;
                 invoiceTypeSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.SaveView = function () {
                 if (isEditMode) {
                     return update();

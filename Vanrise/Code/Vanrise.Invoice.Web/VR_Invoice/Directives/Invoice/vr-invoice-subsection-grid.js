@@ -69,23 +69,23 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                                         buildGridFields(response, payload.settings.GridColumns);
 
                                         drillDownTabs.length = 0;
-                                            if (payload != undefined) {
-                                                buildGridSubSections(payload.settings.SubSections);
-                                            }
-                                            drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, []);
-                                            gridAPI.retrieveData(query).then(function () {
-                                                promiseDeferred.resolve();
-                                            }).catch(function (error) {
-                                                promiseDeferred.reject(error);
-                                            });
+                                        if (payload != undefined) {
+                                            buildGridSubSections(payload.settings.SubSections);
+                                        }
+                                        drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, []);
+                                        gridAPI.retrieveData(query).then(function () {
+                                            promiseDeferred.resolve();
                                         }).catch(function (error) {
                                             promiseDeferred.reject(error);
                                         });
+                                    }).catch(function (error) {
+                                        promiseDeferred.reject(error);
+                                    });
                                 }
                                 return promiseDeferred.promise;
 
                             }
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -131,7 +131,7 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function buildGridSubSections(subSections) {
@@ -157,7 +157,7 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                                     InvoiceTypeId: invoiceTypeId
                                 },
                                 settings: subSection.Settings,
-                                invoiceId: invoiceId,
+                                invoiceId: invoiceId
                             };
                             return invoiceItem.invoiceItemGridAPI.load(invoiceItemGridPayload);
                         };

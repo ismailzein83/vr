@@ -40,7 +40,7 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsField", ["UtilsServic
                             return true;
                     }
                     return false;
-                }
+                };
 
 
                 defineAPI();
@@ -52,14 +52,12 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsField", ["UtilsServic
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (context != undefined)
-                        {
+                        if (context != undefined) {
                             var fields = context.getFields();
                             if (fields != undefined)
                                 $scope.scopeModel.recordFields = fields;
                         }
-                        if (payload.parameterEntity != undefined)
-                        {
+                        if (payload.parameterEntity != undefined) {
                             $scope.scopeModel.selectedInvoiceField = UtilsService.getItemByVal($scope.scopeModel.invoiceFields, payload.parameterEntity.Field, "value");
                             $scope.scopeModel.selectedRecordField = UtilsService.getItemByVal($scope.scopeModel.recordFields, payload.parameterEntity.FieldName, "FieldName");
                         }
@@ -67,15 +65,15 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsField", ["UtilsServic
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.FieldRDLReportParameterValue ,Vanrise.Invoice.MainExtensions",
                         Field: $scope.scopeModel.selectedInvoiceField.value,
-                        FieldName: $scope.scopeModel.isCustomFieldRequired()?  $scope.scopeModel.selectedRecordField.FieldName:undefined
+                        FieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

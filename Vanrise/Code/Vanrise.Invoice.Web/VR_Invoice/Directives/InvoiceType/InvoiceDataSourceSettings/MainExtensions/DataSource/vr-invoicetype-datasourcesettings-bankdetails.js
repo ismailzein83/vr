@@ -40,13 +40,13 @@ app.directive("vrInvoicetypeDatasourcesettingsBankdetails", ["UtilsService", "VR
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.BankDetailsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -62,10 +62,10 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
                         };
                     };
                     var parameter = {
-                            context: getContext()
-                        };
+                        context: getContext()
+                    };
                     VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/SerialNumberPatternHelper.html', parameter, modalSettings);
-                }
+                };
                 defineAPI();
             }
 
@@ -79,21 +79,20 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
                         invoiceTypeId = payload.invoiceTypeId;
                         if (payload.serialNumberPattern != undefined)
                             ctrl.value = payload.serialNumberPattern;
-                        if (invoiceTypeId != undefined && parts == undefined)
-                        {
+                        if (invoiceTypeId != undefined && parts == undefined) {
                             VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
                                 parts = response.Settings.SerialNumberParts;
                             });
                         }
-                        
+
                         var promises = [];
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return ctrl.value;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

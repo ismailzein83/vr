@@ -28,16 +28,14 @@
             $scope.scopeModel = {};
             $scope.scopeModel.invoiceFields = UtilsService.getArrayEnum(VR_Invoice_InvoiceFieldEnum);
             $scope.scopeModel.recordFields = context != undefined ? context.getFields() : [];
-            $scope.scopeModel.isCustomFieldRequired = function ()
-            {
-                if ($scope.scopeModel.selectedInvoiceField != undefined)
-                {
+            $scope.scopeModel.isCustomFieldRequired = function () {
+                if ($scope.scopeModel.selectedInvoiceField != undefined) {
                     if ($scope.scopeModel.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.CustomField.value)
                         return true;
                 }
-                
+
                 return false;
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode)?  updateGridColumn() : addGridColumn();

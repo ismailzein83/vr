@@ -49,7 +49,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    var directivePayload = { context: getContext()}
+                    var directivePayload = { context: getContext() };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -98,7 +98,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { context: getContext(), invoiceFilterConditionEntity: invoiceFilterConditionEntity }
+                            var directivePayload = { context: getContext(), invoiceFilterConditionEntity: invoiceFilterConditionEntity };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -148,7 +148,7 @@
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
                         + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
-                + '</vr-directivewrapper>'
+                + '</vr-directivewrapper>';
             return template;
         }
     }

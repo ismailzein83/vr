@@ -48,16 +48,16 @@ app.directive("vrInvoicetypeGridactionsettingsSetinvoicepaid", ["UtilsService", 
                         $scope.scopeModel.isInvoicePaid = invoiceGridActionEntity.IsInvoicePaid;
                     }
                     var promises = [];
-                   
+
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.SetInvoicePaidAction ,Vanrise.Invoice.MainExtensions",
                         IsInvoicePaid: $scope.scopeModel.isInvoicePaid,
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

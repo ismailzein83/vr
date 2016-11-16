@@ -50,14 +50,14 @@ app.directive("vrInvoicetypeInvoicefilterconditionIspaidinvoice", ["UtilsService
                     var promises = [];
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.IsPaidInvoiceFilterCondition ,Vanrise.Invoice.MainExtensions",
-                        IsPaid: $scope.scopeModel.isPaid,
+                        IsPaid: $scope.scopeModel.isPaid
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

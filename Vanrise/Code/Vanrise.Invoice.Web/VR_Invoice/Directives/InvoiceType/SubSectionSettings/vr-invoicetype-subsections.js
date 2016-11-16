@@ -37,12 +37,12 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one sub section.";
-                }
+                };
 
                 ctrl.addSubSection = function () {
                     var onSubSectionAdded = function (subSection) {
                         ctrl.datasource.push({ Entity: subSection });
-                    }
+                    };
 
                     VR_Invoice_InvoiceTypeService.addSubSection(onSubSectionAdded, getContext());
                 };
@@ -50,7 +50,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                 ctrl.removeSubSection = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -68,7 +68,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                         }
                     }
                     return subSections;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -80,7 +80,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -95,14 +95,14 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editSubsection(subSectionObj) {
                 var onSubSectionUpdated = function (subSection) {
                     var index = ctrl.datasource.indexOf(subSectionObj);
                     ctrl.datasource[index] = { Entity: subSection };
-                }
+                };
 
                 VR_Invoice_InvoiceTypeService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
             }

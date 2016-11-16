@@ -5,7 +5,7 @@
     invoiceTypeManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceTypeService', 'VRNotificationService'];
 
     function invoiceTypeManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceTypeService, VRNotificationService) {
-        var gridAPI
+        var gridAPI;
         loadParameters();
         defineScope();
         load();

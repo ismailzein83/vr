@@ -38,11 +38,11 @@
             $scope.scopeModel.onRecordFilterReady = function (api) {
                 recordFilterAPI = api;
                 recordFilterReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onSubReportDataSourcesReady = function (api) {
                 subReportDataSourcesAPI = api;
                 subReportDataSourcesReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSubReport() : addSubReport();
             };
@@ -97,7 +97,7 @@
         function loadRecordFilterDirective() {
             var recordFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             recordFilterReadyPromiseDeferred.promise.then(function () {
-                var recordFilterPayload = { context: getContext() }
+                var recordFilterPayload = { context: getContext() };
                 if(subReportEntity != undefined)
                 {
                     recordFilterPayload.FilterGroup = subReportEntity.FilterGroup;
@@ -122,10 +122,9 @@
           
             if (currentContext == undefined)
                 currentContext = {};
-            currentContext.showItemsFilter =function()
-            {
+            currentContext.showItemsFilter = function () {
                 return $scope.scopeModel.repeatedSubReport;
-            }
+            };
             return currentContext;
         }
         function addSubReport() {

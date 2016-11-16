@@ -32,15 +32,14 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onInvoiceUISubsectionSettingsReady = function (api)
-            {
+            $scope.scopeModel.onInvoiceUISubsectionSettingsReady = function (api) {
                 invoiceUISubsectionSettingsAPI = api;
                 invoiceUISubsectionSettingsReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRecordFilterReady = function (api) {
                 recordFilterAPI = api;
                 recordFilterReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSubSection() : addeSubSection();
             };
@@ -76,7 +75,7 @@
         function loadRecordFilterDirective() {
             var recordFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             recordFilterReadyPromiseDeferred.promise.then(function () {
-                var recordFilterPayload = { context: getContext() }
+                var recordFilterPayload = { context: getContext() };
                 if (subSectionEntity != undefined) {
                     recordFilterPayload.FilterGroup = subSectionEntity.FilterGroup;
                 }

@@ -31,15 +31,14 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onGridActionSettingsReady = function (api)
-            {
-                gridActionSettingsAPI =api;
+            $scope.scopeModel.onGridActionSettingsReady = function (api) {
+                gridActionSettingsAPI = api;
                 gridActionSettingsReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onInvoiceFilterConditionReady = function (api) {
                 invoiceFilterConditionAPI = api;
                 invoiceFilterConditionReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateGridAction() : addGridAction();
             };
@@ -77,7 +76,7 @@
         function loadInvoiceFilterConditionDirective() {
             var invoiceFilterConditionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             invoiceFilterConditionReadyPromiseDeferred.promise.then(function () {
-                var invoiceFilterConditionPayload = { context: getContext() }
+                var invoiceFilterConditionPayload = { context: getContext() };
                 if (actionEntity != undefined) {
                     invoiceFilterConditionPayload.invoiceFilterConditionEntity = actionEntity.InvoiceFilterCondition;
                 }
@@ -88,7 +87,7 @@
         function loadGridActionSettingsDirective() {
             var gridActionSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             gridActionSettingsReadyPromiseDeferred.promise.then(function () {
-                var invoiceGridActionPayload = { context: getContext() }
+                var invoiceGridActionPayload = { context: getContext() };
                 if(actionEntity != undefined)
                 {
                     invoiceGridActionPayload.invoiceGridActionEntity = actionEntity.Settings;

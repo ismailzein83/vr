@@ -42,16 +42,16 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
                 $scope.scopeModel.onSubSectionGridColumnsReady = function (api) {
                     subSectionGridColumnsAPI = api;
                     subSectionGridColumnsReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onConcatenatedPartsReady = function (api) {
                     concatenatedPartsAPI = api;
                     concatenatedPartsReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onInvoiceItemSubSectionGridColumnsReady = function (api) {
                     invoiceItemSubSectionGridColumnsAPI = api;
                     invoiceItemSubSectionGridColumnsReadyPromiseDeferred.resolve();
 
-                }
+                };
                 defineAPI();
             }
 
@@ -65,9 +65,8 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
 
                     var concatenatedPartsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     concatenatedPartsReadyPromiseDeferred.promise.then(function () {
-                        var concatenatedPartsDirectivePayload = { context: getContext() }
-                        if( payload != undefined)
-                        {
+                        var concatenatedPartsDirectivePayload = { context: getContext() };
+                        if (payload != undefined) {
                             concatenatedPartsDirectivePayload.concatenatedParts = payload.ItemSetNameParts;
                         }
 
@@ -92,7 +91,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
                     promises.push(invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -100,7 +99,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
                         GridColumns: subSectionGridColumnsAPI.getData(),
                         SubSections: invoiceItemSubSectionGridColumnsAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

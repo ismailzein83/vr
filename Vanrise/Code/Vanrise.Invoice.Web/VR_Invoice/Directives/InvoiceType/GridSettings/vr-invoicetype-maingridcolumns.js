@@ -40,21 +40,20 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one column.";
-                }
+                };
 
                 ctrl.addGridColumn = function () {
                     var onGridColumnAdded = function (gridColumn) {
                         ctrl.datasource.push(addNeededFields({ Entity: gridColumn }));
-                    }
+                    };
 
                     VR_Invoice_InvoiceTypeService.addGridColumn(onGridColumnAdded, getContext());
                 };
 
-                ctrl.removeColumn = function(dataItem)
-                {
+                ctrl.removeColumn = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -76,22 +75,19 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
                         }
                     }
                     return columns;
-                }
+                };
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
+                    if (payload != undefined) {
                         context = payload.context;
-                        if(payload.mainGridColumns != undefined)
-                        {
-                            for(var i=0;i<payload.mainGridColumns.length;i++)
-                            {
+                        if (payload.mainGridColumns != undefined) {
+                            for (var i = 0; i < payload.mainGridColumns.length; i++) {
                                 var gridColumn = payload.mainGridColumns[i];
                                 ctrl.datasource.push(addNeededFields({ Entity: gridColumn }));
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -111,14 +107,14 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editColumn(columnObj) {
                 var onGridColumnUpdated = function (column) {
                     var index = ctrl.datasource.indexOf(columnObj);
                     ctrl.datasource[index] = addNeededFields({ Entity: column });
-                }
+                };
 
                 VR_Invoice_InvoiceTypeService.editGridColumn(columnObj.Entity, onGridColumnUpdated, getContext());
             }

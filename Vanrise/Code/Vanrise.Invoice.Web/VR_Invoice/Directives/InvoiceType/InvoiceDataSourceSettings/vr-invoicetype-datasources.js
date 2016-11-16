@@ -38,19 +38,19 @@ app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationServic
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one dataSource.";
-                }
+                };
 
                 ctrl.addDataSource = function () {
                     var onDataSourceAdded = function (dataSource) {
                         ctrl.datasource.push({ Entity: dataSource });
-                    }
+                    };
                     VR_Invoice_InvoiceTypeService.addDataSource(onDataSourceAdded, getContext());
                 };
 
                 ctrl.removeDataSource = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -72,7 +72,7 @@ app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationServic
                         }
                     }
                     return dataSources;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -84,7 +84,7 @@ app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationServic
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -99,14 +99,14 @@ app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationServic
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editDataSource(dataSourceObj) {
                 var onDataSourceUpdated = function (dataSource) {
                     var index = ctrl.datasource.indexOf(dataSourceObj);
                     ctrl.datasource[index] = { Entity: dataSource };
-                }
+                };
                 VR_Invoice_InvoiceTypeService.editDataSource(dataSourceObj.Entity, onDataSourceUpdated, getContext());
             }
             function getContext()

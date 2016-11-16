@@ -37,7 +37,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionFiltergroup", ["UtilsService",
                 $scope.scopeModel.onRecordFilterReady = function (api) {
                     recordFilterAPI = api;
                     recordFilterReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -53,7 +53,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionFiltergroup", ["UtilsService",
                     var promises = [];
                     var recordFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     recordFilterReadyPromiseDeferred.promise.then(function () {
-                        var recordFilterPayload = { context: getContext() }
+                        var recordFilterPayload = { context: getContext() };
                         if (invoiceFilterConditionEntity != undefined) {
                             recordFilterPayload.FilterGroup = invoiceFilterConditionEntity.FilterGroup;
                         }
@@ -61,16 +61,16 @@ app.directive("vrInvoicetypeInvoicefilterconditionFiltergroup", ["UtilsService",
                     });
                     promises.push(recordFilterLoadPromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var filterGroup = recordFilterAPI.getData();
 
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.FilterGroupCondition ,Vanrise.Invoice.MainExtensions",
-                        FilterGroup: filterGroup != undefined ? filterGroup.filterObj : undefined,
+                        FilterGroup: filterGroup != undefined ? filterGroup.filterObj : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -30,7 +30,7 @@
             $scope.scopeModel.onPartSettingsReady = function (api) {
                 serialNumberPartSettingsAPI = api;
                 serialNumberPartSettingsReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSerialNumberPart() : addeSerialNumberPart();
             };

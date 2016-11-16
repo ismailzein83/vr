@@ -49,7 +49,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicecounter", ["UtilsService", "VRNot
                         var promises = [];
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -58,7 +58,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicecounter", ["UtilsService", "VRNot
                         OverAllStartUpCounter: $scope.scopeModel.overAllStartUpCounter,
                         Type: $scope.scopeModel.selectedCounterType != undefined ? $scope.scopeModel.selectedCounterType.value : undefined
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -43,14 +43,14 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                 ctrl.addSubReport = function () {
                     var onSubReportAdded = function (subReport) {
                         ctrl.datasource.push({ Entity: subReport });
-                    }
+                    };
                     VR_Invoice_InvoiceTypeService.addSubReport(onSubReportAdded, getContext());
                 };
 
                 ctrl.removeSubReport = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -74,7 +74,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                         }
                     }
                     return subReports;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -86,7 +86,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -105,14 +105,14 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editSubReport(subReportObj) {
                 var onSubReportUpdated = function (subReport) {
                     var index = ctrl.datasource.indexOf(subReportObj);
                     ctrl.datasource[index] = { Entity: subReport };
-                }
+                };
                 VR_Invoice_InvoiceTypeService.editSubReport(subReportObj.Entity, onSubReportUpdated, getContext());
             }
         }

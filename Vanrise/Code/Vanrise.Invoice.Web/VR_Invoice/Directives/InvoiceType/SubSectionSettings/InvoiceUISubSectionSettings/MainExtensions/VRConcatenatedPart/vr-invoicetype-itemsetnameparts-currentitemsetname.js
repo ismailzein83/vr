@@ -41,13 +41,13 @@ app.directive("vrInvoicetypeItemsetnamepartsCurrentitemsetname", ["UtilsService"
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.CurrentItemSetNameConcatenatedPart ,Vanrise.Invoice.MainExtensions",
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

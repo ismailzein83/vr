@@ -34,7 +34,7 @@
             $scope.scopeModel.onParameterSettingsReady = function (api) {
                 parameterSettingsAPI = api;
                 parameterSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.isVisible = true;
 
@@ -79,7 +79,7 @@
         function loadParameterSettingsDirective() {
             var parameterSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             parameterSettingsReadyPromiseDeferred.promise.then(function () {
-                var parameterPayload = { context: getContext() }
+                var parameterPayload = { context: getContext() };
                 if(parameterEntity != undefined)
                     parameterPayload.parameterEntity = parameterEntity.Value;
                 VRUIUtilsService.callDirectiveLoad(parameterSettingsAPI, parameterPayload, parameterSettingsLoadPromiseDeferred);
