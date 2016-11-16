@@ -32,13 +32,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("CustomerIds");
 
             IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, Vanrise.Common.Utilities.Min(context.EffectiveDate, DateTime.Today));
-            IEnumerable<SaleCodeExistingEntity> saleCodesExistingEntities = saleCodes.MapRecords(SaleCodeExistingEntityMapper);
+            IEnumerable<ExistingSaleCodeEntity> saleCodesExistingEntities = saleCodes.MapRecords(SaleCodeExistingEntityMapper);
 
             if (saleCodesExistingEntities == null)
                 return;
 
-            Dictionary<string, Dictionary<string, List<SaleCodeExistingEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(saleCodesExistingEntities);
-            Dictionary<int, List<ZoneWrapper>> zonesWrapperByCountry = StructureZonesWrapperByCountry(existingSaleCodesByZoneName);
+            Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(saleCodesExistingEntities);
+            Dictionary<int, List<ExistingSaleZone>> zonesWrapperByCountry = StructureZonesWrapperByCountry(existingSaleCodesByZoneName);
             Dictionary<int, List<SalePLZoneChange>> zoneChangesByCountryId = StructureZoneChangesByCountry(context.ZoneChanges);
 
             List<RoutingCustomerInfoDetails> routingCustomersInfoDetails = new List<RoutingCustomerInfoDetails>();
@@ -87,7 +87,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 foreach (int soldCountryId in customerSoldCountries)
                 {
-                    List<ZoneWrapper> zonesWrapperForCountry = zonesWrapperByCountry.GetRecord(soldCountryId);
+                    List<ExistingSaleZone> zonesWrapperForCountry = zonesWrapperByCountry.GetRecord(soldCountryId);
                     IEnumerable<SalePLZoneChange> countryZonesChanges = zoneChangesByCountryId.GetRecord(soldCountryId);
 
                     if (customer.CustomerSettings.IsAToZ)
@@ -104,8 +104,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             if (zonesWrapperForCountry != null)
                             {
-                                List<ZoneWrapper> zonesWrapperHaveChanges = new List<ZoneWrapper>();
-                                foreach (ZoneWrapper zoneWrapper in zonesWrapperForCountry)
+                                List<ExistingSaleZone> zonesWrapperHaveChanges = new List<ExistingSaleZone>();
+                                foreach (ExistingSaleZone zoneWrapper in zonesWrapperForCountry)
                                 {
                                     SalePLZoneChange salePLZoneChange = countryZonesChanges.FindRecord(item => item.ZoneName.Equals(zoneWrapper.ZoneName));
                                     if (salePLZoneChange != null && salePLZoneChange.CustomersHavingRateChange.Contains(customerId))
@@ -138,15 +138,15 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        private class ZoneWrapper
+        private class ExistingSaleZone
         {
             public long ZoneId { get; set; }
             public string ZoneName { get; set; }
 
-            public List<CodeObject> Codes { get; set; }
+            public List<ExistingSaleCode> Codes { get; set; }
         }
 
-        private class CodeObject
+        private class ExistingSaleCode
         {
             public string Code { get; set; }
             public DateTime BED { get; set; }
@@ -226,12 +226,12 @@ namespace TOne.WhS.BusinessEntity.Business
             client.Send(objMail);
         }
 
-        private void CreateSalePLZoneNotifications(List<SalePLZoneNotification> salePLZoneNotifications, List<ZoneWrapper> zonesWrappers, SaleEntityZoneRateLocator rateLocator, int sellingProductId,
+        private void CreateSalePLZoneNotifications(List<SalePLZoneNotification> salePLZoneNotifications, List<ExistingSaleZone> zonesWrappers, SaleEntityZoneRateLocator rateLocator, int sellingProductId,
             int customerId)
         {
             if (zonesWrappers != null)
             {
-                foreach (ZoneWrapper zoneWrapper in zonesWrappers)
+                foreach (ExistingSaleZone zoneWrapper in zonesWrappers)
                 {
                     SalePLZoneNotification zoneNotification = new SalePLZoneNotification()
                     {
@@ -249,29 +249,29 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        private Dictionary<int, List<ZoneWrapper>> StructureZonesWrapperByCountry(Dictionary<string, Dictionary<string, List<SaleCodeExistingEntity>>> existingSaleCodesByZoneName)
+        private Dictionary<int, List<ExistingSaleZone>> StructureZonesWrapperByCountry(Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName)
         {
             if (existingSaleCodesByZoneName == null)
                 return null;
 
-            Dictionary<int, List<ZoneWrapper>> zonesWrapperByCountry = new Dictionary<int, List<ZoneWrapper>>();
-            List<ZoneWrapper> zonesWrapper;
+            Dictionary<int, List<ExistingSaleZone>> zonesWrapperByCountry = new Dictionary<int, List<ExistingSaleZone>>();
+            List<ExistingSaleZone> zonesWrapper;
             SaleZoneManager zoneManager = new SaleZoneManager();
 
             DateTime today = DateTime.Today;
-            foreach (KeyValuePair<string, Dictionary<string, List<SaleCodeExistingEntity>>> zoneItem in existingSaleCodesByZoneName)
+            foreach (KeyValuePair<string, Dictionary<string, List<ExistingSaleCodeEntity>>> zoneItem in existingSaleCodesByZoneName)
             {
 
-                List<CodeObject> codes = new List<CodeObject>();
+                List<ExistingSaleCode> codes = new List<ExistingSaleCode>();
                 long zoneId = zoneItem.Value.First().Value.First().CodeEntity.ZoneId;
                 DateTime maxCodeBED = DateTime.MinValue;
-                foreach (KeyValuePair<string, List<SaleCodeExistingEntity>> codeItem in zoneItem.Value)
+                foreach (KeyValuePair<string, List<ExistingSaleCodeEntity>> codeItem in zoneItem.Value)
                 {
-                    IEnumerable<SaleCodeExistingEntity> connectedSaleCodes = codeItem.Value.GetLastConnectedEntities();
+                    IEnumerable<ExistingSaleCodeEntity> connectedSaleCodes = codeItem.Value.GetLastConnectedEntities();
                     if (connectedSaleCodes != null)
                         connectedSaleCodes = connectedSaleCodes.OrderBy(itm => itm.BED);
 
-                    CodeObject codeObject = new CodeObject()
+                    ExistingSaleCode codeObject = new ExistingSaleCode()
                     {
                         Code = codeItem.Key,
                         BED = connectedSaleCodes.First().BED,
@@ -287,7 +287,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     codes.Add(codeObject);
                 }
 
-                ZoneWrapper zoneWrapper = new ZoneWrapper()
+                ExistingSaleZone zoneWrapper = new ExistingSaleZone()
                 {
                     ZoneName = zoneItem.Key,
                     ZoneId = zoneId,
@@ -297,7 +297,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 int countryId = zoneManager.GetSaleZoneCountryId(zoneWrapper.ZoneId);
                 if (!zonesWrapperByCountry.TryGetValue(countryId, out zonesWrapper))
                 {
-                    zonesWrapper = new List<ZoneWrapper>();
+                    zonesWrapper = new List<ExistingSaleZone>();
                     zonesWrapper.Add(zoneWrapper);
                     zonesWrapperByCountry.Add(countryId, zonesWrapper);
                 }
@@ -308,10 +308,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return zonesWrapperByCountry;
         }
 
-        private long GetEffectiveZoneId(List<SaleCodeExistingEntity> saleCodes, DateTime effectiveOn)
+        private long GetEffectiveZoneId(List<ExistingSaleCodeEntity> saleCodes, DateTime effectiveOn)
         {
             long zoneId = saleCodes.First().CodeEntity.ZoneId;
-            foreach (SaleCodeExistingEntity saleCode in saleCodes)
+            foreach (ExistingSaleCodeEntity saleCode in saleCodes)
             {
                 SaleCode codeEntity = saleCode.CodeEntity;
                 if (codeEntity.BED <= effectiveOn && codeEntity.EED.VRGreaterThan(effectiveOn))
@@ -329,13 +329,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        private IEnumerable<SalePLZoneNotification> CreateSalePLZoneNotifications(IEnumerable<SaleCodeExistingEntity> saleCodesByCountry)
+        private IEnumerable<SalePLZoneNotification> CreateSalePLZoneNotifications(IEnumerable<ExistingSaleCodeEntity> saleCodesByCountry)
         {
             Dictionary<string, SalePLZoneNotification> countryZoneNotifications = new Dictionary<string, SalePLZoneNotification>();
 
             if (saleCodesByCountry != null)
             {
-                foreach (SaleCodeExistingEntity saleCode in saleCodesByCountry)
+                foreach (ExistingSaleCodeEntity saleCode in saleCodesByCountry)
                 {
                     string zoneName = saleCode.ZoneName;
                     SalePLZoneNotification zoneNotification = null;
@@ -375,19 +375,19 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        private Dictionary<string, Dictionary<string, List<SaleCodeExistingEntity>>> StructureExistingSaleCodesByZoneName(IEnumerable<SaleCodeExistingEntity> saleCodesExistingEntities)
+        private Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> StructureExistingSaleCodesByZoneName(IEnumerable<ExistingSaleCodeEntity> saleCodesExistingEntities)
         {
-            Dictionary<string, Dictionary<string, List<SaleCodeExistingEntity>>> existingSaleCodesByZoneName = new Dictionary<string, Dictionary<string, List<SaleCodeExistingEntity>>>();
+            Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName = new Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>>();
             if (saleCodesExistingEntities != null)
             {
-                Dictionary<string, List<SaleCodeExistingEntity>> saleCodesByCodeValue;
-                List<SaleCodeExistingEntity> saleCodes;
-                foreach (SaleCodeExistingEntity saleCodeExistingEntity in saleCodesExistingEntities)
+                Dictionary<string, List<ExistingSaleCodeEntity>> saleCodesByCodeValue;
+                List<ExistingSaleCodeEntity> saleCodes;
+                foreach (ExistingSaleCodeEntity saleCodeExistingEntity in saleCodesExistingEntities)
                 {
                     if (!existingSaleCodesByZoneName.TryGetValue(saleCodeExistingEntity.ZoneName, out saleCodesByCodeValue))
                     {
-                        saleCodesByCodeValue = new Dictionary<string, List<SaleCodeExistingEntity>>();
-                        saleCodes = new List<SaleCodeExistingEntity>();
+                        saleCodesByCodeValue = new Dictionary<string, List<ExistingSaleCodeEntity>>();
+                        saleCodes = new List<ExistingSaleCodeEntity>();
                         saleCodes.Add(saleCodeExistingEntity);
                         saleCodesByCodeValue.Add(saleCodeExistingEntity.CodeEntity.Code, saleCodes);
                         existingSaleCodesByZoneName.Add(saleCodeExistingEntity.ZoneName, saleCodesByCodeValue);
@@ -396,7 +396,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         if (!saleCodesByCodeValue.TryGetValue(saleCodeExistingEntity.CodeEntity.Code, out saleCodes))
                         {
-                            saleCodes = new List<SaleCodeExistingEntity>();
+                            saleCodes = new List<ExistingSaleCodeEntity>();
                             saleCodes.Add(saleCodeExistingEntity);
                             saleCodesByCodeValue.Add(saleCodeExistingEntity.CodeEntity.Code, saleCodes);
                         }
@@ -409,17 +409,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return existingSaleCodesByZoneName;
         }
 
-        private Dictionary<int, List<SaleCodeExistingEntity>> StructureExistingSaleCodesByCountry(IEnumerable<SaleCodeExistingEntity> saleCodesExistingEntities)
+        private Dictionary<int, List<ExistingSaleCodeEntity>> StructureExistingSaleCodesByCountry(IEnumerable<ExistingSaleCodeEntity> saleCodesExistingEntities)
         {
-            Dictionary<int, List<SaleCodeExistingEntity>> existingSaleCodesByCountryId = new Dictionary<int, List<SaleCodeExistingEntity>>();
+            Dictionary<int, List<ExistingSaleCodeEntity>> existingSaleCodesByCountryId = new Dictionary<int, List<ExistingSaleCodeEntity>>();
             if (saleCodesExistingEntities != null)
             {
-                List<SaleCodeExistingEntity> saleCodesExistingEntitiesList;
-                foreach (SaleCodeExistingEntity saleCodeExistingEntity in saleCodesExistingEntities)
+                List<ExistingSaleCodeEntity> saleCodesExistingEntitiesList;
+                foreach (ExistingSaleCodeEntity saleCodeExistingEntity in saleCodesExistingEntities)
                 {
                     if (!existingSaleCodesByCountryId.TryGetValue(saleCodeExistingEntity.CountryId, out saleCodesExistingEntitiesList))
                     {
-                        saleCodesExistingEntitiesList = new List<SaleCodeExistingEntity>();
+                        saleCodesExistingEntitiesList = new List<ExistingSaleCodeEntity>();
                         saleCodesExistingEntitiesList.Add(saleCodeExistingEntity);
                         existingSaleCodesByCountryId.Add(saleCodeExistingEntity.CountryId, saleCodesExistingEntitiesList);
                     }
@@ -436,7 +436,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Mappers
 
-        private SalePLCodeNotification CodeNotificationMapper(SaleCodeExistingEntity saleCode)
+        private SalePLCodeNotification CodeNotificationMapper(ExistingSaleCodeEntity saleCode)
         {
             return new SalePLCodeNotification()
             {
@@ -446,7 +446,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        private SalePLCodeNotification SalePLCodeNotificationMapper(CodeObject saleCode)
+        private SalePLCodeNotification SalePLCodeNotificationMapper(ExistingSaleCode saleCode)
         {
             return new SalePLCodeNotification()
             {
@@ -456,9 +456,9 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        private SaleCodeExistingEntity SaleCodeExistingEntityMapper(SaleCode saleCode)
+        private ExistingSaleCodeEntity SaleCodeExistingEntityMapper(SaleCode saleCode)
         {
-            return new SaleCodeExistingEntity(saleCode)
+            return new ExistingSaleCodeEntity(saleCode)
             {
                 CountryId = _SaleZoneManager.GetSaleZoneCountryId(saleCode.ZoneId),
                 ZoneName = _SaleZoneManager.GetSaleZoneName(saleCode.ZoneId)

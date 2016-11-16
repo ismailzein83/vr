@@ -7,11 +7,11 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    class SaleCodeExistingEntity : IExistingEntity
+    class ExistingSaleCodeEntity : IExistingEntity
     {
         #region Public Methods
 
-        public SaleCodeExistingEntity(BusinessEntity.Entities.SaleCode saleCode)
+        public ExistingSaleCodeEntity(BusinessEntity.Entities.SaleCode saleCode)
         {
             this.CodeEntity = saleCode;
         }
@@ -38,7 +38,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public bool IsSameEntity(IExistingEntity nextEntity)
         {
-            SaleCodeExistingEntity nextExistingCode = nextEntity as SaleCodeExistingEntity;
+            ExistingSaleCodeEntity nextExistingCode = nextEntity as ExistingSaleCodeEntity;
             return this.ZoneName.Equals(nextExistingCode.ZoneName, StringComparison.InvariantCultureIgnoreCase);
         }
 
