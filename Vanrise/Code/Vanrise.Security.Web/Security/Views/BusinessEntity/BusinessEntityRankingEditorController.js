@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 BusinessEntityRankingEditorController.$inject = ['$scope', 'VRNotificationService', 'UtilsService', 'VR_Sec_BusinessEntityNodeAPIService','VR_Sec_EntityTypeEnum'];
 function BusinessEntityRankingEditorController($scope, VRNotificationService, UtilsService, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_EntityTypeEnum) {
     var treeAPI;
@@ -14,7 +14,7 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
             if ($scope.BusinessEntities.length > 0) {
                 treeAPI.refreshTree($scope.BusinessEntities);
             }
-        }
+        };
 
         $scope.hasRankingPermission = function () {
             return VR_Sec_BusinessEntityNodeAPIService.HasUpdateEntityNodesRankPermission();
@@ -31,7 +31,7 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
                             $scope.onRankingSuccess(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
-                })
+                });
             }
         };
 
@@ -40,10 +40,10 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
         };
 
         $scope.onMoveItem = function (node, parent) {
-            
+
             if (parent.isLeaf)
                 return false;
-        }
+        };
     }
 
     function load() {
@@ -73,7 +73,7 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
             setLeafNodes(response);
             angular.forEach(response, function (item) {
                 $scope.businessEntitiesItems.push(item);
-            })
+            });
             if (treeAPI != undefined) {
                 treeAPI.refreshTree($scope.businessEntitiesItems);
             }
@@ -119,7 +119,7 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
                 BreakInheritance: businessEntity.BreakInheritance,
                 Parent: parent,
                 Children: []
-            }
+            };
             preparedBusinessEntityItems.push(preparedBusinessEntityItem);
             prepareBusinessEntityItems(businessEntity.Children, preparedBusinessEntityItem.Children, businessEntity);
         }

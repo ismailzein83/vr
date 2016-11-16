@@ -16,7 +16,7 @@
             };
             var parameters = {
                 moduleId: moduleId
-            }
+            };
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onBusinessEntityDefinitionAdded = onBusinessEntityDefinitionAdded;
             };

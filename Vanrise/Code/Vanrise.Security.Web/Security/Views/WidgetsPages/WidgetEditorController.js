@@ -25,12 +25,12 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
             templateDirectiveAPI = api;
             var payload;
             if (widgetEntity != undefined && widgetEntity.Setting != undefined)
-                payload = widgetEntity.Setting.Settings
+                payload = widgetEntity.Setting.Settings;
             var setLoader = function (value) {
                 $scope.scopeModal.isLoadingTemplateDirective = value;
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, templateDirectiveAPI, payload, setLoader);
-        }
+        };
 
         $scope.scopeModal.onPreviewAPIReady = function (api) {
             previewDirectiveAPI = api;
@@ -42,11 +42,10 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
             }
 
-        }
-        $scope.scopeModal.buildWidgetObjFromScope = function ()
-        {
+        };
+        $scope.scopeModal.buildWidgetObjFromScope = function () {
             return buildWidgetObjFromScope();
-        }
+        };
         $scope.scopeModal.widgets = [];
         $scope.scopeModal.selectedWidget;
         $scope.scopeModal.widgetName;

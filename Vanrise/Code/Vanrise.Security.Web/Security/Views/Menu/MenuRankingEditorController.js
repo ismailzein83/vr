@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 MenuRankingEditorController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'UtilsService', 'VR_Sec_MenuAPIService','VR_Sec_MenuTypeEnum'];
 function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationService, UtilsService, VR_Sec_MenuAPIService, VR_Sec_MenuTypeEnum) {
     var treeAPI;
@@ -16,7 +16,7 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
             if ($scope.menu.length > 0) {
                 treeAPI.refreshTree($scope.menu);
             }
-        }
+        };
 
         $scope.hasRankingPermission = function () {
             return VR_Sec_ViewAPIService.HasUpdateViewsRankPermission();
@@ -33,7 +33,7 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
                             $scope.onRankingSuccess(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
-                })
+                });
             }
         };
 
@@ -41,9 +41,8 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
             $scope.modalContext.closeModal();
         };
 
-        $scope.onMoveMenuItem = function (node, parent)
-        {
-        
+        $scope.onMoveMenuItem = function (node, parent) {
+
             if (parent.isRoot && node.isLeaf)
                 return false;
             if (parent.isLeaf)
@@ -53,8 +52,8 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
             if (treeAPI.getTree != undefined)
                 menu = treeAPI.getTree();
             return isAllowedNodeLevel(node, getNodeLevel(parent, menu) + 1);
-          
-        }
+
+        };
     }
 
     function load() {
@@ -85,13 +84,13 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
             setLeafNodes(response);
             angular.forEach(response, function (item) {
                 $scope.menuItems.push(item);
-            })
+            });
             var menu = {
                 Name: "Root",
                 Childs: $scope.menuItems,
-                isRoot:true,
+                isRoot: true,
                 isOpened: true
-            }
+            };
             $scope.menu.push(menu);
             if (treeAPI != undefined) {
                 treeAPI.refreshTree($scope.menu);
@@ -140,12 +139,12 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
                 Location: menuItem.Location,
                 MenuType: menuItem.MenuType,
                 Name: menuItem.Name,
-                Rank: i+1,
+                Rank: i + 1,
                 Type: menuItem.Type,
                 Title: menuItem.Title,
                 AllowDynamic: menuItem.AllowDynamic,
                 Childs: []
-            }
+            };
             preparedMenuItems.push(preparedMenuItem);
             prepareMenuItems(menuItem.Childs, preparedMenuItem.Childs);
         }

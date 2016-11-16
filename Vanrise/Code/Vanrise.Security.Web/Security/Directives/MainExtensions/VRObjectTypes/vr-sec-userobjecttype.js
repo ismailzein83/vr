@@ -37,9 +37,9 @@
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.Security.MainExtensions.VRObjectTypes.UserObjectType, Vanrise.Security.MainExtensions",
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

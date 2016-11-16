@@ -32,7 +32,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             $scope.scopeModel.onMailMessageTemplateSettingsReady = function (api) {
                 mailMessageTemplateSettingsAPI = api;
                 mailMessageTemplateSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
             function initializeController() {
                 defineAPI();
@@ -56,14 +56,14 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         });
 
                     return mailMessageTemplateSettingsLoadPromiseDeferred.promise;
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities",
                         MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

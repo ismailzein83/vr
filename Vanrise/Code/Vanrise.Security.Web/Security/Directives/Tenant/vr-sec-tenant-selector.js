@@ -63,7 +63,7 @@ app.directive('vrSecTenantSelector', ['VR_Sec_TenantAPIService', 'VR_Sec_TenantS
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TenantId" isrequired="ctrl.isrequired" hideremoveicon = "ctrl.hideremoveicon"'
                 + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Tenant" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function tenantCtor(ctrl, $scope, attrs) {
@@ -74,7 +74,7 @@ app.directive('vrSecTenantSelector', ['VR_Sec_TenantAPIService', 'VR_Sec_TenantS
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -106,13 +106,13 @@ app.directive('vrSecTenantSelector', ['VR_Sec_TenantAPIService', 'VR_Sec_TenantS
                             }
                         }
                     });
-                }
+                };
 
 
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('TenantId', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

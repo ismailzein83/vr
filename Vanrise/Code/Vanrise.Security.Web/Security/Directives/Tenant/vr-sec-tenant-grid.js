@@ -43,11 +43,11 @@ app.directive("vrSecTenantGrid", ["VR_Sec_TenantAPIService", "VR_Sec_TenantServi
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onTenantAdded = function (tenantObject) {
                         gridAPI.itemAdded(tenantObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -81,7 +81,7 @@ app.directive("vrSecTenantGrid", ["VR_Sec_TenantAPIService", "VR_Sec_TenantServi
         function editTenant(tenantObj) {
             var onTenanUpdated = function (tenantObj) {
                 gridAPI.itemUpdated(tenantObj);
-            }
+            };
 
             VR_Sec_TenantService.editTenant(tenantObj.Entity.TenantId, onTenanUpdated);
         }

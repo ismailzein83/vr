@@ -59,26 +59,24 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                 api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.viewId != undefined) {
-                            viewId = payload.viewId
+                            viewId = payload.viewId;
                             return UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                                 .then(function () {
                                     if ($scope.defaultPeriod != undefined || $scope.defaultGrouping != undefined) {
                                         $scope.nonSearchable = $scope.defaultPeriod == undefined;
-                                        fillDateAndPeriod($scope.defaultPeriod, $scope.defaultGrouping).then(function ()
-                                        {
-                                            
+                                        fillDateAndPeriod($scope.defaultPeriod, $scope.defaultGrouping).then(function () {
+
                                             loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
 
                                         });
-                                    } else
-                                    {
+                                    } else {
                                         loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
 
                                     }
                                 });
                         } else {
                             $scope.nonSearchable = payload.selectedPeriod == undefined;
-                            var timeDimentionType = payload.selectedTimeDimensionType !=undefined?payload.selectedTimeDimensionType.value:undefined;
+                            var timeDimentionType = payload.selectedTimeDimensionType != undefined ? payload.selectedTimeDimensionType.value : undefined;
                             fillDateAndPeriod(payload.selectedPeriod, timeDimentionType)
                                 .then(function () {
                                     return UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
@@ -89,7 +87,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                         }
                     }
 
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -103,11 +101,11 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     $scope.onTimeRangeDirectiveReady = function (api) {
                         timeRangeDirectiveAPI = api;
                         timeRangeReadyPromiseDeferred.resolve();
-                    }
+                    };
                     $scope.onTimeDimentionDirectiveReady = function (api) {
                         timeDimentionDirectiveAPI = api;
                         timeDimentionReadyPromiseDeferred.resolve();
-                    }
+                    };
                     timeRangeReadyPromiseDeferred.promise.then(function () {
                         var timeRangePeriod = {
                             period: selectedPeriod
@@ -160,7 +158,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     var numberOfColumns;
                     for (var td in ColumnWidthEnum)
                         if (bodyContent.NumberOfColumns == ColumnWidthEnum[td].value)
-                            numberOfColumns = ColumnWidthEnum[td]
+                            numberOfColumns = ColumnWidthEnum[td];
 
                     if (bodyWidget != null) {
                         bodyWidget.NumberOfColumns = numberOfColumns;
@@ -188,7 +186,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                     timeDimensionType: timeDimention,
                                     fromDate: widgetDate.from,
                                     toDate: widgetDate.to
-                                }
+                                };
                                 widgetPeriod.filter = filter;
                                 bodyWidget.API.load(widgetPeriod);
                             }
@@ -218,7 +216,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     var numberOfColumns;
                     for (var td in ColumnWidthEnum)
                         if (summaryContent.NumberOfColumns == ColumnWidthEnum[td].value)
-                            numberOfColumns = ColumnWidthEnum[td]
+                            numberOfColumns = ColumnWidthEnum[td];
                     if (summaryWidget != null) {
                         summaryWidget.NumberOfColumns = numberOfColumns;
                         summaryWidget.SectionTitle = summaryContent.SectionTitle;
@@ -246,7 +244,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                     timeDimensionType: timeDimention,
                                     fromDate: widgetDate.from,
                                     toDate: widgetDate.to
-                                }
+                                };
                                 widgetPeriod.filter = filter;
                                 summaryWidget.API.load(widgetPeriod);
                             }
@@ -262,7 +260,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                         timeDimensionType: timeDimention,
                                         fromDate: widgetDate.from,
                                         toDate: widgetDate.to
-                                    }
+                                    };
                                     widgetPeriod.filter = filter;
                                     return api.load(widgetPeriod);
                                 }
@@ -314,7 +312,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                     timeDimensionType: timeDimentionDirectiveAPI.getSelectedValues(),
                     fromDate: $scope.scopeModal.fromDate,
                     toDate: $scope.scopeModal.toDate
-                }
+                };
                 return filter;
             }
 

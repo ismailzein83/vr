@@ -64,7 +64,7 @@
                         ctrl.permissions.push(permission);
 
                         function buildPermissionFlagsDescription(permissionFlags) {
-                            var allowFlags = ""
+                            var allowFlags = "";
                             var denyFlags = "";
 
                             angular.forEach(permissionFlags, function (item) {

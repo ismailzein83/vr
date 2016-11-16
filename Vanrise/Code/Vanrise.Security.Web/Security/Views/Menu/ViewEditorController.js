@@ -46,13 +46,13 @@
             $scope.scopeModal.onUserDirectiveReady = function (api) {
                 userDirectiveAPI = api;
                 userReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.onGroupDirectiveReady = function (api) {
                 groupDirectiveAPI = api;
 
                 groupReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {
@@ -129,8 +129,8 @@
         function buildViewObjFromScope() {
             var audiences = {
                 Users: userDirectiveAPI.getSelectedIds(),
-                Groups:groupDirectiveAPI.getSelectedIds()
-            }
+                Groups: groupDirectiveAPI.getSelectedIds()
+            };
             var viewObject = {
                 ViewId: viewId,
                 Name: $scope.scopeModal.name,
@@ -142,7 +142,7 @@
                 Type:viewEntity.Type,
                 ViewContent:viewEntity.ViewContent,
                 Rank:viewEntity.Rank,
-                Settings:viewEntity.Settings,
+                Settings:viewEntity.Settings
             };
             return viewObject;
         }

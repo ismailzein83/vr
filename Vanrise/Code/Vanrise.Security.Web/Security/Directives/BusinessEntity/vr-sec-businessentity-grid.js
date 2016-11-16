@@ -42,11 +42,10 @@ app.directive("vrSecBusinessentityGrid", ['VRNotificationService', 'VR_Sec_Busin
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
-                    directiveAPI.onBusinessEntityAdded = function (businessEntity)
-                    {
+                    };
+                    directiveAPI.onBusinessEntityAdded = function (businessEntity) {
                         gridAPI.itemAdded(businessEntity);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -77,7 +76,7 @@ app.directive("vrSecBusinessentityGrid", ['VRNotificationService', 'VR_Sec_Busin
         function editBusinessEntity(businessEntityObj) {
             var onBusinessEntityUpdated = function (businessEntity) {
                 gridAPI.itemUpdated(businessEntity);
-            }
+            };
 
             VR_Sec_BusinessEntityDefinitionService.updateBusinessEntityDefinition(businessEntityObj.Entity.EntityId, onBusinessEntityUpdated);
         }

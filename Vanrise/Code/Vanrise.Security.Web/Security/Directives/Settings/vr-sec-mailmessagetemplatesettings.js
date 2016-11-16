@@ -38,15 +38,15 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
             $scope.scopeModel.onAddUserSelectorReady = function (api) {
                 addUserSelectorReadyAPI = api;
                 addUserSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onResetPasswordSelectorReady = function (api) {
                 resetPasswordSelectorReadyAPI = api;
                 resetPasswordSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onForgotPasswordSelectorReady = function (api) {
                 forgotPasswordSelectorReadyAPI = api;
                 forgotPasswordSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             function initializeController() {
 
@@ -77,7 +77,7 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                     var addUserPayload = {
                         selectedIds: newUserId,
                         filter: { VRMailMessageTypeId: VR_Sec_MailMessageTemplateSettingsEnum.NewUserMailMessageTypeId.value }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(addUserSelectorReadyAPI, addUserPayload, addUserSelectorLoadPromiseDeferred);
                     promises.push(addUserSelectorLoadPromiseDeferred.promise);
 
@@ -86,7 +86,7 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                     var resetPasswordPayload = {
                         selectedIds: resetPasswordId,
                         filter: { VRMailMessageTypeId: VR_Sec_MailMessageTemplateSettingsEnum.ResetPasswordMailMessageTypeId.value }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(resetPasswordSelectorReadyAPI, resetPasswordPayload, resetPasswordSelectorLoadPromiseDeferred);
                     promises.push(resetPasswordSelectorLoadPromiseDeferred.promise);
 
@@ -95,12 +95,12 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                     var forgotPasswordPayload = {
                         selectedIds: forgotPasswordId,
                         filter: { VRMailMessageTypeId: VR_Sec_MailMessageTemplateSettingsEnum.ForgotPasswordMailMessageTypeId.value }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(forgotPasswordSelectorReadyAPI, forgotPasswordPayload, forgotPasswordSelectorLoadPromiseDeferred);
                     promises.push(forgotPasswordSelectorLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -108,7 +108,7 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                         ResetPasswordId: resetPasswordSelectorReadyAPI.getSelectedIds(),
                         ForgotPasswordId: forgotPasswordSelectorReadyAPI.getSelectedIds(),
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

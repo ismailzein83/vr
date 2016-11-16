@@ -38,10 +38,10 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                             if (ctrl.onitemadded != null && typeof (ctrl.onitemadded) == 'function')
                                 ctrl.onitemadded(userObj.Entity)
                         }
-                        
+
                     };
                     VR_Sec_UserService.addUser(onUserAdded);
-                }
+                };
 
                 ctrl.haspermission = function () {
                     return VR_Sec_UserAPIService.HasAddUserPermission();
@@ -58,7 +58,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getUserTemplate(attrs);
@@ -87,7 +87,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function userCtor(ctrl, $scope, attrs) {
@@ -98,20 +98,20 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                   
+
                     var selectedIds;
                     ctrl.filter;
                     if (payload != undefined) {
                         ctrl.filter = payload.filter;
                         selectedIds = payload.selectedIds;
-                    }                   
+                    }
                     return VR_Sec_UserAPIService.GetUsersInfo(UtilsService.serializetoJson(ctrl.filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
@@ -125,11 +125,11 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                             VRUIUtilsService.setSelectedValues(selectedIds, 'UserId', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('UserId', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

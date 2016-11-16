@@ -49,10 +49,10 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
                         promises.push(loadViewTypes);
                         promises.push(gridAPI.retrieveData(query));
                         return UtilsService.waitMultiplePromises(promises);
-                    }
+                    };
                     directiveAPI.onViewAdded = function (viewObj) {
                         gridAPI.itemAdded(viewObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -92,7 +92,7 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onViewUpdated = function (viewObj) {
                     gridAPI.itemUpdated(viewObj);
-                }
+                };
             };
             VRModalService.showModal(viewType.Editor, modalParameters, modalSettings);
 

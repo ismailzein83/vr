@@ -14,7 +14,7 @@
 
             $scope.forgotPassword = function () {
                 VR_Sec_UserService.forgotPassword($scope.email);
-            }
+            };
         }
 
         function load() {
@@ -36,7 +36,7 @@
                 };
 
                 authenticate(credentialsObject);
-            }
+            };
             VR_Sec_UserService.activatePassword($scope.email, userObj, $scope.password, onPasswordActivated);
         }
 

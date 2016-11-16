@@ -11,7 +11,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
 
         $scope.scopeModal.validateDateTime = function () {
             return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
-        }
+        };
 
         $scope.scopeModal.selectedPeriod = PeriodEnum.CurrentMonth;
         date = $scope.scopeModal.selectedPeriod.getInterval();
@@ -23,7 +23,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
             timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
             fromDate: $scope.scopeModal.fromDate,
             toDate: $scope.scopeModal.toDate
-        }
+        };
         $scope.scopeModal.periods = UtilsService.getArrayEnum(PeriodEnum);
         $scope.scopeModal.close = function () {
             $scope.modalContext.closeModal()
@@ -31,7 +31,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
         var customize = {
             value: -1,
             description: "Customize"
-        }
+        };
         $scope.scopeModal.onBlurChanged = function () {
             var from = UtilsService.getShortDate($scope.scopeModal.fromDate);
             var oldFrom = UtilsService.getShortDate(date.from);
@@ -40,7 +40,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
             if (from != oldFrom || to != oldTo)
                 $scope.scopeModal.selectedPeriod = customize;
 
-        }
+        };
 
         $scope.scopeModal.widget = $scope.$parent.widget;
         if ($scope.scopeModal.widget != null) {
@@ -57,7 +57,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
                 timeDimensionType: $scope.scopeModal.selectedTimeDimensionType,
                 fromDate: $scope.scopeModal.fromDate,
                 toDate: $scope.scopeModal.toDate
-            }
+            };
             return refreshWidget();
         };
         $scope.scopeModal.periodSelectionChanged = function () {

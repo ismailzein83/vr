@@ -37,7 +37,7 @@
 
             $scope.onTreeReady = function (api) {
                 treeAPI = api;
-            }
+            };
 
             $scope.onTreeValueChanged = onTreeValueChanged;
 

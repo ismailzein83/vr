@@ -25,7 +25,7 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
             compile: function (element, attrs) {
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) { }
-                }
+                };
             },
             templateUrl: "/Client/Modules/Security/Directives/Widget/Templates/WidgetPreview.html"
 
@@ -47,11 +47,11 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
                 $scope.onTimeRangeDirectiveReady = function (api) {
                     timeRangeDirectiveAPI = api;
                     timeRangeReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onTimeDimentionDirectiveReady = function (api) {
                     timeDimentionDirectiveAPI = api;
                     timeDimentionReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onElementReady = function (api) {
                     widgetAPI = api;
@@ -114,7 +114,7 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
 
                         });
                     return loadwidgetPromiseDeferred.promise;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -132,11 +132,11 @@ app.directive('vrSecWidgetpreview', ['UtilsService', 'TimeDimensionTypeEnum', 'V
             }
             function getFilter()
             {
-               return {
+                return {
                     timeDimensionType: $scope.selectedTimeDimension,
                     fromDate: $scope.fromDate,
                     toDate: $scope.toDate
-                }
+                };
             }
             this.initializeController = initializeController;
             this.defineAPI = defineAPI;

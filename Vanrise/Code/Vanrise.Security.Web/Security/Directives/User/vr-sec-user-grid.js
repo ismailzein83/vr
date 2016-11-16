@@ -47,11 +47,11 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                                 hasAuthServer = response;
                                 gridAPI.retrieveData(query);
                             });
-                        }
+                        };
 
                         directiveAPI.onUserAdded = function (userObject) {
                             gridAPI.itemAdded(userObject);
-                        }
+                        };
 
                         return directiveAPI;
                     }
@@ -99,7 +99,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             function editUser(userObj) {
                 var onUserUpdated = function (userObj) {
                     gridAPI.itemUpdated(userObj);
-                }
+                };
 
                 VR_Sec_UserService.editUser(userObj.Entity.UserId, onUserUpdated);
             }

@@ -76,7 +76,7 @@
 
             $scope.onEntitiesGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.treeValueChanged = function () {
                 if ($scope.selectedMenuItem != undefined) {
@@ -86,7 +86,7 @@
                     gridAPI.loadGrid(query);
                     $scope.showGrid = true;
                 }
-            }
+            };
 
             $scope.editBusinessEntityModule = function () {
                 var onBusinessEntityModuleUpdated = function (moduleObj) {
@@ -96,7 +96,7 @@
                 };
 
                 VR_Sec_BusinessEntityModuleService.updateBusinessEntityModule($scope.selectedMenuItem.EntityId, onBusinessEntityModuleUpdated);
-            }
+            };
 
             $scope.ranking = function () {
                 var onRankingSuccess = function (moduleObj) {
@@ -110,7 +110,7 @@
 
                 VR_Sec_BusinessEntityDefinitionService.openBusinessEntityRankingEditor(onRankingSuccess);
 
-            }
+            };
         }
 
         function loadParameters() {
@@ -158,7 +158,7 @@
                 EntityId: moduleObj.ModuleId,
                 Name: moduleObj.Name,
                 Children: []
-            }
+            };
             return node;
         }
 

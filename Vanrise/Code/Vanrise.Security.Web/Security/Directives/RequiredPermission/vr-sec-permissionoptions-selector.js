@@ -35,7 +35,7 @@ function (UtilsService, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getDirectiveTemplate(attrs);
@@ -113,7 +113,7 @@ function (UtilsService, VRUIUtilsService) {
                 + ' isrequired="ctrl.isrequired"'
                 + hideremoveicon
                 + ' entityName="Permission">'
-                + '</vr-select>'
+                + '</vr-select>';
     }
 
     return directiveDefinitionObject;

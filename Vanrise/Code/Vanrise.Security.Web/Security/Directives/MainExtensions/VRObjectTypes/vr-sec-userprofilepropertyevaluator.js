@@ -54,7 +54,7 @@
                     var data = {
                         $type: "Vanrise.Security.MainExtensions.VRObjectTypes.UserProfilePropertyEvaluator, Vanrise.Security.MainExtensions",
                         UserField: $scope.scopeModel.selectedUserField.value
-                    }
+                    };
                     return data;
                 };
 

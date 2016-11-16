@@ -48,7 +48,7 @@
             $scope.onTenantSelectorReady = function (api) {
                 tenantSelectorAPI = api;
                 tenantReadyPromiseDeferred.resolve();
-            }
+            };
         }
         function load() {
             $scope.isLoading = true;

@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 dynamicPageManagementController.$inject = ['$scope', 'VR_Sec_ViewService', 'VR_Sec_ViewAPIService'];
 
 function dynamicPageManagementController($scope, VR_Sec_ViewService, VR_Sec_ViewAPIService) {
@@ -16,7 +16,7 @@ function dynamicPageManagementController($scope, VR_Sec_ViewService, VR_Sec_View
             api.loadGrid(filter);
         };
 
-        $scope.Add = addDynamicPage
+        $scope.Add = addDynamicPage;
 
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());

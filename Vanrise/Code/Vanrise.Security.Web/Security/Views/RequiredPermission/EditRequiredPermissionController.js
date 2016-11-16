@@ -42,7 +42,7 @@
                     findInCurrentPermission($scope.currentNode);
                     payload = {
                         datasource: $scope.currentNode.PermissionOptions
-                    }
+                    };
                     if (permissionEntity != undefined) {
                         payload.selectedIds = permissionEntity.PermissionOptions;
                     }
@@ -118,25 +118,25 @@
         function buildRequiredPermissionObj() {
            
             return {
-                EntityId:$scope.currentNode.EntityId,
-                PermissionOptions:permissionSelectorAPI.getSelectedIds(),
+                EntityId: $scope.currentNode.EntityId,
+                PermissionOptions: permissionSelectorAPI.getSelectedIds(),
                 EntityName: $scope.currentNode.Name,
                 EntType: $scope.currentNode.EntType
 
-            }
+            };
         }
         
         function findInCurrentPermission(node) {
             var permission = UtilsService.getItemByVal(permissions, node.EntityId, "EntityId");
             if(permission !=null ){
                 permissionEntity = permission, editMode = true;
-                setTitle()
+                setTitle();
             }
                 
             
             else {
                 permissionEntity = undefined, editMode = false;
-                setTitle()
+                setTitle();
             }
          
         }

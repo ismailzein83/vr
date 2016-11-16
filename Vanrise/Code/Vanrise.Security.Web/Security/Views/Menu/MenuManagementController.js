@@ -46,10 +46,9 @@
 
             $scope.showGrid = false;
 
-            $scope.onViewGridReady = function(api)
-            {
+            $scope.onViewGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.treeValueChanged = function () {
                 if ($scope.selectedMenuItem != undefined) {
@@ -59,7 +58,7 @@
                     gridAPI.loadGrid(query);
                     $scope.showGrid = true;
                 }
-            }
+            };
 
             $scope.addModule = function () {
                 var onModuleAdded = function (moduleObj) {
@@ -70,10 +69,9 @@
                 };
 
                 VR_Sec_ModuleService.addModule(onModuleAdded, $scope.selectedMenuItem.Id);
-            }
+            };
 
-            $scope.editModule = function()
-            {
+            $scope.editModule = function () {
                 var onModuleUpdated = function (moduleObj) {
                     var node = mapModuleNode(moduleObj.Entity);
                     treeAPI.createNode(node);
@@ -81,11 +79,10 @@
                     //  treeAPI.refreshTree(menuItems);
                 };
 
-                VR_Sec_ModuleService.editModule($scope.selectedMenuItem.Id,onModuleUpdated);
-            }
+                VR_Sec_ModuleService.editModule($scope.selectedMenuItem.Id, onModuleUpdated);
+            };
 
-            $scope.ranking = function()
-            {
+            $scope.ranking = function () {
                 var onRankingSuccess = function (moduleObj) {
                     menuItems.length = 0;
                     var menus = [];
@@ -97,14 +94,14 @@
                         Childs: menus,
                         isRoot: true,
                         isOpened: true
-                    }
+                    };
                     menuItems.push(menu);
                     treeAPI.refreshTree(menuItems);
                 };
 
                 VR_Sec_MenuService.openRankingEditor(onRankingSuccess);
-                
-            }
+
+            };
         }
 
         function loadParameters() {
@@ -145,9 +142,9 @@
                         var menu = {
                             Name: "Root",
                             Childs: menus,
-                            isRoot:true,
+                            isRoot: true,
                             isOpened: true
-                        }
+                        };
                         menuItems.push(menu);
                     }
                 });
@@ -157,10 +154,10 @@
         function mapModuleNode(moduleObj)
         {
             var node = {
-                Id:moduleObj.ModuleId,
+                Id: moduleObj.ModuleId,
                 Name: moduleObj.Name,
-                Childs:[]
-            }
+                Childs: []
+            };
             return node;
         }
 

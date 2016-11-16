@@ -43,10 +43,10 @@ function (VRNotificationService, VR_Sec_WidgetAPIService, VR_Sec_WidgetService) 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onWidgetAdded = function (WidgetObject) {
                         gridAPI.itemAdded(WidgetObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -91,7 +91,7 @@ function (VRNotificationService, VR_Sec_WidgetAPIService, VR_Sec_WidgetService) 
         function deleteWidget(dataItem) {
             var onWidgetDeleted = function (deletedItem) {
                 gridAPI.itemDeleted(deletedItem);
-            }
+            };
 
             VR_Sec_WidgetService.deleteWidget($scope, dataItem, onWidgetDeleted);
         }

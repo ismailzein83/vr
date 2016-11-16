@@ -45,14 +45,13 @@
 
             $scope.scopeModal.validate = function () {
                 return validate();
-            }
+            };
 
-            $scope.scopeModal.validatePremissionOptions = function ()
-            {
+            $scope.scopeModal.validatePremissionOptions = function () {
                 if ($scope.scopeModal.permissionOptions == undefined || $scope.scopeModal.permissionOptions.length == 0)
                     return "At least one option should be added.";
                 return null;
-            }
+            };
 
             $scope.hasSaveBusinessEntityPermission = function () {
                 if ($scope.scopeModal.isEditMode)
@@ -121,7 +120,7 @@
             if ($scope.scopeModal.permissionOption == undefined)
                 return true;
             if (UtilsService.contains($scope.scopeModal.permissionOptions, $scope.scopeModal.permissionOption))
-                return true
+                return true;
             return false;
         }
 

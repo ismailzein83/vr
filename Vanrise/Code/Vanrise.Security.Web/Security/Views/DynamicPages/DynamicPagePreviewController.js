@@ -1,4 +1,5 @@
-﻿dynamicPagePreviewController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService'];
+﻿"use strict";
+dynamicPagePreviewController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService'];
 
 function dynamicPagePreviewController($scope, VRUIUtilsService, VRNavigationService) {
     var viewId;
@@ -26,7 +27,7 @@ function dynamicPagePreviewController($scope, VRUIUtilsService, VRNavigationServ
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
 
-        }
+        };
     }
 
     function load() {

@@ -21,7 +21,7 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -48,10 +48,10 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
           
             ctrl.addRequiredPermission = function () {
                 VR_Sec_RequiredPermissionService.addRequiredPermission(ctrl.requiredPermissions, onSavePermissionObject);
-            }
+            };
             ctrl.removeRequiredPermission = function (obj) {
                 ctrl.requiredPermissions.splice(ctrl.requiredPermissions.indexOf(obj), 1);
-            }
+            };
 
             ctrl.requiredPermissionGridMenuActions = [{
                 name: 'Edit',
@@ -71,7 +71,7 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                  }
                 return {
                     Entries: entries
-                 } 
+                };
             };
 
 
@@ -79,7 +79,7 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                 if (payload != undefined && payload.data != undefined) {
                     if (payload.data && payload.data.Entries.length > 0) {
                         var ids = [];
-                        var basiclist  = []
+                        var basiclist = [];
                         for (var y = 0; y < payload.data.Entries.length; y++) {
                             var currentObj = payload.data.Entries[y];
                             ids[ids.length] = currentObj.EntityId;
@@ -92,14 +92,14 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                                         EntityId: response[i].EntityId,
                                         PermissionOptions: basiclist[UtilsService.getItemIndexByVal(basiclist, response[i].EntityId, "EntityId")].PermissionOptions,
                                         EntityName: response[i].Name,
-                                        EntType:1
+                                        EntType: 1
                                     });
                                 }
                             }
                         });
                     }
                 }
-            }
+            };
             function onSavePermissionObject(obj) {
                 var permission = UtilsService.getItemByVal(ctrl.requiredPermissions, obj.EntityId, "EntityId");
                 if (permission != null) {

@@ -83,7 +83,7 @@
                     //Update the exisiting one
                     permissionFlags[respectiveFlagIndex].Value = selectedPermission.selectedFlagOptionIndex;
                 }
-            }
+            };
 
             $scope.save = function () {
                 var result;

@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 widgetManagementController.$inject = ['$scope', 'UtilsService', 'VR_Sec_WidgetDefinitionAPIService', 'VRNotificationService', 'VR_Sec_WidgetService','VR_Sec_WidgetAPIService'];
 
 function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitionAPIService, VRNotificationService, VR_Sec_WidgetService, VR_Sec_WidgetAPIService) {
@@ -17,7 +17,7 @@ function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitio
 
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
-        }
+        };
 
         $scope.Add = addNewWidget;
 
@@ -31,7 +31,7 @@ function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitio
         var query = {
             WidgetName: $scope.widgetName,
             WidgetTypes: UtilsService.getPropValuesFromArray($scope.selectedWidgetsTypes, "ID")
-        }
+        };
         return query;
     }
 

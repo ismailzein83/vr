@@ -146,7 +146,7 @@
         }
        
         function buildGroupObjFromScope() {
-            var settings = VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, groupeTypeAPI, 'selectedGroupTypeTemplate')
+            var settings = VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, groupeTypeAPI, 'selectedGroupTypeTemplate');
             var groupObj = {
                 groupId: ($scope.groupId != null) ? $scope.groupId : 0,
                 name: $scope.scopeModal.name,

@@ -46,7 +46,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 $scope.scopeModal.isLoadingPreviewDirective = value;
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
-        }
+        };
 
         $scope.scopeModal.onPeriodDirectiveReady = function (api) {
             periodDirectiveAPI = api;
@@ -57,7 +57,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 $scope.isLoadingPeriodSection = value
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, periodDirectiveAPI, payload, setLoader, periodReadyPromiseDeferred);
-        }
+        };
 
         $scope.scopeModal.onTimeDimentionDirectiveReady = function (api) {
             timeDimentionDirectiveAPI = api;
@@ -68,17 +68,17 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 $scope.isLoadingTimeDimentionSection = value
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeDimentionDirectiveAPI, payload, setLoader, timeDimentionReadyPromiseDeferred);
-        }
+        };
 
         $scope.scopeModal.onUserDirectiveReady = function (api) {
             userDirectiveAPI = api;
             userReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.scopeModal.onGroupDirectiveReady = function (api) {
             groupDirectiveAPI = api;
             groupReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.scopeModal.tabObject;
 
@@ -110,7 +110,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
 
         $scope.scopeModal.validate = function () {
             validate();
-        }
+        };
 
         $scope.scopeModal.selectedColumnWidth;
 
@@ -121,7 +121,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             if ($scope.scopeModal.menuList.length > 0) {
                 treeAPI.refreshTree($scope.scopeModal.menuList);
             }
-        }
+        };
 
         $scope.scopeModal.nonSearchable = false;
 
@@ -129,7 +129,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
 
         $scope.scopeModal.onSelectionChanged = function () {
             buildContentsFromScope();
-        }
+        };
 
         $scope.scopeModal.periodSelectionChanged = function () {
             if ($scope.scopeModal.selectedWidget != undefined && $scope.scopeModal.selectedPeriod != undefined) {
@@ -140,7 +140,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 }
 
             }
-        }
+        };
 
         $scope.scopeModal.onWidgetSelectionChanged = function () {
             if ($scope.scopeModal.selectedWidget != undefined && $scope.scopeModal.selectedPeriod != undefined) {
@@ -151,11 +151,11 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 }
 
             }
-        }
+        };
 
         $scope.scopeModal.validateWidgetError = function (addedWidget) {
             return validateWidgetError(addedWidget);
-        }
+        };
 
         $scope.scopeModal.save = function () {
             $scope.scopeModal.isLoading = true;
@@ -173,13 +173,13 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             if ($scope.scopeModal.selectedMenuNode == undefined)
                 return "You Should Select Menu Location.";
             return null;
-        }
+        };
 
         $scope.scopeModal.validateWidget = function () {
             if ($scope.scopeModal.addedSummaryWidgets.length == 0 && $scope.scopeModal.addedBodyWidgets.length == 0)
                 return "You should add at least one Widget.";
             return null;
-        }
+        };
 
         $scope.scopeModal.close = function () {
             $scope.modalContext.closeModal()
@@ -202,34 +202,33 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 $scope.scopeModal.selectedWidget = null;
             }
 
-        }
+        };
 
-        $scope.scopeModal.validateObjectBeforePreview = function ()
-        {
+        $scope.scopeModal.validateObjectBeforePreview = function () {
             return validateObjectBeforePreview();
-        }
+        };
         $scope.scopeModal.addViewContent = function () {
 
             var viewWidget = {
                 Widget: $scope.scopeModal.selectedWidget,
                 NumberOfColumns: $scope.scopeModal.selectedColumnWidth,
                 SectionTitle: $scope.scopeModal.sectionTitle
-            }
+            };
             viewWidget.Widget.onElementReady = function (api) {
                 viewWidget.Widget.API = api;
                 var payload = {
                     previewMode: true,
                     title: viewWidget.SectionTitle,
                     settings: viewWidget.Widget.Setting.Settings
-                }
+                };
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingSummaryDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
-            }
+            };
             if ($scope.scopeModal.nonSearchable) {
-                viewWidget.DefaultPeriod = $scope.scopeModal.selectedPeriod.value
-                viewWidget.DefaultGrouping = $scope.scopeModal.selectedTimeDimensionType.value
+                viewWidget.DefaultPeriod = $scope.scopeModal.selectedPeriod.value;
+                viewWidget.DefaultGrouping = $scope.scopeModal.selectedTimeDimensionType.value;
             }
             switch ($scope.scopeModal.selectedSection.value) {
                 case VR_Sec_WidgetSectionEnum.Summary.value:
@@ -267,8 +266,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
 
         };
 
-        $scope.scopeModal.hasSaveViewPermission = function()
-        {
+        $scope.scopeModal.hasSaveViewPermission = function () {
             if (isEditMode) {
                 return VR_Sec_ViewAPIService.HasUpdateViewPermission();
             }
@@ -276,7 +274,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 return VR_Sec_ViewAPIService.HasAddViewPermission();
             }
 
-        }
+        };
 
 
     }
@@ -312,7 +310,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             selectedTimeDimensionType: !$scope.scopeModal.nonSearchable ? $scope.scopeModal.selectedTimeDimensionType : undefined,
             bodyContents: $scope.scopeModal.bodyContents,
             summaryContents: $scope.scopeModal.summaryContents,
-        }
+        };
         return payload;
     }
 
@@ -330,11 +328,11 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         var ViewContent = {
             BodyContents: $scope.scopeModal.bodyContents,
             SummaryContents: $scope.scopeModal.summaryContents
-        }
+        };
         var parameter = {
             Audience: Audiences,
             ViewContent: ViewContent
-        }
+        };
         VRModalService.showModal('/Client/Modules/BI/Views/DynamicPageValidator.html', parameter, settings);
 
     }
@@ -402,10 +400,10 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 WidgetId: Widget.Widget.Id,
                 NumberOfColumns: Widget.NumberOfColumns.value,
                 SectionTitle: Widget.SectionTitle
-            }
+            };
             if (Widget.DefaultPeriod != undefined && Widget.DefaultGrouping != undefined) {
-                viewSummaryContent.DefaultPeriod = Widget.DefaultPeriod
-                viewSummaryContent.DefaultGrouping = Widget.DefaultGrouping
+                viewSummaryContent.DefaultPeriod = Widget.DefaultPeriod;
+                viewSummaryContent.DefaultGrouping = Widget.DefaultGrouping;
             }
             $scope.scopeModal.summaryContents.push(viewSummaryContent);
         }
@@ -415,10 +413,10 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 WidgetId: Widget.Widget.Id,
                 NumberOfColumns: Widget.NumberOfColumns.value,
                 SectionTitle: Widget.SectionTitle
-            }
+            };
             if (Widget.DefaultPeriod != undefined && Widget.DefaultGrouping != undefined) {
-                viewBodyContent.DefaultPeriod = Widget.DefaultPeriod
-                viewBodyContent.DefaultGrouping = Widget.DefaultGrouping
+                viewBodyContent.DefaultPeriod = Widget.DefaultPeriod;
+                viewBodyContent.DefaultGrouping = Widget.DefaultGrouping;
             }
             $scope.scopeModal.bodyContents.push(viewBodyContent);
         }
@@ -435,7 +433,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         var ViewContent = {
             SummaryContents: $scope.scopeModal.summaryContents,
             BodyContents: $scope.scopeModal.bodyContents,
-        }
+        };
         if (!$scope.scopeModal.nonSearchable) {
             ViewContent.DefaultPeriod = $scope.scopeModal.selectedPeriod.value;
             ViewContent.DefaultGrouping = $scope.scopeModal.selectedTimeDimensionType.value;
@@ -581,20 +579,20 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 previewMode: true,
                 title: bodyContent.SectionTitle,
                 settings: bodyValue.Setting.Settings
-            }
+            };
             var setLoader = function (value) {
                 $scope.scopeModal.isLoadingBodyDirective = value;
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bodyValue.API, bodyPayload, setLoader);
-        }
+        };
         var viewWidget = {
             Widget: bodyValue,
             NumberOfColumns: numberOfColumns,
             SectionTitle: bodyContent.SectionTitle
-        }
+        };
         if (bodyContent.DefaultPeriod != undefined && bodyContent.DefaultGrouping != undefined) {
-            viewWidget.DefaultPeriod = bodyContent.DefaultPeriod
-            viewWidget.DefaultGrouping = bodyContent.DefaultGrouping
+            viewWidget.DefaultPeriod = bodyContent.DefaultPeriod;
+            viewWidget.DefaultGrouping = bodyContent.DefaultGrouping;
         }
         $scope.scopeModal.addedBodyWidgets.push(viewWidget);
         $scope.scopeModal.bodyWidgets.splice($scope.scopeModal.bodyWidgets.indexOf(bodyValue), 1);
@@ -607,20 +605,20 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 previewMode: true,
                 title: summaryContent.SectionTitle,
                 settings: summaryValue.Setting.Settings
-            }
+            };
             var setLoader = function (value) {
                 $scope.scopeModal.isLoadingSummaryDirective = value;
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, summaryValue.API, summaryPayload, setLoader);
-        }
+        };
         var viewWidget = {
             Widget: summaryValue,
             NumberOfColumns: numberOfColumns,
             SectionTitle: summaryContent.SectionTitle
-        }
+        };
         if (summaryContent.DefaultPeriod != undefined && summaryContent.DefaultGrouping != undefined) {
-            viewWidget.DefaultPeriod = summaryContent.DefaultPeriod
-            viewWidget.DefaultGrouping = summaryContent.DefaultGrouping
+            viewWidget.DefaultPeriod = summaryContent.DefaultPeriod;
+            viewWidget.DefaultGrouping = summaryContent.DefaultGrouping;
         }
         $scope.scopeModal.addedSummaryWidgets.push(viewWidget);
         $scope.scopeModal.summaryWidgets.splice($scope.scopeModal.summaryWidgets.indexOf(summaryValue), 1);

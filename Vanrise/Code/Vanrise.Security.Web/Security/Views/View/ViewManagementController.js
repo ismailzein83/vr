@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 ViewManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VR_Sec_ViewAPIService','VRUIUtilsService','VR_Sec_ViewService','VR_Sec_ViewTypeAPIService','VRModalService'];
 
 function ViewManagementController($scope, UtilsService, VRNotificationService, VR_Sec_ViewAPIService, VRUIUtilsService, VR_Sec_ViewService, VR_Sec_ViewTypeAPIService, VRModalService) {
@@ -17,11 +17,11 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
 
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
-        }
+        };
         $scope.onViewTypeDirectiveReady = function (api) {
-           viewTypeDirectiveApi = api;
-           viewTypeReadyPromiseDeferred.resolve();
-        }
+            viewTypeDirectiveApi = api;
+            viewTypeReadyPromiseDeferred.resolve();
+        };
 
         $scope.addMenuActions = [];
 
@@ -33,9 +33,9 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
     function getFilterObject() {
 
         var query = {
-            Name : $scope.viewName,
-            ViewTypes: viewTypeDirectiveApi !=undefined?viewTypeDirectiveApi.getSelectedIds():undefined
-        }
+            Name: $scope.viewName,
+            ViewTypes: viewTypeDirectiveApi != undefined ? viewTypeDirectiveApi.getSelectedIds() : undefined
+        };
         return query;
     }
 

@@ -52,11 +52,11 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onViewAdded = function (dynamicPageObject) {
                         fillNeededData(dynamicPageObject);
                         gridAPI.itemAdded(dynamicPageObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -196,7 +196,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
         function deleteDynamicPage(dataItem) {
             var onDynamicPageDeleted = function () {
                 gridAPI.itemDeleted(deletedItem);
-            }
+            };
 
             VR_Sec_ViewService.deleteDynamicPage($scope, dataItem, onDynamicPageDeleted);
         }

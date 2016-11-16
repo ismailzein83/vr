@@ -42,11 +42,11 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onGroupAdded = function (groupObject) {
                         gridAPI.itemAdded(groupObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -92,7 +92,7 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
         function editGroup(groupObj) {
             var onGroupUpdated = function (groupObj) {
                 gridAPI.itemUpdated(groupObj);
-            }
+            };
 
             VR_Sec_GroupService.editGroup(groupObj.Entity.GroupId, onGroupUpdated);
         }
