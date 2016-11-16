@@ -48,7 +48,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 isGroupedByCustomer = false;
             }
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate,currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");
@@ -162,7 +162,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate,int currencyId)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -176,6 +176,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>(),
+                    CurrencyId = currencyId
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
