@@ -25,7 +25,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -90,12 +90,12 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
 
                     }
                     loadCarrierAccounts(attrs);
-                }
+                };
 
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
 
             }
 
@@ -103,12 +103,10 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                 var api = {};
 
                 api.load = function (payload) {
-                }
-                api.getData = function()
-                {
+                };
+                api.getData = function () {
                     var partnerPrefix;
-                    if (ctrl.selectedCarrierTypes != undefined)
-                    {
+                    if (ctrl.selectedCarrierTypes != undefined) {
                         if (ctrl.selectedCarrierTypes.length == 1)
                             partnerPrefix = ctrl.selectedCarrierTypes[0].description;
                         else
@@ -119,13 +117,13 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                         partnerPrefix: partnerPrefix,
                         selectedIds: VRUIUtilsService.getIdSelectedIds('InvoiceCarrierId', attrs, ctrl)
                     };
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
             function loadCarrierAccounts(attrs) {
-                ctrl.isloadingCarriers = true
+                ctrl.isloadingCarriers = true;
                 var filter = {};
                 if (ctrl.selectedCarrierTypes != undefined)
                 {

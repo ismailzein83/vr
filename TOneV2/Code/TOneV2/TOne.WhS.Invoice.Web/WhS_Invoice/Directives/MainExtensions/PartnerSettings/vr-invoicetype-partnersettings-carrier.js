@@ -35,14 +35,13 @@ app.directive("vrInvoicetypePartnersettingsCarrier", ["UtilsService", "VRNotific
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
+                    if (payload != undefined) {
                         $scope.useMaskInfo = payload.UseMaskInfo;
                         $scope.partnerSelector = payload.PartnerSelector;
                         $scope.partnerManagerFQTN = UtilsService.serializetoJson(payload.PartnerManagerFQTN);
                         $scope.partnerFilterSelector = payload.PartnerFilterSelector;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -52,7 +51,7 @@ app.directive("vrInvoicetypePartnersettingsCarrier", ["UtilsService", "VRNotific
                         PartnerManagerFQTN: UtilsService.parseStringToJson($scope.partnerManagerFQTN),
                         PartnerFilterSelector: $scope.partnerFilterSelector
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

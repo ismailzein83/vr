@@ -22,7 +22,7 @@ app.directive('whsInvoiceCarrierSupplierSelector', ['UtilsService', 'VRUIUtilsSe
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -43,7 +43,7 @@ app.directive('whsInvoiceCarrierSupplierSelector', ['UtilsService', 'VRUIUtilsSe
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
                     directiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -60,11 +60,11 @@ app.directive('whsInvoiceCarrierSupplierSelector', ['UtilsService', 'VRUIUtilsSe
                         VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, undefined, directiveLoadPromiseDeferred);
                     });
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return directiveReadyAPI.getSelectedIds();
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

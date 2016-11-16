@@ -22,7 +22,7 @@ app.directive('whsInvoiceCarrierCustomerFilterSelector', ['UtilsService', 'VRUIU
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -43,7 +43,7 @@ app.directive('whsInvoiceCarrierCustomerFilterSelector', ['UtilsService', 'VRUIU
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
                     directiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -60,15 +60,15 @@ app.directive('whsInvoiceCarrierCustomerFilterSelector', ['UtilsService', 'VRUIU
                         VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, undefined, directiveLoadPromiseDeferred);
                     });
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
-                    var data = directiveReadyAPI !=undefined? directiveReadyAPI.getData():undefined;
+                    var data = directiveReadyAPI != undefined ? directiveReadyAPI.getData() : undefined;
                     return {
                         partnerPrefix: data != undefined ? data.partnerPrefix : undefined,
                         selectedIds: data != undefined ? data.selectedIds : undefined,
-                    }
-                }
+                    };
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

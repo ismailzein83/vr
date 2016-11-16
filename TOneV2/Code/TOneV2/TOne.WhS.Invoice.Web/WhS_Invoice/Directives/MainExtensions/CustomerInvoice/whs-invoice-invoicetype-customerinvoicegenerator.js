@@ -35,13 +35,13 @@ app.directive("whsInvoiceInvoicetypeCustomerinvoicegenerator", ["UtilsService", 
                 var api = {};
 
                 api.load = function (payload) {
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Invoice.Business.Extensions.CustomerInvoiceGenerator ,TOne.WhS.Invoice.Business"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
