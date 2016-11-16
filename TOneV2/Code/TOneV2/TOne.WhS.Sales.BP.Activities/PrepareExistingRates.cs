@@ -49,15 +49,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private ExistingRate ExistingRateMapper
-        (
-            SaleRate saleRate,
-            Dictionary<long, ExistingZone> existingZonesById,
-            CurrencyExchangeRateManager currencyExchangeRateManager,
-            SaleRateManager saleRateManager,
-            int currencyId,
-            DateTime effectiveOn
-        )
+        private ExistingRate ExistingRateMapper(SaleRate saleRate, Dictionary<long, ExistingZone> existingZonesById, CurrencyExchangeRateManager currencyExchangeRateManager, SaleRateManager saleRateManager, int currencyId, DateTime effectiveOn)
         {
             ExistingZone existingZone;
 
@@ -67,12 +59,14 @@ namespace TOne.WhS.Sales.BP.Activities
             decimal convertedRate =
                 currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, saleRateManager.GetCurrencyId(saleRate), currencyId, effectiveOn);
 
-            return new ExistingRate()
+            var existingRate = new ExistingRate()
             {
                 ConvertedRate = convertedRate,
                 RateEntity = saleRate,
                 ParentZone = existingZone
             };
+			existingZone.ExistingRates.Add(existingRate);
+			return existingRate;
         }
 
         #endregion
