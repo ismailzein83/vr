@@ -8,7 +8,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateReadAllNoCache : ISaleRateReader
     {
-
         #region ctor/Local Variables
         SaleRatesByOwner _allSaleRatesByOwner;
         ISaleRateDataManager _saleRateDataManager;
@@ -16,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-        public SaleRateReadAllNoCache(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+		public SaleRateReadAllNoCache(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             _saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             _salePriceListManager = new SalePriceListManager();
@@ -60,14 +59,23 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (saleRatePriceList.RatesByRateType == null)
                         saleRatePriceList.RatesByRateType = new Dictionary<int, SaleRate>();
 
-                    if (!saleRatePriceList.RatesByRateType.ContainsKey(saleRate.RateTypeId.Value))
-                        saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+					if (!saleRatePriceList.RatesByRateType.ContainsKey(saleRate.RateTypeId.Value))
+					{
+						if (!isEffectiveInFuture || ShouldOverrideFutureRate(saleRatePriceList.Rate, saleRate))
+							saleRatePriceList.RatesByRateType.Add(saleRate.RateTypeId.Value, saleRate);
+					}
                 }
-                else
-                    saleRatePriceList.Rate = saleRate;
+				else if (!isEffectiveInFuture || ShouldOverrideFutureRate(saleRatePriceList.Rate, saleRate))
+                    saleRatePriceList.Rate = saleRate;  
             }
             return result;
         }
+		private bool ShouldOverrideFutureRate(SaleRate existingRate, SaleRate newRate)
+		{
+			if (existingRate != null && existingRate.BED > newRate.BED)
+				return false;
+			return true;
+		}
         #endregion
     }
 }
