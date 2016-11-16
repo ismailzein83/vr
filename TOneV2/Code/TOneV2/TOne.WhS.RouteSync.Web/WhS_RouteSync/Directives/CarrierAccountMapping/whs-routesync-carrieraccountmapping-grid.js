@@ -37,13 +37,12 @@ app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAP
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var separator = ";";
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.mappingColumns = ctrl.mappingColumns;
                 $scope.scopeModel.filterdCarrierMappings = [];
                 $scope.scopeModel.carrierAccountMappings = [];
-                $scope.scopeModel.separator = '';
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -90,14 +89,14 @@ app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAP
                 };
                 for (var j = 0; j < $scope.scopeModel.mappingColumns.length; j++) {
                     var mapping = $scope.scopeModel.mappingColumns[j];
-                    obj[mapping['Column']] = carrierMapping[mapping['Column']] != null ? carrierMapping[mapping['Column']].split($scope.scopeModel.separator) : undefined;
+                    obj[mapping['Column']] = carrierMapping[mapping['Column']] != null ? carrierMapping[mapping['Column']].split(separator) : undefined;
                 }
                 return obj;
             }
 
             function loadCarrierMappings(query) {
                 if (query && query.switchSynchronizerSettings)
-                    $scope.scopeModel.separator = query.switchSynchronizerSettings.MappingSeparator;
+                    separator = query.switchSynchronizerSettings.MappingSeparator;
                 $scope.scopeModel.isLoading = true;
                 var serializedFilter = {};
                 return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter)
@@ -115,7 +114,7 @@ app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAP
                                      var mapping = $scope.scopeModel.mappingColumns[j];
                                      var accountCarrierMappings = query.switchSynchronizerSettings.CarrierMappings[carrierAccount.CarrierAccountId];
 
-                                     carrierMapping[mapping['Column']] = accountCarrierMappings != undefined && accountCarrierMappings[mapping['Column']] != null ? accountCarrierMappings[mapping['Column']].join($scope.scopeModel.separator) : undefined;
+                                     carrierMapping[mapping['Column']] = accountCarrierMappings != undefined && accountCarrierMappings[mapping['Column']] != null ? accountCarrierMappings[mapping['Column']].join(separator) : undefined;
                                  }
                                  $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
                              }

@@ -237,6 +237,8 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         public void PrepareTables()
         {
             StringBuilder query = new StringBuilder();
+            query.AppendLine(query_CreateRadiusRouteTable);
+            query.AppendLine(query_CreateRadiusRoutePercentageTable);
             query.AppendLine(query_CreateRadiusRouteTempTable);
             query.AppendLine(query_CreateRadiusRoutePercentageTempTable);
             ExecuteNonQueryText(query.ToString(), null);
@@ -300,6 +302,27 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 	                                                                [Percentage] [int] NOT NULL,
 	                                                                [Statistics] [int] NOT NULL) 
                                                                     ON [PRIMARY]";
+
+
+        const string query_CreateRadiusRoutePercentageTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'dbo.[RadiusRoutePercentage]') AND s.type in (N'U'))
+                                                                  begin                                                                                              CREATE TABLE [dbo].[RadiusRoutePercentage](
+	                                                                [Customer] [varchar](50) NOT NULL,
+	                                                                [Code] [varchar](50) NOT NULL,
+	                                                                [Priority] [int] NOT NULL,
+	                                                                [RouteOption] [varchar](255) NOT NULL,
+	                                                                [Percentage] [int] NOT NULL,
+	                                                                [Statistics] [int] NOT NULL) 
+                                                                    ON [PRIMARY]  
+                                                                  end";
+        const string query_CreateRadiusRouteTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'dbo.[RadiusRoute]') AND s.type in (N'U'))
+                                                          begin
+                                                              CREATE TABLE [dbo].[RadiusRoute](
+	                                                          [Customer] [varchar](50) NOT NULL,
+	                                                          [Code] [varchar](50) NOT NULL,
+	                                                          [RouteOption] [varchar](255) NOT NULL,
+	                                                          [IsPercentage] [varchar](1) NOT NULL) 
+                                                              ON [PRIMARY]
+                                                          end";
         #endregion
     }
 }
