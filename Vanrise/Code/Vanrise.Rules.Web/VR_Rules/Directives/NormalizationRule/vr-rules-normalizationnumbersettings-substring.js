@@ -20,7 +20,7 @@ app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -50,13 +50,13 @@ app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
                     StartIndex: ctrl.startIndex,
                     Length: ctrl.length
                 };
-            }
+            };
             api.load = function (payload) {
                 if (payload != undefined) {
                     ctrl.startIndex = payload.StartIndex;
                     ctrl.length = payload.Length;
                 }
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

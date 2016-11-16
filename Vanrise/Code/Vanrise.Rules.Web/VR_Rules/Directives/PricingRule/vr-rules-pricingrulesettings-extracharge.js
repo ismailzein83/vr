@@ -43,7 +43,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You Should Select at least one filter type ";
-            }
+            };
             ctrl.disableAddButton = true;
             ctrl.addFilter = function () {
                 var dataItem = {
@@ -79,11 +79,11 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             api.getData = function () {
                 var obj = {
                     $type: "Vanrise.Rules.Pricing.PricingRuleExtraChargeSettings, Vanrise.Rules.Pricing",
-                    CurrencyId : currencyDirectiveAPI.getSelectedIds(),
-                    Actions: getActions(),
-                }
+                    CurrencyId: currencyDirectiveAPI.getSelectedIds(),
+                    Actions: getActions()
+                };
                 return obj;
-            }
+            };
             function getActions() {
                 var actionList = [];
 
@@ -97,7 +97,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             }
             api.load = function (payload) {
                 return loadFiltersSection(payload);
-            }
+            };
 
             function loadFiltersSection(payload) {
                 var promises = [];
@@ -175,7 +175,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 currencyDirectiveReadyPromiseDeferred.promise.then(function () {
                     VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred)
 
-                })
+                });
                 promises.push(loadCurrencySelectorPromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises);

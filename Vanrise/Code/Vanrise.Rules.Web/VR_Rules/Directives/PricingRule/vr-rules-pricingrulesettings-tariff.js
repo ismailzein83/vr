@@ -42,7 +42,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                 directiveReadyAPI = api;
                 var setLoader = function (value) { $scope.isLoadingDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
-            }
+            };
             defineAPI();
         }
 
@@ -54,7 +54,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                 obj.ConfigId = $scope.selectedPricingRuleTariffSettings.ExtensionConfigurationId;
                 obj.CurrencyId = currencyDirectiveAPI.getSelectedIds();
                 return obj;
-            }
+            };
 
             api.load = function (payload) {
                 var promises = [];
@@ -85,7 +85,7 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                                 $scope.pricingRuleTariffSettings.push(response[i]);
                             }
                         }
-                    })
+                    });
                 }
                 function loadDirective() {
                     var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -109,13 +109,13 @@ function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsServi
                 }
 
                 currencyDirectiveReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred)
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
 
-                })
+                });
                 promises.push(loadCurrencySelectorPromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
 
             if (ctrl.onReady != null)

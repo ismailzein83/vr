@@ -28,7 +28,7 @@ function ($compile) {
             if (ctrl.fromRate != undefined && ctrl.toRate != undefined && parseFloat(ctrl.fromRate) > parseFloat(ctrl.toRate))
                 return 'From Rate should be less than To Rate';
             return undefined;
-        }
+        };
         function initializeController() {
 
             defineAPI();
@@ -43,16 +43,16 @@ function ($compile) {
                     FromRate: ctrl.fromRate,
                     ToRate: ctrl.toRate,
                     ExtraAmount: ctrl.extraAmount
-                }
+                };
                 return obj;
-            }
+            };
             api.load = function (payload) {
                 if (payload != undefined) {
                     ctrl.fromRate = payload.FromRate;
-                    ctrl.toRate = payload.ToRate
-                    ctrl.extraAmount = payload.ExtraAmount
+                    ctrl.toRate = payload.ToRate;
+                    ctrl.extraAmount = payload.ExtraAmount;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

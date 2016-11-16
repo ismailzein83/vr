@@ -37,14 +37,14 @@ function ($compile) {
                 var obj = {
                     $type: "Vanrise.Rules.Pricing.MainExtensions.RateType.SpecificDayRateTypeSettings, Vanrise.Rules.Pricing.MainExtensions",
                     Date: ctrl.date,
-                }
+                };
                 return obj;
-            }
+            };
             api.load = function (payload) {
                 if (payload != undefined) {
                     ctrl.date = payload.Date;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

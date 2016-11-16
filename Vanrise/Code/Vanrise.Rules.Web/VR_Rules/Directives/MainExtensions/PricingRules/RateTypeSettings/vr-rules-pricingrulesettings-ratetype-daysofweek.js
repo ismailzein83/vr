@@ -35,20 +35,20 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
                     id: ctrl.times.length + 1,
                     FromTime: ctrl.fromTime,
                     ToTime: ctrl.toTime
-                }
+                };
                 if (!isFilterExisting())
                     ctrl.times.push(filter);
-            }
+            };
 
             ctrl.disableAddButton = function () {
                 if (ctrl.fromTime != undefined && ctrl.toTime != undefined && ctrl.validateTime() == undefined)
                     return false;
                 return true;
-            }
+            };
 
             ctrl.validateTime = function () {
                 return VRValidationService.validateTimeRange(ctrl.fromTime, ctrl.toTime);
-            }
+            };
 
             function isFilterExisting() {
                 if (ctrl.times.length == 0)
@@ -82,9 +82,9 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
                     $type: "Vanrise.Rules.Pricing.MainExtensions.RateType.DaysOfWeekRateTypeSettings, Vanrise.Rules.Pricing.MainExtensions",
                     Days: UtilsService.getPropValuesFromArray(ctrl.selectedDaysOfWeek, "value"),
                     TimeRanges: getTimeRanges()
-                }
+                };
                 return obj;
-            }
+            };
             function getTimeRanges() {
                 var obj = [];
                 for (var i = 0; i < ctrl.times.length; i++) {
@@ -113,7 +113,7 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
                     }
 
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

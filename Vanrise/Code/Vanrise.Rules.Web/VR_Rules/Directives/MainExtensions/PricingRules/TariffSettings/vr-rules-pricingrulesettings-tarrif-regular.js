@@ -41,9 +41,9 @@ function ($compile) {
                     FirstPeriodRate: ctrl.firstPeriodRate,
                     FractionUnit: ctrl.fractionUnit,
                     PricingUnit: ctrl.pricingUnit
-                }
+                };
                 return obj;
-            }
+            };
             api.load = function (payload) {
                 if (payload != undefined) {
                     ctrl.callFee = payload.CallFee;
@@ -52,7 +52,7 @@ function ($compile) {
                     ctrl.fractionUnit = payload.FractionUnit,
                     ctrl.pricingUnit = payload.PricingUnit
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

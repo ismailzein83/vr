@@ -20,7 +20,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/VR_Rules/Directives/NormalizationRule/Templates/NormalizeNumberSettingsDirectiveTemplate.html"
     };
@@ -48,7 +48,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You must add at least one action";
-            }
+            };
             ctrl.addFilter = function () {
                 var dataItem = {
                     id: ctrl.datasource.length + 1,
