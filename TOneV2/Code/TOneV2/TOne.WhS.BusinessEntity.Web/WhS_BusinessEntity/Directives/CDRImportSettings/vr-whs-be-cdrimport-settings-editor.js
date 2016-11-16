@@ -68,7 +68,7 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
                 api.getData = function () {
                     var obj = {
-                        $type: "TOne.WhS.BusinessEntity.Entities.CDRMappingSettings, TOne.WhS.BusinessEntity.Entities",
+                        $type: "TOne.WhS.BusinessEntity.Entities.CDRImportSettings, TOne.WhS.BusinessEntity.Entities",
                         SwitchCDRMappingConfiguration: switchCDRMappingConfigurationDirectiveAPI.getData()
                     };
 

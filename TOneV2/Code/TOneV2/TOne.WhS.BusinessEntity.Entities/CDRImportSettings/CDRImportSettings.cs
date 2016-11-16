@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public enum CDPNIdentification { CDPN = 0, CDPNIn = 1, CDPNOut = 2 }
 
-    public class CDRMappingSettings : SettingData
+    public class CDRImportSettings : SettingData
     {
         public SwitchCDRMappingConfiguration SwitchCDRMappingConfiguration { get; set; }
     }

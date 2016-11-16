@@ -18,7 +18,7 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/TechnicalSetting/Templates/BETechnicalSettingsTemplate.html"
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/TechnicalSettings/Templates/BETechnicalSettingsTemplate.html"
         };
 
         function settingEditorCtor(ctrl, $scope, $attrs) {

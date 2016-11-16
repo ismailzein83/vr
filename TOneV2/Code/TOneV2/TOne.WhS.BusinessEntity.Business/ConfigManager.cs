@@ -106,23 +106,23 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting;
         }
 
-        private CDRMappingSettings GetCDRMappingSettings()
+        private CDRImportSettings GetCDRImportSettings()
         {
             SettingManager settingManager = new SettingManager();
-            CDRMappingSettings cdrMappingSettings = settingManager.GetSetting<CDRMappingSettings>(Constants.CDRMappingSettings);
+            CDRImportSettings cdrImportSettings = settingManager.GetSetting<CDRImportSettings>(Constants.CDRImportSettings);
 
-            if (cdrMappingSettings == null)
-                throw new NullReferenceException("cdrMappingSettings");
+            if (cdrImportSettings == null)
+                throw new NullReferenceException("cdrImportSettings");
 
-            return cdrMappingSettings;
+            return cdrImportSettings;
         }
         private SwitchCDRMappingConfiguration GetSwitchCDRMappingConfiguration()
         {
-            CDRMappingSettings cdrMappingSettings = GetCDRMappingSettings();
-            if (cdrMappingSettings.SwitchCDRMappingConfiguration == null)
-                throw new NullReferenceException("cdrMappingSettings.SwitchCDRMappingConfiguration");
+            CDRImportSettings cdrImportSettings = GetCDRImportSettings();
+            if (cdrImportSettings.SwitchCDRMappingConfiguration == null)
+                throw new NullReferenceException("cdrImportSettings.SwitchCDRMappingConfiguration");
 
-            return cdrMappingSettings.SwitchCDRMappingConfiguration;
+            return cdrImportSettings.SwitchCDRMappingConfiguration;
         }
 
         private BusinessEntitySettingsData GetBusinessEntitySettingsData()
