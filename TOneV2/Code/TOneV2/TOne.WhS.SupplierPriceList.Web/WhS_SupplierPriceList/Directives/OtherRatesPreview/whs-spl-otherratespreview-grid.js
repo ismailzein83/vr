@@ -45,7 +45,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_RateChangeTypeE
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

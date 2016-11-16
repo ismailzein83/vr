@@ -45,7 +45,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChan
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -72,14 +72,14 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneServiceChan
         function mapDataNeeded(dataItem) {
 
             dataItem.onSystemServicseReady = function (api) {
-                dataItem.SystemServicesApi = api
+                dataItem.SystemServicesApi = api;
                 dataItem.SystemServicesApi.load({ selectedIds: dataItem.SystemServiceIds });
-            }
+            };
 
             dataItem.onImportedServicesReady = function (api) {
-                dataItem.ImportedServicesApi = api
+                dataItem.ImportedServicesApi = api;
                 dataItem.ImportedServicesApi.load({ selectedIds: dataItem.ImportedServiceIds });
-            }
+            };
 
             switch (dataItem.ZoneServicesChangeType) {
                 case WhS_SupPL_ZoneServiceChangeTypeEnum.New.value:

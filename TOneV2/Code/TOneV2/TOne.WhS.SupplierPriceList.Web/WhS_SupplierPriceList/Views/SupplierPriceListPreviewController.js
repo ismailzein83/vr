@@ -40,11 +40,11 @@
 
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
-            }
+            };
 
             $scope.scopeModal.stopTask = function () {
                 return executeTask(false);
-            }
+            };
 
             $scope.onViewChangeTypeSelectItem = function (dataItem) {
                 if (dataItem != undefined) {
@@ -53,12 +53,12 @@
                     changeType = dataItem.value;
                     return loadPreviewDataSection();
                 }
-            }
+            };
 
             $scope.scopeModal.onValidationMessageHistoryGridReady = function (api) {
                 validationMessageHistoryGridAPI = api;
                 validationMessageHistoryReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.onViewChangeTypeSelectorReady = function (api) {
@@ -80,7 +80,7 @@
 
                 var previewDataPayload = {
                     ProcessInstanceId: processInstanceId,
-                    OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds(),
+                    OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds()
                 };
 
 
@@ -168,9 +168,9 @@
                 var payload = {
                     ProcessInstanceId: processInstanceId,
                     OnlyModified: changeType
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred)
-            })
+            });
             return loadPreviewDataPromiseDeferred.promise;
         }
 
@@ -184,7 +184,7 @@
                 };
 
                 VRUIUtilsService.callDirectiveLoad(validationMessageHistoryGridAPI, payload, loadValidationMessageHistoryPromiseDeferred)
-            })
+            });
 
             return loadValidationMessageHistoryPromiseDeferred.promise;
         }

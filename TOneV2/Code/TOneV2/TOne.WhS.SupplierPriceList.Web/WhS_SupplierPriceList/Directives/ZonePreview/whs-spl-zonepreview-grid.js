@@ -47,7 +47,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

@@ -37,17 +37,17 @@
                         $scope.scopeModel.isLoading = false;
                         UtilsService.downloadFile(response.data, response.headers);
                     });
-                }
+                };
 
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencyDirectiveAPI = api;
                     currencyReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.carrierAccountSelectItem = function (dataItem) {
                     var selectedCarrierAccountId = dataItem.CarrierAccountId;
@@ -71,22 +71,22 @@
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierPriceListConfigurationAPI, payload, setLoader, supplierPriceListConfigurationReadyPromiseDeferred);
                         });
                     }
-                }
+                };
 
                 $scope.scopeModel.onReadyWoorkBook = function (api) {
                     inputWorkBookApi = api;
-                }
+                };
 
                 $scope.scopeModel.onSupplierPriceListConfigurationSelectiveReady = function (api) {
                     supplierPriceListConfigurationAPI = api;
-                }
+                };
 
                 $scope.scopeModel.saveSupplierPriceListConfiguration = function () {
                     if (priceListTemplateEntity)
                         return saveExistingPriceListTemplate();
                     else
                         return saveNewPriceListTemplate();
-                }
+                };
 
                 $scope.scopeModel.startImport = function () {
 
@@ -124,14 +124,14 @@
                         });
                     }
                     return promiseDeffered.promise;
-                }
+                };
 
                 $scope.scopeModel.hassaveSupplierPriceListConfigurationPermission = function () {
                     if (priceListTemplateEntity)
                         return WhS_SupPL_SupplierPriceListTemplateAPIService.HasUpdateSupplierPriceListTemplatePermission();
                     else
                         return WhS_SupPL_SupplierPriceListTemplateAPIService.HasaddSupplierPriceListTemplatePermission();
-                }
+                };
             }
 
             function startImportSupplierPriceList(supplierPriceListTemplateId) {
@@ -154,7 +154,7 @@
                         var context = {
                             onClose: function () {
                             }
-                        }
+                        };
                         BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                     }
                     promiseDeffered.resolve();
@@ -196,7 +196,7 @@
 
                     VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencySelectorPromiseDeferred)
 
-                })
+                });
                 return loadCurrencySelectorPromiseDeferred.promise;
 
             }
@@ -210,7 +210,7 @@
                     getSelectedCell: getSelectedCell,
                     setSelectedCell: selectCellAtSheet,
                     getSelectedSheet: getSelectedSheet
-                }
+                };
                 function selectCellAtSheet(row, col, s) {
                     var a = parseInt(row);
                     var b = parseInt(col);

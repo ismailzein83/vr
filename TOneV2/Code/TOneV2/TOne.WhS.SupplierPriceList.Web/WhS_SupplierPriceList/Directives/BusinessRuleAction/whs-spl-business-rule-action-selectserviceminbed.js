@@ -19,7 +19,7 @@ app.directive("businessprocessBpBusinessRuleSelectminimumbedAction", [function (
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/BusinessRuleAction/Templates/EmptyTemplate.html"
     };
@@ -46,7 +46,7 @@ app.directive("businessprocessBpBusinessRuleSelectminimumbedAction", [function (
 
             api.load = function (payload) {
 
-            }
+            };
 
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);

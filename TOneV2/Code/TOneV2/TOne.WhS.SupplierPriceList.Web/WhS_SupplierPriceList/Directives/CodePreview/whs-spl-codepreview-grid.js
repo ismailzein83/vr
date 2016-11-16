@@ -43,7 +43,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_CodeChangeTypeE
                     directiveAPI.load = function (query) {
                         zoneName = query.ZoneName;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }

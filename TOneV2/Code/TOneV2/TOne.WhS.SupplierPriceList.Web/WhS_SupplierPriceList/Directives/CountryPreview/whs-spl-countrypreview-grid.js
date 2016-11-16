@@ -48,7 +48,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }
