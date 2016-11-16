@@ -37,13 +37,12 @@ function (UtilsService, VR_Notification_VRActionService) {
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You Should Select at least one action.";
-            }
+            };
 
             ctrl.addVRAction = function () {
-                var onVRActionAdded = function(action)
-                {
+                var onVRActionAdded = function (action) {
                     ctrl.datasource.push({ Entity: action });
-                }
+                };
                 VR_Notification_VRActionService.addVRAction(onVRActionAdded, extensionType);
 
             };
@@ -61,33 +60,28 @@ function (UtilsService, VR_Notification_VRActionService) {
 
             api.getData = function () {
                 var data;
-                if(ctrl.datasource.length > 0)
-                {
+                if (ctrl.datasource.length > 0) {
                     data = [];
-                    for(var i=0;i<ctrl.datasource.length;i++)
-                    {
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
                         data.push(ctrl.datasource[i].Entity);
                     }
 
                 }
                 return data;
-            }
+            };
 
             api.load = function (payload) {
-                if(payload != undefined)
-                {
+                if (payload != undefined) {
                     isRequired = payload.isRequired;
                     extensionType = payload.extensionType;
                 }
                 ctrl.datasource.length = 0;
-                if(payload != undefined && payload.actions !=undefined)
-                {
-                    for(var i=0;i<payload.actions.length;i++)
-                    {
-                        ctrl.datasource.push({ Entity: payload.actions[i]});
+                if (payload != undefined && payload.actions != undefined) {
+                    for (var i = 0; i < payload.actions.length; i++) {
+                        ctrl.datasource.push({ Entity: payload.actions[i] });
                     }
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -103,7 +97,7 @@ function (UtilsService, VR_Notification_VRActionService) {
         function editAction(dataItem) {
             var onVRActionUpdated = function (vrActionObj) {
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: vrActionObj };
-            }
+            };
             VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType);
         }
     }

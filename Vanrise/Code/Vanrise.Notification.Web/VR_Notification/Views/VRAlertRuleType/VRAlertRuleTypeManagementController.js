@@ -21,14 +21,14 @@
             $scope.add = function () {
                 var onVRAlertRuleTypeAdded = function (addedVRAlertRuleType) {
                     gridAPI.onVRAlertRuleTypeAdded(addedVRAlertRuleType);
-                }
+                };
 
                 VR_Notification_VRAlertRuleTypeService.addVRAlertRuleType(onVRAlertRuleTypeAdded);
             };
 
             $scope.hasAddVRAlertRuleTypePermission = function () {
                 return VR_Notification_VRAlertRuleTypeAPIService.HasAddVRAlertRuleTypePermission()
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;

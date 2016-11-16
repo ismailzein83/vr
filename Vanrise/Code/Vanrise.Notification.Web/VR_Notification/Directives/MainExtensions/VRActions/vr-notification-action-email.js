@@ -20,7 +20,7 @@ app.directive('vrNotificationActionEmail', ['UtilsService', 'VRUIUtilsService', 
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_Notification/Directives/MainExtensions/VRActions/Templates/EmailActionTemplate.html';
@@ -45,15 +45,15 @@ app.directive('vrNotificationActionEmail', ['UtilsService', 'VRUIUtilsService', 
                     if (payload != undefined) {
                         vrActionEntity = payload.vrActionEntity;
                     }
-                }
+                };
 
                 api.getData = function () {
 
                     return {
                         $type: "Vanrise.Notification.MainExtensions.VRActions.EmailAction, Vanrise.Notification.MainExtensions",
-                        ActionName:"Email"
+                        ActionName: "Email"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

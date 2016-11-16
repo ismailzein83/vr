@@ -34,7 +34,7 @@
             $scope.scopeModel.onVRActionDirectiveReady = function (api) {
                 actionDirectiveApi = api;
                 actionReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.scopeModel.save = function () {

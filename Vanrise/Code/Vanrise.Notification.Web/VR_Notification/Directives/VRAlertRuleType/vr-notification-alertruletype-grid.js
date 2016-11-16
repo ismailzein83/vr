@@ -52,7 +52,7 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTy
 
                 api.onVRAlertRuleTypeAdded = function (addedVRAlertRuleType) {
                     gridAPI.itemAdded(addedVRAlertRuleType);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

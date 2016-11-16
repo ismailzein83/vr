@@ -45,7 +45,7 @@
             $scope.scopeModel.onAlertRuleTypeSelectorReady = function (api) {
                 vrAlertRuleTypeSelectorAPI = api;
                 vrAlertRuleTypeSelectoReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onAlertRuleTypeSelectionChanged = function (api) {
                 vrAlertRuleTypeId = vrAlertRuleTypeSelectorAPI.getSelectedIds();
                 if (vrAlertRuleTypeId != undefined) {
@@ -64,8 +64,7 @@
                     });
                 }
 
-                function loadVRAlertRuleCriteriaDirective()
-                {
+                function loadVRAlertRuleCriteriaDirective() {
                     var vrAlertRuleCriteriaDirectivePayload = {};
                     if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
                         vrAlertRuleCriteriaDirectivePayload.dataAnalysisDefinitionId = vrAlertRuleTypeEntity.Settings.DataAnalysisDefinitionId;
@@ -77,8 +76,7 @@
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, vrAlertRuleCriteriaDirectiveAPI, vrAlertRuleCriteriaDirectivePayload, setLoader);
                 }
-                function loadVRActionDirective()
-                {
+                function loadVRActionDirective() {
                     var vrActionDirectivePayload = {};
                     vrActionDirectivePayload.isRequired = true;
                     if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
@@ -90,7 +88,7 @@
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, vrActionDirectiveAPI, vrActionDirectivePayload, setLoader);
                 }
-            }
+            };
 
             $scope.scopeModel.onVRAlertRuleCriteriaDirectiveReady = function (api) {
                  vrAlertRuleCriteriaDirectiveAPI = api;
@@ -230,7 +228,7 @@
                         }
 
                         VRUIUtilsService.callDirectiveLoad(vrActionDirectiveAPI, vrActionDirectivePayload, vrActionDirectiveLoadDeferred);
-                    })
+                    });
                 });
 
                 return vrActionDirectiveLoadDeferred.promise;
