@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	SwapDealService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_DealContractTypeEnum', 'WhS_BE_DealAgreementTypeEnum', 'UtilsService'];
+	SwapDealService.$inject = ['VRModalService', 'VRNotificationService',  'UtilsService'];
 
-	function SwapDealService(VRModalService, VRNotificationService, WhS_BE_DealContractTypeEnum, WhS_BE_DealAgreementTypeEnum, UtilsService)
+	function SwapDealService(VRModalService, VRNotificationService,  UtilsService)
 	{
 	    var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
 

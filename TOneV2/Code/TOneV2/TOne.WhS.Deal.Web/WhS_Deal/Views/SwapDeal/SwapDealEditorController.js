@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_DealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_DealService', 'WhS_BE_DealAnalysisService', 'VRValidationService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService'];
 
-    function SwapDealEditorController($scope, WhS_Deal_DealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_BE_SwapDealAnalysisService, VRValidationService) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService) {
         var isEditMode;
 
         var dealId;
@@ -148,7 +148,7 @@
         }
 
         function getSwapDeal() {
-            return WhS_Deal_DealAPIService.GetDeal(dealId).then(function (response) {
+            return WhS_Deal_SwapDealAPIService.GetDeal(dealId).then(function (response) {
                 dealEntity = response;
             });
         }
@@ -236,7 +236,7 @@
                 $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
                return;
             }
-            return WhS_Deal_DealAPIService.GetSwapDealSettingData().then(function (response) {
+            return WhS_Deal_SwapDealAPIService.GetSwapDealSettingData().then(function (response) {
                 $scope.scopeModel.gracePeriod = response.GracePeriod;
             })
                
@@ -255,7 +255,7 @@
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;
-            return WhS_Deal_DealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
+            return WhS_Deal_SwapDealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
                         $scope.onSwapDealAdded(response.InsertedObject);
@@ -270,7 +270,7 @@
 
         function updateSwapDeal() {
             $scope.scopeModel.isLoading = true;
-            return WhS_Deal_DealAPIService.UpdateDeal(buildSwapDealObjFromScope()).then(function (response) {
+            return WhS_Deal_SwapDealAPIService.UpdateDeal(buildSwapDealObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealUpdated != undefined)
                         $scope.onSwapDealUpdated(response.UpdatedObject);
