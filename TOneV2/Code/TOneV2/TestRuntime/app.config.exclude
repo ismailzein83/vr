@@ -34,7 +34,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Caching Runtime service used as centralized memory cache for business entities. nbOfRuntimeInstances depended on available resources-->
-      <runtimeServiceGroup name="groupA2" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="groupA2" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="CachingRuntimeService" type="Vanrise.Caching.Runtime.CachingRuntimeService,Vanrise.Caching.Runtime" interval="00:00:01"></runtimeService>
         </runtimeServices>
@@ -46,7 +46,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="3">
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="5">
         <runtimeServices>
           <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
         </runtimeServices>
@@ -64,19 +64,19 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Related to saving batches as queues in database at end stages such as Billingstats and traffic stats. nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group5" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="group5" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Summary Queue Activation Service" type="Vanrise.Queueing.SummaryQueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Related to Data sources such CDR Import process. nbOfRuntimeInstances should be equal to "Number Of Parallel Readers" configured in Data source management page.-->
-      <runtimeServiceGroup name="group6" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="group6" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Data Source Runtime Service" type="Vanrise.Integration.Business.DataSourceRuntimeService, Vanrise.Integration.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Used to cache Data Result in Memory in order to handle Paging and sorting on the UI grids. nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group7" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="group7" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Big Data Runtime Service" type="Vanrise.Common.Business.BigDataRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
