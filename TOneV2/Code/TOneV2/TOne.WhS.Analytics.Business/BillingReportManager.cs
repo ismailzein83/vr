@@ -80,7 +80,7 @@ namespace TOne.WhS.Analytics.Business
             List<string> arrayOfDate = new List<string>();
             foreach (DateTime dateTime in dates.ToList())
             {
-                arrayOfDate.Add(dateTime.ToString("yyyy-MM"));
+                arrayOfDate.Add(dateTime.ToString("MMMM - yyyy"));
             }
             List<BusinessCaseStatus> listBusinessCaseStatus = new List<BusinessCaseStatus>();
 
@@ -154,9 +154,7 @@ namespace TOne.WhS.Analytics.Business
                 else
                     listBusinessCaseStatus[i].Zone = _supplierZoneManager.GetSupplierZoneName(listBusinessCaseStatus[i].ZoneId);
             }
-            List<BusinessCaseStatus> sortedList = listBusinessCaseStatus.OrderByDescending(o => o.Durations).ToList();
-
-            return sortedList;
+            return listBusinessCaseStatus;
         }
 
         static IEnumerable<DateTime> monthsBetween(DateTime d0, DateTime d1)
@@ -214,6 +212,10 @@ namespace TOne.WhS.Analytics.Business
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count();
+            worksheet.Cells.SetColumnWidth(4, 20);
+            worksheet.Cells.SetColumnWidth(5, 20);
+            worksheet.Cells.SetColumnWidth(6, 20);
+            worksheet.Cells.SetColumnWidth(7, 20);
 
             if (lstCarrierProfileCount > 0)
             {
@@ -224,7 +226,7 @@ namespace TOne.WhS.Analytics.Business
                 int HeaderIndex = 2;
                 worksheet.Cells[2, 1].PutValue("Amount");
 
-                worksheet.Cells[3, 1].PutValue("Duration");
+                worksheet.Cells[3, 1].PutValue("Duration (Min)");
                 Range range = worksheet.Cells.CreateRange("B1:D1");
                 Style s = workbook.Styles[workbook.Styles.Add()];
                 s.Font.Name = "Times New Roman";
@@ -266,16 +268,16 @@ namespace TOne.WhS.Analytics.Business
                     worksheet.Cells[1, HeaderIndex].PutValue(listBusinessCaseStatus[i].MonthYear);
                     worksheet.Cells[2, HeaderIndex].PutValue(listBusinessCaseStatus[i].Amount);
                     worksheet.Cells[3, HeaderIndex++].PutValue(listBusinessCaseStatus[i].Durations);
-                    worksheet.Cells.SetColumnWidth(i + 1, 20);
+                    worksheet.Cells.SetColumnWidth(i + 1, 23);
                 }
-                worksheet.Cells.SetColumnWidth(lstCarrierProfileCount + 1, 20);
+                worksheet.Cells.SetColumnWidth(lstCarrierProfileCount + 1, 23);
                 if (lstCarrierProfileCount == 1)
                     worksheet.Cells.SetColumnWidth(1, 50);
 
                 worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
 
                 //Adding a chart to the worksheet
-                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.ColumnStacked, 5, 1, 30, lstCarrierProfileCount + 2);
+                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, 5, 1, 30, lstCarrierProfileCount + 2);
 
                 //Accessing the instance of the newly added chart
                 Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
@@ -322,6 +324,10 @@ namespace TOne.WhS.Analytics.Business
                 label.Font.Name = "Times New Roman";
                 label.Font.Size = 12;
                 label.Font.IsBold = true;
+                worksheet.Cells.SetColumnWidth(4, 20);
+                worksheet.Cells.SetColumnWidth(5, 20);
+                worksheet.Cells.SetColumnWidth(6, 20);
+                worksheet.Cells.SetColumnWidth(7, 20);
 
                 worksheet.Cells[0, 4].SetStyle(label);
                 worksheet.Cells[0, 4].PutValue("From Date");
