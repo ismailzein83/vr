@@ -91,7 +91,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {
                         if (codeEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(codeEffectiveDateField.FieldValue.ToString()))
-                            result = (DateTime)codeEffectiveDateField.FieldValue;
+                            result = Convert.ToDateTime(codeEffectiveDateField.FieldValue);
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
@@ -197,7 +197,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                     {
                         if (rateEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateEffectiveDateField.FieldValue.ToString()))
-                            result = (DateTime)rateEffectiveDateField.FieldValue;
+                            result = Convert.ToDateTime(rateEffectiveDateField.FieldValue);
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
@@ -240,7 +240,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                             {
                                 if (rateEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateEffectiveDateField.FieldValue.ToString()))
-                                    result = (DateTime)rateEffectiveDateField.FieldValue;
+                                    result = Convert.ToDateTime(rateEffectiveDateField.FieldValue);
                             };
                             if (obj.Fields.TryGetValue("Zone", out zoneField))
                             {
@@ -298,7 +298,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                             if (obj.Fields.TryGetValue("EffectiveDate", out serviceEffectiveDateField))
                             {
                                 if (serviceEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(serviceEffectiveDateField.FieldValue.ToString()))
-                                    result = (DateTime)serviceEffectiveDateField.FieldValue;
+                                    result = Convert.ToDateTime(serviceEffectiveDateField.FieldValue);
                             };
                             if (obj.Fields.TryGetValue("Zone", out zoneField))
                             {

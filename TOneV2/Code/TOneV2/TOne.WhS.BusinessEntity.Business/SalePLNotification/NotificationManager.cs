@@ -267,7 +267,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 DateTime maxCodeBED = DateTime.MinValue;
                 foreach (KeyValuePair<string, List<SaleCodeExistingEntity>> codeItem in zoneItem.Value)
                 {
-                    List<SaleCodeExistingEntity> connectedSaleCodes = codeItem.Value.GetLastConnectedEntities();
+                    IEnumerable<SaleCodeExistingEntity> connectedSaleCodes = codeItem.Value.GetLastConnectedEntities();
+                    if (connectedSaleCodes != null)
+                        connectedSaleCodes = connectedSaleCodes.OrderBy(itm => itm.BED);
+
                     CodeObject codeObject = new CodeObject()
                     {
                         Code = codeItem.Key,
