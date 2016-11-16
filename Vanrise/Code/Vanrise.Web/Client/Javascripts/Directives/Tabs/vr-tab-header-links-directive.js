@@ -28,6 +28,8 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
             };
 
             ctrl.getTabStyle = function (ctrl) {
+                if ($attrs.vertical != undefined)
+                    return { 'display': 'block', 'margin-bottom': '0px', 'border-radius': '0px' };
                 var m = 1;
                 if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length -1)
                     m = 0;
@@ -98,8 +100,8 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-           
-            element.html('<div class="btn-group btn-group-custom vr-tabs"  >' + element.html() + '</div>');
+            var verticalflag = attrs.vertical !=undefined? "vertical" : " ";
+            element.html('<div class="btn-group btn-group-custom vr-tabs"  ' + verticalflag + ' >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeService) {
+app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (MultiTranscludeService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -17,7 +17,9 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
                     tab.isLoaded = true;
                 ctrl.tabs.push(tab);
             };
-
+            ctrl.getMinHeight = function () {
+                return { 'min-height': (ctrl.tabs.length * 26 + 1) +'px'};
+            }
             ctrl.tabSelectionChanged = function () {
                 if (ctrl.tabs[ctrl.selectedTabIndex] != undefined)
                     ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
@@ -30,6 +32,9 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
             {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
+                setTimeout(function () {
+                    UtilsService.safeApply($scope);
+                }, 1)
             }
             var api = {};
             api.removeAllTabs = function () {

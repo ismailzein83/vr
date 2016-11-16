@@ -1,23 +1,24 @@
-﻿'use strict';
+﻿"use strict";
 
 
-app.directive('vrTab', ['MultiTranscludeService', function (MultiTranscludeService) {
+app.directive("vrTab", ["MultiTranscludeService", function (MultiTranscludeService) {
 
     var directiveDefinitionObject = {
         transclude: true,
-        restrict: 'E',
+        restrict: "E",
         scope: {
-            tabobject:'='
+            tabobject:"="
         },
-        require: '^vrTabs',
+        require: "^vrTabs",
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
         },
-        controllerAs: 'ctrl',
+        controllerAs: "ctrl",
         bindToController: true,
         link: function ($scope, elem, iAttrs, tabsCtrl, transcludeFn) {
 
             var ctrl = $scope.ctrl;
+            ctrl.vertical = elem.parent().attr("vertical") != undefined;
             if (ctrl.tabobject == undefined)
                 ctrl.tabobject = {};
             var tab = ctrl.tabobject;
@@ -27,6 +28,9 @@ app.directive('vrTab', ['MultiTranscludeService', function (MultiTranscludeServi
                 tab.isLoaded = true;
             tabsCtrl.addTab(tab);
 
+            ctrl.getMinHeight = function () {
+                return tabsCtrl.getMinHeight(ctrl);
+            }
             elem.bind("$destroy", function () {
                 if (ctrl.tabobject != undefined) {
                     tabsCtrl.removeTab(ctrl.tabobject);
@@ -34,7 +38,9 @@ app.directive('vrTab', ['MultiTranscludeService', function (MultiTranscludeServi
                 }
             });
         },
-        templateUrl: '/Client/Javascripts/Directives/Tabs/Templates/TabTemplate.html'
+        templateUrl: function (elem, attrs) {
+                return "/Client/Javascripts/Directives/Tabs/Templates/TabTemplate.html";
+        }
     };
 
     return directiveDefinitionObject;

@@ -1,7 +1,14 @@
-﻿<vr-row removeline ng-if="ctrl.tabobject.isLoaded" ng-show="ctrl.tabobject.isSelected" tabcontent="true">
+﻿<vr-row removeline ng-if="ctrl.tabobject.isLoaded &&  !ctrl.vertical" ng-show="ctrl.tabobject.isSelected" tabcontent="true">
     <vr-columns width="fullrow" tabs="true">
         <vr-validation-group validationcontext="ctrl.tabobject.validationContext">
             <div ng-transclude></div>
-        </vr-validation-group>        
+        </vr-validation-group>
     </vr-columns>
 </vr-row>
+<div ng-if="ctrl.tabobject.isLoaded &&  ctrl.vertical" ng-show="ctrl.tabobject.isSelected" ng-style="ctrl.getMinHeight()" tabcontent="true" style="display: inline-block;width: calc(100% - 160px);height:auto;border:1px solid #DDD;">
+    <div tabs="true">
+        <vr-validation-group validationcontext="ctrl.tabobject.validationContext">
+            <div ng-transclude></div>
+        </vr-validation-group>
+    </div>
+</div>
