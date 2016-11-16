@@ -46,7 +46,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             $scope.onCurrentRateClicked = function (dataItem) {
                 WhS_Sales_RatePlanService.viewFutureRate(zoneItem.ZoneName, dataItem.FutureRate);
-            }
+            };
 
             $scope.onCurrentRateNewEEDChanged = function () {
                 zoneItem.IsDirty = true;

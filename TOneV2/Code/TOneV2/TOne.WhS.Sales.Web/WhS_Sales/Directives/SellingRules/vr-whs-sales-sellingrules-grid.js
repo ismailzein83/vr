@@ -44,15 +44,15 @@ function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_Sell
                             query = payload.query;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onSellingRuleAdded = function (sellingRuleObject) {
                         gridAPI.itemAdded(sellingRuleObject);
-                    }
+                    };
 
                     directiveAPI.onSellingRuleUpdated = function (sellingRuleObject) {
                         gridAPI.itemUpdated(sellingRuleObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -105,7 +105,7 @@ function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_Sell
 
             var onSellingRuleDeleted = function (deletedItem) {
                 gridAPI.itemDeleted(deletedItem);
-            }
+            };
 
             WhS_Sales_SellingRuleService.deleteSellingRule($scope, sellingRule, onSellingRuleDeleted);
         }

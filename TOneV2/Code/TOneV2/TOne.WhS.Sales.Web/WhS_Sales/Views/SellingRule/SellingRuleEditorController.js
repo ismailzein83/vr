@@ -46,9 +46,9 @@
                     return WhS_Sales_SellingRuleAPIService.HasUpdateRulePermission();
                 else
                     return WhS_Sales_SellingRuleAPIService.HasAddRulePermission();
-            }
+            };
 
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.saleZoneGroupTemplates = [];
             $scope.scopeModel.customerGroupTemplates = [];
             $scope.scopeModel.sellingRuleSettingsTemplates = [];
@@ -60,12 +60,12 @@
             $scope.scopeModel.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
                 saleZoneGroupSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsAPI = api;
                 customerGroupSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onSellingRuleSettingsDirectiveReady = function (api) {
                 sellingRuleSettingsAPI = api;
@@ -73,9 +73,9 @@
 
                 var sellingRuleSettingsPayload = {
                     FilterSettings: { SellingProductId: sellingProductId }
-                }
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingRuleSettingsAPI, sellingRuleSettingsPayload, setLoader, sellingRuleSettingsReadyPromiseDeferred);
-            }
+            };
 
 
 

@@ -101,7 +101,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 			};
 
 			api.applyChanges = function () {
-				setNewRoutingProduct()
+			    setNewRoutingProduct();
 				setRoutingProductChange();
 			};
 

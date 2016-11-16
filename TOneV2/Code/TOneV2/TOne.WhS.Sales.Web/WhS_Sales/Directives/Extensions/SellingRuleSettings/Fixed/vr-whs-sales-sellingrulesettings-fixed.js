@@ -22,7 +22,7 @@ app.directive('vrWhsSalesSellingrulesettingsFixed', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Sales/Directives/Extensions/SellingRuleSettings/Fixed/Templates/FixedRuleDirective.html';
@@ -44,7 +44,7 @@ app.directive('vrWhsSalesSellingrulesettingsFixed', ['UtilsService',
                         ctrl.fromRate = payload.SellingRuleSettings.FromRate;
                         ctrl.toRate = payload.SellingRuleSettings.ToRate;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -52,7 +52,7 @@ app.directive('vrWhsSalesSellingrulesettingsFixed', ['UtilsService',
                         FromRate: ctrl.fromRate,
                         ToRate: ctrl.toRate,
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

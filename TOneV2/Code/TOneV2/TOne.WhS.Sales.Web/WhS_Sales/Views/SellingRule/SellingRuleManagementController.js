@@ -22,36 +22,36 @@
 
             $scope.hasAddRulePermission = function () {
                 return WhS_Sales_SellingRuleAPIService.HasAddRulePermission();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
-            }
+            };
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
-            }
+            };
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
                 $scope.showSaleZoneSelector = true;
 
                 var payload = {
                     sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                }
+                };
 
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-            }
+            };
 
 
             $scope.searchClicked = function () {

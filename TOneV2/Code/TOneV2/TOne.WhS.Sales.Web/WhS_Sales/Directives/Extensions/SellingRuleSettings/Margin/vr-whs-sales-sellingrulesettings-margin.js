@@ -48,7 +48,7 @@ app.directive('vrWhsSalesSellingrulesettingsMargin', ['UtilsService',
                         ctrl.isPercentage = payload.SellingRuleSettings.IsPercentage;
                     }
 
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -59,7 +59,7 @@ app.directive('vrWhsSalesSellingrulesettingsMargin', ['UtilsService',
                         ToRate: ctrl.toRate,
                         IsPercentage: ctrl.isPercentage
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
