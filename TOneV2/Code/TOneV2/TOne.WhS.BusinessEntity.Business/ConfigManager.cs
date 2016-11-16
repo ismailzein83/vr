@@ -43,92 +43,43 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public CDPNIdentification GetGeneralCDPNIndentification()
         {
-            GeneralIdentification generalIdentification = GetGeneralIdentification();
-            if (!generalIdentification.CDPNIdentification.HasValue)
-                throw new NullReferenceException("generalIdentification.CDPNIdentification");
+            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+            if (!switchCDRMappingConfiguration.GeneralIdentification.HasValue)
+                throw new NullReferenceException("switchCDRMappingConfiguration.GeneralIdentification");
 
-            return generalIdentification.CDPNIdentification.Value;
+            return switchCDRMappingConfiguration.GeneralIdentification.Value;
         }
-
         public CDPNIdentification GetCustomerCDPNIndentification()
         {
-            CustomerIdentification customerIdentification = GetCustomerIdentification();
-            if (!customerIdentification.CDPNIdentification.HasValue)
-                throw new NullReferenceException("customerIdentification.CDPNIdentification");
+            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+            if (!switchCDRMappingConfiguration.CustomerIdentification.HasValue)
+                throw new NullReferenceException("switchCDRMappingConfiguration.CustomerIdentification");
 
-            return customerIdentification.CDPNIdentification.Value;
+            return switchCDRMappingConfiguration.CustomerIdentification.Value;
         }
-
         public CDPNIdentification GetSupplierCDPNIndentification()
         {
-            SupplierIdentification supplierIdentification = GetSupplierIdentification();
-            if (!supplierIdentification.CDPNIdentification.HasValue)
-                throw new NullReferenceException("supplierIdentification.CDPNIdentification");
+            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+            if (!switchCDRMappingConfiguration.SupplierIdentification.HasValue)
+                throw new NullReferenceException("switchCDRMappingConfiguration.SupplierIdentification");
 
-            return supplierIdentification.CDPNIdentification.Value;
+            return switchCDRMappingConfiguration.SupplierIdentification.Value;
         }
-
         public CDPNIdentification GetSaleZoneCDPNIndentification()
         {
-            SaleZoneIdentification saleZoneIdentification = GetSaleZoneIdentification();
-            if (!saleZoneIdentification.CDPNIdentification.HasValue)
-                throw new NullReferenceException("saleZoneIdentification.CDPNIdentification");
+            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+            if (!switchCDRMappingConfiguration.SaleZoneIdentification.HasValue)
+                throw new NullReferenceException("switchCDRMappingConfiguration.SaleZoneIdentification");
 
-            return saleZoneIdentification.CDPNIdentification.Value;
+            return switchCDRMappingConfiguration.SaleZoneIdentification.Value;
         }
-
         public CDPNIdentification GetSupplierZoneCDPNIndentification()
         {
-            SupplierZoneIdentification supplierZoneIdentification = GetSupplierZoneIdentification();
-            if (!supplierZoneIdentification.CDPNIdentification.HasValue)
-                throw new NullReferenceException("supplierZoneIdentification.CDPNIdentification");
+            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+            if (!switchCDRMappingConfiguration.SupplierZoneIdentification.HasValue)
+                throw new NullReferenceException("switchCDRMappingConfiguration.SupplierZoneIdentification");
 
-            return supplierZoneIdentification.CDPNIdentification.Value;
-        }
-
-        public GeneralIdentification GetGeneralIdentification()
-        {
-            GeneralIdentification generalIdentification = GetSwitchCDRProcessConfiguration().GeneralIdentification;
-            if (generalIdentification == null)
-                throw new NullReferenceException("generalIdentification");
-
-            return generalIdentification;
-        }
-
-        public CustomerIdentification GetCustomerIdentification()
-        {
-            CustomerIdentification customerIdentification = GetSwitchCDRProcessConfiguration().CustomerIdentification;
-            if (customerIdentification == null)
-                throw new NullReferenceException("customerIdentification");
-
-            return customerIdentification;
-        }
-
-        public SupplierIdentification GetSupplierIdentification()
-        {
-            SupplierIdentification supplierIdentification = GetSwitchCDRProcessConfiguration().SupplierIdentification;
-            if (supplierIdentification == null)
-                throw new NullReferenceException("supplierIdentification");
-
-            return supplierIdentification;
-        }
-
-        public SaleZoneIdentification GetSaleZoneIdentification()
-        {
-            SaleZoneIdentification saleZoneIdentification= GetSwitchCDRProcessConfiguration().SaleZoneIdentification;
-            if (saleZoneIdentification == null)
-                throw new NullReferenceException("saleZoneIdentification");
-
-            return saleZoneIdentification;
-        }
-
-        public SupplierZoneIdentification GetSupplierZoneIdentification()
-        {
-            SupplierZoneIdentification supplierZoneIdentification = GetSwitchCDRProcessConfiguration().SupplierZoneIdentification;
-            if (supplierZoneIdentification == null)
-                throw new NullReferenceException("supplierZoneIdentification");
-
-            return supplierZoneIdentification;
+            return switchCDRMappingConfiguration.SupplierZoneIdentification.Value;
         }
 
         public CachingExpirationIntervals GetCachingExpirationIntervals()
@@ -155,23 +106,23 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting;
         }
 
-        private CDRImportSettings GetCDRImportSettings()
+        private CDRMappingSettings GetCDRMappingSettings()
         {
             SettingManager settingManager = new SettingManager();
-            CDRImportSettings cdrImportSettings = settingManager.GetSetting<CDRImportSettings>(Constants.CDRImportSettings);
+            CDRMappingSettings cdrMappingSettings = settingManager.GetSetting<CDRMappingSettings>(Constants.CDRMappingSettings);
 
-            if (cdrImportSettings == null)
-                throw new NullReferenceException("cdrImportSettings");
+            if (cdrMappingSettings == null)
+                throw new NullReferenceException("cdrMappingSettings");
 
-            return cdrImportSettings;
+            return cdrMappingSettings;
         }
-        private SwitchCDRProcessConfiguration GetSwitchCDRProcessConfiguration()
+        private SwitchCDRMappingConfiguration GetSwitchCDRMappingConfiguration()
         {
-            CDRImportSettings cdrImportSettings = GetCDRImportSettings();
-            if (cdrImportSettings.SwitchCDRProcessConfiguration == null)
-                throw new NullReferenceException("cdrImportSettings.SwitchCDRProcessConfiguration");
+            CDRMappingSettings cdrMappingSettings = GetCDRMappingSettings();
+            if (cdrMappingSettings.SwitchCDRMappingConfiguration == null)
+                throw new NullReferenceException("cdrMappingSettings.SwitchCDRMappingConfiguration");
 
-            return cdrImportSettings.SwitchCDRProcessConfiguration;
+            return cdrMappingSettings.SwitchCDRMappingConfiguration;
         }
 
         private BusinessEntitySettingsData GetBusinessEntitySettingsData()

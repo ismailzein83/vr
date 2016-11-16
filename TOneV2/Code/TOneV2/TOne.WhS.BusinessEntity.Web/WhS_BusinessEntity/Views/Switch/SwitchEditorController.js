@@ -13,8 +13,8 @@
         var switchSyncSettingsDirectiveAPI;
         var switchSyncSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var switchCDRProcessConfigurationDirectiveAPI;
-        var switchCDRProcessConfigurationDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var switchCDRMappingConfigurationDirectiveAPI;
+        var switchCDRMappingConfigurationDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -52,9 +52,9 @@
                 switchSyncSettingsDirectiveAPI = api;
                 switchSyncSettingsDirectiveReadyDeferred.resolve();
             };
-            $scope.scopeModel.onSwitchCDRProcessConfiguration = function (api) {
-                switchCDRProcessConfigurationDirectiveAPI = api;
-                switchCDRProcessConfigurationDirectiveReadyDeferred.resolve();
+            $scope.scopeModel.onSwitchCDRMappingConfiguration = function (api) {
+                switchCDRMappingConfigurationDirectiveAPI = api;
+                switchCDRMappingConfigurationDirectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.close = function () {
@@ -86,7 +86,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwitchSyncSettingsDirective, loadSwitchCDRProcessConfigurationDirectiveDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSwitchSyncSettingsDirective, loadSwitchCDRMappingConfigurationDirectiveDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -115,22 +115,22 @@
 
             return switchSyncSettingsDirectiveReadyDeferred.promise;
         }
-        function loadSwitchCDRProcessConfigurationDirectiveDirective() {
-            var switchCDRProcessConfigurationDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadSwitchCDRMappingConfigurationDirectiveDirective() {
+            var switchCDRMappingConfigurationDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            switchCDRProcessConfigurationDirectiveReadyDeferred.promise.then(function () {
+            switchCDRMappingConfigurationDirectiveReadyDeferred.promise.then(function () {
 
-                var switchCDRProcessConfigurationDirectivePayload;
+                var switchCDRMappingConfigurationDirectivePayload;
                 if (switchEntity != undefined && switchEntity.Settings != undefined) {
-                    switchCDRProcessConfigurationDirectivePayload = {
-                        switchCDRProcessConfiguration: switchEntity.Settings.SwitchCDRProcessConfiguration
+                    switchCDRMappingConfigurationDirectivePayload = {
+                        switchCDRMappingConfiguration: switchEntity.Settings.SwitchCDRMappingConfiguration
                     }
                 }
 
-                VRUIUtilsService.callDirectiveLoad(switchCDRProcessConfigurationDirectiveAPI, switchCDRProcessConfigurationDirectivePayload, switchCDRProcessConfigurationDirectiveLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(switchCDRMappingConfigurationDirectiveAPI, switchCDRMappingConfigurationDirectivePayload, switchCDRMappingConfigurationDirectiveLoadDeferred);
             });
 
-            return switchCDRProcessConfigurationDirectiveLoadDeferred.promise;
+            return switchCDRMappingConfigurationDirectiveLoadDeferred.promise;
         }
 
         function insertSwitch() {
@@ -172,7 +172,7 @@
                 Settings: {
                     $type: "TOne.WhS.BusinessEntity.Entities.SwitchSettings, TOne.WhS.BusinessEntity.Entities",
                     RouteSynchronizer: switchSyncSettingsDirectiveAPI.getData().SwitchRouteSynchronizer,
-                    SwitchCDRProcessConfiguration: switchCDRProcessConfigurationDirectiveAPI.getData()
+                    SwitchCDRMappingConfiguration: switchCDRMappingConfigurationDirectiveAPI.getData()
                 }
             };
             return obj;

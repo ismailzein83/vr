@@ -178,16 +178,16 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (currentSwitch == null)
                         throw new NullReferenceException(string.Format("currentSwitch for ID: {0}", switchId));
 
-                    SwitchCDRProcessConfiguration switchCDRProcessConfiguration = currentSwitch.Settings != null ? currentSwitch.Settings.SwitchCDRProcessConfiguration : null;
+                    SwitchCDRMappingConfiguration switchCDRMappingConfiguration = currentSwitch.Settings != null ? currentSwitch.Settings.SwitchCDRMappingConfiguration : null;
 
                     Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = new Dictionary<SwitchCDPN, CDPNIdentification>();
-                    if (currentSwitch.Settings.SwitchCDRProcessConfiguration != null)
+                    if (currentSwitch.Settings.SwitchCDRMappingConfiguration != null)
                     {
-                        mappingResults.Add(SwitchCDPN.CDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.GeneralIdentification, configManager.GetGeneralCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.CustomerCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.CustomerIdentification, configManager.GetCustomerCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.SupplierCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.SupplierIdentification, configManager.GetSupplierCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.SaleZoneCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.SaleZoneIdentification, configManager.GetSaleZoneCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.SupplierZoneCDPN, GetCorrespondingCDPNIdentification(switchCDRProcessConfiguration.SupplierZoneIdentification, configManager.GetSupplierZoneCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.CDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.GeneralIdentification, configManager.GetGeneralCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.CustomerCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.CustomerIdentification, configManager.GetCustomerCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SupplierCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SupplierIdentification, configManager.GetSupplierCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SaleZoneCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SaleZoneIdentification, configManager.GetSaleZoneCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SupplierZoneCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SupplierZoneIdentification, configManager.GetSupplierZoneCDPNIndentification()));
                     }
                     else
                     {
@@ -254,10 +254,10 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        private CDPNIdentification GetCorrespondingCDPNIdentification(ICDPNIdentification switchCDPNIdentification, CDPNIdentification defaultCDPNIdentification)
+        private CDPNIdentification _GetCorrespondingCDPNIdentification(CDPNIdentification? switchCDPNIdentification, CDPNIdentification defaultCDPNIdentification)
         {
-            if (switchCDPNIdentification != null && switchCDPNIdentification.CDPNIdentification.HasValue)
-                return switchCDPNIdentification.CDPNIdentification.Value;
+            if (switchCDPNIdentification != null && switchCDPNIdentification.HasValue)
+                return switchCDPNIdentification.Value;
 
             return defaultCDPNIdentification;
         }

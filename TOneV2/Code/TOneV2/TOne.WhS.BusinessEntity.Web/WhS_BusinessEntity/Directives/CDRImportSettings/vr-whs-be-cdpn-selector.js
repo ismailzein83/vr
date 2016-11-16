@@ -11,7 +11,8 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
                 onselectionchanged: '=',
                 isrequired: '=',
                 normalColNum: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                label: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -28,11 +29,32 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: function (element, attrs) {
+            template: function (element, attrs) {
 
-                return "/Client/Modules/WhS_BusinessEntity/Directives/CDRImportSettings/Templates/CDPNSelectorTemplate.html";
+                return getTemplate(attrs);
             }
         };
+
+        function getTemplate(attrs) {
+
+            var multipleselection = "";
+            var label = "CDPN";
+            var entityName = "CDPN";
+
+            if (attrs.ismultipleselection != undefined) {
+                label = "CDPNs";
+                multipleselection = "ismultipleselection";
+            }
+            if (attrs.label != undefined)
+                label = attrs.label;
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
+                       '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label +
+                           '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + entityName +
+                           '" customvalidate="ctrl.customvalidate">' +
+                       '</vr-select>' +
+                   '</vr-columns>';
+        }
 
         function CDPNSelectorCtor(ctrl, $scope, attrs) {
 
@@ -76,4 +98,5 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
 
             this.initializeController = initializeController;
         }
+
     }]);

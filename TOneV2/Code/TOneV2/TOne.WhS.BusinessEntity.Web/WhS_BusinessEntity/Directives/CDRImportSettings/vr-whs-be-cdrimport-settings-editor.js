@@ -25,19 +25,18 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
         function cdrImportEditorCtor(ctrl, $scope, $attrs) {
 
-            var switchCDRProcessConfigurationDirectiveAPI;
-            var switchCDRProcessConfigurationDirectiveDeferred = UtilsService.createPromiseDeferred();
+            var switchCDRMappingConfigurationDirectiveAPI;
+            var switchCDRMappingConfigurationDirectiveDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onSwitchCDRProcessConfiguration = function (api) {
-                    switchCDRProcessConfigurationDirectiveAPI = api;
-                    switchCDRProcessConfigurationDirectiveDeferred.resolve();
+                $scope.scopeModel.onSwitchCDRMappingConfiguration = function (api) {
+                    switchCDRMappingConfigurationDirectiveAPI = api;
+                    switchCDRMappingConfigurationDirectiveDeferred.resolve();
                 };
 
-
-                UtilsService.waitMultiplePromises([switchCDRProcessConfigurationDirectiveDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([switchCDRMappingConfigurationDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
 
@@ -47,31 +46,33 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
                 api.load = function (payload) {
 
-                    var switchCDRProcessConfiguration;
+                    var switchCDRMappingConfiguration;
 
                     if (payload != undefined && payload.data != undefined) {
-                        switchCDRProcessConfiguration = payload.data.SwitchCDRProcessConfiguration;
+                        switchCDRMappingConfiguration = payload.data.SwitchCDRMappingConfiguration;
                     }
 
                     var promises = [];
 
-                    //Loading SwitchCDRProcessConfiguration Directive
-                    var switchCDRProcessConfigurationLoadDeferred = UtilsService.createPromiseDeferred();
-                    var switchCDRProcessConfigurationPayload = {
-                        switchCDRProcessConfiguration: switchCDRProcessConfiguration
+                    //Loading SwitchCDRMappingConfiguration Directive
+                    var switchCDRMAppingConfigurationLoadDeferred = UtilsService.createPromiseDeferred();
+                    var switchCDRMappingConfigurationPayload = {
+                        switchCDRMappingConfiguration: switchCDRMappingConfiguration
                     };
-                    VRUIUtilsService.callDirectiveLoad(switchCDRProcessConfigurationDirectiveAPI, switchCDRProcessConfigurationPayload, switchCDRProcessConfigurationLoadDeferred);
-                    promises.push(switchCDRProcessConfigurationLoadDeferred.promise);
+                    VRUIUtilsService.callDirectiveLoad(switchCDRMappingConfigurationDirectiveAPI, switchCDRMappingConfigurationPayload, switchCDRMAppingConfigurationLoadDeferred);
+                    promises.push(switchCDRMAppingConfigurationLoadDeferred.promise);
 
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.CDRImportSettings, TOne.WhS.BusinessEntity.Entities",
-                        SwitchCDRProcessConfiguration: switchCDRProcessConfigurationDirectiveAPI.getData()
+                    var obj = {
+                        $type: "TOne.WhS.BusinessEntity.Entities.CDRMappingSettings, TOne.WhS.BusinessEntity.Entities",
+                        SwitchCDRMappingConfiguration: switchCDRMappingConfigurationDirectiveAPI.getData()
                     };
+
+                    return obj;
                 };
 
                 if (ctrl.onReady != null)

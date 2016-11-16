@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsBeSwitchcdrmappingconfiguration', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -21,7 +21,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CDRImportSettings/Templates/SwitchCDRProcessConfigurationTemplate.html"
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CDRImportSettings/Templates/SwitchCDRMappingConfigurationTemplate.html"
         };
 
         function cdrImportEditorCtor(ctrl, $scope, $attrs) {
@@ -66,12 +66,10 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     supplierZoneCDPNReadyDeferred.resolve();
                 };
 
-
                 UtilsService.waitMultiplePromises([customerCDPNReadyDeferred.promise, supplierCDPNReadyDeferred.promise, saleZoneCDPNReadyDeferred.promise,
                     supplierZoneCDPNReadyDeferred.promise, cdpnReadyDeferred.promise]).then(function () {
                         defineAPI();
                     });
-
             }
             function defineAPI() {
                 var api = {};
@@ -84,12 +82,12 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     var saleZoneIdentification;
                     var supplierZoneIdentification;
 
-                    if (payload != undefined && payload.switchCDRProcessConfiguration != undefined) {
-                        generalIdentification = payload.switchCDRProcessConfiguration.GeneralIdentification;
-                        customerIdentification = payload.switchCDRProcessConfiguration.CustomerIdentification;
-                        supplierIdentification = payload.switchCDRProcessConfiguration.SupplierIdentification;
-                        saleZoneIdentification = payload.switchCDRProcessConfiguration.SaleZoneIdentification;
-                        supplierZoneIdentification = payload.switchCDRProcessConfiguration.SupplierZoneIdentification;
+                    if (payload != undefined && payload.switchCDRMappingConfiguration != undefined) {
+                        generalIdentification = payload.switchCDRMappingConfiguration.GeneralIdentification;
+                        customerIdentification = payload.switchCDRMappingConfiguration.CustomerIdentification;
+                        supplierIdentification = payload.switchCDRMappingConfiguration.SupplierIdentification;
+                        saleZoneIdentification = payload.switchCDRMappingConfiguration.SaleZoneIdentification;
+                        supplierZoneIdentification = payload.switchCDRMappingConfiguration.SupplierZoneIdentification;
                     }
 
                     var promises = [];
@@ -97,7 +95,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     //Loading CDPN Selector
                     var cdpnSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     var cdpnSelectorPayload = {
-                        selectedIds: generalIdentification ? generalIdentification.CDPNIdentification : undefined
+                        selectedIds: generalIdentification
                     };
                     VRUIUtilsService.callDirectiveLoad(cdpnSelectorAPI, cdpnSelectorPayload, cdpnSelectorLoadDeferred);
                     promises.push(cdpnSelectorLoadDeferred.promise);
@@ -105,7 +103,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     //Loading CustomerCDPN Selector
                     var customerCDPNSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     var customerCDPNSelectorPayload = {
-                        selectedIds: customerIdentification ? customerIdentification.CDPNIdentification : undefined
+                        selectedIds: customerIdentification
                     };
                     VRUIUtilsService.callDirectiveLoad(customerCDPNSelectorAPI, customerCDPNSelectorPayload, customerCDPNSelectorLoadDeferred);
                     promises.push(customerCDPNSelectorLoadDeferred.promise);
@@ -113,7 +111,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     //Loading SupplierCDPN Selector
                     var supplierCDPNSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     var supplierCDPNSelectorPayload = {
-                        selectedIds: supplierIdentification ? supplierIdentification.CDPNIdentification : undefined
+                        selectedIds: supplierIdentification
                     };
                     VRUIUtilsService.callDirectiveLoad(supplierCDPNSelectorAPI, supplierCDPNSelectorPayload, supplierCDPNSelectorLoadDeferred);
                     promises.push(supplierCDPNSelectorLoadDeferred.promise);
@@ -121,7 +119,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     //Loading SaleZoneCDPN Selector
                     var saleZoneCDPNSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     var saleZoneCDPNSelectorPayload = {
-                        selectedIds: saleZoneIdentification ? saleZoneIdentification.CDPNIdentification : undefined
+                        selectedIds: saleZoneIdentification
                     };
                     VRUIUtilsService.callDirectiveLoad(saleZoneCDPNSelectorAPI, saleZoneCDPNSelectorPayload, saleZoneCDPNSelectorLoadDeferred);
                     promises.push(saleZoneCDPNSelectorLoadDeferred.promise);
@@ -129,7 +127,7 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
                     //Loading SupplierZoneCDPN Selector
                     var supplierZoneCDPNSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     var supplierZoneCDPNSelectorPayload = {
-                        selectedIds: supplierZoneIdentification ? supplierZoneIdentification.CDPNIdentification : undefined
+                        selectedIds: supplierZoneIdentification
                     };
                     VRUIUtilsService.callDirectiveLoad(supplierZoneCDPNSelectorAPI, supplierZoneCDPNSelectorPayload, supplierZoneCDPNSelectorLoadDeferred);
                     promises.push(supplierZoneCDPNSelectorLoadDeferred.promise);
@@ -140,27 +138,11 @@ app.directive('vrWhsBeSwitchcdrprocessconfiguration', ['UtilsService', 'VRUIUtil
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.SwitchCDRProcessConfiguration, TOne.WhS.BusinessEntity.Entities",
-                        GeneralIdentification: {
-                            $type: "TOne.WhS.BusinessEntity.Entities.GeneralIdentification, TOne.WhS.BusinessEntity.Entities",
-                            CDPNIdentification: cdpnSelectorAPI.getSelectedIds()
-                        },
-                        CustomerIdentification: {
-                            $type: "TOne.WhS.BusinessEntity.Entities.CustomerIdentification, TOne.WhS.BusinessEntity.Entities",
-                            CDPNIdentification: customerCDPNSelectorAPI.getSelectedIds()
-                        },
-                        SupplierIdentification: {
-                            $type: "TOne.WhS.BusinessEntity.Entities.SupplierIdentification, TOne.WhS.BusinessEntity.Entities",
-                            CDPNIdentification: supplierCDPNSelectorAPI.getSelectedIds()
-                        },
-                        SaleZoneIdentification: {
-                            $type: "TOne.WhS.BusinessEntity.Entities.SaleZoneIdentification, TOne.WhS.BusinessEntity.Entities",
-                            CDPNIdentification: saleZoneCDPNSelectorAPI.getSelectedIds()
-                        },
-                        SupplierZoneIdentification: {
-                            $type: "TOne.WhS.BusinessEntity.Entities.SupplierZoneIdentification, TOne.WhS.BusinessEntity.Entities",
-                            CDPNIdentification: supplierZoneCDPNSelectorAPI.getSelectedIds()
-                        }
+                        GeneralIdentification: cdpnSelectorAPI.getSelectedIds(),
+                        CustomerIdentification: customerCDPNSelectorAPI.getSelectedIds(),
+                        SupplierIdentification: supplierCDPNSelectorAPI.getSelectedIds(),
+                        SaleZoneIdentification: saleZoneCDPNSelectorAPI.getSelectedIds(),
+                        SupplierZoneIdentification: supplierZoneCDPNSelectorAPI.getSelectedIds()
                     };
                 };
 

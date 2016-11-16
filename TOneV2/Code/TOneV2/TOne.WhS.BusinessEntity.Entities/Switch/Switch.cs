@@ -33,6 +33,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SwitchRouteSynchronizer RouteSynchronizer { get; set; }
 
-        public SwitchCDRProcessConfiguration SwitchCDRProcessConfiguration { get; set; }
+        public SwitchCDRMappingConfiguration SwitchCDRMappingConfiguration { get; set; }
     }
 }
