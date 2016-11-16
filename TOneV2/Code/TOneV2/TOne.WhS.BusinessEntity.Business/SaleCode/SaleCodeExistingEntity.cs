@@ -18,13 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public BusinessEntity.Entities.SaleCode CodeEntity { get; set; }
 
-        public string ZoneName
-        {
-            get
-            {
-                return new SaleZoneManager().GetSaleZoneName(this.CodeEntity.ZoneId);
-            }
-        }
+        public string ZoneName { get; set; }
 
         public int CountryId { get; set; }
 

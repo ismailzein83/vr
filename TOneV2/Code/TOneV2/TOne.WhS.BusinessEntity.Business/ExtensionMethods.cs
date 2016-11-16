@@ -80,8 +80,21 @@ namespace TOne.WhS.BusinessEntity.Business
             if (entities.Count == 0)
                 return null;
 
-            IEnumerable<T> orderedList = entities.OrderBy(itm => itm.BED);
-            return GetConnectedEntitiesToTheLeft(entities);
+            List<T> connectedEntities = new List<T>();
+            int entitiesCount = entities.Count;
+            connectedEntities.Add(entities[entitiesCount - 1]);
+            for (int i = entities.Count() - 1; i > 0; i--)
+            {
+                var currentElement = entities[i];
+                var previousElement = entities[i - 1];
+
+                if (previousElement.OriginalEED.HasValue && currentElement.BED == previousElement.OriginalEED && currentElement.IsSameEntity(previousElement))
+                    connectedEntities.Add(previousElement);
+                else
+                    break;
+            }
+
+            return connectedEntities;
         }
 
         private static List<T> GetConnectedEntitiesToTheRight<T>(List<T> entities) where T : IExistingEntity

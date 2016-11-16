@@ -67,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.Business
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
 
             SalePLZoneNotification salePLZoneNotifications = new SalePLZoneNotification();
-           
+
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
@@ -96,7 +96,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                     else if (countryZonesChanges != null)
                     {
-                        if(context.ChangeType == SalePLChangeType.CodeAndRate)
+                        if (context.ChangeType == SalePLChangeType.CodeAndRate)
                         {
                             CreateSalePLZoneNotifications(customerZoneNotifications, zonesWrapperForCountry, rateLocator, assignedSellingProductId, customerId);
                         }
@@ -119,8 +119,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                 }
 
-				if (customerZoneNotifications.Count > 0)
-					SendPriceList(customer, customerSalePriceListType, context.InitiatorId, customerZoneNotifications);
+                if (customerZoneNotifications.Count > 0)
+                    SendPriceList(customer, customerSalePriceListType, context.InitiatorId, customerZoneNotifications);
             }
         }
 
@@ -136,21 +136,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return (changeType == SalePLChangeType.CodeAndRate) ? SalePriceListType.Country : SalePriceListType.RateChange;
         }
-        
+
 
         private class ZoneWrapper
         {
             public long ZoneId { get; set; }
             public string ZoneName { get; set; }
 
-            private List<CodeObject> _codes = new List<CodeObject>();
-            public List<CodeObject> Codes
-            {
-                get
-                {
-                    return this._codes;
-                }
-            }
+            public List<CodeObject> Codes { get; set; }
         }
 
         private class CodeObject
@@ -178,10 +171,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 Zones = customerZonesNotifications
             };
 
-            byte [] salePLTemplateBytes = template.Settings.Execute(salePLTemplateSettingsContext);
+            byte[] salePLTemplateBytes = template.Settings.Execute(salePLTemplateSettingsContext);
 
             Guid salePLMailTemplateId = carrierAccountManager.GetSalePLMailTemplateId(customer.CarrierAccountId);
-            
+
             UserManager userManager = new UserManager();
             Vanrise.Security.Entities.User initiator = userManager.GetUserbyId(initiatorId);
 
@@ -212,16 +205,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             MailMessage objMail = new MailMessage();
 
-			if (evaluatedTemplate.To != null)
-			{
-				foreach (string toEmail in evaluatedTemplate.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
-					objMail.To.Add(toEmail);
-			}
-			if (evaluatedTemplate.CC != null)
-			{
-				foreach (string ccEmail in evaluatedTemplate.CC.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
-					objMail.CC.Add(ccEmail);
-			}
+            if (evaluatedTemplate.To != null)
+            {
+                foreach (string toEmail in evaluatedTemplate.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                    objMail.To.Add(toEmail);
+            }
+            if (evaluatedTemplate.CC != null)
+            {
+                foreach (string ccEmail in evaluatedTemplate.CC.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                    objMail.CC.Add(ccEmail);
+            }
             objMail.From = new MailAddress(emailSettingData.SenderEmail);
             objMail.Subject = evaluatedTemplate.Subject;
             objMail.Body = evaluatedTemplate.Body;
@@ -247,7 +240,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     };
 
                     SaleEntityZoneRate saleEntityZoneRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
-                    
+
                     zoneNotification.Rate = saleEntityZoneRate != null ? SalePLRateNotificationMapper(saleEntityZoneRate) : GetExistingRate();
                     zoneNotification.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
                     salePLZoneNotifications.Add(zoneNotification);
@@ -268,23 +261,35 @@ namespace TOne.WhS.BusinessEntity.Business
             DateTime today = DateTime.Today;
             foreach (KeyValuePair<string, Dictionary<string, List<SaleCodeExistingEntity>>> zoneItem in existingSaleCodesByZoneName)
             {
-                ZoneWrapper zoneWrapper = new ZoneWrapper()
-                {
-                    ZoneName = zoneItem.Key,
-                    ZoneId = GetEffectiveZoneId(zoneItem.Value.First().Value, today)
-                };
 
+                List<CodeObject> codes = new List<CodeObject>();
+                long zoneId = zoneItem.Value.First().Value.First().CodeEntity.ZoneId;
+                DateTime maxCodeBED = DateTime.MinValue;
                 foreach (KeyValuePair<string, List<SaleCodeExistingEntity>> codeItem in zoneItem.Value)
                 {
-                    List<SaleCodeExistingEntity> connectedSaleCodes = codeItem.Value.GetConnectedEntities(today);
+                    List<SaleCodeExistingEntity> connectedSaleCodes = codeItem.Value.GetLastConnectedEntities();
                     CodeObject codeObject = new CodeObject()
                     {
                         Code = codeItem.Key,
                         BED = connectedSaleCodes.First().BED,
                         EED = connectedSaleCodes.Last().EED
                     };
-                    zoneWrapper.Codes.Add(codeObject);
+
+                    if (maxCodeBED < codeObject.BED) 
+                    {
+                        maxCodeBED = codeObject.BED;
+                        zoneId = connectedSaleCodes.First().CodeEntity.ZoneId;
+                    }
+                        
+                    codes.Add(codeObject);
                 }
+
+                ZoneWrapper zoneWrapper = new ZoneWrapper()
+                {
+                    ZoneName = zoneItem.Key,
+                    ZoneId = zoneId,
+                    Codes = codes
+                };
 
                 int countryId = zoneManager.GetSaleZoneCountryId(zoneWrapper.ZoneId);
                 if (!zonesWrapperByCountry.TryGetValue(countryId, out zonesWrapper))
@@ -452,7 +457,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return new SaleCodeExistingEntity(saleCode)
             {
-                CountryId = _SaleZoneManager.GetSaleZoneCountryId(saleCode.ZoneId)
+                CountryId = _SaleZoneManager.GetSaleZoneCountryId(saleCode.ZoneId),
+                ZoneName = _SaleZoneManager.GetSaleZoneName(saleCode.ZoneId)
             };
         }
 
