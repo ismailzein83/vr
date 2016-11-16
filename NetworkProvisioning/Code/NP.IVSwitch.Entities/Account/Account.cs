@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities
 {
-    public enum AccountType { vendor = 1, customer = 2}
+    public enum AccountType { Vendor = 1, Customer = 2}
     public enum State { Active = 1, Dormant = 2 , Suspended = 3}
 
     public class Account
