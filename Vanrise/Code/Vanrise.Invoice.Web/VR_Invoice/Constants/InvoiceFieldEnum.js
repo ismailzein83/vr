@@ -9,7 +9,7 @@
     DueDate: { value: 7, description: "Due Date", fieldName: "DueDate", type: "Datetime" },
     Paid: { value: 8, description: "Paid Date", fieldName: "PaidDate", type: "Datetime" },
     UserId: { value: 9, description: "User Name", fieldName: "UserName", type: "Text" },
-    CreatedTime: { value: 10, description: "Created Date", fieldName: "CreatedTime", type: "Datetime" },
+    CreatedTime: { value: 10, description: "Created Date", fieldName: "CreatedTime", type: "Datetime" }
 
     
 });
