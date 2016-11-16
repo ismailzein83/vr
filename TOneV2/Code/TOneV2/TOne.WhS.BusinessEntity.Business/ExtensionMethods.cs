@@ -72,6 +72,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return connectedEntities;
         }
 
+        public static List<T> GetLastConnectedEntities<T>(this List<T> entities) where T : IExistingEntity
+        {
+            if (entities == null)
+                throw new MissingArgumentValidationException("entities");
+
+            if (entities.Count == 0)
+                return null;
+
+            IEnumerable<T> orderedList = entities.OrderBy(itm => itm.BED);
+            return GetConnectedEntitiesToTheLeft(entities);
+        }
+
         private static List<T> GetConnectedEntitiesToTheRight<T>(List<T> entities) where T : IExistingEntity
         {
             List<T> connectedEntities = new List<T>();
