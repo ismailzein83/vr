@@ -49,7 +49,7 @@
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.TelesRadius.SQL",
                         ConnectionString: { ConnectionString: $scope.scopeModel.connectionString }
-                    }
+                    };
                     return data;
                 }
 

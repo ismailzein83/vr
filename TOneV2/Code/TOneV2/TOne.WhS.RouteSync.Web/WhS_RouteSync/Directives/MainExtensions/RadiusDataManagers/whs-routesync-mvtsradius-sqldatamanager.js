@@ -57,7 +57,7 @@
                         $type: "TOne.WhS.RouteSync.MVTSRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.MVTSRadius.SQL",
                         ConnectionString: { ConnectionString: $scope.scopeModel.connectionString },
                         RedundantConnectionStrings: redundantConnectionStrings
-                    }
+                    };
                     return data;
                 }
 

@@ -36,7 +36,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.routeBatchSize = payload.data.RouteSyncProcess.RouteBatchSize;
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
@@ -44,7 +44,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         RouteSyncProcess: { RouteBatchSize: $scope.scopeModel.routeBatchSize }
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

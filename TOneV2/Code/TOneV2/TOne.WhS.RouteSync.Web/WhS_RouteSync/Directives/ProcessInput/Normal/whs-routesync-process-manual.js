@@ -57,7 +57,7 @@ app.directive("whsRoutesyncProcessManual", ["VRUIUtilsService", "UtilsService",
                     var promises = [];
                     promises.push(loadRouteSyncDefinitionSelector());
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

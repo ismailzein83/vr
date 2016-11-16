@@ -101,6 +101,6 @@ app.directive('whsRoutesyncSwitchSelector', ['WhS_RouteSync_SwitchAPIService', '
             return '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="SwitchId" isrequired="ctrl.isrequired" label="' + label +
                         '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                         '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                   '</vr-select>'
+                   '</vr-select>';
         }
     }]);

@@ -21,7 +21,7 @@
             $scope.scopeModel.add = function () {
                 var onRouteSyncDefinitionAdded = function (addedRouteSyncDefinition) {
                     gridAPI.onRouteSyncDefinitionAdded(addedRouteSyncDefinition);
-                }
+                };
                 WhS_RouteSync_RouteSyncDefinitionService.addRouteSyncDefinition(onRouteSyncDefinitionAdded);
             };
 

@@ -95,7 +95,7 @@
                         CarrierMappings: gridAPI.getData(),
                         MappingSeparator: $scope.scopeModel.separator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions
-                    }
+                    };
                     return data;
                 }
 

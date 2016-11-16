@@ -51,7 +51,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
 
                 api.onRouteSyncDefinitionAdded = function (addedRouteSyncDefinition) {
                     gridAPI.itemAdded(addedRouteSyncDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

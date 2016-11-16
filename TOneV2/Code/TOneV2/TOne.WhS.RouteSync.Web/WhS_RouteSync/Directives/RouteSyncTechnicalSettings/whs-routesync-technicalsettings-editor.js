@@ -36,15 +36,15 @@ app.directive('whsRoutesyncTechnicalsettingsEditor', ['UtilsService', 'VRUIUtils
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.switchInfoGetter = JSON.stringify(payload.data.SwitchInfoGetter);
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
                         $type: "TOne.WhS.RouteSync.Entities.RouteSyncTechnicalSettings, TOne.WhS.RouteSync.Entities",
                         SwitchInfoGetter: UtilsService.parseStringToJson($scope.scopeModel.switchInfoGetter)
                     };
-                    return data;    
-                }
+                    return data;
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

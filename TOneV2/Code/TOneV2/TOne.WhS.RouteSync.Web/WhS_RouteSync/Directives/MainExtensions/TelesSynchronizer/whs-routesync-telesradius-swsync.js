@@ -82,7 +82,7 @@
                         DataManager: getDataManager(),
                         CarrierMappings: getCarrierMappings(),
                         MappingSeparator: $scope.scopeModel.separator
-                    }
+                    };
                     return data;
                 }
 

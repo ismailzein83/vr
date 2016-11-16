@@ -58,7 +58,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSy
                    + ' entityName="' + label + '"'
                    + '  >'
                    + '</vr-select>'
-                   + '</vr-columns>'
+                   + '</vr-columns>';
         }
 
         function RouteSyncDefinitionSelectorCtor(ctrl, $scope, attrs) {
@@ -76,12 +76,12 @@ app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSy
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(defineAPI());
                     }
-                }
+                };
 
 
                 ctrl.search = function (nameFilter) {
                     return WhS_RouteSync_RouteSyncDefinitionAPIService.GetRouteSyncDefinitionsInfo(nameFilter);
-                }
+                };
 
             }
 
@@ -113,7 +113,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSy
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('RouteSyncDefinitionId', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
