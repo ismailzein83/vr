@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchAccountGrid', ['NP_IVSwitch_AccountAPIService', 'NP_IVSwitch_AccountService', 'VRNotificationService', 'NP_IVSwitch_AccountTypeEnum','NP_IVSwitch_StateEnum','UtilsService',
-function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificationService, NP_IVSwitch_AccountTypeEnum, NP_IVSwitch_StateEnum,UtilsService) {
+app.directive('npIvswitchAccountGrid', ['NP_IVSwitch_AccountAPIService', 'NP_IVSwitch_AccountService', 'VRNotificationService', 'NP_IVSwitch_AccountTypeEnum','NP_IVSwitch_StateEnum','UtilsService','VRUIUtilsService','NP_IVSwitch_RouteService',
+function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificationService, NP_IVSwitch_AccountTypeEnum, NP_IVSwitch_StateEnum, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,6 +21,7 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
             this.initializeController = initializeController;
 
             var gridAPI;
+            var drillDownManager;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -29,11 +30,17 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions, false);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return NP_IVSwitch_AccountAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                          onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -56,6 +63,52 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function buildDrillDownTabs() {
+                var drillDownTabs = [];
+
+                drillDownTabs.push(buildRouteTab());
+           //     drillDownTabs.push(buildSubEndPointsTab());
+
+                function buildRouteTab() {
+                    var  RouteTab = {};
+
+                    RouteTab.title = 'Route';
+                    RouteTab.directive = 'np-ivswitch-route-grid';
+
+                    RouteTab.loadDirective = function (subAccountGridAPI, parentAccount) {
+                        parentAccount.subAccountGridAPI = subAccountGridAPI;
+                        var subAccountGridPayload = {
+                            AccountId: parentAccount.Entity.AccountId
+                        };
+                        return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
+                    };
+                    RouteTab.hideDrillDownFunction = function (dataItem) {
+                        return false; /////////////////////////////
+                    };
+
+                    RouteTab.parentMenuActions = [{
+                        name: 'Add Route',
+                        clicked: function (parentAccount) {
+                            if (RouteTab.setTabSelected != undefined)
+                                RouteTab.setTabSelected(parentAccount);
+                            var onRouteAdded = function (addedRoute) {
+                                parentAccount.subAccountGridAPI.onRouteAdded(addedRoute);
+                            };
+                            console.log(parentAccount.Entity.AccountId)
+                            NP_IVSwitch_RouteService.addRoute(parentAccount.Entity.AccountId, onRouteAdded);
+                        },
+                     }];
+
+ 
+                    return RouteTab;
+                }
+
+
+                return drillDownTabs;
+
+
             }
 
             function defineMenuActions() {

@@ -1,0 +1,13 @@
+﻿
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.route"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.RouteId">
+    <vr-datagridcolumn headertext="'Vendor ID'" field="'Entity.AccountId'"></vr-datagridcolumn>
+     <vr-datagridcolumn headertext="'Host'" field="'Entity.Host'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'State'" field="'Entity.State'"></vr-datagridcolumn> 
+    <vr-datagridcolumn headertext="'P-Score'" field="'Entity.PScore'"></vr-datagridcolumn>
+
+</vr-datagrid>

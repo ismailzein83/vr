@@ -33,6 +33,11 @@
             });
         }
          
+        function GetCodecProfilesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, "GetCodecProfilesInfo"), {
+                filter: filter
+            });
+        }
 
         function HasAddCodecProfilePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['AddCodecProfile']));
@@ -49,6 +54,7 @@
             GetCodecProfileEditorRuntime: GetCodecProfileEditorRuntime,
             AddCodecProfile: AddCodecProfile,
             UpdateCodecProfile: UpdateCodecProfile,
+            GetCodecProfilesInfo: GetCodecProfilesInfo,
             HasAddCodecProfilePermission: HasAddCodecProfilePermission,
             HasEditCodecProfilePermission: HasEditCodecProfilePermission,
         });

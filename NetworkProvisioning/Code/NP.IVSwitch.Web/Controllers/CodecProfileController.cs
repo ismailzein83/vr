@@ -16,6 +16,14 @@ namespace NP.IVSwitch.Web.Controllers
     {
         CodecProfileManager _manager = new CodecProfileManager();
 
+        [HttpGet]
+        [Route("GetCodecProfilesInfo")]
+        public IEnumerable<CodecProfileInfo> GetCodecProfilesInfo(string filter = null)
+        {
+            CodecProfileFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<CodecProfileFilter>(filter) : null;
+            return _manager.GetCodecProfilesInfo(deserializedFilter);
+        } 
+
         [HttpPost]
         [Route("GetFilteredCodecProfiles")]
         public object GetFilteredCodecProfiles(Vanrise.Entities.DataRetrievalInput<CodecProfileQuery> input)

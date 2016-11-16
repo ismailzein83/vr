@@ -13,6 +13,12 @@ namespace NP.IVSwitch.Business
     {
         #region Public Methods
 
+        public IEnumerable<TranslationRuleInfo> GetTranslationRulesInfo(TranslationRuleFilter filter)
+        {
+            Func<TranslationRule, bool> filterExpression = null;
+
+            return this.GetCachedTranslationRule().MapRecords(TranslationRuleInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
         public TranslationRule GetTranslationRule(int translationRuleId)
         {
             Dictionary<int, TranslationRule> cachedTranslationRule = this.GetCachedTranslationRule();
@@ -116,7 +122,16 @@ namespace NP.IVSwitch.Business
             return TranslationRuleDetail;
         }
 
-         
+        public TranslationRuleInfo TranslationRuleInfoMapper(TranslationRule translationRule)
+        {
+            TranslationRuleInfo translationRuleInfo = new TranslationRuleInfo()
+            {
+                TranslationRuleId = translationRule.TranslationRuleId,
+                Name = translationRule.Name,
+
+            };
+            return translationRuleInfo;
+        } 
 
         #endregion
 

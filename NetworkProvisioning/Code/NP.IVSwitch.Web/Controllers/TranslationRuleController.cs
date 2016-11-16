@@ -16,6 +16,14 @@ namespace NP.IVSwitch.Web.Controllers
     {
         TranslationRuleManager _manager = new TranslationRuleManager();
 
+        [HttpGet]
+        [Route("GetTranslationRulesInfo")]
+        public IEnumerable<TranslationRuleInfo> GetTranslationRulesInfo(string filter = null)
+        {
+            TranslationRuleFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<TranslationRuleFilter>(filter) : null;
+            return _manager.GetTranslationRulesInfo(deserializedFilter);
+        }  
+
         [HttpPost]
         [Route("GetFilteredTranslationRules")]
         public object GetFilteredTranslationRules(Vanrise.Entities.DataRetrievalInput<TranslationRuleQuery> input)

@@ -52,8 +52,15 @@
     <Compile Include="CodecProfile\CodecProfile.cs" />
     <Compile Include="CodecProfile\CodecProfileDetail.cs" />
     <Compile Include="CodecProfile\CodecProfileEditorRuntime.cs" />
+    <Compile Include="CodecProfile\CodecProfileFilter.cs" />
+    <Compile Include="CodecProfile\CodecProfileInfo.cs" />
     <Compile Include="CodecProfile\CodecProfileQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Route\Route.cs" />
+    <Compile Include="Route\RouteDetail.cs" />
+    <Compile Include="Route\RouteQuery.cs" />
+    <Compile Include="TranslationRule\TranslationRuleFilter.cs" />
+    <Compile Include="TranslationRule\TranslationRuleInfo.cs" />
     <Compile Include="TranslationRule\TranslationRule.cs" />
     <Compile Include="TranslationRule\TranslationRuleDetail.cs" />
     <Compile Include="TranslationRule\TranslationRuleQuery.cs" />

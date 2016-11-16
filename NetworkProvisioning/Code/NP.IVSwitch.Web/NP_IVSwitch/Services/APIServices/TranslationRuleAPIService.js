@@ -29,7 +29,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateTranslationRule'), TranslationRuleItem);
         }
           
-
+        function GetTranslationRulesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, "GetTranslationRulesInfo"), {
+                filter: filter
+            });
+        }
 
         function HasAddTranslationRulePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['AddTranslationRule']));
@@ -44,7 +48,8 @@
             GetFilteredTranslationRules: GetFilteredTranslationRules,
             GetTranslationRule: GetTranslationRule,
             AddTranslationRule: AddTranslationRule,
-            UpdateTranslationRule: UpdateTranslationRule, 
+            UpdateTranslationRule: UpdateTranslationRule,
+            GetTranslationRulesInfo: GetTranslationRulesInfo,
             HasAddTranslationRulePermission: HasAddTranslationRulePermission,
             HasEditTranslationRulePermission: HasEditTranslationRulePermission,
         });

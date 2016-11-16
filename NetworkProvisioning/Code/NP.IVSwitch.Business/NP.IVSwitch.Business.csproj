@@ -58,6 +58,7 @@
     <Compile Include="CodecDefManager.cs" />
     <Compile Include="CodecProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteManager.cs" />
     <Compile Include="TranslationRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>

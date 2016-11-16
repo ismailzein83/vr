@@ -13,6 +13,13 @@ namespace NP.IVSwitch.Business
     public class CodecProfileManager
     {
         #region Public Methods
+
+        public IEnumerable<CodecProfileInfo> GetCodecProfilesInfo(CodecProfileFilter filter)
+        {
+            Func<CodecProfile, bool> filterExpression = null;
+
+            return this.GetCachedCodecProfile().MapRecords(CodecProfileInfoMapper, filterExpression).OrderBy(x => x.ProfileName);
+        }
         public CodecProfile GetCodecProfile(int codecProfileId)
         {
             Dictionary<int, CodecProfile> cachedCodecProfile = this.GetCachedCodecProfile();
@@ -128,6 +135,17 @@ namespace NP.IVSwitch.Business
             };
 
             return codecProfileDetail;
+        }
+
+        public CodecProfileInfo CodecProfileInfoMapper(CodecProfile codecProfile)
+        {
+            CodecProfileInfo codecProfileInfo = new CodecProfileInfo()
+            {
+                CodecProfileId = codecProfile.CodecProfileId,
+                ProfileName = codecProfile.ProfileName,           
+
+            };
+            return codecProfileInfo;
         }
 
         #endregion
