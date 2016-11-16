@@ -454,6 +454,24 @@
     <Reference Include="Vanrise.Notification.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.NumberingPlan.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
