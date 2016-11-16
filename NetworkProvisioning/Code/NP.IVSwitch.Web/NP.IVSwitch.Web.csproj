@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CodecDefController.cs" />
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\TranslationRuleController.cs" />
@@ -145,7 +146,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="NP_IVSwitch\Constant\AccountTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
+    <Content Include="NP_IVSwitch\Constant\StateEnum.js" />
+    <Content Include="NP_IVSwitch\Directives\Account\np-ivswitch-account-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\Account\np-ivswitch-account-selector.js" />
+    <Content Include="NP_IVSwitch\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-selector.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\Templates\CodecDefGridTemplate.html" />
@@ -153,12 +159,18 @@
     <Content Include="NP_IVSwitch\Directives\CodecProfile\Templates\CodecProfileGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-grid.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Services\AccountService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\AccountAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CodecDefAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CodecProfileAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\TranslationRuleAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CodecDefService.js" />
     <Content Include="NP_IVSwitch\Services\CodecProfileService.js" />
     <Content Include="NP_IVSwitch\Services\TranslationRuleService.js" />
+    <Content Include="NP_IVSwitch\Views\Account\AccountEditor.html" />
+    <Content Include="NP_IVSwitch\Views\Account\AccountEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\Account\AccountManagement.html" />
+    <Content Include="NP_IVSwitch\Views\Account\AccountManagementController.js" />
     <Content Include="NP_IVSwitch\Views\CodecDef\CodecDefEditor.html" />
     <Content Include="NP_IVSwitch\Views\CodecDef\CodecDefEditorController.js" />
     <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileEditorController.js" />

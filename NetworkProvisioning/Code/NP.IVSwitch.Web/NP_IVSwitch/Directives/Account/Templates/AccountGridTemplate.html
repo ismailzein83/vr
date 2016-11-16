@@ -1,0 +1,15 @@
+﻿
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.account"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.AccountId">
+    <vr-datagridcolumn headertext="'Account ID'" field="'Entity.AccountId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type ID'" field="'TypeDescription'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'First Name'" field="'Entity.FirstName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Name'" field="'Entity.LastName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Balance'" field="'Entity.CurrentBalance'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current State'" field="'CurrentStateDescription'"></vr-datagridcolumn>
+
+</vr-datagrid>

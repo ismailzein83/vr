@@ -10,8 +10,6 @@ namespace NP.IVSwitch.Entities
     {
         public int CodecProfileId { get; set; }
 
-        public string CodecString {get;set;}
-
         public string ProfileName {get;set;}
 
         public string CreateDate { get; set; }

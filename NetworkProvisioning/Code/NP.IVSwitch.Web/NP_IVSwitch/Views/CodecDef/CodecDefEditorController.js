@@ -25,7 +25,7 @@
             };
 
             $scope.scopeModel.add = function () {
-                // add selected codec to grid in the codec profile editor
+
                 if ($scope.onCodecDefAdded != undefined) {
                      selectedCodecDefEntity = {
                         Description: codecDefEntity.Description,
@@ -33,7 +33,7 @@
                      }
                     $scope.onCodecDefAdded(selectedCodecDefEntity);
                 }
-                //   $scope.modalContext.closeModal();
+                    $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onSelectorDirectiveReady = function (api) {

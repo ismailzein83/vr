@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager.cs" />
     <Compile Include="CodecDefManager.cs" />
     <Compile Include="CodecProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

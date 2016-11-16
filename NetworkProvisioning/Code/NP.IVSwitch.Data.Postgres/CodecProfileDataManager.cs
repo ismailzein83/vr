@@ -21,14 +21,14 @@ namespace NP.IVSwitch.Data.Postgres
         private CodecProfile CodecProfileMapper(IDataReader reader)
         {
             String CodecDefId = reader["ui_codec_display"] as string;
-            CodecDefId = CodecDefId.Remove(CodecDefId.Length - 3);
+          //  CodecDefId = CodecDefId.Remove(CodecDefId.Length - 3);
 
-            String Temp1 = CodecDefId.Replace("|-1:", "@");
+            String Temp1 = CodecDefId.Replace("|-1", "");
 
-            if (Temp1.EndsWith("@"))
-                Temp1 = Temp1.Remove(Temp1.Length - 1);
+        //    if (Temp1.EndsWith("@"))
+          //      Temp1 = Temp1.Remove(Temp1.Length - 1);
 
-            String[] Temp2 = Temp1.Split('@');
+            String[] Temp2 = Temp1.Split(':');
             List<int> CodecDefIdList = Temp2.Select(Int32.Parse).ToList();
 
              
@@ -36,7 +36,6 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 CodecProfileId = (int)reader["codec_profile_id"],
                 ProfileName = reader["profile_name"] as string,
-                CodecString = reader["codec_string"] as string,
                 CreateDate = reader["create_date"].ToString(),
                 CodecDefId = CodecDefIdList
                
@@ -56,7 +55,10 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool Update(CodecProfile codecProfile, Dictionary<int, CodecDef> cachedCodecDef)
         {
-            List<String> codecDefParams = GetCodecDefParams(cachedCodecDef, codecProfile.CodecDefId);
+            String codecString;
+            String uiCodecDisplay;
+
+            GetCodecDefParams(cachedCodecDef, codecProfile.CodecDefId, out codecString, out uiCodecDisplay);   
 
             String cmdText = @"UPDATE codec_profiles
 	                             SET profile_name = @psgname, codec_string = @psgcodecstring, ui_codec_display = @psguicodecdisplay
@@ -66,8 +68,8 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@psgid", codecProfile.CodecProfileId);
                 cmd.Parameters.AddWithValue("@psgname", codecProfile.ProfileName);
-                cmd.Parameters.AddWithValue("@psgcodecstring", codecDefParams[0]);
-                cmd.Parameters.AddWithValue("@psguicodecdisplay", codecDefParams[1]); 
+                cmd.Parameters.AddWithValue("@psgcodecstring", codecString);
+                cmd.Parameters.AddWithValue("@psguicodecdisplay", uiCodecDisplay); 
 
  
             }
@@ -78,9 +80,10 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(CodecProfile codecProfile, Dictionary<int, CodecDef> cachedCodecDef, out int insertedId)
         {
             object codecProfileId;
+            String codecString;
+            String uiCodecDisplay;
 
-            List<String> codecDefParams = GetCodecDefParams(cachedCodecDef, codecProfile.CodecDefId);
-          
+            GetCodecDefParams(cachedCodecDef, codecProfile.CodecDefId, out codecString, out uiCodecDisplay);          
 
 
             String cmdText = @"INSERT INTO codec_profiles(profile_name,codec_string,ui_codec_display)
@@ -91,8 +94,8 @@ namespace NP.IVSwitch.Data.Postgres
             codecProfileId = ExecuteScalarText(cmdText, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@psgname", codecProfile.ProfileName);
-                cmd.Parameters.AddWithValue("@psgcodecstring", codecDefParams[0]);
-                cmd.Parameters.AddWithValue("@psguicodecdisplay", codecDefParams[1]); 
+                cmd.Parameters.AddWithValue("@psgcodecstring", codecString);
+                cmd.Parameters.AddWithValue("@psguicodecdisplay", uiCodecDisplay); 
 
               }
             );
@@ -108,10 +111,10 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        private List<String> GetCodecDefParams(Dictionary<int, CodecDef> cachedCodecDef, List<int> CodecDefId)
+        private void GetCodecDefParams(Dictionary<int, CodecDef> cachedCodecDef, List<int> CodecDefId, out String codecString, out String uiCodecDisplay)
         {
-            StringBuilder codecString = new StringBuilder("^^");
-            StringBuilder uiCodecDisplay = new StringBuilder();
+             StringBuilder codecStringBuilder = new StringBuilder("^^");
+             StringBuilder idStringBuilder = new StringBuilder();
  
             Func<CodecDef, bool> filterExpression = (x) => (CodecDefId== null || CodecDefId.Contains(x.CodecId)); ;
 
@@ -119,21 +122,21 @@ namespace NP.IVSwitch.Data.Postgres
 
             for (int i = 0; i < CodecDefList.Count(); i++)
             {
-                codecString.Append( ":" + CodecDefList[i].FsName);
+                codecStringBuilder.Append(":" + CodecDefList[i].FsName);
 
-                if (uiCodecDisplay.Length != 0)
-                    uiCodecDisplay.Append("|-1:" + CodecDefList[i].CodecId.ToString());
+                if (idStringBuilder.Length != 0)
+                    idStringBuilder.Append("|-1:" + CodecDefList[i].CodecId.ToString());
                 else
-                    uiCodecDisplay.Append(CodecDefList[i].CodecId.ToString());
+                    idStringBuilder.Append(CodecDefList[i].CodecId.ToString());
 
             }
 
-            if (uiCodecDisplay != null)
-                uiCodecDisplay.Append( "|-1");
+            if (idStringBuilder != null)
+                idStringBuilder.Append( "|-1");
 
-            List<String> CodecDefParams = new List<String>{codecString.ToString(), uiCodecDisplay.ToString()};
-
-            return CodecDefParams;
+            codecString = codecStringBuilder.ToString();
+            uiCodecDisplay = idStringBuilder.ToString();
+             
              
         }
 

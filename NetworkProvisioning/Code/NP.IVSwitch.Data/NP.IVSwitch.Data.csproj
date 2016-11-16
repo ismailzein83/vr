@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAccountDataManager.cs" />
     <Compile Include="ICodecDefDataManager.cs" />
     <Compile Include="ICodecProfileDataManager.cs" />
     <Compile Include="IDataManager.cs" />
