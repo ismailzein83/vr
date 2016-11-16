@@ -30,15 +30,15 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
         $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
             viewPermissionAPI = api;
             viewPermissionReadyDeferred.resolve();
-        }
+        };
         $scope.scopeModel.onStartNewInstanceRequiredPermissionReady = function (api) {
             startNewInstancePermissionAPI = api;
             startNewInstancePermissionReadyDeferred.resolve();
-        }
+        };
         $scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
             scheduleTaskPermissionAPI = api;
             scheduleTaskPermissionReadyDeferred.resolve();
-        }
+        };
         $scope.saveBPDefinition = function () {
             return update();
         };
@@ -152,7 +152,7 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
             View: viewPermissionAPI.getData(),
             StartNewInstance: startNewInstancePermissionAPI.getData(),
             ScheduleTask: scheduleTaskPermissionAPI.getData()
-        }
+        };
         
         return obj;
     }

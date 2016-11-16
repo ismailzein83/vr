@@ -35,7 +35,7 @@ function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getBPInstanceStatusTemplate(attrs);
@@ -59,7 +59,7 @@ function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService
         return '<div>'
             + '<vr-select ' + multipleselection + '  datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired"'
             + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Status" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-            + '</div>'
+            + '</div>';
     }
 
     function bpInstanceStatusCtor(ctrl, $scope, attrs) {
@@ -82,11 +82,11 @@ function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService
                     }
                 }
                 return getBPInstanceStatusInfo(attrs, ctrl, selectedIds, serializedFilter);
-            }
+            };
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

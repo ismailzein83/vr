@@ -42,7 +42,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                 if ($scope.bpBusinessRules.length > 0)
                     return null;
                 return "You Should Select at least one business rule";
-            }
+            };
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
 
@@ -55,7 +55,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                     if (payload.existingBusinessRules != undefined)
                         existingBusinessRules = payload.existingBusinessRules;
                     return UtilsService.waitMultipleAsyncOperations([loadBusinessRuleDefintions]);
-                }
+                };
 
                 directiveAPI.getData = function () {
                     var obj = [];
@@ -64,7 +64,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                         obj.push($scope.bpBusinessRules[x]);
                     }
                     return obj;
-                }
+                };
 
                 function loadBusinessRuleDefintions() {
                     $scope.businessRuleDefintions.length = 0;
@@ -143,7 +143,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                 });
                 $scope.scopeModel.selectedbusinessRuleDefintion = undefined;
             }
-        }
+        };
 
         $scope.removeBusinessRule = function (dataItem) {
             var index = UtilsService.getItemIndexByVal($scope.bpBusinessRules, dataItem.Entity.BPBusinessRuleDefinitionId, 'Entity.BPBusinessRuleDefinitionId');

@@ -26,7 +26,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
         $scope.onBPDefinitionDirectiveReady = function (api) {
             bpDefinitionDirectiveApi = api;
             bpDefinitionReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onBPBusinessRuleSetDirectiveReady = function (api) {
             bpBusinessRuleSetDirectiveApi = api;
@@ -36,10 +36,10 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                 var businessRuleSetPayload = {
                     filter: { BPDefinitionId: $scope.bpDefition.BPDefinitionID, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
                     selectedIds: bpBusinessRuleSetParentId
-                }
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpBusinessRuleSetDirectiveApi, businessRuleSetPayload, setLoader, bpBusinessRuleSetReadyPromiseDeferred);
             }
-        }
+        };
 
 
         $scope.onBusinessRuleSetDetailReady = function (api) {
@@ -50,10 +50,10 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                 var businessRuleSetDetailPayload = {
                     BPDefinitionId: $scope.bpDefition.BPDefinitionID,
                     existingBusinessRules: existingBusinessRules
-                }
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpBusinessRuleSetDetailDirectiveApi, businessRuleSetDetailPayload, setLoader, bpBusinessRuleSetDetailReadyPromiseDeferred);
             }
-        }
+        };
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
@@ -106,19 +106,19 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                 var businessRuleSetPayload = {
                     filter: { BPDefinitionId: bpDefinitionId, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
                     selectedIds: bpBusinessRuleSetParentId
-                }
+                };
 
                 var businessRuleSetDetailPayload = {
                     BPDefinitionId: bpDefinitionId,
                     existingBusinessRules: existingBusinessRules
-                }
+                };
 
                 if (bpDefinitionId != undefined) {
                     bpBusinessRuleSetDirectiveApi.load(businessRuleSetPayload);
                     bpBusinessRuleSetDetailDirectiveApi.load(businessRuleSetDetailPayload);
                 }
             }
-        }
+        };
     }
 
     function getData() {
@@ -185,7 +185,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
             bpBusinessRuleSetId = parameters.bpBusinessRuleSetId;
         }
         if (bpBusinessRuleSetId != undefined) {
-            isEditMode = true
+            isEditMode = true;
             $scope.scopeModel.isReadOnly = true;
         }
     }

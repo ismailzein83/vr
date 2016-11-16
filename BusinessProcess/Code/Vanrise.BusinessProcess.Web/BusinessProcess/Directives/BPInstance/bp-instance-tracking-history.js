@@ -50,7 +50,7 @@ function (BusinessProcess_BPInstanceTrackingAPIService, BusinessProcess_BPInstan
                         bpInstanceId = query.BPInstanceID;
                         getFilterObject();
                         return gridAPI.retrieveData(filter);
-                    }
+                    };
 
                     return directiveAPI;
                 }

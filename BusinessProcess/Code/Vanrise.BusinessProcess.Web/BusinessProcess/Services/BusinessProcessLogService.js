@@ -12,13 +12,13 @@ app.service('BusinessProcess_BusinessProcessLogService', ['VRCommon_MasterLogSer
                 rank: 4,
                 directive: "bp-instance-log-search",
                 hasPermission: function () {
-                   return BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission()
+                    return BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission()
 
                 },
                 loadDirective: function (directiveAPI) {
                     return directiveAPI.load();
                 }
-            }
+            };
             VRCommon_MasterLogService.addTabDefinition(tabDefinition);
         }
 

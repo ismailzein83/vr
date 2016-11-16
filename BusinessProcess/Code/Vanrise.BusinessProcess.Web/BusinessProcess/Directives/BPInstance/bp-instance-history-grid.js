@@ -44,7 +44,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

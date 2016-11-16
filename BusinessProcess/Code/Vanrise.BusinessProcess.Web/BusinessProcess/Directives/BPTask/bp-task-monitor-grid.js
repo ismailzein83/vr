@@ -41,7 +41,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
 
         $scope.loadMoreData = function () {
             return getData();
-        }
+        };
 
         var minId = undefined;
 
@@ -68,13 +68,13 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                         isGettingDataFirstTime = true;
                         minId = undefined;
                         createTimer();
-                    }
+                    };
 
                     directiveAPI.clearTimer = function () {
                         if ($scope.job) {
                             VRTimerService.unregisterJob($scope.job);
                         }
-                    }
+                    };
                     return directiveAPI;
                 }
 
@@ -177,7 +177,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
             if (dataItem.Entity.Status == 0) {
                 return BusinessProcess_BPTaskService.openTask(dataItem.Entity.BPTaskId);
             }
-        }
+        };
 
 
         function manipulateDataBefore(response) {

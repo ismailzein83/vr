@@ -40,7 +40,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
 
         $scope.loadMoreData = function () {
             return getData();
-        }
+        };
 
         var minId = undefined;
 
@@ -68,13 +68,13 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         isGettingDataFirstTime = true;
                         minId = undefined;
                         createTimer();
-                    }
+                    };
 
                     directiveAPI.clearTimer = function () {
                         if ($scope.job) {
                             VRTimerService.unregisterJob($scope.job);
                         }
-                    }
+                    };
                     return directiveAPI;
                 }
 
@@ -150,7 +150,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
 
         $scope.processInstanceClicked = function (dataItem) {
             BusinessProcess_BPInstanceService.openProcessTracking(dataItem.Entity.ProcessInstanceID);
-        }
+        };
 
         function getData() {
 

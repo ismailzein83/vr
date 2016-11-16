@@ -21,7 +21,7 @@
         }
 
         function getFilterObject() {
-            var filter = {}
+            var filter = {};
             filter.Title = $scope.title;
             return filter;
         }

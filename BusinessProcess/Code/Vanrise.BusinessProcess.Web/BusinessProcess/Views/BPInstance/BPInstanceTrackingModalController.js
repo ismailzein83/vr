@@ -50,25 +50,25 @@
                 instanceTrackingMonitorGridAPI = api;
                 getInstanceTrackingFilter();
                 instanceTrackingMonitorGridAPI.loadGrid(instanceTrackingFilter);
-            }
+            };
 
             $scope.onTaskMonitorGridReady = function (api) {
                 taskTrackingMonitorGridAPI = api;
                 getFilterObject();
                 taskTrackingMonitorGridAPI.loadGrid(filter);
-            }
+            };
 
             $scope.onValidationMessageMonitorGridReady = function (api) {
                 validationMessageMonitorGridAPI = api;
                 getFilterObject();
                 validationMessageMonitorGridAPI.loadGrid(filter);
-            }
+            };
 
             $scope.onValidationMessageHistoryGridReady = function (api) {
                 validationMessageHistoryGridAPI = api;
                 getFilterObject();
                 validationMessageHistoryGridAPI.load(filter);
-            }
+            };
 
             $scope.modalContext.onModalHide = function () {
                 instanceTrackingMonitorGridAPI.clearTimer();

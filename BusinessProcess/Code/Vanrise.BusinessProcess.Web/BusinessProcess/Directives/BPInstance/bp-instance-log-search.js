@@ -51,7 +51,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
                 var directiveAPI = {};
                 directiveAPI.load = function () {
                     return load();
-                }
+                };
                 return directiveAPI;
             }
 
@@ -62,12 +62,12 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefinitionDirectiveApi = api;
                 bpDefinitionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onBPInstanceStatusDirectiveReady = function (api) {
                 bpInstanceStatusDirectiveApi = api;
                 bpInstanceStatusReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -83,7 +83,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
 
         }
 

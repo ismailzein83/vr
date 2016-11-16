@@ -50,7 +50,7 @@ function (BusinessProcess_BPValidationMessageAPIService, VRNotificationService, 
                         bpInstanceId = query.BPInstanceID;
                         getFilterObject();
                         return gridAPI.retrieveData(filter);
-                    }
+                    };
 
                     return directiveAPI;
                 }

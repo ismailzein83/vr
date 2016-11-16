@@ -18,7 +18,7 @@
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefinitionDirectiveApi = api;
                 bpDefinitionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -36,11 +36,11 @@
                 };
 
                 BusinessProcess_BPBusinessRuleSetService.addBusinessRuleSet(onBusinessRuleSetAdded);
-            }
+            };
 
             $scope.hasAddBusinessRuleSet = function () {
                 return BusinessProcess_BPBusinessRuleSetAPIService.HasAddBusinessRuleSet();
-            }
+            };
         }
 
         function getFilterObject() {

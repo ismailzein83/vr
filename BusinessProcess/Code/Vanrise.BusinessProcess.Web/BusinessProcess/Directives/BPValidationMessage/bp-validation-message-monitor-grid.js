@@ -40,7 +40,7 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
 
         $scope.loadMoreData = function () {
             return getData();
-        }
+        };
 
         function initializeController() {
             $scope.bpValidationMessages = [];
@@ -55,13 +55,13 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                     directiveAPI.loadGrid = function (query) {
                         input.BPInstanceID = query.BPInstanceID;
                         onInit();
-                    }
+                    };
 
                     directiveAPI.clearTimer = function () {
                         if ($scope.job) {
                             VRTimerService.unregisterJob($scope.job);
                         }
-                    }
+                    };
                     return directiveAPI;
                 }
 

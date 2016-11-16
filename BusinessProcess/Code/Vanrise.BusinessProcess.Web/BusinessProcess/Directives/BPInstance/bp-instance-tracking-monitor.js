@@ -40,7 +40,7 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
 
         $scope.loadMoreData = function () {
             return getData();
-        }
+        };
 
         function loadFilters() {
             $scope.trackingSeverity = UtilsService.getLogEntryType();
@@ -62,13 +62,13 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                         input.BPInstanceID = query.BPInstanceID;
                         $scope.selectedTrackingSeverity = query.Severities;
                         onInit();
-                    }
+                    };
 
                     directiveAPI.clearTimer = function () {
                         if ($scope.job) {
                             VRTimerService.unregisterJob($scope.job);
                         }
-                    }
+                    };
                     return directiveAPI;
                 }
 

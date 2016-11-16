@@ -46,11 +46,11 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onBusinessRuleSetAdded = function (businessRuleSetObj) {
                         gridAPI.itemAdded(businessRuleSetObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

@@ -20,7 +20,7 @@ function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIServic
             bpDefinitionDirectiveApi = api;
             bpDefinitionDirectiveReadyPromiseDeferred.resolve();
 
-        }
+        };
         $scope.createNewProcess = function () {
 
             $scope.issaving = true;

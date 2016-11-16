@@ -22,12 +22,12 @@
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefinitionDirectiveApi = api;
                 bpDefinitionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onBPInstanceStatusDirectiveReady = function (api) {
                 bpInstanceStatusDirectiveApi = api;
                 bpInstanceStatusReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -43,7 +43,7 @@
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
         }
 
         function getFilterObject() {

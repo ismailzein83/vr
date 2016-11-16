@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

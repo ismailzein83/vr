@@ -35,7 +35,7 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -60,7 +60,7 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPBusinessRuleSetId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Business Rule Set" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function businessRuleSetCtor(ctrl, $scope, attrs) {
@@ -78,17 +78,17 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
                     var serializedFilter;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        
+
                         if (payload.filter != undefined) {
                             serializedFilter = UtilsService.serializetoJson(payload.filter);
                         }
                     }
                     return getBPBusinessRuleSetsInfo(attrs, ctrl, selectedIds, serializedFilter);
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('BPBusinessRuleSetId', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

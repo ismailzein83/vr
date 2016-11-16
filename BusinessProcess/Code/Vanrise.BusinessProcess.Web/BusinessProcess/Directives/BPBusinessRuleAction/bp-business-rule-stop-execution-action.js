@@ -20,7 +20,7 @@ app.directive("businessprocessBpBusinessRuleStopExecutionAction", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/BusinessProcess/Directives/BPBusinessRuleAction/Templates/EmptyTemplate.html"
     };
@@ -45,8 +45,8 @@ app.directive("businessprocessBpBusinessRuleStopExecutionAction", [function () {
             };
 
             api.load = function (payload) {
-                    
-            }
+
+            };
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                 ctrl.onReady(api);

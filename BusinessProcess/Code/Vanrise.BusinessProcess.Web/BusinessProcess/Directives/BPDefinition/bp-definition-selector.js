@@ -35,7 +35,7 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getBPDefinitionTemplate(attrs);
@@ -60,7 +60,7 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
             return '<div vr-disabled="ctrl.isdisabled">'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPDefinitionID" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="BPDefinition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function bpDefinitionCtor(ctrl, $scope, attrs) {
@@ -83,15 +83,15 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
                         }
                     }
                     return getBPDefinitionsInfo(attrs, ctrl, selectedIds, serializedFilter);
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('BPDefinitionID', attrs, ctrl);
-                }
+                };
 
                 api.setSelectedValues = function (selectedIds) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'BPDefinitionID', attrs, ctrl);
-                }
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

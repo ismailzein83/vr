@@ -20,7 +20,7 @@
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefinitionDirectiveApi = api;
                 bpDefinitionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
