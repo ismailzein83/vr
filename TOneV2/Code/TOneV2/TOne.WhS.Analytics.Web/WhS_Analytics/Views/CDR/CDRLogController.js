@@ -122,7 +122,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
         $scope.nRecords = '100';
 
         var date = new Date();
-        $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 00, 00, 00, 00);
+        $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
 
         $scope.CDROption = [];
         $scope.selectedCDROption = BillingCDROptionMeasureEnum.All.value;
