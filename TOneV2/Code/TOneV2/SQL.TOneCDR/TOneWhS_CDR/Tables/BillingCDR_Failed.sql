@@ -1,5 +1,4 @@
 ﻿CREATE TABLE [TOneWhS_CDR].[BillingCDR_Failed] (
-    [ID]                          BIGINT          IDENTITY (1, 1) NOT NULL,
     [CDRId]                       BIGINT          NOT NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
@@ -32,6 +31,8 @@
     [SwitchId]                    INT             NULL,
     [CountryId]                   INT             NULL
 );
+
+
 
 
 

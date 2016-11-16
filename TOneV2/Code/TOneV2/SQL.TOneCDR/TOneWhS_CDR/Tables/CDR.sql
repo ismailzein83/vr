@@ -1,5 +1,5 @@
-﻿CREATE TABLE [TOneWhS_CDR].[CDR] (
-    [CDRId]                   BIGINT          NOT NULL,
+CREATE TABLE [TOneWhS_CDR].[CDR] (
+    [Id]                      BIGINT          NOT NULL,
     [IDonSwitch]              BIGINT          NULL,
     [Tag]                     VARCHAR (100)   NULL,
     [AttemptDateTime]         DATETIME        NULL,
@@ -35,12 +35,14 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_CDR_AttemptDateTime]
     ON [TOneWhS_CDR].[CDR]([AttemptDateTime] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_CDR_CDRId]
-    ON [TOneWhS_CDR].[CDR]([CDRId] ASC);
+CREATE NONCLUSTERED INDEX [IX_CDR_Id]
+    ON [TOneWhS_CDR].[CDR]([Id] ASC);
 
