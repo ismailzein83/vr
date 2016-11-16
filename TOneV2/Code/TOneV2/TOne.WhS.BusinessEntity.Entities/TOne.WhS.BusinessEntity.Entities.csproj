@@ -115,17 +115,6 @@
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="CodePrefixInfo.cs" />
-    <Compile Include="Deals\DealProgress.cs" />
-    <Compile Include="Deals\Deal.cs" />
-    <Compile Include="Deals\DealAnalysis.cs" />
-    <Compile Include="Deals\DealBuyingPart.cs" />
-    <Compile Include="Deals\DealDetail.cs" />
-    <Compile Include="Deals\DealQuery.cs" />
-    <Compile Include="Deals\DealSellingPart.cs" />
-    <Compile Include="Deals\VolumeCommitment.cs" />
-    <Compile Include="Deals\VolumeCommitmentDetail.cs" />
-    <Compile Include="Deals\VolumeCommitmentInfo.cs" />
-    <Compile Include="Deals\VolumeCommitmentQuery.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />
     <Compile Include="ICode.cs" />

@@ -61,8 +61,6 @@
     <Compile Include="ICustomerSellingProductDataManager.cs" />
     <Compile Include="ICustomerZoneDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IDealProgressDataManager.cs" />
-    <Compile Include="IDealDataManager.cs" />
     <Compile Include="ISaleEntityRoutingProductDataManager.cs" />
     <Compile Include="ISaleEntityServiceDataManager.cs" />
     <Compile Include="ISalePriceListDataManager.cs" />
@@ -82,7 +80,6 @@
     <Compile Include="ISupplierZoneDataManager.cs" />
     <Compile Include="ISwitchConnectivityDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
-    <Compile Include="IVolumeCommitmentDataManager.cs" />
     <Compile Include="IZoneServiceConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

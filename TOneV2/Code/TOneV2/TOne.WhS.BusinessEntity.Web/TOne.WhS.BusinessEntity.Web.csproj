@@ -145,8 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\DealProgressController.cs" />
-    <Compile Include="Controllers\DealController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
@@ -171,7 +169,6 @@
     <Compile Include="Controllers\SupplierZoneController.cs" />
     <Compile Include="Controllers\SwitchConnectivityController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
-    <Compile Include="Controllers\VolumeCommitmentController.cs" />
     <Compile Include="Controllers\ZoneServiceConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -210,9 +207,6 @@
     <Content Include="WhS_BusinessEntity\Constant\CustomerPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PrimarySaleEntityEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingStatusEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\DealAnalysisTypeEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\DealAgreementTypeEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\DealContractTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="WhS_BusinessEntity\Constant\DBTableNameEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RateChangeTypeEnum.js" />
@@ -242,18 +236,6 @@
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\DealBuyingGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\DealGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\DealSellingGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\VolumeCommitmentItemsManagement.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\Templates\VolumeCommitmentTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-deal-selector.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-dealbuying-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-dealselling-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-deal-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-volumecommitment-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Deal\vr-whs-be-volumecommitment-items.js" />
-    <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\Templates\GetCDPNsForIdentificationStepPreviewTemplate.html" />
@@ -397,15 +379,11 @@
     <Content Include="WhS_BusinessEntity\Images\ReOpen.png" />
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\DealProgressAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\DealAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\StateBackupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierOtherRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneServiceAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\VolumeCommitmentAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\DealAnalysisService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierPriceListAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePricelistAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
@@ -414,9 +392,6 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
-    <Content Include="WhS_BusinessEntity\Services\DealBuyingService.js" />
-    <Content Include="WhS_BusinessEntity\Services\DealSellingService.js" />
-    <Content Include="WhS_BusinessEntity\Services\DealService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
@@ -446,9 +421,8 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CodeGroupService.js" />
     <Content Include="WhS_BusinessEntity\Services\AccountManagerService.js" />
-    <Content Include="WhS_BusinessEntity\Services\VolumeCommitmentService.js" />
-    <Content Include="WhS_BusinessEntity\Services\ZoneServiceConfigService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingNumberPlanService.js" />
+    <Content Include="WhS_BusinessEntity\Services\ZoneServiceConfigService.js" />
     <Content Include="WhS_BusinessEntity\Style\WhsBusinessEntity.css" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
@@ -470,33 +444,6 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealProgressManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealProgressManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\InboundTrafficEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\InboundTrafficEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\OutboundTrafficEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealBuyingEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\OutboundTrafficEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealBuyingEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealAnalysisEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealAnalysisEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealAnalysisManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealAnalysisManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealSellingEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealSellingEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\DealSellingGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentItemEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentItemEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\Deal\VolumeCommitmentManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditor.html" />
@@ -536,10 +483,6 @@
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\SellingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\SellingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingProduct\SellingProductManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagement.html" />

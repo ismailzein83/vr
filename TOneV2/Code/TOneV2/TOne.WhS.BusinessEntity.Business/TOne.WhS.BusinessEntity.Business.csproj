@@ -105,8 +105,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerSellingProductManager.cs" />
     <Compile Include="CustomerZoneManager.cs" />
-    <Compile Include="DealProgressManager.cs" />
-    <Compile Include="DealManager.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
@@ -193,7 +191,6 @@
     <Compile Include="SwitchConnectivityManager.cs" />
     <Compile Include="Switch\RouteSyncSwitchGetter.cs" />
     <Compile Include="Switch\SwitchManager.cs" />
-    <Compile Include="VolumeCommitmentManager.cs" />
     <Compile Include="ZoneServiceConfigManager.cs" />
   </ItemGroup>
   <ItemGroup>

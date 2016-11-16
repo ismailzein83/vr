@@ -67,8 +67,6 @@
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="CustomerSellingProductDataManager.cs" />
     <Compile Include="CustomerZoneDataManager.cs" />
-    <Compile Include="DealProgressDataManager.cs" />
-    <Compile Include="DealDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleEntityServiceDataManager.cs" />
     <Compile Include="SalePriceListDataManager.cs" />
@@ -93,7 +91,6 @@
     <Compile Include="SupplierZoneDataManager.cs" />
     <Compile Include="SwitchConnectivityDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
-    <Compile Include="VolumeCommitmentDataManager.cs" />
     <Compile Include="ZoneServiceConfigDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

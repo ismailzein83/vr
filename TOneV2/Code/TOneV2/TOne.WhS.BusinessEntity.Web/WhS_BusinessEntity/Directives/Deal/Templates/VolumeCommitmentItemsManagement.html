@@ -1,8 +1,0 @@
-﻿<vr-button type="Add" data-onclick="ctrl.addItem" standalone></vr-button>
-
-<vr-validator validate="ctrl.isValid()">
-    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeItem" hidegridmenu>
-        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
-    </vr-datagrid>
-</vr-validator>
