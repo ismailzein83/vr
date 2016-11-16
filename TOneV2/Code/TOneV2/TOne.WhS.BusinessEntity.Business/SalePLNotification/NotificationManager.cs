@@ -61,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
             }
 
-            SaleRateReadAllNoCache saleRateReadWithNoCache = new SaleRateReadAllNoCache(routingCustomersInfoDetails, context.EffectiveDate, false);
+            SaleRateReadAllNoCache saleRateReadWithNoCache = new SaleRateReadAllNoCache(routingCustomersInfoDetails, context.EffectiveDate, true);
             SaleEntityZoneRateLocator rateLocator = new SaleEntityZoneRateLocator(saleRateReadWithNoCache);
 
             CustomerZoneManager customerZoneManager = new CustomerZoneManager();
