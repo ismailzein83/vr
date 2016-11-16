@@ -23,10 +23,9 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
             };
         };
 
-        $scope.schedulerTaskAction.processInputArguments.loadTemplateData = function()
-        {
+        $scope.schedulerTaskAction.processInputArguments.loadTemplateData = function () {
             loadForm();
-        }
+        };
 
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
             if ($scope.selectedDateOption.Value == 0)
@@ -38,19 +37,16 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
                 return undefined;
         };
 
-        $scope.dateOptionSelected = function ()
-        {
-            if($scope.selectedDateOption.Value == 0)
-            {
+        $scope.dateOptionSelected = function () {
+            if ($scope.selectedDateOption.Value == 0) {
                 $scope.specificDateOptionSelected = false;
                 $scope.repricingDay = '';
             }
-            else
-            {
+            else {
                 $scope.specificDateOptionSelected = true;
             }
-            
-        }
+
+        };
     }
 
     var isFormLoaded;

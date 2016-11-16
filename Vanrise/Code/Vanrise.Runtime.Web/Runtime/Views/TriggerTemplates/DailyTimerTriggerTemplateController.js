@@ -27,11 +27,11 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
 
             if (timeIsValid)
                 $scope.selectedTimes.push($scope.selectedTime);
-        }
+        };
 
         $scope.removeTime = function (timeToRemove) {
             $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
-        }
+        };
 
         $scope.schedulerTypeTaskTrigger.getData = function () {
             return {
@@ -43,7 +43,7 @@ function DailyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Utils
 
         $scope.schedulerTypeTaskTrigger.loadTemplateData = function () {
             loadForm();
-        }
+        };
     }
 
     var isFormLoaded;

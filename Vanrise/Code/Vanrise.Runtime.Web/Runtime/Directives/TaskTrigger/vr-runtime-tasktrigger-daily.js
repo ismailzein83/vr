@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerDaily.html"
     };
@@ -48,11 +48,11 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
 
                 if (timeIsValid)
                     $scope.selectedTimes.push($scope.selectedTime);
-            }
+            };
 
             $scope.removeTime = function (timeToRemove) {
                 $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
-            }
+            };
 
             defineAPI();
         }
@@ -75,8 +75,8 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
                         $scope.selectedTimes.push(item);
                     });
                 }
-                   
-            }
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

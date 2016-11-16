@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerInterval.html"
     };
@@ -56,7 +56,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, IntervalTimeTyp
                 else {
                     setToDefaultValues();
                 }
-            }
+            };
 
             function setToDefaultValues() {
                 $scope.interval = "30";

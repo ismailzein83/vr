@@ -18,7 +18,7 @@ function TimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, UtilsServi
 
         $scope.schedulerTaskTrigger.loadTemplateData = function () {
             loadForm();
-        }
+        };
     }
 
     var isFormLoaded;

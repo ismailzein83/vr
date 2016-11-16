@@ -55,11 +55,11 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
                     };
                     directiveAPI.onTaskAdded = function (taskObject) {
                         gridAPI.itemAdded(taskObject);
-                    }
+                    };
 
                     directiveAPI.isMyTasksSelected = function (isMyTask) {
                         isMyTaskSelected = isMyTask;
-                    }
+                    };
                     return directiveAPI;
                 }
                 createTimer();

@@ -69,7 +69,7 @@
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taskTriggerDirectiveAPI, undefined, setLoader, taskTriggerDirectiveReadyPromiseDeferred);
 
-            }
+            };
             $scope.onTaskActionDirectiveReady = function (api) {
                 taskActionDirectiveAPI = api;
                 var setLoader = function (value) {
@@ -79,7 +79,7 @@
                 if (api.setAdditionalParamter != undefined && typeof (api.setAdditionalParamter) == "function") {
                     api.setAdditionalParamter(additionalParameter);
                 }
-            }
+            };
             $scope.scopeModel.validateDates = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.startEffDate, $scope.scopeModel.endEffDate);
             };
@@ -93,7 +93,7 @@
                     taskActionDirectiveAPI.load(payload);
                 }
 
-            }
+            };
 
             $scope.hasSavePermission = function () {
                 if (editMode)

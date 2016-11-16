@@ -32,7 +32,7 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -78,7 +78,7 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('TaskId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -101,7 +101,7 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
                         fillDataSource(response, selectedIds);
                     });
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

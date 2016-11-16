@@ -27,7 +27,7 @@ function WFActionTemplateController($scope, BusinessProcess_BPDefinitionAPIServi
 
         $scope.schedulerTaskAction.loadTemplateData = function () {
             loadForm();
-        }
+        };
     }
 
     var isFormLoaded;

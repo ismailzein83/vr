@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -64,20 +64,20 @@ function (UtilsService, VRUIUtilsService) {
 
             api.load = function (payload) {
                 var data;
-                if (payload!=undefined && payload.data != undefined )
+                if (payload != undefined && payload.data != undefined)
                     data = payload.data;
-               
+
                 if (data != undefined) {
                     $scope.repricingDay = data.RepricingDay;
                     $scope.divideProcessIntoSubProcesses = data.DivideProcessIntoSubProcesses;
                 }
-                
+
 
                 $scope.selectedDateOption = UtilsService.getItemByVal($scope.dateOptions, payload.selectedDateOption, "Value");
 
-               
-               
-            }
+
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

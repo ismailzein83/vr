@@ -29,11 +29,11 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
 
             if (timeIsValid)
                 $scope.selectedTimes.push($scope.selectedTime);
-        }
+        };
 
         $scope.removeTime = function (timeToRemove) {
             $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
-        }
+        };
 
         $scope.schedulerTypeTaskTrigger.getData = function () {
             var numbersOfSelectedDays = [];
@@ -51,7 +51,7 @@ function WeeklyTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, Days
 
         $scope.schedulerTypeTaskTrigger.loadTemplateData = function () {
             loadForm();
-        }
+        };
     }
 
     var isFormLoaded;

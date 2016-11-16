@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerWeekly.html"
     };
@@ -52,11 +52,11 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
 
                 if (timeIsValid)
                     $scope.selectedTimes.push($scope.selectedTime);
-            }
+            };
 
             $scope.removeTime = function (timeToRemove) {
                 $scope.selectedTimes.splice($scope.selectedTimes.indexOf(timeToRemove), 1);
-            }
+            };
 
             defineAPI();
         }
@@ -79,7 +79,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
-                    var data = payload.data
+                    var data = payload.data;
 
                     angular.forEach(data.ScheduledDays, function (item) {
                         var selectedDay = UtilsService.getItemByVal($scope.daysOfWeek, item, "value");
@@ -90,7 +90,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum, DaysOfWeekEnum)
                         $scope.selectedTimes.push(item);
                     });
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

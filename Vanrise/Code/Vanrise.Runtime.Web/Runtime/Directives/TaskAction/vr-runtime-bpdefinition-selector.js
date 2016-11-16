@@ -36,7 +36,7 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcess_BPDefinitionAPI
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getBPTemplate(attrs);
@@ -58,7 +58,7 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcess_BPDefinitionAPI
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="BPDefinitionID" isrequired="ctrl.isrequired"'
                + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Bp definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-               + '</div>'
+               + '</div>';
         }
 
         function bpCtor(ctrl, $scope, attrs) {
@@ -71,19 +71,19 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcess_BPDefinitionAPI
                 var api = {};
 
                 api.load = function (payload) {
-                   
+
                     var selectedIds;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
-                    
+
                     return getBPDefenitionsInfo(attrs, ctrl, selectedIds);
-                    
-                }
+
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('BPDefinitionID', attrs, ctrl);
-                }
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

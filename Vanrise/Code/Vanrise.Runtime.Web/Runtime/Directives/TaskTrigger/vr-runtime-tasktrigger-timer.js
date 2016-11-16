@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Runtime/Directives/TaskTrigger/Templates/TaskTriggerTimer.html"
     };
@@ -41,7 +41,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                     $scope.isLoadingTimerSection = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timerTypeDirectiveAPI, undefined, setLoader, timerTypeDirectiveReadyPromiseDeferred);
-            }
+            };
 
             defineAPI();
         }
@@ -60,8 +60,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                     data = payload.data;
                     $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
                 }
-                else 
-                {
+                else {
                     setToDefaultValues();
                 }
 
@@ -80,7 +79,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
 
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             function setToDefaultValues()
             {

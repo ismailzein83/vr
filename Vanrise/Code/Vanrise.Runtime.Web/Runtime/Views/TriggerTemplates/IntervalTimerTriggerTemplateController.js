@@ -20,10 +20,9 @@ function IntervalTimeTriggerTemplateController($scope, TimeSchedulerTypeEnum, In
             };
         };
 
-        $scope.schedulerTypeTaskTrigger.loadTemplateData = function()
-        {
+        $scope.schedulerTypeTaskTrigger.loadTemplateData = function () {
             loadForm();
-        }
+        };
     }
 
     var isFormLoaded;

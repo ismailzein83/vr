@@ -21,7 +21,7 @@ function (UtilsService, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Runtime/Directives/TaskAction/Templates/TaskActionWorkFlow.html"
     };
@@ -43,12 +43,12 @@ function (UtilsService, VRUIUtilsService) {
                     $scope.isLoadingAction = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpDefenitionDirectiveAPI, undefined, setLoader, bpDefenitionDirectiveReadyPromiseDeferred);
-            }
+            };
 
             $scope.onBPDefinitionSelectorReady = function (api) {
                 bpDefenitionSelectorAPI = api;
                 bpDefenitionSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             defineAPI();
         }
@@ -70,7 +70,7 @@ function (UtilsService, VRUIUtilsService) {
                 if (additionalParameter != undefined) {
                     bpDefinitionId = additionalParameter.bpDefinitionID;
                 }
-            }
+            };
             api.load = function (payload) {
                 var data;
                 if (payload != undefined && payload.data != undefined)
@@ -117,7 +117,7 @@ function (UtilsService, VRUIUtilsService) {
                 }
                 return UtilsService.waitMultiplePromises(promises);
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
