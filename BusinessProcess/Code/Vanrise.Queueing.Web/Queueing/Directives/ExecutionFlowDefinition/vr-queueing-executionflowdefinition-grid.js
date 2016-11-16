@@ -44,11 +44,11 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
 
                         directiveAPI.onExecutionFlowDefinitionAdded = function (executionFlowDefinitionObject) {
                             gridAPI.itemAdded(executionFlowDefinitionObject);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -81,7 +81,7 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
             function editExecutionFlowDefinition(executionFlowDefinitionObj) {
                 var onExecutionFlowDefinitionUpdated = function (executionFlowDefinitionObj) {
                     gridAPI.itemUpdated(executionFlowDefinitionObj);
-                }
+                };
 
                 VR_Queueing_ExecutionFlowDefinitionService.editExecutionFlowDefiniton(executionFlowDefinitionObj.Entity.ID, onExecutionFlowDefinitionUpdated);
             }

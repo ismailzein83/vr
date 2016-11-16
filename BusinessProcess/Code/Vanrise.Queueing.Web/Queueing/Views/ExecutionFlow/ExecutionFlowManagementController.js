@@ -44,7 +44,7 @@
             };
             $scope.hasAddExecutionFlow = function () {
                 return VR_Queueing_ExecutionFlowAPIService.HasAddExecutionFlow();
-            }
+            };
         }
 
         function load() {

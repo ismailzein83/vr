@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/Queueing/Directives/QueueActivator/Templates/QueueActivatorCustomActivatorTemplate.html';
@@ -47,14 +47,14 @@
                     if (payload != undefined && payload.QueueActivator != undefined) {
                         ctrl.fqtn = payload.QueueActivator.FQTN;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.Queueing.Entities.CustomQueueActivator, Vanrise.Queueing.Entities',
                         FQTN: ctrl.fqtn
                     };
-                }
+                };
 
                 return api;
             }

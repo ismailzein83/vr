@@ -118,7 +118,7 @@
                         return {
                             $type: "Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators"
                         };
-                }
+                };
 
                 return api;
             }

@@ -38,7 +38,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
                 var onExecutionFlowStageAdded = function (executionFlowStage) {
 
                     ctrl.datasource.push(executionFlowStage);
-                }
+                };
                 VR_Queueing_ExecutionFlowStageService.addExecutionFlowStage(onExecutionFlowStageAdded, ctrl.datasource);
             };
 
@@ -71,9 +71,9 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
 
                 var obj = {
                     Stages: stages,
-                }
+                };
                 return obj;
-            }
+            };
 
             api.load = function (payload) {
 
@@ -87,7 +87,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
                     }
                 }
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -108,7 +108,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
 
             $scope.gridMenuActions = function (dataItem) {
                 return defaultMenuActions;
-            }
+            };
         }
 
         function editExecutionFlowStage(executionFlowStagedObj) {
@@ -116,7 +116,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
 
                 var index = UtilsService.getItemIndexByVal(ctrl.datasource, executionFlowStagedObj.StageName, 'StageName');
                 ctrl.datasource[index] = executionFlowStageObj;
-            }
+            };
 
             VR_Queueing_ExecutionFlowStageService.editExecutionFlowStage(executionFlowStagedObj, onExecutionFlowStageUpdated, ctrl.datasource);
         }

@@ -69,7 +69,7 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="Id" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Queue Instance" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function queueInstanceCtor(ctrl, $scope, attrs) {
@@ -80,7 +80,7 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -113,11 +113,11 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
 
 
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
-                }
+                };
 
 
                 if (ctrl.onReady != null)

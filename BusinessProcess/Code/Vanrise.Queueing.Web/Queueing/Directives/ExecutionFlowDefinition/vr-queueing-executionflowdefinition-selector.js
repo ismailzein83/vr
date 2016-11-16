@@ -40,7 +40,7 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getExecutionFlowDefinitionTemplate(attrs);
@@ -70,7 +70,7 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
             return '<div>'
                 + '<vr-select ' + multipleselection + ' ' + hideremoveicon + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function executionFlowCtor(ctrl, $scope, attrs) {
@@ -81,7 +81,7 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -94,7 +94,7 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
                     if (payload) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
-                        
+
 
                     }
 
@@ -111,17 +111,17 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
                         }
 
-                        
+
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
-                }
+                };
 
                 api.setDisabled = function (isDisabled) {
                     ctrl.isdisabled = isDisabled;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

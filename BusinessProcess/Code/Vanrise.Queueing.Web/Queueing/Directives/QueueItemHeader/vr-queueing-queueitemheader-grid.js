@@ -31,7 +31,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_QueueingAPIService, V
 
             $scope.getStatusColor = function (dataItem, colDef) {
                 return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.Status);
-            }
+            };
             $scope.queueItemHeaders = [];
             $scope.gridReady = function (api) {
 
@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_QueueingAPIService, V
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -64,7 +64,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_QueueingAPIService, V
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
-            }
+            };
 
         }
 

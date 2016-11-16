@@ -35,17 +35,17 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                     var color = undefined;
                     var notProcessedCount = dataItem.notProcessedCount;
                     if (notProcessedCount != undefined) {
-                       
-                        if( notProcessedCount >=5 && notProcessedCount < 15)
-                                color = LabelColorsEnum.Warning.color;
 
-                        else if(notProcessedCount> 15)
-                                color = LabelColorsEnum.Error.color;
-                       
+                        if (notProcessedCount >= 5 && notProcessedCount < 15)
+                            color = LabelColorsEnum.Warning.color;
+
+                        else if (notProcessedCount > 15)
+                            color = LabelColorsEnum.Error.color;
+
                     }
 
                     return color;
-                }
+                };
 
 
                 $scope.getSuspendedColor = function (dataItem) {
@@ -57,7 +57,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                     }
 
                     return color;
-                }
+                };
 
                 
 
@@ -77,7 +77,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                         directiveAPI.loadGrid = function (query) {
 
                             return gridAPI.retrieveData(query);
-                        }
+                        };
 
                         return directiveAPI;
                     }
@@ -137,7 +137,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                                 $scope.queueInstances[i].suspendedCount = suspendedCount;
                             }
                         }
-                    })
+                    });
                 }
               
 

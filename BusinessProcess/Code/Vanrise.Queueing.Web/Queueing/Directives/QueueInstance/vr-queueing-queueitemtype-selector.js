@@ -40,7 +40,7 @@ app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueItemTypeAPIS
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getExecutionFlowTemplate(attrs);
@@ -69,7 +69,7 @@ app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueItemTypeAPIS
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="Id" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Item Type" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function executionFlowCtor(ctrl, $scope, attrs) {
@@ -80,7 +80,7 @@ app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueItemTypeAPIS
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -112,11 +112,11 @@ app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueItemTypeAPIS
 
 
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
-                }
+                };
 
 
                 if (ctrl.onReady != null)

@@ -69,7 +69,7 @@ app.directive('vrQueueingQueuestatusSelector', ['VR_Queueing_QueueInstanceServic
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Queue Status" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function queueStatusCtor(ctrl, $scope, attrs) {
@@ -80,7 +80,7 @@ app.directive('vrQueueingQueuestatusSelector', ['VR_Queueing_QueueInstanceServic
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -97,26 +97,26 @@ app.directive('vrQueueingQueuestatusSelector', ['VR_Queueing_QueueInstanceServic
 
                     }
 
-                    var response= VR_Queueing_QueueInstanceService.getQueueItemStatus();
-                        ctrl.datasource.length = 0;
+                    var response = VR_Queueing_QueueInstanceService.getQueueItemStatus();
+                    ctrl.datasource.length = 0;
 
-                        if (response) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            ctrl.datasource.push(response[i]);
                         }
+                    }
 
-                        if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
-                        }
+                    if (selectedIds) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                    }
 
 
-                    
-                }
+
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
-                }
+                };
 
 
                 if (ctrl.onReady != null)

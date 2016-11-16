@@ -31,7 +31,7 @@
             };
             $scope.hasAddExecutionFlowDefinition = function () {
                 return VR_Queueing_ExecutionFlowDefinitionAPIService.HasAddExecutionFlowDefinition();
-            }
+            };
         }
 
         function getFilterObject() {

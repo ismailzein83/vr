@@ -44,11 +44,11 @@ app.directive("vrQueueingQueueitemheader2Grid", ["VR_Queueing_QueueItemHeaderAPI
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
 
                         directiveAPI.onExecutionFlowAdded = function (executionFlowObject) {
                             gridAPI.itemAdded(executionFlowObject);
-                        }
+                        };
 
 
                         return directiveAPI;

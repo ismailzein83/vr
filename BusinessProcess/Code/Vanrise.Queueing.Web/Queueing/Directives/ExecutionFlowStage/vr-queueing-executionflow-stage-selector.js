@@ -112,7 +112,7 @@ app.directive('vrQueueingExecutionflowStageSelector', ['VR_Queueing_ExecutionFlo
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                        '" onselectitem="ctrl.onselectitem" onblurdropdown="ctrl.onblurdropdown" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
-                   '</div>'
+                   '</div>';
         }
 
     }]);

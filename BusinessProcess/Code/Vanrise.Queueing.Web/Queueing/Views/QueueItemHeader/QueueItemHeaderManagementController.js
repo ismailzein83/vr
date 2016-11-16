@@ -78,7 +78,7 @@
                         $scope.isDisabledQueueInstanceSelect = false;
                         var payload = {
                             ExecutionFlowId: selectedItem[0].ExecutionFlowId,
-                        }
+                        };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, queueInstanceSelectorAPI, payload, setLoader);
                     }
                     else {
@@ -89,7 +89,7 @@
 
                 }
 
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;

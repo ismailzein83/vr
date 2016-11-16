@@ -52,7 +52,7 @@
             $scope.scopeModal.onDirectiveReady = function (api) {
                 queueActivatorConfigDirectiveReadyAPI = api;
                 queueActivatorConfigDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModal.SaveExecutionFlowStage = function () {
                 if (isEditMode) {
@@ -70,7 +70,7 @@
                 else if (UtilsService.getItemIndexByVal(existingExecutionFlowStages, $scope.scopeModal.stageName, 'StageName') != -1)
                     return 'Same Name Exist.';
                 return null;
-            }
+            };
 
             $scope.scopeModal.validateQueueTemplateName = function () {
                 if ($scope.scopeModal.queueTemplateName.indexOf('#FlowId#') >= 0)
@@ -78,7 +78,7 @@
                 else
                     return 'Queue Template Name Must Contain #FlowId#.';
                 return null;
-            }
+            };
 
             $scope.scopeModal.validateBatchDescription = function () {
                 if ($scope.scopeModal.batchDescription.indexOf('#RECORDSCOUNT#') >= 0)
@@ -86,7 +86,7 @@
                 else
                     return 'Batch Description Must Contain #RECORDSCOUNT#.';
                 return null;
-            }
+            };
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -114,7 +114,7 @@
                 }
                 else
                     $scope.isDataRecordTypeSelected = false;
-            }
+            };
 
         }
 
@@ -197,7 +197,7 @@
 
                     loadQueueActivatorSection(executionFlowStageEntity.QueueItemType.dataRecordTypeId, true).then(function () {
                         loadQueueActivatorPromiseDeferred.resolve();
-                    })
+                    });
 
                 });
             }
@@ -233,7 +233,7 @@
                 var payload = {
                     ExistingStages: existingStages,
                     DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
-                }
+                };
 
                 if (isEditMode) {
                     payload.QueueActivator = executionFlowStageEntity.QueueActivator;

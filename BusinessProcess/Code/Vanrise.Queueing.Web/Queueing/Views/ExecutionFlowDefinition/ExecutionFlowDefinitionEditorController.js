@@ -25,12 +25,12 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {}
+            $scope.scopeModal = {};
 
             $scope.scopeModal.onExecutionFlowStageDirectiveReady = function (api) {
                 executionFlowStageAPI = api;
                 executionFlowStageReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.save = function () {
                 if (isEditMode) {
@@ -121,7 +121,7 @@
 
             executionFlowStageReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (executionFlowDefinitionEntity != undefined) ? { Stages: executionFlowDefinitionEntity.Stages } : undefined
+                    var directivePayload = (executionFlowDefinitionEntity != undefined) ? { Stages: executionFlowDefinitionEntity.Stages } : undefined;
 
                     VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, directivePayload, loadExecutionFlowStagePromiseDeferred);
                 });

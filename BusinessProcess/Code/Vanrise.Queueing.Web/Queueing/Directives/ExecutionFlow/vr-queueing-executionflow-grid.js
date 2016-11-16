@@ -45,7 +45,7 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
                     }
 
                     return color;
-                }
+                };
 
 
                 $scope.getSuspendedColor = function (dataItem) {
@@ -57,7 +57,7 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
                     }
 
                     return color;
-                }
+                };
 
 
                 $scope.executionFlows = [];
@@ -76,12 +76,12 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
 
                         directiveAPI.onExecutionFlowAdded = function (executionFlowObject) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowObject);
                             gridAPI.itemAdded(executionFlowObject);
-                        }
+                        };
 
 
                         return directiveAPI;
@@ -103,7 +103,7 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
                             var timer;
                             if (!isFirstTimeLoaded) {
                                 isFirstTimeLoaded = true;
-                                refreshExecutionFlowGrid()
+                                refreshExecutionFlowGrid();
                                 timer = setInterval(function(){
                                     refreshExecutionFlowGrid();                                
                                 }, 5000);
@@ -161,7 +161,7 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
                 var onExecutionFlowUpdated = function (executionFlowObj) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowObj);
                     gridAPI.itemUpdated(executionFlowObj);
-                }
+                };
 
                 VR_Queueing_ExecutionFlowService.editExecutionFlow(executionFlowObj.Entity.ExecutionFlowId, onExecutionFlowUpdated);
             }
