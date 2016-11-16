@@ -52,7 +52,7 @@ app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitio
 
                 api.onReprocessDefinitionAdded = function (addedReprocessDefinition) {
                     gridAPI.itemAdded(addedReprocessDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

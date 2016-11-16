@@ -20,7 +20,7 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/Reprocess/Directives/ReprocessInput/Templates/ReprocessProcessTemplate.html'
         };
@@ -38,11 +38,11 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
             $scope.onReprocessDefinitionSelectorReady = function (api) {
                 reprocessDefinitionSelectorAPI = api;
                 reprocessDefinitionSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
 
             function defineAPI() {
 
@@ -72,7 +72,7 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                     promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

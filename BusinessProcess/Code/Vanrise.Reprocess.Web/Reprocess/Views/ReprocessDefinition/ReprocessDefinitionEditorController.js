@@ -90,7 +90,7 @@
             function loadStagesSelector() {
                 var payload = {
                     executionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds()
-                }
+                };
                 if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined)
                     payload.selectedIds = reprocessDefinitionEntity.Settings.StageNames;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSatge = value };
@@ -115,7 +115,7 @@
                                     Filters: selectedRecordStorage != undefined ? [buildStageRecordTypeFilter()] : undefined,
                                     InculdesStageNames: stageNames
                                 }
-                            }
+                            };
                             var setExecutionFlowStagesLoader = function (value) {
                                 $scope.scopeModel.isLoadingExecutionFlowStages = value;
                             };
@@ -283,7 +283,7 @@
                 ExecutionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds(),
                 InitiationStageNames: executionFlowStageAPI.getSelectedIds(),
                 StageNames: stageAPI.getSelectedIds()
-            }
+            };
 
             return {
                 ReprocessDefinitionId: reprocessDefinitionId != undefined ? reprocessDefinitionId : undefined,

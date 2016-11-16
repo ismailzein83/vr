@@ -35,7 +35,7 @@ app.directive('reprocessReprocessdefinitionSelector', ['Reprocess_ReprocessDefin
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getReprocessDefinitionTemplate(attrs);
@@ -59,7 +59,7 @@ app.directive('reprocessReprocessdefinitionSelector', ['Reprocess_ReprocessDefin
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ReprocessDefinitionId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="ReprocessDefinition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function reprocessDefinitionCtor(ctrl, $scope, attrs) {
@@ -82,15 +82,15 @@ app.directive('reprocessReprocessdefinitionSelector', ['Reprocess_ReprocessDefin
                         }
                     }
                     return getReprocessDefinitionsInfo(attrs, ctrl, selectedIds, serializedFilter);
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ReprocessDefinitionId', attrs, ctrl);
-                }
+                };
 
                 api.setSelectedValues = function (selectedIds) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'ReprocessDefinitionId', attrs, ctrl);
-                }
+                };
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

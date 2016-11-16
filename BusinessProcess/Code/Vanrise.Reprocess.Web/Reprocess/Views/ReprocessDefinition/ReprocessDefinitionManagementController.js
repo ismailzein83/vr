@@ -24,12 +24,12 @@
             $scope.scopeModel.add = function () {
                 var onReprocessDefinitionAdded = function (addedReprocessDefinition) {
                     gridAPI.onReprocessDefinitionAdded(addedReprocessDefinition);
-                }
+                };
                 Reprocess_ReprocessDefinitionService.addReprocessDefinition(onReprocessDefinitionAdded);
             };
             $scope.hasAddReprocessDefinitionPermission = function () {
                 return Reprocess_ReprocessDefinitionAPIService.HasAddReprocessDefinitionPermission();
-            }
+            };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
