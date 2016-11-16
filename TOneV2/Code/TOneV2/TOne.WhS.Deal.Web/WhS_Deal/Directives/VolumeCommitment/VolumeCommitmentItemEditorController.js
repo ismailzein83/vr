@@ -289,10 +289,6 @@
         function rebuildTiersArray(array) {
             for (var j = 0 ; j < array.length; j++) {
                 var tier = array[j];
-                if (tier.RetroActiveFromTierNumber != undefined) {
-                    console.log(tier.RetroActiveFromTierNumber)
-                    console.log(array[tier.RetroActiveFromTierNumber - 1])
-                }
                 tier.tierId = j;
                 tier.tierName = 'Tier ' + parseInt(j + 1);
                 tier.FromVol = j == 0 ? 0 : array[j - 1].UpToVolume;
