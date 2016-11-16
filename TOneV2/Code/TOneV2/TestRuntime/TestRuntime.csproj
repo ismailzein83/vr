@@ -440,11 +440,25 @@
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Invoice.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
