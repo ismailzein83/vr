@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Percentage/Templates/OptionPercentageOptimizationDirective.html';
@@ -42,16 +42,16 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
                         Title: routingOptimizer.Title,
                     };
                     ctrl.dataSource.push(dataItem);
-                }
+                };
 
                 ctrl.onDeSelectedRoutingOptimizer = function (routingOptimizer) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.dataSource, routingOptimizer.ExtensionConfigurationId, "ID")
+                    var index = UtilsService.getItemIndexByVal(ctrl.dataSource, routingOptimizer.ExtensionConfigurationId, "ID");
                     ctrl.dataSource.splice(index, 1);
-                }
+                };
                 ctrl.removeRoutingOptimizer = function (routingOptimizer) {
                     ctrl.dataSource.splice(ctrl.dataSource.indexOf(routingOptimizer), 1);
                     ctrl.selectedRoutingOptimizers.splice(UtilsService.getItemIndexByVal(ctrl.selectedRoutingOptimizers, routingOptimizer.ID, "ExtensionConfigurationId"), 1);
-                }
+                };
                 defineAPI();
             }
 
@@ -60,7 +60,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                       
+
                     }
 
                     WhS_Routing_RoutRuleSettingsAPIService.GetRoutingOptimizerSettingsConfigs().then(function (response) {
@@ -85,19 +85,17 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
                         }
                     });
 
-                }
+                };
 
                 api.getData = function () {
                     var items;
-                    if(ctrl.dataSource.length>0)
-                    {
+                    if (ctrl.dataSource.length > 0) {
                         items = [];
-                        for(var i=0;i<ctrl.dataSource.length;i++)
-                        {
+                        for (var i = 0; i < ctrl.dataSource.length; i++) {
                             var item = ctrl.dataSource[i];
                             items.push({
-                                RoutingOptimizerItemConfigId:item.ID,
-                                PercentageFactor:item.PercentageFactor
+                                RoutingOptimizerItemConfigId: item.ID,
+                                PercentageFactor: item.PercentageFactor
                             });
                         }
                     }
@@ -105,7 +103,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
                         $type: "TOne.WhS.Routing.Business.RoutingOptimizationOptionPercentage, TOne.WhS.Routing.Business",
                         Items: items,
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

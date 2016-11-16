@@ -60,37 +60,37 @@ app.directive('vrWhsRoutingDatatransformationSalecodematch', ['UtilsService', 'V
                 $scope.onNumberDirectiveReady = function (api) {
                     numberDirectiveAPI = api;
                     numberRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onCustomerIdDirectiveReady = function (api) {
                     customerIdDirectiveAPI = api;
                     customerIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onEffectiveOnDirectiveReady = function (api) {
                     effectiveOnDirectiveAPI = api;
                     effectiveOnDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onCustomerNumberPlanDirectiveReady = function (api) {
                     customerNumberPlanDirectiveAPI = api;
                     customerNumberPlanDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onSaleCodeDirectiveReady = function (api) {
                     saleCodeDirectiveAPI = api;
                     saleCodeDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onSaleZoneIdDirectiveReady = function (api) {
                     saleZoneIdDirectiveAPI = api;
                     saleZoneIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onMasterSaleCodeDirectiveReady = function (api) {
                     masterSaleCodeDirectiveAPI = api;
                     masterSaleCodeDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onMasterSaleZoneIdDirectiveReady = function (api) {
                     masterSaleZoneIdDirectiveAPI = api;
                     masterSaleZoneIdDirectiveReadyPromiseDeferred.resolve();
-                }   
+                };
                 defineAPI();
             }
 
@@ -99,7 +99,7 @@ app.directive('vrWhsRoutingDatatransformationSalecodematch', ['UtilsService', 'V
 
                 api.load = function (payload) {
                     var promises = [];
-                
+
                     var loadNumberDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     numberRateDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadNumber;
@@ -147,7 +147,7 @@ app.directive('vrWhsRoutingDatatransformationSalecodematch', ['UtilsService', 'V
                     });
 
                     promises.push(loadEffectiveOnDirectivePromiseDeferred.promise);
-                    
+
                     var loadCustomerNumberPlanDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     customerNumberPlanDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadCustomerNumberPlan;
@@ -155,9 +155,9 @@ app.directive('vrWhsRoutingDatatransformationSalecodematch', ['UtilsService', 'V
                             payloadCustomerNumberPlan = {};
                             if (payload != undefined) {
                                 payloadCustomerNumberPlan.context = payload.context;
-                                if(payload.stepDetails != undefined)
+                                if (payload.stepDetails != undefined)
                                     payloadCustomerNumberPlan.selectedRecords = payload.stepDetails.CustomerSellingNumberPlanId;
-                            }                                
+                            }
                         }
                         VRUIUtilsService.callDirectiveLoad(customerNumberPlanDirectiveAPI, payloadCustomerNumberPlan, loadCustomerNumberPlanDirectivePromiseDeferred);
                     });
@@ -230,7 +230,7 @@ app.directive('vrWhsRoutingDatatransformationSalecodematch', ['UtilsService', 'V
                     promises.push(loadMasterSaleCodeDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
@@ -242,10 +242,10 @@ app.directive('vrWhsRoutingDatatransformationSalecodematch', ['UtilsService', 'V
                         SaleCode: saleCodeDirectiveAPI != undefined ? saleCodeDirectiveAPI.getData() : undefined,
                         SaleZoneId: saleZoneIdDirectiveAPI != undefined ? saleZoneIdDirectiveAPI.getData() : undefined,
                         MasterSaleCode: masterSaleCodeDirectiveAPI != undefined ? masterSaleCodeDirectiveAPI.getData() : undefined,
-                        MasterSaleZoneId: masterSaleZoneIdDirectiveAPI != undefined ? masterSaleZoneIdDirectiveAPI.getData() : undefined,
-                    }
+                        MasterSaleZoneId: masterSaleZoneIdDirectiveAPI != undefined ? masterSaleZoneIdDirectiveAPI.getData() : undefined
+                    };
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

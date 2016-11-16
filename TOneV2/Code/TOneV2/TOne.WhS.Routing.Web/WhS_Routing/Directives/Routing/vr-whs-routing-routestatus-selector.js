@@ -32,7 +32,7 @@ app.directive('vrWhsRoutingRoutestatusSelector', ['UtilsService', 'VRUIUtilsServ
 
                 return "/Client/Modules/WhS_Routing/Directives/Routing/Templates/RouteStatusSelectorTemplate.html"
             }
-        }
+        };
 
         function RouteStatusSelectorCtor(ctrl, $scope, attrs) {
 

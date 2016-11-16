@@ -33,7 +33,7 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -60,7 +60,7 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="RoutingDatabaseId" '
             + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
-               + '</div>'
+               + '</div>';
         }
 
         function routingDatabaseCtor(ctrl, $scope, $attrs) {
@@ -98,11 +98,11 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                             VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingDatabaseId', $attrs, ctrl);
 
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('RoutingDatabaseId', $attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

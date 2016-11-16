@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/WhS_Routing/Directives/Extensions/RouteOptionRuleSettings/Templates/RouteOptionRulesSettingsMarketPriceTemplate.html'
         };
@@ -51,7 +51,7 @@
                 ctrl.onCurrencySelectorReady = function (api) {
                     currencySelectorAPI = api;
                     currencySelectorReadyDeferred.resolve();
-                }
+                };
 
                 ctrl.onValidateMarketPrice = function () {
                     if (ctrl.marketPrices.length == 0) {
@@ -74,7 +74,7 @@
                             ctrl.marketPrices.splice(index, 1);
                         }
                     });
-                }
+                };
 
                 UtilsService.waitMultiplePromises(_promises).then(function () {
                     defineAPI();

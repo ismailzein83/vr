@@ -25,22 +25,22 @@
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onRouteOptionRuleSettingsSelectorReady = function (api) {
                 routeOptionRuleTypeSelectorAPI = api;
                 routeOptionRuleTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(getFilterObject());
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)
@@ -51,7 +51,7 @@
 
             $scope.hasAddRulePermission = function () {
                 return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
-            }
+            };
 
             function getFilterObject() {
 

@@ -100,6 +100,6 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsSelector', ['WhS_Routing_Route
             return '<vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" ' + multipleselection + ' on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
-                   '</vr-select>'
+                   '</vr-select>';
         }
     }]);

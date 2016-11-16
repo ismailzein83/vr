@@ -17,7 +17,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
         $scope.supplierZoneRPOptionPolicies = [];
         $scope.onRoutingProductDatabaseTypeSelectionChanged = function () {
             $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
-        }
+        };
 
         $scope.createProcessInput.getData = function () {
             return {
@@ -35,7 +35,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
 
         $scope.onGridReady = function (api) {
             gridAPI = api;
-        }
+        };
     }
 
     function load() {
@@ -84,7 +84,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
         poilicy.onDirectiveReady = function (api) {
             poilicy.rpSupplierPoliciesDirectiveApi = api;
             poilicy.rpSupplierPoliciesReadyPromiseDeferred.resolve();
-        }
+        };
         poilicy.rpSupplierPoliciesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         poilicy.rpSupplierPoliciesReadyPromiseDeferred.promise.then(function () {
 
@@ -100,7 +100,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
             dataItem.IsDefault = false;
             $scope.defaultPolicy = null;
         }
-    }
+    };
 
     $scope.onDefaultCheckChanged = function (dataItem) {
         angular.forEach($scope.supplierZoneRPOptionPolicies, function (item) {
@@ -112,7 +112,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
             $scope.defaultPolicy = dataItem;
         else
             $scope.defaultPolicy = null;
-    }
+    };
 
     $scope.ValidatePolicies = function () {
         if ($scope.supplierZoneRPOptionPolicies != undefined && $scope.supplierZoneRPOptionPolicies.length == 0)

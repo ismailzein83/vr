@@ -42,7 +42,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                 if (payload != undefined && payload.ProductRoute != undefined) {
                     ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
                 }
-            }
+            };
 
             api.getData = function () {
                 var obj = {
@@ -56,9 +56,9 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
                         AddBlockedOptions: ctrl.productRouteAddBlockedOptions
                     }
-                }
+                };
                 return obj;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

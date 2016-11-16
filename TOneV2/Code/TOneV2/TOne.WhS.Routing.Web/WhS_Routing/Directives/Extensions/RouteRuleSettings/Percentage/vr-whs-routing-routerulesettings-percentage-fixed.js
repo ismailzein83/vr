@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Percentage/Templates/OptionPercentageFixedDirective.html';
@@ -52,13 +52,13 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                     for (var j = 0; j < ctrl.percentages.length; j++) {
                         totalPercentage = totalPercentage + parseFloat(ctrl.percentages[j].percentage);
                     }
-                    
+
                     if (value > 100 - totalPercentage)
                         ctrl.disableButton = true;
                     else {
                         ctrl.disableButton = (value == undefined);
                     }
-                }
+                };
 
                 ctrl.removeFilter = function (dataItem) {
                     ctrl.percentages.splice(ctrl.percentages.indexOf(dataItem), 1);
@@ -89,8 +89,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
 
                 api.load = function (payload) {
 
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         for (var i = 0; i < payload.Percentages.length; i++) {
                             ctrl.percentages.push({
                                 id: i,
@@ -98,15 +97,15 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                             });
                         }
                     }
-                    
-                }
+
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.RouteRules.Percentages.FixedOptionPercentage, TOne.WhS.Routing.Business",
                         Percentages: UtilsService.getPropValuesFromArray(ctrl.percentages, "percentage"),
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

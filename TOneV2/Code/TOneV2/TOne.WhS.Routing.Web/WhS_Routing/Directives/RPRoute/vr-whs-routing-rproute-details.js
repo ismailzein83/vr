@@ -80,14 +80,14 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                 //    rowStyle = { CssClass: "bg-warning" }
 
                 if (dataItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
-                    rowStyle = { CssClass: "bg-danger" }
+                    rowStyle = { CssClass: "bg-danger" };
 
-                return rowStyle
+                return rowStyle;
             };
 
             $scope.openRouteOptionSupplier = function (dataItem) {
                 WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, dataItem.SupplierName);
-            }
+            };
 
             UtilsService.waitMultiplePromises([rpRoutePolicyReadyPromiseDeffered.promise, gridReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -141,7 +141,7 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorDeferred);
                     return loadPolicySelectorDeferred.promise;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

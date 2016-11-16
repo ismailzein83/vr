@@ -45,7 +45,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -83,7 +83,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                 var rowStyle;
 
                 if (dataItem.Entity.IsBlocked)
-                    rowStyle = { CssClass: "bg-danger" }
+                    rowStyle = { CssClass: "bg-danger" };
 
                 return rowStyle
             };

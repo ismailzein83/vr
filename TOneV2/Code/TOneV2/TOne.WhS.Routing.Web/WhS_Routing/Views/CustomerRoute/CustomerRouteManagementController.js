@@ -24,21 +24,21 @@
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
                 routingDatabaseReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onRouteStatusDirectiveReady = function (api) {
                 routeStatusSelectorAPI = api;
                 routeStatusSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)

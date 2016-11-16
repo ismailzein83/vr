@@ -45,7 +45,7 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematchPreview', ['UtilsS
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
-                            ctrl.number = payload.stepDetails.Number
+                            ctrl.number = payload.stepDetails.Number;
                             ctrl.supplierId = payload.stepDetails.SupplierId;
                             ctrl.effectiveOn = payload.stepDetails.EffectiveOn;
                             ctrl.supplierCode = payload.stepDetails.SupplierCode;
@@ -54,7 +54,7 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematchPreview', ['UtilsS
                         checkValidation();
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.number = changes.Number;
@@ -63,15 +63,15 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematchPreview', ['UtilsS
                     ctrl.supplierCode = changes.SupplierCode;
                     ctrl.supplierZoneId = changes.SupplierZoneId;
                     stepObj.stepDetails = changes;
-                }
+                };
 
                 api.checkValidation = function () {
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
                     return stepObj.stepDetails
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

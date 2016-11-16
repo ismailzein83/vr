@@ -64,8 +64,8 @@
                 if (dataItem.Entity.ExecutedRuleId) {
                     menuActions.push({
                         name: "Option Rule",
-                        clicked: openRouteOptionRuleEditor,
-                    })
+                        clicked: openRouteOptionRuleEditor
+                    });
                 }
 
                 function openRouteOptionRuleEditor(dataItem) {
@@ -80,13 +80,13 @@
                 var rowStyle;
 
                 if (dataItem.Entity.IsBlocked) {
-                    rowStyle = { CssClass: "bg-danger" }
+                    rowStyle = { CssClass: "bg-danger" };
                 }
                 else if (dataItem.Entity.ExecutedRuleId) {
                     rowStyle = { CssClass: "bg-success" };
                 }
 
-                return rowStyle
+                return rowStyle;
             };
 
             $scope.close = function () {

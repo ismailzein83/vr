@@ -19,7 +19,7 @@ app.directive("vrWhsRoutingBuildbycodeprefix", [ function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/BuildRoutesByCodePrefixTemplate.html"
     };
@@ -48,7 +48,7 @@ app.directive("vrWhsRoutingBuildbycodeprefix", [ function () {
 
             api.load = function (payload) {
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -31,12 +31,12 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
             $scope.onCustomerDataTransformationDefinitionReady = function (api) {
                 customerTransformationSelectorAPI = api;
                 customerTransformationReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSupplierDataTransformationDefinitionReady = function (api) {
                 supplierTransformationSelectorAPI = api;
                 supplierTransformationReadyPromiseDeferred.resolve();
-            }
+            };
 
             function initializeController() {
                 defineAPI();
@@ -74,7 +74,7 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                     promises.push(supplierTransformationLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -84,7 +84,7 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                             SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds()
                         }
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

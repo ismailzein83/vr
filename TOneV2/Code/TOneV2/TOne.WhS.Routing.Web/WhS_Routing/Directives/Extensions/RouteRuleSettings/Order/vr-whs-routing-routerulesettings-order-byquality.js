@@ -23,7 +23,7 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return '';
@@ -41,14 +41,14 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    
-                }
+
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByQuality, TOne.WhS.Routing.Business"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

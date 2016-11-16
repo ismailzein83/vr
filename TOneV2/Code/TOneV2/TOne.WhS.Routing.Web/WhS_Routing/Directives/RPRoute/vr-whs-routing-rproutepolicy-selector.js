@@ -33,7 +33,7 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -59,7 +59,7 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
             return '<div>'
                 + '<vr-select on-ready="ctrl.onSelectorReady" ' + multipleselection + '  datatextfield="Title" datavaluefield="ExtensionConfigurationId" '
             + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectitem="ctrl.onselectitem"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
-               + '</div>'
+               + '</div>';
         }
 
         function rpRoutePolicyCtor(ctrl, $scope, $attrs) {
@@ -105,7 +105,7 @@ app.directive('vrWhsRoutingRproutepolicySelector', ['WhS_Routing_RPRouteAPIServi
 
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', $attrs, ctrl);

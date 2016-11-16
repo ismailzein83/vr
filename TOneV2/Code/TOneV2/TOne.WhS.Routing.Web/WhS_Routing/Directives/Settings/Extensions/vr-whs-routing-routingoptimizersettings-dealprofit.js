@@ -44,13 +44,13 @@ app.directive('vrWhsRoutingRoutingoptimizersettingsDealprofit', ['UtilsService',
                     if (payload != undefined) {
                     }
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Entities.DealProfitRoutingOptimizerItemSettings, TOne.WhS.Routing.Entities",
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

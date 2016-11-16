@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRoutingoptimizersettingsMargin', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Settings/Extensions/Templates/MarginRoutingOptimizerItemSettingsTemplate.html';
@@ -44,13 +44,13 @@ app.directive('vrWhsRoutingRoutingoptimizersettingsMargin', ['UtilsService',
                     if (payload != undefined) {
                     }
 
-                }
+                };
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Entities.MarginRoutingOptimizerItemSettings, TOne.WhS.Routing.Entities",
+                        $type: "TOne.WhS.Routing.Entities.MarginRoutingOptimizerItemSettings, TOne.WhS.Routing.Entities"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

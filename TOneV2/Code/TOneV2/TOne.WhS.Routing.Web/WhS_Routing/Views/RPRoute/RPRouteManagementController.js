@@ -31,7 +31,7 @@
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
                 routingDatabaseReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onRPRoutePolicySelectorReady = function (api) {
                 rpRoutePolicyAPI = api;
@@ -40,20 +40,19 @@
             $scope.onSaleZoneSelectorReady = function (api) {
                 saleZoneSelectorAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onRoutingProductSelectorReady = function (api) {
                 routingProductSelectorAPI = api;
                 routingProductReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onRouteStatusDirectiveReady = function (api) {
                 routeStatusSelectorAPI = api;
                 routeStatusSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
-            $scope.onRoutingDatabaseSelectorChange = function ()
-            {
+            $scope.onRoutingDatabaseSelectorChange = function () {
                 var selectedId = routingDatabaseSelectorAPI.getSelectedIds();
 
                 if (selectedId == undefined)
@@ -70,11 +69,11 @@
                     $scope.isLoadingFilterData = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rpRoutePolicyAPI, policySelectorPayload, setLoader, undefined);
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)

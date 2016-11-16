@@ -45,7 +45,7 @@ function (UtilsService, WhS_Routing_RateOptionTypeEnum, WhS_Routing_RateOptionEn
 
             return null;
 
-        }
+        };
         function initializeController() {
             defineAPI();
         }
@@ -61,7 +61,7 @@ function (UtilsService, WhS_Routing_RateOptionTypeEnum, WhS_Routing_RateOptionEn
                     $scope.scopeModel.rateOptionType = UtilsService.getEnum(WhS_Routing_RateOptionTypeEnum, 'value', payload.RateOptionType);
                     $scope.scopeModel.rateOptionValue = payload.RateOptionValue;
                 }
-            }
+            };
 
             api.getData = function () {
                 return {
@@ -70,7 +70,7 @@ function (UtilsService, WhS_Routing_RateOptionTypeEnum, WhS_Routing_RateOptionEn
                     RateOptionType: $scope.scopeModel.rateOptionType.value,
                     RateOptionValue: $scope.scopeModel.rateOptionValue
                 };
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

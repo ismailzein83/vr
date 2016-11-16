@@ -69,22 +69,22 @@ function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingProcessTypeEnum) {
                 var customerRoutePayload = {
                     routeOptionRuleTypeConfiguration: customerRouteOptionRuleTypeConfiguration ? customerRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration : undefined,
                     routingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(customerRouteGridAPI, customerRoutePayload, customerRouteGridLoadPromiseDeferred);
                 promises.push(customerRouteGridLoadPromiseDeferred.promise);
 
                 //Loading Product Route Grid
                 var productRouteGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 var productRoutePayload = {
-                    routeOptionRuleTypeConfiguration: productRouteOptionRuleTypeConfiguration? productRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration : undefined,
+                    routeOptionRuleTypeConfiguration: productRouteOptionRuleTypeConfiguration ? productRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration : undefined,
                     routingProcessType: WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(productRouteGridAPI, productRoutePayload, productRouteGridLoadPromiseDeferred);
                 promises.push(productRouteGridLoadPromiseDeferred.promise);
 
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             api.getData = function () {
 
@@ -98,10 +98,10 @@ function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingProcessTypeEnum) {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteOptionRuleTypeConfiguration, TOne.WhS.Routing.Entities",
                         RouteOptionRuleTypeConfiguration: productRouteGridAPI.getData()
                     }
-                }
+                };
 
                 return obj;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

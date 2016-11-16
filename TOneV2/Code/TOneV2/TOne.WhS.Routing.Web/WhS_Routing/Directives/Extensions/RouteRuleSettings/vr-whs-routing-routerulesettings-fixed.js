@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/RouteRuleFixedDirective.html';
@@ -42,7 +42,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountSelectorAPI = api;
                     carrierAccountSelectorReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.isValid = function () {
                     var suppliers = $scope.scopeModel.fixedSuppliers;
@@ -58,7 +58,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         return "Sum of all Percentages must be equal to 100";
 
                     return null;
-                }
+                };
 
                 $scope.scopeModel.onSelectSupplier = function (selectedItem) {
 
@@ -73,12 +73,11 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     $scope.scopeModel.fixedSuppliers.splice(index, 1);
                 };
 
-                $scope.scopeModel.onDeleteRow = function (deletedItem)
-                {
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSuppliers, deletedItem.CarrierAccountId, 'CarrierAccountId');
                     $scope.scopeModel.selectedSuppliers.splice(index, 1);
                     $scope.scopeModel.onDeselectSupplier(deletedItem);
-                }
+                };
                 
                 defineAPI();
             }
@@ -95,7 +94,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     if (payload != undefined) {
                         supplierFilterSettings = payload.SupplierFilterSettings;
 
-                        if(payload.RouteRuleSettings != undefined ){
+                        if (payload.RouteRuleSettings != undefined) {
                             options = payload.RouteRuleSettings.Options;
                             filters = payload.RouteRuleSettings.Filters;
                         }
@@ -142,7 +141,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -179,7 +178,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         }
                         return filters;
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

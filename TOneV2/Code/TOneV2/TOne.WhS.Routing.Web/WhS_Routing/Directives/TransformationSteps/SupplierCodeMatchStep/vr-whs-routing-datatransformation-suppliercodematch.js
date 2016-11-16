@@ -23,7 +23,7 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematch', ['UtilsService'
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/TransformationSteps/SupplierCodeMatchStep/Templates/SupplierCodeMatchStepTemplate.html';
@@ -50,24 +50,24 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematch', ['UtilsService'
                 $scope.onNumberDirectiveReady = function (api) {
                     numberDirectiveAPI = api;
                     numberRateDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onSupplierIdDirectiveReady = function (api) {
                     supplierIdDirectiveAPI = api;
                     supplierIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onEffectiveOnDirectiveReady = function (api) {
                     effectiveOnDirectiveAPI = api;
                     effectiveOnDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onSupplierCodeDirectiveReady = function (api) {
                     supplierCodeDirectiveAPI = api;
                     supplierCodeDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.onSupplierZoneIdDirectiveReady = function (api) {
                     supplierZoneIdDirectiveAPI = api;
                     supplierZoneIdDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -157,7 +157,7 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematch', ['UtilsService'
 
                     promises.push(loadSupplierZoneIdDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var obj = {
@@ -166,10 +166,10 @@ app.directive('vrWhsRoutingDatatransformationSuppliercodematch', ['UtilsService'
                         SupplierId: supplierIdDirectiveAPI != undefined ? supplierIdDirectiveAPI.getData() : undefined,
                         EffectiveOn: effectiveOnDirectiveAPI != undefined ? effectiveOnDirectiveAPI.getData() : undefined,
                         SupplierCode: supplierCodeDirectiveAPI != undefined ? supplierCodeDirectiveAPI.getData() : undefined,
-                        SupplierZoneId: supplierZoneIdDirectiveAPI != undefined ? supplierZoneIdDirectiveAPI.getData() : undefined,
-                    }
+                        SupplierZoneId: supplierZoneIdDirectiveAPI != undefined ? supplierZoneIdDirectiveAPI.getData() : undefined
+                    };
                     return obj;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

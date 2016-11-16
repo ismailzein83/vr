@@ -89,7 +89,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     return UtilsService.waitMultiplePromises(_routeOptionDetailServiceViewerPromises).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

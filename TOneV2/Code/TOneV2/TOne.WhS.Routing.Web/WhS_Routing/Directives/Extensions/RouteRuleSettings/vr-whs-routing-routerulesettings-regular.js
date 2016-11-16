@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Templates/RouteRuleRegularDirective.html';
@@ -68,7 +68,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                     }
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionSettingsGroupDirectiveAPI, optionSettingsGroupPayload, setLoader, routeOptionSettingsReadyPromiseDeferred);
-                }
+                };
 
                 //$scope.onOptionOrderSettingsGroupDirectiveReady = function (api) {
                 //    routeRuleOptionOrderSettingsDirectiveAPI = api;
@@ -79,18 +79,18 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                 $scope.onOptionFilterSettingsGroupDirectiveReady = function (api) {
                     routeRuleOptionFilterSettingsDirectiveAPI = api;
                     routeRuleOptionFilterSettingsReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onOptionOrderTypeDirectiveReady = function (api) {
                     optionOrderTypeDirectiveAPI = api;
                     optionOrderTypeReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onOptionPercentageSettingsGroupDirectiveReady = function (api) {
                     routeRuleOptionPercentageSettingsDirectiveAPI = api;
                     var setLoader = function (value) { $scope.isLoadingOptionPercentageSettingsSection = value };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleOptionPercentageSettingsDirectiveAPI, undefined, setLoader, routeRuleOptionPercentageSettingsReadyPromiseDeferred);
-                }
+                };
 
                 defineAPI();
             }
@@ -241,7 +241,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 api.getData = function () {
 
@@ -260,7 +260,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         OptionFilters: routeRuleOptionFilterSettingsDirectiveAPI.getData(),
                         OptionPercentageSettings: VRUIUtilsService.getSettingsFromDirective($scope, routeRuleOptionPercentageSettingsDirectiveAPI, 'selectedPercentageSettingsGroupTemplate')
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

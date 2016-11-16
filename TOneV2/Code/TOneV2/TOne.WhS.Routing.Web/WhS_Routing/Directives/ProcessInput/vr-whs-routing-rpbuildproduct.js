@@ -20,7 +20,7 @@ app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'V
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/RPBuildProductRoutesProcessTemplate.html"
     };
@@ -38,18 +38,18 @@ app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'V
 
             $scope.onRoutingProductDatabaseTypeSelectionChanged = function () {
                 $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.onSelectCheckChanged = function (dataItem) {
                 if (!dataItem.isSelected && dataItem.IsDefault) {
                     dataItem.IsDefault = false;
                     defaultPolicy = null;
                 }
-            }
+            };
 
             $scope.onDefaultCheckChanged = function (dataItem) {
                 angular.forEach($scope.supplierZoneRPOptionPolicies, function (item) {
@@ -61,7 +61,7 @@ app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'V
                     defaultPolicy = dataItem;
                 else
                     defaultPolicy = null;
-            }
+            };
 
             $scope.ValidatePolicies = function () {
                 if ($scope.supplierZoneRPOptionPolicies != undefined && $scope.supplierZoneRPOptionPolicies.length == 0)

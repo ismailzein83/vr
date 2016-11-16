@@ -52,7 +52,7 @@
         }
         function defineScope() {
 
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
             $scope.scopeModel.beginEffectiveDate = new Date();
@@ -67,39 +67,39 @@
             $scope.scopeModel.onRouteOptionRuleSettingsTypeSelectorReady = function (api) {
                 routeOptionRuleSettingsTypeSelectorAPI = api;
                 routeOptionRuleSettingsTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onSuppliersWithZonesGroupSettingsDirectiveReady = function (api) {
                 suppliersWithZonesGroupSettingsAPI = api;
                 suppliersWithZonesGroupSettingsReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
                 var saleZoneGroupPayload = {
                     sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
-                    saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                    saleZoneFilterSettings: { RoutingProductId: routingProductId }
                 };
                 var setLoader = function (value) { setTimeout(function () { $scope.scopeModel.isLoadingSaleZoneGroup = value; UtilsService.safeApply($scope); }) };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
-            }
+            };
             $scope.scopeModel.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
                 codeCriteriaGroupSettingsAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomersSection = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, codeCriteriaGroupSettingsAPI, undefined, setLoader, codeCriteriaGroupSettingsReadyPromiseDeferred);
-            }
+            };
             $scope.scopeModel.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsAPI = api;
                 customerGroupSettingsReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRouteOptionRuleSettingsDirectiveReady = function (api) {
                 routeOptionRuleSettingsAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingRouteOptionRuleSettings = value };
 
                 var routeOptionRuleSettingsPayload = {
                     SupplierFilterSettings: { RoutingProductId: routingProductId }
-                }
+                };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeOptionRuleSettingsAPI, routeOptionRuleSettingsPayload, setLoader, routeOptionRuleSettingsReadyPromiseDeferred);
-            }
+            };
 
             $scope.scopeModel.onRouteOptionRuleCriteriaTypeSelectionChanged = function () {
 
@@ -115,7 +115,7 @@
                     $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
-            }
+            };
             $scope.scopeModel.onRouteOptionRuleSettingsTypeSelectionChanged = function () {
 
                 var _selectedItem = routeOptionRuleSettingsTypeSelectorAPI.getSelectedIds();
@@ -124,7 +124,7 @@
                     $scope.scopeModel.showCriteriaSection = $scope.scopeModel.showSettingsSection = true;
                     $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
                     $scope.scopeModel.excludedCodes = [];
-                    reloadSuppliersWithZonesGroupSection()
+                    reloadSuppliersWithZonesGroupSection();
                     reloadFilterBySection();
                     reloadSaleZoneGroupSection();
                     reloadCustomerGroupSection();
@@ -163,7 +163,7 @@
                     var saleZoneGroupPayload = {
                         sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
                         saleZoneFilterSettings: { RoutingProductId: routingProductId }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
 
                     return saleZoneGroupSettingsLoadPromiseDeferred.promise;
@@ -179,7 +179,7 @@
 
                     return customerGroupSettingsLoadPromiseDeferred.promise;
                 }
-            }
+            };
 
             //TODO: make the validation below a custom validation
             $scope.scopeModel.addExcludedCode = function () {
@@ -198,10 +198,10 @@
 
                 if (codeIsValid)
                     $scope.scopeModel.excludedCodes.push($scope.scopeModel.excludedCode);
-            }
+            };
             $scope.scopeModel.removeExcludedCode = function (codeToRemove) {
                 $scope.scopeModel.excludedCodes.splice($scope.scopeModel.excludedCodes.indexOf(codeToRemove), 1);
-            }
+            };
 
             $scope.scopeModel.SaveRouteOptionRule = function () {
                 if (isEditMode) {
@@ -217,7 +217,7 @@
                     return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
                 else
                     return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -247,7 +247,7 @@
         function getRouteOptionRule() {
             return WhS_Routing_RouteOptionRuleAPIService.GetRuleEditorRuntime(routeRuleId).then(function (routeOptionRule) {
                 routeOptionRuleEntity = routeOptionRule.Entity;
-                settingsEditorRuntime = routeOptionRule.SettingsEditorRuntime
+                settingsEditorRuntime = routeOptionRule.SettingsEditorRuntime;
 
                 $scope.scopeModel.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
                 routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
@@ -358,7 +358,7 @@
 
                 var saleZoneGroupPayload = {
                     sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
-                    saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                    saleZoneFilterSettings: { RoutingProductId: routingProductId }
                 };
 
 

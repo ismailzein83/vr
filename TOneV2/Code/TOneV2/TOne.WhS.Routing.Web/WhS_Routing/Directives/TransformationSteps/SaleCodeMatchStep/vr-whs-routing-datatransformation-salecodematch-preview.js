@@ -23,7 +23,7 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/TransformationSteps/SaleCodeMatchStep/Templates/SaleCodeMatchStepPreviewTemplate.html';
@@ -45,7 +45,7 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
-                            ctrl.number = payload.stepDetails.Number
+                            ctrl.number = payload.stepDetails.Number;
                             ctrl.customerId = payload.stepDetails.CustomerId;
                             ctrl.effectiveOn = payload.stepDetails.EffectiveOn;
                             ctrl.customerSellingNumberPlanId = payload.stepDetails.CustomerSellingNumberPlanId;
@@ -57,7 +57,7 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                         checkValidation();
                     }
 
-                }
+                };
 
                 api.applyChanges = function (changes) {
                     ctrl.number = changes.Number;
@@ -69,15 +69,15 @@ app.directive('vrWhsRoutingDatatransformationSalecodematchPreview', ['UtilsServi
                     ctrl.masterSaleCode = changes.MasterSaleCode;
                     ctrl.masterSaleZoneId = changes.MasterSaleZoneId;
                     stepObj.stepDetails = changes;
-                }
+                };
 
                 api.checkValidation = function () {
                     return checkValidation();
-                }
+                };
 
                 api.getData = function () {
                     return stepObj.stepDetails
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

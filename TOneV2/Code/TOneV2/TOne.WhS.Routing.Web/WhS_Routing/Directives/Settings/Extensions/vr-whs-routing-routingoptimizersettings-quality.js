@@ -50,16 +50,16 @@ app.directive('vrWhsRoutingRoutingoptimizersettingsQuality', ['UtilsService','Wh
                         $scope.scopeModel.selectedTimeUnit = UtilsService.getEnum(WhS_Routing_TimeSettingsTypeEnum, "value", payload.PeriodTimeUnit);
                     }
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Entities.QualityRoutingOptimizerItemSettings, TOne.WhS.Routing.Entities",
-                        PeriodLength:$scope.scopeModel.periodLength,
+                        PeriodLength: $scope.scopeModel.periodLength,
                         PeriodTimeUnit: $scope.scopeModel.selectedTimeUnit.value,
-                        QualityFormula: $scope.scopeModel.qualityFormula,
+                        QualityFormula: $scope.scopeModel.qualityFormula
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

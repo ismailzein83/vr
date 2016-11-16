@@ -20,7 +20,7 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/WhS_Routing/Directives/ProcessInput/Templates/BuildRouteProcessTemplate.html"
         };
@@ -54,12 +54,12 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
 
                 $scope.onRoutingDatabaseTypeSelectionChanged = function () {
                     $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
-                }
+                };
 
                 $scope.onSwitchSelectorReady = function (api) {
                     switchSelectorAPI = api;
                     switchSelectorReadyDeferred.resolve();
-                }
+                };
                 /* directive API definition */
 
                 var api = {};
@@ -85,7 +85,7 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
 
                     promises.push(loadSwitchSelector());
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

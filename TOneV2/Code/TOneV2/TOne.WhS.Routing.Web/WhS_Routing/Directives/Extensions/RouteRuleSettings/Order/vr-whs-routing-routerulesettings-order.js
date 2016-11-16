@@ -22,7 +22,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Order/Templates/RouteRuleOrderDirective.html';
@@ -61,7 +61,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                 }
             }
             return null;
-        }
+        };
         ctrl.addOptionOrderType = function () {
             addNewItem(ctrl.selectedOptionOrderSettingsGroupTemplate);
             ctrl.selectedOptionOrderSettingsGroupTemplate = undefined;
@@ -85,7 +85,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
             $scope.scopeModel.onRouteRuleSettingsOrderTypeSelectorReady = function (api) {
                 routeRuleSettingsOrderTypeSelectorAPI = api;
                 routeRuleSettingsOrderTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.showPercentage = function () {
 
@@ -94,7 +94,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                     return true;
 
                 return false;
-            }
+            };
 
             defineAPI();
         }
@@ -103,14 +103,14 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
 
             api.load = function (payload) {
                 return loadOrderOptionSection(payload);
-            }
+            };
 
             api.getData = function () {
                 if (ctrl.datasource.length > 0)
                     return getOrderOptions();
                 else
                     return null;
-            }
+            };
 
             function loadOrderOptionSection(payload) {
                 var promises = [];

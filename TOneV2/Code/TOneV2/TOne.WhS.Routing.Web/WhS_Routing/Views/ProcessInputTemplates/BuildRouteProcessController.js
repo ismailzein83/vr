@@ -10,7 +10,7 @@ function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDa
     function defineScope() {
         $scope.onRoutingProductDatabaseTypeSelectionChanged = function () {
             $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
-        }
+        };
 
         $scope.createProcessInput.getData = function () {
             return {
@@ -19,7 +19,7 @@ function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDa
                     EffectiveTime: !$scope.isFuture ? $scope.effectiveOn : null,
                     IsFuture: $scope.isFuture,
                     RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
-                    RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value,
+                    RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value
                 }
             };
         };

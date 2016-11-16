@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRouterulesettingsExcluded', ['UtilsService', 'VRUIUti
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Option/Templates/ExcludedOptionDirective.html';
@@ -39,7 +39,7 @@ app.directive('vrWhsRoutingRouterulesettingsExcluded', ['UtilsService', 'VRUIUti
                 ctrl.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
-                }
+                };
 
                 ctrl.removeFilter = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal(ctrl.selectedSuppliers, dataItem.CarrierAccountId, 'CarrierAccountId');
@@ -58,21 +58,20 @@ app.directive('vrWhsRoutingRouterulesettingsExcluded', ['UtilsService', 'VRUIUti
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
                         var carrierAccountPayload = {
-                            filter: { SupplierFilterSettings: payload != undefined? payload.SupplierFilterSettings : undefined },
+                            filter: { SupplierFilterSettings: payload != undefined ? payload.SupplierFilterSettings : undefined },
                             selectedIds: []
                         };
-                        if (payload != undefined && payload.OptionsSettingsGroup != undefined)
-                        {
+                        if (payload != undefined && payload.OptionsSettingsGroup != undefined) {
                             for (var i = 0; i < payload.OptionsSettingsGroup.Options.length; i++) {
                                 carrierAccountPayload.selectedIds.push(payload.OptionsSettingsGroup.Options[i].SupplierId);
                             }
                         }
-                            
+
                         VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                     });
 
                     return loadCarrierAccountPromiseDeferred.promise;
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -92,7 +91,7 @@ app.directive('vrWhsRoutingRouterulesettingsExcluded', ['UtilsService', 'VRUIUti
 
                         return options;
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

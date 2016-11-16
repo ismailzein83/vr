@@ -53,7 +53,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                         defaultPolicyId = query.DefaultPolicyId;
                         selectedPolicyConfigId = query.PolicyConfigId;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -93,9 +93,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                 var rowStyle;
 
                 if (dataItem.IsBlocked)
-                    rowStyle = { CssClass: "bg-danger" }
+                    rowStyle = { CssClass: "bg-danger" };
 
-                return rowStyle
+                return rowStyle;
             };
 
             defineMenuActions();

@@ -81,14 +81,14 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
             api.load = function (payload) {
                 return loadFiltersSection(payload);
-            }
+            };
 
             api.getData = function () {
                 if (ctrl.datasource.length > 0)
                     return getFilters();
                 else
                     return null;
-            }
+            };
 
             function loadFiltersSection(payload) {
                 var promises = [];

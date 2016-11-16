@@ -31,13 +31,13 @@ function ($compile, UtilsService) {
             api.getData = function () {
                 var obj = {
                     $type: "TOne.WhS.Routing.Business.SupplierZoneToRPOptionHighestRatePolicy, TOne.WhS.Routing.Business"
-                }
+                };
                 return obj;
-            }
+            };
 
             api.load = function (payload) {
 
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

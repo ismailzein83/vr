@@ -40,9 +40,9 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     ctrl.maximumCodePrefixLength = payload.MaxCodePrefixLength;
                     ctrl.customerGroupSize = payload.CustomerGroupSize;
                     ctrl.supplierGroupSize = payload.SupplierGroupSize;
-                    
+
                 }
-            }
+            };
 
             api.getData = function () {
                 var obj = {
@@ -51,9 +51,9 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     MaxCodePrefixLength: ctrl.maximumCodePrefixLength,
                     CustomerGroupSize: ctrl.customerGroupSize,
                     SupplierGroupSize: ctrl.supplierGroupSize
-                }
+                };
                 return obj;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -41,9 +41,9 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     FutureDBToKeep: ctrl.future,
                     MaximumEstimatedExecutionTime: ctrl.time,
                     TimeUnit: ctrl.selectedTimeUnit.value
-                }
+                };
                 return obj;
-            }
+            };
             api.load = function (payload) {
                 $scope.timeUnits = UtilsService.getArrayEnum(WhS_Routing_TimeSettingsTypeEnum);
 
@@ -54,7 +54,7 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     ctrl.time = payload.MaximumEstimatedExecutionTime;
                     ctrl.selectedTimeUnit = UtilsService.getEnum(WhS_Routing_TimeSettingsTypeEnum, "value", payload.TimeUnit);
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

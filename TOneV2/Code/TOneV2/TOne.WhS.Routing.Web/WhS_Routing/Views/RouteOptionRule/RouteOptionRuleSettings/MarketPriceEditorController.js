@@ -35,7 +35,7 @@
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
                 zoneServiceConfigSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.validateZoneServiceConfig = function () {
 
@@ -60,13 +60,12 @@
                 }
                 return null;
             };
-            $scope.scopeModel.validateRates = function()
-            {
+            $scope.scopeModel.validateRates = function () {
                 if ($scope.scopeModel.minRate != undefined && $scope.scopeModel.maxRate != undefined && parseFloat($scope.scopeModel.minRate) > parseFloat($scope.scopeModel.maxRate))
                     return 'Min Rate should be less than Max Rate';
 
                 return null;
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)

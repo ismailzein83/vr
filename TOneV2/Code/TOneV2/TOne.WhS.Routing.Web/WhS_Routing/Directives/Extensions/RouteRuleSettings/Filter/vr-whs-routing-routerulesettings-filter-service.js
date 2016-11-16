@@ -39,13 +39,13 @@ app.directive('vrWhsRoutingRouterulesettingsFilterService', ['UtilsService',
 
                 api.load = function (payload) {
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.RouteRules.Filters.ServiceOptionFilter, TOne.WhS.Routing.Business"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

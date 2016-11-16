@@ -46,15 +46,15 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                             query = payload.query;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onRouteRuleAdded = function (routeRuleObject) {
                         gridAPI.itemAdded(routeRuleObject);
-                    }
+                    };
 
                     directiveAPI.onRouteRuleUpdated = function (routeRuleObject) {
                         gridAPI.itemUpdated(routeRuleObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -74,7 +74,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
             $scope.getRowStyle = function (dataItem) {
                 var rowStyle;
                 if (dataItem.CssClass != undefined)
-                    rowStyle = { CssClass: dataItem.CssClass }
+                    rowStyle = { CssClass: dataItem.CssClass };
 
                 return rowStyle
             };
@@ -116,7 +116,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
 
             var onRouteRuleDeleted = function (deletedItem) {
                 gridAPI.itemDeleted(deletedItem);
-            }
+            };
 
             WhS_Routing_RouteRuleService.deleteRouteRule($scope, routeRule, onRouteRuleDeleted);
         }

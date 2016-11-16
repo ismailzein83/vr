@@ -44,13 +44,13 @@ app.directive('vrWhsRoutingRoutingoptimizersettingsDealcompletionprogress', ['Ut
                     if (payload != undefined) {
                     }
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Entities.DealCompletionProgressRoutingOptimizerItemSettings, TOne.WhS.Routing.Entities",
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

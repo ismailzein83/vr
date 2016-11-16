@@ -49,7 +49,7 @@
         }
         function defineScope() {
 
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
             $scope.scopeModel.beginEffectiveDate = new Date();
@@ -64,7 +64,7 @@
             $scope.scopeModel.onRouteRuleSettingsTypeSelectorReady = function (api) {
                 routeRuleSettingsTypeSelectorAPI = api;
                 routeRuleSettingsTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;
                 var saleZoneGroupPayload = {
@@ -73,26 +73,26 @@
                 };
                 var setLoader = function (value) { setTimeout(function () { $scope.scopeModel.isLoadingSaleZoneGroup = value; UtilsService.safeApply($scope); }) };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
-            }
+            };
             $scope.scopeModel.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
                 codeCriteriaGroupSettingsAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomersSection = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, codeCriteriaGroupSettingsAPI, undefined, setLoader, codeCriteriaGroupSettingsReadyPromiseDeferred);
-            }
+            };
             $scope.scopeModel.onCustomerGroupSettingsDirectiveReady = function (api) {
                 customerGroupSettingsAPI = api;
                 customerGroupSettingsReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRouteRuleSettingsDirectiveReady = function (api) {
                 routeRuleSettingsAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleSettings = value };
 
                 var routeRuleSettingsPayload = {
                     SupplierFilterSettings: { RoutingProductId: routingProductId }
-                }
+                };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, routeRuleSettingsPayload, setLoader, routeRuleSettingsReadyPromiseDeferred);
-            }
+            };
 
             $scope.scopeModel.onRouteRuleCriteriaTypeSelectionChanged = function () {
 
@@ -109,7 +109,7 @@
                     $scope.scopeModel.showIncludedCodeSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = true;
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
-            }
+            };
             $scope.scopeModel.onRouteRuleSettingsTypeSelectionChanged = function () {
 
                 var _selectedItem = routeRuleSettingsTypeSelectorAPI.getSelectedIds();
@@ -144,7 +144,7 @@
                     var saleZoneGroupPayload = {
                         sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
                         saleZoneFilterSettings: { RoutingProductId: routingProductId }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
 
                     return saleZoneGroupSettingsLoadPromiseDeferred.promise;
@@ -160,7 +160,7 @@
 
                     return customerGroupSettingsLoadPromiseDeferred.promise;
                 }
-            }
+            };
 
             //TODO: make the validation below a custom validation
             $scope.scopeModel.addExcludedCode = function () {
@@ -179,10 +179,10 @@
 
                 if (codeIsValid)
                     $scope.scopeModel.excludedCodes.push($scope.scopeModel.excludedCode);
-            }
+            };
             $scope.scopeModel.removeExcludedCode = function (codeToRemove) {
                 $scope.scopeModel.excludedCodes.splice($scope.scopeModel.excludedCodes.indexOf(codeToRemove), 1);
-            }
+            };
 
             $scope.scopeModel.SaveRouteRule = function () {
                 if (isEditMode) {
@@ -198,11 +198,11 @@
                     return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
                 else
                     return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
-            }
+            };
 
             $scope.scopeModel.validateDates = function (date) {
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()

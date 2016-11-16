@@ -22,7 +22,7 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsBlock', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/WhS_Routing/Directives/Extensions/RouteOptionRuleSettings/Templates/RouteOptionRulesSettingsBlockTemplate.html'
         };
@@ -39,13 +39,13 @@ app.directive('vrWhsRoutingRouteoptionrulesettingsBlock', ['UtilsService',
 
                 api.load = function (payload) {
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.BlockRouteOptionRule, TOne.WhS.Routing.Business"
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

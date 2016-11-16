@@ -46,23 +46,23 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                 $scope.scopeModel.onCustomerRouteDatabaseConfigurationReady = function (api) {
                     customerRouteDatabaseConfigurationAPI = api;
                     customerRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onProductRouteDatabaseConfigurationReady = function (api) {
                     productRouteDatabaseConfigurationAPI = api;
                     productRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onSubProcessSettingsReady = function (api) {
                     subProcessSettingsAPI = api;
                     subProcessSettingsReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onCustomerRouteSettingsReady = function (api) {
                     customerRouteSettingsAPI = api;
                     customerRouteSettingsReadyPromiseDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onRouteOptionRuleConfigurationReady = function (api) {
                     routeOptionRuleConfigurationAPI = api;
                     routeOptionRuleConfigurationReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -129,7 +129,7 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -142,7 +142,7 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         RouteBuildConfiguration: customerRouteSettingsAPI.getData(),
                         RouteOptionRuleConfiguration: routeOptionRuleConfigurationAPI.getData()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

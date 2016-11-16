@@ -49,9 +49,9 @@
                     var data = {
                         $type: "TOne.WhS.Routing.Business.Extensions.RouteSyncReader, TOne.WhS.Routing.Business",
                         RangeType: $scope.scopeModel.selectedRouteRangeType.description
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

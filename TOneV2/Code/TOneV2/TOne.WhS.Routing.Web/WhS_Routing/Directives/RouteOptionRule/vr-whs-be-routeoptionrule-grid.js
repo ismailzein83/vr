@@ -48,15 +48,15 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                             query = payload.query;
                         }
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onRouteOptionRuleAdded = function (routeOptionRuleObject) {
                         gridAPI.itemAdded(routeOptionRuleObject);
-                    }
+                    };
 
                     directiveAPI.onRouteOptionRuleUpdated = function (routeOptionRuleObject) {
                         gridAPI.itemUpdated(routeOptionRuleObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -75,8 +75,8 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
 
             $scope.getRowStyle = function (dataItem) {
                 var rowStyle;
-                if (dataItem.CssClass != undefined )
-                    rowStyle = { CssClass: dataItem.CssClass }
+                if (dataItem.CssClass != undefined)
+                    rowStyle = { CssClass: dataItem.CssClass };
 
                 return rowStyle
             };

@@ -39,19 +39,16 @@ app.directive('vrWhsRoutingRoutingoptimizersettings', ['UtilsService', 'VRUIUtil
                     }
                     var promises = [];
                     WhS_Routing_RoutRuleSettingsAPIService.GetRoutingOptimizerSettingsConfigs().then(function (response) {
-                        if(response)
-                        {
-                            for(var i=0;i<response.length ; i++)
-                            {
-                                var item =  response[i];
+                        if (response) {
+                            for (var i = 0; i < response.length ; i++) {
+                                var item = response[i];
                                 var filterItem = {
-                                    payload:item,
+                                    payload: item,
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                     loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                 };
                                 var payloadData;
-                                if (routingOptimizerSettings != undefined && routingOptimizerSettings.Items != undefined)
-                                {
+                                if (routingOptimizerSettings != undefined && routingOptimizerSettings.Items != undefined) {
                                     payloadData = UtilsService.getItemByVal(routingOptimizerSettings.Items, item.ExtensionConfigurationId, "ConfigId");
                                 }
                                 promises.push(filterItem.loadPromiseDeferred.promise);
@@ -60,7 +57,7 @@ app.directive('vrWhsRoutingRoutingoptimizersettings', ['UtilsService', 'VRUIUtil
                         }
                     });
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
                 
                 api.getData = function () {
                     var items;
@@ -68,11 +65,9 @@ app.directive('vrWhsRoutingRoutingoptimizersettings', ['UtilsService', 'VRUIUtil
                         items = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            if (currentItem.directiveAPI != undefined)
-                            {
+                            if (currentItem.directiveAPI != undefined) {
                                 var data = currentItem.directiveAPI.getData();
-                                if (data != undefined)
-                                {
+                                if (data != undefined) {
                                     data.ConfigId = currentItem.configId;
                                     items.push(data);
                                 }
@@ -83,7 +78,7 @@ app.directive('vrWhsRoutingRoutingoptimizersettings', ['UtilsService', 'VRUIUtil
                         $type: "TOne.WhS.Routing.Entities.RoutingOptimizerSettings, TOne.WhS.Routing.Entities",
                         Items: items
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
