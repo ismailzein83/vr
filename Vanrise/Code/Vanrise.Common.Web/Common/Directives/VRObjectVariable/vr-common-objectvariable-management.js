@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/Common/Directives/VRObjectVariable/Templates/VRObjectVariableManagementTemplate.html'
         };
@@ -56,7 +56,7 @@
                             ctrl.objectVariables.splice(index, 1);
                         }
                     });
-                }
+                };
 
                 defineMenuActions();
             }
@@ -90,7 +90,7 @@
 
                 api.getData = function () {
                     var data;
-                    var dataItem
+                    var dataItem;
 
                     if (ctrl.objectVariables.length > 0) {
                         data = {};

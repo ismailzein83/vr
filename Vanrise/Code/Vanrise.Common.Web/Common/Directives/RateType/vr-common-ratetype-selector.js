@@ -40,7 +40,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -55,7 +55,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
         if (attrs.customlabel != undefined)
             label = attrs.customlabel.replace(/'/g, "");
         if (attrs.isdisabled)
-            disabled = "vr-disabled='true'"
+            disabled = "vr-disabled='true'";
 
         var required = "";
         if (attrs.isrequired != undefined)
@@ -70,7 +70,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
 
         return ' <vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate"  on-ready="ctrl.onSelectorReady"  datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
                + 'entityname="RateType" ' + ' label="' + label + '" ' + addCliked + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
@@ -82,18 +82,18 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
         function initializeController() {
             ctrl.addNewRateType = function () {
                 var onRateTypeAdded = function (rateTypeObj) {
-                    ctrl.datasource.push(rateTypeObj)
+                    ctrl.datasource.push(rateTypeObj);
                     if ($attrs.ismultipleselection != undefined)
                         ctrl.selectedvalues.push(rateTypeObj);
                     else
                         ctrl.selectedvalues = rateTypeObj;
                 };
                 VRCommon_RateTypeService.addRateType(onRateTypeAdded);
-            }
+            };
             ctrl.onSelectorReady = function (api) {
                 selectorApi = api;
                 defineAPI();
-            }
+            };
         }
 
         function defineAPI() {
@@ -101,7 +101,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('RateTypeId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -119,7 +119,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
                         VRUIUtilsService.setSelectedValues(selectedIds, 'RateTypeId', $attrs, ctrl);
 
                 });
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

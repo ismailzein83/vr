@@ -17,7 +17,7 @@
             };
 
             $scope.searchClicked = function () {
-                setFilterObject()
+                setFilterObject();
                 return gridAPI.loadGrid(filter);
             };
 
@@ -25,7 +25,7 @@
 
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
             $scope.addNewRateType = addNewRateType;
         }
 

@@ -28,7 +28,7 @@ app.directive('vrCommonCurrencySettingsEditor', ['UtilsService', 'VRUIUtilsServi
             $scope.onCurrencySelectReady = function (api) {
                 currencySelectorAPI = api;
                 currencyReadyPromiseDeferred.resolve();
-            }
+            };
 
             function initializeController()
             {
@@ -57,7 +57,7 @@ app.directive('vrCommonCurrencySettingsEditor', ['UtilsService', 'VRUIUtilsServi
                         $type: "Vanrise.Entities.CurrencySettingData, Vanrise.Entities",
                         CurrencyId: currencySelectorAPI.getSelectedIds()
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

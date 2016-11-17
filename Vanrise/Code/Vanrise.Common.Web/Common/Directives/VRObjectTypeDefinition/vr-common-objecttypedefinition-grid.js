@@ -51,7 +51,7 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
 
                 api.onVRObjectTypeDefinitionAdded = function (addedVRObjectTypeDefinition) {
                     gridAPI.itemAdded(addedVRObjectTypeDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

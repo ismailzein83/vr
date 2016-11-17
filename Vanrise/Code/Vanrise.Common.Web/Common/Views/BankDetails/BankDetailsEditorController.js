@@ -29,7 +29,7 @@
             $scope.onCurrencyDirectiveReady = function (api) {
                 currencyDirectiveApi = api;
                 currencyReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.saveBankDetail = function () {
                 if (isEditMode)

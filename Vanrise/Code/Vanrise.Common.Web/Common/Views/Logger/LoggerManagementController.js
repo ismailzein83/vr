@@ -40,39 +40,39 @@
             $scope.onEntryTypeDirectiveReady = function (api) {
                 entryTypeDirectiveApi = api;
                 entryTypeReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onMachineDirectiveReady = function (api) {
                 machineDirectiveApi = api;
                 machineReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onApplicationDirectiveReady = function (api) {
                 applicationDirectiveApi = api;
                 applicationReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onAssemblyDirectiveReady = function (api) {
                 assemblyDirectiveApi = api;
                 assemblyReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onTypeDirectiveReady = function (api) {
                 typeDirectiveApi = api;
                 typeReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onMethodDirectiveReady = function (api) {
                 methodDirectiveApi = api;
                 methodReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
         }
 
         function load() {

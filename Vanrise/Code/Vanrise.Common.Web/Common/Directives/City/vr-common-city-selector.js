@@ -34,7 +34,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getCityTemplate(attrs);
@@ -102,7 +102,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                             ctrl.isLoadingCities = false;
                         });
                     }
-                }
+                };
 
                 ctrl.addNewCity = function () {
                     var onCityAdded = function (cityObj) {
@@ -114,7 +114,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                     };
 
                     VRCommon_CityService.addCity(onCityAdded, countryId != undefined ? countryId : countrySelectorAPI.getSelectedIds());
-                }
+                };
                 ctrl.haspermission = function () {
                     return VRCommon_CityAPIService.HasAddCityPermission();
                 };
@@ -162,7 +162,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                                 promises.push(setSelectedCityPromiseDeferred.promise);
 
                                 VRCommon_CityAPIService.GetDistinctCountryIdsByCityIds(selectedCityIds).then(function (response) {
-                                    
+
                                     var selectedCountryIds = [];
 
                                     for (var i = 0 ; i < response.length < 0 ; i++) {
@@ -171,13 +171,13 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
                                     var countryPayload = {
                                         selectedIds: selectedCountryIds
-                                    }
+                                    };
                                     VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countryPayload, loadCountrySelectorPromiseDeferred);
 
                                     loadCountrySelectorPromiseDeferred.promise.then(function () {
                                         VRUIUtilsService.setSelectedValues(selectedIds, 'CityId', attrs, ctrl);
                                         setSelectedCityPromiseDeferred.resolve();
-                                    })
+                                    });
 
                                 });
 
@@ -199,15 +199,15 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                             return loadCountrySelectorPromiseDeferred.promise;
                         }
                     }
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CityId', attrs, ctrl);
-                }
+                };
 
                 api.clearDataSource = function () {
                     selectorAPI.clearDataSource();
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

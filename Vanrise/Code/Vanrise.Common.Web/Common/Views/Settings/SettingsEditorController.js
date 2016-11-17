@@ -27,7 +27,7 @@
             $scope.onSettingsEditorReady = function (api) {
                 settingsEditorAPI = api;
                 settingsEditorReadyDeferred.resolve();
-            }
+            };
 
             $scope.saveSetting = function () {
                 return updateSetting();

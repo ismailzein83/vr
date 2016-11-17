@@ -44,13 +44,13 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onCountryAdded = function (countryObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(countryObject);
                         gridAPI.itemAdded(countryObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -88,7 +88,7 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
             var onCountryUpdated = function (countryObj) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(countryObj);
                 gridAPI.itemUpdated(countryObj);
-            }
+            };
 
             VRCommon_CountryService.editCountry(countryObj.Entity.CountryId, onCountryUpdated);
         }

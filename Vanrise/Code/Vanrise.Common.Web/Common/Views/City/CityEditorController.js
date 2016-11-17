@@ -35,7 +35,7 @@
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.saveCity = function () {
                 if (editMode)

@@ -42,10 +42,10 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onCityAdded = function (cityObject) {
                         gridAPI.itemAdded(cityObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -76,7 +76,7 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
         function editCity(cityObj) {
             var onCityUpdated = function (cityObj) {
                 gridAPI.itemUpdated(cityObj);
-            }
+            };
 
             VRCommon_CityService.editCity(cityObj.Entity.CityId, onCityUpdated);
         }

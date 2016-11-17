@@ -44,13 +44,13 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onCurrencyAdded = function (currencyObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(currencyObject);
                         gridAPI.itemAdded(currencyObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -83,7 +83,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
             var onCurrencyUpdated = function (currencyObj) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(currencyObj);
                 gridAPI.itemUpdated(currencyObj);
-            }
+            };
             VRCommon_CurrencyService.editCurrency(currencyObj.Entity.CurrencyId, onCurrencyUpdated);
         }
         

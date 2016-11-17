@@ -104,7 +104,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return '<vr-row>'

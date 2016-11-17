@@ -54,7 +54,7 @@
                     var data = {
                         $type: "Vanrise.Common.MainExtensions.VRObjectTypes.ProductInfoPropertyEvaluator, Vanrise.Common.MainExtensions",
                         ProductField: $scope.scopeModel.selectedProductField.value
-                    }
+                    };
                     return data;
                 };
 

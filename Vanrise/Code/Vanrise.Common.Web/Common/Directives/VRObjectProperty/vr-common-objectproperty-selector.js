@@ -60,7 +60,7 @@
                             loadPropertySelector();
                         }
                     }
-                }
+                };
 
                 $scope.scopeModel.onPropertySelectorReady = function (api) {
                     propertySelectorAPI = api;

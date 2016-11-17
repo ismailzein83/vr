@@ -39,7 +39,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -114,7 +114,7 @@
                     + hideremoveicon
                     + ' entityName="' + label + '">'
                 + '</vr-select>'
-            + '</div>'
+            + '</div>';
         }
 
         return directiveDefinitionObject;

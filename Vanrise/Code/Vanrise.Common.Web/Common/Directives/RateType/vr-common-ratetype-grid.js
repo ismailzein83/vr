@@ -42,10 +42,10 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onRateTypeAdded = function (rateTypeObject) {
                         gridAPI.itemAdded(rateTypeObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

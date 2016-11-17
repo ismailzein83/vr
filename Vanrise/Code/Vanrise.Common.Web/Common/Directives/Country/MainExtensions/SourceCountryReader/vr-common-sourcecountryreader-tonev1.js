@@ -20,7 +20,7 @@ app.directive("vrCommonSourcecountryreaderTonev1", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -56,7 +56,7 @@ app.directive("vrCommonSourcecountryreaderTonev1", [function () {
                 if (payload != undefined) {
                     $scope.connectionString = payload.connectionString;
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

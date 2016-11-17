@@ -6,7 +6,7 @@
 
    function connectionEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
-        var connectionStringType
+       var connectionStringType;
         var connectionEntity;
         var editMode;
         loadParameters();
@@ -41,7 +41,7 @@
                     }
 
                 }
-            }
+            };
         }
         function load() {   
             loadAllControls();
@@ -49,10 +49,10 @@
            
         }
         function loadAllControls() {
-           connectionStringType = {
+            connectionStringType = {
                 ConnectionString: { value: 0, description: "Connection String" },
-                ConnectionStringName: { value: 1, description: "Connection String Name" },
-            }
+                ConnectionStringName: { value: 1, description: "Connection String Name" }
+            };
                        
             $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
             $scope.selectedConnectionStringType = connectionStringType.ConnectionString;

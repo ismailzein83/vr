@@ -53,7 +53,7 @@ app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService'
 
                 api.onVRComponentTypeAdded = function (addedVRComponentType) {
                     gridAPI.itemAdded(addedVRComponentType);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

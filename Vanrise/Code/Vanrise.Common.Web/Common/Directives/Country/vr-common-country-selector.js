@@ -28,10 +28,10 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                     if ($attrs.ismultipleselection != undefined)
                         ctrl.selectedvalues.push(countryObj.Entity);
                     else
-                        ctrl.selectedvalues = countryObj.Entity ;
+                        ctrl.selectedvalues = countryObj.Entity;
                 };
                 VRCommon_CountryService.addCountry(onCountryAdded);
-            }
+            };
 
             ctrl.haspermission = function () {
                 return VRCommon_CountryAPIService.HasAddCountryPermission();
@@ -47,7 +47,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getCountryTemplate(attrs);
@@ -71,7 +71,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function countryCtor(ctrl, $scope, attrs) {
@@ -91,11 +91,11 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 }
 
                 return getCountriesInfo(attrs, ctrl, selectedIds);
-            }
+            };
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CountryId', attrs, ctrl);
-            }             
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

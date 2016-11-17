@@ -50,7 +50,7 @@
                     var data = {
                         $type: "Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions",
                         ClassName: $scope.scopeModel.className
-                    }
+                    };
                     return data;
                 }
 

@@ -33,7 +33,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                             ctrl.selectedvalues = currencyObj;
                     };
                     VRCommon_CurrencyService.addCurrency(onCurrencyAdded);
-                }
+                };
 
 
                 var ctor = new currencyCtor(ctrl, $scope, $attrs);
@@ -47,7 +47,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getCurrencyTemplate(attrs);
@@ -71,7 +71,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select>'
-               + '</div>'
+               + '</div>';
         }
 
         function currencyCtor(ctrl, $scope, attrs) {
@@ -82,7 +82,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
 
 
             }
@@ -148,11 +148,11 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CurrencyId', attrs, ctrl);
-                }
+                };
 
                 api.selectedCurrency = function (selectedIds) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'CurrencyId', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

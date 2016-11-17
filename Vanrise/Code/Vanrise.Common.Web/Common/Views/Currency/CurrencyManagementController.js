@@ -21,7 +21,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.loadGrid(filter)
-            }
+            };
             $scope.addNewCurrency = addNewCurrency;
         }
 

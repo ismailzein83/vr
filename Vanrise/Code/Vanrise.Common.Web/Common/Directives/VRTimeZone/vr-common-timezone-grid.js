@@ -41,12 +41,12 @@ function (UtilsService, VRNotificationService, VRCommon_VRTimeZoneAPIService, VR
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onVRTimeZoneAdded = function (timeZoneObject) {
                         gridAPI.itemAdded(timeZoneObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -77,7 +77,7 @@ function (UtilsService, VRNotificationService, VRCommon_VRTimeZoneAPIService, VR
         function editVRTimeZone(timeZoneObj) {
             var onVRTimeZoneUpdated = function (timeZoneObj) {
                 gridAPI.itemUpdated(timeZoneObj);
-            }
+            };
 
             VRCommon_VRTimeZoneService.editVRTimeZone(timeZoneObj.Entity.TimeZoneId, onVRTimeZoneUpdated);
         }

@@ -30,7 +30,7 @@
             $scope.scopeModel.onPartSettingsReady = function (api) {
                 concatenatedPartSettingsAPI = api;
                 concatenatedPartSettingsReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateConcatenatedPart() : addeConcatenatedPart();
             };

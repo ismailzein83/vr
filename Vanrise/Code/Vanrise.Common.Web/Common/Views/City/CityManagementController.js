@@ -25,7 +25,7 @@
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             function getFilterObject() {
                 filter = {
@@ -36,9 +36,9 @@
             }
 
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
+                gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
             $scope.addNewCity = addNewCity;
         }
 

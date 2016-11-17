@@ -22,7 +22,7 @@
             $scope.scopeModel.add = function () {
                 var onMailMessageTypeAdded = function (addedMailMessageType) {
                     gridAPI.onMailMessageTypeAdded(addedMailMessageType);
-                }
+                };
                 VRCommon_VRMailMessageTypeService.addMailMessageType(onMailMessageTypeAdded);
             };
 

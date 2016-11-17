@@ -32,18 +32,18 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one action.";
-                }
+                };
                 ctrl.addBankDetail = function () {
                     var onBankDetailAdded = function (bankDetail) {
                         ctrl.datasource.push({ Entity: bankDetail });
-                    }
+                    };
 
                     VRCommon_BankDetailService.addBankDetail(onBankDetailAdded, ctrl.datasource);
                 };
                 ctrl.removeBankDetail = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -62,7 +62,7 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
                             ctrl.datasource.push({ Entity: bankDetail });
                         }
                     }
-                }
+                };
 
                 api.getData = function () {
                     var bankDetails;
@@ -77,7 +77,7 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
                         $type: "Vanrise.Entities.BankDetailsSettings, Vanrise.Entities",
                         BankDetails: bankDetails
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -93,13 +93,13 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
             function editBankDetail(bankDetailObj) {
                 var onBankDetailUpdated = function (bankDetail) {
                     var index = ctrl.datasource.indexOf(bankDetailObj);
                     ctrl.datasource[index] = { Entity: bankDetail };
-                }
+                };
                 VRCommon_BankDetailService.editBankDetail(bankDetailObj.Entity, onBankDetailUpdated, ctrl.datasource);
             }
         }

@@ -29,13 +29,10 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
-                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
-                    {
-                        for(var i=0;i<ctrl.datasource.length;i++)
-                        {
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i];
-                            if(item.Entity.IsDefault)
-                            {
+                            if (item.Entity.IsDefault) {
                                 return null;
                             }
                         }
@@ -43,18 +40,18 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
 
                     }
                     return "You Should add at least one setting.";
-                }
+                };
                 ctrl.addCompanySetting = function () {
                     var onCompanySettingAdded = function (companySetting) {
                         ctrl.datasource.push({ Entity: companySetting });
-                    }
+                    };
 
                     VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource);
                 };
                 ctrl.removeCompanySetting = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -73,7 +70,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                             ctrl.datasource.push({ Entity: companySetting });
                         }
                     }
-                }
+                };
 
                 api.getData = function () {
                     var companySettings;
@@ -88,7 +85,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         $type: "Vanrise.Entities.CompanySettings, Vanrise.Entities",
                         Settings: companySettings
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -104,13 +101,13 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
             function editCompanySetting(companySettingObj) {
                 var onCompanySettingUpdated = function (companySetting) {
                     var index = ctrl.datasource.indexOf(companySettingObj);
                     ctrl.datasource[index] = { Entity: companySetting };
-                }
+                };
                 VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, ctrl.datasource);
             }
         }

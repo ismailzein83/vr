@@ -29,7 +29,7 @@
                     return VRCommon_RateTypeAPIService.HasUpdateRateTypePermission();
                 else
                     return VRCommon_RateTypeAPIService.HasAddRateTypePermission();
-            }
+            };
 
             $scope.saveRateType = function () {
                 if (isEditMode) {
@@ -126,7 +126,7 @@
         function buildRateTypeObjFromScope() {
             var obj = {
                 RateTypeId: (rateTypetId != null) ? rateTypetId : 0,
-                Name: $scope.name,
+                Name: $scope.name
             };
             return obj;
         }

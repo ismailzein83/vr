@@ -152,7 +152,7 @@
 
             var context = {
                 getObjectVariables: function () { return objectDirectiveAPI.getData(); }
-            }
+            };
             return context;
         }
         function buildMailMessageTypeObjFromScope() {
@@ -163,7 +163,7 @@
                 VRMailMessageTypeId: mailMessageTypeEntity != undefined ? mailMessageTypeEntity.VRMailMessageTypeId : undefined,
                 Name: $scope.scopeModel.name,
                 Settings: {
-                    Objects: objects,
+                    Objects: objects
                 }
             };
         }

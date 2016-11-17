@@ -44,7 +44,7 @@ app.directive('vrCommonProductinfotechnicalsettingsEditor', ['UtilsService', 'VR
                         $scope.scopeModel.productName = productInfoTechnicalSettingsPayload.ProductInfo.ProductName;
                         $scope.scopeModel.versionNumber = productInfoTechnicalSettingsPayload.ProductInfo.VersionNumber;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -54,7 +54,7 @@ app.directive('vrCommonProductinfotechnicalsettingsEditor', ['UtilsService', 'VR
                             VersionNumber: $scope.scopeModel.versionNumber
                         }
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

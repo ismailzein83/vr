@@ -30,12 +30,12 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
             $scope.onCurrencySelectReady = function (api) {
                 currencySelectorAPI = api;
-                currencyReadyPromiseDeferred.resolve()
-            }
+                currencyReadyPromiseDeferred.resolve();
+            };
 
 
         }

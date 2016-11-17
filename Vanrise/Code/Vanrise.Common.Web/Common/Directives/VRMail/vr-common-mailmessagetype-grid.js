@@ -52,7 +52,7 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIServ
 
                 api.onMailMessageTypeAdded = function (addedMailMessageType) {
                     gridAPI.itemAdded(addedMailMessageType);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

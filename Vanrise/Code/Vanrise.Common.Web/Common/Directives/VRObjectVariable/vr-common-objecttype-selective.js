@@ -52,7 +52,7 @@
 
                     if (ctrl.onselectionchanged != null && typeof (ctrl.onselectionchanged) == "function")
                         ctrl.onselectionchanged();
-                }
+                };
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;

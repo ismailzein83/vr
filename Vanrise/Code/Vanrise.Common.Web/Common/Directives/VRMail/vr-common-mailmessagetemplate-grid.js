@@ -52,7 +52,7 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
 
                 api.onMailMessageTemplateAdded = function (addedMailMessageTemplate) {
                     gridAPI.itemAdded(addedMailMessageTemplate);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

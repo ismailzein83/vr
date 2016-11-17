@@ -141,7 +141,7 @@
                 + ' </vr-row>'
                     + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
                             + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                    + ' </vr-directivewrapper>'
+                    + ' </vr-directivewrapper>';
             return template;
         }
     }

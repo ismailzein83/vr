@@ -20,7 +20,7 @@ app.directive("vrCommonTextmanipulationsettingsAddprefix", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -48,12 +48,12 @@ app.directive("vrCommonTextmanipulationsettingsAddprefix", [function () {
                     $type: "Vanrise.Common.MainExtensions.TextManipulationAction.AddPrefixActionSettings,Vanrise.Common.MainExtensions",
                     Prefix: ctrl.numberPrefix
                 };
-            }
+            };
             api.load = function (payload) {
                 if (payload != undefined) {
                     ctrl.numberPrefix = payload.Prefix;
                 }
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

@@ -21,13 +21,13 @@
             $scope.add = function () {
                 var onStyleDefinitionAdded = function (addedStyleDefinition) {
                     gridAPI.onStyleDefinitionAdded(addedStyleDefinition);
-                }
+                };
                 VRCommon_StyleDefinitionService.addStyleDefinition(onStyleDefinitionAdded);
             };
 
-            $scope.hasAddStyleDefinitionPermission =function () {
+            $scope.hasAddStyleDefinitionPermission = function () {
                 return VRCommon_StyleDefinitionAPIService.HasAddStyleDefinitionPermission()
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;

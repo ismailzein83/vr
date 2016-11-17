@@ -9,18 +9,18 @@ app.service('VRCommon_LogEntryService', ['VRCommon_MasterLogService','VRCommon_L
 
         function registerLogToMaster() {
                
-                var tabDefinition = {
-                    title: "General",
-                    rank:1,
-                    directive: "vr-log-entry-search",
-                    hide: true,
-                    hasPermission: function (){
-                        return VRCommon_LogEntryAPIService.HasViewSystemLogPermission();
-                    },
-                    loadDirective: function (directiveAPI) {
-                        return directiveAPI.load();
-                    }
+            var tabDefinition = {
+                title: "General",
+                rank: 1,
+                directive: "vr-log-entry-search",
+                hide: true,
+                hasPermission: function () {
+                    return VRCommon_LogEntryAPIService.HasViewSystemLogPermission();
+                },
+                loadDirective: function (directiveAPI) {
+                    return directiveAPI.load();
                 }
+            };
                 VRCommon_MasterLogService.addTabDefinition(tabDefinition);
         }
 

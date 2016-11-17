@@ -20,7 +20,7 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Common/Directives/TextManipulation/Templates/TextManiplutaionSettingsDirectiveTemplate.html"
     };
@@ -49,7 +49,7 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You must add at least one action";
-            }
+            };
             ctrl.addFilter = function () {
                 var dataItem = {
                     id: counter++,
@@ -74,7 +74,7 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
             ctrl.templatesSelectorReady = function (api) {
                 templatesSelectorAPI = api;
                 defineAPI();
-            }
+            };
 
         }
 

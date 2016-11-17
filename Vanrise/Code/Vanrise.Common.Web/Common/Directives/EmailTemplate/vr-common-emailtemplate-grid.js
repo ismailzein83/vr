@@ -40,7 +40,7 @@ function (UtilsService, VRNotificationService, VRCommon_EmailTemplateAPIService,
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -74,7 +74,7 @@ function (UtilsService, VRNotificationService, VRCommon_EmailTemplateAPIService,
         function editEmailTemplate(emailTemplate) {
             var onEmailTemplateUpdated = function (emailTemplateObj) {
                 gridAPI.itemUpdated(emailTemplateObj);
-            }
+            };
             VRCommon_EmailTemplateService.editEmailTemplate(emailTemplate.Entity.EmailTemplateId, onEmailTemplateUpdated);
         }
     }

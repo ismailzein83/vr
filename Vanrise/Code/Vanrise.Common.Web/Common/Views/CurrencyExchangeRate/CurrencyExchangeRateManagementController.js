@@ -26,12 +26,12 @@
                 gridAPI = api;
                 getFilterObject();
                 gridAPI.loadGrid(filter)
-            }
+            };
 
             $scope.onCurrencySelectReady = function (api) {
                 currencySelectorAPI = api;
                 currencyReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.addNewCurrencyExchangeRate = addNewCurrencyExchangeRate;
         }
 

@@ -21,7 +21,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
 
             $scope.addNewCountry = addNewCountry;
             $scope.hasAddCountryPermission = function () {
@@ -30,9 +30,9 @@
 
 
             $scope.uploadNewCountries = function () {
-               
-                VRCommon_CountryService.uploadCountrires(); 
-            }
+
+                VRCommon_CountryService.uploadCountrires();
+            };
             $scope.hasUploadCountryPermission = function () {
                 return VRCommon_CountryAPIService.HasUploadCountryPermission();
             };

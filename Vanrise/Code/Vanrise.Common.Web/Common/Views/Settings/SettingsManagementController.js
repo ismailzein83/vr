@@ -46,7 +46,7 @@
 
         var search = function (currentItem) {
             return currentItem.api.loadGrid(getFilterObject(currentItem.settingName));
-        }
+        };
 
         var buildSettingCategory = function (currentItem) {
             var settingCategory = {
@@ -57,7 +57,7 @@
                 }
             };
             $scope.settingCategories.push(settingCategory);
-        }
+        };
 
         function getFilterObject(category) {
             return {

@@ -40,7 +40,7 @@ app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtils
                         $scope.timeout = payload.data.Timeout;
                         $scope.ssl = payload.data.EnabelSsl;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -52,7 +52,7 @@ app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtils
                         Timeout: $scope.timeout,
                         EnabelSsl: $scope.ssl
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

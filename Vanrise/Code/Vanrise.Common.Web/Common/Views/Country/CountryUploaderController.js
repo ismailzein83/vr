@@ -16,13 +16,13 @@
                 return VRCommon_CountryAPIService.DownloadCountriesTemplate().then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
-            }
+            };
             $scope.hasDownloadCountryPermission = function () {
                 return VRCommon_CountryAPIService.HasDownloadCountryPermission();
             };
 
 
-            $scope.uploadCountires = function () {                
+            $scope.uploadCountires = function () {
                 return VRCommon_CountryAPIService.UploadCountries($scope.file.fileId).then(function (response) {
                     $scope.isUploadingComplete = true;
                     $scope.addedCountries = response.CountOfCountriesAdded;
@@ -32,7 +32,7 @@
                 }).catch(function (error) {
                     VRNotificationService.showError(error.ExceptionMessage);
                 });;
-            }
+            };
 
             $scope.downloadLog = function () {
                 if (fileID != undefined) {
@@ -40,7 +40,7 @@
                         UtilsService.downloadFile(response.data, response.headers);
                     });
                 }
-            }
+            };
 
             $scope.hasUploadCountryPermission = function () {
                 return VRCommon_CountryAPIService.HasUploadCountryPermission();

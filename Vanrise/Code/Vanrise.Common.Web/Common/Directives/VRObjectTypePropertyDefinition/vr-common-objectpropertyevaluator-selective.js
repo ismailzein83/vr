@@ -78,7 +78,7 @@
 
                     //Loading ObjectPropertySelector
                     if (objectType != undefined) {
-                        var loadObjectPropertySelectorPromise = loadObjectPropertySelector(objectType.ConfigId)
+                        var loadObjectPropertySelectorPromise = loadObjectPropertySelector(objectType.ConfigId);
                         promises.push(loadObjectPropertySelectorPromise);
                     }
 

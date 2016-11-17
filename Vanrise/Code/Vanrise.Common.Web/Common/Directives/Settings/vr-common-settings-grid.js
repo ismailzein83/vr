@@ -40,7 +40,7 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -80,7 +80,7 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
         function editSettings(settings) {
             var onSettingsUpdated = function (settingsObj) {
                 gridAPI.itemUpdated(settingsObj);
-            }
+            };
             VRCommon_SettingsService.editSettings(settings.Entity.SettingId, onSettingsUpdated);
         }
     }

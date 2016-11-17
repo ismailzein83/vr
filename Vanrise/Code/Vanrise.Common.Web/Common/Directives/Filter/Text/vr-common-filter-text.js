@@ -44,7 +44,7 @@ app.directive('vrCommonFilterText', ['UtilsService', 'VRUIUtilsService', functio
                     selectedIds = payload.textFilterTypeValue;
                 }
 
-                var selectorPayload = { selectedIds: selectedIds }
+                var selectorPayload = { selectedIds: selectedIds };
                 return selectorAPI.load(selectorPayload);
             };
 

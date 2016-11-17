@@ -29,10 +29,10 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
                     if ($attrs.ismultipleselection != undefined)
                         ctrl.selectedvalues.push(timeZoneObj.Entity);
                     else
-                        ctrl.selectedvalues = timeZoneObj.Entity ;
+                        ctrl.selectedvalues = timeZoneObj.Entity;
                 };
                 VRCommon_VRTimeZoneService.addTimeZone(onTimeZoneAdded);
-            }
+            };
 
             ctrl.haspermission = function () {
                 return VRCommon_VRTimeZoneAPIService.HasAddVRTimeZonePermission();
@@ -48,7 +48,7 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTimeZoneTemplate(attrs);
@@ -74,7 +74,7 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TimeZoneId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Time Zone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Time Zone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function timeZoneCtor(ctrl, $scope, attrs) {
@@ -94,10 +94,10 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
                 }
 
                 return getTimeZonesInfo(attrs, ctrl, selectedIds);
-            }
+            };
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('TimeZoneId', attrs, ctrl);
-            }             
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

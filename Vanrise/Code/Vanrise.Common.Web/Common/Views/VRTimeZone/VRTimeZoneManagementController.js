@@ -21,7 +21,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
-            }
+            };
 
             $scope.addNewVRTimeZone = addNewVRTimeZone;
             $scope.hasAddVRTimeZonePermission = function () {

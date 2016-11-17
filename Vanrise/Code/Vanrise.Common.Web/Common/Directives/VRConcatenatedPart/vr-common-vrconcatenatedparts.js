@@ -37,12 +37,12 @@ app.directive("vrCommonVrconcatenatedparts", ["UtilsService", "VRNotificationSer
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should add at least one part.";
-                }
+                };
 
                 ctrl.addConcatenatedPart = function () {
                     var onConcatenatedPartAdded = function (concatenatedPart) {
                         ctrl.datasource.push({ Entity: concatenatedPart });
-                    }
+                    };
 
                     VRCommon_VRConcatenatedPartService.addConcatenatedPart(onConcatenatedPartAdded, getContext());
                 };
@@ -50,7 +50,7 @@ app.directive("vrCommonVrconcatenatedparts", ["UtilsService", "VRNotificationSer
                 ctrl.removeConcatenatedPart = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -68,7 +68,7 @@ app.directive("vrCommonVrconcatenatedparts", ["UtilsService", "VRNotificationSer
                         }
                     }
                     return concatenatedParts;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -80,7 +80,7 @@ app.directive("vrCommonVrconcatenatedparts", ["UtilsService", "VRNotificationSer
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -95,14 +95,14 @@ app.directive("vrCommonVrconcatenatedparts", ["UtilsService", "VRNotificationSer
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editConcatenatedPart(concatenatedPartObj) {
                 var onConcatenatedPartUpdated = function (concatenatedPart) {
                     var index = ctrl.datasource.indexOf(concatenatedPartObj);
                     ctrl.datasource[index] = { Entity: concatenatedPart };
-                }
+                };
 
                 VRCommon_VRConcatenatedPartService.editConcatenatedPart(concatenatedPartObj.Entity, onConcatenatedPartUpdated, getContext());
             }

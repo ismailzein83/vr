@@ -22,7 +22,7 @@
             $scope.scopeModel.add = function () {
                 var onVRObjectTypeDefinitionAdded = function (addedVRObjectTypeDefinition) {
                     gridAPI.onVRObjectTypeDefinitionAdded(addedVRObjectTypeDefinition);
-                }
+                };
                 VRCommon_VRObjectTypeDefinitionService.addVRObjectTypeDefinition(onVRObjectTypeDefinitionAdded);
             };
 

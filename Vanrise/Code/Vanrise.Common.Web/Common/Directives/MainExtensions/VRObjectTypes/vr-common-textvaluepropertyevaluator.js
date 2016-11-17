@@ -43,8 +43,8 @@
                 api.getData = function () {
 
                     var data = {
-                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.TextValuePropertyEvaluator, Vanrise.Common.MainExtensions",
-                    }
+                        $type: "Vanrise.Common.MainExtensions.VRObjectTypes.TextValuePropertyEvaluator, Vanrise.Common.MainExtensions"
+                    };
                     return data;
                 };
 

@@ -22,11 +22,10 @@
         }
         function defineScope() {
 
-            $scope.onTextManipulationSettingsDirectiveReady = function(api)
-            {
+            $scope.onTextManipulationSettingsDirectiveReady = function (api) {
                 textManipulationSettingsAPI = api;
                 textManipulationSettingsReadyDeferred.resolve();
-            }
+            };
 
             $scope.saveTextManipulation = function () {
                 return saveTextManipulation();

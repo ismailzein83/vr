@@ -43,14 +43,14 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
                 function getDirectiveAPI() {
                    
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query,isChildgrid) {
+                    directiveAPI.loadGrid = function (query, isChildgrid) {
                         if (isChildgrid != undefined)
                             $scope.hidecurrencycolumn = true;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onExchangeRateAdded = function (exchangeRateObject) {
                         gridAPI.itemAdded(exchangeRateObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

@@ -51,7 +51,7 @@
                     }
                 }
                 return null;
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)

@@ -20,7 +20,7 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -45,28 +45,28 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
             ctrl.connections = [];
             ctrl.isConnectionsGridValid = function () {
                 if (ctrl.connections.length == 0 && $scope.enableRateUpdate == false) {
-                    return 'At least one connection string must be added.'
+                    return 'At least one connection string must be added.';
                 }
                 return null;
-            }
+            };
             ctrl.addConnection = function () {
-                var onConnectionAdded = function (connectionObj) {                
+                var onConnectionAdded = function (connectionObj) {
                     ctrl.connections.push(connectionObj);
-                }
+                };
                 VRCommon_ConnectionStringService.addConnectionString(onConnectionAdded);
-            }
+            };
             ctrl.removeConnection = function (source) {
                 ctrl.connections.splice(ctrl.connections.indexOf(source), 1);
-            }
+            };
 
             ctrl.connectionsGridMenuActions = [{
                 name: 'Edit',
                 clicked: editSource
             }];
             function editSource(connection) {
-                var onConnectionUpdated = function (connectionObj) {                   
+                var onConnectionUpdated = function (connectionObj) {
                     ctrl.connections[ctrl.connections.indexOf(connection)] = connectionObj;
-                }
+                };
 
                 VRCommon_ConnectionStringService.editConnectionString(connection, onConnectionUpdated);
             }
@@ -83,12 +83,12 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
             };
 
 
-            api.load = function (payload) {            
+            api.load = function (payload) {
                 $scope.url = "http://globalcurrencies.xignite.com/";
                 $scope.enableRateUpdate = true;
 
                 if (payload != undefined && payload.data != undefined) {
-                    $scope.url =  payload.data.URL ;
+                    $scope.url = payload.data.URL;
                     $scope.token = payload.data.Token;
                     $scope.enableRateUpdate = payload.data.EnableRateUpdate;
                     if (payload.data.ConnectionStrings && payload.data.ConnectionStrings.length > 0) {
@@ -99,7 +99,7 @@ app.directive("vrCommonExchangerateFxsauder", ['VRCommon_ConnectionStringService
                     }
 
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

@@ -37,7 +37,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -78,7 +78,7 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', $attrs, ctrl);
 
                     });
-                }
+                };
 
                 directiveAPI.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', attrs, ctrl);
@@ -115,7 +115,7 @@
                     + hideremoveicon
                     + ' entityName="' + label + '">'
                 + '</vr-select>'
-            + '</div>'
+            + '</div>';
         }
 
         return directiveDefinitionObject;

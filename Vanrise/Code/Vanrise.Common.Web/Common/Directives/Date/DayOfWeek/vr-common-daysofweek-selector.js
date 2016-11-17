@@ -34,7 +34,7 @@ app.directive('vrCommonDaysofweekSelector', ['UtilsService', 'VRUIUtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDaysOfWeekTemplate(attrs);
@@ -51,7 +51,7 @@ app.directive('vrCommonDaysofweekSelector', ['UtilsService', 'VRUIUtilsService',
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="description" datavaluefield="value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="DaysOfWeek" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select>'
-               + '</div>'
+               + '</div>';
         }
 
         function daysOfWeekCtor(ctrl, $scope, attrs) {
@@ -61,7 +61,7 @@ app.directive('vrCommonDaysofweekSelector', ['UtilsService', 'VRUIUtilsService',
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -81,12 +81,12 @@ app.directive('vrCommonDaysofweekSelector', ['UtilsService', 'VRUIUtilsService',
 
                 api.getSelectedIds = function () {
                     return vruiUtilsService.getIdSelectedIds('value', attrs, ctrl);
-                }
+                };
 
                 api.selectedDay = function (selectedIds) {
                     alert(selectedIds);
                     vruiUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

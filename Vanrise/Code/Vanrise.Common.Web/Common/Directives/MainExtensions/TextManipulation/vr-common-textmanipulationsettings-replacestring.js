@@ -20,7 +20,7 @@ app.directive("vrCommonTextmanipulationsettingsReplacestring", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -51,7 +51,7 @@ app.directive("vrCommonTextmanipulationsettingsReplacestring", [function () {
                     NewString: ctrl.newString,
                     IgnoreCase: ctrl.ignoreCase
                 };
-            }
+            };
 
             api.load = function (payload) {
                 if (payload != undefined) {
@@ -59,7 +59,7 @@ app.directive("vrCommonTextmanipulationsettingsReplacestring", [function () {
                     ctrl.newString = payload.NewString;
                     ctrl.ignoreCase = payload.IgnoreCase;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

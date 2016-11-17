@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService, VRCo
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };

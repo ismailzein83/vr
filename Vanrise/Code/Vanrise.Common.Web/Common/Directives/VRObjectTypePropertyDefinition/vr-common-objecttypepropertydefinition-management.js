@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: '/Client/Modules/Common/Directives/VRObjectTypePropertyDefinition/Templates/VRObjectTypePropertyDefinitionManagementTemplate.html'
         };
@@ -54,7 +54,7 @@
                             ctrl.objectTypePropertyDefinitions.splice(index, 1);
                         }
                     });
-                }
+                };
 
                 defineMenuActions();
             }

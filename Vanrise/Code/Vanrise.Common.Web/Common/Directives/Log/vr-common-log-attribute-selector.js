@@ -30,7 +30,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                             ctrl.selectedvalues = logAttributeObj.Entity;
                     };
                     VRCommon_LogAttributeService.addLogAttribute(onLogAttributeAdded);
-                }
+                };
 
                
                 var ctor = new LogAttributeCtor(ctrl, $scope, $attrs);
@@ -43,7 +43,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getLogAttributeTemplate(attrs);
@@ -69,7 +69,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="LogAttributeID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select>'
+                + ' label="' + label + '" ' + addCliked + ' on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select>';
         }
 
         function LogAttributeCtor(ctrl, $scope, attrs) {
@@ -77,7 +77,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
 
             }
 
@@ -92,13 +92,13 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                         selectedIds = payload.selectedIds;
                         attribute = payload.attribute;
                     }
-                    if (attribute!=undefined)
+                    if (attribute != undefined)
                         return getLogAttributeInfo(attrs, ctrl, selectedIds, attribute);
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('LogAttributeID', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

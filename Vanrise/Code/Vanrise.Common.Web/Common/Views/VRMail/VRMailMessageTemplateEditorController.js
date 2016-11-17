@@ -42,7 +42,7 @@
             $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
                 mailMessageTypeSelectorAPI = api;
                 mailMessageTypeSelectoReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onMailMessageTypeSelectionChanged = function () {
                 mailMessageTypeId = mailMessageTypeSelectorAPI.getSelectedIds();
                 if (mailMessageTypeId != undefined) {
@@ -55,7 +55,7 @@
                         getMailMessageType(undefined);
                     }
                 }
-            }
+            };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;

@@ -37,7 +37,7 @@
             $scope.scopeModel.onVRComponentTypeEditorReady = function (api) {
                 componentTypeEditorAPI = api;
                 componentTypeEditorReadyDeferred.resolve();
-            }
+            };
 
             $scope.saveComponentType = function () {
                 if (isEditMode) {
@@ -135,7 +135,7 @@
         }
 
         function buildComponentTypeObjFromScope() {
-            var obj = componentTypeEditorAPI.getData()
+            var obj = componentTypeEditorAPI.getData();
             return obj;
         }
 

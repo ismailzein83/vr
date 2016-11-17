@@ -51,7 +51,7 @@
                     payload.context = buildPropertyContext();
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, propertyDirectiveAPI, payload, setLoader);
                 }
-            }
+            };
 
             $scope.scopeModel.onPropertyDirectiveReady = function (api) {
                 propertyDirectiveAPI = api;
@@ -180,7 +180,7 @@
         function buildPropertyContext() {
             var context = {
                 getObjectType: function () { return objectTypeSelectiveAPI.getData(); }
-            }
+            };
 
             return context;
         }
@@ -190,7 +190,7 @@
                 canDefineProperties: function (canDefineProperties) {
                     $scope.scopeModel.canDefineProperties = canDefineProperties;
                 }
-            }
+            };
             return context;
         }
         function buildVRObjectTypeDefinitionObjFromScope() {

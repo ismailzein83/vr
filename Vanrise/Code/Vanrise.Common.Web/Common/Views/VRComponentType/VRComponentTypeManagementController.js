@@ -31,12 +31,12 @@
 
             $scope.scopeModel.onComponentTypeConfigSelectorChanged = function () {
                 loadGrid();
-            }
+            };
 
             $scope.scopeModel.add = function () {
                 var onVRObjectTypeDefinitionAdded = function (addedItem) {
                     gridAPI.onVRComponentTypeAdded(addedItem);
-                }
+                };
                 VRCommon_VRComponentTypeService.addVRComponentType($scope.scopeModel.selectedComponentType.ExtensionConfigurationId, onVRObjectTypeDefinitionAdded);
             };
 

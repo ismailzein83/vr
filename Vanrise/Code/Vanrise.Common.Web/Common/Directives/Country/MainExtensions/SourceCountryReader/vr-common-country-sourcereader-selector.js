@@ -20,7 +20,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -40,7 +40,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
         $scope.oncountrySourceTypeDirectiveReady = function (api) {
             countrySourceDirectiveAPI = api;
             countrySourceDirectiveReadyPromiseDeferred.resolve();
-        }
+        };
 
         function initializeController() {            
             defineAPI();
@@ -87,7 +87,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
 
                 if (payload != undefined && payload.sourceConfigId != undefined) {
                     var loadCountrySourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                    countrySourceDirectiveReadyPromiseDeferred.promise.then(function() {
+                    countrySourceDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             connectionString: connectionString
                         };
@@ -97,7 +97,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
                     promises.push(loadCountrySourceTemplatePromiseDeferred.promise);
                 }
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

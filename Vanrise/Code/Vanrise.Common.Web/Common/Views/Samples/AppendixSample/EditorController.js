@@ -45,18 +45,18 @@
             $scope.appendixReady = function (api) {
                 appendixAPI = api;
                 appendixReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.appendix2Ready = function (api) {
                 appendix2API = api;
                 appendix2ReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.dynamicAppendixReady = function (api) {
                 dynamicAppendixAPI = api;
                 var setLoader = function (value) { $scope.isLoadingDynamicAppendix = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dynamicAppendixAPI, undefined, setLoader, dynamicAppendixReadyPromiseDeferred);
-            }
+            };
 
             $scope.dynamicAppendixTemplates = [];
 
