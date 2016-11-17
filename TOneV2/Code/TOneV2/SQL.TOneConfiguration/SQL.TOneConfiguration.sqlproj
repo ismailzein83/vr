@@ -464,6 +464,7 @@
     <Build Include="common\Stored Procedures\sp_VRComponentType_Update.sql" />
     <Build Include="common\Stored Procedures\sp_VRComponentType_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_VRComponentType_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_CheckOverlaping.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
