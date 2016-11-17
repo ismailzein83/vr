@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace Vanrise.Data.Postgres
 {
@@ -146,6 +147,21 @@ namespace Vanrise.Data.Postgres
             return cmd;
         }
 
+        #endregion
+        #region BulkCopy
+
+        public void BulkCopy(string tableName, byte[] data, int dataCount)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                using (var outStream = conn.BeginRawBinaryCopy(String.Format("COPY {0} FROM STDIN (FORMAT BINARY)", tableName)))
+                {
+                    outStream.Write(data, 0, dataCount);
+
+                }
+            }
+        }
         #endregion
     }
 }
