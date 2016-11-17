@@ -33,7 +33,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 if (ctrl.datasource.length > 0)
                     return null;
                 return "You Should Select at least one filter type ";
-            }
+            };
             ctrl.disableAddButton = true;
             ctrl.addFilter = function () {
                 var dataItem = {
@@ -75,8 +75,8 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             api.getData = function () {
                 var obj = {
                     $type: "Vanrise.Rules.Pricing.PricingRuleRateTypeSettings, Vanrise.Rules.Pricing",
-                    Items: getItems(),
-                }
+                    Items: getItems()
+                };
                 return obj;
 
                 function getItems() {
@@ -91,11 +91,11 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
                     return itemList;
                 }
-            }
+            };
             
             api.load = function (payload) {
                 return loadFiltersSection(payload);
-            }
+            };
 
             function loadFiltersSection(payload) {
                 console.log(payload);
@@ -115,7 +115,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 loadPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 readyRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadRateTypePromiseDeferred: UtilsService.createPromiseDeferred()
                             };
                             promises.push(filterItem.loadPromiseDeferred.promise);
                             filterItems.push(filterItem);
@@ -165,7 +165,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                         dataItem.rateTypeSelectorAPI = api;
                         filterItem.readyRateTypePromiseDeferred.resolve();
                     };
-                    var dataItemRateTypePayload = { selectedIds: filterItem.payload.RateTypeId }
+                    var dataItemRateTypePayload = { selectedIds: filterItem.payload.RateTypeId };
                     filterItem.readyRateTypePromiseDeferred.promise
                        .then(function () {
                            VRUIUtilsService.callDirectiveLoad(dataItem.rateTypeSelectorAPI, dataItemRateTypePayload, filterItem.loadRateTypePromiseDeferred);
