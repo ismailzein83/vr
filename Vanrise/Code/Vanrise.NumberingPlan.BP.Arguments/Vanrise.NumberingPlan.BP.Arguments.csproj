@@ -46,6 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodePreparationInput.cs" />
+    <Compile Include="CodePreparationProcessInput.cs" />
+    <Compile Include="CodePreparationProcessOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
