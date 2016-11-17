@@ -12,7 +12,7 @@
             EntityType: entityType,
             EntityName: entityName,
             EntityId: entityId
-        }
+        };
         var modalSettings = {
             useModalTemplate: true,
             width: "80%",
@@ -118,7 +118,7 @@
                     return false;
             case TimeDimensionTypeEnum.Weekly.value:
                 if (getDateDifference(fromDate, toDate) > 200)
-                    return true
+                    return true;
                 else
                     return false;
             case TimeDimensionTypeEnum.Daily.value:
@@ -161,7 +161,7 @@
         if (fullYear.length == 4)
             return fullYear.substring(2, 4);
         else
-            return fullYear
+            return fullYear;
     }
 
     function getDateDifference(fromDate, toDate) {

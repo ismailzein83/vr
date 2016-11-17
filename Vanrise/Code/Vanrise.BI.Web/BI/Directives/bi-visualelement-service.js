@@ -1,4 +1,4 @@
-﻿
+﻿'use strict';
 app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
 
     return ({

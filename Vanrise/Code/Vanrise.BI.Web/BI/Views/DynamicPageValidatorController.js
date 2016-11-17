@@ -37,7 +37,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
             .then(function (response) {
                 if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                     if (response.Data.length == 0) {
-                        $scope.showMessage = "All the active audiences of the page have the rights to see all added widgets."
+                        $scope.showMessage = "All the active audiences of the page have the rights to see all added widgets.";
                     }
                     angular.forEach(response.Data, function (itm) {
                        fillNeededData(itm);
@@ -66,7 +66,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
             UserIds: $scope.filter.Audience.Users,
             GroupIds: $scope.filter.Audience.Groups,
             Widgets: $scope.widgets
-        }
+        };
         return mainGridAPI.retrieveData(query);
 
 

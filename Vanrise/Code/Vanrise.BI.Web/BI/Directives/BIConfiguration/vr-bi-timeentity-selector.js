@@ -59,8 +59,8 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
-                + ' label="' + label +  '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Time Entity" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Time Entity" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '</div>';
         }
 
         function timeEntityCtor(ctrl, $scope, attrs) {
@@ -71,7 +71,7 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -95,11 +95,11 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
                             VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

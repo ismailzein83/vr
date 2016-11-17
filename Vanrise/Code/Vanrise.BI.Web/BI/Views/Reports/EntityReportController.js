@@ -13,22 +13,22 @@ function EntityReportController($scope, UtilsService, TimeDimensionTypeEnum, BIE
             
 
             defineTimeDimensionTypes();
-            defineMeasureTypes()
+            defineMeasureTypes();
 
-            $scope.onchangeEntityType = function () {                
-                loadEntityData()
+            $scope.onchangeEntityType = function () {
+                loadEntityData();
 
-            }
+            };
             $scope.search = function () {
 
                 return resultAPI.loadData($scope.fromDate, $scope.toDate, $scope.selectedTimeDimensionType.value);
 
-            }
+            };
 
             $scope.onEntityReportResultReady = function (api) {
-                resultAPI = api
+                resultAPI = api;
                 resultAPI.loadData($scope.fromDate, $scope.toDate, $scope.selectedTimeDimensionType.value);
-            }
+            };
         }
 
         function load() {

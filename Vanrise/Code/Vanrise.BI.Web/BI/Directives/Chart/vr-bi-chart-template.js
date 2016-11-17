@@ -42,33 +42,33 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                 var setLoader = function (value) { ctrl.isLoadingMeasures = value };
                 var payload;
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measureDirectiveAPI, payload, setLoader, measureReadyPromiseDeferred);
-            }
+            };
 
             ctrl.onTimeEntityDirectiveReady = function (api) {
                 timeEntityDirectiveAPI = api;
                 timeEntityReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onEntityDirectiveReady = function (api) {
                 entityDirectiveAPI = api;
                 entityReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onFilterDimensionReady = function (api) {
                 filterDimensionAPI = api;
                 var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
-                var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") }
+                var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
-            }
+            };
 
             $scope.onEntitySelectionChanged = function () {
                 if (filterDimensionAPI != undefined) {
 
                     var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
-                    var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") }
+                    var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
                 }
 
-            }
+            };
             ctrl.selectedEntitiesType = [];
             ctrl.definitionTypes = [];
             ctrl.selectedDefinitionType;
@@ -86,7 +86,7 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                     ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes.length > 0 ? ctrl.selectedMeasureTypes[0] : undefined;
                 }
 
-            }
+            };
 
             ctrl.onSelectionChanged = function () {
                 if (ctrl.selectedTopMeasure == undefined) {
@@ -102,7 +102,7 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                         ctrl.selectedTopMeasure = ctrl.selectedMeasureType;
                 }
                 lastTopMeasureValue = ctrl.selectedTopMeasure;
-            }
+            };
 
             defineChartDefinitionTypes();
             defineOperationTypes();
@@ -116,8 +116,7 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
 
             api.getData = function () {
                 var measureTypes;
-                if (ctrl.selectedOperationType != undefined)
-                {
+                if (ctrl.selectedOperationType != undefined) {
                     if (ctrl.selectedOperationType.value == "TopEntities" && ctrl.isPieChart) {
                         if (ctrl.selectedEntitiesType.length > 0 && ctrl.selectedMeasureType != undefined) {
                             measureTypes = [];
@@ -153,18 +152,18 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
 
                 return {
                     $type: "Vanrise.BI.Entities.ChartDirectiveSetting, Vanrise.BI.Entities",
-                    OperationType: ctrl.selectedOperationType != undefined? ctrl.selectedOperationType.value : undefined,
+                    OperationType: ctrl.selectedOperationType != undefined ? ctrl.selectedOperationType.value : undefined,
                     EntityType: entityType,
                     MeasureTypes: measureTypes,
                     TopMeasure: topMeasure,
-                    DefinitionType: ctrl.selectedDefinitionType !=undefined? ctrl.selectedDefinitionType.value :undefined,
+                    DefinitionType: ctrl.selectedDefinitionType != undefined ? ctrl.selectedDefinitionType.value : undefined,
                     IsPieChart: ctrl.isPieChart,
                     TopRecords: ctrl.topRecords,
                     TimeEntity: ctrl.selectedTimeEntity != undefined ? ctrl.selectedTimeEntity.Name : undefined,
                     Filter: filterDimensionAPI != undefined ? filterDimensionAPI.getData() : undefined
                 };
 
-            }
+            };
 
             api.load = function (payload) {
                 if (payload != undefined && payload.DefinitionType != undefined) {
@@ -226,18 +225,17 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
                 promises.push(loadFilterDimentionPromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises).then(function () {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         for (var j = 0; j < ctrl.selectedMeasureTypes.length; j++) {
                             if (ctrl.selectedMeasureTypes[j].Name == payload.TopMeasure)
                                 ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes[j];
                         }
                         lastTopMeasureValue = ctrl.selectedTopMeasure;
                     }
-                   
+
                 });
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -32,12 +32,12 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
             $scope.onMeasureDirectiveReady = function (api) {
                 measureDirectiveAPI = api;
                 measureReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onTimeEntityDirectiveReady = function (api) {
                 timeEntityDirectiveAPI = api;
                 timeEntityReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.selectedMeasureTypes = [];
             defineAPI();
@@ -48,8 +48,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
 
             api.getData = function () {
                 var measureTypes;
-                if ($scope.selectedMeasureTypes.length > 0)
-                {
+                if ($scope.selectedMeasureTypes.length > 0) {
                     measureTypes = [];
                     for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
 
@@ -61,13 +60,13 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
                     MeasureTypes: measureTypes,
                     TimeEntity: ctrl.selectedTimeEntity != undefined ? ctrl.selectedTimeEntity.Name : undefined
                 };
-            }
+            };
 
             api.load = function (payload) {
-                var promises=[];
+                var promises = [];
                 var loadMeasurePromiseDeferred = UtilsService.createPromiseDeferred();
                 measureReadyPromiseDeferred.promise.then(function () {
-                    var measurePayload = { selectedIds: payload!= undefined ? payload.MeasureTypes : undefined };
+                    var measurePayload = { selectedIds: payload != undefined ? payload.MeasureTypes : undefined };
 
                     VRUIUtilsService.callDirectiveLoad(measureDirectiveAPI, measurePayload, loadMeasurePromiseDeferred);
 
@@ -85,7 +84,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, VR_BI
                 promises.push(loadTimeEntityPromiseDeferred.promise);
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

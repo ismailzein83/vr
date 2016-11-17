@@ -35,7 +35,7 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTimeEntityTemplate(attrs);
@@ -60,7 +60,7 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Measure" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function timeEntityCtor(ctrl, $scope, attrs) {
@@ -71,7 +71,7 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -95,11 +95,11 @@ app.directive('vrBiMeasureSelector', ['VR_BI_BIConfigurationAPIService', 'UtilsS
                             VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
                     });
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

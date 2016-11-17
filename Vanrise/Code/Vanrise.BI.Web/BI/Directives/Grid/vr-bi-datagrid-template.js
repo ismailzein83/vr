@@ -35,25 +35,22 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
         var filterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         function initializeController() {
 
-            $scope.onFilterDimensionReady = function(api)
-            {
+            $scope.onFilterDimensionReady = function (api) {
                 filterDimensionAPI = api;
                 var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
-                var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") }
+                var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
-            }
+            };
 
-            ctrl.onEntitySelectionChanged = function()
-            {
-                if (filterDimensionAPI != undefined)
-                {
-                  
+            ctrl.onEntitySelectionChanged = function () {
+                if (filterDimensionAPI != undefined) {
+
                     var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
-                    var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") }
+                    var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
                 }
-               
-            }
+
+            };
             ctrl.selectedEntitiesType = [];
            
             ctrl.selectedMeasureTypes = [];
@@ -66,23 +63,23 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                     if (!UtilsService.contains(ctrl.selectedMeasureTypes, ctrl.selectedTopMeasure))
                         ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes[0];
                 }
-            }
+            };
 
 
 
             ctrl.onMeasureDirectiveReady = function (api) {
                 measureDirectiveAPI = api;
                 measureReadyPromiseDeferred.resolve();
-            }
+            };
 
             ctrl.onTimeEntityDirectiveReady = function (api) {
                 timeEntityDirectiveAPI = api;
                 timeEntityReadyPromiseDeferred.resolve();
-            }
+            };
             ctrl.onEntityDirectiveReady = function (api) {
                 entityDirectiveAPI = api;
                 entityReadyPromiseDeferred.resolve();
-            }
+            };
             defineNumberOfColumns();
             defineOperationTypes();
             defineTimeDimensionTypes();
@@ -97,8 +94,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                 if (ctrl.selectedTopMeasure != undefined)
                     topMeasure = ctrl.selectedTopMeasure.Name;
                 var measureTypes;
-                if (ctrl.selectedMeasureTypes.length > 0)
-                {
+                if (ctrl.selectedMeasureTypes.length > 0) {
                     measureTypes = [];
                     for (var i = 0; i < ctrl.selectedMeasureTypes.length; i++) {
                         measureTypes.push(ctrl.selectedMeasureTypes[i].Name);
@@ -109,7 +105,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                         }
                     }
                 }
-                
+
                 var entityType;
                 if (ctrl.selectedEntitiesType.length > 0 && ctrl.selectedOperationType.value != "MeasuresGroupedByTime") {
                     entityType = [];
@@ -117,24 +113,23 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                         entityType.push(ctrl.selectedEntitiesType[i].Name);
 
                 }
-                else if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime")
-                {
+                else if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime") {
                     entityType = null;
                 }
 
 
                 return {
                     $type: "Vanrise.BI.Entities.DataGridDirectiveSetting, Vanrise.BI.Entities",
-                    OperationType: ctrl.selectedOperationType !=undefined? ctrl.selectedOperationType.value : undefined,
+                    OperationType: ctrl.selectedOperationType != undefined ? ctrl.selectedOperationType.value : undefined,
                     EntityType: entityType,
                     MeasureTypes: measureTypes,
                     TopMeasure: topMeasure,
                     TopRecords: ctrl.topRecords,
                     TimeEntity: ctrl.selectedTimeEntity != undefined ? ctrl.selectedTimeEntity.Name : undefined,
-                    Filter: filterDimensionAPI !=undefined?filterDimensionAPI.getData():undefined
+                    Filter: filterDimensionAPI != undefined ? filterDimensionAPI.getData() : undefined
                 };
 
-            }
+            };
 
             api.load = function (payload) {
 
@@ -181,7 +176,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
 
                 var loadFilterDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 filterReadyPromiseDeferred.promise.then(function () {
-                    var entityPayload = payload != undefined ? { entityNames: payload.EntityType ,filter:payload.Filter}: undefined;
+                    var entityPayload = payload != undefined ? { entityNames: payload.EntityType, filter: payload.Filter } : undefined;
                     filterReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(filterDimensionAPI, entityPayload, loadFilterDimentionPromiseDeferred);
 
@@ -189,20 +184,18 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                 promises.push(loadFilterDimentionPromiseDeferred.promise);
 
 
-                return UtilsService.waitMultiplePromises(promises).then(function()
-                {
-                    if (payload != undefined)
-                    {
+                return UtilsService.waitMultiplePromises(promises).then(function () {
+                    if (payload != undefined) {
                         for (var j = 0; j < ctrl.selectedMeasureTypes.length; j++) {
                             if (ctrl.selectedMeasureTypes[j].Name == payload.TopMeasure)
                                 ctrl.selectedTopMeasure = ctrl.selectedMeasureTypes[j];
                         }
 
                     }
-                   
+
                 });
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

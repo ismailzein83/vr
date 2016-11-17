@@ -26,7 +26,7 @@ app.directive('vrBiSummary', ['UtilsService', 'VR_BI_BIConfigurationAPIService',
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) { }
-            }
+            };
         },
         template: function (element, attrs) {
             return getSummaryTemplate(attrs.previewmode);
@@ -36,11 +36,13 @@ app.directive('vrBiSummary', ['UtilsService', 'VR_BI_BIConfigurationAPIService',
 
     function getSummaryTemplate(previewmode) {
         if (previewmode == undefined) {
-            return '<vr-section title="{{ctrl.title}}">' + '<div ng-if="ctrl.isAllowed==false"  class="alert alert-danger" role="alert">' + '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>' + '<span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!' + '</div>' + '<div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData">' + '<div width="normal">' + '<div class="circle-div" ng-repeat="value in ctrl.dataSource" ng-class="\'circle-bg-\'+ $index % 4" >' + '<div  class="circle-label" >' + '<vr-label isValue="{{value.description.DisplayName}}">{{value.description.DisplayName}}</vr-label>' + '</div>' + '<div class="circle-value" >' + '<vr-label isValue="{{value.value}}">{{value.value | number:2}}</vr-label>' + '</div>' + '<div class="circle-unit" >' + '<vr-label isValue="{{value.value}}" ng-show="value.description.Unit.length!=0">({{value.description.Unit}})</vr-label>' + '<vr-label  ng-show="value.description.Unit.length==0"></vr-label>' + '</div>'
-
-            + '</div>' + '</div>' + '</div>' + '</vr-section>'
+            return '<vr-section title="{{ctrl.title}}"><div ng-if="ctrl.isAllowed==false"  class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>'
+                    + '<span class="sr-only">Error:</span> You Don\'t Have Permission, Please Contact Your Administrator..!!</div><div ng-if="ctrl.isAllowed" vr-loader="ctrl.isGettingData">'
+                    + '<div width="normal"><div class="circle-div" ng-repeat="value in ctrl.dataSource" ng-class="\'circle-bg-\'+ $index % 4" ><div  class="circle-label" >'
+                    + '<vr-label isValue="{{value.description.DisplayName}}">{{value.description.DisplayName}}</vr-label></div><div class="circle-value" >'
+                    + '<vr-label isValue="{{value.value}}">{{value.value | number:2}}</vr-label></div><div class="circle-unit" ><vr-label isValue="{{value.value}}" ng-show="value.description.Unit.length!=0">({{value.description.Unit}})</vr-label>'
+                    + '<vr-label  ng-show="value.description.Unit.length==0"></vr-label></div></div></div></div></vr-section>';
         } else
-            //  return '<vr-section title="{{ctrl.title}}"><div><table class="table  table-striped" ><tr ng-repeat="value in ctrl.measureTypes" ><td><vr-label isValue="{{value}}">{{value.DisplayName}}</vr-label></td></tr></table></vr-section>';
             return '<vr-section title="{{ctrl.title}}"><div><div class="circle-div" ng-repeat="value in ctrl.measureTypes" ng-class="\'circle-bg-\'+ $index % 4"  ><div class="circle-value" ></div><div  class="circle-label" ><vr-label isValue="{{value}}">{{value.DisplayName}}</vr-label</div></vr-section>';
 
     }

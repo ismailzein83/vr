@@ -35,7 +35,7 @@ app.directive('vrBiDimensionSelector', ['VR_BI_BIDimensionAPIService', 'UtilsSer
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTimeEntityTemplate(attrs);
@@ -61,7 +61,7 @@ app.directive('vrBiDimensionSelector', ['VR_BI_BIDimensionAPIService', 'UtilsSer
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DimensionId" isrequired="ctrl.isrequired" '
                 + label + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Entity Value" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</div>';
         }
 
         function DimensionCtor(ctrl, $scope, attrs) {
@@ -72,7 +72,7 @@ app.directive('vrBiDimensionSelector', ['VR_BI_BIDimensionAPIService', 'UtilsSer
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
@@ -84,8 +84,7 @@ app.directive('vrBiDimensionSelector', ['VR_BI_BIDimensionAPIService', 'UtilsSer
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        if (payload.entityName != undefined)
-                        {
+                        if (payload.entityName != undefined) {
                             return VR_BI_BIDimensionAPIService.GetDimensionInfo(payload.entityName).then(function (response) {
                                 ctrl.datasource.length = 0;
                                 angular.forEach(response, function (itm) {
@@ -97,13 +96,13 @@ app.directive('vrBiDimensionSelector', ['VR_BI_BIDimensionAPIService', 'UtilsSer
                                 }
                             });
                         }
-                       
+
                     }
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('DimensionId', attrs, ctrl);
-                }
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

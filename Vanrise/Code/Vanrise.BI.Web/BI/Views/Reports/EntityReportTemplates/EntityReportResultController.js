@@ -83,7 +83,7 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
 
             $scope.choicesReady = function (api) {
                 //api.selectChoice(1);
-            }
+            };
         }
         function loadData(fromDate, toDate, timeDimensionValue) {
             $scope.timeDimensionValue = timeDimensionValue;

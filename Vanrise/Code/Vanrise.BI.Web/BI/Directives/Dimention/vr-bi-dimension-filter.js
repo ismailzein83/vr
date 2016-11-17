@@ -33,23 +33,20 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.validate = function () {
-                    for(var i = 0;i<ctrl.datasource.length; i++)
-                    {
-                        for(var j = 0;j<ctrl.datasource.length; j++)
-                        {
-                            if ( i !=j && ctrl.datasource[i].selectedEntityName != undefined && ctrl.datasource[j].selectedEntityName !=undefined)
-                                 if (ctrl.datasource[i].selectedEntityName.Name == ctrl.datasource[j].selectedEntityName.Name)
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
+                        for (var j = 0; j < ctrl.datasource.length; j++) {
+                            if (i != j && ctrl.datasource[i].selectedEntityName != undefined && ctrl.datasource[j].selectedEntityName != undefined)
+                                if (ctrl.datasource[i].selectedEntityName.Name == ctrl.datasource[j].selectedEntityName.Name)
                                     return "Same entity selected more than once.";
                         }
                     }
                     return null;
-                }
-                ctrl.removeFilter = function(dataItem)
-                {
+                };
+                ctrl.removeFilter = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     if (index != -1)
                         ctrl.datasource.splice(index, 1);
-                }
+                };
                 ctrl.addFilter = function () {
                     var filter = {
                         entityNames : entityNames,
@@ -57,7 +54,7 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                         {
                             filter.dimensionAPI = api;
                             var setLoader = function (value) { filter.isLoadingDimentionDirective = value };
-                            var payload = { entityName: filter.selectedEntityName.Name }
+                            var payload = { entityName: filter.selectedEntityName.Name };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filter.dimensionAPI, payload, setLoader);
                         },
                         onSelectItem: function (selectItem)
@@ -65,7 +62,7 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                             if (filter.dimensionAPI != undefined)
                             {
                                 var setLoader = function (value) { filter.isLoadingDimentionDirective = value };
-                                var payload = { entityName: selectItem.Name }
+                                var payload = { entityName: selectItem.Name };
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filter.dimensionAPI, payload, setLoader);
                             }
 
@@ -83,10 +80,8 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
 
                 api.getData = function () {
                     var entityFilter = [];
-                    if (ctrl.datasource.length > 0)
-                    {
-                        for(var i =0;i<ctrl.datasource.length;i++)
-                        {
+                    if (ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
                             var dataItem = ctrl.datasource[i];
                             entityFilter.push({
                                 EntityName: dataItem.selectedEntityName != undefined ? dataItem.selectedEntityName.Name : undefined,
@@ -95,33 +90,28 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                         }
                     }
                     return entityFilter;
-                }
+                };
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
+                    if (payload != undefined) {
                         var promises = [];
-                        if(payload.entityNames !=undefined)
-                        {
+                        if (payload.entityNames != undefined) {
                             entityNames.length = 0;
-                            for (var i = 0; i < payload.entityNames.length ; i++)
-                            {
+                            for (var i = 0; i < payload.entityNames.length ; i++) {
                                 entityNames.push({ Name: payload.entityNames[i] });
                             }
                         }
-                        if(payload.filter !=undefined)
-                        {
-                            
-                            for(var i = 0 ; i< payload.filter.length;i++)
-                            {
+                        if (payload.filter != undefined) {
+
+                            for (var i = 0 ; i < payload.filter.length; i++) {
                                 addFilterDataItemAPI(payload.filter[i], promises);
                             }
 
-                           
+
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -139,14 +129,14 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                     onSelectItem: function (selectItem) {
                         if (dataItem.dimensionAPI != undefined) {
                             var setLoader = function (value) { dataItem.isLoadingDimentionDirective = value };
-                            var payload = { entityName: selectItem.Name }
+                            var payload = { entityName: selectItem.Name };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionAPI, payload, setLoader);
                         }
                     }
                 };
                 promises.push(dataItem.loadPromiseDeferred.promise);
                 dataItem.readyPromiseDeferred.promise.then(function () {
-                    var payload = { entityName: dataItem.selectedEntityName.Name, selectedIds: filter.Values }
+                    var payload = { entityName: dataItem.selectedEntityName.Name, selectedIds: filter.Values };
                     VRUIUtilsService.callDirectiveLoad(dataItem.dimensionAPI, payload, dataItem.loadPromiseDeferred);
                 }),
                 ctrl.datasource.push(dataItem);
