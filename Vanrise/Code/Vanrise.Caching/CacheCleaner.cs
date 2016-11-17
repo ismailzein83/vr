@@ -17,12 +17,7 @@ namespace Vanrise.Caching
             s_timer = new System.Timers.Timer(5000);
             s_timer.Elapsed += s_timer_Elapsed;            
         }
-
-        internal static void Start()
-        {
-            s_timer.Start();
-        }
-
+        
         static bool s_isRunning;
         static Object s_lockObj = new object();
         static void s_timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -38,7 +33,6 @@ namespace Vanrise.Caching
 
             try
             {
-
                 List<CachedObject> copyOfCleanableCacheObjects = new List<CachedObject>();
                 copyOfCleanableCacheObjects.AddRange(s_cleanableCacheObjects);
 
@@ -56,12 +50,19 @@ namespace Vanrise.Caching
                         anyCacheCleaned = true;
                     }
                 }
+                if (s_cleanableCacheObjects.Count == 0)
+                {
+                    lock (s_timer)
+                    {
+                        s_timer.Enabled = false;
+                    }
+                }
                 if (anyCacheCleaned)
                 {
                     GC.Collect();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
@@ -86,6 +87,11 @@ namespace Vanrise.Caching
             lock(s_cleanableCacheObjects)
             {
                 s_cleanableCacheObjects.Add(cachedObject);
+            }
+            lock(s_timer)
+            {
+                if (!s_timer.Enabled)
+                    s_timer.Enabled = true;
             }
         }
     }
