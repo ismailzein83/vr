@@ -44,7 +44,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 var directiveAPI = {};
                 directiveAPI.load = function () {
                     return load();
-                }
+                };
                 return directiveAPI;
             }
 
@@ -62,16 +62,16 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             $scope.gridReady = function (api) {
                 gridApi = api;
-            }
+            };
 
             $scope.searchClicked = function () {
                 $scope.showGrid = true;
                 return gridApi.loadGrid(getQueryGrid());
-            }
+            };
             $scope.onDataSourceSelectorReady = function (api) {
                 dataSourceDirectiveAPI = api;
                 dataSourceReadyPromiseDeferred.resolve();
-            }
+            };
 
         }
 

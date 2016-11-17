@@ -31,7 +31,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
             $scope.getStatusColor = function (dataItem, colDef) {
                 return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.Status);
-            }
+            };
             $scope.dataSources = [];
             $scope.gridReady = function (api) {
 
@@ -46,12 +46,12 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onDataSourceAdded = function (dataSource) {
 
                         gridAPI.itemAdded(dataSource);
 
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -64,7 +64,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
-            }
+            };
             defineMenuActions();
         }
         function defineMenuActions() {
@@ -85,7 +85,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
             var onDataSourceUpdated = function (dataSource) {
                 gridAPI.itemUpdated(dataSource);
-            }
+            };
 
             VR_Integration_DataSourceService.editDataSource(dataSourceObj.Entity.DataSourceId, onDataSourceUpdated);
         }
@@ -97,7 +97,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
                 gridAPI.itemDeleted(dataSource);
-            }
+            };
 
             VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj.Entity, onDataSourceDeleted);
         }

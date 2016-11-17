@@ -22,16 +22,16 @@ function DataSourceLogManagementController($scope, UtilsService, VRNotificationS
 
         $scope.gridReady = function (api) {
             gridApi = api;
-        }
+        };
 
         $scope.searchClicked = function () {
             $scope.showGrid = true;
             return gridApi.loadGrid(getQueryGrid());
-        }
+        };
         $scope.onDataSourceSelectorReady = function (api) {
             dataSourceDirectiveAPI = api;
             dataSourceReadyPromiseDeferred.resolve();
-        }
+        };
 
     }
 

@@ -44,7 +44,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
                 var directiveAPI = {};
                 directiveAPI.load = function () {
                     return load();
-                }
+                };
                 return directiveAPI;
             }
 
@@ -59,19 +59,19 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
 
             $scope.gridReady = function (api) {
                 gridApi = api;
-            }
+            };
 
             $scope.searchClicked = function () {
                 $scope.showGrid = true;
                 return gridApi.loadGrid(getGridQuery());
-            }
+            };
 
             $scope.mappingResults = UtilsService.getArrayEnum(VR_Integration_MappingResultEnum);
 
             $scope.onDataSourceSelectorReady = function (api) {
                 dataSourceDirectiveAPI = api;
                 dataSourceReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

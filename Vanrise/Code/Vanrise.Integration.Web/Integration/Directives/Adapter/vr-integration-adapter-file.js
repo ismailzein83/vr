@@ -21,7 +21,7 @@ function (UtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterFileTemplate.html"
     };
@@ -78,7 +78,7 @@ function (UtilsService) {
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
                     }
                 }
-            }
+            };
                 
             
             if (ctrl.onReady != null)

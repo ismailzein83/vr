@@ -60,13 +60,13 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
         $scope.scopeModel.onTaskTriggerDirectiveReady = function (api) {
             taskTriggerDirectiveAPI = api;
             taskTriggerDirectiveReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.scopeModel.onAdapterTypeDirectiveReady = function (api) {
             adapterTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.scopeModel.isLoadingAdapterDirective = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, adapterTypeDirectiveAPI, undefined, setLoader, adapterTypeDirectiveReadyPromiseDeferred);
-        }
+        };
 
         $scope.scopeModel.addExecutionFlow = function () {
 
@@ -93,7 +93,7 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
             };
 
             VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceExecutionFlowEditor.html', null, modalSettings);
-        }
+        };
 
         $scope.scopeModel.adapterTypes = [];
         $scope.scopeModel.executionFlows = [];

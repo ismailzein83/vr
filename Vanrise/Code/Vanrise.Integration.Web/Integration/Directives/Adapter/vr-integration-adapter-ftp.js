@@ -21,7 +21,7 @@ function (UtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterFTPTemplate.html"
     };
@@ -34,7 +34,7 @@ function (UtilsService) {
 
             $scope.actionIsRequired = function () {
                 return !$scope.basedOnTime;
-            }
+            };
 
             defineAPI();
         }
@@ -89,7 +89,7 @@ function (UtilsService) {
                     }
 
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

@@ -31,7 +31,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceLogAPISe
 
             $scope.getSeverityColor = function (dataItem, colDef) {
                 return UtilsService.getLogEntryTypeColor(dataItem.Severity);
-            }
+            };
             $scope.logs = [];
             $scope.gridReady = function (api) {
 
@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceLogAPISe
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -63,7 +63,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceLogAPISe
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
-            }
+            };
 
         }
 

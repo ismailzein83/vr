@@ -21,7 +21,7 @@ function (UtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterDBTemplate.html"
     };
@@ -59,7 +59,7 @@ function (UtilsService) {
                 }
 
                 return "Format: DD.HH:MM:SS";
-            }
+            };
 
             defineAPI();
         }
@@ -93,7 +93,7 @@ function (UtilsService) {
 
 
             api.load = function (payload) {
-                
+
                 if (payload != undefined) {
                     var argumentData = payload.adapterArgument;
                     if (argumentData != undefined) {
@@ -115,9 +115,9 @@ function (UtilsService) {
                         $scope.lastImportedId = adapterState.LastImportedId;
                     }
                 }
-              
-                
-            }
+
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

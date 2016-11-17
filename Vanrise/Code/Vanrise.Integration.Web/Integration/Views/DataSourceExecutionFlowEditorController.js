@@ -24,11 +24,11 @@ function DataSourceExecutionFlowEditorController($scope, VR_Integration_DataSour
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
-        }
+        };
 
         $scope.close = function () {
             $scope.modalContext.closeModal();
-        }
+        };
     }
 
     function load() {

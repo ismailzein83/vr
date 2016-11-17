@@ -32,7 +32,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
 
             $scope.getStatusColor = function (dataItem, colDef) {
                 return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.ExecutionStatus);
-            }
+            };
 
             $scope.importedBatches = [];
             $scope.gridReady = function (api) {
@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
 
                 drillDownDefinition.loadDirective = function (directiveAPI, dataItem) {
                     dataItem.queueItemHeaderAPI = directiveAPI;
-                       var query = dataItem.QueueItemIds.split(',').map(Number)
+                    var query = dataItem.QueueItemIds.split(',').map(Number);
                        return dataItem.queueItemHeaderAPI.loadGrid(query);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
@@ -60,7 +60,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -81,7 +81,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
-            }
+            };
         }
 
     }

@@ -34,7 +34,7 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -47,7 +47,7 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
@@ -57,7 +57,7 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
           addDataSource='onaddclicked="addDataSource"';
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="DataSourceID" '
-        + required + ' label="DataSource" datasource="ctrl.datasource" ' + addDataSource + ' selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" "></vr-select></vr-columns>'
+        + required + ' label="DataSource" datasource="ctrl.datasource" ' + addDataSource + ' selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" "></vr-select></vr-columns>';
 
     }
 
@@ -73,14 +73,14 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
 
                 var onDataSourceAdded = function (dataSourceObj) {
                     ctrl.dataSources.push(dataSourceObj);
-                }
+                };
 
                 VR_Integration_DataSourceService.addDataSource(onDataSourceAdded);
-            }
+            };
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('DataSourceID', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
                 var filter = null;
                 var selectedIds;
@@ -99,7 +99,7 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
 
                 });
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
