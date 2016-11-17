@@ -401,12 +401,13 @@ namespace TOne.WhS.Analytics.Business
                 }
 
                 worksheet.Cells.CreateRange("C2", colName + "2").SetStyle(style);
-
-                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, topDestination + 3, 1, (int)(topDestination * 2.5), numberOfMonths + 2);
-                Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
-
                 int seriesCount = 0;
                 seriesCount = (listZonesCount < topDestination) ? listZonesCount : topDestination;
+
+                int chartIndex = worksheet.Charts.Add(Aspose.Cells.Charts.ChartType.Column, seriesCount + 3, 1, (int)(seriesCount * 2.5), numberOfMonths + 2);
+                Aspose.Cells.Charts.Chart chart = worksheet.Charts[chartIndex];
+
+
 
                 chart.NSeries.Add("C3:" + colName + (seriesCount + 2), false);
                 chart.NSeries.CategoryData = "C2:" + colName + "2";
