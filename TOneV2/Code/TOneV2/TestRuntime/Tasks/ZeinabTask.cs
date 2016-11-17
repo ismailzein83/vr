@@ -18,45 +18,41 @@ namespace TestRuntime
     {
         public void Execute()
         {
-            SwitchMappingRulesMigrator migrator = new SwitchMappingRulesMigrator("Server=192.168.110.185;Database=NettalkFidaa;User ID=Development;Password=dev!123");
-            migrator.LoadSwitches();
-            migrator.Migrate("3", "Teles", new DateTime(2016, 08, 16));
-            //SwitchMappingRulesManager switchMapping = new SwitchMappingRulesManager();
-            //List<TOne.WhS.DBSync.Entities.SwitchMappingRules> switches = switchMapping.LoadSwitches();
-            //string parser = "teles";
-            //foreach (var item in switches)
-            //{
-            //    List<InParsedMapping> inParsedMappings;
-            //    List<OutParsedMapping> outParsedMappings;
-            //    switch (item.Name.ToLower())
-            //    {
-            //        case "teles":
-            //            TelesSwitchParser telesSwitchParser = new TelesSwitchParser();
-            //            telesSwitchParser.GetParsedMappings(item.Configuration, out inParsedMappings, out outParsedMappings);
-            //            break;
-            //    }
-            //}
+            #region Runtime
+            var runtimeServices = new List<RuntimeService>();
 
-            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            ////QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
-            //var runtimeServices = new List<RuntimeService>();
-            ////runtimeServices.Add(queueActivationService);
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
 
-            //runtimeServices.Add(bpService);
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
 
-            //RuntimeHost host = new RuntimeHost(runtimeServices);
-            //host.Start();
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
 
-            ////BPClient bpClient = new BPClient();
-            ////bpClient.CreateNewProcess(new CreateProcessInput
-            ////{
-            ////    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-            ////    {
-            ////        EffectiveTime = DateTime.Now,
-            ////        IsFuture = false
-            ////    }
-            ////});
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(schedulerService);
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
+
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+            Console.ReadKey();
+            #endregion
         }
     }
 }
