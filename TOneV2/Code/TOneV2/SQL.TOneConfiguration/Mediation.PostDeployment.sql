@@ -10,6 +10,8 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+
+
 GO--delete useless views from ClearVoice product such 'My Scheduler Service', 'Style Definitions', 'Organizational Charts', Lookups, etc...
 delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','66DE2441-8A96-41E7-94EA-9F8AF38A3515','604B2CB5-B839-4E51-8D13-3C1C84D05DEE','DCF8CA21-852C-41B9-9101-6990E545509D','25994374-CB99-475B-8047-3CDB7474A083','9F691B87-4936-4C4C-A757-4B3E12F7E1D9', 'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', '0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', '4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712')
 GO
@@ -67,4 +69,92 @@ set identity_insert [queue].[QueueActivatorConfig] off;
 
 --[common].[Setting]---------------------------501 to 600-------------------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;;with cte_data([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('547C43CD-58D2-45A3-BF87-F97E93C1DB9A',501,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Mediation","VersionNumber":"version 0.9"}}',1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[OldID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+set nocount on;;with cte_data([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('547C43CD-58D2-45A3-BF87-F97E93C1DB9A',501,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Mediation","VersionNumber":"version 0.9"}}',1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[OldID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);--[queue].[ExecutionFlowDefinition]---------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ExecutionTree],[Stages])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('DCC30943-F1E3-44D2-81F0-4AB49EADFD31','MediationExecutionFlow', 'Mediation Execution Flow', NULL, '{"$type":"System.Collections.Generic.List`1[[Vanrise.Queueing.Entities.QueueExecutionFlowStage, Vanrise.Queueing.Entities]], mscorlib","$values":[{"$type":"Vanrise.Queueing.Entities.QueueExecutionFlowStage, Vanrise.Queueing.Entities","StageName":"Mediation Store Batch","QueueNameTemplate":"Queue_#FlowId#_#StageName#","QueueTitleTemplate":"#StageName# Queue (#FlowName#)","QueueItemType":{"$type":"Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators","DataRecordTypeId":"1d7b5d3c-4ac6-42a3-a6e8-5a014e2edf94","BatchDescription":"#RECORDSCOUNT# of CDRs"},"QueueActivator":{"$type":"Mediation.Generic.QueueActivators.StoreStagingRecordsQueueActivator, Mediation.Generic.QueueActivators","MediationDefinitionId":1,"ConfigId":501}}]}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ExecutionTree],[Stages]))
+merge	[queue].[ExecutionFlowDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ExecutionTree] = s.[ExecutionTree],[Stages] = s.[Stages]
+when not matched by target then
+	insert([ID],[Name],[Title],[ExecutionTree],[Stages])
+	values(s.[ID],s.[Name],s.[Title],s.[ExecutionTree],s.[Stages]);
+
+
+--[queue].[ExecutionFlow]-------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+
+;with cte_data([ID],[Name],[ExecutionFlowDefinitionID])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('8F27D74A-F254-4E98-AE43-05AE61566484','Mediation Flow','DCC30943-F1E3-44D2-81F0-4AB49EADFD31')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ExecutionFlowDefinitionID]))
+merge	[queue].[ExecutionFlow] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
+when not matched by target then
+	insert([ID],[Name],[ExecutionFlowDefinitionID])
+	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID]);
+
+
+--[runtime].[SchedulerTaskTriggerType]--------------------------------------------------------------set nocount on;;with cte_data([ID],[OldID],[Name],[TriggerTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'Timer','{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[TriggerTypeInfo]))merge	[runtime].[SchedulerTaskTriggerType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[TriggerTypeInfo] = s.[TriggerTypeInfo]when not matched by target then	insert([ID],[OldID],[Name],[TriggerTypeInfo])	values(s.[ID],s.[OldID],s.[Name],s.[TriggerTypeInfo]);
+----------------------------------------------------------------------------------------------------
+
+
+--[runtime].[ScheduleTask]------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('6D3AB9F6-DF06-4DA1-814A-D40CF4A6A558','Mediation Data Source Task', 0, 0, '295B4FAC-DBF9-456F-855E-60D0B176F86B', 'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68', '{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-12T10:35:00+03:00"}', 1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId]))
+merge	[runtime].[ScheduleTask] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]
+when not matched by target then
+	insert([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
+	values(s.[ID],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);
+
+
+
+--[integration].[DataSource]----------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+
+;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('3643F87B-8C5F-4C8F-BB39-3218198FD8C1','File Data Source - MultiNet','396A4933-DF4F-49CD-9799-BF605B9F4597', null,'6D3AB9F6-DF06-4DA1-814A-D40CF4A6A558', '{"$type":"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities","AdapterArgument":{"$type":"Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments","Extension":".txt","Directory":"/MultiNet/CDRs","ServerIP":"192.168.110.185","UserName":"devftpuser","Password":"P@ssw0rd","DirectorytoMoveFile":"/MultiNet/Processed","ActionAfterImport":2,"MaxParallelRuntimeInstances":1},"MapperCustomCode":"Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));\n            var cdrs = new List<dynamic>();\n            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\n            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\"ParsedCDR\");\n            try\n            {\n                System.IO.StreamReader sr = ImportedData.StreamReader;\n                while (!sr.EndOfStream)\n                {\n                    string currentLine = sr.ReadLine();\n                    if (string.IsNullOrEmpty(currentLine))\n                        continue;\n                    string[] rowData = currentLine.Split('','');\n                    dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;\n                    cdr.TC_VERSIONID = rowData[0].Trim(''\"'');\n                    cdr.TC_CALLID = rowData[13].Trim(''\"'');\n                    cdr.TC_LOGTYPE = rowData[1].Trim(''\"'');\n                    cdr.TC_TIMESTAMP = DateTime.ParseExact(rowData[3].Trim(''\"''), \"yyyyMMddHHmmss:fff\", System.Globalization.CultureInfo.InvariantCulture);\n\n                    cdr.TC_DISCONNECTREASON = rowData[4].Trim(''\"'');\n                    cdr.TC_CALLPROGRESSSTATE = rowData[5].Trim(''\"'');\n                    cdr.TC_ACCOUNT = rowData[6].Trim(''\"'');\n                    cdr.TC_ORIGINATORID = rowData[7].Trim(''\"'');\n                    cdr.TC_ORIGINATORNUMBER = rowData[8].Trim(''\"'');\n                    cdr.TC_ORIGINALFROMNUMBER = rowData[9].Trim(''\"'');\n                    cdr.TC_ORIGINALDIALEDNUMBER = rowData[10].Trim(''\"'');\n                    cdr.TC_TERMINATORID = rowData[11].Trim(''\"'');\n                    cdr.TC_TERMINATORNUMBER = rowData[12].Trim(''\"'');\n                    cdr.TC_INCOMINGGWID = rowData[15].Trim(''\"'');\n                    cdr.TC_OUTGOINGGWID = rowData[16].Trim(''\"'');\n                    cdr.TC_TRANSFERREDCALLID = rowData[20].Trim(''\"'');\n                    cdrs.Add(cdr);\n\n                }\n            }\n            catch (Exception ex)\n            {                \n                throw ex;\n            }\n\n            MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, \"#RECORDSCOUNT# of Raw CDRs\");\n            mappedBatches.Add(\"Mediation Store Batch\", batch);\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\n            return result;","ExecutionFlowId":"8F27D74A-F254-4E98-AE43-05AE61566484"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings]))
+merge	[integration].[DataSource] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
+
+
+
+
