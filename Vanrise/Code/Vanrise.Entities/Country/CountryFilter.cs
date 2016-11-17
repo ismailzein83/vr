@@ -4,9 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities.Country
+namespace Vanrise.Entities
 {
-	class CountryFilter
+	public class CountryFilter
 	{
+		public IEnumerable<ICountryFilter> Filters { get; set; }
+	}
+
+	public interface ICountryFilter
+	{
+		bool IsExcluded(ICountryFilterContext context);
+	}
+
+	public interface ICountryFilterContext
+	{
+		Country Country { get; }
+	}
+
+	public class CountryFilterContext : ICountryFilterContext
+	{
+		public Country Country { get; set; }
 	}
 }
