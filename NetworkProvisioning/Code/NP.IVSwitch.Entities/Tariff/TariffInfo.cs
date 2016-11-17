@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities 
 {
-    public class RouteQuery
+    public class TariffInfo
     {
-        public int AccountId { get; set; }
+        public String TariffName { get; set; }
+        public int TariffId { get; set; }
     }
 }

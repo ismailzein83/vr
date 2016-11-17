@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_EndPointEnum',
 
-    function (NP_IVSwitch_CodecProfileAPIService, UtilsService, VRUIUtilsService) {
+    function (NP_IVSwitch_EndPointAPIService, UtilsService, VRUIUtilsService, NP_IVSwitch_EndPointEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -26,8 +26,8 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var codecProfileSelector = new CodecProfileSelector(ctrl, $scope, $attrs);
-                codecProfileSelector.initializeController();
+                var endPointSelector = new EndPointSelector(ctrl, $scope, $attrs);
+                endPointSelector.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -37,7 +37,7 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
             }
         };
 
-        function CodecProfileSelector(ctrl, $scope, attrs) {
+        function EndPointSelector(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
@@ -45,6 +45,7 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
+ 
                     selectorAPI = api;
                     defineAPI();
                 };
@@ -61,52 +62,53 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                     }
+ 
+
+                    var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
+                    selectorAPI.clearDataSource();
+                    if (EnumArray != null) {
+                        ctrl.datasource = EnumArray;
+
+                    }
+                    if (selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                    }
+                
+         
 
 
-                    return NP_IVSwitch_CodecProfileAPIService.GetCodecProfilesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        selectorAPI.clearDataSource();
-                         if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
+        };
 
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'CodecProfileId', attrs, ctrl);
-                            }
-                        }
-                    });
+        api.getSelectedIds = function () {
+            return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
+        };
 
 
-                };
-
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('CodecProfileId', attrs, ctrl);
-                };
-
-
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
-        }
+        if (ctrl.onReady != null)
+            ctrl.onReady(api);
+    }
+}
 
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Available Codec Profiles";
+            var label = "EndPoint Type";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Available Codec Profiles";
+                label = "EndPoint Type";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                   '<vr-select ' + multipleselection + ' datatextfield="ProfileName" datavaluefield="CodecProfileId" isrequired="ctrl.isrequired" label="' + label +
+                   '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</vr-columns>';
         }
 
-    }]);
+}]);
+
+    

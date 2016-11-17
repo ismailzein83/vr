@@ -2,15 +2,15 @@
 
     "use strict";
 
-    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum','NP_IVSwitch_TraceEnum'];
+    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_TraceEnum'];
 
-    function RouteEditorController($scope, NP_IVSwitch_RouteAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum) {
+    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum) {
 
         var isEditMode;
- 
-        var routeId;
+
+        var endPointId;
         var accountId;
-        var routeEntity;
+        var endPointEntity;
 
         var selectorCodecProfileAPI;
         var selectorCodecProfileReadyDeferred = UtilsService.createPromiseDeferred();
@@ -21,6 +21,9 @@
         var selectorTariffAPI;
         var selectorTariffReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var selectorEndPointAPI;
+        var selectorEndPointReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
 
         defineScope();
@@ -30,14 +33,14 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
- 
-            if (parameters != undefined && parameters != null) {
-                routeId = parameters.RouteId;
-                accountId = parameters.AccountId;
-               }
 
-            isEditMode = (routeId != undefined);
-         }
+            if (parameters != undefined && parameters != null) {
+                endPointId = parameters.EndPointId;
+                accountId = parameters.AccountId;
+            }
+
+            isEditMode = (endPointId != undefined);
+        }
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -69,6 +72,12 @@
                 selectorTariffReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onSelectorEndPointReady = function (api) {
+                selectorEndPointAPI = api;
+ 
+                selectorEndPointReadyDeferred.resolve();
+             };
+
 
             $scope.scopeModel.onSelectionChanged = function (SelectedItem) {
 
@@ -81,14 +90,14 @@
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.codecprofileid = SelectedItem.CodecProfileId;
-                 }
+                }
             }
 
             $scope.scopeModel.onSelectionTranslationRuleChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
-                 }
+                }
             }
 
 
@@ -98,20 +107,20 @@
                     $scope.scopeModel.tariffid = SelectedItem.TariffId;
                 }
             }
-            
+
 
             $scope.scopeModel.onSelectionChangedState = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.currentstate = SelectedItem;
                 }
             }
-           
+
         }
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                getRoute().then(function () {
+                getEndPoint().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -120,19 +129,19 @@
             }
             else {
                 loadAllControls();
-            }            
+            }
         }
 
 
 
-        function getRoute() {
-            return NP_IVSwitch_RouteAPIService.GetRoute(routeId).then(function (response) {
-                routeEntity = response;                
+        function getEndPoint() {
+            return NP_IVSwitch_EndPointAPIService.GetEndPoint(endPointId).then(function (response) {
+                endPointEntity = response;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadSelectorTariff]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadSelectorTariff, loadSelectorEndPoint]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -140,11 +149,11 @@
 
             function setTitle() {
                 if (isEditMode) {
-                    var routeName = (routeEntity != undefined) ? routeEntity.FirstName : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(routeName, 'Route');
+                    var endPointName = (endPointEntity != undefined) ? endPointEntity.FirstName : null;
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(endPointName, 'EndPoint');
                 }
                 else {
-                    $scope.title = UtilsService.buildTitleForAddEditor('Route');
+                    $scope.title = UtilsService.buildTitleForAddEditor('EndPoint');
                 }
             }
             function loadStaticData() {
@@ -154,33 +163,33 @@
 
                 $scope.scopeModel.currenttrace = $scope.scopeModel.trace[0]; // always disabled
 
-                if (routeEntity == undefined) {
+                if (endPointEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
- 
+
                     return;
                 }
-                $scope.scopeModel.description = routeEntity.Description;
-                $scope.scopeModel.logalias = routeEntity.LogAlias;
+                $scope.scopeModel.description = endPointEntity.Description;
+                $scope.scopeModel.logalias = endPointEntity.LogAlias;
 
-                $scope.scopeModel.channelslimit = routeEntity.ChannelsLimit;
-                $scope.scopeModel.host = routeEntity.Host;
-                $scope.scopeModel.port = routeEntity.Port;
-                $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
-                $scope.scopeModel.pscore = routeEntity.PScore;
-            
-                $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
-                $scope.scopeModel.wakeuptime = routeEntity.WakeUpTime;
-             }
+                $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
+                $scope.scopeModel.host = endPointEntity.Host;
+                $scope.scopeModel.port = endPointEntity.Port;
+                $scope.scopeModel.connectiontimeout = endPointEntity.ConnectionTimeOut;
+                $scope.scopeModel.pscore = endPointEntity.PScore;
+
+                $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
+                $scope.scopeModel.wakeuptime = endPointEntity.WakeUpTime;
+            }
 
             function loadSelectorCodecProfile() {
                 var selectorCodecProfileLoadDeferred = UtilsService.createPromiseDeferred();
 
                 selectorCodecProfileReadyDeferred.promise.then(function () {
                     var selectorCodecProfilePayload = {};
- 
-                    if (routeEntity != undefined && routeEntity.CodecProfileId != 0)  
-                        selectorCodecProfilePayload.selectedIds = routeEntity.CodecProfileId;           
+
+                    if (endPointEntity != undefined && endPointEntity.CodecProfileId != 0)
+                        selectorCodecProfilePayload.selectedIds = endPointEntity.CodecProfileId;
 
                     VRUIUtilsService.callDirectiveLoad(selectorCodecProfileAPI, selectorCodecProfilePayload, selectorCodecProfileLoadDeferred);
                 });
@@ -193,8 +202,8 @@
 
                 selectorTranslationRuleReadyDeferred.promise.then(function () {
                     var selectorTranslationRulePayload = {};
-                    if (routeEntity != undefined && routeEntity.TransRuleId != 0)
-                        selectorTranslationRulePayload.selectedIds = routeEntity.TransRuleId;
+                    if (endPointEntity != undefined && endPointEntity.TransRuleId != 0)
+                        selectorTranslationRulePayload.selectedIds = endPointEntity.TransRuleId;
 
                     VRUIUtilsService.callDirectiveLoad(selectorTranslationRuleAPI, selectorTranslationRulePayload, selectorTranslationRuleLoadDeferred);
                 });
@@ -207,24 +216,36 @@
 
                 selectorTariffReadyDeferred.promise.then(function () {
                     var selectorTariffPayload = {};
-                    if (routeEntity != undefined && routeEntity.TariffId != 0)
-                        selectorTariffPayload.selectedIds = routeEntity.TariffId;
+                    if (endPointEntity != undefined && endPointEntity.TariffId != 0)
+                        selectorTariffPayload.selectedIds = endPointEntity.TariffId;
 
                     VRUIUtilsService.callDirectiveLoad(selectorTariffAPI, selectorTariffPayload, selectorTariffLoadDeferred);
                 });
 
                 return selectorTariffLoadDeferred.promise;
             }
+
+            function loadSelectorEndPoint() {
+                var selectorEndPointLoadDeferred = UtilsService.createPromiseDeferred();
+ 
+                selectorEndPointReadyDeferred.promise.then(function () {
+                    var selectorEndPointPayload = {};
+                    
+                    VRUIUtilsService.callDirectiveLoad(selectorEndPointAPI, selectorEndPointPayload, selectorEndPointLoadDeferred);
+                });
+
+                return selectorEndPointLoadDeferred.promise;
+            }
         }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
-     
-            return NP_IVSwitch_RouteAPIService.AddRoute(buildRouteObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Route', response, 'Name')) {
 
-                    if ($scope.onRouteAdded != undefined)
-                        $scope.onRouteAdded(response.InsertedObject);
+            return NP_IVSwitch_EndPointAPIService.AddEndPoint(buildEndPointObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('EndPoint', response, 'Name')) {
+
+                    if ($scope.onEndPointAdded != undefined)
+                        $scope.onEndPointAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -235,15 +256,15 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-       
-
-            return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope()).then(function (response) {
 
 
-                if (VRNotificationService.notifyOnItemUpdated('Route', response, 'Name')) {
+            return NP_IVSwitch_EndPointAPIService.UpdateEndPoint(buildEndPointObjFromScope()).then(function (response) {
 
-                    if ($scope.onRouteUpdated != undefined) {
-                        $scope.onRouteUpdated(response.UpdatedObject);
+
+                if (VRNotificationService.notifyOnItemUpdated('EndPoint', response, 'Name')) {
+
+                    if ($scope.onEndPointUpdated != undefined) {
+                        $scope.onEndPointUpdated(response.UpdatedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
@@ -254,28 +275,24 @@
             });
         }
 
-        function buildRouteObjFromScope() {
-             return {
-                RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
-                AccountId: accountId ,
-                Description :$scope.scopeModel.description,
+        function buildEndPointObjFromScope() {
+            return {
+                EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
+                AccountId: accountId,
+                Description: $scope.scopeModel.description,
                 ChannelsLimit: $scope.scopeModel.channelslimit,
-                LogAlias : $scope.scopeModel.logalias,
-                Host : $scope.scopeModel.host,
-                Port: $scope.scopeModel.port,
-                ConnectionTimeOut :$scope.scopeModel.connectiontimeout,
-                PScore:$scope.scopeModel.pscore,                
+                LogAlias: $scope.scopeModel.logalias,
+                Host: $scope.scopeModel.host,
                 CurrentState: $scope.scopeModel.currentstate.value,
-                EnableTrace: $scope.scopeModel.currenttrace.value,
                 CodecProfileId: $scope.scopeModel.codecprofileid,
                 TransRuleId: $scope.scopeModel.translationruleid,
                 TariffId: $scope.scopeModel.tariffid,
-                WakeUpTime: $scope.scopeModel.wakeuptime,
+                LastHitDate: $scope.scopeModel.lasthittime,
 
             };
         }
     }
 
-    appControllers.controller('NP_IVSwitch_RouteEditorController', RouteEditorController);
+    appControllers.controller('NP_IVSwitch_EndPointEditorController', EndPointEditorController);
 
 })(appControllers);

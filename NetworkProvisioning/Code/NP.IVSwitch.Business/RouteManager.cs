@@ -22,7 +22,7 @@ namespace NP.IVSwitch.Business
         public IDataRetrievalResult<RouteDetail> GetFilteredRoutes(DataRetrievalInput<RouteQuery> input)
         {
             var allRoutes = this.GetCachedRoute();
-            Func<Route, bool> filterExpression = (x) => (input.Query.AccountId == null || (x.AccountId == input.Query.AccountId)); 
+            Func<Route, bool> filterExpression = (x) => (input.Query.AccountId == 0 || (x.AccountId == input.Query.AccountId)); 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutes.ToBigResult(input, filterExpression, RouteDetailMapper));
         }
 

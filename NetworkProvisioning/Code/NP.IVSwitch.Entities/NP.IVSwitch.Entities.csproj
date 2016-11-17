@@ -55,10 +55,16 @@
     <Compile Include="CodecProfile\CodecProfileFilter.cs" />
     <Compile Include="CodecProfile\CodecProfileInfo.cs" />
     <Compile Include="CodecProfile\CodecProfileQuery.cs" />
+    <Compile Include="EndPoint\EndPoint.cs" />
+    <Compile Include="EndPoint\EndPointDetail.cs" />
+    <Compile Include="EndPoint\EndPointQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Route\Route.cs" />
     <Compile Include="Route\RouteDetail.cs" />
     <Compile Include="Route\RouteQuery.cs" />
+    <Compile Include="Tariff\Tariff.cs" />
+    <Compile Include="Tariff\TariffFilter.cs" />
+    <Compile Include="Tariff\TariffInfo.cs" />
     <Compile Include="TranslationRule\TranslationRuleFilter.cs" />
     <Compile Include="TranslationRule\TranslationRuleInfo.cs" />
     <Compile Include="TranslationRule\TranslationRule.cs" />

@@ -14,8 +14,7 @@
                 AccountId: AccountId,
             };
 
-            console.log(AccountId)
-            settings.onScopeReady = function (modalScope) {
+             settings.onScopeReady = function (modalScope) {
                 modalScope.onRouteAdded = onRouteAdded
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);

@@ -54,6 +54,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EndPointManager.cs" />
+    <Compile Include="TariffManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="CodecDefManager.cs" />
     <Compile Include="CodecProfileManager.cs" />

@@ -14,7 +14,7 @@ namespace NP.IVSwitch.Entities
         public int AccountId{get;set;}
         public String Description {get;set;}
         public int GroupId {get;set;}        
-        public int TariffID {get;set;}
+        public int TariffId {get;set;}
         public  String LogAlias {get;set;}
         public int CodecProfileId { get; set; }
         public int TransRuleId { get; set; }

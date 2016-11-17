@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('npIvswitchTariffSelector', ['NP_IVSwitch_TariffAPIService', 'UtilsService', 'VRUIUtilsService',
 
-    function (NP_IVSwitch_CodecProfileAPIService, UtilsService, VRUIUtilsService) {
+    function (NP_IVSwitch_TariffAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -26,8 +26,8 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var codecProfileSelector = new CodecProfileSelector(ctrl, $scope, $attrs);
-                codecProfileSelector.initializeController();
+                var tariffSelector = new TariffSelector(ctrl, $scope, $attrs);
+                tariffSelector.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -37,7 +37,7 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
             }
         };
 
-        function CodecProfileSelector(ctrl, $scope, attrs) {
+        function TariffSelector(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
@@ -63,15 +63,15 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
                     }
 
 
-                    return NP_IVSwitch_CodecProfileAPIService.GetCodecProfilesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return NP_IVSwitch_TariffAPIService.GetTariffsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
-                         if (response != null) {
+                        if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
 
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'CodecProfileId', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'TariffId', attrs, ctrl);
                             }
                         }
                     });
@@ -80,7 +80,7 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('CodecProfileId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('TariffId', attrs, ctrl);
                 };
 
 
@@ -92,17 +92,17 @@ app.directive('npIvswitchCodecprofileSelector', ['NP_IVSwitch_CodecProfileAPISer
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Available Codec Profiles";
+            var label = "Available Tariffs";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Available Codec Profiles";
+                label = "Available Tariffs";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                   '<vr-select ' + multipleselection + ' datatextfield="ProfileName" datavaluefield="CodecProfileId" isrequired="ctrl.isrequired" label="' + label +
+                   '<vr-select ' + multipleselection + ' datatextfield="TariffName" datavaluefield="TariffId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +

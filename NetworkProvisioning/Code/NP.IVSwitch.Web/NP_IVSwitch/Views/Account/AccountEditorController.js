@@ -175,10 +175,7 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-            console.log(buildAccountObjFromScope().CurrentState)
-            console.log(buildAccountObjFromScope().TypeId)
-
-
+           
             return NP_IVSwitch_AccountAPIService.UpdateAccount(buildAccountObjFromScope()).then(function (response) {
 
 

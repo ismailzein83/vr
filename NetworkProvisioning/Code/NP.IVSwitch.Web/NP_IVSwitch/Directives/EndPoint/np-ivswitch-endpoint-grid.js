@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService',
-    function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService) {
+app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_IVSwitch_EndPointService', 'VRNotificationService',
+    function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -9,21 +9,21 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var routeGrid = new RouteGrid($scope, ctrl, $attrs);
-                routeGrid.initializeController();
+                var endPointGrid = new EndPointGrid($scope, ctrl, $attrs);
+                endPointGrid.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/NP_IVSwitch/Directives/Route/Templates/RouteGridTemplate.html'
+            templateUrl: '/Client/Modules/NP_IVSwitch/Directives/EndPoint/Templates/EndPointGridTemplate.html'
         };
 
-        function RouteGrid($scope, ctrl, $attrs) {
+        function EndPointGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-             var gridAPI;
+            var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.route = [];
+                $scope.scopeModel.endPoint = [];
                 $scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
@@ -31,8 +31,9 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                     defineAPI();
                 };
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return NP_IVSwitch_RouteAPIService.GetFilteredRoutes(dataRetrievalInput).then(function (response) {
-                         onResponseReady(response);
+                    return NP_IVSwitch_EndPointAPIService.GetFilteredEndPoints(dataRetrievalInput).then(function (response) {
+                        console.log(response)
+                        onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
@@ -48,8 +49,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                     return gridAPI.retrieveData(query);
                 };
 
-                api.onRouteAdded = function (addedRoute) {
-                     gridAPI.itemAdded(addedRoute);
+                api.onEndPointAdded = function (addedEndPoint) {
+                    gridAPI.itemAdded(addedEndPoint);
                 }
 
                 if (ctrl.onReady != null)
@@ -59,18 +60,18 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
-                    clicked: editRoute,
-                    haspermission: hasEditRoutePermission
+                    clicked: editEndPoint,
+                    haspermission: hasEditEndPointPermission
                 });
             }
-            function editRoute(RouteItem) {
-                var onRouteUpdated = function (updatedRoute) {
-                    gridAPI.itemUpdated(updatedRoute);
+            function editEndPoint(EndPointItem) {
+                var onEndPointUpdated = function (updatedEndPoint) {
+                    gridAPI.itemUpdated(updatedEndPoint);
                 };
-                 NP_IVSwitch_RouteService.editRoute(RouteItem.Entity.RouteId, onRouteUpdated);
+                NP_IVSwitch_EndPointService.editEndPoint(EndPointItem.Entity.EndPointId, onEndPointUpdated);
             }
-            function hasEditRoutePermission() {
-                return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
+            function hasEditEndPointPermission() {
+                return NP_IVSwitch_EndPointAPIService.HasEditEndPointPermission();
             }
 
         }

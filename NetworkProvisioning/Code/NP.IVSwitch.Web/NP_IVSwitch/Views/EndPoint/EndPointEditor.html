@@ -1,26 +1,32 @@
-﻿<div vr-modalcontent ng-controller="NP_IVSwitch_RouteEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_EndPointEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
-        <vr-form name="formRouteEditor">
+        <vr-form name="formEndPointEditor">
             <vr-tabs>
                 <vr-tab header="'Info'">
-                  
+
+                    <np-ivswitch-endpoint-selector on-ready="scopeModel.onSelectorEndPointReady" onselectionchanged="scopeModel.onSelectionEndPointChanged"
+                                                   normal-col-num="6"></np-ivswitch-endpoint-selector>
+
                     <vr-columns width="1/2row">
                         <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
                     </vr-columns>
+
+                  
+
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Group Membership Tag" ></vr-textbox>
+                        <vr-textbox label="Group Membership Tag"></vr-textbox>
                     </vr-columns>
 
                     <np-ivswitch-tariff-selector on-ready="scopeModel.onSelectorTariffReady" onselectionchanged="scopeModel.onSelectionTariffChanged"
-                                                          normal-col-num="6"></np-ivswitch-tariff-selector>   
+                                                 normal-col-num="6"></np-ivswitch-tariff-selector>
                     <vr-columns width="1/2row">
                         <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired></vr-textbox>
                     </vr-columns>
 
                     <np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
-                                                   normal-col-num="6"></np-ivswitch-codecprofile-selector>  
+                                                       normal-col-num="6"></np-ivswitch-codecprofile-selector>
                     <np-ivswitch-translationrule-selector on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
-                                                       normal-col-num="6"></np-ivswitch-translationrule-selector>                  
+                                                          normal-col-num="6"></np-ivswitch-translationrule-selector>
                 </vr-tab>
                 <vr-tab header="'Control'">
                     <vr-columns width="1/2row">
@@ -32,31 +38,19 @@
                     </vr-columns>
 
                     <vr-columns width="1/2row">
-                        <vr-datetimepicker type="datetime" label="Wakeup Time" value="scopeModel.wakeuptime"></vr-datetimepicker>
+                        <vr-datetimepicker type="datetime" label="Last Hit Time" value="scopeModel.lasthittime"></vr-datetimepicker>
                     </vr-columns>
-                     
+
                     <vr-columns width="1/2row">
                         <vr-select datatextfield="description" datavaluefield="value" label="Tracing"
-                                   datasource="scopeModel.trace" selectedvalues="scopeModel.currenttrace" ></vr-select>
+                                   datasource="scopeModel.trace" selectedvalues="scopeModel.currenttrace"></vr-select>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-textbox label="Host" value="scopeModel.host" isrequired></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Port" value="scopeModel.port" isrequired></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="SIP Transport Mode"  ></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Connection Timeout (s)" value="scopeModel.connectiontimeout"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Custom Route Parameters"  ></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Current P-Score" value="scopeModel.pscore"></vr-textbox>
-                    </vr-columns>
+                  
+                     
+                     
 
                 </vr-tab>
             </vr-tabs>
@@ -65,7 +59,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formEndPointEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

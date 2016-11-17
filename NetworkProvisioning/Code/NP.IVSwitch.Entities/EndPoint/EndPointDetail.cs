@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NP.IVSwitch.Entities 
+namespace NP.IVSwitch.Entities
 {
-    public class RouteQuery
+    public class EndPointDetail
     {
-        public int AccountId { get; set; }
+        public EndPoint Entity { get; set; }
     }
 }

@@ -1,0 +1,11 @@
+﻿<
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.endPoint"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.EndPointId">
+    <vr-datagridcolumn headertext="'Customer ID'" field="'Entity.AccountId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'State'" field="'Entity.State'"></vr-datagridcolumn>
+</vr-datagrid>

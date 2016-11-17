@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities 
 {
-    public class RouteQuery
+    public class EndPointQuery
     {
+        public String EndPointName { get; set; }
+
         public int AccountId { get; set; }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchAccountGrid', ['NP_IVSwitch_AccountAPIService', 'NP_IVSwitch_AccountService', 'VRNotificationService', 'NP_IVSwitch_AccountTypeEnum','NP_IVSwitch_StateEnum','UtilsService','VRUIUtilsService','NP_IVSwitch_RouteService',
-function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificationService, NP_IVSwitch_AccountTypeEnum, NP_IVSwitch_StateEnum, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteService) {
+app.directive('npIvswitchAccountGrid', ['NP_IVSwitch_AccountAPIService', 'NP_IVSwitch_AccountService', 'VRNotificationService', 'NP_IVSwitch_AccountTypeEnum','NP_IVSwitch_StateEnum','UtilsService','VRUIUtilsService','NP_IVSwitch_RouteService','NP_IVSwitch_EndPointService',
+function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificationService, NP_IVSwitch_AccountTypeEnum, NP_IVSwitch_StateEnum, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteService, NP_IVSwitch_EndPointService) {
         return {
             restrict: 'E',
             scope: {
@@ -66,10 +66,13 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
             }
 
             function buildDrillDownTabs() {
+
+                var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_AccountTypeEnum);
+
                 var drillDownTabs = [];
 
                 drillDownTabs.push(buildRouteTab());
-           //     drillDownTabs.push(buildSubEndPointsTab());
+                drillDownTabs.push(buildEndPointTab());
 
                 function buildRouteTab() {
                     var  RouteTab = {};
@@ -85,7 +88,7 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
                         return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
                     };
                     RouteTab.hideDrillDownFunction = function (dataItem) {
-                        return false; /////////////////////////////
+                         return !(dataItem.TypeDescription == "Vendor"); /////////////////////////////
                     };
 
                     RouteTab.parentMenuActions = [{
@@ -96,13 +99,45 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
                             var onRouteAdded = function (addedRoute) {
                                 parentAccount.subAccountGridAPI.onRouteAdded(addedRoute);
                             };
-                            console.log(parentAccount.Entity.AccountId)
-                            NP_IVSwitch_RouteService.addRoute(parentAccount.Entity.AccountId, onRouteAdded);
+                             NP_IVSwitch_RouteService.addRoute(parentAccount.Entity.AccountId, onRouteAdded);
                         },
                      }];
 
  
                     return RouteTab;
+                }
+
+                function buildEndPointTab() {
+                    var EndPointTab = {};
+
+                    EndPointTab.title = ' EndPoint ';
+                    EndPointTab.directive = 'np-ivswitch-endpoint-grid';
+
+                    EndPointTab.loadDirective = function (subAccountGridAPI, parentAccount) {
+                        parentAccount.subAccountGridAPI = subAccountGridAPI;
+                        var subAccountGridPayload = {
+                            AccountId: parentAccount.Entity.AccountId
+                        };
+                        return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
+                    };
+                    EndPointTab.hideDrillDownFunction = function (dataItem) {
+                        return !(dataItem.TypeDescription == "Customer"); /////////////////////////////
+                    };
+
+                    EndPointTab.parentMenuActions = [{
+                        name: 'Add  EndPoint',
+                        clicked: function (parentAccount) {
+                            if (EndPointTab.setTabSelected != undefined)
+                                EndPointTab.setTabSelected(parentAccount);
+                            var onEndPointAdded = function (addedEndPoint) {
+                                parentAccount.subAccountGridAPI.onEndPointAdded(addedEndPoint);
+                            };
+                            NP_IVSwitch_EndPointService.addEndPoint(parentAccount.Entity.AccountId, onEndPointAdded);
+                        },
+                    }];
+
+
+                    return EndPointTab;
                 }
 
 

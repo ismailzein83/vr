@@ -25,7 +25,7 @@ namespace NP.IVSwitch.Data.Postgres
             route.AccountId = (int)reader["account_id"];
             route.Description = reader["description"] as string;
             route.GroupId = (int)reader["group_id"];
-            route.TariffID = (int)reader["tariff_id"];
+            route.TariffId = (int)reader["tariff_id"];
             route.LogAlias = reader["log_alias"] as string;
             route.CodecProfileId = (int)reader["codec_profile_id"];
             route.TransRuleId = (int)reader["trans_rule_id"];
@@ -73,7 +73,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@route_id", route.RouteId);                 
                 cmd.Parameters.AddWithValue("@description", route.Description);
                 cmd.Parameters.AddWithValue("@group_id", route.GroupId);
-                cmd.Parameters.AddWithValue("@tariff_id", route.TariffID);
+                cmd.Parameters.AddWithValue("@tariff_id", route.TariffId);
                 cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
@@ -114,7 +114,7 @@ namespace NP.IVSwitch.Data.Postgres
                  cmd.Parameters.AddWithValue("@account_id", route.AccountId);
                 cmd.Parameters.AddWithValue("@description", route.Description);
                 cmd.Parameters.AddWithValue("@group_id", route.GroupId);
-                cmd.Parameters.AddWithValue("@tariff_id", route.TariffID);
+                cmd.Parameters.AddWithValue("@tariff_id", route.TariffId);
                 cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
