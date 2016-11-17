@@ -23,6 +23,9 @@
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
+
+                ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+
                 var loadMoreDataFunction;
                 if ($attrs.loadmoredata != undefined)
                     loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);

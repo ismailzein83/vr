@@ -23,7 +23,7 @@ app.directive('vrValidationDatetime', function () {
 });
 
 
-app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', function (BaseDirService, VRValidationService) {
+app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'UtilsService', function (BaseDirService, VRValidationService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -43,6 +43,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
 
             var ctrl = this;
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+
             ctrl.validate = function () {
                 return VRValidationService.validate(ctrl.value, $scope, $attrs);
             };
@@ -281,7 +283,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             $scope.ctrl.onBlurDirective = function (e) {
                 var dateTab = new Date(ctrl.value).toDateString().split(" ");
                 var year = parseInt(dateTab[3]);
-                if ($attrs.type != "time" && (year < 1970 || isNaN(year))) {
+                if ($attrs.type != "time" && (year < 1970 || isNaN(year)) && !ctrl.readOnly) {
                     ctrl.value = new Date();
                 }
                 if ($attrs.onblurdatetime != undefined) {
@@ -366,8 +368,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                  '<div   >'
                   + '<vr-validator validate="ctrl.validate()" vr-input>'
                   + '<div id="divDatePicker" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container" ng-style="ctrl.getInputeStyle()" >'
-                            + '<input tabindex="{{ctrl.tabindex}}" class="vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
-                            + '<div  ng-show="showtd"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;right:-' + n * 10 + 'px;" >' + icontemplate + '</div>'
+                            + '<input tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" class="vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                            + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;right:-' + n * 10 + 'px;" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'
                       + '<span ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'

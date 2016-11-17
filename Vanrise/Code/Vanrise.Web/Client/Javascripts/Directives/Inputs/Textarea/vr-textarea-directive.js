@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextarea.$inject = ['BaseDirService', 'VRValidationService'];
+    vrTextarea.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService'];
 
-    function vrTextarea(BaseDirService, VRValidationService) {
+    function vrTextarea(BaseDirService, VRValidationService, UtilsService) {
 
         return {
             restrict: 'E',
@@ -61,7 +61,7 @@
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
-                        ctrl.readOnly = attrs.readonly != undefined;
+                        ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
 
                         if (attrs.hint != undefined) {
@@ -112,7 +112,7 @@
                         rows = attrs.rows;
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
                             + '<vr-validator validate="ctrl.validate()">'
-                            + '<textarea tabindex="{{ctrl.tabindex}}"  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="' + rows + '" class="form-control" style="width: 100%; resize: none;" ></textarea>'
+                            + '<textarea tabindex="{{ctrl.tabindex}}" readonly="ctrl.readOnly"  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="' + rows + '" class="form-control" style="width: 100%; resize: none;" ></textarea>'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"   placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
                         + '</div>'

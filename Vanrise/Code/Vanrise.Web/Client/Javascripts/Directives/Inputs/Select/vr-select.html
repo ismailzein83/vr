@@ -2,64 +2,84 @@
     <div class="dropdown-container2" >
         <vr-validator validate="ctrl.validate()" vr-input>
             <div class="dropdown drop-down-inside-modal">
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);" ng-if="!ctrl.readOnly || ctrl.isMultiple()">
                     <li role="presentation" ng-click="ctrl.onClickLi($event)" ng-if="ctrl.isDropDownOpened()">
 
                         <!-- filter  -->
-                        <div ng-if="ctrl.isContainerVisible()" style="display: inline-block; width: 220px;">
+                        <div ng-if="!ctrl.readOnly">
+                            <div ng-if="ctrl.isContainerVisible()" style="display: inline-block; width: 220px;">
 
-                            <div ng-if="ctrl.isEnFilter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
-                                <div class="inner-addon right-addon">
+                                <div ng-if="ctrl.isEnFilter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                                    <div class="inner-addon right-addon">
 
-                                    <i ng-if="! ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
-                                    <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                                        <i ng-if="! ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
+                                        <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
 
-                                    <i ng-if="ctrl.isRemoteLoad()" class="glyphicon icon-loader" ng-show="ctrl.showloading"></i>
-                                    <input ng-if="ctrl.isRemoteLoad()" id="filterInput" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
+                                        <i ng-if="ctrl.isRemoteLoad()" class="glyphicon icon-loader" ng-show="ctrl.showloading"></i>
+                                        <input ng-if="ctrl.isRemoteLoad()" id="filterInput" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
 
+                                    </div>
+                                </div>
+
+                                <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="!ctrl.showloading && ctrl.filtername.length < ctrl.limitcharactercount">Please type {{ctrl.limitcharactercount - ctrl.filtername.length}} character(s)..</div>
+                                <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="ctrl.showloading">Loading..</div>
+
+                                <div ng-if="ctrl.isMultiple()" style="overflow: auto; margin-top: 5px; padding-left: 3px;" ng-class="ctrl.isEnFilter()? 'with-filter' : 'no-filter'">
+                                    <a href="" class="mark-select " ng-click="ctrl.selectValue($event, c); " ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername"
+                                       style="display: block; padding: 3px 2px 0px 2px; white-space: normal;" ng-class="ctrl.getObjectDisabled(c)==true ?'vr-select-disabled-item':ctrl.findExsite(c) >-1 ?'selected':'' ">
+                                        <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{ ::ctrl.getObjectText(c)}}</div>
+                                        <div style="float:right" ng-show="ctrl.findExsite(c) > -1">✔</div>
+                                    </a>
+                                </div>
+                                <div class="vr-select-height" ng-if="!ctrl.isMultiple()">
+                                    <a href="" ng-if="!ctrl.isMultiple()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" ng-repeat="c in ctrl.boundDataSource" class="mark-select " ng-click="ctrl.selectValue($event, c);"
+                                       style="display: block; padding: 2px;border: none; white-space: normal;">
+                                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
+                                    </a>
+                                </div>
+
+
+                            </div>
+                            <!-- filter -->
+                            <div ng-if="!ctrl.isContainerVisible()">
+                                <div ng-if="ctrl.withLocalFiter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                                    <div class="inner-addon right-addon">
+                                        <i class="glyphicon glyphicon-remove hand-cursor" ng-if="ctrl.filtername.length > 0" style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
+                                        <input id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                                    </div>
+                                </div>
+                                <div class="vr-select-height">
+                                    <a href="" ng-if="!ctrl.isContainerVisible()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername" class="mark-select " ng-click="ctrl.selectValue($event, c)" ng-mouseenter="ctrl.muteaction($event);"
+                                       style="display: block;padding:2px; margin:2px; white-space: normal;">
+                                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}} </div>
+                                    </a>
                                 </div>
                             </div>
 
-                            <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="!ctrl.showloading && ctrl.filtername.length < ctrl.limitcharactercount">Please type {{ctrl.limitcharactercount - ctrl.filtername.length}} character(s)..</div>
-                            <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="ctrl.showloading">Loading..</div>
-
-                            <div ng-if="ctrl.isMultiple()" style="overflow: auto; margin-top: 5px; padding-left: 3px;" ng-class="ctrl.isEnFilter()? 'with-filter' : 'no-filter'">
-                                <a href="" class="mark-select " ng-click="ctrl.selectValue($event, c); " ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername"
-                                   style="display: block; padding: 3px 2px 0px 2px; white-space: normal;" ng-class="ctrl.getObjectDisabled(c)==true ?'vr-select-disabled-item':ctrl.findExsite(c) >-1 ?'selected':'' ">
-                                    <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{ ::ctrl.getObjectText(c)}}</div>
-                                    <div style="float:right" ng-show="ctrl.findExsite(c) > -1">✔</div>
-                                </a>
-                            </div>
-                            <div class="vr-select-height" ng-if="!ctrl.isMultiple()">
-                                <a href="" ng-if="!ctrl.isMultiple()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" ng-repeat="c in ctrl.boundDataSource" class="mark-select " ng-click="ctrl.selectValue($event, c);"
-                                   style="display: block; padding: 2px;border: none; white-space: normal;">
-                                    <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
-                                </a>
-                            </div>
-
-
-                        </div>
-                        <!-- filter -->
-                        <div ng-if="!ctrl.isContainerVisible()">
-                            <div ng-if="ctrl.withLocalFiter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
-                                <div class="inner-addon right-addon">
-                                    <i class="glyphicon glyphicon-remove hand-cursor" ng-if="ctrl.filtername.length > 0" style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
-                                    <input id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                            <!-- Add DIV in case of multiple -->
+                            <div ng-if="ctrl.selectedSectionVisible()" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; overflow: auto; white-space:normal" ng-show="ctrl.selectedSectionVisible()">
+                                <div style="padding:5px ;height:29px">
+                                    {{ctrl.selectlbl}}
+                                    <a href="" class="link" ng-hide="ctrl.readOnly" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); ">
+                                        Clear all
+                                        <i class="glyphicon glyphicon-trash hand-cursor "></i>
+                                    </a>
                                 </div>
+                                <div style="height: 200px; overflow: auto;padding-top:5px">
+                                    <span class="label custom-label" ng-repeat="obj in ctrl.selectedvalues">
+                                        {{::ctrl.getObjectText(obj)}}
+                                        <span ng-hide="ctrl.hideAddButton || ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.selectValue($event,obj);"></span>
+                                    </span>
+                                </div>
+
                             </div>
-                            <div class="vr-select-height">
-                                <a href="" ng-if="!ctrl.isContainerVisible()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername" class="mark-select " ng-click="ctrl.selectValue($event, c)" ng-mouseenter="ctrl.muteaction($event);"
-                                   style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                    <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}} </div>
-                                </a>
-                            </div>
+
                         </div>
 
-                        <!-- Add DIV in case of multiple -->
-                        <div ng-if="ctrl.selectedSectionVisible()" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; overflow: auto; white-space:normal" ng-show="ctrl.selectedSectionVisible()">
+                        <div ng-if="ctrl.readOnly" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; overflow: auto; white-space:normal" ng-show="ctrl.selectedSectionVisible()">
                             <div style="padding:5px ;height:29px">
                                 {{ctrl.selectlbl}}
-                                <a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); ">
+                                <a href="" class="link" ng-hide="ctrl.readOnly" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); ">
                                     Clear all
                                     <i class="glyphicon glyphicon-trash hand-cursor "></i>
                                 </a>
@@ -67,17 +87,17 @@
                             <div style="height: 200px; overflow: auto;padding-top:5px">
                                 <span class="label custom-label" ng-repeat="obj in ctrl.selectedvalues">
                                     {{::ctrl.getObjectText(obj)}}
-                                    <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.selectValue($event,obj);"></span>
+                                    <span ng-hide="ctrl.hideAddButton || ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.selectValue($event,obj);"></span>
                                 </span>
                             </div>
 
                         </div>
 
-
-
                     </li>
                     <!--<li role ="presentation"> <span class="glyphicon glyphicon-plus">Add</span></li>-->
                 </ul>
+
+                
 
 
             </div>
@@ -86,7 +106,7 @@
         <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true" style="top:-10px" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
 
     </div>
-    <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" class="glyphicon glyphicon-plus hand-cursor vr-select-add" ng-hide="ctrl.hideAddButton"></span>
+    <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" class="glyphicon glyphicon-plus hand-cursor vr-select-add" ng-hide="ctrl.hideAddButton || ctrl.readOnly"></span>
 
 </div>
 

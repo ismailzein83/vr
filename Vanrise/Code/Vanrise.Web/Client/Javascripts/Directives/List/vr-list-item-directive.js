@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrListitem', [function () {
+app.directive('vrListitem', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -12,8 +12,7 @@ app.directive('vrListitem', [function () {
         require: '^^vrList',
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
-
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
         },
         controllerAs: 'listItemCtrl',
         bindToController: true,
@@ -44,7 +43,7 @@ app.directive('vrListitem', [function () {
             var itemContentWidth = '100%'
             var removeItemTemplate = '';
             if (attrs.onremove != undefined) {
-                removeItemTemplate = '  <i class="glyphicon glyphicon-remove hand-cursor" style="width:10px; cursor :default" ng-click="listItemCtrl.onremove()"></i>';
+                removeItemTemplate = '  <i  ng-if="!ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" style="width:10px; cursor :default" ng-click="listItemCtrl.onremove()"></i>';
                 itemContentWidth = 'calc(100% - 14px)';
             }
 

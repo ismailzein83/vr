@@ -112,6 +112,22 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     };
 
 
+    function isContextReadOnly(scope,ctrl) {
+        while (scope != null) {
+            if (typeof (scope.getReadOnly) == 'function') {
+                return scope.getReadOnly();
+            }
+            scope = scope.$parent;
+        }
+        return false;
+    }
+
+    function setContextReadOnly(scope) {
+        scope.getReadOnly = function () {
+            return true;
+        };
+    }
+
     function getEnum(enumObj, propertyFilter, valueFilter) {
         for (var item in enumObj) {
             if (enumObj.hasOwnProperty(item)) {
@@ -607,8 +623,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return "Upload " + entityType;
     }
 
-    function buildTitleForUpdateEditor(entityTitle, entityType) {
-        var title = "Edit "
+    function buildTitleForUpdateEditor(entityTitle, entityType, scope) {
+        var title = (isContextReadOnly(scope)) ? "View " : "Edit ";
         if (entityType != undefined)
             title += entityType + ": " + entityTitle;
         else
@@ -818,7 +834,9 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         round: round,
         diffDays: diffDays,
         parseStringToJson: parseStringToJson,
-        getItemIndexByStringVal: getItemIndexByStringVal
+        getItemIndexByStringVal: getItemIndexByStringVal,
+        isContextReadOnly: isContextReadOnly,
+        setContextReadOnly: setContextReadOnly
     });
 
 }]);

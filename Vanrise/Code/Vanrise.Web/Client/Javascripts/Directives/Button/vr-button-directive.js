@@ -66,6 +66,16 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                     isDisabled = false;
                 return isDisabled;
             };
+            var types = {
+                "Close": false,
+                "Preview":false
+            }
+
+            ctrl.isExculdedOnreadOnly = function () {
+                var readOnly = UtilsService.isContextReadOnly($scope);
+                return !readOnly || types[$attrs.type]!=undefined;
+
+            }
             var menu;
             if ($attrs.menuactions != undefined ) {
                     menu = $scope.$parent.$eval($attrs.menuactions);

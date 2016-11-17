@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrDatalist', [function () {
+app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         //transclude: true,
@@ -18,6 +18,9 @@ app.directive('vrDatalist', [function () {
                 ctrl.datasource = {};
 
             ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
+
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
+
             ctrl.onInternalRemove = function (dataItem) {
                 if (ctrl.autoremoveitem == true) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -32,6 +35,8 @@ app.directive('vrDatalist', [function () {
                 console.log(typeof dataItem)
             }
             $scope.ondataitemclicked = function (dataItem) {
+                if (ctrl.readOnly)
+                    return;
                 if (typeof (ctrl.onitemclicked) == 'function')
                     ctrl.onitemclicked(dataItem);
             };
@@ -56,7 +61,7 @@ app.directive('vrDatalist', [function () {
             var draggableIconTemplate = '';
             var contentWidth = 0;
             if (attrs.isitemdraggable != undefined) {
-                draggableIconTemplate = '<div style="width: 14px; display:inline-block;height:25px">'
+                draggableIconTemplate = '<div ng-if="!ctrl.readOnly" style="width: 14px; display:inline-block;height:25px">'
                                             + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 10px); left: -6px"></i>'
                                         + '</div>';
                 contentWidth += 14;

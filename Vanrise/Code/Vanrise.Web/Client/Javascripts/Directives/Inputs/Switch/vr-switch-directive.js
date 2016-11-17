@@ -1,15 +1,15 @@
 ﻿'use strict';
 
-app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
+app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (SecurityService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             value: '=',
-            hint:'@'
+            hint: '@'
         },
-        controller: function ($scope, $element) {
-
+        controller: function ($scope, $element, $attrs) {
+          
             $scope.adjustTooltipPosition = function (e) {
                 setTimeout(function () {
                     var self = angular.element(e.currentTarget);
@@ -30,9 +30,11 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                 $scope.value = false;
         },
         link: function (scope, element, attrs, ctrl) {
-            
+
+            ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
+
             var isUserChange;
-            scope.$watch('value', function () {
+            scope.$watch('value', function (newValue, oldValue) {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                     return;
                 isUserChange = false;//reset the flag
@@ -43,31 +45,52 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                     }
                 }
             });
+            ctrl.toogleCheck = function () {
+                if (ctrl.readOnly)
+                    return;
+                scope.value = !scope.value;
+                isUserChange = true;
+
+            };
             scope.withLable = false;
             if (attrs.label != undefined)
                 scope.withLable = true;
 
             if (attrs.hint != undefined)
-                scope.hint = attrs.hint;           
-            scope.notifyUserChange = function () {
-                isUserChange = true;
-            };
-            
+                scope.hint = attrs.hint;
+          
+
         },
-        //controllerAs: 'ctrl',
-        //bindToController: true,
+        controllerAs: 'ctrl',
+        bindToController: true,
         template: function (element, attrs) {
             if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions)) {
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">' + label + '</vr-label><div class="vr-switch"><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch>'
-                    + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input"  html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
-                    + '</div>';
+                var onspan = '';
+                if (attrs.on != undefined)
+                    onspan = '<span class="on">' + attrs.on + '</span>';
+                var offspan = '';
+                if (attrs.off != undefined)
+                    offspan ='<span class="off">' + attrs.off + '</span>';
+
+                var template = '<vr-label ng-if="withLable">' + label + '</vr-label>'
+                               + '<div class="vr-switch">'
+                                   + '<span  class="switch green" ng-class="value == true? \'checked\':\'\'" ng-click="ctrl.toogleCheck()">'
+                                   + '<small></small>'
+                                   + '<input type="checkbox" ng-model="value" style="display:none;"/>'
+                                   + '</span>'
+                                   + '<span class="switch-text">'
+                                   + onspan + offspan
+                                   + '</span>'
+                                   + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input"  html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
+                               + '</div>';
+                return template;
             }
             else
                 return "";
-            
+
         }
 
     };

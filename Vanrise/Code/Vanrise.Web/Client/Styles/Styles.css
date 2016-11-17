@@ -660,13 +660,13 @@ vr-modalcontent .action-bar {
     width: 49%;
 }
 
-    .action-bar-right button {
-        float: right !important;
-    }
+.action-bar-right button {
+    float: right !important;
+}
 
-    .action-bar-right div {
-        float: right !important;
-    }
+.action-bar-right div {
+    float: right !important;
+}
 
 .btncustom:hover {
     opacity: 0.99;
@@ -705,6 +705,10 @@ vr-modalcontent .action-bar {
 .style-row {
     padding: 5px 10px;
     /*border-bottom: 1px solid #F0F0F0;*/
+}
+
+vr-row[spacer] >.row:first-of-type{
+    margin-top: 10px;
 }
 
 .emptycol {
@@ -1883,7 +1887,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: none;
     opacity: 0.5;
 }
-
+.read-only-frame{
+      pointer-events: none !important;
+}
 vr-button[class*="divDisabled"] > div{
     pointer-events: none;
     opacity: 0.5;
@@ -1916,7 +1922,10 @@ vr-switch[class*="divDisabled"] .switch {
     white-space: nowrap;
     vertical-align: top;
 }
-
+.vr-tabs[vertical]{
+    width: 150px;
+    margin-right: -5px;
+}
 .vr-tabs label {
     padding: 1px 9px;
     border: 1px solid #DDD;
@@ -1924,6 +1933,16 @@ vr-switch[class*="divDisabled"] .switch {
     margin-bottom: -7px;
     border-radius: 5px 5px 0px 0px;
      margin-right: 1px; 
+    height: 26px;
+    margin-right: 1px;
+   background-color: #F0F0F0 ;
+}
+
+.vr-tabs[vertical] .label {
+    padding: 1px 9px;
+    height: 26px;
+    border-radius: 0px;
+    margin-right: 1px; 
     height: 26px;
     margin-right: 1px;
    background-color: #F0F0F0 ;
@@ -1953,6 +1972,31 @@ vr-switch[class*="divDisabled"] .switch {
     font-weight: bold;
     height: 26px;
 }
+.vr-tabs[vertical] .clicked-btn {
+
+    border-radius: 0px 5px 5px 0px;
+    border-right-color: transparent;
+    margin-bottom: 0px !important;
+    margin-right: 0px !important;
+    border-right-color: transparent !important;
+    z-index: 1;
+    position: relative;
+  
+}
+
+
+.vr-tabs label {
+    padding: 1px 9px;
+    border: 1px solid #DDD;
+    height: 26px;
+    margin-bottom: -7px;
+    border-radius: 5px 5px 0px 0px;
+    margin-right: 1px;
+    height: 26px;
+    margin-right: 1px;
+    background-color: #F0F0F0;
+}
+    
 
 .remove-line {
     border-bottom: 0px solid #F0F0F0 !important;

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService'];
+    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService'];
 
-    function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService) {
+    function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService) {
 
         return {
             restrict: 'E',
@@ -91,7 +91,7 @@
                             isUserChange = true;
                         };
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
-                        ctrl.readOnly = attrs.readonly != undefined;
+                        ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
@@ -287,7 +287,7 @@
                                 + '</button>'
                                 + '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuCu-test" style="width : 100%">'
                                     + '<li role="presentation" ng-click="ctrl.muteAction($event);">'
-                                        + '<div style="width : 100%" > '
+                                        + '<div style="width : 100%"  ng-if="!ctrl.readOnly" > '
                                         + '<div style="display:inline-block;width:calc(100% - 30px );padding: 0px 3px;" >'
                                                 + ' <vr-textbox value="ctrl.valuetext" type="ctrl.datatype" customvalidate="ctrl.validateInpute()" onenterpress="ctrl.addNewValue"></vr-textbox>'
                                          + '</div>'
@@ -297,7 +297,7 @@
                                         +'<div  style="border-left:1px solid #f0f0f0;display: inline-block;overflow: auto; white-space:normal" >'
                                             + '<div style="padding:5px ;height:29px">'
                                                 + 'Values:'
-                                                + '<a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); ">'
+                                                + '<a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); "  ng-if="!ctrl.readOnly">'
                                                 +  ' Clear all'
                                                 + '<i class="glyphicon glyphicon-trash hand-cursor "></i>'
                                                 +  '</a>'
@@ -305,7 +305,7 @@
                                             +' <div style="height: 100px; overflow: auto;padding-top:5px">'
                                                + '<span class="label custom-label" ng-repeat="obj in ctrl.value track by $index">'
                                                   +'{{obj}} '
-                                                   + '<span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.removeValue(obj);"></span>'
+                                                   + '<span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.removeValue(obj);"  ng-if="!ctrl.readOnly"></span>'
                                                 + '</span>'
                                             + '</div>'
                                        + '</div>'

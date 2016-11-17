@@ -53,6 +53,7 @@
                     rootScope = $scope.$root;
 
                 var controller = this;
+                controller.readOnly = utilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
                 controller.validate = function () {
                     return VRValidationService.validate(controller.selectedvalues, $scope, $attrs);
@@ -284,7 +285,7 @@
 
                 function getSelectedSectionClass() {
                     if (!selectedSectionVisible()) return 'single-col-checklist';
-                    return controller.selectedvalues.length === 0 ? 'single-col-checklist' : 'double-col-checklist';
+                    return controller.selectedvalues.length === 0 || controller.readOnly ? 'single-col-checklist' : 'double-col-checklist';
                 }
                 
                 //Exports
@@ -404,8 +405,11 @@
                                 if (isRemoteLoad()) {
                                     top = top - 35;
                                 }
-                                if (controller.hidefilterbox != undefined)
+                                if (controller.hidefilterbox != undefined )
                                     top = top + 30;
+                                if(controller.readOnly && controller.isRemoteLoad() )
+                                    top = top + 30;
+
                             }
                             else
                                 top = selfOffset.top - $(window).scrollTop() + selfHeight;
@@ -509,7 +513,7 @@
                                             + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                             + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span class="caret vr-select-caret"></span>')
-                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon()"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
+                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
                     }
 
@@ -594,7 +598,7 @@
                         }
 
                         ctrl.selectValue = function (e, item) {
-                            if (ctrl.getObjectDisabled(item) == true)
+                            if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
                                 return;
                               selectItem(e, item);
                         };

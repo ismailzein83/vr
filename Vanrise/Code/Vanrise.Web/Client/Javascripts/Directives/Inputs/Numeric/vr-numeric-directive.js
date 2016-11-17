@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrNumeric.$inject = ['BaseDirService', 'VRValidationService'];
+    vrNumeric.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService'];
 
-    function vrNumeric(BaseDirService, VRValidationService) {
+    function vrNumeric(BaseDirService, VRValidationService, UtilsService) {
 
         return {
             restrict: 'E',
@@ -22,6 +22,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+                ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+
                 ctrl.validate = function () {
                     if (ctrl.maxValue != undefined && parseFloat(ctrl.value) > ctrl.maxValue) {
                         return "value should be less than or equal to " + ctrl.maxValue;
@@ -219,10 +221,10 @@
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" >'
                                             + '<vr-validator validate="ctrl.validate()" vr-input>'
-                                                   + '<input  tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
+                                                   + '<input readonly="ctrl.readOnly" tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
                                                        + '</vr-validator>'
                                                 + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="top:0px" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
-                                                + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()">'
+                                                + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()" ng-if="!ctrl.readOnly">'
                                                 + '<span class="unit" ng-bind="ctrl.unitValue"></span>'
                                                 + '<div class="hand-cursor arrow-box" ng-click="ctrl.increment()" ng-style="{\'color\':ctrl.upColor}">'
                                                 + '<div class="caret-up" ></div>'

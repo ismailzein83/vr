@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService'];
+    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService'];
 
-    function vrTextbox(BaseDirService, TextboxTypeEnum, VRValidationService) {
+    function vrTextbox(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService) {
 
         return {
             restrict: 'E',
@@ -21,7 +21,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
+                ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
                 var validationOptions = {};
                 if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name)
                     validationOptions.emailValidation = true;
@@ -155,7 +155,7 @@
                             isUserChange = true;
                         };
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
-                        ctrl.readOnly = attrs.readonly != undefined;
+                       // ctrl.readOnly = attrs.readonly != undefined;
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }

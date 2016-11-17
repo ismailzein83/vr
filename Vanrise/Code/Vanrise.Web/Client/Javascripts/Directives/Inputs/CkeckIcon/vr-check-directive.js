@@ -31,7 +31,8 @@ app.directive('vrCheck', ['SecurityService', function (SecurityService) {
                 $scope.value = false;
         },
         link: function (scope, element, attrs, ctrl) {
-            
+            ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
+
             var isUserChange;
             scope.$watch('value', function () {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
@@ -44,23 +45,26 @@ app.directive('vrCheck', ['SecurityService', function (SecurityService) {
                     }
                 }
             });
+            ctrl.toogleCheck = function () {
+                if (ctrl.readOnly)
+                    return;
+                scope.value = !scope.value;
+                isUserChange = true;
+            };
             scope.withLable = false;
             if (attrs.label != undefined)
                 scope.withLable = true;
 
             if (attrs.hint != undefined)
                 scope.hint = attrs.hint;           
-            scope.notifyUserChange = function () {
-                isUserChange = true;
-            };
-            
+           
         },
         template: function (element, attrs) {
             if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions)) {
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="value"  ng-click="value=!value; notifyUserChange()" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
+                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="value"  ng-click="ctrl.toogleCheck()" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
                     + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
                     + '</div>';
             }

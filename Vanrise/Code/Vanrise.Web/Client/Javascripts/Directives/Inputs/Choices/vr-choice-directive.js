@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChoice', [function () {
+app.directive('vrChoice', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -22,7 +22,7 @@ app.directive('vrChoice', [function () {
             return {
                 pre: function ($scope, iElem, iAttrs, choicesCtrl) {
                     var ctrl = $scope.ctrl;
-
+                    ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
                     ctrl.selectionChanged = function () {
                         ctrl.isselected = ctrl.isSelected;
                     };
@@ -30,6 +30,8 @@ app.directive('vrChoice', [function () {
                     choicesCtrl.addChoiceCtrl(ctrl);
 
                     ctrl.choiceClicked = function () {
+                        if (ctrl.readOnly)
+                            return;
                         choicesCtrl.selectChoice(ctrl);
                     };
 

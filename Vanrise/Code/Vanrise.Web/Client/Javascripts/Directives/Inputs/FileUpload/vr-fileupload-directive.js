@@ -14,7 +14,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
         },
         controller: function ($scope, $element, $attrs,$timeout) {
             var ctrl = this;
-
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
             ctrl.validate = function () {
                 return VRValidationService.validate(ctrl.value, $scope, $attrs);
             };
@@ -246,16 +246,16 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                      + '<div id="mainInput" ng-model="ctrl.value" class="form-control vr-file-upload"  style="border-radius: 4px;padding: 0px;">'
                             + '<div  class="vr-file">'
                                +'<div ng-if=" ctrl.file !=null ">'
-                               + ' <a href="" class="vr-file-name" ng-click="ctrl.downloadFile() ">{{ctrl.file.name}}</a>'
+                               + ' <a href="" class="vr-file-name" ng-click="ctrl.downloadFile()">{{ctrl.file.name}}</a>'
                                + ' <div ng-show=" ctrl.num < 100" class="progress-bar progress-bar-success  progress-bar-striped active vr-file-process" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: ctrl.num + \'%\'}"></div>'
                                + ' <div ng-show="complet == true " class="vr-file-process" ><span>Complete</span></div>'
                                + ' <div ng-show="broken ==true " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>fail</span></div>'
                                +'</div>'
                            + '</div>'
-                            + '<span ng-show="ctrl.file !=null || broken ==true" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
-                            + '<span vr-disabled="ctrl.file !=null" class="btn btn-success fileinput-button vr-file-btn">'
+                            + '<span ng-show="ctrl.file !=null || broken ==true" ng-if="!ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
+                            + '<span ng-if="!ctrl.readOnly" vr-disabled="ctrl.file !=null" class="btn btn-success fileinput-button vr-file-btn">'
                                 + '<i class="glyphicon glyphicon-paperclip  vr-file-upload-paperclip"></i>'
-                                + '<input type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
+                                + '<input ng-if="ctrl.readOnly" type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
                             + '</span>'
                       + '</div>'
                   + '</vr-validator>'

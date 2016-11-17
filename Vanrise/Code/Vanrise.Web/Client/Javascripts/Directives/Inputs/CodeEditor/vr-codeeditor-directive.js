@@ -12,7 +12,9 @@
             scope: {
                 value: '='
             },
-            controller: function () {
+            controller: function ($scope, $element) {
+                var ctrl = this;
+                ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
 
             },
             compile: function () {
@@ -33,7 +35,7 @@
             controllerAs: 'ctrl',
             bindToController: true,
             template: function () {
-                return '<textarea ui-codemirror="ctrl.editorOptions" ng-model="ctrl.value"></textarea>';
+                return '<textarea  ng-readonly="ctrl.readOnly" ui-codemirror="ctrl.editorOptions" ng-model="ctrl.value"></textarea>';
             }
 
         };

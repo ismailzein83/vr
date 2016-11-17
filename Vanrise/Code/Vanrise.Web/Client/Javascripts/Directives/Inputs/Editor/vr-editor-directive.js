@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrEditor.$inject = ['BaseDirService', 'VRValidationService'];
+    vrEditor.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService'];
 
-    function vrEditor(BaseDirService, VRValidationService) {
+    function vrEditor(BaseDirService, VRValidationService, UtilsService) {
 
         return {
             restrict: 'E',
@@ -17,7 +17,10 @@
                 $scope.api = {
                     scope: $scope
                     
-               };
+                };
+                var ctrl = this;
+
+                
                 $scope.editorConfig = {
                     sanitize: false,
                     toolbar: [
@@ -77,9 +80,9 @@
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
-                        ctrl.readOnly = attrs.readonly != undefined;
+                      
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
-
+                        
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
@@ -110,6 +113,17 @@
                        
                         //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
+                    },
+                    post: function (scope, element, attrs) {
+                        var ctrl = scope.ctrl;
+                        ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
+                        if (ctrl.readOnly) {
+                            element.find('textarea').attr('readonly', 'readonly');
+                            $(element.find('iframe')).addClass("read-only-frame");
+                            $(element.find('.tinyeditor-header')).addClass("read-only-frame");
+                            $(element.find('iframe')).attr('tabindex',-1);
+                            $(element.find('.tinyeditor-header')).attr('tabindex', -1)
+                        }
                     }
                 }
             },
