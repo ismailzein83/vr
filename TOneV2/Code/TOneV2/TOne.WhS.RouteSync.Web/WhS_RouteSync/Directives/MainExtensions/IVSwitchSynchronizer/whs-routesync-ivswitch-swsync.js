@@ -24,7 +24,6 @@
 
             var gridAPI;
             function getCarrierMappings() {
-
                 var result = {};
                 if ($scope.scopeModel.carrierAccountMappings != undefined)
                     for (var i = 0; i < $scope.scopeModel.carrierAccountMappings.length; i++) {
@@ -99,6 +98,7 @@
                         $scope.scopeModel.OwnerName = ivSwSynSettings.OwnerName;
                         $scope.scopeModel.NumberOfOptions = ivSwSynSettings.NumberOfOptions;
                         $scope.scopeModel.Separator = ivSwSynSettings.Separator;
+                        $scope.scopeModel.BlockedAccountMapping = ivSwSynSettings.BlockedAccountMapping;
                     }
                     var loadCarrierMappingPromise = loadCarrierMappings(payload);
                     promises.push(loadCarrierMappingPromise);
@@ -114,8 +114,9 @@
                         TariffConnectionString: $scope.scopeModel.TariffConnectionString,
                         OwnerName: $scope.scopeModel.OwnerName,
                         NumberOfOptions: $scope.scopeModel.NumberOfOptions,
-                        Separator: $scope.scopeModel.Separator
-                    }
+                        Separator: $scope.scopeModel.Separator,
+                        BlockedAccountMapping: $scope.scopeModel.BlockedAccountMapping
+                    };
                     return data;
                 }
 
