@@ -71,7 +71,7 @@
             {
                 SourceBEReader: sourceReaderApi.getData(),
                 EntitySyncDefinitions: GetEntitySyncDefinitions()
-            }
+            };
             return {
                 BEReceiveDefinitionId: receveiveDEfinitionEntity != undefined ? receveiveDEfinitionEntity.BEReceiveDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
@@ -159,7 +159,7 @@
             $scope.scopeModel.onBESyncSettingsDirectiveReady = function (api) {
                 beSettingsAPI = api;
                 beSettingsAPIReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function loadTSourceReaderDefinitions() {

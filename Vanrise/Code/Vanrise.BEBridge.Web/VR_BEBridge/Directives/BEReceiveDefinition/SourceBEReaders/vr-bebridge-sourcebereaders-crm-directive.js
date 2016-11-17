@@ -41,7 +41,7 @@ app.directive('vrBebridgeSourcebereadersCrmDirective', ['VRNotificationService',
 
                     if (fieldIsValid)
                         $scope.scopeModel.Fields.push($scope.scopeModel.field);
-                }
+                };
 
                 defineAPI();
             }
@@ -66,7 +66,7 @@ app.directive('vrBebridgeSourcebereadersCrmDirective', ['VRNotificationService',
                         UserName: $scope.scopeModel.UserName,
                         Password: $scope.scopeModel.Password,
                         TopRecords: $scope.scopeModel.TopRecords
-                    }
+                    };
                     return {
                         $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.MicrosoftCRMSourceReader,  Vanrise.BEBridge.MainExtensions",
                         Setting: setting

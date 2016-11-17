@@ -20,7 +20,7 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/VR_BEBridge/Directives/ProcessInput/Scheduled/Templates/BEBridgeProcessScheduledTemplate.html"
         };
@@ -57,7 +57,7 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                     var promises = [];
                     promises.push(loadRouteSyncDefinitionSelector());
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

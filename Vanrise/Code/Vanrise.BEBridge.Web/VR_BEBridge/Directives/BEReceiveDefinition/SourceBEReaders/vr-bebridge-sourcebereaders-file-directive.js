@@ -39,7 +39,7 @@ app.directive('vrBebridgeSourcebereadersFileDirective', ['VRNotificationService'
                         Extension: $scope.scopeModel.Extension,
                         Mask: $scope.scopeModel.Mask,
                         Directory: $scope.scopeModel.Directory
-                    }
+                    };
                     return {
                         $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.FileSourceReader, Vanrise.BEBridge.MainExtensions",
                         Setting: setting

@@ -47,7 +47,7 @@ app.directive('vrBebridgeSourcebereadersFtpDirective', ['VRNotificationService',
                         UserName: $scope.scopeModel.UserName,
                         Password: $scope.scopeModel.Password,
                         BasedOnTime: $scope.scopeModel.BasedOnTime
-                    }
+                    };
                     return {
                         $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.FTPSourceReader,  Vanrise.BEBridge.MainExtensions",
                         Setting: setting

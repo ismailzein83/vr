@@ -25,7 +25,7 @@
             $scope.scopeModel.add = function () {
                 var onReceiveDefinitionAdded = function (addReceiveDefinition) {
                     gridAPI.onReceiveDefinitionAdded(addReceiveDefinition);
-                }
+                };
                 beReceiveDefinitionService.addReceiveDefinition(onReceiveDefinitionAdded);
             };
 

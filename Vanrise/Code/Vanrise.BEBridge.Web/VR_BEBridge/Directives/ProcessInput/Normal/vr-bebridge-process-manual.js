@@ -20,7 +20,7 @@ app.directive("vrBebridgeProcessManual", ["VRUIUtilsService", "UtilsService",
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/VR_BEBridge/Directives/ProcessInput/Normal/Templates/BEBridgeProcessManualTemplate.html"
         };
@@ -57,7 +57,7 @@ app.directive("vrBebridgeProcessManual", ["VRUIUtilsService", "UtilsService",
                     var promises = [];
                     promises.push(loadRouteSyncDefinitionSelector());
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

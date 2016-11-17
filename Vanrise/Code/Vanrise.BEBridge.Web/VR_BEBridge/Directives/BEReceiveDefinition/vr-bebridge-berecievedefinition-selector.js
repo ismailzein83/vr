@@ -28,7 +28,7 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getBERecieveDefinitionTemplate(attrs);
@@ -57,7 +57,7 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
                    + ' entityName="' + label + '"'
                    + '  >'
                    + '</vr-select>'
-                   + '</vr-columns>'
+                   + '</vr-columns>';
         }
 
         function BERecieveDefinitionSelectorCtor(ctrl, $scope, attrs) {
@@ -75,12 +75,12 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(defineAPI());
                     }
-                }
+                };
 
 
                 ctrl.search = function (nameFilter) {
                     return VR_BEBridge_BERecieveDefinitionAPIService.GetBERecieveDefinitionsInfo(nameFilter);
-                }
+                };
 
             }
 
@@ -112,7 +112,7 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

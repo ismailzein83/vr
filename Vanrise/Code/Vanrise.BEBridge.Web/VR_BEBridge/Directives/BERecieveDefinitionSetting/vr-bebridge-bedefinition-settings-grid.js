@@ -36,13 +36,13 @@ app.directive("vrBebridgeBedefinitionSettingsGrid", ["UtilsService", "VRNotifica
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You should add at least one setting";
-                }
+                };
 
                 ctrl.addBERecieveDefinitionSetting = function () {
                     var onBEReceiveDefinitionSettingsAdded = function (dataRecordField) {
                         dataRecordField.ID = counter++;
                         ctrl.datasource.push(dataRecordField);
-                    }
+                    };
 
                     VR_BEBridge_BEReceiveDefinitionSettingsService.addReceiveDefinitionSettings(onBEReceiveDefinitionSettingsAdded, ctrl.datasource);
                 };
@@ -68,10 +68,10 @@ app.directive("vrBebridgeBedefinitionSettingsGrid", ["UtilsService", "VRNotifica
 
                     }
                     var obj = {
-                        Fields: fields,
-                    }
+                        Fields: fields
+                    };
                     return obj;
-                }
+                };
 
                 api.load = function (payload) {
 
@@ -84,7 +84,7 @@ app.directive("vrBebridgeBedefinitionSettingsGrid", ["UtilsService", "VRNotifica
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -103,7 +103,7 @@ app.directive("vrBebridgeBedefinitionSettingsGrid", ["UtilsService", "VRNotifica
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editReceiveDefinitionSettings(dataRecordFieldObj) {
@@ -111,7 +111,7 @@ app.directive("vrBebridgeBedefinitionSettingsGrid", ["UtilsService", "VRNotifica
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordFieldObj.ID, 'ID');
                     dataRecordField.ID = counter++;
                     ctrl.datasource[index] = dataRecordField;
-                }
+                };
 
                 VR_BEBridge_BEReceiveDefinitionSettingsService.editReceiveDefinitionSettings(dataRecordFieldObj, onBEReceiveDefinitionSettingsUpdated, ctrl.datasource);
             }

@@ -35,11 +35,11 @@ app.directive('vrBebridgeBereceivedefinitionGrid', ['VR_BEBridge_BERecieveDefini
 
                 api.onReceiveDefinitionAdded = function (addedReceiveDefinition) {
                     gridAPI.itemAdded(addedReceiveDefinition);
-                }
+                };
 
                 api.onReceiveDefinitionUpdated = function (updatedReceiveDefinition) {
                     gridAPI.itemUpdated(updatedReceiveDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
