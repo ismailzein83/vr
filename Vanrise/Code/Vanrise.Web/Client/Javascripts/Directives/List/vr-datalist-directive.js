@@ -19,7 +19,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
 
             ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
 
-            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
             ctrl.onInternalRemove = function (dataItem) {
                 if (ctrl.autoremoveitem == true) {
