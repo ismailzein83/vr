@@ -62,6 +62,7 @@
     <Compile Include="ComponentType\VRComponentTypeDetail.cs" />
     <Compile Include="ComponentType\VRComponentTypeQuery.cs" />
     <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
+    <Compile Include="Country\CountryFilter.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="DateTimeType.cs" />
     <Compile Include="Settings\BankDetailsSettings\BankDetailsSettings.cs" />
