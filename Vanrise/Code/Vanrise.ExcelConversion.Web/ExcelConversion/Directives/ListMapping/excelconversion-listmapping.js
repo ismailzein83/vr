@@ -40,17 +40,17 @@
                                 row: range[0],
                                 col: range[1],
                                 sheet: context.getSelectedSheet()
-                            }
+                            };
                         }
 
                     }
 
-                }
+                };
                 ctrl.selectLastRowIndex = function () {
                     if (context != undefined) {
                         context.setSelectedCell(ctrl.lastRowIndex.row, ctrl.lastRowIndex.col, ctrl.lastRowIndex.sheet);
                     }
-                }
+                };
                 ctrl.updateFirstRowIndexRange = function () {
                     if (context != undefined) {
                         var range = context.getSelectedCell();
@@ -58,24 +58,23 @@
                             ctrl.firstRowIndex = {
                                 row: range[0],
                                 col: range[1],
-                                sheet: context.getSelectedSheet(),
-                            }
+                                sheet: context.getSelectedSheet()
+                            };
                         }
 
                     }
 
-                }
+                };
                 ctrl.selectFirstRowIndex = function () {
                     if (context != undefined) {
                         context.setSelectedCell(ctrl.firstRowIndex.row, ctrl.firstRowIndex.col, ctrl.firstRowIndex.sheet);
                     }
-                }
+                };
 
-                ctrl.onRecordFilterReady = function(api)
-                {
+                ctrl.onRecordFilterReady = function (api) {
                     recordFilterAPI = api;
                     recordFilterReadyPromiseDeferred.resolve();
-                }
+                };
 
                 ctrl.filterFieldsMappings = [];
                 ctrl.addField = function () {
@@ -83,41 +82,35 @@
                         {
                             readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                             loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            selectedDataTypes : VR_GenericData_MappingFieldTypeEnum.Text
+                            selectedDataTypes: VR_GenericData_MappingFieldTypeEnum.Text
                         };
                     addFilterAPIExtension(dataItem);
-                }
+                };
                 ctrl.dataTypes = UtilsService.getArrayEnum(VR_GenericData_MappingFieldTypeEnum);
-                ctrl.addFilterValidate = function()
-                {
+                ctrl.addFilterValidate = function () {
                     if (ctrl.filterFieldsMappings.length == 0)
                         return true;
-                    for(var i=0 ;i<ctrl.filterFieldsMappings.length ;i++)
-                    {
+                    for (var i = 0 ; i < ctrl.filterFieldsMappings.length ; i++) {
                         var filterFieldsMapping = ctrl.filterFieldsMappings[i];
                         if (filterFieldsMapping.FieldName == undefined || filterFieldsMapping.selectedDataTypes == undefined)
                             return true;
                     }
                     return false;
-                }
-                ctrl.removeFilter = function(dataItem)
-                {
+                };
+                ctrl.removeFilter = function (dataItem) {
                     var index = ctrl.filterFieldsMappings.indexOf(dataItem);
                     ctrl.filterFieldsMappings.splice(index, 1);
-                }
-                ctrl.isFilterFilled = function()
-                {
+                };
+                ctrl.isFilterFilled = function () {
                     var recordFilterData = recordFilterAPI.getData();
                     if (ctrl.filterFieldsMappings.length > 0 && recordFilterData.filterObj == undefined)
                         return "Filter does not edited yet.";
                     if (ctrl.checkIfFieldNameChanges(recordFilterData))
-                        return "Fields are not matched."
+                        return "Fields are not matched.";
                     return null;
-                }
-                ctrl.checkIfFieldNameChanges = function (recordFilterData)
-                {
-                    if (recordFilterData != undefined && recordFilterData.filterObj != undefined)
-                    {
+                };
+                ctrl.checkIfFieldNameChanges = function (recordFilterData) {
+                    if (recordFilterData != undefined && recordFilterData.filterObj != undefined) {
                         var fieldNames = VR_GenericData_RecordFilterService.getFilterGroupFieldNames(recordFilterData.filterObj);
                         if (fieldNames != undefined) {
                             for (var i = 0; i < fieldNames.length ; i++) {
@@ -128,7 +121,7 @@
                         }
                     }
                     return false;
-                }
+                };
                 defineAPI();
             }
 
@@ -139,14 +132,14 @@
                 if (payloadEntity != undefined) {
                     payload.fieldMapping = payloadEntity.FieldMapping;
                     dataItem.FieldName = payloadEntity.FieldName;
-                    dataItem.selectedDataTypes = UtilsService.getItemByVal(ctrl.dataTypes, payloadEntity.FieldType.ConfigId,"value.ConfigId")
+                    dataItem.selectedDataTypes = UtilsService.getItemByVal(ctrl.dataTypes, payloadEntity.FieldType.ConfigId, "value.ConfigId");
                 }
                 dataItem.normalColNum = ctrl.normalColNum;
 
                 dataItem.onFieldMappingReady = function (api) {
                     dataItem.fieldMappingAPI = api;
                     dataItem.readyPromiseDeferred.resolve();
-                }
+                };
                 dataItem.readyPromiseDeferred.promise
               .then(function () {
                   
@@ -175,7 +168,7 @@
                                     row: listMappingData.FirstRowIndex,
                                     col: listMappingData.FirstRowIndex,
                                     sheet: listMappingData.SheetIndex
-                                }
+                                };
                             }
                             if (listMappingData.LastRowIndex != undefined)
                             {
@@ -183,15 +176,15 @@
                                     row: listMappingData.LastRowIndex,
                                     col: listMappingData.LastRowIndex,
                                     sheet: listMappingData.SheetIndex
-                                }
+                                };
                             }
                             if(listMappingData.Filter != undefined && listMappingData.Filter.Fields != undefined)
                             {
                                 for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
                                     var filterItem = {
-                                        readyPromiseDeferred : UtilsService.createPromiseDeferred(),
-                                        loadPromiseDeferred : UtilsService.createPromiseDeferred()
-                                    }
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
                                     var filterFieldsMappingEntity = listMappingData.Filter.Fields[j];
                                     promises.push(filterItem.loadPromiseDeferred.promise);
                                     addFilterAPIExtension(filterItem, filterFieldsMappingEntity);
@@ -202,8 +195,8 @@
                         ctrl.fieldMappings = payload.fieldMappings;
                         for (var i = 0; i < ctrl.fieldMappings.length; i++) {
                             var item = ctrl.fieldMappings[i];
-                            item.readyPromiseDeferred = UtilsService.createPromiseDeferred(),
-                            item.loadPromiseDeferred = UtilsService.createPromiseDeferred()
+                            item.readyPromiseDeferred = UtilsService.createPromiseDeferred();
+                            item.loadPromiseDeferred = UtilsService.createPromiseDeferred();
                             promises.push(item.loadPromiseDeferred.promise);
                             addAPIExtension(ctrl.fieldMappings[i]);
                         }
@@ -237,7 +230,7 @@
                         dataItem.onFieldMappingReady = function (api) {
                             dataItem.fieldMappingAPI = api;
                             dataItem.readyPromiseDeferred.resolve();
-                        }
+                        };
                         dataItem.readyPromiseDeferred.promise
                       .then(function () {
                           if (listMappingData != undefined && listMappingData.FieldMappings != undefined && listMappingData.FieldMappings.length > 0) {
@@ -326,7 +319,7 @@
                         currentContext = {};
                     currentContext.getFirstRowIndex = function () {
                         return ctrl.firstRowIndex;
-                    }
+                    };
                     return currentContext;
                 }
             }

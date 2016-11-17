@@ -29,7 +29,7 @@
             var label = "";
             if (label != undefined)
                 label = attrs.label;
-            return "<vr-excelconversion-fieldmapping-cellfieldmapping on-ready='cellfieldCtrl.onDirectiveReady' " + label + " isrequired='true' ></vr-excelconversion-fieldmapping-cellfieldmapping>"
+            return "<vr-excelconversion-fieldmapping-cellfieldmapping on-ready='cellfieldCtrl.onDirectiveReady' " + label + " isrequired='true' ></vr-excelconversion-fieldmapping-cellfieldmapping>";
         }
         function ConcatenatedpartCellfield($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -43,7 +43,7 @@
                 ctrl.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     cellFieldReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -88,7 +88,7 @@
                         data = {
                             $type: "Vanrise.ExcelConversion.MainExtensions.ConcatenatedParts.CellFieldConcatenatedPart, Vanrise.ExcelConversion.MainExtensions ",
                             CellFieldMapping: directiveAPI.getData()
-                        }
+                        };
                         return data;
                     }
                 }

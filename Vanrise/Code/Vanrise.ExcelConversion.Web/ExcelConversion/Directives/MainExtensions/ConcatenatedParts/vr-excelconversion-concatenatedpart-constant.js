@@ -29,7 +29,7 @@
             var label = "";
             if (label != undefined)
                 label = attrs.label;
-            return "<vr-row removeline> <vr-columns colnum='{{constantCtrl.normalColNum * 2}}'><vr-textbox value='constantCtrl.value' " + label + " isrequired='true'> </vr-textbox>   </vr-columns></vr-row>"
+            return "<vr-row removeline> <vr-columns colnum='{{constantCtrl.normalColNum * 2}}'><vr-textbox value='constantCtrl.value' " + label + " isrequired='true'> </vr-textbox>   </vr-columns></vr-row>";
         }
         function ConcatenatedpartConstant($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -58,7 +58,7 @@
                     var data = {
                         $type: "Vanrise.ExcelConversion.MainExtensions.ConcatenatedParts.ConstantConcatenatedPart, Vanrise.ExcelConversion.MainExtensions ",
                         Constant: ctrl.value
-                    }
+                    };
                     return data;
                 }
             }

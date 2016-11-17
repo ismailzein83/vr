@@ -36,8 +36,7 @@
                  + '</vr-columns>'
                  + ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum *0.5}}" >'
                 + ' <span class="glyphicon glyphicon-check" ng-click="cellfieldmappingCtrl.editCellManipulation()" ng-if="cellfieldmappingCtrl.showCheckButton" style="color:green;font-size:15px;cursor:pointer"></span>'
-                 + '</vr-columns>'
-            ;
+                 + '</vr-columns>';
         }
 
         function CellFieldMapping($scope, ctrl, $attrs) {
@@ -53,12 +52,12 @@
                                 row: range[0],
                                 col: range[1],
                                 sheet: context.getSelectedSheet(),
-                            }
+                            };
                         }
 
                     }
 
-                }
+                };
                 ctrl.validate = function () {
                     if ($scope.cellObject != undefined && context != undefined) {
                         var row = context.getFirstRowIndex();
@@ -69,35 +68,32 @@
 
                     }
                     return null;
-                }
+                };
                 ctrl.selectCell = function () {
                     if (context != undefined && $scope.cellObject != undefined) {
                         context.setSelectedCell($scope.cellObject.row, $scope.cellObject.col, $scope.cellObject.sheet);
                     }
-                }
+                };
 
                 ctrl.showEditButton = true;
                 ctrl.showCheckButton = false;
 
-                ctrl.editCellManipulation = function()
-                {
+                ctrl.editCellManipulation = function () {
                     var onTextManipulationSave = function (textManipulationObj) {
-                        if (textManipulationObj != undefined && textManipulationObj.textManipulationSettings != undefined)
-                        {
+                        if (textManipulationObj != undefined && textManipulationObj.textManipulationSettings != undefined) {
                             textManipulationSettings = textManipulationObj.textManipulationSettings;
                             ctrl.showEditButton = false;
                             ctrl.showCheckButton = true;
-                        
+
                         }
-                        else
-                        {
+                        else {
                             ctrl.showEditButton = true;
                             ctrl.showCheckButton = false;
                             textManipulationSettings = undefined;
                         }
-                    }
+                    };
                     VRCommon_TextManipulationService.editTextManipulation(onTextManipulationSave, textManipulationSettings);
-                }
+                };
 
                 defineAPI();
             }
@@ -112,8 +108,8 @@
                             $scope.cellObject = {
                                 row: payload.fieldMapping.RowIndex,
                                 col: payload.fieldMapping.CellIndex,
-                                sheet: payload.fieldMapping.SheetIndex,
-                            }
+                                sheet: payload.fieldMapping.SheetIndex
+                            };
                             textManipulationSettings = payload.fieldMapping.ManipulationSettings;
                             if (textManipulationSettings != undefined)
                             {
@@ -132,7 +128,7 @@
                 }
 
                 function getData() {
-                    var data
+                    var data;
                     if ($scope.cellObject != undefined) {
                         data = {
                             $type: "Vanrise.ExcelConversion.MainExtensions.FieldMappings.CellFieldMapping, Vanrise.ExcelConversion.MainExtensions",

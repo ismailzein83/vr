@@ -78,7 +78,7 @@
                     if (ctrl.datasource.length > 0)
                         return null;
                     return "At least one field type should be added.";
-                }
+                };
 
 
 
@@ -134,7 +134,7 @@
                         } else {
                             $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                         }
-                    })
+                    });
 
                     function getFieldMappingTemplateConfigs() {
                         return VR_ExcelConversion_ExcelAPIService.GetConcatenatedPartTemplateConfigs().then(function (response) {

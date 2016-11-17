@@ -76,7 +76,7 @@
                     directiveAPI = api;
                     directivePayload = {
                         context: getContext()
-                    }
+                    };
                     var setLoader = function (value) {
                         $scope.isLoadingDirective = value;
                     };
