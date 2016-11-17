@@ -21,15 +21,13 @@
     </exceptionLoggers>
   </vanriseLogging>
 
-  <connectionStrings>    
-    <add name="Mediation_GenericConfig_DBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= " />
-    <add name="Mediation_GenericRecord_DBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= " />
+  <connectionStrings>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= "/>
     
     <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=Mediation_Queueing;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=Mediation_Transaction;User ID=sa;Password= "/>
-    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>    
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>
     
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= "/>    
     <add name="MainDBConnString" connectionString=""/>    
   </connectionStrings>
   <appSettings>
@@ -41,21 +39,20 @@
     <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
 
-    <add key="Mediation_GenericRecord_DBConnStringKey" value="Mediation_GenericRecord_DBConnString"/>
-    <add key="Mediation_GenericConfig_DBConnStringKey" value="Mediation_GenericRecord_DBConnString"/>
-    <add key="SecurityDBConnStringKey" value="Mediation_GenericConfig_DBConnString" />
-    <add key="ConfigurationDBConnStringKey" value="Mediation_GenericConfig_DBConnString" />
+    <add key="Mediation_GenericRecord_DBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="Mediation_GenericConfig_DBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
+    <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="RuntimeConnStringKey" value="TransactionDBConnString" />
     <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString" />
     <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
-    <add key="BusinessProcessConfigDBConnStringKey" value="Mediation_GenericConfig_DBConnString" />
+    <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="BigDataServiceDBConnStringKey" value="TransactionDBConnString"/>
-    <add key="RulesDBConnStringKey" value="Mediation_GenericConfig_DBConnString"/>
+    <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
     <add key="QueueDBConnStringKey" value="TransactionDBConnString"/>
     <add key="QueueItemDBConnStringKey" value="QueueItemDBConnString"/>
     <add key="TempPasswordValidity" value="24:00:00"/>
-
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
