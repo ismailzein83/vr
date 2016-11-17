@@ -35,12 +35,12 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                 $scope.scopeModel.genericBusinessEntitySelectorReady = function (api) {
                     genericBESelectorAPI = api;
                     genericBESelectorReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.BillingTransactionTypeSelectorReady = function (api) {
                     billingTransactionTypeSelectorAPI = api;
                     billingTransactionTypeReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }

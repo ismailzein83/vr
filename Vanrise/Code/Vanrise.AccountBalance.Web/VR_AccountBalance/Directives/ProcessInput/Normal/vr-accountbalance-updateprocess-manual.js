@@ -19,7 +19,7 @@ app.directive("vrAccountbalanceUpdateprocessManual", ['UtilsService', 'VRUIUtils
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/VR_AccountBalance/Directives/ProcessInput/Normal/Templates/AccountBalanceUpdateProcessManualTemplate.html"
     };
@@ -56,7 +56,7 @@ app.directive("vrAccountbalanceUpdateprocessManual", ['UtilsService', 'VRUIUtils
                 var promises = [];
                 promises.push(loadAccountTypeSelector());
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

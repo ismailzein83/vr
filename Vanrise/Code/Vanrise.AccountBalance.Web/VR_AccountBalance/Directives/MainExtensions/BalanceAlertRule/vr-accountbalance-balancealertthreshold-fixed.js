@@ -23,7 +23,7 @@ app.directive('vrAccountbalanceBalancealertthresholdFixed', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_AccountBalance/Directives/MainExtensions/BalanceAlertRule/Templates/FixedBalanceAlertThresholdTemplate.html';
@@ -42,18 +42,17 @@ app.directive('vrAccountbalanceBalancealertthresholdFixed', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload !=undefined)
-                    {
+                    if (payload != undefined) {
                         $scope.scopeModel.threshold = payload.Threshold;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.AccountBalance.MainExtensions.BalanceAlertThresholds.FixedBalanceAlertThreshold, Vanrise.AccountBalance.MainExtensions",
-                        Threshold: $scope.scopeModel.threshold,
+                        Threshold: $scope.scopeModel.threshold
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

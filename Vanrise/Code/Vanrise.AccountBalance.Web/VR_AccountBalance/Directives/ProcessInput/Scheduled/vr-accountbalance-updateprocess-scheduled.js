@@ -19,7 +19,7 @@ app.directive("vrAccountbalanceUpdateprocessScheduled", ['UtilsService', 'VRUIUt
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/VR_AccountBalance/Directives/ProcessInput/Scheduled/Templates/AccountBalanceUpdateProcessScheduledTemplate.html"
     };
@@ -56,7 +56,7 @@ app.directive("vrAccountbalanceUpdateprocessScheduled", ['UtilsService', 'VRUIUt
                 var promises = [];
                 promises.push(loadAccountTypeSelector());
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

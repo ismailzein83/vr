@@ -28,7 +28,7 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -55,7 +55,7 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                    + '  label="' + label + '"'
                    + ' entityName="' + label + '"'
                    + '  >'
-                   + '</vr-select>'
+                   + '</vr-select>';
         }
 
         function BalanceAccountTypeSelectorCtor(ctrl, $scope, attrs) {
@@ -73,12 +73,12 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(defineAPI());
                     }
-                }
+                };
 
 
                 ctrl.search = function (nameFilter) {
                     return VR_AccountBalance_BalanceAccountTypeAPIService.GetBalanceAccountTypeInfos(nameFilter);
-                }
+                };
 
             }
 
@@ -110,7 +110,7 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -33,16 +33,15 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
                     return null;
 
                 return "You Should Select at least one threshold action.";
-            }
+            };
 
             ctrl.addThresholdAction = function () {
-                var onBalanceAlertThresholdAdded = function (balanceAlertThreshold)
-                {
+                var onBalanceAlertThresholdAdded = function (balanceAlertThreshold) {
                     balanceAlertThreshold.ActionNames = getActionNames(balanceAlertThreshold.Actions);
 
                     balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
-                }
+                };
                 VR_AccountBalance_BalanceAlertService.addBalanceAlertThreshold(onBalanceAlertThresholdAdded);
             };
 
@@ -60,30 +59,24 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
 
             api.getData = function () {
                 var data = [];
-                if(ctrl.datasource.length >0)
-                {
-                    for(var i=0;i<ctrl.datasource.length;i++)
-                    {
+                if (ctrl.datasource.length > 0) {
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
                         data.push(ctrl.datasource[i].Entity);
                     }
                 }
                 var result = {
-                   ThresholdActions: data
-                }
+                    ThresholdActions: data
+                };
                 return result;
-            }
+            };
           
             api.load = function (payload) {
-                if(payload !=undefined && payload.settings !=undefined)
-                {
-                    
-                    if(payload.settings.ThresholdActions !=undefined)
-                    {
-                        for(var i=0;i<payload.settings.ThresholdActions.length;i++)
-                        {
+                if (payload != undefined && payload.settings != undefined) {
+
+                    if (payload.settings.ThresholdActions != undefined) {
+                        for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
                             var thresholdAction = payload.settings.ThresholdActions[i];
-                            if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0)
-                            {
+                            if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
                                 thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
                             }
                             if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
@@ -93,7 +86,7 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
                         }
                     }
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -132,7 +125,7 @@ function (UtilsService, VR_AccountBalance_BalanceAlertService) {
                 thresholdActionObj.RollbackActionNames = getActionNames(thresholdActionObj.RollbackActions);
 
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
-            }
+            };
             VR_AccountBalance_BalanceAlertService.editBalanceAlertThreshold(dataItem.Entity, onThresholdActionUpdated);
         }
 

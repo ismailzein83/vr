@@ -103,7 +103,7 @@
         function loadBalanceAlertThresholdDirective() {
             var balanceAlertThresholdLoadDeferred = UtilsService.createPromiseDeferred();
             balanceAlertThresholdReadyDeferred.promise.then(function () {
-                var balanceAlertThresholdPayload = thresholdEntity != undefined ? { thresholdEntity: thresholdEntity.Threshold } : undefined
+                var balanceAlertThresholdPayload = thresholdEntity != undefined ? { thresholdEntity: thresholdEntity.Threshold } : undefined;
                 VRUIUtilsService.callDirectiveLoad(balanceAlertThresholdAPI, balanceAlertThresholdPayload, balanceAlertThresholdLoadDeferred);
             });
             return balanceAlertThresholdLoadDeferred.promises;

@@ -19,7 +19,7 @@ app.directive("vrBalancealertcheckerProcess", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/VR_AccountBalance/Directives/ProcessInput/Templates/BalanceAlertCheckerProcess.html"
     };
@@ -38,14 +38,14 @@ app.directive("vrBalancealertcheckerProcess", [function () {
             api.getData = function () {
                 return {
                     InputArguments: {
-                        $type: "Vanrise.AccountBalance.BP.Arguments.BalanceAlertCheckerProcessInput, Vanrise.AccountBalance.BP.Arguments",
+                        $type: "Vanrise.AccountBalance.BP.Arguments.BalanceAlertCheckerProcessInput, Vanrise.AccountBalance.BP.Arguments"
                     }
                 };
             };
 
             api.load = function (payload) {
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
