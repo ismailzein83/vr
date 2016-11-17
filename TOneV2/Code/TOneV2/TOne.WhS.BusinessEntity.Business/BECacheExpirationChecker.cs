@@ -15,37 +15,29 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        SlidingWindowCacheExpirationChecker todayBECacheExpirationChecker;
-        SlidingWindowCacheExpirationChecker previousBECacheExpirationChecker;
-        public BECacheExpirationChecker()
-        {
-            InitializeSlidingWindowCacheExpirationCheckers();
-        }
-
         public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
-        {
-            IBEDayFilterCacheName dayFilterCacheName = context.CachedObject.CacheName as IBEDayFilterCacheName;
-            if (dayFilterCacheName != null && dayFilterCacheName.FilterDay == DateTime.Today)
-                return todayBECacheExpirationChecker.IsCacheExpired(context);
-            else
-                return previousBECacheExpirationChecker.IsCacheExpired(context);
-        }
-
-        private void InitializeSlidingWindowCacheExpirationCheckers()
         {
             ConfigManager configManager = new ConfigManager();
             CachingExpirationIntervals cachingExpirationIntervals = configManager.GetCachingExpirationIntervals();
 
-            TimeSpan? todayEntitesTimeSpan = null;
-            if (cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.HasValue)
-                todayEntitesTimeSpan = TimeSpan.FromMinutes(cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.Value);
+            IBEDayFilterCacheName dayFilterCacheName = context.CachedObject.CacheName as IBEDayFilterCacheName;
+            if (dayFilterCacheName != null && dayFilterCacheName.FilterDay == DateTime.Today)
+            {
+                if (!cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.HasValue)
+                    return false;
+                return IsCacheExpired(context, cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.Value);
+            }
+            else
+            {
+                return IsCacheExpired(context, cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes);
+            }
+        }
 
-            TimeSpan? previousEntitesTimeSpan = null;
-            if (cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes.HasValue)
-                previousEntitesTimeSpan = TimeSpan.FromMinutes(cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes.Value);
-
-            todayBECacheExpirationChecker = new SlidingWindowCacheExpirationChecker(todayEntitesTimeSpan);
-            previousBECacheExpirationChecker = new SlidingWindowCacheExpirationChecker(previousEntitesTimeSpan);
+        private bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context, int entitiesIntervalInMinutes)
+        {
+            TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(entitiesIntervalInMinutes);
+            SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new SlidingWindowCacheExpirationChecker(entitiesTimeSpan);
+            return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
         }
     }
 

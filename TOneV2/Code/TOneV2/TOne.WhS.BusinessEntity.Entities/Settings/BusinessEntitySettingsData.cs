@@ -11,6 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int? TodayEntitiesIntervalInMinutes { get; set; }
 
-        public int? PreviousEntitiesIntervalInMinutes { get; set; }
+        public int PreviousEntitiesIntervalInMinutes { get; set; }
     }
 }

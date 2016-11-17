@@ -12,7 +12,6 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         private ISupplierZoneServiceDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
         private object _updateHandle;
-        DateTime? _settingCacheLastCheck;
 
         public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
         {
@@ -29,9 +28,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         protected override bool ShouldSetCacheExpired(object parameter)
         {
-            return _dataManager.AreSupplierZoneServicesUpdated(ref _updateHandle)
-                            |
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingCacheLastCheck);
+            return _dataManager.AreSupplierZoneServicesUpdated(ref _updateHandle);
         }
     }
 }

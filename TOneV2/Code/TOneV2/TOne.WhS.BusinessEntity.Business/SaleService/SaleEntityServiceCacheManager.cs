@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
-using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -12,7 +7,6 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         private ISaleEntityServiceDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityServiceDataManager>();
         private object _updateHandle;
-        DateTime? _settingCacheLastCheck;
 
         public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
         {
@@ -29,9 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         protected override bool ShouldSetCacheExpired(object parameter)
         {
-            return _dataManager.AreSaleEntityServicesUpdated(ref _updateHandle)
-                            |
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingCacheLastCheck);
+            return _dataManager.AreSaleEntityServicesUpdated(ref _updateHandle);
         }
     }
 }
