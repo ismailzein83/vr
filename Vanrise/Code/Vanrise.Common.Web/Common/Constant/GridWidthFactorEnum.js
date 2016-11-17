@@ -4,4 +4,5 @@
     Normal: { value: "Normal", description: "Normal", widthFactor: 10 },
     Large: { value: "Large", description: "Large", widthFactor: 13 },
     XLarge: { value: "XLarge", description: "XLarge", widthFactor: 15 },
+    Fixed: { value: "FixedWidth", description: "Fixed Width" }
 });
