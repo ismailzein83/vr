@@ -2,13 +2,14 @@
 
     'use strict';
 
-    RoutingProductService.$inject = ['VRModalService', 'VRNotificationService'];
+    RoutingProductService.$inject = ['VRModalService', 'VRNotificationService','UtilsService'];
 
-    function RoutingProductService(VRModalService, VRNotificationService) {
+    function RoutingProductService(VRModalService, VRNotificationService, UtilsService) {
         return ({
             addRoutingProduct: addRoutingProduct,
             editRoutingProduct: editRoutingProduct,
-            deleteRoutingProduct: deleteRoutingProduct
+            deleteRoutingProduct: deleteRoutingProduct,
+            viewRoutingProduct: viewRoutingProduct
         });
 
         function addRoutingProduct(onRoutingProductAdded) {
@@ -31,6 +32,22 @@
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onRoutingProductUpdated = onRoutingProductUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);
+        }
+
+
+        function viewRoutingProduct(routingProductId) {
+            var modalSettings = {
+            };
+
+            var parameters = {
+                routingProductId: routingProductId
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);
         }

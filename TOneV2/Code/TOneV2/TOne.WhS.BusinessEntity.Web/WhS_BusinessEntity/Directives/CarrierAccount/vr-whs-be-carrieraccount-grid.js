@@ -110,15 +110,23 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
 
         function defineMenuActions() {
             var menuActionsWithSellingProduct = [{
+                name: "View",
+                clicked: viewCarrierAccount,
+                haspermission: hasViewCarrierAccountPermission
+            },{
                 name: "Edit",
                 clicked: editCarrierAccount,
                 haspermission: hasUpdateCarrierAccountPermission
-            }, {
+            },{
                 name: "Assign Selling Product",
                 clicked: assignNew,
                 haspermission: hasAddCustomerSellingProductPermission
             }];
-            var defaultMenuActions = [{
+            var defaultMenuActions = [ {
+                name: "View",
+                clicked: viewCarrierAccount,
+                haspermission: hasViewCarrierAccountPermission
+            },{
                 name: "Edit",
                 clicked: editCarrierAccount,
                 haspermission: hasUpdateCarrierAccountPermission
@@ -144,6 +152,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             function hasUpdateCarrierAccountPermission() {
                 return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
             }
+
+            function hasViewCarrierAccountPermission() {
+                return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission().then(function (response) {
+                    return !response;
+                });
+            }
         }
 
         function editCarrierAccount(carrierAccountObj) {
@@ -159,6 +173,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             else
                 carrierAccountItem = carrierAccountObj.Entity.CarrierAccountId;
             WhS_BE_CarrierAccountService.editCarrierAccount(carrierAccountItem, onCarrierAccountUpdated);
+        }
+
+        function viewCarrierAccount(carrierAccountObj) {          
+            WhS_BE_CarrierAccountService.viewCarrierAccount(carrierAccountObj.Entity.CarrierAccountId);
         }
 
         var addReadySericeApi = function (dataItem) {

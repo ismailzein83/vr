@@ -443,6 +443,12 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductZoneServiceEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleCode\SaleCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditor.html" />

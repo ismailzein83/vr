@@ -2,12 +2,13 @@
 
     'use strict';
 
-    CarrierAccountService.$inject = ['VRModalService'];
+    CarrierAccountService.$inject = ['VRModalService', 'UtilsService'];
 
-    function CarrierAccountService(VRModalService) {
+    function CarrierAccountService(VRModalService, UtilsService) {
         return ({
             addCarrierAccount: addCarrierAccount,
-            editCarrierAccount: editCarrierAccount
+            editCarrierAccount: editCarrierAccount,
+            viewCarrierAccount: viewCarrierAccount
         });
 
         function addCarrierAccount(onCarrierAccountAdded, dataItem) {
@@ -35,6 +36,18 @@
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
+        }
+
+        function viewCarrierAccount(CarrierAccountId) {
+            var modalSettings = {
+            };
+            var parameters = {
+                CarrierAccountId: CarrierAccountId
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope)
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
         }

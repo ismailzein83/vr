@@ -95,22 +95,35 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
         }
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editRoutingProduct,
-                haspermission: hasUpdateRoutingProductPermission
-            },
-            {
-                name: "Add Route Rule",
-                clicked: addRouteRule,
-                haspermission: hasAddRulePermission
-            }
+            $scope.gridMenuActions = [
+                {
+                    name: "View",
+                    clicked: viewRoutingProduct,
+                    haspermission: hasViewRoutingProductPermission
+                },
+                    {
+                    name: "Edit",
+                    clicked: editRoutingProduct,
+                    haspermission: hasUpdateRoutingProductPermission
+                },
+                {
+                    name: "Add Route Rule",
+                    clicked: addRouteRule,
+                    haspermission: hasAddRulePermission
+                }
             ];
         }
 
         function hasUpdateRoutingProductPermission() {
             return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
         }
+
+        function hasViewRoutingProductPermission() {
+            return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission().then(function (response) {
+                return !response;
+            });
+        }
+
 
         function hasAddRulePermission() {
             return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
@@ -133,6 +146,10 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             };
 
             WhS_BE_RoutingProductService.editRoutingProduct(routingProduct.Entity.RoutingProductId, onRoutingProductUpdated);
+        }
+
+        function viewRoutingProduct(routingProduct) {
+            WhS_BE_RoutingProductService.viewRoutingProduct(routingProduct.Entity.RoutingProductId);
         }
 
         //function deleteRoutingProduct(routingProduct) {
