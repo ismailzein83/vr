@@ -181,7 +181,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SwitchCDRMappingConfiguration switchCDRMappingConfiguration = currentSwitch.Settings != null ? currentSwitch.Settings.SwitchCDRMappingConfiguration : null;
 
                     Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = new Dictionary<SwitchCDPN, CDPNIdentification>();
-                    if (currentSwitch.Settings.SwitchCDRMappingConfiguration != null)
+                    if (switchCDRMappingConfiguration != null)
                     {
                         mappingResults.Add(SwitchCDPN.CDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.GeneralIdentification, configManager.GetGeneralCDPNIndentification()));
                         mappingResults.Add(SwitchCDPN.CustomerCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.CustomerIdentification, configManager.GetCustomerCDPNIndentification()));
