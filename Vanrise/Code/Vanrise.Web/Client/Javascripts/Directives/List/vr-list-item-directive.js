@@ -12,7 +12,7 @@ app.directive('vrListitem', ['UtilsService', function (UtilsService) {
         require: '^^vrList',
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
         },
         controllerAs: 'listItemCtrl',
         bindToController: true,
