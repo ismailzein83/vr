@@ -43,7 +43,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
+                  
                     if (payload != undefined && payload.sections != undefined) {
                         selectedValues = payload.selectedValues;
                         ctrl.sections.length = 0;

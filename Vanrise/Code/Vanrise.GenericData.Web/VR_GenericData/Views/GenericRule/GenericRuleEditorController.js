@@ -24,6 +24,9 @@
         var settingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var settingsDirectiveAPI;
 
+        var criteriaDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var criteriaDirectiveAPI;
+
         loadParameters();
         defineScope();
         load();
@@ -67,6 +70,11 @@
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
+                criteriaDirectiveAPI = api;
+                criteriaDirectiveReadyPromiseDeferred.resolve();
+            }
         }
 
         function load() {
@@ -131,57 +139,19 @@
         }
 
         function loadCriteriaSection() {
-            if (criteriaDefinitionFields == undefined)
-                return;
             var promises = [];
 
-            var loadAllFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadAllFieldsPromiseDeferred.promise);
+            var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadCriteriaSectionPromiseDeferred.promise);
 
-            var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (allConfigs) {
 
-                var criteriaFieldsPromises = [];
-
-                angular.forEach(criteriaDefinitionFields, function (field) {
-                    var dataFieldTypeConfig = UtilsService.getItemByVal(allConfigs, field.FieldType.ConfigId, 'ExtensionConfigurationId');
-                    field.runtimeEditor = {};
-                    field.runtimeEditor.directive = dataFieldTypeConfig.RuntimeEditor;
-                    field.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    field.runtimeEditor.onDirectiveReady = function (api) {
-                        field.runtimeEditor.directiveAPI = api;
-                        field.runtimeEditor.onReadyPromiseDeferred.resolve();
-                    };
-
-                    field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
-
-                    if (accessibility != undefined && accessibility.criteriaAccessibility != undefined) {
-                        var accessibleField = accessibility.criteriaAccessibility[field.FieldName];
-                        if (accessibleField != undefined) {
-                            field.notAccessible = accessibleField.notAccessible;
-                        }
-                    }
-
-                    field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
-                        var payload = {
-                            fieldTitle: field.Title,
-                            fieldType: field.FieldType,
-                            fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : (preDefinedData != undefined && preDefinedData.criteriaFieldsValues != undefined ? preDefinedData.criteriaFieldsValues[field.FieldName] : undefined),
-                        };
-                        VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
-                    });
-                });
-
-                UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
-                    loadAllFieldsPromiseDeferred.resolve();
-                }).catch(function (error) {
-                    loadAllFieldsPromiseDeferred.reject(error);
-                });
-
-                $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;
+            criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    criteriaDefinitionFields: criteriaDefinitionFields,
+                    criteriaFieldsValues: criteriaFieldsValues
+                };
+                VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, payload, loadCriteriaSectionPromiseDeferred);
             });
-
-            promises.push(loadFieldTypeConfigPromise);
 
             return UtilsService.waitMultiplePromises(promises);
         }
@@ -214,29 +184,13 @@
         }
 
         function buildGenericRuleObjFromScope() {
-            var genericRuleCriteria = {};
 
-            if (criteriaDefinitionFields != undefined) {
-                genericRuleCriteria.FieldsValues = {};
-                var criteriaValuesExist = false;
-
-                angular.forEach(criteriaDefinitionFields, function (field) {
-                    var fieldData = field.runtimeEditor.directiveAPI.getData();
-                    if (fieldData != undefined) {
-                        genericRuleCriteria.FieldsValues[field.FieldName] = fieldData;
-                        criteriaValuesExist = true;
-                    }
-                });
-
-                if (!criteriaValuesExist)
-                    genericRuleCriteria = undefined;
-            }
 
             var genericRule = {
                 $type: genericRuleTypeConfig.RuleTypeFQTN,
                 RuleId: (genericRuleId != null) ? genericRuleId : 0,
                 DefinitionId: genericRuleDefinitionId,
-                Criteria: genericRuleCriteria,
+                Criteria: criteriaDirectiveAPI.getData(),
                 Settings: settingsDirectiveAPI.getData(),
                 BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate,

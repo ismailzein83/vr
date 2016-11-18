@@ -75,7 +75,7 @@
                                 ctrl.datasource.push(response[i]);
                             }
                         }
-                        console.log(ctrl.datasource);
+                       
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
                         }

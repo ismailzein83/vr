@@ -1,0 +1,4 @@
+﻿<span ng-repeat="field in criteriaFields">
+    <vr-directivewrapper directive="field.runtimeEditor.directive" on-ready="field.runtimeEditor.onDirectiveReady"
+                         selectionmode="dynamic" normal-col-num="3" ng-hide="field.notAccessible"></vr-directivewrapper>
+</span>
