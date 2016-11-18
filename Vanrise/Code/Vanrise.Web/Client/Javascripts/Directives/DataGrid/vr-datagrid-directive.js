@@ -1184,7 +1184,18 @@
 
                 if (clearBeforeRetrieve) {
                     retrieveDataResultKey = null;
-                    sortColumn = defaultSortByFieldName != undefined ? undefined : ctrl.columnDefs[0];
+                    
+                    if (defaultSortByFieldName != undefined) {
+                        sortColumn = undefined
+                    }
+                    else {
+                        for (var colIndex = 0; colIndex < ctrl.columnDefs.length && sortColumn == undefined; colIndex++) {
+                            sortColumn = ctrl.columnDefs[colIndex];
+                            if (sortColumn.isHidden)
+                                sortColumn = undefined;
+                        }
+                    }                   
+                    
                     sortDirection = defaultSortDirection != undefined ? defaultSortDirection : "ASC";
                 }
                 if (clearBeforeRetrieve || isSorting) {
