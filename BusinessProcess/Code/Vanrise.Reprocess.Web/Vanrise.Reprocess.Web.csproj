@@ -142,7 +142,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Reprocess\Constants\ReprocessChunkTimeEnum.js" />
     <Content Include="Reprocess\Constants\ModuleConfig.js" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\reprocess-reprocessdefinition-selector.js" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\reprocess-reprocessdefinition-grid.js" />

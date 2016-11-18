@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
-using Vanrise.Queueing;
 using Vanrise.GenericData.Business;
-using System.Reflection;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -68,7 +64,7 @@ namespace Vanrise.Reprocess.BP.Activities
         protected override LoadDataToReprocessOutput DoWorkWithResult(LoadDataToReprocessInput inputArgument, AsyncActivityHandle handle)
         {
             LoadDataToReprocessOutput output = new LoadDataToReprocessOutput() { EventCount = 0 };
-            object obj = new object();
+
             if (inputArgument.OutputStageNames == null || inputArgument.OutputStageNames.Count == 0)
                 throw new Exception("No output stages!");
 
@@ -77,22 +73,19 @@ namespace Vanrise.Reprocess.BP.Activities
 
             manager.GetDataRecords(inputArgument.RecordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
             {
-                //lock (obj)
-                //{
-                    output.EventCount++;
+                output.EventCount++;
 
-                    batch.Records.Add(itm);
-                    if (batch.Records.Count >= 10000)
+                batch.Records.Add(itm);
+                if (batch.Records.Count >= 10000)
+                {
+                    foreach (string stageName in inputArgument.OutputStageNames)
                     {
-                        foreach (string stageName in inputArgument.OutputStageNames)
-                        {
-                            inputArgument.StageManager.EnqueueBatch(stageName, batch);
-                        }
-                        batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
+                        inputArgument.StageManager.EnqueueBatch(stageName, batch);
                     }
-                //}
+                    batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
+                }
             }));
-            
+
             if (batch.Records.Count > 0)
             {
                 foreach (string stageName in inputArgument.OutputStageNames)

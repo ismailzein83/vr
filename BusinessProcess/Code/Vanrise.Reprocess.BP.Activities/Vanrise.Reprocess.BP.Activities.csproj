@@ -81,7 +81,6 @@
     <Compile Include="GetStageBatchRecords.cs" />
     <Compile Include="FinalizeStage.cs" />
     <Compile Include="ExecuteStage.cs" />
-    <Compile Include="GenerateDateTimeRanges.cs" />
     <Compile Include="GetReprocessDefinition.cs" />
     <Compile Include="LoadDataToReprocess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

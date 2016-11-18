@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Activities;
-using Vanrise.Reprocess.Entities;
 using System.Linq;
+using Vanrise.Entities;
+using Vanrise.BusinessProcess.Entities;
 
-namespace Vanrise.Reprocess.BP.Activities
+namespace Vanrise.BusinessProcess.WFActivities
 {
     public sealed class GenerateDateTimeRanges : CodeActivity
     {

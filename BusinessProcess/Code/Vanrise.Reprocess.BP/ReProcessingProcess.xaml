@@ -33,6 +33,7 @@
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Reprocess.Entities</x:String>
       <x:String>Vanrise.Reprocess.BP.Activities</x:String>
+      <x:String>Vanrise.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -65,7 +66,7 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)" Name="DateTimeRanges" />
+      <Variable x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)" Name="DateTimeRanges" />
       <Variable x:TypeArguments="x:Int32" Name="TotalRangesCount" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="ProcessedRangesCount" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalEventCount" />
@@ -80,28 +81,28 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <vrba1:GenerateDateTimeRanges sap2010:WorkflowViewState.IdRef="GenerateDateTimeRanges_1">
-      <vrba1:GenerateDateTimeRanges.ChunkTime>
-        <InArgument x:TypeArguments="vre:ChunkTime">
-          <mca:CSharpValue x:TypeArguments="vre:ChunkTime">Input.ChunkTime</mca:CSharpValue>
+    <vbw:GenerateDateTimeRanges sap2010:WorkflowViewState.IdRef="GenerateDateTimeRanges_1">
+      <vbw:GenerateDateTimeRanges.ChunkTime>
+        <InArgument x:TypeArguments="vbe:ChunkTime">
+          <mca:CSharpValue x:TypeArguments="vbe:ChunkTime">Input.ChunkTime</mca:CSharpValue>
         </InArgument>
-      </vrba1:GenerateDateTimeRanges.ChunkTime>
-      <vrba1:GenerateDateTimeRanges.DateTimeRanges>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)">DateTimeRanges</mca:CSharpReference>
+      </vbw:GenerateDateTimeRanges.ChunkTime>
+      <vbw:GenerateDateTimeRanges.DateTimeRanges>
+        <OutArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">DateTimeRanges</mca:CSharpReference>
         </OutArgument>
-      </vrba1:GenerateDateTimeRanges.DateTimeRanges>
-      <vrba1:GenerateDateTimeRanges.From>
+      </vbw:GenerateDateTimeRanges.DateTimeRanges>
+      <vbw:GenerateDateTimeRanges.From>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
         </InArgument>
-      </vrba1:GenerateDateTimeRanges.From>
-      <vrba1:GenerateDateTimeRanges.To>
+      </vbw:GenerateDateTimeRanges.From>
+      <vbw:GenerateDateTimeRanges.To>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
         </InArgument>
-      </vrba1:GenerateDateTimeRanges.To>
-    </vrba1:GenerateDateTimeRanges>
+      </vbw:GenerateDateTimeRanges.To>
+    </vbw:GenerateDateTimeRanges>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:Int32">
@@ -114,15 +115,15 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <ParallelForEach x:TypeArguments="vre:DateTimeRange" DisplayName="ParallelForEach&lt;DateTimeRange&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+    <ParallelForEach x:TypeArguments="ve:DateTimeRange">
       <ParallelForEach.Values>
-        <InArgument x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vre:DateTimeRange)">DateTimeRanges.Reverse()</mca:CSharpValue>
+        <InArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">DateTimeRanges.Reverse()</mca:CSharpValue>
         </InArgument>
       </ParallelForEach.Values>
-      <ActivityAction x:TypeArguments="vre:DateTimeRange">
+      <ActivityAction x:TypeArguments="ve:DateTimeRange">
         <ActivityAction.Argument>
-          <DelegateInArgument x:TypeArguments="vre:DateTimeRange" Name="item" />
+          <DelegateInArgument x:TypeArguments="ve:DateTimeRange" Name="item" />
         </ActivityAction.Argument>
         <Sequence DisplayName="Sequence_RunSubReprocess" sap2010:WorkflowViewState.IdRef="Sequence_2">
           <Sequence.Variables>
@@ -243,6 +244,7 @@
           </If>
         </Sequence>
       </ActivityAction>
+      <sap2010:WorkflowViewState.IdRef>ParallelForEach`1_4</sap2010:WorkflowViewState.IdRef>
     </ParallelForEach>
     <If sap2010:WorkflowViewState.IdRef="If_3">
       <If.Condition>
@@ -438,7 +440,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXEIDugMOAgEBRjNGNgIBA0czRzYCAQJMBVIgAwHaBFMFaCQDAbUEaQV0DgMBogR1BfYBFwMBvAL3AQWxAwoCAQ+yAwW4AyACAQRPC0+FAQMB3ARMYEyAAQMB2wRlC2VXAwHRBFYLVl0DAcgEYAtgWQMBvwRbC1t5AwG2BHELcV4DAawEbAtsYAMBowR4C3h7AwGZBH8J9AEUAwG9AvoBC/oBYAIBEP4BCa8DFAIBGbUDC7UDhQECAQayA2CyA4ABAgEFhQELkAEmAwH+A5EBC6MBHAMB4gOkAQuvARQDAccDsAEL8wEQAwG+Av8BC4oCKgMBqQKLAguWAhQDAZYClwILrgMdAgEajQERjQGLAQMBjASIARGIAZEBAwH/A5QBEZsBIAMB8QOgARGgAYQBAwHkA5EBfJEBggEDAeMDrAERrAFkAwHVA6cBEacBagMByAOzARGzAbEBAwG/ArcBD70BIwMBuQPAAQ/xARoDAcwChwIRhwJoAwGzAoICEYICeAMBqgKTAhGTAn0DAaACjgIRjgJtAwGXApoCEZoCkAEDAY0CoQIPrAMaAgEbugEVugHcAQMBugPBARHMARoDAZ4DzQER2AEaAwGDA9kBEeQBGgMB6ALlARHwASwDAc0CpAI/pAJCAgEcpgIRsQIsAwH0AbICEb0CLgMB2wG+AhHJAiwDAcIBygIRqwMWAgEdyQEXyQGwAQMBrAPEARfEAZIBAwGfA9UBF9UBewMBkQPQARfQAWsDAYQD4QEX4QF1AwH2AtwBF9wBawMB6QLtARftAZEBAwHbAugBF+gBrQIDAc4CrgIXrgKRAQMBgQKpAhepAp8BAwH1AboCF7oChgEDAegBtQIXtQJmAwHcAcYCF8YCkQEDAc8BwQIXwQKfAQMBwwHNAhfNAm0CAR7RAhWpAycCASrUAhvUAowBAwG2AdsCGacDJAIBK9wCG+cCNgMBmwHoAhv6AiwCAX/7AhumAyACASzkAiHkApsBAwGpAd8CId8CugEDAZwB6wIh8gIgAwGOAfcCIfcCnAEDAYEB6AKMAegCkgEDAYAB/gIh/gLLAQIBLYIDH4gDMwIBcYsDH6QDKgIBOoUDJYUDgwICAXKMAyGXAyoCAVaYAyGjAzwCATuUAyeUA30CAWSPAyePA4EBAgFXoAMnoAOhAQIBSZsDJ5sDiwICATw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXEMDvAMOAgEBRzNHNgIBA0gzSDYCAQJNBVMgAwHaBFQFaSIDAbUEagV1DgMBogR2BfgBFwMBvAL5AQWzAwoCAQ+0AwW6AyACAQRQC1CFAQMB3ARNYE2AAQMB2wRmC2ZXAwHRBFcLV10DAcgEYQthWQMBvwRcC1x4AwG2BHILcl4DAawEbQttYAMBowR5C3l6AwGZBIABCfUBFAMBvQL8AQv8AWACARCAAgmxAxQCARm3Awu3A4UBAgEGtANgtAOAAQIBBYYBC5EBJgMB/gOSAQukARwDAeIDpQELsAEUAwHHA7EBC/QBEAMBvgKBAguMAioDAakCjQILmAIUAwGWApkCC7ADHQIBGo4BEY4BiwEDAYwEiQERiQGRAQMB/wOVARGcASADAfEDoQERoQGEAQMB5AOSAXySAYIBAwHjA60BEa0BZAMB1QOoARGoAWoDAcgDtAERtAGxAQMBvwK4AQ++ASMDAbkDwQEP8gEaAwHMAokCEYkCaAMBswKEAhGEAngDAaoClQIRlQJ9AwGgApACEZACbQMBlwKcAhGcApABAwGNAqMCD64DGgIBG7sBFbsB3AEDAboDwgERzQEaAwGeA84BEdkBGgMBgwPaARHlARoDAegC5gER8QEsAwHNAqYCP6YCQgIBHKgCEbMCLAMB9AG0AhG/Ai4DAdsBwAIRywIsAwHCAcwCEa0DFgIBHcoBF8oBsAEDAawDxQEXxQGSAQMBnwPWARfWAXsDAZED0QEX0QFrAwGEA+IBF+IBdQMB9gLdARfdAWsDAekC7gEX7gGRAQMB2wLpARfpAa0CAwHOArACF7ACkQEDAYECqwIXqwKfAQMB9QG8Ahe8AoYBAwHoAbcCF7cCZgMB3AHIAhfIApEBAwHPAcMCF8MCnwEDAcMBzwIXzwJtAgEe0wIVqwMnAgEq1gIb1gKMAQMBtgHdAhmpAyQCASveAhvpAjYDAZsB6gIb/AIsAgF//QIbqAMgAgEs5gIh5gKbAQMBqQHhAiHhAroBAwGcAe0CIfQCIAMBjgH5AiH5ApwBAwGBAeoCjAHqApIBAwGAAYADIYADywECAS2EAx+KAzMCAXGNAx+mAyoCATqHAyWHA4MCAgFyjgMhmQMqAgFWmgMhpQM8AgE7lgMnlgN9AgFkkQMnkQOBAQIBV6IDJ6IDoQECAUmdAyedA4sCAgE8</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -468,7 +470,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="865,1102" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_4" sap:VirtualizedContainerService.HintSize="865,1102" />
       <sap2010:ViewStateData Id="GetReprocessDefinition_1" sap:VirtualizedContainerService.HintSize="718,22" />
       <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="718,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="666,22" />
