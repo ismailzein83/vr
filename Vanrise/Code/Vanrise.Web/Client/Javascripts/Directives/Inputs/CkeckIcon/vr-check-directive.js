@@ -9,8 +9,30 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityS
             hint: '@',
             label: '@'
         },
-        controller: function ($scope, $element) {
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var isUserChange;
+            if (ctrl.value == undefined)
+                ctrl.value = false;
+            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
+            ctrl.toogleCheck = function () {
+                if (ctrl.readOnly)
+                    return;
+                ctrl.value = !ctrl.value;
+                isUserChange = true;
+            };
+            $scope.$watch('ctrl.value', function () {
+                if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
+                    return;
+                isUserChange = false;//reset the flag
+                if ($attrs.onvaluechanged != undefined) {
+                    var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
+                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
+                        onvaluechangedMethod();
+                    }
+                }
+            });
             $scope.adjustTooltipPosition = function (e) {
                 setTimeout(function () {
                     var self = angular.element(e.currentTarget);
@@ -27,50 +49,22 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityS
                 }, 1);
             }
 
-            if ($scope.value == undefined)
-                $scope.value = false;
-        },
-        link: function (scope, element, attrs, ctrl) {
-            ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
 
-            var isUserChange;
-            scope.$watch('value', function () {
-                if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
-                    return;
-                isUserChange = false;//reset the flag
-                if (attrs.onvaluechanged != undefined) {
-                    var onvaluechangedMethod = scope.$parent.$eval(attrs.onvaluechanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-            });
-            ctrl.toogleCheck = function () {
-                if (ctrl.readOnly)
-                    return;
-                scope.value = !scope.value;
-                isUserChange = true;
-            };
-            scope.withLable = false;
-            if (attrs.label != undefined)
-                scope.withLable = true;
-
-            if (attrs.hint != undefined)
-                scope.hint = attrs.hint;           
-           
         },
+        controllerAs: 'ctrl',
+        bindToController: true,
         template: function (element, attrs) {
             if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions)) {
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="value"  ng-click="ctrl.toogleCheck()" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
+                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="ctrl.value"  ng-click="ctrl.toogleCheck()" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="ctrl.value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
                     + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
                     + '</div>';
             }
             else
                 return "";
-            
+
         }
 
     };
