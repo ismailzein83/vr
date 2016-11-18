@@ -823,7 +823,8 @@ as (select * from (values
 ('001FCDA4-5D25-4B65-A27C-FD134D020404',197,8,4,'SumCostRate','SumCostRate','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CASE WHEN CostRateTypeId IS NULL THEN CostRateValue END","AggregateType":2,"CurrencySQLColumnName":"CostCurrencyId"}'),
 ('E3CF671E-BCF5-479D-9532-FDA700C41DD2',148,4,4,'SumDeliveredNumberOfCalls','SumDeliveredNumberOfCalls','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"DeliveredNumberOfCalls","AggregateType":2}'),
 ('19E02864-E24B-4372-B68B-23D0122190C8',null,8,4,'MinBillingPeriod','MinBillingPeriod','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"BatchStart","AggregateType":4}'),
-('2EF40700-4871-4954-92C4-AD8967BA9A5C',null,8,4,'MaxBillingPeriod','MaxBillingPeriod','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"BatchStart","AggregateType":3}')
+('2EF40700-4871-4954-92C4-AD8967BA9A5C',null,8,4,'MaxBillingPeriod','MaxBillingPeriod','{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"BatchStart","AggregateType":3}'),
+('CCBB1FE4-73F0-4CBB-978D-819628C7FE0A',	NULL,	8,	4,	'SumSaleNet_OrigCurr',	'SumSaleNet_OrigCurr',	'{"$type":"Vanrise.Analytic.Entities.AnalyticAggregateConfig, Vanrise.Analytic.Entities","SQLColumn":"CASE WHEN SaleRateTypeId IS NULL THEN SaleNet END","AggregateType":2}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[OldID],[TableId],[ItemType],[Name],[Title],[Config]))
 merge	[Analytic].[AnalyticItemConfig] as t
