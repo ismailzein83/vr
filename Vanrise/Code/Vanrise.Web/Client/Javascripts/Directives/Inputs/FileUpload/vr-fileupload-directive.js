@@ -66,6 +66,8 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 replaceFileInput: true,
                 datatype: 'json',
                 add: function (e, data) {
+                    if (ctrl.readOnly)
+                        return;
                     var nameAsTab = data.originalFiles[0].name.split(".");
                     var fileExt = nameAsTab[nameAsTab.length - 1];
                     if ($scope.extensionList.indexOf(fileExt) == -1 && $scope.extensionList.length > 0 ) {
@@ -252,10 +254,10 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                                + ' <div ng-show="broken ==true " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>fail</span></div>'
                                +'</div>'
                            + '</div>'
-                            + '<span ng-show="ctrl.file !=null || broken ==true" ng-if="!ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
-                            + '<span ng-if="!ctrl.readOnly" vr-disabled="ctrl.file !=null" class="btn btn-success fileinput-button vr-file-btn">'
+                            + '<span ng-show="ctrl.file !=null || broken ==true" ng-if="!ctrl.readOnly"  class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
+                            + '<span vr-disabled="ctrl.file !=null" ng-show="!ctrl.readOnly" class="btn btn-success fileinput-button vr-file-btn">'
                                 + '<i class="glyphicon glyphicon-paperclip  vr-file-upload-paperclip"></i>'
-                                + '<input ng-if="!ctrl.readOnly" type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
+                                + '<input  type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
                             + '</span>'
                       + '</div>'
                   + '</vr-validator>'
