@@ -2,8 +2,8 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="gridReady"
+             defaultsortbyfieldname="'Entity.ItemId'"
              idfield="Entity.ItemId">
-
     <vr-datagridcolumn headertext="'Item Id'" field="'Entity.ItemId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Stage Name'" field="'StageName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
@@ -12,5 +12,4 @@
     <vr-datagridcolumn headertext="'Error Message'" field="'Entity.ErrorMessage'" widthfactor="5" expendablecolumn></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Created Time'" field="'Entity.CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Last Updated Time'" field="'Entity.LastUpdatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
-
 </vr-datagrid>

@@ -78,8 +78,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-
-            $scope.fromDate = new Date();
+            $scope.fromDate = new Date().setHours(0, 0, 0, 0);
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);

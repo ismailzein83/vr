@@ -1,10 +1,9 @@
 ﻿<vr-datagrid datasource="queueItemHeader"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
+             defaultsortbyfieldname="'Entity.QueueId'"
              on-ready="ongridReady"
              idfield="Entity.QueueId">
-
-
     <vr-datagridcolumn headertext="'ID'" field="'Entity.ItemId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Execution Flow'" field="'ExecutionFlowName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Queue Instance'" field="'QueueTitle'" disablesorting></vr-datagridcolumn>
