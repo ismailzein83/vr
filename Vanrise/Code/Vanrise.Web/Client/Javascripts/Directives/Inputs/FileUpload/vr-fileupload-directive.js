@@ -255,7 +255,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                             + '<span ng-show="ctrl.file !=null || broken ==true" ng-if="!ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                             + '<span ng-if="!ctrl.readOnly" vr-disabled="ctrl.file !=null" class="btn btn-success fileinput-button vr-file-btn">'
                                 + '<i class="glyphicon glyphicon-paperclip  vr-file-upload-paperclip"></i>'
-                                + '<input ng-if="ctrl.readOnly" type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
+                                + '<input ng-if="!ctrl.readOnly" type="file" tabindex="{{ctrl.tabindex}}" id="fileUpload">'
                             + '</span>'
                       + '</div>'
                   + '</vr-validator>'
