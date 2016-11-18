@@ -77,7 +77,7 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                 }
 
                 api.getData = function () {
-                    console.log(ctrl.listItems);
+                  
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.ItemsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
                         ItemSetNames : ctrl.listItems

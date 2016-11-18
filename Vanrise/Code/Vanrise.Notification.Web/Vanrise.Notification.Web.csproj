@@ -152,14 +152,14 @@
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeGridTemplate.html" />
-    <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-selector.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-grid.js" />
-    <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-settings.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleCriteriaTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleGridTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-grid.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-criteria.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-settings.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Notification\Directives\LiveBalance\" />
+    <Folder Include="VR_Notification\Directives\MainExtensions\VRAlertRule\Templates\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

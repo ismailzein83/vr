@@ -7,11 +7,21 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-select on-ready="scopeModel.onSettingsSelectorReady"
+                                       datasource="scopeModel.templateConfigs"
+                                       selectedvalues="scopeModel.selectedTemplateConfig"
+                                       datavaluefield="ExtensionConfigurationId"
+                                       datatextfield="Title"
+                                       isrequired="true"
+                                       label="Alert Rule Type Settings"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'">
-                    <vr-notification-alertruletype-settings on-ready="scopeModel.onSettingsDirectiveReady" normal-col-num="4"></vr-notification-alertruletype-settings>
-                </vr-tab>
+                <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady">
+                </vr-directivewrapper>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

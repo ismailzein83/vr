@@ -159,7 +159,9 @@
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-billingtransaction-grid.js" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\Templates\LiveBalanceTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\FixedBalanceAlertThresholdTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-accountbalancerule-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-balancealertthreshold-fixed.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\Templates\AccountBalanceUpdateProcessManualTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\Templates\AccountBalanceUpdateProcessScheduledTemplate.html" />
