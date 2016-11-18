@@ -246,6 +246,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-ratetype.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-ratevalue.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tariff.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\Templates\CloneDataRecordPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\Templates\CloneDataRecordTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\vr-genericdata-datatransformation-clonedatarecord-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\vr-genericdata-datatransformation-clonedatarecord.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectFieldTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjectfield.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\Templates\ArrayFieldTypeTemplate.html" />
