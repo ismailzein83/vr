@@ -64,9 +64,9 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public void BuildRouteTable(string routeTableName)
         {
             string[] tableSql = { 
-                @"DROP TABLE IF EXISTS " + routeTableName+"_temp" + "; ",
-                 @"DROP TABLE IF EXISTS " + routeTableName+"_OLD" + "; ",
-                @"CREATE TABLE " + routeTableName+"_temp" + @" (        
+               string.Format("DROP TABLE IF EXISTS {0}_temp;",routeTableName),
+                string.Format("DROP TABLE IF EXISTS {0}_OLD; ",routeTableName),
+               string.Format(@"CREATE TABLE {0}_temp (        
                   destination character varying(20) NOT NULL,
                   route_id integer NOT NULL,
                   time_frame character varying(50) NOT NULL,
@@ -89,8 +89,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                   flag_4 integer DEFAULT 0,
                   flag_5 numeric DEFAULT 0,
                   tech_prefix character varying(20)
-                  );",
-                 "ALTER TABLE "+routeTableName+"_temp OWNER TO "+_ownerName+";" 
+                  );",routeTableName),
+                 string.Format("ALTER TABLE {0}_temp OWNER TO {1}",routeTableName,_ownerName) 
                 };
             ExecuteNonQuery(tableSql);
         }

@@ -1,93 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Entities;
-using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.IVSwitch
 {
     public class IVSwitchSWSync : SwitchRouteSynchronizer
     {
         #region properties
-
-        private IVSwitchRouteDataManager _routeDataManager;
-        private IVSwitchTariffDataManager _tariffDataManager;
-        private IVSwitchMasterDataManager _masterDataManager;
         public string OwnerName { get; set; }
         public string MasterConnectionString { get; set; }
         public string RouteConnectionString { get; set; }
         public string TariffConnectionString { get; set; }
         public int NumberOfOptions { get; set; }
         public string BlockedAccountMapping { get; set; }
+        public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
         public string Separator { get; set; }
-        private Dictionary<string, CarrierDefinition> CustomerDefinitions { get; set; }
-        private Dictionary<string, CarrierDefinition> SupplierDefinitions { get; set; }
-
-        private List<CarrierDefinition> CustomerTables { get; set; }
+        public Guid Uid { get; set; }
 
         #endregion
 
         public override Guid ConfigId { get { return new Guid("64152327-5DB5-47AE-9569-23D38BCB18CC"); } }
-        public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
-
-        private int _blockRouteId;
-        private Dictionary<string, IvSwitchMapping> IvSwitchMappings { get; set; }
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            _routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            _tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
-            _masterDataManager = new IVSwitchMasterDataManager(MasterConnectionString);
-
-            CustomerDefinitions = _masterDataManager.GetCustomerDefinition();
-            SupplierDefinitions = _masterDataManager.GetSupplierDefinition();
-            _blockRouteId = SupplierDefinitions.ContainsKey(BlockedAccountMapping)
-                     ? SupplierDefinitions[BlockedAccountMapping].RouteTableId
-                     : 0;
-            CustomerTables = new List<CarrierDefinition>();
-            BuildIvSwitchMapping();
-            BuildTempTables();
+            PreparedConfiguration.GetCachedPreparedConfiguration(this);
         }
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
         {
             if (context.Routes == null || CarrierMappings == null)
                 return;
+            PreparedConfiguration preparedData = PreparedConfiguration.GetCachedPreparedConfiguration(this);
             List<ConvertedRoute> routes = new List<ConvertedRoute>();
             foreach (var route in context.Routes)
             {
                 IvSwitchMapping carrierMapping;
-                if (IvSwitchMappings.TryGetValue(route.CustomerId, out carrierMapping) && carrierMapping.CustomerGateways != null)
+                if (preparedData.IvSwitchMappings.TryGetValue(route.CustomerId, out carrierMapping))
                 {
-                    foreach (var customerGateway in carrierMapping.CustomerGateways)
+                    foreach (var customerMapping in carrierMapping.CustomerMapping)
                     {
-                        CarrierDefinition customerDefinition;
-                        if (!CustomerDefinitions.TryGetValue(customerGateway.Mapping, out customerDefinition)) continue;
-
-                        if (customerDefinition.RouteTableId == 0) continue;
-                        IVSwitchConvertedRoute ivSwitch = new IVSwitchConvertedRoute
-                        {
-                            Routes = new List<IVSwitchRoute>(),
-                            Tariffs = new List<IVSwitchTariff>(),
-                            RouteTableName = customerDefinition.RouteTableName,
-                            TariffTableName = customerDefinition.TariffTableName
-                        };
-                        List<IVSwitchOption> options = BuildOptions(route);
-                        if (options == null)
-                        {
-                            IVSwitchRoute ivSwitchRoute = BuildBlockedRoute();
-                            if (ivSwitchRoute != null) ivSwitchRoute.Destination = route.Code;
-                            ivSwitch.Routes.Add(ivSwitchRoute);
-                        }
-                        else
-                        {
-                            ivSwitch.Routes.AddRange(BuildIvSwitchvonvertedRoute(customerGateway, options, route));
-                        }
-                        IVSwitchTariff tariff = BuildTariff(route);
-                        ivSwitch.Tariffs.Add(tariff);
-                        routes.Add(ivSwitch);
+                        routes.Add(BuildRouteAndRouteOptions(route, customerMapping,preparedData));
                     }
                 }
             }
@@ -135,19 +89,24 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
             Dictionary<int, PreparedRoute> routes = (Dictionary<int, PreparedRoute>)context.PreparedItemsForApply;
+            IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
+            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var item in routes.Values)
             {
-                _routeDataManager.BulkCopy(item.RouteTableName, item.Routes, item.RoutesCount);
-                _tariffDataManager.BulkCopy(item.TariffTableName, item.Tariffs, item.TariffCount);
+                routeDataManager.BulkCopy(string.Format("{0}_temp", item.RouteTableName), item.Routes, item.RoutesCount);
+                tariffDataManager.BulkCopy(string.Format("{0}_temp", item.TariffTableName), item.Tariffs, item.TariffCount);
             }
         }
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
-            foreach (var customerTable in CustomerTables)
+            PreparedConfiguration preparedData = PreparedConfiguration.GetCachedPreparedConfiguration(this);
+            IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
+            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
+            foreach (var customerTable in preparedData.CustomerTables)
             {
-                _routeDataManager.CreatePrimaryKey(customerTable.RouteTableName);
-                _routeDataManager.Swap(customerTable.RouteTableName);
-                _tariffDataManager.Swap(customerTable.TariffTableName);
+                routeDataManager.CreatePrimaryKey(customerTable.RouteTableName);
+                routeDataManager.Swap(customerTable.RouteTableName);
+                tariffDataManager.Swap(customerTable.TariffTableName);
             }
         }
         #region private functions
@@ -182,14 +141,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     route.Flag4, route.Flag5, route.TechPrefix
                     , "\t");
         }
-        private void BuildTempTables()
-        {
-            foreach (var customerTable in CustomerTables)
-            {
-                _routeDataManager.BuildRouteTable(customerTable.RouteTableName);
-                _tariffDataManager.BuildTariffTable(customerTable.TariffTableName);
-            }
-        }
         private IVSwitchTariff BuildTariff(Route route)
         {
             IVSwitchTariff tariff = new IVSwitchTariff
@@ -205,133 +156,89 @@ namespace TOne.WhS.RouteSync.IVSwitch
             }
             return tariff;
         }
-        private List<IVSwitchRoute> BuildIvSwitchvonvertedRoute(Gateway carrierGateway, List<IVSwitchOption> options, Route route)
+
+        private IVSwitchConvertedRoute BuildRouteAndRouteOptions(Route route, string carrierMapping, PreparedConfiguration preparedData)
         {
-            if (!CustomerDefinitions.ContainsKey(carrierGateway.Mapping))
+            if (route == null)
                 return null;
-            var customerDefinition = CustomerDefinitions[carrierGateway.Mapping];
-            if (customerDefinition.RouteTableId == 0)
+            if (!preparedData.CustomerDefinitions.ContainsKey(carrierMapping))
                 return null;
-            List<IVSwitchRoute> routes = new List<IVSwitchRoute>();
-            int gatewayCount = options.Count;
-            foreach (var option in options)
+            var customerDefinition = preparedData.CustomerDefinitions[carrierMapping];
+            if (!customerDefinition.RouteTableId.HasValue)
+                return null;
+            IVSwitchConvertedRoute ivSwitch = new IVSwitchConvertedRoute
             {
-                IVSwitchRoute ivSwitchRoute = new IVSwitchRoute
-                {
-                    Destination = route.Code,
-                    RouteId = customerDefinition.RouteTableId,
-                    TimeFrame = "* * * * *",
-                    Preference = option.Priority ?? 0,
-                    StateId = 1,
-                    HuntStop = 0,
-                    WakeUpTime = DateTime.UtcNow,
-                    TotalBkts = gatewayCount,
-                    Flag1 = option.Percentage ?? 0,
-                    BktCapacity = decimal.ToInt32(option.ScaledDownPercentage),
-                    BktToken = decimal.ToInt32(option.ScaledDownPercentage),
-                    BktSerial = option.Serial
-                };
-                routes.Add(ivSwitchRoute);
+                Routes = new List<IVSwitchRoute>(),
+                Tariffs = new List<IVSwitchTariff>(),
+                RouteTableName = customerDefinition.RouteTableName,
+                TariffTableName = customerDefinition.TariffTableName
+            };
+            if (route.Options == null || route.Options.Count == 0)
+            {
+                IVSwitchRoute ivSwitchRoute = BuildBlockedRoute(preparedData);
+                if (ivSwitchRoute != null) ivSwitchRoute.Destination = route.Code;
+                ivSwitch.Routes.Add(ivSwitchRoute);
+                return ivSwitch;
             }
-            return routes;
-        }
-        private List<IVSwitchOption> BuildOptions(Route route)
-        {
-            if (route == null || route.Options == null || route.Options.Count == 0)
-                return null;
-            List<IVSwitchOption> options = new List<IVSwitchOption>();
             decimal? optionsPercenatgeSum = route.Options.Sum(it => it.Percentage);
             Decimal? maxPercentage = route.Options.Max(it => it.Percentage);
+
+            List<IVSwitchRoute> routes = new List<IVSwitchRoute>();
+            int gatewayCount = route.Options.Count;
             foreach (var option in route.Options)
             {
                 int serial = 1;
                 int priority = NumberOfOptions;
-                IvSwitchMapping carrierMapping;
-                if (IvSwitchMappings.TryGetValue(option.SupplierId, out carrierMapping) && carrierMapping.SupplierGateways != null)
+                IvSwitchMapping supplierMapping;
+                if (preparedData.IvSwitchMappings.TryGetValue(option.SupplierId, out supplierMapping) && supplierMapping.SupplierGateways != null)
                 {
-                    foreach (var supplierGateWay in carrierMapping.SupplierGateways)
+                    foreach (var supplierGateWay in supplierMapping.SupplierGateways)
                     {
                         if (priority == 0) break;
                         if (string.IsNullOrEmpty(supplierGateWay.Mapping)) continue;
-                        if (!SupplierDefinitions.ContainsKey(supplierGateWay.Mapping)) continue;
-                        IVSwitchOption ivOption = new IVSwitchOption
-                        {
-                            Option = supplierGateWay.Mapping,
-                            Percentage = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum, carrierMapping.SupplierGateways.Count),
-                            Priority = priority,
-                            Serial = serial++
-                        };
-                        ivOption.ScaledDownPercentage = BuildScaledDownPercentage(ivOption.Percentage ?? 0, 1,
-                            maxPercentage ?? 0, 1, optionsPercenatgeSum ?? 0);
+                        if (!preparedData.SupplierDefinitions.ContainsKey(supplierGateWay.Mapping)) continue;
 
-                        options.Add(ivOption);
+                        IVSwitchRoute ivOption = new IVSwitchRoute
+                        {
+                            Destination = route.Code,
+                            RouteId = customerDefinition.RouteTableId,
+                            TimeFrame = "* * * * *",
+                            Preference = priority,
+                            StateId = 1,
+                            HuntStop = 0,
+                            WakeUpTime = DateTime.UtcNow,
+                            TotalBkts = gatewayCount,
+                            Flag1 =
+                                BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
+                                    supplierMapping.SupplierGateways.Count),
+                            BktSerial = serial++
+                        };
+                        ivOption.BktCapacity = decimal.ToInt32(BuildScaledDownPercentage(ivOption.Flag1 ?? 0, 1,
+                            maxPercentage ?? 0, 1, optionsPercenatgeSum ?? 0));
+                        ivOption.BktToken = ivOption.BktCapacity;
+
+                        routes.Add(ivOption);
                         priority--;
                     }
                 }
             }
-            return options;
+            ivSwitch.Tariffs.Add(BuildTariff((route)));
+            ivSwitch.Routes.AddRange(routes);
+            return ivSwitch;
         }
-        private void BuildIvSwitchMapping()
+        private IVSwitchRoute BuildBlockedRoute(PreparedConfiguration preparedConfiguration)
         {
-            IvSwitchMappings = new Dictionary<string, IvSwitchMapping>();
-            foreach (var mapItem in CarrierMappings)
-            {
-                var map = mapItem.Value;
-                if (map.CustomerMapping == null && map.SupplierMapping == null) continue;
-                IvSwitchMapping ivSwitchMapping = new IvSwitchMapping
-                {
-                    CarrierId = map.CarrierId,
-                    InnerPrefix = map.InnerPrefix,
-                    CustomerGateways = new List<Gateway>(),
-                    SupplierGateways = new List<Gateway>()
-                };
-                if (map.CustomerMapping != null)
-                    foreach (var customerMapping in map.CustomerMapping)
-                    {
-                        CarrierDefinition definition;
-                        if (!CustomerDefinitions.TryGetValue(customerMapping, out definition)) continue;
-                        CustomerTables.Add(definition);
-                        Gateway gateway = new Gateway { Mapping = customerMapping };
-                        string[] parts = customerMapping.Split(':');
-                        if (parts.Count() > 1)
-                        {
-                            gateway.Mapping = parts[0];
-                            int percentage;
-                            int.TryParse(parts[1], out percentage);
-                            gateway.Percentage = percentage;
-                        }
-                        ivSwitchMapping.CustomerGateways.Add(gateway);
-                    }
-                if (map.SupplierMapping != null)
-                    foreach (var supplierMapping in map.SupplierMapping)
-                    {
-                        if (!SupplierDefinitions.ContainsKey(supplierMapping)) continue;
-                        Gateway gateway = new Gateway { Mapping = supplierMapping };
-                        string[] parts = supplierMapping.Split(':');
-                        if (parts.Count() > 1)
-                        {
-                            gateway.Mapping = parts[0];
-                            int percentage;
-                            int.TryParse(parts[1], out percentage);
-                            gateway.Percentage = percentage;
-                        }
-                        ivSwitchMapping.SupplierGateways.Add(gateway);
-                    }
-                IvSwitchMappings[mapItem.Key] = ivSwitchMapping;
-            }
-        }
-        private IVSwitchRoute BuildBlockedRoute()
-        {
-            if (SupplierDefinitions != null && SupplierDefinitions.Count > 0)
+            if (preparedConfiguration.SupplierDefinitions != null && preparedConfiguration.SupplierDefinitions.Count > 0)
             {
                 return new IVSwitchRoute
                 {
                     Description = "BLK",
-                    RouteId = _blockRouteId
+                    RouteId = preparedConfiguration.BlockRouteId
                 };
             }
             return null;
         }
+
         #endregion
 
         #region Percentage Routing
@@ -359,51 +266,5 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 : BuildOptionPercentage(optionPercentage, optionsPercenatgeSum, gatewayCount);
         }
         #endregion
-
-    }
-
-    public class PreparedRoute
-    {
-        public string RouteTableName { get; set; }
-        public string TariffTableName { get; set; }
-        public byte[] Routes { get; set; }
-        public int RoutesCount { get; set; }
-        public byte[] Tariffs { get; set; }
-        public int TariffCount { get; set; }
-    }
-    public class CarrierDefinition
-    {
-        public string AccountId { get; set; }
-        public string GroupId { get; set; }
-        public string RouteTableName
-        {
-            get { return "rt" + RouteTableId; }
-        }
-
-        public string TariffTableName
-        {
-            get { return "trf" + TariffTableId; }
-        }
-        public int RouteTableId { get; set; }
-        public int TariffTableId { get; set; }
-    }
-    public class CarrierMapping
-    {
-        public int CarrierId { get; set; }
-        public List<string> CustomerMapping { get; set; }
-        public List<string> SupplierMapping { get; set; }
-        public string InnerPrefix { get; set; }
-    }
-    public class IvSwitchMapping
-    {
-        public int CarrierId { get; set; }
-        public List<Gateway> CustomerGateways { get; set; }
-        public List<Gateway> SupplierGateways { get; set; }
-        public string InnerPrefix { get; set; }
-    }
-    public class Gateway
-    {
-        public string Mapping { get; set; }
-        public int Percentage { get; set; }
     }
 }

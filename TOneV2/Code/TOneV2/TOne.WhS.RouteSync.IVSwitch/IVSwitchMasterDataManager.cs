@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -18,15 +19,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return _connectionString;
         }
 
-        public Dictionary<string, CarrierDefinition> GetSupplierDefinition()
-        {
-            return GetDefinitions(GetSupplierQuery());
-        }
-        public Dictionary<string, CarrierDefinition> GetCustomerDefinition()
-        {
-            return GetDefinitions(GetCustomerQuery());
-        }
-
         private string GetCustomerQuery()
         {
             return
@@ -39,34 +31,81 @@ namespace TOne.WhS.RouteSync.IVSwitch
         {
             return @"select distinct route_id,account_id,group_id from routes";
         }
-        private Dictionary<string, CarrierDefinition> GetDefinitions(string query)
+
+        private Dictionary<string, CustomerDefinition> ToCustomerDictionary(List<CustomerDefinition> customersLst)
         {
-            Dictionary<string, CarrierDefinition> carrier = new Dictionary<string, CarrierDefinition>();
-            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(_connectionString))
+            Dictionary<string, CustomerDefinition> result = new Dictionary<string, CustomerDefinition>();
+            foreach (var customer in customersLst)
             {
-                using (Npgsql.NpgsqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandTimeout = 0;
-                    cmd.CommandText = query;
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-                    Npgsql.NpgsqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        CarrierDefinition carrierDefinition = new CarrierDefinition();
-                        if (!dr.IsDBNull(0))
-                        {
-                            int id;
-                            int.TryParse(dr[0].ToString(), out id);
-                            carrierDefinition.RouteTableId = id;
-                        }
-                        if (!dr.IsDBNull(1)) carrierDefinition.AccountId = dr[1].ToString();
-                        if (!dr.IsDBNull(2)) carrierDefinition.GroupId = dr[2].ToString();
-                        string key = string.Format("{0}_{1}", carrierDefinition.AccountId, carrierDefinition.GroupId);
-                        if (!carrier.ContainsKey(key)) carrier[key] = carrierDefinition;
-                    }
-                }
+                string key = GenerateKey(customer);
+                if (!result.ContainsKey(key))
+                    result[key] = customer;
             }
-            return carrier;
+            return result;
         }
+        public Dictionary<string, CustomerDefinition> GetCustomers()
+        {
+            string query = GetCustomerQuery();
+            List<CustomerDefinition> customers = GetItemsText(query, CustomerDefinitionMapper, null);
+            return ToCustomerDictionary(customers);
+        }
+        public Dictionary<string, CarrierDefinition> GetSuppliers()
+        {
+            string query = GetSupplierQuery();
+            List<CarrierDefinition> supplierList = GetItemsText(query, SupplierDefinitionMapper, null);
+            Dictionary<string, CarrierDefinition> supplierDictionary = new Dictionary<string, CarrierDefinition>();
+            foreach (var customer in supplierList)
+            {
+                string key = GenerateKey(customer);
+                if (!supplierDictionary.ContainsKey(key))
+                    supplierDictionary[key] = customer;
+            }
+            return supplierDictionary;
+        }
+
+        private string GenerateKey(CarrierDefinition customerDefinition)
+        {
+            return string.Format("{0}_{1}", customerDefinition.AccountId, customerDefinition.GroupId);
+        }
+
+        #region CustomerMapper
+        CarrierDefinition SupplierDefinitionMapper(IDataReader reader)
+        {
+            CarrierDefinition mapperCustomerDefinition = new CarrierDefinition
+            {
+                AccountId = reader["account_id"] != System.DBNull.Value ? reader["account_id"].ToString() : "",
+                GroupId = reader["group_id"] != System.DBNull.Value ? reader["group_id"].ToString() : ""
+            };
+            if (reader["route_id"] != System.DBNull.Value)
+            {
+                int id;
+                int.TryParse(reader["route_id"].ToString(), out id);
+                mapperCustomerDefinition.RouteTableId = id;
+            }
+            return mapperCustomerDefinition;
+        }
+        CustomerDefinition CustomerDefinitionMapper(IDataReader reader)
+        {
+            CustomerDefinition mapperCustomerDefinition = new CustomerDefinition
+            {
+                AccountId = reader["account_id"] != System.DBNull.Value ? reader["account_id"].ToString() : "",
+                GroupId = reader["group_id"] != System.DBNull.Value ? reader["group_id"].ToString() : ""
+            };
+            if (reader["route_table_id"] != System.DBNull.Value)
+            {
+                int id;
+                int.TryParse(reader["route_table_id"].ToString(), out id);
+                mapperCustomerDefinition.RouteTableId = id;
+            }
+            if (reader["tariff_id"] != System.DBNull.Value)
+            {
+                int id;
+                int.TryParse(reader["tariff_id"].ToString(), out id);
+                mapperCustomerDefinition.TariffTableId = id;
+            }
+            return mapperCustomerDefinition;
+        }
+        #endregion
+
     }
 }

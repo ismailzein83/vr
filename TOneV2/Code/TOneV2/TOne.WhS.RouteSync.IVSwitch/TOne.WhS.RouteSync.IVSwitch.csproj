@@ -44,6 +44,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
@@ -60,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationCacheManager.cs" />
     <Compile Include="IVSwitchConvertedRoute.cs" />
     <Compile Include="IVSwitchMasterDataManager.cs" />
     <Compile Include="IVSwitchOption.cs" />
@@ -68,6 +73,7 @@
     <Compile Include="IVSwitchSWSync.cs" />
     <Compile Include="IVSwitchTariff.cs" />
     <Compile Include="IVSwitchTariffDataManager.cs" />
+    <Compile Include="PreparedConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

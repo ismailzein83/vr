@@ -9,7 +9,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
     public class IVSwitchRoute
     {
         public string Destination { get; set; }
-        public int RouteId { get; set; }
+        public int? RouteId { get; set; }
         public string TimeFrame { get; set; }
         public int Preference { get; set; }
         public int HuntStop { get; set; }
@@ -24,7 +24,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public int BktCapacity { get; set; }
         public int BktToken { get; set; }
         public int PScore { get; set; }
-        public decimal Flag1 { get; set; }
+        public decimal? Flag1 { get; set; }
         public decimal Flag2 { get; set; }
         public int Flag3 { get; set; }
         public int Flag4 { get; set; }
