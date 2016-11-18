@@ -54,7 +54,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
             $scope.mappingResults = [];
             $scope.selectedMappingResults = [];
             $scope.importedBatches = [];
-
+            $scope.selectedFromDateTime = new Date().setHours(0, 0, 0, 0);
             $scope.showGrid = false;
 
             $scope.gridReady = function (api) {

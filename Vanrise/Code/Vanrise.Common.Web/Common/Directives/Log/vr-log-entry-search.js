@@ -70,7 +70,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
 
         function defineScope() {
             $scope.showGrid = false;
-            $scope.fromDate = new Date();
+            $scope.fromDate = new Date().setHours(0, 0, 0, 0);
             $scope.searchClicked = function () {
                 $scope.showGrid = true;
                 setFilterObject();
