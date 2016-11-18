@@ -3,7 +3,7 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.LogEntryId" defaultsortdirection="'DESC'">
+             idfield="Entity.LogEntryId" defaultsortdirection="'DESC'" defaultsortbyfieldname="'Entity.LogEntryId'">
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.LogEntryId'" type="'Text'" widthfactor="1"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Machine'" field="'MachineName'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
@@ -13,5 +13,5 @@
     <vr-datagridcolumn headertext="'Method'" field="'MethodName'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Entry Type'" field="'EntryTypeName'" type="'Text'" widthfactor="2" getcolor="getTypeColor"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Event Time'" field="'Entity.EventTime'" type="'LongDatetime'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" widthfactor="6" expendablecolumn ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" widthfactor="6" expendablecolumn></vr-datagridcolumn>
 </vr-datagrid>
