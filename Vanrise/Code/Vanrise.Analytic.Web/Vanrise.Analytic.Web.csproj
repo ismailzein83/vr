@@ -140,6 +140,8 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-dimension-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ProcessInput\Templates\DAProfCalcProcessInputTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ProcessInput\vr-analytic-daprofcalc-processinput.js" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\Templates\TimeRangeFilterSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\vr-analytic-timerangefilter-selective.js" />
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisDefinition\vr-analytic-dataanalysisdefinition-selector.js" />

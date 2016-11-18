@@ -22,6 +22,7 @@
     <x:Property Name="OutputRecordsQueue" Type="InArgument(vq:BaseQueue(vae:DAProfCalcOutputRecordBatch))" />
     <x:Property Name="OutputRecordProcessor" Type="InArgument(vae:IDAProfCalcOutputRecordProcessor)" />
     <x:Property Name="DAProfCalcExecInputs" Type="InArgument(scg:List(vae:DAProfCalcExecInput))" />
+    <x:Property Name="ChunkTime" Type="InArgument(vbe:ChunkTime)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Analytic.BP.DAProfCalcSubProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -35,13 +36,17 @@
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Analytic.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
@@ -54,9 +59,11 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
@@ -78,7 +85,7 @@
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)">new MemoryQueue&lt;Vanrise.Analytic.Entities.DAProfCalcOutputRecordBatch&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="scg:List(ve:DateTimeRange)" Name="subProcessTimeRanges" />
+      <Variable x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)" Name="subProcessTimeRanges" />
     </Sequence.Variables>
     <AddToCollection x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)" DisplayName="AddToCollection&lt;BaseQueue&lt;DAProfCalcOutputRecordBatch&gt;&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
       <AddToCollection.Item>
@@ -109,6 +116,28 @@
         </AddToCollection>
       </If.Then>
     </If>
+    <vbw:GenerateDateTimeRanges sap2010:WorkflowViewState.IdRef="GenerateDateTimeRanges_1">
+      <vbw:GenerateDateTimeRanges.ChunkTime>
+        <InArgument x:TypeArguments="vbe:ChunkTime">
+          <mca:CSharpValue x:TypeArguments="vbe:ChunkTime">ChunkTime</mca:CSharpValue>
+        </InArgument>
+      </vbw:GenerateDateTimeRanges.ChunkTime>
+      <vbw:GenerateDateTimeRanges.DateTimeRanges>
+        <OutArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">subProcessTimeRanges</mca:CSharpReference>
+        </OutArgument>
+      </vbw:GenerateDateTimeRanges.DateTimeRanges>
+      <vbw:GenerateDateTimeRanges.From>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">FromTime</mca:CSharpValue>
+        </InArgument>
+      </vbw:GenerateDateTimeRanges.From>
+      <vbw:GenerateDateTimeRanges.To>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ToTime</mca:CSharpValue>
+        </InArgument>
+      </vbw:GenerateDateTimeRanges.To>
+    </vbw:GenerateDateTimeRanges>
     <ParallelForEach x:TypeArguments="ve:DateTimeRange" DisplayName="ParallelForEach&lt;DateTimeRange&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
@@ -138,13 +167,14 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbBFFA44BDgIBAUkLSbYBAgENTgtOvAECAQJTBVwXAgFWXQVvCgIBM3AFjAEXAgEYWglamAECAWJWC1aJAQIBV2ALYGQCATRkCW0bAgE/cwtzdgIBKHoJigEUAgEZaw1rnAECAUtnD2eEAQIBQHsLiQEcAgEafhGGASACARx7pAF7qgECARs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbBZMA6sBDgIBAVALULYBAgEOVQtVvAECAQJaBWMXAwGOAWQFdgoCAWh3BYwBIgIBN40BBakBFwIBGmEJYZgBAwGbAV0LXYkBAwGPAWcLZ2QCAWlrCXQbAgF1iQELiQFRAgFcegt6VwIBUIQBC4QBUwIBRH8Lf34CATiQAQuQAXYCASuXAQmnARQCARtyDXKcAQMBggFuD26EAQIBdpgBC6YBHAIBHJsBEaMBIAIBHpgBpAGYAaoBAgEd</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="AddToCollection`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
@@ -154,14 +184,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="464,296" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,732">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,794">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="526,812" />
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="526,874" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

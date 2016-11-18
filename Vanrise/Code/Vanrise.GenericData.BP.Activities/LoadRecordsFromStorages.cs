@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
 using Vanrise.Queueing;
 using Vanrise.GenericData.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.GenericData.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -13,7 +13,13 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class LoadRecordsFromStoragesInput
     {
+        public List<Guid> RecordStorageIds { get; set; }
 
+        public DateTime FromTime { get; set; }
+
+        public DateTime ToTime { get; set; }
+
+        public BaseQueue<RecordBatch> OutputQueue { get; set; }
     }
 
     public class LoadRecordsFromStoragesOutput
@@ -28,25 +34,67 @@ namespace Vanrise.GenericData.BP.Activities
         [RequiredArgument]
         public InArgument<List<Guid>> RecordStorageIds { get; set; }
 
+        [RequiredArgument]
         public InArgument<DateTime> FromTime { get; set; }
 
+        [RequiredArgument]
         public InArgument<DateTime> ToTime { get; set; }
 
+        [RequiredArgument]
         public InOutArgument<BaseQueue<RecordBatch>> OutputQueue { get; set; }
-        
+
         protected override LoadRecordsFromStoragesOutput DoWorkWithResult(LoadRecordsFromStoragesInput inputArgument, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+            if (inputArgument.OutputQueue == null)
+                throw new NullReferenceException("inputArgument.OutputQueue");
+
+            if (inputArgument.RecordStorageIds == null)
+                throw new NullReferenceException("inputArgument.RecordStorageIds");
+
+            LoadRecordsFromStoragesOutput output = new LoadRecordsFromStoragesOutput() { };
+            long eventCount = 0;
+
+            DataRecordStorageManager manager = new DataRecordStorageManager();
+            RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
+
+            foreach (Guid recordStorageId in inputArgument.RecordStorageIds)
+            {
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
+                {
+                    eventCount++;
+                    recordBatch.Records.Add(itm);
+                    if (recordBatch.Records.Count >= 10000)
+                    {
+                        inputArgument.OutputQueue.Enqueue(recordBatch);
+
+                        recordBatch = new RecordBatch() { Records = new List<dynamic>() };
+                    }
+                }));
+
+                
+            }
+            if (recordBatch.Records.Count > 0)
+            {
+                inputArgument.OutputQueue.Enqueue(recordBatch);
+            }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", eventCount);
+            return output;
         }
 
         protected override LoadRecordsFromStoragesInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new LoadRecordsFromStoragesInput()
+            {
+                FromTime = this.FromTime.Get(context),
+                OutputQueue = this.OutputQueue.Get(context),
+                RecordStorageIds = this.RecordStorageIds.Get(context),
+                ToTime = this.ToTime.Get(context)
+            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadRecordsFromStoragesOutput result)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

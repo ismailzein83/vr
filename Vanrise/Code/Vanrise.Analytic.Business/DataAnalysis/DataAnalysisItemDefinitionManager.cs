@@ -22,6 +22,23 @@ namespace Vanrise.Analytic.Business
             return cachedDataAnalysisItemDefinitions.GetRecord(dataAnalysisItemDefinitionId);
         }
 
+        public IEnumerable<DataAnalysisItemDefinition> GetDataAnalysisItemDefinitionsById(Guid dataAnalysisDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataAnalysisItemDefinitionsById",
+               () =>
+               {
+                   var allDataAnalysisItemDefinitions = GetCachedDataAnalysisItemDefinitions();
+                   Func<DataAnalysisItemDefinition, bool> filterExpression = (x) =>
+                   {
+                       if (dataAnalysisDefinitionId != x.DataAnalysisDefinitionId)
+                           return false;
+
+                       return true;
+                   };
+                   return allDataAnalysisItemDefinitions != null ? allDataAnalysisItemDefinitions.FindAllRecords(filterExpression) : null;
+               });
+        }
+
         public IDataRetrievalResult<DataAnalysisItemDefinitionDetail> GetFilteredDataAnalysisItemDefinitions(DataRetrievalInput<DataAnalysisItemDefinitionQuery> input)
         {
             var allDataAnalysisItemDefinitions = GetCachedDataAnalysisItemDefinitions();
@@ -35,7 +52,7 @@ namespace Vanrise.Analytic.Business
 
                 return true;
             };
-                    
+
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDataAnalysisItemDefinitions.ToBigResult(input, filterExpression, DataAnalysisItemDefinitionDetailMapper));
         }
@@ -168,6 +185,6 @@ namespace Vanrise.Analytic.Business
             return dataAnalysisItemDefinitionInfo;
         }
 
-        #endregion   
+        #endregion
     }
 }
