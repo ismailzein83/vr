@@ -252,17 +252,32 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\TABS.Plugins.VoipSwitch.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.BP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Activities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Analytic.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.Data.Postgres">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Analytic.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Analytic.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Web.dll</HintPath>
