@@ -54,7 +54,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainManager.cs" />
     <Compile Include="EndPointManager.cs" />
+    <Compile Include="RouteTableManager.cs" />
     <Compile Include="TariffManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="CodecDefManager.cs" />

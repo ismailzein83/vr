@@ -7,13 +7,17 @@
 
     function EndPointService(NPModalService) {
 
-        function addEndPoint(onEndPointAdded) {
+        function addEndPoint(AccountId, onEndPointAdded) {
             var settings = {};
+
+            var parameters = {
+                AccountId: AccountId,
+            };
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onEndPointAdded = onEndPointAdded
             };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', null, settings);
+            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
         };
         function editEndPoint(EndPointId, onEndPointUpdated) {
             var settings = {};

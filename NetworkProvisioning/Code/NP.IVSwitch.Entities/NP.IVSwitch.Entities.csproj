@@ -55,10 +55,16 @@
     <Compile Include="CodecProfile\CodecProfileFilter.cs" />
     <Compile Include="CodecProfile\CodecProfileInfo.cs" />
     <Compile Include="CodecProfile\CodecProfileQuery.cs" />
+    <Compile Include="Domain\Domain.cs" />
+    <Compile Include="Domain\DomainFilter.cs" />
+    <Compile Include="Domain\DomainInfo.cs" />
     <Compile Include="EndPoint\EndPoint.cs" />
     <Compile Include="EndPoint\EndPointDetail.cs" />
     <Compile Include="EndPoint\EndPointQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteTable\RouteTable.cs" />
+    <Compile Include="RouteTable\RouteTableFilter.cs" />
+    <Compile Include="RouteTable\RouteTableInfo.cs" />
     <Compile Include="Route\Route.cs" />
     <Compile Include="Route\RouteDetail.cs" />
     <Compile Include="Route\RouteQuery.cs" />

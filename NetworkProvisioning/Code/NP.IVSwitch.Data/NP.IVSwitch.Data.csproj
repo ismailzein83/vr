@@ -47,7 +47,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDomainDataManager.cs" />
     <Compile Include="IEndPointDataManager.cs" />
+    <Compile Include="IRouteTableDataManager.cs" />
     <Compile Include="ITariffDataManager.cs" />
     <Compile Include="IAccountDataManager.cs" />
     <Compile Include="ICodecDefDataManager.cs" />

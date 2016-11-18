@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities 
 {
+    public enum RtpMode {AdvancedProxying = 1,PassthruProxying = 2,NoProxying = 3}
+
     public class EndPoint
     {
         public int EndPointId { get; set; } // user_id
+
+        public int EndPointType { get; set; }
 
         public String Host { get; set; }
         public Int16 DomainId { get; set; }
@@ -22,11 +27,10 @@ namespace NP.IVSwitch.Entities
         public  String LogAlias {get;set;}   
         public int TariffId {get;set;}        
         public int RouteTableId {get;set;}
-        public DateTime LastHitDate {get;set;}
         public Trace EnableTrace { get; set; }
         public int CodecProfileId { get; set; }
         public int GroupId {get;set;}       
-        public int RtpMode {get;set;}  
+        public RtpMode RtpMode {get;set;}  
         public int MaxCallDuration {get;set;}
         public  String TracePattern {get;set;}   
         public String TraceId {get;set;}
