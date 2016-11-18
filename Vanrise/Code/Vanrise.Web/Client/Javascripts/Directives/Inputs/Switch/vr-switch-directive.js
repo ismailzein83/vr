@@ -34,7 +34,7 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
             ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
 
             var isUserChange;
-            scope.$watch('value', function (newValue, oldValue) {
+            scope.$watch('ctrl.value', function (newValue, oldValue) {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                     return;
                 isUserChange = false;//reset the flag
@@ -48,7 +48,7 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
             ctrl.toogleCheck = function () {
                 if (ctrl.readOnly)
                     return;
-                scope.value = !scope.value;
+                ctrl.value = !ctrl.value;
                 isUserChange = true;
 
             };
@@ -77,9 +77,9 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
 
                 var template = '<vr-label ng-if="withLable">' + label + '</vr-label>'
                                + '<div class="vr-switch">'
-                                   + '<span  class="switch green" ng-class="value == true? \'checked\':\'\'" ng-click="ctrl.toogleCheck()">'
+                                   + '<span  class="switch green" ng-class="ctrl.value == true? \'checked\':\'\'" ng-click="ctrl.toogleCheck()">'
                                    + '<small></small>'
-                                   + '<input type="checkbox" ng-model="value" style="display:none;"/>'
+                                   + '<input type="checkbox" ng-model="ctrl.value" style="display:none;"/>'
                                    + '</span>'
                                    + '<span class="switch-text">'
                                    + onspan + offspan
