@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCheck', ['SecurityService', function (SecurityService) {
+app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
