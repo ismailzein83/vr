@@ -84,11 +84,18 @@
                   
 
                    
-                    if (iAttrs.headertext != undefined)
-                        $scope.$watch(iAttrs.headertext, function (val) {                            
+                    if (iAttrs.headertext != undefined) {
+                        $scope.$watch(iAttrs.headertext, function (val) {
                             if (colDef != undefined && val != undefined)
                                 dataGridCtrl.updateColumnHeader(colDef, val);
                         });
+
+                        if (col.headerText.toUpperCase() === 'ID') {
+                            dataGridCtrl.hideColumn(colDef);
+                        }
+                          
+                    }
+                       
                     if (!show)
                         dataGridCtrl.hideColumn(colDef);
 
