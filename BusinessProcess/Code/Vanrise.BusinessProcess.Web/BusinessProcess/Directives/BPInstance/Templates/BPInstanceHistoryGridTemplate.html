@@ -3,9 +3,9 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.ProcessInstanceID">
+             idfield="Entity.ProcessInstanceID" defaultsortbyfieldname="'Entity.ProcessInstanceID'">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.ProcessInstanceID'" widthfactor="5"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'" isclickable="true" onclicked="processInstanceClicked" widthfactor="40" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'" isclickable="true" onclicked="processInstanceClicked" widthfactor="40"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Last Message'" field="'Entity.LastMessage'" type="'Text'" widthfactor="40" expendablecolumn></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Retry'" field="'Entity.RetryCount'" widthfactor="5"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Event Time'" field="'Entity.CreatedTime'" type="'LongDatetime'" widthfactor="20"></vr-datagridcolumn>
