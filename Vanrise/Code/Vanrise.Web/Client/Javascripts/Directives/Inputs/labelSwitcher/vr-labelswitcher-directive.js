@@ -23,7 +23,7 @@ app.directive('vrLabelswitcher', ['VRValidationService', 'BaseDirService', 'VRNo
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                     ctrl.tabindex = "-1"
                 }
-            }, 10)
+            }, 10);
 
 
              
@@ -31,26 +31,26 @@ app.directive('vrLabelswitcher', ['VRValidationService', 'BaseDirService', 'VRNo
             $scope.selectedindex = 0;
             $scope.nextindex = 1;
             $scope.items = [
-                { id: 1, label: "item 1", selected:true},
+                { id: 1, label: "item 1", selected: true },
                 { id: 2, label: "item 2", selected: false },
                 { id: 3, label: "item 3", selected: false },
                 { id: 4, label: "item 4", selected: false },
                // { id: 5, label: "last", selected: false }
-            ]
-            $scope.items[$scope.items.length] = { id: -1, label: " " },
-            $scope.setSelected = function (item, index ) {                
-                
-                
+            ];
+            $scope.items[$scope.items.length] = { id: -1, label: " " };
+            $scope.setSelected = function (item, index) {
+
+
                 $scope.nextindex = index + 1;
                 $scope.selectedindex = index;
 
-                if (index == $scope.items.length -1) {
+                if (index == $scope.items.length - 1) {
                     $scope.nextindex = 1;
                     $scope.selectedindex = 0;
                 }
 
 
-            }
+            };
 
 
            
@@ -65,9 +65,9 @@ app.directive('vrLabelswitcher', ['VRValidationService', 'BaseDirService', 'VRNo
             var getInputeStyle = function () {
                 var div = $element.find('div[validator-section]')[0];
                 if ($attrs.hint != undefined) {
-                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
-                };
-            }
+                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                }
+            };
             getInputeStyle();
 
             ctrl.adjustTooltipPosition = function (e) {
@@ -84,7 +84,7 @@ app.directive('vrLabelswitcher', ['VRValidationService', 'BaseDirService', 'VRNo
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                 }, 1);
-            }
+            };
 
             function getModuleName() {
                 return (ctrl.modulename == undefined || ctrl.modulename == null) ? null : ctrl.modulename;
@@ -117,13 +117,13 @@ app.directive('vrLabelswitcher', ['VRValidationService', 'BaseDirService', 'VRNo
                             var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                             $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
                             $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
-                        }, 1)
-                    }
-                   
+                        }, 1);
+                    };
+
                     //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
-            }
+            };
         },
         bindToController: true,
         template: function (element, attrs) {

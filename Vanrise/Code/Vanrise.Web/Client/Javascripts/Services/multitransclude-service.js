@@ -35,5 +35,5 @@ app.service("MultiTranscludeService", function () {
                 });
             });
         }
-    }
+    };
 });

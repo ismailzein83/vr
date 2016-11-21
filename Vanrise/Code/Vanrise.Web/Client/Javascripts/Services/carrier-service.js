@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 
 app.service('OperatorsService', function (HttpService, MainService) {
 

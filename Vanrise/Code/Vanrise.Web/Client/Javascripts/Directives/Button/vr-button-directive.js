@@ -68,31 +68,31 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
             };
             var types = {
                 "Close": false,
-                "Preview":false
-            }
+                "Preview": false
+            };
 
             ctrl.isExculdedOnreadOnly = function () {
                 var readOnly = UtilsService.isContextReadOnly($scope);
-                return !readOnly || types[$attrs.type]!=undefined;
+                return !readOnly || types[$attrs.type] != undefined;
 
-            }
+            };
             var menu;
             if ($attrs.menuactions != undefined ) {
                     menu = $scope.$parent.$eval($attrs.menuactions);
               
-                    var  checkMenuActionPermission =  function () {
+                    var checkMenuActionPermission = function () {
                         for (var i = 0; i < menu.length; i++) {
                             invokeHasPermission(menu[i]);
                         }
-                    }
+                    };
 
-                    var invokeHasPermission =  function(menuAction) {
+                    var invokeHasPermission = function (menuAction) {
                         if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
                         menuAction.disable = true;
-                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {                           
+                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
                             if (isAllowed) { menuAction.disable = false; }
                         });
-                    }
+                    };
                     checkMenuActionPermission();
                
             }
@@ -131,9 +131,9 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
         compile: function (element, attrs) {
 
             return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {                   
+                pre: function ($scope, iElem, iAttrs, ctrl) {
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return ButtonDirService.getTemplate(attrs);

@@ -18,7 +18,7 @@
                 var isStandalone = tAttrs.standalone;
                 var isValue = tAttrs.isvalue != undefined;
                 var color = (tAttrs.color != undefined) ? tAttrs.color : "";
-                var hintSection = ""
+                var hintSection = "";
                 if (tAttrs.hint != undefined)
                     hintSection = '<vr-hint value="' + tAttrs.hint + '"></vr-hint>';
 

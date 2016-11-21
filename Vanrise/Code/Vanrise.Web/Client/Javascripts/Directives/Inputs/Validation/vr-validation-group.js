@@ -51,7 +51,7 @@ app.directive('vrValidationGroup', [function () {
                         });
                     }
                 }
-            }
+            };
         }
     };
 

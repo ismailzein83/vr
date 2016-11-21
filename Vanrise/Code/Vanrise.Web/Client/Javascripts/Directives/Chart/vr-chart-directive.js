@@ -29,7 +29,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return ChartDirService.dTemplate;
@@ -49,7 +49,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         function initializeController() {
             ctrl.isSettingsVisible = function () {
                 return (ctrl.hidesettings == undefined || ctrl.hidesettings == false) && isChartAvailable;
-            }
+            };
 
             ctrl.changeSettings = changeSettings;
 
@@ -436,7 +436,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 if (chartElement.highcharts() != undefined)
                     chartElement.highcharts().setSize(chartElement.parent().width(), chartElement.height(), true);
 
-            }, time)
+            }, time);
         }
         $(window).resize(function () {
             resizeChart(500);

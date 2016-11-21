@@ -78,7 +78,7 @@
         function validateTimeEqualorGreaterthanToday(currentDate) {
             var errorMessage = "Date cannot be in the past";
             var today = new Date();
-            today.setHours(0, 0, 0, 0)
+            today.setHours(0, 0, 0, 0);
 
             if (currentDate instanceof Date) {
                 if (currentDate == undefined)

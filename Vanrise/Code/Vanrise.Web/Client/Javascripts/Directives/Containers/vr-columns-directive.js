@@ -31,7 +31,7 @@
                 if (tAttrs.colnumsm != undefined) {
                     nbrcolsm = tAttrs.colnumsm;
                 }
-                var emptyline=""
+                var emptyline = "";
                 if (tAttrs.withemptyline != undefined) {
                     emptyline = " empty-line-col ";
                 }

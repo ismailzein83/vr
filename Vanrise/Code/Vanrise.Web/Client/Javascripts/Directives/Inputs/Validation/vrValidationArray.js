@@ -11,7 +11,7 @@ app.directive('vrValidationArray', function () {
                 if (viewValue == undefined || viewValue == 0) ctrlModel.$setValidity('requiredarray', false);
                 else ctrlModel.$setValidity('requiredarray', true);
                 return viewValue;
-            }
+            };
             ctrlModel.$parsers.unshift(validate);
             ctrlModel.$formatters.push(validate);
         }

@@ -1,5 +1,4 @@
-﻿'use strict';
-app.constant('TimeDimensionTypeEnum', {
+﻿app.constant('TimeDimensionTypeEnum', {
     Yearly: { value: 0, description: "Yearly" },
     Monthly: { value: 1, description: "Monthly" },
     Weekly: { value: 2, description: "Weekly" },

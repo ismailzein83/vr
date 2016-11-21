@@ -1,5 +1,4 @@
-﻿'use strict';
-app.constant('LabelColorsEnum', {
+﻿app.constant('LabelColorsEnum', {
     Success: { color: "label label-success" },
     Warning: { color: "label label-warning" },
     WarningLevel1: { color: "label label-warning-1" },

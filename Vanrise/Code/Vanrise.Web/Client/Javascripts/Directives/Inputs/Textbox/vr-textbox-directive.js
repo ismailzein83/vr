@@ -36,7 +36,7 @@
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                         ctrl.tabindex = "-1"
                     }
-                }, 10)
+                }, 10);
                
                 var $quan = $('.next-input');
                 $quan.on('keyup', function (e) {
@@ -63,7 +63,7 @@
                             onblurtextboxMethod();
                         }
                     }
-                }
+                };
             },
             compile: function (element, attrs) {
 
@@ -82,28 +82,28 @@
                     pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
 
-                        
+
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
-                          
+
                             var retrunedValue;
                             isUserChange = false;//reset the flag
-                          
+
                             if (newValue == "") {
-                                
+
                                 setTimeout(function () {
                                     ctrl.value = undefined;
                                     $scope.$apply();
                                 });
-                               
+
                             }
                             if (!newValue == "") {
 
                                 retrunedValue = newValue;
                             }
-                            
+
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
@@ -115,29 +115,29 @@
                                 //    ctrl.value = oldValue;
                                 if (decimalArray.length > 1 && ctrl.decimalprecision == 0)
                                     ctrl.value = oldValue;
-                                if (negativeArray.length > 1 && ctrl.minvalue >=0)
+                                if (negativeArray.length > 1 && ctrl.minvalue >= 0)
                                     ctrl.value = oldValue;
                                 if (decimalArray.length > 2)
                                     ctrl.value = oldValue;
                                 if (negativeArray.length > 2)
                                     ctrl.value = oldValue;
-                               // if (arr.length === 0) return;
-                               //if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
+                                // if (arr.length === 0) return;
+                                //if (arr.length === 1 && (arr[0] === '-' || arr[0] === '.')) return;
                                 if (arr.length === 2 && newValue === '-.') return;
                                 if (!isNaN(newValue) && newValue != "") {
                                     retrunedValue = newValue;
                                 }
                                 if (isNaN(newValue) && (newValue != '-') && (newValue != '.')) {
                                     ctrl.value = oldValue;
-                                    retrunedValue=undefined;
+                                    retrunedValue = undefined;
                                 }
-                               
-                            
+
+
                             }
-                           
+
                             if (iAttrs.maxlength != undefined) {
                                 var charArray = String(newValue).split("");
-                                if(charArray.length > ctrl.maxlength)
+                                if (charArray.length > ctrl.maxlength)
                                     ctrl.value = oldValue;
 
                             }
@@ -148,23 +148,23 @@
                                     onvaluechangedMethod(retrunedValue);
                                 }
                             }
-                           
+
                         });
 
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
-                       // ctrl.readOnly = attrs.readonly != undefined;
+                        // ctrl.readOnly = attrs.readonly != undefined;
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
                         var getInputeStyle = function () {
                             var div = element.find('div[validator-section]')[0];
                             if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
-                            };
-                        }
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                            }
+                        };
                         getInputeStyle();
 
                         ctrl.onKeyUp = function ($event) {
@@ -174,10 +174,10 @@
                                     onEnterPress();
                                 }
                             }
-                        }
+                        };
 
                         ctrl.adjustTooltipPosition = function (e) {
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 var self = angular.element(e.currentTarget);
                                 var selfHeight = $(self).height();
                                 var selfOffset = $(self).offset();
@@ -185,17 +185,17 @@
                                 $(tooltip).css({ display: 'block' });
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                                var innerTooltipWidth = parseFloat (( $(innerTooltip).width() / 2 ) + 2.5);
+                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
                                 $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                             }, 1);
-                        }
-                       
+                        };
+
                         //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',

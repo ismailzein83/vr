@@ -1,4 +1,5 @@
-﻿app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
+﻿'use strict';
+app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
     return {
         restrict: 'E',
         require: '^vrDatagrid',
@@ -9,10 +10,9 @@
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
 
                     var gridColumnAttribute = iAttrs.columnattributes != undefined ? $scope.$eval(iAttrs.columnattributes) : undefined;
-                   
+
                     var col = {};
-                    if (gridColumnAttribute != undefined)
-                    {
+                    if (gridColumnAttribute != undefined) {
                         col = {
                             headerText: gridColumnAttribute.HeaderText,
                             disableSorting: gridColumnAttribute.DisableSorting,
@@ -26,7 +26,7 @@
                             type: gridColumnAttribute.Type,
                             numberPrecision: gridColumnAttribute.NumberPrecision,
                             tag: gridColumnAttribute.Tag,
-                           
+
                         };
                     }
 
@@ -36,13 +36,13 @@
                         col.disableSorting = $scope.$eval(iAttrs.disablesorting);
                     else if (col.disableSorting == undefined)
                         col.disableSorting = false;
-                    if(iAttrs.headerdescription != undefined)
+                    if (iAttrs.headerdescription != undefined)
                         col.headerDescription = $scope.$eval(iAttrs.headerdescription);
-                    if(iAttrs.field != undefined)
+                    if (iAttrs.field != undefined)
                         col.field = $scope.$eval(iAttrs.field);
                     if (iAttrs.isfielddynamic != undefined)
-                        col.isFieldDynamic =  $scope.$eval(iAttrs.isfielddynamic);
-                    if(iAttrs.summaryfield != undefined )
+                        col.isFieldDynamic = $scope.$eval(iAttrs.isfielddynamic);
+                    if (iAttrs.summaryfield != undefined)
                         col.summaryField = $scope.$eval(iAttrs.summaryfield);
                     if (iAttrs.tooltipfield != undefined)
                         col.tooltipField = $scope.$eval(iAttrs.tooltipfield);
@@ -71,19 +71,19 @@
                     if (iAttrs.getcolor != undefined)
                         col.getcolor = $scope.$eval(iAttrs.getcolor);
                     col.cellTemplate = cellTemplate;
-                  
 
-                   
+
+
 
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
-                 
+
 
                     var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;
 
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
-                  
 
-                   
+
+
                     if (iAttrs.headertext != undefined) {
                         $scope.$watch(iAttrs.headertext, function (val) {
                             if (colDef != undefined && val != undefined)
@@ -93,9 +93,9 @@
                         if (col.headerText.toUpperCase() === 'ID') {
                             dataGridCtrl.hideColumn(colDef);
                         }
-                          
+
                     }
-                       
+
                     if (!show)
                         dataGridCtrl.hideColumn(colDef);
 
@@ -111,16 +111,16 @@
                             return $parse(expr)($scope);
                         }, function (value) {
                             if (colDef != undefined) {
-                                if (value) 
+                                if (value)
                                     dataGridCtrl.showColumn(colDef);
                                 else
                                     dataGridCtrl.hideColumn(colDef);
-                                    
-                            }                            
+
+                            }
                         })
                     });
                 }
-            }
+            };
         }
-    }
+    };
 }]);

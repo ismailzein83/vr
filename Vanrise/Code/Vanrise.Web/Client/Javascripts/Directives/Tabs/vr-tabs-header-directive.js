@@ -20,7 +20,7 @@ app.directive('vrTabsHeader', [function () {
                 pre: function (scope, elem, attrs, tabsCtrl) {
                     scope.ctrl = tabsCtrl;
                 }
-            }
+            };
         },
         template: function (element) {
             var isvertical = element.parent().attr("vertical") != undefined;

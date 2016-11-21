@@ -1,5 +1,4 @@
-﻿'use strict';
-app.constant('VR_ChartDefinitionTypeEnum', {
+﻿app.constant('VR_ChartDefinitionTypeEnum', {
     Column: { value: "column", description: "Column", orientation: 1 },
     Line: { value: "line", description: "Line", orientation: 1 },
     Spline: { value: "spline", description: "Spline", orientation: 1 },

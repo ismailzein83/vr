@@ -19,7 +19,7 @@ app.directive('vrChoices', [function () {
             ctrl.addChoiceCtrl = function (choiceCtrl) {
                 choiceCtrls.push(choiceCtrl);
                 setDefaultChoiceSeletion();
-            }
+            };
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
                 triggerSelectionChanged = true;
@@ -28,12 +28,12 @@ app.directive('vrChoices', [function () {
                         setChoiceSelection(t, false);
                 });
                 setChoiceSelection(choiceCtrl, true);
-            }
+            };
 
             ctrl.unselectChoice = function (choiceCtrl) {
                 setChoiceSelection(choiceCtrl, false);
                 setDefaultChoiceSeletion();
-            }
+            };
             ctrl.isradio = $attrs.isradio != undefined;
             function setDefaultChoiceSeletion() {
                 if (choiceCtrls.length == 0 || ctrl.selectedindex > -1)
@@ -45,16 +45,16 @@ app.directive('vrChoices', [function () {
                 });
                 if (!isAnySelected)
                     setChoiceSelection(choiceCtrls[0], true);
-            }
+            };
 
             function setChoiceSelection(choiceCtrl, isSelected) {
                 if (choiceCtrl.isSelected != isSelected) {
                     choiceCtrl.isSelected = isSelected;
                     choiceCtrl.selectionChanged();
                     if (isSelected == true)
-                        ctrl.selectedindex = choiceCtrls.indexOf(choiceCtrl);                        
+                        ctrl.selectedindex = choiceCtrls.indexOf(choiceCtrl);
                 }
-            }
+            };
 
             $scope.$watch("ctrl.selectedindex", function (value) {
                 if (choiceCtrls[ctrl.selectedindex] != undefined && !choiceCtrls[ctrl.selectedindex].isSelected)
@@ -91,9 +91,9 @@ app.directive('vrChoices', [function () {
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                   
+
                 }
-            }
+            };
         }
 
     };

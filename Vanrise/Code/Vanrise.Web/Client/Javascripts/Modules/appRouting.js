@@ -1,4 +1,5 @@
-﻿var appRouting = angular.module('appRouting', ['ngRoute']);
+﻿'use strict';
+var appRouting = angular.module('appRouting', ['ngRoute']);
 appRouting.config(['$routeProvider',
   function ($routeProvider) {
       var folderPart = '';

@@ -1,4 +1,5 @@
-﻿app.filter('vrtextOrNumber', ['$filter', function ($filter) {
+﻿'use strict';
+app.filter('vrtextOrNumber', ['$filter', function ($filter) {
     return function (input, fractionSize) {
         if (isNaN(input)) {
             return input;

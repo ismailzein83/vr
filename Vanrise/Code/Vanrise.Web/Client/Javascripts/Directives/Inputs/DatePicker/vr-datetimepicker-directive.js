@@ -14,7 +14,7 @@ app.directive('vrValidationDatetime', function () {
                 }
 
                 return viewValue;
-            }
+            };
             ctrlModel.$parsers.unshift(validate);
             ctrlModel.$formatters.push(validate);
 
@@ -101,7 +101,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     setTimeout(function () {
 
                         $(dropDown).slideDown();
-                    },100)
+                    }, 100);
 
                     $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset' });
 
@@ -110,10 +110,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
         
             $(divDatePicker.parents('div')).scroll(function () {
                 fixDateTimePickerPosition();
-            })
+            });
             $(window).scroll(function () {
                 fixDateTimePickerPosition();
-            })
+            });
 
             $scope.$on('start-drag', function (event, args) {
                 fixDateTimePickerPosition();
@@ -128,7 +128,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                     ctrl.tabindex = "-1"
                 }
-            }, 10)
+            }, 10);
 
             var isUserChange = false;
             var selectedDate;
@@ -201,10 +201,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     if (moment($this.val(), format, true).isValid()) {
                         divDatePicker.data("DateTimePicker").date($this.val());
                     }
-                }, 1)
+                }, 1);
 
 
-            }
+            };
 
             //ctrl.setDefaultDate = function () {
             //    if (ctrl.value == null )
@@ -217,9 +217,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var getInputeStyle = function () {
                 var div = $element.find('div[validator-section]')[0];
                 if ($attrs.hint != undefined) {
-                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
+                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
                 };
-            }
+            };
             getInputeStyle();
 
             ctrl.adjustTooltipPosition = function (e) {
@@ -236,7 +236,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                 }, 1);
-            }
+            };
             $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == null)
                     $element.find('#divDatePicker').find('.vr-date-input').val('');
@@ -292,7 +292,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         onblurdatetimeMethod();
                     }
                 }
-            }
+            };
             $scope.ctrl.toggleDate = function (e) {
 
                 e.preventDefault();
@@ -304,7 +304,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 // switch icon to time
                 $('.btn-switcher').addClass("glyphicon-time");
                 $('.btn-switcher').removeClass("glyphicon-calendar");
-            }
+            };
             $scope.ctrl.toggleTime = function (e) {
 
                 e.preventDefault();
@@ -315,7 +315,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 // switch icon to date
                 $('.btn-switcher').removeClass("glyphicon-time");
                 $('.btn-switcher').addClass("glyphicon-calendar");
-            }
+            };
             //BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
 
         },
@@ -333,7 +333,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     //var ctrl = $scope.ctrl;
                     //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
                 }
-            }
+            };
         },
         controllerAs: 'ctrl',
         bindToController: true,

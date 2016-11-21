@@ -29,7 +29,7 @@
                             mode: 'text/x-csharp'
                         };
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',

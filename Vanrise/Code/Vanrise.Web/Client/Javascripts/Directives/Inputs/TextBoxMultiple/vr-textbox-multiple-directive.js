@@ -34,7 +34,7 @@
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                         ctrl.tabindex = "-1"
                     }
-                }, 10)
+                }, 10);
                
                 var $quan = $('.next-input');
                 $quan.on('keyup', function (e) {
@@ -60,7 +60,7 @@
                             onblurtextboxMethod();
                         }
                     }
-                }
+                };
             },
             compile: function (element, attrs) {              
                 return {
@@ -98,13 +98,13 @@
                         var getInputeStyle = function () {
                             var div = element.find('div[validator-section]')[0];
                             if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
-                            };
-                        }
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                            }
+                        };
                         getInputeStyle();
                         ctrl.muteAction = function (e) {
                             BaseDirService.muteAction(e);
-                        }
+                        };
                         var validationOptionsInput = {};
                         if (iAttrs.datatype === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Email.name)
                             validationOptionsInput.emailValidation = true;
@@ -123,33 +123,33 @@
                         }
                         ctrl.validateInpute = function () {
                             return VRValidationService.validate(ctrl.valuetext, $scope, { isrequired: false }, validationOptionsInput);
-                        }
+                        };
                         ctrl.addNewValue = function () {
                             if (!IsInvalide(ctrl.valuetext)) {
                                 ctrl.value.push(ctrl.valuetext);
                                 ctrl.valuetext = null;
                             }
-                           
-                        }
+
+                        };
                         ctrl.removeValue = function (obj) {
-                            var index= ctrl.value.indexOf(obj);
+                            var index = ctrl.value.indexOf(obj);
                             ctrl.value.splice(index, 1);
-                        }
+                        };
 
                         ctrl.clearAllSelected = function (e) {
                             BaseDirService.muteAction(e);
                             ctrl.value.length = 0;
-                        }
-                        ctrl.disabledAdd = function () {                         
+                        };
+                        ctrl.disabledAdd = function () {
                             return IsInvalide(ctrl.valuetext);
-                        }
+                        };
                        
                         ctrl.getLabelText = function () {
                             if (ctrl.value == 0) return "Select";
                             else if (ctrl.value != undefined) return ctrl.value.join(";");
-                        }
+                        };
                         ctrl.adjustTooltipPosition = function (e) {
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 var self = angular.element(e.currentTarget);
                                 var selfHeight = $(self).height();
                                 var selfOffset = $(self).offset();
@@ -157,18 +157,18 @@
                                 $(tooltip).css({ display: 'block' });
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                                var innerTooltipWidth = parseFloat (( $(innerTooltip).width() / 2 ) + 2.5);
+                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
                                 $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                             }, 1);
-                        }
+                        };
 
                         setTimeout(function () {
                             $('#' + ctrl.id).on('show.bs.dropdown', function () {
-                                setTimeout(function() {
+                                setTimeout(function () {
                                     $('#' + ctrl.id).find('input').first().focus();
-                                },1)
+                                }, 1);
 
                                 var selfHeight = $(this).height();
                                 var selfOffset = $(this).offset();
@@ -280,7 +280,7 @@
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<vr-validator validate="ctrl.validate()" vr-input >'
                             + '<div class="dropdown vr-multiple" id="{{ctrl.id}}" >'
-                             +  '<button  class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;" type="button" data-toggle="dropdown" '
+                             + '<button  class="btn btn-default dropdown-toggle" style="width:100%;text-align: left;" type="button" data-toggle="dropdown" '
                                 + ' aria-expanded="true"  >'
                                     + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " > {{ctrl.getLabelText()}} </span>'
                                     + '<span style="" class="caret vr-multiple-caret" ></span>'
@@ -294,25 +294,25 @@
                                         + '<div style="display:inline-block;width:30px" ><vr-button vr-disabled="ctrl.disabledAdd()" type="Add"  standalone data-onclick="ctrl.addNewValue" ></vr-button></div>'
                                          + '</div>'
                                         + '<div style="width : 100%" > '
-                                        +'<div  style="border-left:1px solid #f0f0f0;display: inline-block;overflow: auto; white-space:normal" >'
+                                        + '<div  style="border-left:1px solid #f0f0f0;display: inline-block;overflow: auto; white-space:normal" >'
                                             + '<div style="padding:5px ;height:29px">'
                                                 + 'Values:'
                                                 + '<a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); "  ng-if="!ctrl.readOnly">'
-                                                +  ' Clear all'
+                                                + ' Clear all'
                                                 + '<i class="glyphicon glyphicon-trash hand-cursor "></i>'
-                                                +  '</a>'
-                                            +' </div>'
-                                            +' <div style="height: 100px; overflow: auto;padding-top:5px">'
+                                                + '</a>'
+                                            + ' </div>'
+                                            + ' <div style="height: 100px; overflow: auto;padding-top:5px">'
                                                + '<span class="label custom-label" ng-repeat="obj in ctrl.value track by $index">'
-                                                  +'{{obj}} '
+                                                  + '{{obj}} '
                                                    + '<span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.removeValue(obj);"  ng-if="!ctrl.readOnly"></span>'
                                                 + '</span>'
                                             + '</div>'
                                        + '</div>'
-                                    +'</li>'
-                                +'</ul>'
+                                    + '</li>'
+                                + '</ul>'
                             + '</vr-validator>'
-                        + '</div>'
+                        + '</div>';
 
                 ;
                 

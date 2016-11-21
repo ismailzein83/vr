@@ -1,4 +1,4 @@
-﻿
+﻿'use strict';
 app.directive('vrHtmlcompiler', ['$compile', function ($compile) {
     var directiveDefinitionObject = {
 

@@ -23,7 +23,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                     ctrl.tabindex = "-1"
                 }
-            }, 10)
+            }, 10);
 
 
 
@@ -38,7 +38,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                 { id: 5, label: "item 5" },
                 { id: 6, label: "item 6" }
 
-            ]
+            ];
             var firsttime = true;
             ctrl.increment = function () {
 
@@ -48,7 +48,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                 else
                     $scope.selectedindex = $scope.selectedindex + 1;
 
-            }
+            };
             ctrl.decrement = function () {
 
                 if ($scope.selectedindex == 0) {
@@ -57,7 +57,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                 else
                     $scope.selectedindex = $scope.selectedindex - 1;
 
-            }
+            };
             $scope.getClass = function (index) {
 
                 if (index == $scope.selectedindex) {
@@ -66,8 +66,8 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                 if (index == $scope.nextindex) {
                     return "vr-label-switcher-notselected  bgcolor-1";
                 }
-                return "am-slide-top"
-            }
+                return "am-slide-top";
+            };
 
 
             $scope.$watch('ctrl.value', function () {
@@ -81,9 +81,9 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
             var getInputeStyle = function () {
                 var div = $element.find('div[validator-section]')[0];
                 if ($attrs.hint != undefined) {
-                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
-                };
-            }
+                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                }
+            };
             getInputeStyle();
 
             ctrl.adjustTooltipPosition = function (e) {
@@ -100,7 +100,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                 }, 1);
-            }
+            };
 
             function getModuleName() {
                 return (ctrl.modulename == undefined || ctrl.modulename == null) ? null : ctrl.modulename;
@@ -133,13 +133,13 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                             var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                             $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
                             $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
-                        }, 1)
-                    }
+                        }, 1);
+                    };
 
                     //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
-            }
+            };
         },
         bindToController: true,
         template: function (element, attrs) {
@@ -163,7 +163,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
                         + '<div class="caret-down"></div>'
                         + '</div>{{}}'
                             + '</div>'
-                        + '</div>'
+                        + '</div>';
 
             var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
 

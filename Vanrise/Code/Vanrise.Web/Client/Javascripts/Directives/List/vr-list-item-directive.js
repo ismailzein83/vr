@@ -40,7 +40,7 @@ app.directive('vrListitem', ['UtilsService', function (UtilsService) {
         template: function (elem, attrs) {
             
 
-            var itemContentWidth = '100%'
+            var itemContentWidth = '100%';
             var removeItemTemplate = '';
             if (attrs.onremove != undefined) {
                 removeItemTemplate = '  <i  ng-if="!ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" style="width:10px; cursor :default" ng-click="listItemCtrl.onremove()"></i>';

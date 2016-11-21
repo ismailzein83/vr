@@ -11,7 +11,7 @@ app.directive('vrPreviewImage', ['FileAPIService', function (FileAPIService) {
         },
         controller: function ($scope, $element, $attrs, $timeout) {
             var ctrl = this;
-            ctrl.image = ''
+            ctrl.image = '';
             ctrl.Style = {
                 "height": ctrl.height,
                 "width": ctrl.width
@@ -19,12 +19,12 @@ app.directive('vrPreviewImage', ['FileAPIService', function (FileAPIService) {
             };
             ctrl.previewImage = function () {
                 FileAPIService.PreviewImage(ctrl.value).then(function (response) {
-                    if (response!=null)
+                    if (response != null)
                         ctrl.image = response;
-                    else 
+                    else
                         ctrl.image = "/Client/Images/no_image.jpg";
-                })
-            }
+                });
+            };
 
             $scope.$watch('ctrl.value', function () {                
                 if (ctrl.value != null && ctrl.value != undefined && ctrl.value != 0) {
@@ -47,7 +47,7 @@ app.directive('vrPreviewImage', ['FileAPIService', function (FileAPIService) {
             var labelTemplate = '';
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-            var imageTemplate = ' <img ng-src="{{ctrl.image}}"  style="width:100%;height:100%"/>'
+            var imageTemplate = ' <img ng-src="{{ctrl.image}}"  style="width:100%;height:100%"/>';
                  
 
 

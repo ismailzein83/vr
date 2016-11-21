@@ -94,7 +94,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         var deferred = $q.defer();
         var data;
         if (dataToSend)
-            data = dataToSend
+            data = dataToSend;
         var responseType = '';
         var ContentType = 'application/json;charset=utf-8';
         var isExport = dataToSend != undefined && dataToSend.DataRetrievalResultType != undefined && dataToSend.DataRetrievalResultType == DataRetrievalResultTypeEnum.Excel.value;
@@ -109,7 +109,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
                 'Content-Type': ContentType
             },
             data: data
-        }
+        };
         $http(req)
             .success(function (response, status, headers, config) {
                 var returnedResponse;
@@ -142,7 +142,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
                     if (exceptionMessage != undefined) {
                         showErrorMessage(exceptionMessage)
                     } else {
-                        showErrorMessage('Error Occured while posting data!')
+                        showErrorMessage('Error Occured while posting data!');
                     }
                     setTimeout(function () {
                         notify.closeAll();

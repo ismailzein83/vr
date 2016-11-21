@@ -19,7 +19,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
             ctrl.addChoiceCtrl = function (choiceCtrl) {
                 choiceCtrls.push(choiceCtrl);
                 setDefaultChoiceSeletion();
-            }
+            };
             ctrl.removeTab = function (tabCtrl) {
                 choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
                 setTimeout(function () {
@@ -31,10 +31,10 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 if ($attrs.vertical != undefined)
                     return { 'display': 'block', 'margin-bottom': '0px', 'border-radius': '0px' };
                 var m = 1;
-                if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length -1)
+                if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length - 1)
                     m = 0;
-                return { 'width': 'calc('+ 100 / choiceCtrls.length  + '% - '+m+'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' }
-            }
+                return { 'width': 'calc(' + 100 / choiceCtrls.length + '% - ' + m + 'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' };
+            };
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
                 triggerSelectionChanged = true;
@@ -43,12 +43,12 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                         setChoiceSelection(t, false);
                 });
                 setChoiceSelection(choiceCtrl, true);
-            }
+            };
 
             ctrl.unselectChoice = function (choiceCtrl) {
                 setChoiceSelection(choiceCtrl, false);
                 setDefaultChoiceSeletion();
-            }
+            };
             ctrl.isradio = $attrs.isradio != undefined;
             function setDefaultChoiceSeletion() {
                 if (choiceCtrls.length == 0 || ctrl.selectedindex > -1)
@@ -60,7 +60,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 });
                 if (!isAnySelected)
                     setChoiceSelection(choiceCtrls[0], true);
-            }
+            };
 
             function setChoiceSelection(choiceCtrl, isSelected) {
                 if (choiceCtrl.isSelected != isSelected) {
@@ -105,9 +105,9 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                   
+
                 }
-            }
+            };
         }
 
     };

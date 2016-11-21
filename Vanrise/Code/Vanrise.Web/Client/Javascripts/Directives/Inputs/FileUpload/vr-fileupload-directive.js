@@ -23,7 +23,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                     ctrl.tabindex = "-1"
                 }
-            }, 10)
+            }, 10);
 
 
             //var inputElement = $element.find('#mainInput');
@@ -154,22 +154,22 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     ctrl.file = null
                 }
             });
-            ctrl.downloadFile = function(){
+            ctrl.downloadFile = function () {
                 var id = ctrl.value.fileId;
                 FileAPIService.DownloadFile(id, getModuleName())
                    .then(function (response) {
-                      UtilsService.downloadFile(response.data, response.headers);
+                       UtilsService.downloadFile(response.data, response.headers);
                    });
-            }
+            };
             if ($attrs.hint != undefined)
                 ctrl.hint = $attrs.hint;
 
             var getInputeStyle = function () {
                 var div = $element.find('div[validator-section]')[0];
                 if ($attrs.hint != undefined) {
-                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
-                };
-            }
+                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                }
+            };
             getInputeStyle();
 
             ctrl.adjustTooltipPosition = function (e) {
@@ -186,7 +186,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                 }, 1);
-            }
+            };
 
             function getModuleName() {
                 return (ctrl.modulename == undefined || ctrl.modulename == null) ? null : ctrl.modulename;
@@ -220,19 +220,19 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                             $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
                             $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
                         }, 1)
-                    }
+                    };
                     ctrl.remove = function () {
                         $scope.complet = false;
                         $scope.broken = false;
                         $scope.isUploading = false;
                         ctrl.value = null;
                         ctrl.file = null;
-                    }
+                    };
 
                     //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
-            }
+            };
         },
         bindToController: true,
         template: function (element, attrs) {

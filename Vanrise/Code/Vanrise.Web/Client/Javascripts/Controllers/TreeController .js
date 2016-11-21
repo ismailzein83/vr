@@ -1,11 +1,11 @@
-﻿'use strict'
+﻿"use strict";
 
 var TreeController = function ($scope, $rootScope) {
- 
-    $scope.tree =  [
+
+    $scope.tree = [
         {
             label: "Routing", location: '', icon: 'glyphicon-certificate', children: [
-               { label: "Rule Management", location: '#/RouteRuleManager',children:[] },
+               { label: "Rule Management", location: '#/RouteRuleManager', children: [] },
                { label: "Route Manager", location: '' }
             ]
         },
@@ -34,19 +34,19 @@ var TreeController = function ($scope, $rootScope) {
                 { label: "Tree", location: '#/Tree' }
             ]
         }
-    ]
+    ];
     $scope.$on("tree View-show", function (e) {
         $rootScope.hisnav.push({
             name: 'tree View',
-            show:true
+            show: true
         });
     });
-   
+
     $scope.$on("tree View", function (e) {
 
     });
-   
-}
+
+};
 
 TreeController.$inject = ['$scope', '$rootScope'];
 

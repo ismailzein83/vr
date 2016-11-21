@@ -1,4 +1,4 @@
-﻿
+﻿'use strict';
 
 app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'PeriodEnum', function ($q, LogEntryTypeEnum, LabelColorsEnum, PeriodEnum) {
 
@@ -628,7 +628,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         if (entityType != undefined)
             title += entityType + ": " + entityTitle;
         else
-            title += entityTitle
+            title += entityTitle;
         return title;
     }
 
@@ -746,7 +746,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     };
 
     function trim(value, charlist) {
-        value = trimLeft(value, charlist)
+        value = trimLeft(value, charlist);
         return trimRight(value, charlist);
     };
     function getUploadedFileName(fileName)
@@ -767,7 +767,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     }
 
     function diffDays(date1, date2) {
-        date2.setHours(23)
+        date2.setHours(23);
         date2.setMinutes(59);
         date2.setSeconds(59);
         var timeDiff = Math.abs(date2.getTime() - date1.getTime());

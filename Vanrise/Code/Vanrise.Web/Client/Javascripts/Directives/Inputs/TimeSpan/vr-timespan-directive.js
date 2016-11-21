@@ -20,14 +20,14 @@
 
                 $scope.scopeModel.validateTimeOffset = function (value) {
                     return UtilsService.validateTimeOffset(value);
-                }                
+                };
             },
             compile: function (element, attrs) {
                 return {
                     pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',
@@ -39,7 +39,7 @@
                     isrequired = 'isrequired';
 
                 var timeSpan =
-                       '<vr-textbox label="{{ctrl.label}}" value="ctrl.value" ' + isrequired + ' customvalidate="scopeModel.validateTimeOffset(ctrl.value)"></vr-textbox>'
+                       '<vr-textbox label="{{ctrl.label}}" value="ctrl.value" ' + isrequired + ' customvalidate="scopeModel.validateTimeOffset(ctrl.value)"></vr-textbox>';
 
                 return timeSpan;
             }

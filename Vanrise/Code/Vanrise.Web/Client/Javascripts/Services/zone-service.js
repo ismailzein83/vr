@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 
 app.service('ZonesService', function (HttpService, MainService) {
 

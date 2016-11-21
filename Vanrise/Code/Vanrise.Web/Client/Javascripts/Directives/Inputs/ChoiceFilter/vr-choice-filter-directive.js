@@ -50,10 +50,10 @@ app.directive('vrChoiceFilter', [function () {
                             var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                             var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
                             $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth - $(window).scrollLeft(), backgroundColor: "#2f4f4f" });
-                            $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left - $(window).scrollLeft(), bordeBottomColor: "#2f4f4f" });    
+                            $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left - $(window).scrollLeft(), bordeBottomColor: "#2f4f4f" });
 
                         }, 1);
-                    }
+                    };
                     $scope.$watch("ctrl.isselected", function (value) {
                         if (ctrl.isSelected != value) {
                             if (value)

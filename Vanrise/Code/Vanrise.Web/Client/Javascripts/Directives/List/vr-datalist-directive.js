@@ -32,8 +32,8 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                 }
             };
             ctrl.getDataItemTitle = function (dataItem) {
-                console.log(typeof dataItem)
-            }
+                console.log(typeof dataItem);
+            };
             $scope.ondataitemclicked = function (dataItem) {
                 if (ctrl.readOnly)
                     return;
@@ -54,7 +54,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                         scope.viewScope = scope.viewScope.$parent;
                     }
                 }
-            }
+            };
         },
         template: function (element, attrs) {
 

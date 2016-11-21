@@ -31,12 +31,12 @@ app.directive('vrDatagridrows', [function () {
                     if (!scope.ctrl.rotateHeader)
                         rotateclass += "vr-datagrid-header-simple";
                     var parentScope = scope.$parent;
-                    while (parentScope != undefined) {     
+                    while (parentScope != undefined) {
                         if (parentScope.hasOwnProperty('isGridScope'))
                             drillDownLevel++;
                         parentScope = parentScope.$parent;
                     }
-                    scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel +rotateclass;
+                    scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel + rotateclass;
                     //console.log('drillDownLevel' + drillDownLevel);
 
                     var lastScrollTop;
@@ -47,13 +47,13 @@ app.directive('vrDatagridrows', [function () {
                         var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
 
                         if (scrollTop > lastScrollTop) {
-                            if (scrollPercentage > 80 && typeof dataGridCtrl.onScrolling == 'function') 
+                            if (scrollPercentage > 80 && typeof dataGridCtrl.onScrolling == 'function')
                                 dataGridCtrl.onScrolling();
                         }
                         lastScrollTop = scrollTop;
                     });
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return "/Client/Javascripts/Directives/DataGrid/vr-datagrid.html";

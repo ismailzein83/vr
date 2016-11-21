@@ -1,4 +1,5 @@
-﻿app.filter('vrtimeNoTimeZone', function () {
+﻿'use strict';
+app.filter('vrtimeNoTimeZone', function () {
     return function (val, offset) {
 
         if (val != null && val.length > 19) {

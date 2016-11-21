@@ -47,31 +47,31 @@
                     pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
                         var isUserChange;
-                        $scope.$watch('ctrl.value', function (newValue, oldValue) {                        
-                                if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
-                                    return;
-                                isUserChange = false;//reset the flag
-                                var arr = String(newValue).split("");
-                                var negativeArray = String(newValue).split("-");
-                                if (arr.length === 0) return;
-                                if (negativeArray.length > 2)
-                                    ctrl.value = oldValue;
-                                if (negativeArray.length > 1 && ctrl.minValue != undefined && ctrl.minValue >=0 )
-                                    ctrl.value = oldValue;
-                                if (arr.indexOf(".") > -1 )
-                                    ctrl.value = oldValue;
-                                if (arr.length === 0) return;
-                                if (arr.length === 1 && (arr[0] == '-')) return;
-                                //if (ctrl.maxValue != undefined && parseFloat(newValue) > ctrl.maxValue) {
-                                //    ctrl.value = oldValue;
-                                //}
-                                //if (ctrl.minValue != undefined && parseFloat(newValue) < ctrl.minValue) {
-                                //    ctrl.value = oldValue;
-                                //}
-                                if (isNaN(newValue)) {
-                                    ctrl.value = oldValue;
-                                }
-                            
+                        $scope.$watch('ctrl.value', function (newValue, oldValue) {
+                            if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
+                                return;
+                            isUserChange = false;//reset the flag
+                            var arr = String(newValue).split("");
+                            var negativeArray = String(newValue).split("-");
+                            if (arr.length === 0) return;
+                            if (negativeArray.length > 2)
+                                ctrl.value = oldValue;
+                            if (negativeArray.length > 1 && ctrl.minValue != undefined && ctrl.minValue >= 0)
+                                ctrl.value = oldValue;
+                            if (arr.indexOf(".") > -1)
+                                ctrl.value = oldValue;
+                            if (arr.length === 0) return;
+                            if (arr.length === 1 && (arr[0] == '-')) return;
+                            //if (ctrl.maxValue != undefined && parseFloat(newValue) > ctrl.maxValue) {
+                            //    ctrl.value = oldValue;
+                            //}
+                            //if (ctrl.minValue != undefined && parseFloat(newValue) < ctrl.minValue) {
+                            //    ctrl.value = oldValue;
+                            //}
+                            if (isNaN(newValue)) {
+                                ctrl.value = oldValue;
+                            }
+
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                                 if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
@@ -79,14 +79,14 @@
                                 }
                             }
                         });
-                       
+
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
                         var defaultcolor = '#666';
                         ctrl.upColor = defaultcolor;
                         ctrl.downColor = defaultcolor;
-                        if (attrs.upsign != undefined ) {
+                        if (attrs.upsign != undefined) {
                             if (ctrl.upsign == "critical")
                                 ctrl.upColor = '#ff0000';
                             else if (ctrl.upsign == "safe")
@@ -113,18 +113,18 @@
                             var avrege;
                             if (isNaN(parseFloat(ctrl.value))) {
                                 if (ctrl.maxValue != undefined) {
-                                    avrege =ctrl.maxValue ;
+                                    avrege = ctrl.maxValue;
                                 }
-                                 if (ctrl.minValue != undefined )
-                                    avrege = ctrl.minValue ;
+                                if (ctrl.minValue != undefined)
+                                    avrege = ctrl.minValue;
 
-                                 if (ctrl.minValue == undefined && ctrl.maxValue == undefined)
-                                     avrege = parseInt(0);
+                                if (ctrl.minValue == undefined && ctrl.maxValue == undefined)
+                                    avrege = parseInt(0);
 
-                                 if (ctrl.minValue != undefined && ctrl.maxValue != undefined)
-                                     avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
+                                if (ctrl.minValue != undefined && ctrl.maxValue != undefined)
+                                    avrege = (ctrl.maxValue + ctrl.minValue) / 2 + (((ctrl.maxValue + ctrl.minValue) / 2 % ctrl.stepValue));
 
-                                ctrl.value = avrege ;
+                                ctrl.value = avrege;
                                 ctrl.notifyUserChange();
 
                                 return;
@@ -156,7 +156,7 @@
                                 return;
                             }
                             var newvalue = parseFloat(ctrl.value) - ctrl.stepValue;
-                            if (ctrl.minValue != undefined &&  newvalue < ctrl.minValue)
+                            if (ctrl.minValue != undefined && newvalue < ctrl.minValue)
                                 return;
                             else
                                 ctrl.value = newvalue;
@@ -169,9 +169,9 @@
                         var getInputeStyle = function () {
                             var div = element.find('div[validator-section]')[0];
                             if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
-                            };
-                        }
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                            }
+                        };
                         getInputeStyle();
 
                         ctrl.adjustTooltipPosition = function (e) {
@@ -188,26 +188,26 @@
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                             }, 1);
-                        }
+                        };
 
                         ctrl.getNumericControlClass = function () {
                             var classes = '';
                             if (attrs.hint != undefined)
                                 classes += ' with-hint ';
-                            if(attrs.label != undefined)
+                            if (attrs.label != undefined)
                                 classes += ' with-label ';
                             return classes;
-                        }
+                        };
                         ctrl.tabindex = "";
                         setTimeout(function () {
                             if ($(element).hasClass('divDisabled') || $(element).parents('.divDisabled').length > 0) {
                                 ctrl.tabindex = "-1"
                             }
-                        }, 10)
+                        }, 10);
                         //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',

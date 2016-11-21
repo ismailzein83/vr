@@ -30,7 +30,7 @@
                 if ($attrs.loadmoredata != undefined)
                     loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);
 
-                var retrieveDataFunction
+                var retrieveDataFunction;
                 if ($attrs.dataretrievalfunction != undefined)
                     retrieveDataFunction = $scope.$parent.$eval($attrs.dataretrievalfunction);
 
@@ -65,7 +65,7 @@
                         else
                             ctrl.showgmenu = false;
                     }
-                }
+                };
 
                 setTimeout(function () {
                     $('.vr-grid-menu').parents('div').scroll(function () {
@@ -134,7 +134,7 @@
                             ctrl.showPager = true;
                         }
                     }
-                }
+                };
             }
 
         };
@@ -485,7 +485,7 @@
                 ctrl.switchColumnVisibility = function (colDef) {
                     colDef.isHidden = !colDef.isHidden;
                     calculateColumnsWidth();
-                }
+                };
 
                 ctrl.isExporting = false;
                 ctrl.onExportClicked = function () {
@@ -507,7 +507,7 @@
 
                 ctrl.showExportAction = function () {
                     return (attrs.enableautoexport != undefined) || this.onexport != undefined;
-                }
+                };
 
                 ctrl.viewSelectionChanged = function () {
                     calculateDataColumnsSectionWidth();
@@ -561,7 +561,7 @@
 
                 ctrl.getGridMenuActions = function () {
                     return ctrl.gridmenuactions != undefined ? ctrl.gridmenuactions : [];
-                }
+                };
 
                 ctrl.executeGridAction = function (menuAction) {
                     if (menuAction.onClicked != undefined) {
@@ -573,13 +573,12 @@
                     }
                 };
 
-                ctrl.getRowCSSClass = function(dataItem)
-                {
+                ctrl.getRowCSSClass = function (dataItem) {
                     if (ctrl.isdynamicrowstyle)
                         return getRowCSSClass(dataItem);
                     else
                         return dataItem.CssClass;
-                }
+                };
 
                 function getRowCSSClass(dataItem) {
                     if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
@@ -736,7 +735,7 @@
                     var itemsToAdd = [];//create a new array to avoid changing the original items
                     angular.forEach(items, function (itm) {
                         itemsToAdd.push(itm);
-                    })
+                    });
                     addBatchItemsToSource(itemsToAdd);
                 };
 
@@ -744,7 +743,7 @@
                     var itemsToAdd = [];//create a new array to avoid changing the original items
                     angular.forEach(items, function (itm) {
                         itemsToAdd.unshift(itm);
-                    })
+                    });
                     addBatchItemsToBeginSource(itemsToAdd);
                 };
 
@@ -789,18 +788,18 @@
                         // to rigth padding in old data loading methode in bi
                         var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                         if (ctrl.datasource.length < 24) {
-                            $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
+                            $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                             ctrl.headerStyle = {
                                 "padding-right": "0px"
-                            }
+                            };
                         }
 
                         else {
 
-                            $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
+                            $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                             ctrl.headerStyle = {
                                 "padding-right": getScrollbarWidth() + "px"
-                            }
+                            };
                         }
 
                     }
@@ -949,18 +948,18 @@
                                 var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                                 var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
                                 if (hasVerticalScrollbar) {
-                                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
+                                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                                     ctrl.headerStyle = {
                                         "padding-right": getScrollbarWidth() + "px"
-                                    }
+                                    };
 
                                 }
 
                                 else {
-                                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' })
+                                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                                     ctrl.headerStyle = {
                                         "padding-right": "0px"
-                                    }
+                                    };
                                 }
                             });
                         }
@@ -969,7 +968,7 @@
                 };
             }
             function isInModal() {
-                return ($(ctrl.el).find("#gridBodyContainer").parents('.modal-body').length > 0)
+                return ($(ctrl.el).find("#gridBodyContainer").parents('.modal-body').length > 0);
             }
 
             function getPageSize() {
@@ -1031,7 +1030,7 @@
 
                     return true;
 
-                }
+                };
                 ctrl.expandRow = function (dataItem) {
 
                     dataItem.expandableRowTemplate = expandableRowTemplate;
@@ -1162,7 +1161,7 @@
                             currentPage: 1,
                             totalDataCount: 0,
                             pageChanged: retrieveDataOnPaging
-                        }
+                        };
                         break;
                     case "PagingOnScroll":
                         definePagingOnScroll(scope, retrieveDataOnPaging);
@@ -1186,7 +1185,7 @@
                     retrieveDataResultKey = null;
                     
                     if (defaultSortByFieldName != undefined) {
-                        sortColumn = undefined
+                        sortColumn = undefined;
                     }
                     else {
                         for (var colIndex = 0; colIndex < ctrl.columnDefs.length && sortColumn == undefined; colIndex++) {

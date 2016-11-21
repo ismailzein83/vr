@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿"use strict";
 
 var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, UtilsService, LabelColorsEnum) {
 
@@ -37,20 +37,20 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
 
     $scope.logevent = function () {
         console.log('ng-click');
-        $scope.istrue=true;
+        $scope.istrue = true;
     };
-    $scope.doc =  {
-        fileId : 1
+    $scope.doc = {
+        fileId: 1
     };
     $scope.colorlist = [];
     for (var prop in LabelColorsEnum) {
         $scope.colorlist.push(LabelColorsEnum[prop]);
     }
-    console.log($scope.colorlist)
+    console.log($scope.colorlist);
     $scope.getColor = function () {
         return LabelColorsEnum.Info.color;
-    }
-    $scope.progress =[];
+    };
+    $scope.progress = [];
     $scope.progress.push(10);
     $scope.progress.push(20);
     $scope.progress.push(30);
@@ -106,7 +106,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
 
         });
 
-       
+
 
     };
     $scope.listData = [];
@@ -115,43 +115,43 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
         $scope.$apply(function () {
             $scope.effectiveOn2 = UtilsService.cloneDateTime($scope.effectiveOn);
         })
-    },2000)
-    $scope.headers = ["value","name"];
+    }, 2000);
+    $scope.headers = ["value", "name"];
     for (var i = 0 ; i < 5 ; i++) {
         $scope.listData[$scope.listData.length] = { value: i + 1, name: "test " + (i + 1) };
     }
-    $scope.itemsSortable = {  animation: 150 };
+    $scope.itemsSortable = { animation: 150 };
 
     $scope.addItem = function () {
         var item = {
             col1: "test " + ++current + "1",
             col2: "test " + current + "2",
-            col3: "test " + current + "3",
+            col3: "test " + current + "3"
         };
         $scope.gridData.push(item);
         gridApi.itemAdded(item);
-    }
+    };
 
     $scope.getCellcolor = function () {
-            var letters = '0123456789ABCDEF'.split('');
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color ;
-       
-    }
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+
+    };
     $scope.toggletime = function (e) {
-            var el = angular.element(e.currentTarget);
-            el.parent().data("DateTimePicker").show();
+        var el = angular.element(e.currentTarget);
+        el.parent().data("DateTimePicker").show();
 
-            $('.date-section').removeClass('in');
-            $('.time-section').addClass('in');
+        $('.date-section').removeClass('in');
+        $('.time-section').addClass('in');
 
-            $('.btn-switcher').removeClass("glyphicon-time");
-            $('.btn-switcher').addClass("glyphicon-calendar");
-           
-    }
+        $('.btn-switcher').removeClass("glyphicon-time");
+        $('.btn-switcher').addClass("glyphicon-calendar");
+
+    };
     var pathArray = location.href.split('/');
     var base = pathArray[0] + '//' + pathArray[2];
     $scope.filesAdded = [];
@@ -169,7 +169,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
         progress: function (e, data) {
             $scope.$apply(function () {
                 $scope.num = data.loaded / data.total * 100;
-                $scope.num2 = data.loaded / data.total * 100 ;
+                $scope.num2 = data.loaded / data.total * 100;
             });
         },
         change: function (e, data) {
@@ -182,7 +182,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
             //alert("Oups, une erreur  est survenue.");
         }
     });
-    $scope.toggledate = function (e) {      
+    $scope.toggledate = function (e) {
         var el = angular.element(e.currentTarget);
         el.parent().data("DateTimePicker").show();
 
@@ -192,7 +192,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
         $('.btn-switcher').addClass("glyphicon-time");
         $('.btn-switcher').removeClass("glyphicon-calendar");
 
-    }
+    };
     var gridApi;
     $scope.gridReady = function (api) {
         gridApi = api;
@@ -202,7 +202,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     $scope.choiceSelectionChanged = function () {
         //console.log($scope.testObj);
     };
-    $scope.groupeHeaders = [       
+    $scope.groupeHeaders = [
         { lable: "test 2", type: "leaf", rotated: true, position: "pulltop pullleft " },
         { lable: "www", type: "leaf", rotated: true, position: " pullleft " },
         { lable: "wfrwfwcvscdsw", type: "leaf", rotated: true, position: "pullbottom pullleft " },
@@ -220,13 +220,13 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     ];
     $scope.testValueChanged = function () {
         console.log("ali")
-    }
+    };
     var choicesApi;
     $scope.choicesReady = function (api) {
         choicesApi = api;
     };
     $scope.test = function () {
-       alert("test")
+        alert("test")
     };
     $scope.selectChoice = function () {
         //$scope.testObj.choiceSelectedIndex = 
@@ -259,20 +259,20 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
        }];
     $scope.treeReady = function (api) {
         api.refreshTree($scope.values);
-    }
-}
+    };
+};
 appControllers.controller('TestViewController', TestViewController);
 
 
 app.directive("getStyle",function(){
-    return{
+    return {
         link: function (scope, element, attrs) {
-          
+
 
 
 
             setTimeout(function () {
-              
+
                 var dom = element[0];
                 var selw = $(element).width();
                 var parent = $(element).parent();
@@ -281,28 +281,40 @@ app.directive("getStyle",function(){
                 var h = dom.scrollWidth;
                 var w = dom.scrollHeight;
                 var pos = [];
-                if (attrs.position != undefined && attrs.position!="") {
+                if (attrs.position != undefined && attrs.position != "") {
                     pos = attrs.position.split(" ");
 
                 }
-                if (pos.indexOf("pullbottom") > -1 )
-                    element[0].style.top = (100 * ((ph - 33))) / ph + "%"; // bottom formular
-                else if (pos.indexOf("pulltop") > -1)
-                    element[0].style.top = (100 * ((ph - (ph - h) ) - 33)) / ph + "%"; //  top formula 
-                else
-                    element[0].style.top = (100 * ((ph - 33) - ((ph - h) / 2))) / ph + "%"; // center  formula
+                if (pos.indexOf("pullbottom") > -1) {
+                    var str1=(100 * ((ph - 33))) / ph;
+                    var str2 ="%";
+                    element[0].style.top = str1.concat(str2); // bottom formular
+                }
+                else if (pos.indexOf("pulltop") > -1) {
+                    var str1 = (100 * ((ph - (ph - h)) - 33)) / ph;
+                    var str2 = "%";
+                    element[0].style.top = str1.concat(str2);//  top formula 
+                }
+                else {
+                    var str1 = (100 * ((ph - 33) - ((ph - h) / 2))) / ph;
+                    var str2 = "%";
+                    element[0].style.top = str1.concat(str2);// center  formula
+                }
 
-
-
-                if (pos.indexOf("pullrigth") > -1)
-                    element[0].style.left = (100 * ((pw) - (w))) / pw + "%";
-
-                else if (pos.indexOf("pullleft") > -1)
-                        element[0].style.left =  "0%";
-                else
-                   element[0].style.left = (100 * ((pw / 2) - (w / 3))) / pw + "%";
-
-            }, 1)
+                if (pos.indexOf("pullrigth") > -1) {
+                    var str1 = (100 * ((pw) - (w))) / pw;
+                    var str2 = "%";
+                    element[0].style.left = str1.concat(str2);
+                }
+                else if (pos.indexOf("pullleft") > -1){
+                    element[0].style.left = "0%";
+                }   
+                else {
+                    var str1 = (100 * ((pw / 2) - (w / 3))) / pw;
+                    var str2 = "%";
+                    element[0].style.left = str1.concat(str2);
+                }
+            }, 1);
 
             //setTimeout(function () {
 
@@ -335,7 +347,7 @@ app.directive("getStyle",function(){
             //parent[0].style.backgroundColor = scope.getCellcolor();
 
 
-            
-        }        
-    }      
+
+        }
+    };
 });

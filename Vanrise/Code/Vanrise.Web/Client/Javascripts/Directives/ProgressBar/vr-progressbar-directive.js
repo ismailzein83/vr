@@ -22,7 +22,7 @@ app.directive('vrProgressbar', [function ($compile) {
         bindToController: true,
         link: function preLink($scope, iElement, iAttrs) {
             var ctrl = $scope.ctrl;
-            var template = getTemplate(ctrl)
+            var template = getTemplate(ctrl);
            iElement.replaceWith(template);
 
         },
@@ -51,9 +51,9 @@ app.directive('vrProgressbar', [function ($compile) {
                   +'</div>';
         }
         else if (values.length>0) {
-            var template = '<div class="' + gridClass + ' progress" style="margin-bottom:0px;padding:0px;">'
+            var template = '<div class="' + gridClass + ' progress" style="margin-bottom:0px;padding:0px;">';
             for (var i = 0; i < values.length; i++) {
-                template += '<div  class="' + gridCellTextClass + ' progress-bar ' + getProgressColor(i) + ' active" style="width:'+values[i]+'%" title="'+values[i]+'%"></div>'
+                template += '<div  class="' + gridCellTextClass + ' progress-bar ' + getProgressColor(i) + ' active" style="width:' + values[i] + '%" title="' + values[i] + '%"></div>';
             }
             template += "</div>";
             return template;

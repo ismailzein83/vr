@@ -6,7 +6,7 @@ app.directive('vrValidator', ['$compile', 'UtilsService', function ($compile, Ut
         require: '?^^vrValidationGroup',
         scope: false,
         controller: function ($scope, $element, $attrs) {
-            
+
         },
         compile: function (tElement, tAttrs) {
             var showTooltipVariableName = UtilsService.generateJSVariableName();
@@ -23,14 +23,14 @@ app.directive('vrValidator', ['$compile', 'UtilsService', function ($compile, Ut
                     if (parentValidationGroupCtrl != null) {
                         var validate = function () {
                             return $scope.$eval(iAttrs.validate);
-                        }
+                        };
                         var validator = parentValidationGroupCtrl.addValidator(validate);
                         $scope.$on('$destroy', function () {
                             parentValidationGroupCtrl.removeValidator(validator);
                         });
                     }
                 }
-            }
+            };
         }
     };
-}])
+}]);

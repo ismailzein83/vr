@@ -30,7 +30,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -46,17 +46,17 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         {
             periodSection = '<vr-columns width="' + attrs.width + '">'
                           + '<vr-period-selector on-ready="scopeModel.onPeriodDirectiveReady" selectedvalues="ctrltimerange.period" onselectionchanged="scopeModel.periodSelectionChanged"></vr-period-selector>'
-                          + '</vr-columns>'
-            onblurchanged = ' onvaluechanged="scopeModel.onBlurChanged" '
+                          + '</vr-columns>';
+            onblurchanged = ' onvaluechanged="scopeModel.onBlurChanged" ';
         }
 
-        return   periodSection
+        return periodSection
                + '<vr-columns width="' + attrs.width + '">'
                + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="scopeModel.validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                + '<vr-columns width="' + attrs.width + '">'
                + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="scopeModel.validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
-               + '</vr-columns>'
+               + '</vr-columns>';
     }
 
     function timeRangeCtor(ctrl, $scope, $attrs) {
@@ -68,45 +68,41 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             var date;
             $scope.scopeModel = {};
             $scope.scopeModel.validateDateTime = function () {
-                if (ctrl.customvalidation != null && VRValidationService.validateTimeRange(ctrl.from, ctrl.to)== null)
+                if (ctrl.customvalidation != null && VRValidationService.validateTimeRange(ctrl.from, ctrl.to) == null)
                     return ctrl.customvalidation();
                 else
-                  return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
-            }
+                    return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
+            };
 
-            $scope.scopeModel.onPeriodDirectiveReady = function (api)
-            {
+            $scope.scopeModel.onPeriodDirectiveReady = function (api) {
                 periodDirectiveAPI = api;
                 periodReadyPromiseDeferred.resolve();
                 defineAPI();
-            }
+            };
 
             $scope.scopeModel.periodSelectionChanged = function () {
-                if (periodSelectedPromiseDeferred == undefined)
-                {
+                if (periodSelectedPromiseDeferred == undefined) {
                     if (ctrl.period != undefined && ctrl.period.value != -1) {
 
                         date = ctrl.period.getInterval();
                         ctrl.from = date.from;
                         ctrl.to = date.to;
-                       
+
                     }
                 }
-               else
-                {
+                else {
                     periodSelectedPromiseDeferred.resolve();
                 }
-                
-            }
+
+            };
 
             var customize = {
                 value: -1,
                 description: "Customize"
-            }
+            };
 
             $scope.scopeModel.onBlurChanged = function () {
-                if (ctrl.period != undefined && ctrl.period.value != -1)
-                {
+                if (ctrl.period != undefined && ctrl.period.value != -1) {
                     date = ctrl.period.getInterval();
                     var from = UtilsService.getShortDate(ctrl.from);
                     var oldFrom = UtilsService.getShortDate(date.from);
@@ -115,8 +111,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     if (from != oldFrom || to != oldTo)
                         ctrl.period = customize;
                 }
-               
-            }
+
+            };
 
             defineAPI();
         }
@@ -137,8 +133,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 periodSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 periodReadyPromiseDeferred.promise.then(function () {
                     var payloadPeriod = {
-                            selectedIds: (payload && payload.period != undefined) ? payload.period : (ctrl.period != undefined ? ctrl.period.value:undefined) 
-                        };
+                        selectedIds: (payload && payload.period != undefined) ? payload.period : (ctrl.period != undefined ? ctrl.period.value : undefined)
+                    };
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
                 });
 
@@ -157,8 +153,8 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     }
                     periodSelectedPromiseDeferred = undefined;
 
-                })
-            }
+                });
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

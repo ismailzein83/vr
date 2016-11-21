@@ -49,11 +49,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     $scope.getStyle = function () {
 
         if ($("div[ng-cloak]").length > 0) {
-            return "{'display':'block'}"
+            return "{'display':'block'}";
         }
-        else 
-            return "{'display':'none'}"
-    }
+        else
+            return "{'display':'none'}";
+    };
 
     $('#dt1').datetimepicker();
     VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
@@ -76,29 +76,29 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $scope.toogled = !$scope.toogled;
 
 
-    }
+    };
     $scope.getPageName = function () {
         if ($scope.currentPage != null)
             return $scope.currentPage.Name;
         else
             return "Home Page";
-    }
+    };
     $scope.pinned = true;
     $scope.pinpanel = function () {
 
         $scope.pinned = !$scope.pinned;
 
 
-    }
+    };
     $scope.showToogled = function () {
         $scope.toogled = true;
         $rootScope.$broadcast("menu-full");
-    }
+    };
     $scope.hideToogled = function () {
-        $scope.toogled = false;       
+        $scope.toogled = false;
         $rootScope.$broadcast("menu-collapsed");
-        
-    }
+
+    };
     var timer;
     $scope.show = false;
     $scope.mouseover = function () {
@@ -121,7 +121,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     $scope.logout = function () {
         SecurityService.deleteAccessCookie();
         SecurityService.redirectToLoginPage(true);
-    }
+    };
 
     $scope.showMenu = function (e) {
         var $this = angular.element(e.currentTarget);
@@ -130,7 +130,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $('.dropdown-toggle', $this).dropdown('toggle');
             $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
         }
-    }
+    };
     $scope.hideMenu = function (e) {
         var $this = angular.element(e.currentTarget);
         dropdownHidingTimeoutHandlerc = setTimeout(function () {
@@ -140,7 +140,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             }
         }, 200);
 
-    }
+    };
  
     $scope.openSupportModal = function () {
 
@@ -148,33 +148,33 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Support";
-           
+
         };
         VRModalService.showModal('/Client/Modules/Common/Views/Support.html', null, modalSettings);
-    }
+    };
 
     $scope.openResetPasswordModal = function () {
 
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Change my Password";           
+            modalScope.title = "Change my Password";
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/ChangePassword.html', null, modalSettings);
-    }
+    };
 
     $scope.openEditProfileModal = function () {
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit my profile";
-            modalScope.onProfileUpdated = function (response) {              
+            modalScope.onProfileUpdated = function (response) {
                 $scope.userDisplayName = response.Name;
-            }
+            };
 
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
-    }
+    };
    
     $scope.menuItemsCurrent = null;
    
@@ -186,7 +186,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else {
             $scope.menuItemsCurrent = item;
         }
-    }
+    };
 
    
     $scope.menusubItemsCurrent = null;
@@ -197,7 +197,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else {
             $scope.menusubItemsCurrent = o;
         }
-    }
+    };
    
     $scope.parent = null;
     $scope.child = null;
@@ -210,12 +210,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $scope.parent = p;
         $scope.child = c;
 
-    }
+    };
     $rootScope.hisnav = [];
     $rootScope.showsubview = function (page) {
         $rootScope.$broadcast(page + "-show");
 
-    }
+    };
     $rootScope.hidesubview = function (page, $index) {
         if ($index == 0) {
             $rootScope.hisnav.length = 0;
@@ -225,51 +225,51 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }
         setTimeout(function () {
             $rootScope.$broadcast(page);
-        }, 10)
+        }, 10);
 
-    }
+    };
     $rootScope.ishideView = function (val) {
-        var obj = $scope.findExisteObj($rootScope.hisnav, val, 'name')
+        var obj = $scope.findExisteObj($rootScope.hisnav, val, 'name');
         if (obj != null) {
             return obj.show;
         }
         else return false;
 
-    }
+    };
 
     $rootScope.toggletime = function (e) {
-     //   e.preventDefault();
-     //   e.stopPropagation();
-        $('.datetime-controle').data("DateTimePicker").toggle()
+        //   e.preventDefault();
+        //   e.stopPropagation();
+        $('.datetime-controle').data("DateTimePicker").toggle();
         $('.date-section').removeClass('in');
         $('.time-section').addClass('in');
-    }
+    };
 
     $scope.clock = ""; // initialise the time variable
-    $scope.tickInterval = 1000 //ms
+    $scope.tickInterval = 1000; //ms
     
     var tick = function () {
-        $scope.clock = Date.now() // get the current time
+        $scope.clock = Date.now(); // get the current time
         setTimeout(tick, $scope.tickInterval); // reset the timer
-    }
+    };
     setTimeout(tick, $scope.tickInterval);
 
     var allMenuItems = [];   
     VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
-       
+
         angular.forEach(response, function (value, key, itm) {
             value.keyclass = key % 16;
             value.isSelected = false;
             value.parent = null;
             allMenuItems.push(value);
             matchParentNode(value);
-          
-        });    
+
+        });
         $scope.menuItems = response;
         if (currentURL != undefined)
             setSelectedMenuFromURL();
         $scope.spinner = false;
-    })
+    });
     
     function matchParentNode(obj) {
        
@@ -336,7 +336,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     $scope.operatorAccountSelectionOption = 1;   
     var numberReg = /^\d+$/;
     $scope.isNumber = function (s) {
-        return String(s).search(numberReg) != -1
+        return String(s).search(numberReg) != -1;
     };
     $scope.dateToString = function (date) {
         var dateString = '';
@@ -355,7 +355,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             dateString += "/" + date.getFullYear();
         }
         return dateString;
-    }
+    };
     var dateReg = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/((199\d)|([2-9]\d{3}))$/;
     $scope.isDate = function (s) {
         var d = "";
@@ -388,8 +388,8 @@ angular.module('mainModule')
 .config([
     'datetimepickerProvider',
     function (datetimepickerProvider) {
-	    datetimepickerProvider.setOptions({
-		    locale: 'en'
-	    });
+        datetimepickerProvider.setOptions({
+            locale: 'en'
+        });
     }
-])
+]);

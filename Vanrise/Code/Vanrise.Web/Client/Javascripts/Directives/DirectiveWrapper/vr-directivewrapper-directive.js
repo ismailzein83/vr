@@ -40,7 +40,7 @@ app.directive('vrDirectivewrapper', ['$compile', function ($compile) {
                             cloneScope.$destroy();
                             cloneScope = null;
                         }
-                        setTimeout(function(){
+                        setTimeout(function () {
                             cloneScope = $scope.$new();
                             iElem.html(newElement);
                             $compile(iElem.contents())(cloneScope);
@@ -49,7 +49,7 @@ app.directive('vrDirectivewrapper', ['$compile', function ($compile) {
 
 
                 }
-            }
+            };
         }
 
     };

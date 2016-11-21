@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 var serviceObj = function (BaseAPIService) {
 
     return ({
@@ -8,10 +8,10 @@ var serviceObj = function (BaseAPIService) {
     function Get() {
         return BaseAPIService.get("/api/Values/Get",
             {
-                
+
             });
     }
-}
+};
 
 serviceObj.$inject = ['BaseAPIService'];
 appControllers.service('ValuesAPIService', serviceObj);

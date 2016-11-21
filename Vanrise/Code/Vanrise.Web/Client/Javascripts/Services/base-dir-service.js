@@ -143,7 +143,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
 
         ctrl.getErrorObject = function () {
             return formCtrl[elementName].$error;
-        }
+        };
 
         ctrl.isVisibleTooltip = function () {
             if (isValidElem()) return false;
@@ -154,7 +154,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
             if (isValidElem()) return validationClass.valid;
 
             return validationClass.invalid;
-        }
+        };
 
 
     }

@@ -190,5 +190,5 @@ function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenu
 
     return {
         setDrillDownExtensionObject: setDrillDownExtensionObject
-    }
+    };
 }

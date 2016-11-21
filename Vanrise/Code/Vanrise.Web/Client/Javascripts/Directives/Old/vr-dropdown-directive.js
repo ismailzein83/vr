@@ -1,4 +1,4 @@
-﻿
+﻿'use strict';
 app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMessagesEnum' , function (DropdownService, BaseDirService,ValidationMessagesEnum) {
 
     var directiveDefinitionObject = {
@@ -136,7 +136,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
             if (attrs.customvalidate !== undefined) {
                 angular.element(element.children()[0]).attr('vr-validation-custom', 'ctrl.customvalidate');
             }
-            setTimeout(function () {               
+            setTimeout(function () {
                 $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
                     $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                 });
@@ -144,7 +144,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
                 $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function (e) {
                     $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                 });
-            }, 100)
+            }, 100);
             setTimeout(function () {
                 //alert($('.drop-down-inside-modal').closest('.modal-body').length)
                 if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
@@ -173,7 +173,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
                         fixDropdownPosition();
                     });
                 }
-            }, 1000)
+            }, 1000);
 
            
           
@@ -186,22 +186,22 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
 
                     $scope.clearDatasource = function () {
                         if (ctrl.options.datasource == undefined) return;
-                        ctrl.options.datasource =[];
+                        ctrl.options.datasource = [];
                         ctrl.options.datasource.length = 0;
-                        };
+                    };
 
                     $scope.clearAllSelected = function (e) {
                         ctrl.muteAction(e);
                         ctrl.options.lastselectedvalue = '';
-                        ctrl.options.selectedvalues =[];
+                        ctrl.options.selectedvalues = [];
                         ctrl.options.selectedvalues.length = 0;
-                        };
+                    };
 
                     var selectval = function (e, item) {
 
                         if (ctrl.singleSelection()) {
                             ctrl.options.lastselectedvalue = '';
-                            ctrl.options.selectedvalues =[];
+                            ctrl.options.selectedvalues = [];
                             ctrl.options.selectedvalues.length = 0;
                             ctrl.options.selectedvalues.push(item);
                         }
@@ -211,30 +211,31 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
                             try {
                                 index = BaseDirService.findExsite(ctrl.options.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
                             }
-                            catch (ex) { 
+                            catch (ex) {
 
                             }
                             if (index >= 0)
                                 ctrl.options.selectedvalues.splice(index, 1);
-                        else
+                            else
                                 ctrl.options.selectedvalues.push(item);
-                                }
-                                };
+                        }
+                    };
 
                     $scope.selectValue = function (e, item) {
                         selectval(e, item);
                         ctrl.options.lastselectedvalue = item;
                         if (typeof (ctrl.onselectionchange()) !== "undefined") {
-                            var item = ctrl.onselectionchange() (ctrl.options.selectedvalues, ctrl.options.lastselectedvalue, ctrl.options.datasource);
+                            var item = ctrl.onselectionchange()(ctrl.options.selectedvalues, ctrl.options.lastselectedvalue, ctrl.options.datasource);
                             if (item !== undefined) {
                                 ctrl.options.lastselectedvalue = item;
                                 selectval(null, item);
                             }
 
-            }
+                        }
                     };
 
-                    var validationClass = { invalid : "required-inpute", valid: ''
+                    var validationClass = {
+                        invalid: "required-inpute", valid: ''
                     };
                     var index = -1;
 
@@ -242,11 +243,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
                         if (iAttrs.isrequired !== undefined || iAttrs.customvalidate !== undefined)
                             return formCtrl[iAttrs.id].$valid;
                         return true;
-                        };
-                    
-                    $scope.getErrorObject = function() {
+                    };
+
+                    $scope.getErrorObject = function () {
                         return formCtrl[iAttrs.id].$error;
-                    }
+                    };
 
                     $scope.isvisibleTooltip = function () {
                         if (isValidElem()) return false;
@@ -259,33 +260,33 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
 
                         return validationClass.invalid;
 
-                            //if (ctrl.options.validationGroup == undefined) {
-                            //    ctrl.options.validationGroup = [];
-                            //    index = ctrl.options.validationGroup.push(isvalid) - 1;
-                            //}
-                            //else {
-                            //    if (index != -1)
-                            //        ctrl.options.validationGroup[index] = isvalid;
-                            //    else
-                //        index = ctrl.options.validationGroup.push(isvalid) - 1;
-                            //}
+                        //if (ctrl.options.validationGroup == undefined) {
+                        //    ctrl.options.validationGroup = [];
+                        //    index = ctrl.options.validationGroup.push(isvalid) - 1;
+                        //}
+                        //else {
+                        //    if (index != -1)
+                        //        ctrl.options.validationGroup[index] = isvalid;
+                        //    else
+                        //        index = ctrl.options.validationGroup.push(isvalid) - 1;
+                        //}
 
-                }
+                    };
 
                     $scope.search = function () {
                         $scope.clearDatasource();
-                        if (ctrl.filtername.length > (ctrl.limitcharactercount -1)) {
+                        if (ctrl.filtername.length > (ctrl.limitcharactercount - 1)) {
                             ctrl.showloading = true;
-                            ctrl.onsearch() (ctrl.filtername).then(function (items) {
+                            ctrl.onsearch()(ctrl.filtername).then(function (items) {
                                 ctrl.options.datasource = items;
                                 ctrl.showloading = false;
-                    }, function (msg) {
-                                    console.log(msg);
-                        });
-                    }
-                };
-        }
-            }
+                            }, function (msg) {
+                                console.log(msg);
+                            });
+                        }
+                    };
+                }
+            };
         },
             templateUrl: function (element, attrs) {
                 if (attrs.type == undefined) return DropdownService.dTemplate;

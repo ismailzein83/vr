@@ -54,31 +54,30 @@
                             var s = parseInt(ctrl.value.sheet);
 
                             if (ctrl.onSelect != null)
-                                ctrl.onSelect(a,b,s);                       
+                                ctrl.onSelect(a, b, s);
 
-                        }
+                        };
 
                         $scope.updateRange = function (r, c, s) {
                             if (ctrl.readOnly)
                                 return;
 
-                            if (r != undefined || c != undefined || s != undefined)
-                            {
+                            if (r != undefined || c != undefined || s != undefined) {
                                 ctrl.value = {
                                     row: r,
                                     col: c,
                                     sheet: s
-                                }
+                                };
                             }
-                           
+
                             if (ctrl.onUpdate != null)
                                 ctrl.onUpdate(r, c, s);
 
-                        }
+                        };
                         ctrl.remove = function () {
-                          
+
                             ctrl.value = null;
-                        }
+                        };
                         ctrl.notifyUserChange = function () {
                             isUserChange = true;
                         };
@@ -90,9 +89,9 @@
                         var getInputeStyle = function () {
                             var div = element.find('div[validator-section]')[0];
                             if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
                             };
-                        }
+                        };
                         getInputeStyle();
 
                         ctrl.adjustTooltipPosition = function (e) {
@@ -109,13 +108,13 @@
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                             }, 1);
-                        }
+                        };
 
 
                         //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',
@@ -128,7 +127,7 @@
                 if (attrs.label != undefined)
                     labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
 
-                var rows = 3
+                var rows = 3;
                 if (attrs.rows != undefined)
                     rows = attrs.rows;
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
@@ -145,7 +144,7 @@
                         + '</div>'
                         + '</vr-validator>'
                         + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
-                    + '</div>'
+                + '</div>';
 
                 return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }

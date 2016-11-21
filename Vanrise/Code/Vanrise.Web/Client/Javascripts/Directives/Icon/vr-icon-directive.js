@@ -18,7 +18,7 @@ app.directive('vrIcon', [function ($compile) {
         'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false }, //#37c737
         'explicit': { value: 'Client/Images/explicit.png', isimage: true },
         'inherited': { value: 'Client/Images/inherited.png', isimage: true }
-    }
+    };
 
     var directiveDefinitionObject = {
 
@@ -47,7 +47,7 @@ app.directive('vrIcon', [function ($compile) {
         bindToController: true,
         link: function preLink($scope, iElement, iAttrs) {
             var ctrl = $scope.ctrl;
-            var template = getTemplate(ctrl, iAttrs)
+            var template = getTemplate(ctrl, iAttrs);
             iElement.replaceWith(template);
 
         },
@@ -63,14 +63,14 @@ app.directive('vrIcon', [function ($compile) {
         var containerstyle = "";
         if (attr.inline != undefined)
             containerstyle = "display:inline-block";
-        var tooltip = ctrl.tooltip != undefined ? ctrl.tooltip : ctrl.icontype
+        var tooltip = ctrl.tooltip != undefined ? ctrl.tooltip : ctrl.icontype;
 
         var template = '';
         if (ctrl.icon.isimage) {
-            template += '<div style="text-align: left;' + containerstyle + '"><img style="width:20px;height:20px" title="' + tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
+            template += '<div style="text-align: left;' + containerstyle + '"><img style="width:20px;height:20px" title="' + tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>';
         }
         else
-            template += '<div style="text-align: left;' + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '" title="' + tooltip + '" /></div>'
+            template += '<div style="text-align: left;' + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '" title="' + tooltip + '" /></div>';
 
         return template;
     }

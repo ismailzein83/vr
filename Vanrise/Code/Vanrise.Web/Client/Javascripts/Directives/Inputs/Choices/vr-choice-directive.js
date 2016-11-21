@@ -47,7 +47,7 @@ app.directive('vrChoice', ['UtilsService', function (UtilsService) {
                         }
                     });
                 }
-            }
+            };
         },
         template: '<label class="hand-cursor" ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude></label>'
     };

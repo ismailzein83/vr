@@ -42,7 +42,7 @@ app.directive('vrTimeformat', ['UtilsService', '$compile', 'VRModalService', fun
 
                     });
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTamplate(attrs);

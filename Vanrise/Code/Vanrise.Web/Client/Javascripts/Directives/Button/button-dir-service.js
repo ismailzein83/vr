@@ -191,64 +191,64 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 return {
                     text: 'Move',
                     class: 'glyphicon glyphicon-move'
-                }
+                };
             case 'Ranking':
                 return {
                     text: 'Ranking',
                     class: 'glyphicon glyphicon-move'
-                }
+                };
             case 'Pricing':
                 return {
                     text: 'Pricing',
                     class: "glyphicon  glyphicon-edit"
-                }
+                };
             case 'Apply':
                 return {
                     text: 'Apply',
                     class: "glyphicon glyphicon-ok-circle"
-                }
+                };
 
             case 'Split':
                 return {
                     text: 'Split',
                     class: "glyphicon glyphicon-resize-full"
-                }
+                };
 
             case 'Merge':
                 return {
                     text: 'Merge',
                     class: "glyphicon glyphicon-resize-small"
-                }
+                };
             case 'Compile':
                 return {
                     text: 'Compile',
                     class: "glyphicon glyphicon-tasks"
-                }
+                };
             case 'SelectAll':
                 return {
                     text: 'Select All',
                     class: "glyphicon glyphicon-check"
-                }
-        	case 'DeselectAll':
-        		return {
-        			text: 'Deselect All',
-        			class: "glyphicon glyphicon-unchecked"
-        		}
+                };
+            case 'DeselectAll':
+                return {
+                    text: 'Deselect All',
+                    class: "glyphicon glyphicon-unchecked"
+                };
             case 'Export':
                 return {
                     text: 'Export',
                     class: "glyphicon glyphicon-download"
-                }
+                };
             case "Continue":
                 return {
                     text: "Continue",
                     class: "glyphicon  glyphicon-play"
-                }
+                };
             case "Stop":
                 return {
                     text: "Stop",
                     class: "glyphicon  glyphicon-stop"
-                }
+                };
             case "End":
                 return {
                     text: "End",
@@ -288,32 +288,32 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 return {
                     text: 'Test Conversion',
                     class: "glyphicon glyphicon-check"
-                }
+                };
             case 'GenerateInvoice':
                 return {
                     text: 'Generate Invoice',
                     class: "glyphicon glyphicon-retweet"
-                }
+                };
             case 'Analyze':
                 return {
-                	text: 'Analyze',
+                    text: 'Analyze',
                     class: "glyphicon glyphicon-retweet"
-                }
+                };
             case 'Preview':
                 return {
                     text: 'Preview',
                     class: "glyphicon glyphicon-eye-open"
-                }
+                };
             case 'SendEmail':
                 return {
                     text: 'Send Email',
                     class: "glyphicon glyphicon-envelope"
-                }
+                };
             case 'ExcludeAll':
                 return {
                     text: 'Exclude All',
                     class: "glyphicon glyphicon-eject"
-                }
+                };
         	case "Load":
         		return {
         			text: "Load",

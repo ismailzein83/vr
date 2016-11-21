@@ -21,11 +21,11 @@ app.directive('vrValidation', ['ValidationService', 'BaseDirService', function (
                     var options = scope.$eval(iAttrs.options);
                     //console.log(options);
                     var validationElement = angular.element(iElem[0].querySelector('.validate-element'));
-                   
+
 
                     validationElement.bind('blur', function () {
                         options = scope.$eval(iAttrs.options);
-                       // console.log(options);
+                        // console.log(options);
                         if (options.required && ValidationService.isEmpty(options.selectedvalues))
                             validationElement.toggleClass('required-inpute');
                     });
@@ -48,7 +48,7 @@ app.directive('vrValidation', ['ValidationService', 'BaseDirService', function (
 
 
                 }
-            }
+            };
         }
     };
 

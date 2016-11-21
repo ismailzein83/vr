@@ -17,7 +17,7 @@ app.directive('vrValidationEmail', function () {
                     ctrlModel.$setValidity('invalidemail', true);
                     return '';
                 }
-            }
+            };
             ctrlModel.$parsers.unshift(validate);
             ctrlModel.$formatters.push(validate);
         }

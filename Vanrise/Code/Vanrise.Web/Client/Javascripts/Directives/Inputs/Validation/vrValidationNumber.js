@@ -13,7 +13,7 @@ app.directive('vrValidationNumber', function () {
                     var negativeArray = String(viewValue).split("-");
                     var validmax = (scope.ctrl.maxvalue != undefined) ? parseFloat(viewValue) <= scope.ctrl.maxvalue : true;
                     var validmin = (scope.ctrl.minvalue != undefined) ? parseFloat(viewValue) >= scope.ctrl.minvalue : true;
-                    var validnegprec = viewValue.tirm() == '-' ? true : false;                 
+                    var validnegprec = viewValue.tirm() == '-' ? true : false;
 
                     ctrlModel.$setValidity('invalidnumber', validmin && validmax && validmaxprec && validnegprec);
                     return viewValue;
@@ -24,7 +24,7 @@ app.directive('vrValidationNumber', function () {
                 }
 
 
-            }
+            };
             ctrlModel.$parsers.unshift(validate);
             ctrlModel.$formatters.push(validate);
         }

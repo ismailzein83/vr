@@ -34,7 +34,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -49,7 +49,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
 
         if (attrs.ismultipleselection != undefined) {
             label = "Periods";
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         }
         else if (attrs.hideremoveicon != undefined) {
             hideremoveicon = "hideremoveicon";
@@ -74,11 +74,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
-            }
-            api.getData = function()
-            {
+            };
+            api.getData = function () {
                 return ctrl.selectedvalues;
-            }
+            };
             api.load = function (payload) {
                 var selectedIds;
                 if (payload != undefined) {
@@ -91,7 +90,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
                 }
 
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

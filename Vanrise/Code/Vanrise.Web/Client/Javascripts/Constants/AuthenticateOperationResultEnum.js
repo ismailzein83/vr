@@ -1,5 +1,4 @@
-﻿'use strict';
-app.constant('AuthenticateOperationResultEnum', {
+﻿app.constant('AuthenticateOperationResultEnum', {
     Succeeded: { value: 0, description: "Succeeded" },
     Failed: { value: 1, description: "Failed" },
     Inactive: { value: 2, description: "Inactive" },

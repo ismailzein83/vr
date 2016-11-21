@@ -1,5 +1,4 @@
-﻿'use strict';
-app.constant('TimeFormateTemplatesEnum', {
+﻿app.constant('TimeFormateTemplatesEnum', {
     MMddyyy: { value: 0, description: "MM/dd/yyyy (ex: 08/22/2006)", expression: "MM/dd/yyyy" },
     ddddddMMMMyyyy: { value: 1, description: "dddd, dd MMMM yyyy (ex: Tuesday, 22 August 2006)", expression: "dddd, dd MMMM yyyy" },
     ddddddMMMMyyyyHHmm: { value: 2, description: "dddd, dd MMMM yyyy HH:mm (ex: Tuesday, 22 August 2006 06:30)", expression: "dddd, dd MMMM yyyy HH:mm" },

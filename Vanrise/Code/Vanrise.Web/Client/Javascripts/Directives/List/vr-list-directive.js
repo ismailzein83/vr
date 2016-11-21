@@ -20,7 +20,7 @@ app.directive('vrList', [ 'MultiTranscludeService', function ( MultiTranscludeSe
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function () {
             

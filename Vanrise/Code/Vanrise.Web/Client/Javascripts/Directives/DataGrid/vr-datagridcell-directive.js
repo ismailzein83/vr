@@ -1,4 +1,4 @@
-﻿
+﻿'use strict';
 app.directive('vrDatagridcell', ['$compile', function ($compile) {
     var directiveDefinitionObject = {
 
@@ -15,7 +15,7 @@ app.directive('vrDatagridcell', ['$compile', function ($compile) {
 
             $element.html(html);
             $compile($element.contents())($scope);
-        },
+        }
 
     };
 

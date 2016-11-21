@@ -18,7 +18,7 @@ app.directive('vrDirectivetabs', ['UtilsService', function (UtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: '/Client/Javascripts/Directives/Tabs/Templates/DirectiveTabsTemplate.html'
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_ExcelConversion_ExcelAPIService) {
-   
+app.directive('vrExcelWs', ["VR_ExcelConversion_ExcelAPIService", function (VR_ExcelConversion_ExcelAPIService) {
+
     return {
         restrict: 'E',
         scope: {
@@ -13,21 +13,21 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
         template: "<div></div>",
         link: function (scope, elem, attrs) {
             var data = [];
-          
+
 
             $(elem).handsontable({
-                 rowHeaders: true,
-                 colHeaders: true,
-                 outsideClickDeselects: false,
-                 readOnly: attrs.allowedit == undefined,
-                 colWidths:100,
-                 mergeCells: scope.data.MergedCells,
-                 height: 320,
-                 fillHandle: false
-                
-                
-            })
-            
+                rowHeaders: true,
+                colHeaders: true,
+                outsideClickDeselects: false,
+                readOnly: attrs.allowedit == undefined,
+                colWidths: 100,
+                mergeCells: scope.data.MergedCells,
+                height: 320,
+                fillHandle: false
+
+
+            });
+
             var api = $(elem).handsontable('getInstance');
             scope.$parent[loaderkey] = false;
 
@@ -52,12 +52,12 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
             }
             var loaderkey = "isloadingdatatab" + scope.index;
             function getPageInfo(startFromBeginning) {
-                var currentdatalength = api.getData().length ;
+                var currentdatalength = api.getData().length;
                 var fromRow = startFromBeginning ? 1 : currentdatalength;
 
                 return {
                     fromRow: fromRow,
-                    toRow: fromRow + getPageSize() 
+                    toRow: fromRow + getPageSize()
                 };
             }
             function fetchDataPageFromServer() {
@@ -67,8 +67,8 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                     FileId: scope.fileid,
                     From: info.fromRow,
                     To: info.toRow,
-                    SheetIndex:scope.index
-                }
+                    SheetIndex: scope.index
+                };
                 return VR_ExcelConversion_ExcelAPIService.ReadExcelFilePage(query).then(function (response) {
                     return response;
 
@@ -76,7 +76,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                     scope.$parent[loaderkey] = false;
                 });
             }
-            
+
             function getData() {
                 var alldata = data;
                 var items = alldata.slice(page * 100, (page + 1) * 100);
@@ -94,7 +94,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 var scrollTop = $(this).scrollTop();
                 var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
                 if (scrollTop > lastScrollTop) {
-                    if (scrollPercentage > 80 ) {
+                    if (scrollPercentage > 80) {
                         fetchDataPageFromServer().then(function (response) {
                             var newdata = [];
                             lastpage = response.Rows.length < 100;
@@ -107,22 +107,22 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
 
                             }
                             if (newdata.length > 0) {
-                                var mergeddata = api.getData();                               
+                                var mergeddata = api.getData();
                                 mergeddata = mergeddata.concat(newdata);
 
                                 api.loadData(mergeddata);
                             }
 
                         });
-                    }                       
+                    }
                 }
 
                 lastScrollTop = scrollTop;
-               
+
             });
-            if (data.length > 0) {                
+            if (data.length > 0) {
                 api.loadData(data);
-                
+
             }
             else {
                 api.loadData(buildFakeData());
@@ -148,24 +148,24 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 Menu["row_above"] = {
                     disabled: function () {
                         //if first row, disable this option
-                        return api.getData().length < scope.data.MaxDataRow
+                        return api.getData().length < scope.data.MaxDataRow;
                     }
-                }
+                };
                 Menu["row_below"] = {
                     disabled: function () {
                         //if first row, disable this option
-                        return api.getData().length < scope.data.MaxDataRow
+                        return api.getData().length < scope.data.MaxDataRow;
                     }
-                }
+                };
                 /*Menu["remove_row"] = true;*/
             }
-                        
+
             if (attrs.enbalecolinsert != undefined) {
-                if(Menu == null)
+                if (Menu == null)
                     Menu = {};
                 Menu["col_left"] = true;
                 Menu["col_right"] = true;
-               
+
             }
             if (Menu != null)
                 api.updateSettings({
@@ -179,15 +179,15 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                 scope.i = 0;
                 var inter = setInterval(function () {
                     scope.i++;
-                    if (scope.i === 1000 ) {
+                    if (scope.i === 1000) {
                         clearInterval(inter);
                         api.isrendered = true;
                     }
-                    if (scope.i <=1000) {
+                    if (scope.i <= 1000) {
                         api.render();
                     }
 
-                },1);
+                }, 1);
             };
             if (scope.onReady != undefined && typeof (scope.onReady) == 'function') {
                 scope.onReady(api);
@@ -195,5 +195,5 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
 
 
         }
-    }
-}])
+    };
+}]);

@@ -47,7 +47,7 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityS
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                 }, 1);
-            }
+            };
 
 
         },

@@ -34,7 +34,7 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -49,7 +49,7 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
 
         if (attrs.ismultipleselection != undefined) {
             label = "Time Dimensions";
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         }
         else if (attrs.hideremoveicon != undefined) {
             hideremoveicon = "hideremoveicon";
@@ -78,11 +78,10 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
-            }
-            api.getSelectedValues = function ()
-            {
+            };
+            api.getSelectedValues = function () {
                 return ctrl.selectedvalues;
-            }
+            };
             api.load = function (payload) {
                 var selectedIds;
                 if (payload != undefined) {
@@ -90,13 +89,13 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
                 }
 
                 ctrl.datasource = UtilsService.getArrayEnum(TimeDimensionTypeEnum);
-                
+
 
                 if (selectedIds != undefined) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
                 }
 
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

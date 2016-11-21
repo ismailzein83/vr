@@ -23,7 +23,7 @@
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                         ctrl.tabindex = "-1"
                     }
-                }, 10)
+                }, 10);
             },
             compile: function (element, attrs) {
 
@@ -41,7 +41,7 @@
 
                         var isUserChange;
                         $scope.$watch('ctrl.value', function (newValue, oldValue) {
-                        
+
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
 
@@ -49,7 +49,7 @@
                                 ctrl.value = undefined;
                             }
                             isUserChange = false;//reset the flag
-                           
+
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                                 if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
@@ -70,9 +70,9 @@
                         var getInputeStyle = function () {
                             var div = element.find('div[validator-section]')[0];
                             if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
                             };
-                        }
+                        };
                         getInputeStyle();
 
                         ctrl.adjustTooltipPosition = function (e) {
@@ -89,13 +89,13 @@
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                             }, 1);
-                        }
+                        };
 
-                       
+
                         //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',
@@ -107,7 +107,7 @@
                     var labelTemplate = '';
                     if (attrs.label != undefined)
                         labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-                    var rows = 3
+                    var rows = 3;
                     if (attrs.rows != undefined)
                         rows = attrs.rows;
                     var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
@@ -115,7 +115,7 @@
                             + '<textarea tabindex="{{ctrl.tabindex}}" readonly="ctrl.readOnly"  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="' + rows + '" class="form-control" style="width: 100%; resize: none;" ></textarea>'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"   placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
-                        + '</div>'
+                    + '</div>';
                 
 
                     //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);

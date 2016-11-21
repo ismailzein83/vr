@@ -18,42 +18,39 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                 ctrl.tabs.push(tab);
             };
             ctrl.getMinHeight = function () {
-                return { 'min-height': (ctrl.tabs.length * 26 + 1) +'px'};
-            }
+                return { 'min-height': (ctrl.tabs.length * 26 + 1) + 'px' };
+            };
             ctrl.tabSelectionChanged = function () {
                 if (ctrl.tabs[ctrl.selectedTabIndex] != undefined)
                     ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
                 if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
                     ctrl.onselectionchanged();
                 }
-            }
+            };
 
-            ctrl.removeTab = function(tab)
-            {
+            ctrl.removeTab = function (tab) {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
                 }, 1)
-            }
+            };
             var api = {};
             api.removeAllTabs = function () {
                 ctrl.tabs.length = 0;
-            }
-            api.setTabSelected=function(index)
-            {
+            };
+            api.setTabSelected = function (index) {
                 setTimeout(function () {
                     var tab = ctrl.tabs[index];
                     if (tab != undefined)
                         tab.isSelected = true;
                 });
-            }
-            api.setLastTabSelected = function()
-            {
+            };
+            api.setLastTabSelected = function () {
                 setTimeout(function () {
                     ctrl.tabs[ctrl.tabs.length - 1].isSelected = true;
                 });
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         },
@@ -66,7 +63,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         }
 
     };

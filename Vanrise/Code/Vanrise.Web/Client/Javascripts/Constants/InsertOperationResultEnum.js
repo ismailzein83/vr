@@ -1,5 +1,4 @@
-﻿'use strict';
-app.constant('InsertOperationResultEnum', {
+﻿app.constant('InsertOperationResultEnum', {
     Succeeded: { value: 0, description: "Succeeded" },
     Failed: { value: 1, description: "Failed" },
     SameExists: { value: 2, description: "SameExists" }

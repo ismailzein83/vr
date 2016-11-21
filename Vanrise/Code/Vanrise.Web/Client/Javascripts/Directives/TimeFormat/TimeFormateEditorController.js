@@ -183,26 +183,23 @@
                 expression: "t"
             }];
             $scope.showTimeParts = false;
-            $scope.onTimeFormatSelectionChanged = function()
-            {
+            $scope.onTimeFormatSelectionChanged = function () {
                 if ($scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value)
                     $scope.showTimeParts = true;
                 else
                     $scope.showTimeParts = false;
-            }
+            };
 
-            $scope.onTimeSelectionChanged = function()
-            {
-                if ($scope.selectedTimeFormatParts != undefined)
-                {
+            $scope.onTimeSelectionChanged = function () {
+                if ($scope.selectedTimeFormatParts != undefined) {
                     $scope.selectedExpression = undefined;
                     $scope.filteredExpressionTemplates = UtilsService.getFilteredArrayFromArray($scope.expressionTemplates, $scope.selectedTimeFormatParts.value, "timeValue");
 
                 }
-            }
+            };
 
             $scope.isbuttonDisabled = function () {
-            }
+            };
 
 
 
@@ -211,7 +208,7 @@
                     $scope.timeFormatValue = $scope.timeFormatValue.concat($scope.selectedExpression.expression);
                 else
                     $scope.timeFormatValue = $scope.selectedExpression.expression;
-            }
+            };
 
             $scope.saveTimeFormatBuilder = function () {
                 return saveTimeFormat();
@@ -221,13 +218,12 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.isFormatValueRequired = function()
-            {
+            $scope.isFormatValueRequired = function () {
                 if ($scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value && $scope.timeFormatValue == undefined)
                     return true;
                 else
                     return false;
-            }
+            };
         }
 
         function load() {

@@ -24,7 +24,7 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
                     $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
                 }, 1);
-            }
+            };
 
             if ($scope.value == undefined)
                 $scope.value = false;

@@ -27,7 +27,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                 }).finally(function () {
                     ctrl.isloadingdata = false;
                 });
-            }
+            };
            
             $scope.$watch('ctrl.fileid', function () {
                 if (ctrl.fileid != null && ctrl.fileid != undefined && ctrl.fileid != 0) {
@@ -53,7 +53,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getWorkBookTemplate(attrs);
@@ -103,7 +103,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                 }
                 ctrl.scopeModel.tabObjects[index].api = api;
 
-            }
+            };
             ctrl.wsindex = 0;
             $scope.$watch('ctrl.wsindex', function () {
                 if (ctrl.scopeModel.tabObjects[ctrl.wsindex] != undefined && ctrl.scopeModel.tabObjects[ctrl.wsindex].api != undefined) {                        
@@ -114,7 +114,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
             var api = {};
             api.clearAtIndex = function (i) {
                 ctrl.scopeModel.tabObjects[i].api.clear();
-            }
+            };
             api.getSelectedSheetApi = function () {
                 for (var index in ctrl.scopeModel.tabObjects) {
                     if (ctrl.scopeModel.tabObjects[index].isSelected == true) {
@@ -122,29 +122,29 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                     }
                 }
                 return null;
-            }
+            };
             api.getSelectedSheet = function () {
                 for (var index in ctrl.scopeModel.tabObjects) {
                     if (ctrl.scopeModel.tabObjects[index].isSelected == true) {
-                        return index ;
+                        return index;
                     }
                 }
-            }
+            };
             api.setSelectedSheet = function (index) {
                 ctrl.sheetindex = index;
                 ctrl.scopeModel.tabObjects[index].isSelected = true;
-            }
-            api.selectCellAtSheet = function (a,b,s) {
+            };
+            api.selectCellAtSheet = function (a, b, s) {
                 ctrl.sheetindex = s;
                 ctrl.scopeModel.tabObjects[s].isSelected = true;
-               setTimeout(function () {
+                setTimeout(function () {
                     ctrl.scopeModel.tabObjects[s].api.selectCell(a, b, a, b);
-                })
-               
-            }
+                });
+
+            };
             api.getAPIsArray = function () {
                 return ctrl.tabObjects;
-            }
+            };
             
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

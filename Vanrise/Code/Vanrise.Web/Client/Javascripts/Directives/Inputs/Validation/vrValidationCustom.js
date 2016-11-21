@@ -17,7 +17,7 @@ app.directive('vrValidationCustom', ['ValidationMessagesEnum', function (Validat
                 ctrlModel.$setValidity('customvalidation', isvalid);
                 //controllers[1].validateForm();//.$checkValidity()
                 return viewValue;
-            }
+            };
             ctrlModel.$parsers.unshift(validate);
             ctrlModel.$formatters.push(validate);
 

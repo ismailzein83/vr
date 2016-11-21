@@ -41,7 +41,7 @@ app.directive('vrPagination', [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     //var ctrl = $scope.ctrl;
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return "/Client/Javascripts/Directives/Pagination/vr-pagination.html";
