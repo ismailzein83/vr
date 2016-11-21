@@ -8,6 +8,9 @@
 
         var isEditMode;
 
+        var directiveAPI;
+        var directiveReadyDeferred;
+
         var vrAlertRuleId;
         var vrAlertRuleEntity;
         var vrAlertRuleTypeId;
@@ -17,17 +20,10 @@
         var vrAlertRuleTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
         var vrAlertRuleTypeSelectionChangedDeferred;
 
-        var vrAlertRuleCriteriaDirectiveAPI;
-        var vrAlertRuleCriteriaDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var vrActionDirectiveAPI;
-        var vrActionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
 
         loadParameters();
         defineScope();
         load();
-
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -38,14 +34,28 @@
 
             isEditMode = (vrAlertRuleId != undefined);
         }
+
         function defineScope() {
+
             $scope.scopeModel = {};
             $scope.scopeModel.isAlertRuleTypeSelected = false;
+            $scope.scopeModel.selectedRuleType;
+            $scope.scopeModel.SettingEditor;
+
 
             $scope.scopeModel.onAlertRuleTypeSelectorReady = function (api) {
                 vrAlertRuleTypeSelectorAPI = api;
                 vrAlertRuleTypeSelectoReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, getDirectiveWrapperPayload(), setLoader, directiveReadyDeferred);
+            };
+
             $scope.scopeModel.onAlertRuleTypeSelectionChanged = function (api) {
                 vrAlertRuleTypeId = vrAlertRuleTypeSelectorAPI.getSelectedIds();
                 if (vrAlertRuleTypeId != undefined) {
@@ -57,47 +67,9 @@
                         if (vrAlertRuleTypeSelectionChangedDeferred != undefined) {
                             vrAlertRuleTypeSelectionChangedDeferred.resolve();
                         }
-                        else {
-                            loadVRAlertRuleCriteriaDirective();
-                            loadVRActionDirective();
-                        }
+
                     });
                 }
-
-                function loadVRAlertRuleCriteriaDirective() {
-                    var vrAlertRuleCriteriaDirectivePayload = {};
-                    if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
-                        vrAlertRuleCriteriaDirectivePayload.dataAnalysisDefinitionId = vrAlertRuleTypeEntity.Settings.DataAnalysisDefinitionId;
-                        vrAlertRuleCriteriaDirectivePayload.criteriaEditor = vrAlertRuleTypeEntity.Settings.CriteriaEditor
-                    }
-                    var setLoader = function (value) {
-                        $scope.scopeModel.VRAlertRuleCriteriaLoading = value;
-                    };
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, vrAlertRuleCriteriaDirectiveAPI, vrAlertRuleCriteriaDirectivePayload, setLoader);
-                }
-                function loadVRActionDirective() {
-                    var vrActionDirectivePayload = {};
-                    vrActionDirectivePayload.isRequired = true;
-                    if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
-                        vrActionDirectivePayload.extensionType = vrAlertRuleTypeEntity.Settings.VRActionExtensionType;
-                    }
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isVRActionLoading = value;
-                    };
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, vrActionDirectiveAPI, vrActionDirectivePayload, setLoader);
-                }
-            };
-
-            $scope.scopeModel.onVRAlertRuleCriteriaDirectiveReady = function (api) {
-                 vrAlertRuleCriteriaDirectiveAPI = api;
-                 vrAlertRuleCriteriaDirectiveReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onVRActionDirectiveReady = function (api) {
-                vrActionDirectiveAPI = api;
-                vrActionDirectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -108,15 +80,33 @@
                     return insert();
                 }
             };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+
         }
+
+        function loadRuleTypeSection() {
+            var promises = [];
+
+            var ruleTypeSelectorPromise = loadVRAlertRuleTypeSelector();
+            promises.push(ruleTypeSelectorPromise);
+
+            if (isEditMode) {
+                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                var directivePromise = loadDirective();
+                promises.push(directivePromise);
+            }
+
+            UtilsService.waitMultiplePromises(promises);
+        }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-
                 getVRAlertRule().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
@@ -134,105 +124,77 @@
                 vrAlertRuleEntity = response;
             });
         }
+
         function getVRAlertRuleType() {
             return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleType(vrAlertRuleTypeId).then(function (response) {
                 vrAlertRuleTypeEntity = response;
+                $scope.scopeModel.SettingEditor = response.Settings.SettingEditor;
+
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRAlertRuleTypeSelector, loadVRAlertRuleCriteriaDirective, loadVRActionDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuleTypeSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
 
-            function setTitle() {
-                if (isEditMode) {
-                    var vrAlertRuleName = (vrAlertRuleEntity != undefined) ? vrAlertRuleEntity.Name : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrAlertRuleName, 'Alert Rule');
+        }
+
+        function setTitle() {
+            if (isEditMode) {
+                var vrAlertRuleName = (vrAlertRuleEntity != undefined) ? vrAlertRuleEntity.Name : null;
+                $scope.title = UtilsService.buildTitleForUpdateEditor(vrAlertRuleName, 'Alert Rule');
+            }
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor('Alert Rule');
+            }
+        }
+
+        function loadStaticData() {
+            if (vrAlertRuleEntity == undefined)
+                return;
+            $scope.scopeModel.name = vrAlertRuleEntity.Name;
+        }
+
+        function loadVRAlertRuleTypeSelector() {
+
+            var vrAlertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            vrAlertRuleTypeSelectoReadyDeferred.promise.then(function () {
+                var vrAlertRuleTypeSelectorPayload;
+
+                if (vrAlertRuleEntity != undefined && vrAlertRuleEntity.RuleTypeId != undefined) {
+                    vrAlertRuleTypeSelectorPayload = {
+                        selectedIds: vrAlertRuleEntity.RuleTypeId
+                    };
                 }
-                else {
-                    $scope.title = UtilsService.buildTitleForAddEditor('Alert Rule');
-                }
-            }
-            function loadStaticData() {
-                if (vrAlertRuleEntity == undefined)
-                    return;
-                $scope.scopeModel.name = vrAlertRuleEntity.Name;
-            }
-            function loadVRAlertRuleTypeSelector() {
-                var vrAlertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, vrAlertRuleTypeSelectorPayload, vrAlertRuleTypeSelectorLoadDeferred);
+            });
 
-                vrAlertRuleTypeSelectoReadyDeferred.promise.then(function () {
-                    var vrAlertRuleTypeSelectorPayload;
+            return vrAlertRuleTypeSelectorLoadDeferred.promise;
+        }
 
-                    if (vrAlertRuleEntity != undefined && vrAlertRuleEntity.RuleTypeId != undefined) {
-                        vrAlertRuleTypeSelectorPayload = {
-                            selectedIds: vrAlertRuleEntity.RuleTypeId
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, vrAlertRuleTypeSelectorPayload, vrAlertRuleTypeSelectorLoadDeferred);
-                });
+        function loadDirective() {
 
-                return vrAlertRuleTypeSelectorLoadDeferred.promise;  
-            }
-            function loadVRAlertRuleCriteriaDirective() {
-                if (!isEditMode) return;
+            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                var vrAlertRuleCriteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            directiveReadyDeferred.promise.then(function () {
 
-                if (vrAlertRuleTypeSelectionChangedDeferred == undefined)
-                    vrAlertRuleTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                directiveReadyDeferred = undefined;
+                //console.log(vrAlertRuleTypeEntity);
+                VRUIUtilsService.callDirectiveLoad(directiveAPI, getDirectiveWrapperPayload(), directiveLoadDeferred);
+            });
 
-                vrAlertRuleCriteriaDirectiveReadyDeferred.promise.then(function () {
+            return directiveLoadDeferred.promise;
+        }
 
-                    vrAlertRuleTypeSelectionChangedDeferred.promise.then(function () {
-                        vrAlertRuleTypeSelectionChangedDeferred = undefined;
-
-                        var vrAlertRuleCriteriaDirectivePayload = {};
-                        if (vrAlertRuleEntity != undefined) {
-                            vrAlertRuleCriteriaDirectivePayload.criteria = vrAlertRuleEntity.Settings.Criteria;
-                        }
-                        if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
-                            vrAlertRuleCriteriaDirectivePayload.dataAnalysisDefinitionId = vrAlertRuleTypeEntity.Settings.DataAnalysisDefinitionId;
-                            vrAlertRuleCriteriaDirectivePayload.criteriaEditor = vrAlertRuleTypeEntity.Settings.CriteriaEditor
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(vrAlertRuleCriteriaDirectiveAPI, vrAlertRuleCriteriaDirectivePayload, vrAlertRuleCriteriaDirectiveLoadDeferred);
-                    })
-                });
-
-                return  vrAlertRuleCriteriaDirectiveLoadDeferred.promise;
-            }
-            function loadVRActionDirective() {
-                if (!isEditMode) return;
-
-                var vrActionDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                if (vrAlertRuleTypeSelectionChangedDeferred == undefined)
-                    vrAlertRuleTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
-                vrAlertRuleCriteriaDirectiveReadyDeferred.promise.then(function () {
-
-                    vrAlertRuleTypeSelectionChangedDeferred.promise.then(function () {
-                        vrAlertRuleTypeSelectionChangedDeferred = undefined;
-
-                        var vrActionDirectivePayload = {};
-                        vrActionDirectivePayload.isRequired = true;
-                        if (vrAlertRuleEntity != undefined) {
-                            vrActionDirectivePayload.actions = vrAlertRuleEntity.Settings.Actions;
-                        }
-                        if (vrAlertRuleTypeEntity != undefined && vrAlertRuleTypeEntity.Settings != undefined) {
-                            vrActionDirectivePayload.extensionType = vrAlertRuleTypeEntity.Settings.VRActionExtensionType;
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(vrActionDirectiveAPI, vrActionDirectivePayload, vrActionDirectiveLoadDeferred);
-                    });
-                });
-
-                return vrActionDirectiveLoadDeferred.promise;
-            }
+        function getDirectiveWrapperPayload() {
+            return {
+                alertTypeSettings: vrAlertRuleTypeEntity.Settings,
+                alertExtendedSettings: vrAlertRuleEntity.Settings.ExtendedSettings
+            };
         }
 
         function insert() {
@@ -249,6 +211,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function update() {
             $scope.scopeModel.isLoading = true;
             return VR_Notification_VRAlertRuleAPIService.UpdateVRAlertRule(buildVRAlertRuleObjFromScope()).then(function (response) {
@@ -273,12 +236,11 @@
                 RuleTypeId: vrAlertRuleTypeSelectorAPI.getSelectedIds(),
                 Settings: {
                     RuleTypeId: null,
-                    Criteria: vrAlertRuleCriteriaDirectiveAPI.getData(),
-                    Actions: vrActionDirectiveAPI.getData(),
-                    RollbackActions: null
-                } 
+                    ExtendedSettings: directiveAPI.getData()
+                }
             };
         }
+
     }
 
     appControllers.controller('VR_Notification_VRAlertRuleEditorController', VRAlertRuleEditorController);

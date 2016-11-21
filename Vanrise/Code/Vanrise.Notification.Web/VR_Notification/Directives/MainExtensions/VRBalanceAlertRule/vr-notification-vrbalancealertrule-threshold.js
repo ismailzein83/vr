@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRActionDirective.$inject = ['VR_Notification_VRActionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    BalancealertthresholdDirective.$inject = ['VR_AccountBalance_BalanceAlertAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-   function VRActionDirective(VR_Notification_VRActionAPIService, UtilsService, VRUIUtilsService) {
+    function BalancealertthresholdDirective(VR_AccountBalance_BalanceAlertAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,7 +15,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new VRAction($scope, ctrl, $attrs);
+                var ctor = new ThresholdEntity($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@
             }
         };
 
-        function VRAction($scope, ctrl, $attrs) {
+        function ThresholdEntity($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -59,35 +59,31 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                   
+
                     var promises = [];
-                    var vrActionEntity;
-                    var extensionType;
+                    var thresholdEntity;
+
                     if (payload != undefined) {
-                        vrActionEntity = payload.vrActionEntity;
-                        extensionType = payload.extensionType;
+                        thresholdEntity = payload.thresholdEntity;
                     }
 
-                    if (vrActionEntity != undefined) {
+                    if (thresholdEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
-                    if (extensionType != undefined)
-                    {
-                        var getVRActionTemplateConfigsPromise = getVRActionTemplateConfigs(extensionType);
-                        promises.push(getVRActionTemplateConfigsPromise);
 
-                    }
-                  
-                    function getVRActionTemplateConfigs(extensionType) {
-                        return VR_Notification_VRActionAPIService.GetVRActionConfigs(extensionType).then(function (response) {
+                    var getBalanceAlertTemplateConfigsPromise = getBalanceAlertTemplateConfigs();
+                    promises.push(getBalanceAlertTemplateConfigsPromise);
+
+                    function getBalanceAlertTemplateConfigs() {
+                        return VR_AccountBalance_BalanceAlertAPIService.GetBalanceAlertThresholdConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (vrActionEntity != undefined) {
+                                if (thresholdEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrActionEntity.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, thresholdEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -99,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { vrActionEntity: vrActionEntity };
+                            var directivePayload = thresholdEntity;
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -137,7 +133,8 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Action Type"'
+                            + 'label="Threshold Type"'
+
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
                         + '</vr-select>'
@@ -150,6 +147,6 @@
         }
     }
 
-   app.directive('vrNotificationVraction', VRActionDirective);
+    app.directive('vrNotificationVrbalancealertruleThreshold', BalancealertthresholdDirective);
 
 })(app);

@@ -76,6 +76,8 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                         criteriaFields = payload.settings.CriteriaDefinition.Fields;
                         ruleObjects = payload.settings.Objects;
                         accountTypeId = payload.settings.AccountTypeId;
+                        $scope.scopeModel.thresholdExtensionType = payload.settings.ThresholdExtensionType;
+                        $scope.scopeModel.actionExtensionType = payload.settings.VRActionExtensionType;
                     }
 
                     return UtilsService.waitMultipleAsyncOperations([loadCriteriaDirective, loadObjectDirective, loadAccountTypeSelector]).catch(function (error) {
@@ -90,7 +92,9 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                         $type: "Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings, Vanrise.AccountBalance.Business",
                         AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
                         CriteriaDefinition: criteriaDirectiveAPI.getData(),
-                        Objects: objectDirectiveAPI.getData()
+                        Objects: objectDirectiveAPI.getData(),
+                        ThresholdExtensionType: $scope.scopeModel.thresholdExtensionType,
+                        VRActionExtensionType: $scope.scopeModel.actionExtensionType
                     };
                 }
 

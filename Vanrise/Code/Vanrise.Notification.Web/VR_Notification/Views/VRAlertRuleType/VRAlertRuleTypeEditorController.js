@@ -22,7 +22,6 @@
         defineScope();
         load();
 
-
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -32,12 +31,12 @@
 
             isEditMode = (vrAlertRuleTypeId != undefined);
         }
+
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.templateConfigs = [];
             $scope.scopeModel.selectedTemplateConfig;
-
             $scope.scopeModel.onSettingsSelectorReady = function (api) {
                 selectorAPI = api;
             };
@@ -63,6 +62,7 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
             };
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -87,7 +87,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getVRAlertRuleTypeSettingsTemplateConfigs, loadDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuleTypeSection]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -105,10 +105,10 @@
             function loadStaticData() {
                 if (vrAlertRuleTypeEntity == undefined)
                     return;
+      
                 $scope.scopeModel.name = vrAlertRuleTypeEntity.Name;
             }
         }
-
 
         function getVRAlertRuleTypeSettingsTemplateConfigs() {
             return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleTypeSettingsExtensionConfigs().then(function (response) {
@@ -125,8 +125,23 @@
             });
         }
 
+        function loadRuleTypeSection() {
+            var promises = [];
+
+            var ruleTypeSelectorPromise = getVRAlertRuleTypeSettingsTemplateConfigs();
+            promises.push(ruleTypeSelectorPromise);
+
+            if (isEditMode) {
+                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                var directivePromise = loadDirective();
+                promises.push(directivePromise);
+            }
+
+            UtilsService.waitMultiplePromises(promises);
+        }
+
         function loadDirective() {
-            directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -154,6 +169,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function update() {
             $scope.scopeModel.isLoading = true;
             return VR_Notification_VRAlertRuleTypeAPIService.UpdateVRAlertRuleType(buildVRAlertRuleTypeObjFromScope()).then(function (response) {
@@ -171,13 +187,20 @@
         }
 
         function buildVRAlertRuleTypeObjFromScope() {
-            var vrAlertRuleTypeSettings = directiveAPI.getData();
-            vrAlertRuleTypeSettings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+
             return {
                 VRAlertRuleTypeId: vrAlertRuleTypeEntity != undefined ? vrAlertRuleTypeEntity.VRAlertRuleTypeId : undefined,
                 Name: $scope.scopeModel.name,
-                Settings: vrAlertRuleTypeSettings
+                Settings: buildAlertTypeSettings()
             };
+        }
+
+        function buildAlertTypeSettings() {
+            var vrAlertRuleTypeSettings = directiveAPI.getData();
+            vrAlertRuleTypeSettings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+            vrAlertRuleTypeSettings.ThresholdExtensionType = $scope.scopeModel.thresholdExtensionType;
+            vrAlertRuleTypeSettings.VRActionExtensionType = $scope.scopeModel.actionExtensionType;
+            return vrAlertRuleTypeSettings;
         }
     }
 

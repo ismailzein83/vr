@@ -13,7 +13,15 @@ namespace Vanrise.Notification.Entities
         public abstract string ThresholdExtensionType { get; set; }
 
         public abstract VRBalanceAlertRuleBehavior Behavior { get; set; }
+
+        public override string SettingEditor
+        {
+            get
+            {
+                return "vr-notification-vrbalancealertrule-settings";
+            }
+        }
     }
 
-    
+
 }

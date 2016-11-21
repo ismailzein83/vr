@@ -1,7 +1,7 @@
 ﻿
 'use strict';
 
-app.directive('vrNotificationVralertruleSettings', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         return {
@@ -16,7 +16,7 @@ app.directive('vrNotificationVralertruleSettings', ['UtilsService', 'VRUIUtilsSe
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_Notification/Directives/VRAlertRule/Templates/VRAlertRuleSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_Notification/Directives/MainExtensions/VRBalanceAlertRule/Templates/VRBalanceAlertRuleSettingsTemplate.html'
         };
 
         function AlertRuleSettings($scope, ctrl, $attrs) {
@@ -24,11 +24,18 @@ app.directive('vrNotificationVralertruleSettings', ['UtilsService', 'VRUIUtilsSe
             var criteriaDirectiveAPI;
             var criteriaDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var vrAlertRuleSettingsDirectiveAPI;
+            var vrAlertRuleSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             var criteriaDefinitionFields;
             var criteriaFieldsValues;
 
-            this.initializeController = initializeController;
+            var extensionType;
 
+            var alertExtendedSettings;
+            var alertTypeSettings;
+
+            this.initializeController = initializeController;
 
             function initializeController() {
 
@@ -39,6 +46,11 @@ app.directive('vrNotificationVralertruleSettings', ['UtilsService', 'VRUIUtilsSe
                     criteriaDirectiveReadyPromiseDeferred.resolve();
                 }
 
+                $scope.scopeModel.onVRAlertRuleSettingsDirectiveReady = function (api) {
+                    vrAlertRuleSettingsDirectiveAPI = api;
+                    vrAlertRuleSettingsDirectiveReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
             function defineAPI() {
@@ -47,13 +59,14 @@ app.directive('vrNotificationVralertruleSettings', ['UtilsService', 'VRUIUtilsSe
                 api.load = function (payload) {
 
                     var promises = [];
-
-
-
+                    //console.log(payload);
                     if (payload != undefined) {
-
+                        criteriaDefinitionFields = payload.alertTypeSettings.CriteriaDefinition.Fields;
+                        extensionType = payload.alertTypeSettings.VRActionExtensionType;
+                        criteriaFieldsValues = payload.alertExtendedSettings.Criteria.FieldsValues;
+                        alertExtendedSettings = payload.alertExtendedSettings;
+                        alertTypeSettings = payload.alertTypeSettings;
                     }
-
 
                     var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadCriteriaSectionPromiseDeferred.promise);
@@ -67,17 +80,33 @@ app.directive('vrNotificationVralertruleSettings', ['UtilsService', 'VRUIUtilsSe
                         VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, payload, loadCriteriaSectionPromiseDeferred);
                     });
 
+
+                    var loadRuleSettingsSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadRuleSettingsSectionPromiseDeferred.promise);
+
+
+                    vrAlertRuleSettingsDirectiveReadyDeferred.promise.then(function () {
+                        var payload = {
+                            settings: alertExtendedSettings,
+                           alertTypeSettings: alertTypeSettings
+                        };
+                        VRUIUtilsService.callDirectiveLoad(vrAlertRuleSettingsDirectiveAPI, payload, loadRuleSettingsSectionPromiseDeferred);
+                    });
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    return directiveAPI.getData();
+                    return {
+                        $type: "Vanrise.Notification.Entities.VRBalanceAlertRuleSettings,Vanrise.Notification.Entities",
+                        Criteria: criteriaDirectiveAPI.getData(),
+                        ThresholdActions: vrAlertRuleSettingsDirectiveAPI.getData()
+                    };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
         }
     }]);
 
