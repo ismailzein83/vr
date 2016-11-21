@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 //using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.NumberingPlan.Entities;
 
 namespace Vanrise.NumberingPlan.BP.Arguments
 {
@@ -17,10 +18,9 @@ namespace Vanrise.NumberingPlan.BP.Arguments
         public bool IsFromExcel { get; set; }
         public override string GetTitle()
         {
-            return null;
-            //ISellingNumberPlanManager sellingNumberPlanManager = BEManagerFactory.GetManager<ISellingNumberPlanManager>();
-            //string sellingNumberPlanName = sellingNumberPlanManager.GetSellingNumberPlanName(SellingNumberPlanId);
-            //return String.Format("#BPDefinitionTitle# Process Started for Selling Number Plan: {0}", sellingNumberPlanName);
+            ISellingNumberPlanManager sellingNumberPlanManager = NPManagerFactory.GetManager<ISellingNumberPlanManager>();
+            string sellingNumberPlanName = sellingNumberPlanManager.GetSellingNumberPlanName(SellingNumberPlanId);
+            return String.Format("#BPDefinitionTitle# Process Started for Selling Number Plan: {0}", sellingNumberPlanName);
         }
     }
 }

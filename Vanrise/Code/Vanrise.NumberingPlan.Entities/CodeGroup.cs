@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.NumberingPlan.Entities
 {
-    public class CodeGroup
+    public class BaseCodeGroup : ICode
     {
         public int CodeGroupId { get; set; }
 
@@ -15,5 +15,15 @@ namespace Vanrise.NumberingPlan.Entities
         public int CountryId { get; set; }
 
         public string SourceId { get; set; }
+    }
+
+    public class CodeGroup : BaseCodeGroup
+    {
+
+    }
+
+    public class CodeGroupToEdit : BaseCodeGroup
+    {
+
     }
 }

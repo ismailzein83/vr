@@ -106,6 +106,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -117,9 +121,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodePreparationController.cs" />
+    <Compile Include="Controllers\CodePreparationPreviewController.cs" />
+    <Compile Include="Controllers\SaleCodeController.cs" />
+    <Compile Include="Controllers\SaleZoneController.cs" />
+    <Compile Include="Controllers\SellingNumberPlanController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.NumberingPlan.Business\Vanrise.NumberingPlan.Business.csproj">
       <Project>{6b112a60-e5c1-4362-a43e-47a4dcc7bd98}</Project>
       <Name>Vanrise.NumberingPlan.Business</Name>
@@ -134,10 +147,71 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-selector.js" />
+    <Content Include="VR_NumberingPlan\Images\Closed.png" />
+    <Content Include="VR_NumberingPlan\Images\Decrease.png" />
+    <Content Include="VR_NumberingPlan\Images\Increase.png" />
+    <Content Include="VR_NumberingPlan\Images\Modified.png" />
+    <Content Include="VR_NumberingPlan\Images\MovedFrom.png" />
+    <Content Include="VR_NumberingPlan\Images\MovedTo.png" />
+    <Content Include="VR_NumberingPlan\Images\New.png" />
+    <Content Include="VR_NumberingPlan\Images\PendingClosed.png" />
+    <Content Include="VR_NumberingPlan\Images\PendingEffective.png" />
+    <Content Include="VR_NumberingPlan\Images\Renamed.png" />
+    <Content Include="VR_NumberingPlan\Images\ReOpen.png" />
+    <Content Include="VR_NumberingPlan\Images\Zone.png" />
+    <Content Include="VR_NumberingPlan\Services\APIServices\SellingNumberPlanAPIService.js" />
+    <Content Include="VR_NumberingPlan\Template\Code preperation sample.xls" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_NumberingPlan\Constants\CodeChangeTypeEnum.js" />
+    <Content Include="VR_NumberingPlan\Constants\CodeItemDraftStatusEnum.js" />
+    <Content Include="VR_NumberingPlan\Constants\CodeItemStatusEnum.js" />
     <Content Include="VR_NumberingPlan\Constants\ModuleConfig.js" />
+    <Content Include="VR_NumberingPlan\Constants\NewCPOutputResultEnum.js" />
+    <Content Include="VR_NumberingPlan\Constants\PreviewChangeTypeEnum.js" />
+    <Content Include="VR_NumberingPlan\Constants\PreviewGroupedBy.js" />
+    <Content Include="VR_NumberingPlan\Constants\ValidationOutput.js" />
+    <Content Include="VR_NumberingPlan\Constants\ZoneChangeTypeEnum.js" />
+    <Content Include="VR_NumberingPlan\Constants\ZoneItemDraftStatusEnum.js" />
+    <Content Include="VR_NumberingPlan\Constants\ZoneItemStatusEnum.js" />
+    <Content Include="VR_NumberingPlan\Directives\ChangesPreview\vr-np-groupedby-selector.js" />
+    <Content Include="VR_NumberingPlan\Directives\ChangesPreview\vr-np-viewchangetype-selector.js" />
+    <Content Include="VR_NumberingPlan\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\CodePreparation\vr-np-codepreparation-codesgrid.js" />
+    <Content Include="VR_NumberingPlan\Directives\CodePreview\Templates\CodePreparationCodePreviewGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\CodePreview\vr-np-codepreview-grid.js" />
+    <Content Include="VR_NumberingPlan\Directives\CountryPreview\Templates\CodePreparationCountryPreviewGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\CountryPreview\vr-np-countrypreview-grid.js" />
+    <Content Include="VR_NumberingPlan\Directives\CPSettings\Templates\CPSettingsTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\CPSettings\vr-np-settings-editor.js" />
+    <Content Include="VR_NumberingPlan\Directives\ZonePreview\Templates\CodePreparationZonePreviewGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\ZonePreview\vr-np-zonepreview-grid.js" />
+    <Content Include="VR_NumberingPlan\Services\APIServices\CodePreparationAPIService.js" />
+    <Content Include="VR_NumberingPlan\Services\APIServices\CodePreparationPreviewAPIService.js" />
+    <Content Include="VR_NumberingPlan\Services\APIServices\SaleCodeAPIService.js" />
+    <Content Include="VR_NumberingPlan\Services\APIServices\SaleZoneAPIService.js" />
+    <Content Include="VR_NumberingPlan\Services\CodePreparationService.js" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlan.html" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanApplyStateEditor.html" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanApplyStateEditorController.js" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanController.js" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanManagement.html" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanManagementController.js" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanPreview.html" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanPreviewController.js" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanUploadEditor.html" />
+    <Content Include="VR_NumberingPlan\Views\NumberingPlanUploadEditorController.js" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\CloseCodeDialog.html" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\CloseCodeDialogController.js" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\MoveCodeDialog.html" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\MoveCodeDialogController.js" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\NewCodeDialog.html" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\NewCodeDialogController.js" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\NewZoneDialog.html" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\NewZoneDialogController.js" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\RenameZoneDialog.html" />
+    <Content Include="VR_NumberingPlan\Views\Dialogs\RenameZoneDialogController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

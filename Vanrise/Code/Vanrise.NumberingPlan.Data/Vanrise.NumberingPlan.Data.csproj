@@ -41,9 +41,28 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodePrepDataManagerFactory.cs" />
+    <Compile Include="IChangedSaleCodeDataManager.cs" />
+    <Compile Include="IChangedSaleZoneDataManager.cs" />
+    <Compile Include="ICodeGroupDataManager.cs" />
+    <Compile Include="ICodePreparationDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="INewSaleCodeDataManager.cs" />
+    <Compile Include="INewSaleZoneDataManager.cs" />
+    <Compile Include="ISaleCodeDataManager.cs" />
+    <Compile Include="ISaleCodePreviewDataManager.cs" />
+    <Compile Include="ISaleCountryPreviewDataManager.cs" />
+    <Compile Include="ISaleZoneDataManager.cs" />
+    <Compile Include="ISaleZonePreviewDataManager.cs" />
+    <Compile Include="ISellingNumberPlanDataManager.cs" />
     <Compile Include="NPDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,6 +70,10 @@
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.NumberingPlan.Entities\Vanrise.NumberingPlan.Entities.csproj">
       <Project>{0370dad0-c425-4005-896f-5169eb915205}</Project>

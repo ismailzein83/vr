@@ -37,8 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
+    <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -47,15 +50,68 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.MainExtensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.NumberingPlan.BP.Activities\Vanrise.NumberingPlan.BP.Activities.csproj">
       <Project>{9eb7951c-6f26-4b77-8982-60d06e61474c}</Project>
       <Name>Vanrise.NumberingPlan.BP.Activities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.NumberingPlan.BP.Arguments\Vanrise.NumberingPlan.BP.Arguments.csproj">
+      <Project>{96358d6e-0962-43ee-92ba-6148a94a6b26}</Project>
+      <Name>Vanrise.NumberingPlan.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.NumberingPlan.Business\Vanrise.NumberingPlan.Business.csproj">
+      <Project>{6b112a60-e5c1-4362-a43e-47a4dcc7bd98}</Project>
+      <Name>Vanrise.NumberingPlan.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.NumberingPlan.Entities\Vanrise.NumberingPlan.Entities.csproj">
+      <Project>{0370dad0-c425-4005-896f-5169eb915205}</Project>
+      <Name>Vanrise.NumberingPlan.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <XamlAppDef Include="NumberingPlan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="SubProcess\ApplyEntitiesToDBProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

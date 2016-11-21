@@ -1,0 +1,332 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.NumberingPlan.BP.SubProcess.ApplyEntitiesToDBProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vnba="clr-namespace:Vanrise.NumberingPlan.BP.Activities;assembly=Vanrise.NumberingPlan.BP.Activities"
+ xmlns:vne="clr-namespace:Vanrise.NumberingPlan.Entities;assembly=Vanrise.NumberingPlan.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="CodePreparationMainProcessStatus" Type="InArgument(vb:AsyncActivityStatus)" />
+    <x:Property Name="NewZonesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(vne:AddedZone)))" />
+    <x:Property Name="NewCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(vne:AddedCode)))" />
+    <x:Property Name="ChangedZonesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(vne:ChangedZone)))" />
+    <x:Property Name="ChangedCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(vne:ChangedCode)))" />
+    <x:Property Name="SellingNumberPlanId" Type="InArgument(x:Int32)" />
+    <x:Property Name="PreviewZonesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(vne:ZonePreview)))" />
+    <x:Property Name="PreviewCodesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(vne:CodePreview)))" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.NumberingPlan.BP.SubProcess.ApplyEntitiesToDBProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.NumberingPlan.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.NumberingPlan.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.NumberingPlan.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.NumberingPlan.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.NumberingPlan.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+    <Parallel.Variables>
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNewZonesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNewCodesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareChangedZonesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareChangedCodesStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNewZonesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNewCodesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedChangedZonesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedChangedCodesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedPreviewZonesQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedPreviewCodesQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedPreviewZonesStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedPreviewCodesStatus" />
+    </Parallel.Variables>
+    <vnba:PrepareNewZonesForApply>
+      <vnba:PrepareNewZonesForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:AddedZone))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:AddedZone))">NewZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareNewZonesForApply.InputQueue>
+      <vnba:PrepareNewZonesForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedNewZonesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </vnba:PrepareNewZonesForApply.OutputQueue>
+      <vnba:PrepareNewZonesForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareNewZonesForApply.PreviousActivityStatus>
+      <vnba:PrepareNewZonesForApply.SellingNumberPlanId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">SellingNumberPlanId</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareNewZonesForApply.SellingNumberPlanId>
+      <vnba:PrepareNewZonesForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareNewZonesStatus</mca:CSharpReference>
+        </OutArgument>
+      </vnba:PrepareNewZonesForApply.Status>
+      <sap2010:WorkflowViewState.IdRef>PrepareNewZonesForApply_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:PrepareNewZonesForApply>
+    <vnba:ApplyNewZonesToDB Status="{x:Null}">
+      <vnba:ApplyNewZonesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNewZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyNewZonesToDB.InputQueue>
+      <vnba:ApplyNewZonesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareNewZonesStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyNewZonesToDB.PreviousActivityStatus>
+      <vnba:ApplyNewZonesToDB.SellingNumberPlanId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">SellingNumberPlanId</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyNewZonesToDB.SellingNumberPlanId>
+      <sap2010:WorkflowViewState.IdRef>ApplyNewZonesToDB_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:ApplyNewZonesToDB>
+    <vnba:PrepareNewCodesForApply>
+      <vnba:PrepareNewCodesForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:AddedCode))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:AddedCode))">NewCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareNewCodesForApply.InputQueue>
+      <vnba:PrepareNewCodesForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedNewCodesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </vnba:PrepareNewCodesForApply.OutputQueue>
+      <vnba:PrepareNewCodesForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareNewCodesForApply.PreviousActivityStatus>
+      <vnba:PrepareNewCodesForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareNewCodesStatus</mca:CSharpReference>
+        </OutArgument>
+      </vnba:PrepareNewCodesForApply.Status>
+      <sap2010:WorkflowViewState.IdRef>PrepareNewCodesForApply_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:PrepareNewCodesForApply>
+    <vnba:ApplyNewCodesToDB Status="{x:Null}">
+      <vnba:ApplyNewCodesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedNewCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyNewCodesToDB.InputQueue>
+      <vnba:ApplyNewCodesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareNewCodesStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyNewCodesToDB.PreviousActivityStatus>
+      <sap2010:WorkflowViewState.IdRef>ApplyNewCodesToDB_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:ApplyNewCodesToDB>
+    <vnba:PrepareChangedZonesForApply>
+      <vnba:PrepareChangedZonesForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:ChangedZone))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareChangedZonesForApply.InputQueue>
+      <vnba:PrepareChangedZonesForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedZonesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </vnba:PrepareChangedZonesForApply.OutputQueue>
+      <vnba:PrepareChangedZonesForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareChangedZonesForApply.PreviousActivityStatus>
+      <vnba:PrepareChangedZonesForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareChangedZonesStatus</mca:CSharpReference>
+        </OutArgument>
+      </vnba:PrepareChangedZonesForApply.Status>
+      <sap2010:WorkflowViewState.IdRef>PrepareChangedZonesForApply_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:PrepareChangedZonesForApply>
+    <vnba:ApplyChangedZonesToDB Status="{x:Null}">
+      <vnba:ApplyChangedZonesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyChangedZonesToDB.InputQueue>
+      <vnba:ApplyChangedZonesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareChangedZonesStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyChangedZonesToDB.PreviousActivityStatus>
+      <sap2010:WorkflowViewState.IdRef>ApplyChangedZonesToDB_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:ApplyChangedZonesToDB>
+    <vnba:PrepareChangedCodesForApply>
+      <vnba:PrepareChangedCodesForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:ChangedCode))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareChangedCodesForApply.InputQueue>
+      <vnba:PrepareChangedCodesForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedCodesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </vnba:PrepareChangedCodesForApply.OutputQueue>
+      <vnba:PrepareChangedCodesForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:PrepareChangedCodesForApply.PreviousActivityStatus>
+      <vnba:PrepareChangedCodesForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareChangedCodesStatus</mca:CSharpReference>
+        </OutArgument>
+      </vnba:PrepareChangedCodesForApply.Status>
+      <sap2010:WorkflowViewState.IdRef>PrepareChangedCodesForApply_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:PrepareChangedCodesForApply>
+    <vnba:ApplyChangedCodesToDB Status="{x:Null}">
+      <vnba:ApplyChangedCodesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">preparedChangedCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyChangedCodesToDB.InputQueue>
+      <vnba:ApplyChangedCodesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareChangedCodesStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyChangedCodesToDB.PreviousActivityStatus>
+      <sap2010:WorkflowViewState.IdRef>ApplyChangedCodesToDB_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:ApplyChangedCodesToDB>
+    <vnba:PreparePreviewZonesForDBApply>
+      <vnba:PreparePreviewZonesForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:ZonePreview))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:ZonePreview))">PreviewZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:PreparePreviewZonesForDBApply.InputQueue>
+      <vnba:PreparePreviewZonesForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewZonesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </vnba:PreparePreviewZonesForDBApply.OutputQueue>
+      <vnba:PreparePreviewZonesForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:PreparePreviewZonesForDBApply.PreviousActivityStatus>
+      <vnba:PreparePreviewZonesForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedPreviewZonesStatus</mca:CSharpReference>
+        </OutArgument>
+      </vnba:PreparePreviewZonesForDBApply.Status>
+      <sap2010:WorkflowViewState.IdRef>PreparePreviewZonesForDBApply_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:PreparePreviewZonesForDBApply>
+    <vnba:ApplyPreviewZonesToDB Status="{x:Null}">
+      <vnba:ApplyPreviewZonesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewZonesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyPreviewZonesToDB.InputQueue>
+      <vnba:ApplyPreviewZonesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedPreviewZonesStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyPreviewZonesToDB.PreviousActivityStatus>
+      <sap2010:WorkflowViewState.IdRef>ApplyPreviewZonesToDB_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:ApplyPreviewZonesToDB>
+    <vnba:PreparePreviewCodesForDBApply>
+      <vnba:PreparePreviewCodesForDBApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:CodePreview))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(vne:CodePreview))">PreviewCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:PreparePreviewCodesForDBApply.InputQueue>
+      <vnba:PreparePreviewCodesForDBApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewCodesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </vnba:PreparePreviewCodesForDBApply.OutputQueue>
+      <vnba:PreparePreviewCodesForDBApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:PreparePreviewCodesForDBApply.PreviousActivityStatus>
+      <vnba:PreparePreviewCodesForDBApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparedPreviewCodesStatus</mca:CSharpReference>
+        </OutArgument>
+      </vnba:PreparePreviewCodesForDBApply.Status>
+      <sap2010:WorkflowViewState.IdRef>PreparePreviewCodesForDBApply_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:PreparePreviewCodesForDBApply>
+    <vnba:ApplyPreviewCodesToDB Status="{x:Null}">
+      <vnba:ApplyPreviewCodesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedPreviewCodesQueue</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyPreviewCodesToDB.InputQueue>
+      <vnba:ApplyPreviewCodesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparedPreviewCodesStatus</mca:CSharpValue>
+        </InArgument>
+      </vnba:ApplyPreviewCodesToDB.PreviousActivityStatus>
+      <sap2010:WorkflowViewState.IdRef>ApplyPreviewCodesToDB_1</sap2010:WorkflowViewState.IdRef>
+    </vnba:ApplyPreviewCodesToDB>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTnVtYmVyaW5nUGxhbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sM0cDuQIOAgEBVgVxJAMBwgVyBYMBHgMBggWEAQWaASQDAa0EmwEFpwEeAwGCBKgBBb4BKAMBrQO/AQXLASIDAYIDzAEF4gEoAwGtAuMBBe8BIgMBggLwAQWGAioDAa0BhwIFkwIiAwGCAZQCBaoCKgIBLasCBbcCIgIBAmMLY3cDAZcGWQtZegMBggZoC2hbAwHtBW0LbXQDAdgFXgtedAMBwwV6C3psAwGtBXULdWwDAZgFfwt/WwMBgwWRAQuRAXcDAe0EhwELhwF6AwHYBJYBC5YBdAMBwwSMAQuMAXQDAa4EowELowFsAwGYBJ4BC54BbAMBgwS1AQu1AXcDAe0DqwELqwGAAQMB2AO6AQu6AXgDAcMDsAELsAF4AwGuA8cBC8cBcAMBmAPCAQvCAXADAYMD2QEL2QF3AwHtAs8BC88BgAEDAdgC3gEL3gF4AwHDAtQBC9QBeAMBrgLrAQvrAXADAZgC5gEL5gFwAwGDAv0BC/0BdwMB7QHzAQvzAYABAwHYAYICC4ICeQMBwwH4AQv4AXgDAa4BjwILjwJxAwGYAYoCC4oCcAMBgwGhAguhAncCAW2XAguXAoABAgFYpgILpgJ5AgFDnAILnAJ4AgEuswILswJxAgEYrgILrgJwAgED</sads:DebugSymbol.Symbol>
+  </Parallel>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="PrepareNewZonesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareNewCodesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedZonesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareChangedCodesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PreparePreviewZonesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyPreviewZonesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PreparePreviewCodesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyPreviewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2954,86" />
+      <sap2010:ViewStateData Id="Vanrise.NumberingPlan.BP.SubProcess.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="2994,166" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

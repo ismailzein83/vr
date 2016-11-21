@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="Vr_NP_MoveCodeDialogController" vr-loader="isGettingData">
+    <vr-modalbody>
+        <vr-form name="formCodeDialog">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-select datatextfield="Name" datavaluefield="Name" label="To Zone" datasource="saleZones" text="None" selectedvalues="selectedZone" isrequired>
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <div>
+                        <vr-label>Codes</vr-label>
+                    </div>
+
+                    <vr-datalist maxitemsperrow="3" datasource="codes" >
+                        {{dataItem}}
+                    </vr-datalist>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCodeDialog" data-onclick="saveMoveCodes"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

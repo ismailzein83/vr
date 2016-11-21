@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="Vr_NP_NumberingPlanApplyStateEditorController">
+    <vr-modalbody>
+        <vr-form validationcontext="applyCodePreparation">
+            <div vr-loader="isLoading">
+                <vr-row removeline>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker type="date" label="Effective Date" value="effectiveDate" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Apply" validationcontext="applyCodePreparation" data-onclick="applyState"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+
+

@@ -1,0 +1,34 @@
+﻿<vr-panel ng-controller="Vr_NP_NumberingPlanController">
+    <vr-form validationcontext="codePreparationGroup">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-row>
+                        <vr-columns width="normal" vr-loader="isLoadingSellingNumberPlan">
+                            <vr-whs-be-sellingnumberplan-selector isrequired on-ready="onSellingNumberPlanSelectorReady" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-label>Upload File</vr-label>
+                            <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
+
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" label="Effective Date" value="effectiveDate" isrequired></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+
+    <vr-row>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+            <div transclude-to="buttons">
+                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
+                <vr-button type="Upload" validationcontext="codePreparationGroup" data-onclick="upload"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+
+
