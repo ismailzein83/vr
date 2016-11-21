@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService',
-    function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService) {
+app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService','NP_IVSwitch_StateEnum','UtilsService',
+    function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService, NP_IVSwitch_StateEnum, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -31,8 +31,10 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                     defineAPI();
                 };
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+
                     return NP_IVSwitch_RouteAPIService.GetFilteredRoutes(dataRetrievalInput).then(function (response) {
-                         onResponseReady(response);
+                        onResponseReady(response);
+
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_TraceEnum','NP_IVSwitch_RtpModeEnum'];
+    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_TraceEnum', 'NP_IVSwitch_RtpModeEnum', 'NP_IVSwitch_EndPointEnum'];
 
-    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum, NP_IVSwitch_RtpModeEnum) {
+    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum, NP_IVSwitch_RtpModeEnum, NP_IVSwitch_EndPointEnum) {
 
         var isEditMode;
 
@@ -127,10 +127,14 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.endpointtype = SelectedItem.value;
 
-                     if ($scope.scopeModel.endpointtype == 0)
+                    if ($scope.scopeModel.endpointtype == 0) {
                         $scope.scopeModel.ShowSIP = true;
-                    else
+                        $scope.scopeModel.ShowACL = false;
+                    }
+                    else {
+                        $scope.scopeModel.ShowSIP = false;
                         $scope.scopeModel.ShowACL = true;
+                    }
 
                  }
             }
@@ -205,7 +209,10 @@
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
  
-                 $scope.scopeModel.rtpmode = UtilsService.getArrayEnum(NP_IVSwitch_RtpModeEnum);
+                $scope.scopeModel.rtpmode = UtilsService.getArrayEnum(NP_IVSwitch_RtpModeEnum);
+
+                $scope.scopeModel.endpointtypes = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
+
                
                 if (endPointEntity == undefined) {
 
@@ -231,9 +238,12 @@
                 $scope.scopeModel.sippassword = endPointEntity.SipPassword;
                 $scope.scopeModel.endpointtype = endPointEntity.EndPointType;
   
-                $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
-                $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[endPointEntity.RtpMode - 1];
-               
+                if (endPointEntity.CurrentState != undefined)
+                    $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
+                if (endPointEntity.RtpMode != undefined)
+                   $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[endPointEntity.RtpMode - 1];
+                if (endPointEntity.EndPointType != undefined)
+                    $scope.scopeModel.endpointtype = $scope.scopeModel.endpointtypes[endPointEntity.EndPointType];
              }
 
             function loadSelectorCodecProfile() {

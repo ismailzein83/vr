@@ -9,5 +9,7 @@ namespace NP.IVSwitch.Entities
     public class RouteDetail
     {
         public Route Entity { get; set; }
+        public string CurrentStateDescription { get; set; }
+
     }
 }

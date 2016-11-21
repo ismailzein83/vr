@@ -12,12 +12,7 @@ namespace NP.IVSwitch.Business
     public class RouteTableManager
     { 
         #region Public Methods
-        public RouteTable GetRouteTable(int routeTableId)
-        {
-            Dictionary<int, RouteTable> cachedRouteTable = this.GetCachedRouteTable();
-            return cachedRouteTable.GetRecord(routeTableId);
-        }
-
+      
         public IEnumerable<RouteTableInfo> GetRouteTablesInfo(RouteTableFilter filter)
         {
             Func<RouteTable, bool> filterExpression = null;

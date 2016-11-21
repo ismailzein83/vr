@@ -14,12 +14,7 @@ namespace NP.IVSwitch.Business
     public class TariffManager
     {
         #region Public Methods
-        public Tariff GetTariff(int tariffId)
-        {
-            Dictionary<int, Tariff> cachedTariff = this.GetCachedTariff();
-            return cachedTariff.GetRecord(tariffId);
-        }
-
+       
         public IEnumerable<TariffInfo> GetTariffsInfo(TariffFilter filter)
         {
             Func<Tariff, bool> filterExpression = null;

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum','NP_IVSwitch_TraceEnum'];
+    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum','NP_IVSwitch_TraceEnum','NP_IVSwitch_TransportModeEnum'];
 
-    function RouteEditorController($scope, NP_IVSwitch_RouteAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum) {
+    function RouteEditorController($scope, NP_IVSwitch_RouteAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum, NP_IVSwitch_TransportModeEnum) {
 
         var isEditMode;
  
@@ -77,6 +77,7 @@
                 }
             }
 
+
             $scope.scopeModel.onSelectionCodecProfileChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
@@ -104,6 +105,12 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.currentstate = SelectedItem;
                 }
+            }
+
+            $scope.scopeModel.onSelectionChangedTransportMode = function (SelectedItem) {
+                if (SelectedItem != undefined) {
+                    $scope.scopeModel.transportmodeid = SelectedItem;
+                 }
             }
            
         }
@@ -140,7 +147,7 @@
 
             function setTitle() {
                 if (isEditMode) {
-                    var routeName = (routeEntity != undefined) ? routeEntity.FirstName : null;
+                    var routeName = (routeEntity != undefined) ? routeEntity.Description : null;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(routeName, 'Route');
                 }
                 else {
@@ -151,6 +158,7 @@
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
                 $scope.scopeModel.trace = UtilsService.getArrayEnum(NP_IVSwitch_TraceEnum);
+                $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
 
                 $scope.scopeModel.currenttrace = $scope.scopeModel.trace[0]; // always disabled
 
@@ -168,9 +176,14 @@
                 $scope.scopeModel.port = routeEntity.Port;
                 $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
                 $scope.scopeModel.pscore = routeEntity.PScore;
-            
-                $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
-                $scope.scopeModel.wakeuptime = routeEntity.WakeUpTime;
+
+                if (routeEntity.TransportModeId != undefined)
+                    $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
+                if (routeEntity.CurrentState != undefined)
+                    $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
+                if (routeEntity.WakeUpTime != undefined)
+                $scope.scopeModel.wakeuptime = routeEntity.WakeUpTime;                 
+
              }
 
             function loadSelectorCodecProfile() {
@@ -235,8 +248,7 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-       
-
+        
             return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope()).then(function (response) {
 
 
@@ -271,6 +283,7 @@
                 TransRuleId: $scope.scopeModel.translationruleid,
                 TariffId: $scope.scopeModel.tariffid,
                 WakeUpTime: $scope.scopeModel.wakeuptime,
+                TransportModeId : $scope.scopeModel.transportmodeid.value,
 
             };
         }

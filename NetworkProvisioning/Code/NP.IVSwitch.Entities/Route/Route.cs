@@ -8,6 +8,8 @@ namespace NP.IVSwitch.Entities
 {
 
     public enum Trace { Disabled = 0, Enabled = 1  }
+    public enum TransportMode { UDP = 1, TCP = 2, TLS =3 }
+
     public class Route
     {
         public int RouteId {get;set;}
@@ -23,8 +25,8 @@ namespace NP.IVSwitch.Entities
         public DateTime WakeUpTime {get;set;}
         public Trace EnableTrace { get; set; }
         public String Host{get;set;}
-        public String Port { get; set; } 
-        public int TransportModeId {get;set;}
+        public String Port { get; set; }
+        public TransportMode TransportModeId { get; set; }
         public int ConnectionTimeOut {get;set;}
         public int PScore {get;set;}
          

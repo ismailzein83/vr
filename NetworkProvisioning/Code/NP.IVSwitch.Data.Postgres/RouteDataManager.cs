@@ -35,7 +35,7 @@ namespace NP.IVSwitch.Data.Postgres
             route.EnableTrace = (Trace)(Int16)reader["enable_trace"];
             route.Host = reader["host"] as string;
             route.Port = reader["port"] as string;
-            route.TransportModeId = (int)reader["transport_mode_id"];
+            route.TransportModeId = (TransportMode)(int)reader["transport_mode_id"];
             route.ConnectionTimeOut = (int)reader["timeout"];
             route.PScore = (int)reader["p_score"]; 
 
@@ -57,9 +57,9 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Update(Route route)
         {
 
-            int currentState, enableTrace ;
+            int currentState, enableTrace, transportPortId ;
 
-            MapEnum(route, out currentState, out enableTrace);
+            MapEnum(route, out currentState, out enableTrace, out  transportPortId);
  
             String cmdText = @"UPDATE routes
 	                             SET  description=@description,group_id=@group_id,tariff_id=@tariff_id,
@@ -83,7 +83,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@enable_trace", enableTrace);
                 cmd.Parameters.AddWithValue("@host", route.Host);
                 cmd.Parameters.AddWithValue("@port", route.Port);
-                cmd.Parameters.AddWithValue("@transport_mode_id", route.TransportModeId);
+                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
                 cmd.Parameters.AddWithValue("@p_score", route.PScore);
              
@@ -96,10 +96,10 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(Route route, out int insertedId)
         {
             object routeId;
-            int currentState, enableTrace;
+            int currentState, enableTrace, transportPortId;
 
 
-            MapEnum(route, out currentState, out enableTrace);
+            MapEnum(route, out currentState, out enableTrace, out transportPortId);
 
 
             String cmdText = @"INSERT INTO routes(account_id,description,group_id,tariff_id,
@@ -124,7 +124,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@enable_trace", enableTrace);
                 cmd.Parameters.AddWithValue("@host", route.Host);
                 cmd.Parameters.AddWithValue("@port", route.Port);
-                cmd.Parameters.AddWithValue("@transport_mode_id", route.TransportModeId);
+                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
                 cmd.Parameters.AddWithValue("@p_score", route.PScore);
 
@@ -142,12 +142,14 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        private void MapEnum(Route route, out int currentState, out int enableTrace)
+        private void MapEnum(Route route, out int currentState, out int enableTrace, out int transportPortId)
         {
             var currentStateValue = Enum.Parse(typeof(State), route.CurrentState.ToString());
             currentState = (int)currentStateValue;
             var enableTraceValue = Enum.Parse(typeof(Trace), route.EnableTrace.ToString());
             enableTrace = (int)enableTraceValue;
+            var transportPortIdValue = Enum.Parse(typeof(TransportMode), route.TransportModeId.ToString());
+            transportPortId = (int)transportPortIdValue;
  
 
         }

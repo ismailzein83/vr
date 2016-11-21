@@ -109,7 +109,8 @@ namespace NP.IVSwitch.Business
             RouteDetail routeDetail = new RouteDetail()
             {
                 Entity = route,
-             
+                CurrentStateDescription = Vanrise.Common.Utilities.GetEnumDescription<State>(route.CurrentState),
+
             };
 
             return routeDetail;

@@ -4,14 +4,12 @@
             <vr-tabs>
                 <vr-tab header="'Info'">
 
-                    <np-ivswitch-endpoint-selector on-ready="scopeModel.onSelectorEndPointReady" onselectionchanged="scopeModel.onSelectionEndPointChanged"
-                                                   normal-col-num="6" isrequired="true"></np-ivswitch-endpoint-selector>
+                    <np-ivswitch-endpoint-selector   on-ready="scopeModel.onSelectorEndPointReady" onselectionchanged="scopeModel.onSelectionEndPointChanged"
+                                                   normal-col-num="6" isrequired="true"  ></np-ivswitch-endpoint-selector>
 
                     <vr-columns width="1/2row">
                         <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
-                    </vr-columns>
-
-                  
+                    </vr-columns>                  
 
                     <vr-columns width="1/2row">
                         <vr-textbox label="Group Membership Tag"></vr-textbox>
@@ -45,7 +43,7 @@
 
                     <vr-columns width="1/2row">
                         <vr-select label="RTP Mode" datatextfield="description" datavaluefield="value" datasource="scopeModel.rtpmode"
-                                   selectedvalues=" scopeModel.selectedrtpmode" onselectionchanged="scopeModel.onSelectionChangedRtpMode"></vr-select>
+                                   selectedvalues=" scopeModel.selectedrtpmode" onselectionchanged="scopeModel.onSelectionChangedRtpMode" isrequired></vr-select>
                     </vr-columns>
 
                     <np-ivswitch-domain-selector on-ready="scopeModel.onSelectorDomainReady" onselectionchanged="scopeModel.onSelectionDomainChanged"

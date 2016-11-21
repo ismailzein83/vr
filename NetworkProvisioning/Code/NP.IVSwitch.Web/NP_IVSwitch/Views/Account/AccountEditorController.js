@@ -136,11 +136,11 @@
                 $scope.scopeModel.taxgroupid = accountEntity.TaxGroupId;
                 $scope.scopeModel.paymentterms = accountEntity.PaymentTerms;
 
-            //     var index = accountEntity.CurrentState;
-            //    if(index>0 && index<4)
-                $scope.scopeModel.currentstate = $scope.scopeModel.states[accountEntity.CurrentState - 1];
-              //  console.log($scope.scopeModel.currentstate);
-            }
+             
+                if (accountEntity.CurrentState != undefined)
+                    $scope.scopeModel.currentstate = $scope.scopeModel.states[accountEntity.CurrentState - 1];
+
+             }
 
             function loadSelectorDirective() {
                 var selectorDirectiveLoadDeferred = UtilsService.createPromiseDeferred();

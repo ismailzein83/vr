@@ -36,8 +36,8 @@ namespace NP.IVSwitch.Entities
         public String TraceId {get;set;}
         public String SipLogin { get; set; } //SIP
         public String SipPassword { get; set; }  //SIP 
- 
-//   type_id smallint, ??
+        public Int16 TypeId { get; set; }
+
 //   svc_handler_id smallint, ??
       }
 }

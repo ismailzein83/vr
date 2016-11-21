@@ -99,7 +99,7 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
                         return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
                     };
                     RouteTab.hideDrillDownFunction = function (dataItem) {
-                        return (dataItem.Entity.TypeId != NP_IVSwitch_AccountTypeEnum.Vendor.value); /////////////////////////////
+                        return (dataItem.Entity.TypeId != NP_IVSwitch_AccountTypeEnum.Vendor.value);
                     };
 
                     RouteTab.parentMenuActions = [{
@@ -132,7 +132,7 @@ function (NP_IVSwitch_AccountAPIService, NP_IVSwitch_AccountService, VRNotificat
                         return parentAccount.subAccountGridAPI.load(subAccountGridPayload);
                     };
                     EndPointTab.hideDrillDownFunction = function (dataItem) {
-                        return (dataItem.Entity.TypeId != NP_IVSwitch_AccountTypeEnum.Customer.value); /////////////////////////////
+                        return (dataItem.Entity.TypeId != NP_IVSwitch_AccountTypeEnum.Customer.value);
                     };
 
                     EndPointTab.parentMenuActions = [{

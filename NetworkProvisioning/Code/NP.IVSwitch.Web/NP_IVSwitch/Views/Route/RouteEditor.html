@@ -45,9 +45,12 @@
                     <vr-columns width="1/2row">
                         <vr-textbox label="Port" value="scopeModel.port" isrequired></vr-textbox>
                     </vr-columns>
+                  
                     <vr-columns width="1/2row">
-                        <vr-textbox label="SIP Transport Mode"  ></vr-textbox>
+                        <vr-select datatextfield="description" datavaluefield="value" label="SIP Transport Mode"
+                                   datasource="scopeModel.transportmode" selectedvalues="scopeModel.transportmodeid" onselectionchanged="scopeModel.onSelectionChangedTransportMode"></vr-select>
                     </vr-columns>
+
                     <vr-columns width="1/2row">
                         <vr-textbox label="Connection Timeout (s)" value="scopeModel.connectiontimeout"></vr-textbox>
                     </vr-columns>

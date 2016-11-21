@@ -12,12 +12,7 @@ namespace NP.IVSwitch.Business
     public class DomainManager
     {
         #region Public Methods
-        public Domain GetDomain(Int16 domainId)
-        {
-            Dictionary<Int16, Domain> cachedDomain = this.GetCachedDomain();
-            return cachedDomain.GetRecord(domainId);
-        }
-
+       
         public IEnumerable<DomainInfo> GetDomainsInfo(DomainFilter filter)
         {
             Func<Domain, bool> filterExpression = null;
