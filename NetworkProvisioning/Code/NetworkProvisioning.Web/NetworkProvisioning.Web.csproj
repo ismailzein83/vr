@@ -138,6 +138,27 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
+    <Reference Include="TOne.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Business">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data.SQL">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.MainExtensions">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Web">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
