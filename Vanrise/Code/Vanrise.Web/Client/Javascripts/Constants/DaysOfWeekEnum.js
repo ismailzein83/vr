@@ -1,4 +1,5 @@
-﻿app.constant('DaysOfWeekEnum', {
+﻿'use strict';
+app.constant('DaysOfWeekEnum', {
     Sunday: { name: "Sunday", value: 0, description: "Sunday" },
     Monday: { name: "Monday", value: 1, description: "Monday" },
     Tuesday: { name: "Tuesday", value: 2, description: "Tuesday" },
