@@ -5,6 +5,6 @@
     Wednesday: { name: "Wednesday", value: 3, description: "Wednesday" },
     Thursday: { name: "Thursday", value: 4, description: "Thursday" },
     Friday: { name: "Friday", value: 5, description: "Friday" },
-    Saturday: { name: "Saturday", value: 6, description: "Saturday" },
+    Saturday: { name: "Saturday", value: 6, description: "Saturday" }
 });
 
