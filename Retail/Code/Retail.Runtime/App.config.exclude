@@ -65,6 +65,7 @@
     <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= " />
+    <add name="NumberingPlanDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= "/>
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
 
@@ -89,6 +90,7 @@
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="NumberingPlanDBConnStringKey" value="NumberingPlanDBConnString"/>
   </appSettings>
 
   <vanriseLogging maxLogLevel="Information">
