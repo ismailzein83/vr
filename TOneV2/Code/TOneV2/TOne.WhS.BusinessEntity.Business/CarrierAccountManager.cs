@@ -120,6 +120,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
 
+        public void UpdateCarrierAccountExtendedSetting(int carrierAccountId, string extendedSettingName, Object extendedSetting)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             if (carrierAccountsIds.Count() > 0)

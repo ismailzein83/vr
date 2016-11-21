@@ -16,6 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierAccountSettings CarrierAccountSettings { get; set; }
         public CarrierAccountSupplierSettings SupplierSettings { get; set; }
         public CarrierAccountCustomerSettings CustomerSettings { get; set; }
+
         public string SourceId { get; set; }
     }
 
@@ -23,6 +24,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int CarrierProfileId { get; set; }
         public int? SellingNumberPlanId { get; set; }
+        public Dictionary<string, Object> ExtendedSettings { get; set; }
         public CarrierAccountType AccountType { get; set; }
 
         public bool IsDeleted { get; set; }
