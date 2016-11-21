@@ -108,9 +108,13 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                 cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                cmd.Parameters.AddWithValue("@sip_login", CheckIfNull(endPoint.SipLogin));
-                cmd.Parameters.AddWithValue("@sip_password", CheckIfNull(endPoint.SipPassword));
-                cmd.Parameters.AddWithValue("@tech_prefix", CheckIfNull(endPoint.TechPrefix));
+                var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
+                prmSipLogin.Value = CheckIfNull(endPoint.SipLogin);
+                cmd.Parameters.Add(prmSipLogin);
+                var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String);
+                prmPassword.Value = CheckIfNull(endPoint.SipPassword);
+                cmd.Parameters.Add(prmPassword);
+                cmd.Parameters.AddWithValue("@tech_prefix", ".");
               
 
             }
@@ -172,7 +176,7 @@ namespace NP.IVSwitch.Data.Postgres
                     cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                     cmd.Parameters.AddWithValue("@route_table_id", endPoint.RouteTableId);
                     cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                    cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
+                    cmd.Parameters.AddWithValue("@rtp_mode", 1);
                     cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                     cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
                     cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
@@ -200,10 +204,10 @@ namespace NP.IVSwitch.Data.Postgres
   
             String cmdText = @"INSERT INTO users(account_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, route_table_id,max_call_dura,rtp_mode,domain_id,
-                                    sip_login,sip_password, tech_prefix)
+                                    sip_login,sip_password, tech_prefix,type_id)
 	                             SELECT  @account_id, @description, @group_id, @tariff_id, @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,  @route_table_id, @max_call_dura, @rtp_mode, @domain_id,@sip_login, @sip_password , @tech_prefix 
-                                   WHERE   NOT EXISTS(SELECT 1 FROM  users WHERE (domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix));
+                                 @channels_limit,  @route_table_id, @max_call_dura, @rtp_mode, @domain_id,@sip_login, @sip_password , @tech_prefix,@type_id 
+                                   WHERE   NOT EXISTS(SELECT 1 FROM  users WHERE (domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix))
  	                             returning  user_id;";
 
             endPointId = ExecuteScalarText(cmdText, (cmd) =>
@@ -221,9 +225,15 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                 cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                cmd.Parameters.AddWithValue("@sip_login", CheckIfNull(endPoint.SipLogin));
-                cmd.Parameters.AddWithValue("@sip_password", CheckIfNull(endPoint.SipPassword));
-                cmd.Parameters.AddWithValue("@tech_prefix", CheckIfNull(endPoint.TechPrefix));
+                var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
+                prmSipLogin.Value = CheckIfNull(endPoint.SipLogin) ;
+                cmd.Parameters.Add(prmSipLogin);
+                var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String);
+                prmPassword.Value = CheckIfNull(endPoint.SipPassword);
+                cmd.Parameters.Add(prmPassword);
+                cmd.Parameters.AddWithValue("@tech_prefix", ".");
+                cmd.Parameters.AddWithValue("@type_id",2);
+
 
  
             }
@@ -250,22 +260,23 @@ namespace NP.IVSwitch.Data.Postgres
             // insert into users and get user id
             String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
                                                  channels_limit ,max_call_dura,rtp_mode,domain_id,
-                                                  tech_prefix)
+                                                  tech_prefix,type_id)
 	                             SELECT  @account_id,  @group_id, @trans_rule_id,@state_id,
-                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id, @tech_prefix 
+                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id, @tech_prefix ,@type_id
  	                             returning  user_id;";
 
             endPointId = ExecuteScalarText(cmdText1, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
-                 cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
-                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
+                cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
+                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                 cmd.Parameters.AddWithValue("@state_id", 1);
                 cmd.Parameters.AddWithValue("@channels_limit", 1);
-                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
+                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                 cmd.Parameters.AddWithValue("@rtp_mode", 1);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                 cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
+                cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
+                cmd.Parameters.AddWithValue("@type_id", 2);
 
 
             }
@@ -298,7 +309,7 @@ namespace NP.IVSwitch.Data.Postgres
                    cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                    cmd.Parameters.AddWithValue("@route_table_id", endPoint.RouteTableId);
                    cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                   cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
+                   cmd.Parameters.AddWithValue("@rtp_mode", 1);
                    cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                    cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
                    cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
@@ -346,7 +357,7 @@ namespace NP.IVSwitch.Data.Postgres
         private Object CheckIfNull(String parameter)
         {
 
-            return (String.IsNullOrEmpty(parameter)) ? (object)DBNull.Value : parameter;            
+            return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value  : parameter;            
 
         }
 

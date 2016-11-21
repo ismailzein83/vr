@@ -31,6 +31,7 @@
         var selectorDomainAPI;
         var selectorDomainReadyDeferred = UtilsService.createPromiseDeferred();
 
+
         loadParameters();
 
         defineScope();
@@ -50,6 +51,8 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+ 
+            $scope.scopeModel.DisableSelector = false;
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -80,7 +83,7 @@
             };
 
             $scope.scopeModel.onSelectorEndPointReady = function (api) {
-                selectorEndPointAPI = api; 
+                 selectorEndPointAPI = api; 
                 selectorEndPointReadyDeferred.resolve();
             };
 
@@ -114,7 +117,6 @@
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
                 }
             }
-
 
             $scope.scopeModel.onSelectionTariffChanged = function (SelectedItem) {
 
@@ -166,10 +168,11 @@
 
         }
         function load() {
-            $scope.scopeModel.isLoading = true;
 
-            if (isEditMode) {
+            $scope.scopeModel.isLoading = true;
+            if (isEditMode) {  
                 getEndPoint().then(function () {
+                    $scope.scopeModel.DisableSelector = true;
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -178,6 +181,7 @@
             }
             else {
                 loadAllControls();
+ 
             }
         }
 
@@ -217,6 +221,7 @@
                 if (endPointEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[0];
 
                     return;
                 }
@@ -240,8 +245,14 @@
   
                 if (endPointEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
-                if (endPointEntity.RtpMode != undefined)
-                   $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[endPointEntity.RtpMode - 1];
+                if (endPointEntity.RtpMode != undefined) {
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[endPointEntity.RtpMode - 1];
+                    if ($scope.scopeModel.selectedrtpmode != undefined)
+                        $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value;
+                }
+                else
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[0];
+
                 if (endPointEntity.EndPointType != undefined)
                     $scope.scopeModel.endpointtype = $scope.scopeModel.endpointtypes[endPointEntity.EndPointType];
              }
@@ -290,6 +301,7 @@
             }
 
             function loadSelectorEndPoint() {
+
                 var selectorEndPointLoadDeferred = UtilsService.createPromiseDeferred();
  
                 selectorEndPointReadyDeferred.promise.then(function () {
@@ -384,7 +396,7 @@
                 ChannelsLimit: $scope.scopeModel.channelslimit,
                 RouteTableId : $scope.scopeModel.routetableid,
                 MaxCallDuration : $scope.scopeModel.maxcallduration,
-                RtpMode: $scope.scopeModel.selectedrtpmode.value,
+                RtpMode: $scope.scopeModel.rtpmode ,
                 DomainId :$scope.scopeModel.domaineid,
                 Host: $scope.scopeModel.host,
                 TechPrefix: $scope.scopeModel.techprefix,

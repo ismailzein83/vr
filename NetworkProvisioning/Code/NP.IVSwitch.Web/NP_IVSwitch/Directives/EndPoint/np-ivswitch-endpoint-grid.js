@@ -32,7 +32,13 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                 };
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return NP_IVSwitch_EndPointAPIService.GetFilteredEndPoints(dataRetrievalInput).then(function (response) {
-                         onResponseReady(response);
+                        for (var i = 0; i < response.Data.length; i++) {
+                            if (response.Data[i].Entity.Host != null)
+                                response.Data[i].HostLogin = response.Data[i].Entity.Host;
+                            else
+                                response.Data[i].HostLogin = response.Data[i].Entity.SipLogin;
+                        }
+                        onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });

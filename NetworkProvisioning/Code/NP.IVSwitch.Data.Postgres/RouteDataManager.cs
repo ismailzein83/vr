@@ -32,13 +32,11 @@ namespace NP.IVSwitch.Data.Postgres
             route.CurrentState =  (State)(Int16)reader["state_id"];
             route.ChannelsLimit = (int)reader["channels_limit"];
             route.WakeUpTime =  (DateTime)reader["wakeup_time"];
-            route.EnableTrace = (Trace)(Int16)reader["enable_trace"];
             route.Host = reader["host"] as string;
             route.Port = reader["port"] as string;
-            route.TransportModeId = (TransportMode)(int)reader["transport_mode_id"];
+       //     route.TransportModeId = (TransportMode)(int)reader["transport_mode_id"];
             route.ConnectionTimeOut = (int)reader["timeout"];
-            route.PScore = (int)reader["p_score"]; 
-
+ 
 
             return route;
         }
@@ -47,7 +45,7 @@ namespace NP.IVSwitch.Data.Postgres
         public List<Route> GetRoutes()
         {
             String cmdText = @"SELECT route_id,account_id,description,group_id,tariff_id,log_alias,codec_profile_id,trans_rule_id,state_id,channels_limit,
-                                      wakeup_time,enable_trace,host,port,transport_mode_id,timeout,p_score          
+                                      wakeup_time,host,port ,timeout          
                                        FROM routes;";
             return GetItemsText(cmdText, RouteMapper, (cmd) =>
             {
@@ -57,15 +55,15 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Update(Route route)
         {
 
-            int currentState, enableTrace, transportPortId ;
+            int currentState  ;
 
-            MapEnum(route, out currentState, out enableTrace, out  transportPortId);
+            MapEnum(route, out currentState );
  
             String cmdText = @"UPDATE routes
 	                             SET  description=@description,group_id=@group_id,tariff_id=@tariff_id,
                                    log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
-                                   channels_limit=@channels_limit, wakeup_time=@wakeup_time,enable_trace=@enable_trace,host=@host,port=@port,
-                                   transport_mode_id=@transport_mode_id,timeout=@timeout,p_score=@p_score 
+                                   channels_limit=@channels_limit, wakeup_time=@wakeup_time,host=@host,port=@port,
+                                     timeout=@timeout 
                                    WHERE  route_id = @route_id;";
 
             int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) =>
@@ -80,13 +78,11 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@state_id", currentState);
                 cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@wakeup_time", route.WakeUpTime);
-                cmd.Parameters.AddWithValue("@enable_trace", enableTrace);
                 cmd.Parameters.AddWithValue("@host", route.Host);
                 cmd.Parameters.AddWithValue("@port", route.Port);
-                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
+           //     cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
-                cmd.Parameters.AddWithValue("@p_score", route.PScore);
-             
+              
 
             }
            );
@@ -96,17 +92,17 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(Route route, out int insertedId)
         {
             object routeId;
-            int currentState, enableTrace, transportPortId;
+            int currentState;
 
 
-            MapEnum(route, out currentState, out enableTrace, out transportPortId);
+            MapEnum(route, out currentState );
 
 
             String cmdText = @"INSERT INTO routes(account_id,description,group_id,tariff_id,
-                                   log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time,enable_trace,host,port,
-                                    transport_mode_id,timeout,p_score )
+                                   log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,
+                                    timeout  )
 	                             SELECT  @account_id, @description, @group_id, @tariff_id, @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,  @wakeup_time, @enable_trace, @host, @port,@transport_mode_id, @timeout, @p_score 
+                                 @channels_limit,  @wakeup_time, @host, @port,  @timeout 
  	                             returning  route_id;";
 
             routeId = ExecuteScalarText(cmdText, (cmd) =>
@@ -121,13 +117,11 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@state_id", currentState);
                 cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@wakeup_time", route.WakeUpTime);
-                cmd.Parameters.AddWithValue("@enable_trace", enableTrace);
                 cmd.Parameters.AddWithValue("@host", route.Host);
-                cmd.Parameters.AddWithValue("@port", route.Port);
-                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
+                cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
+               // cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
-                cmd.Parameters.AddWithValue("@p_score", route.PScore);
-
+ 
             }
             );
 
@@ -142,15 +136,19 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        private void MapEnum(Route route, out int currentState, out int enableTrace, out int transportPortId)
+        private void MapEnum(Route route, out int currentState )
         {
             var currentStateValue = Enum.Parse(typeof(State), route.CurrentState.ToString());
             currentState = (int)currentStateValue;
-            var enableTraceValue = Enum.Parse(typeof(Trace), route.EnableTrace.ToString());
-            enableTrace = (int)enableTraceValue;
-            var transportPortIdValue = Enum.Parse(typeof(TransportMode), route.TransportModeId.ToString());
-            transportPortId = (int)transportPortIdValue;
- 
+  
+     
+
+        }
+
+        private Object CheckIfNull(String parameter, Object DefaultValue)
+        {
+
+            return (String.IsNullOrEmpty(parameter)) ? DefaultValue : parameter;
 
         }
 

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum','NP_IVSwitch_TraceEnum','NP_IVSwitch_TransportModeEnum'];
+    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum','NP_IVSwitch_TransportModeEnum'];
 
-    function RouteEditorController($scope, NP_IVSwitch_RouteAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum, NP_IVSwitch_TransportModeEnum) {
+    function RouteEditorController($scope, NP_IVSwitch_RouteAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum,   NP_IVSwitch_TransportModeEnum) {
 
         var isEditMode;
  
@@ -107,11 +107,11 @@
                 }
             }
 
-            $scope.scopeModel.onSelectionChangedTransportMode = function (SelectedItem) {
-                if (SelectedItem != undefined) {
-                    $scope.scopeModel.transportmodeid = SelectedItem;
-                 }
-            }
+            //$scope.scopeModel.onSelectionChangedTransportMode = function (SelectedItem) {
+            //    if (SelectedItem != undefined) {
+            //        $scope.scopeModel.transportmodeid = SelectedItem;
+            //     }
+            //}
            
         }
         function load() {
@@ -157,11 +157,9 @@
             function loadStaticData() {
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
-                $scope.scopeModel.trace = UtilsService.getArrayEnum(NP_IVSwitch_TraceEnum);
-                $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
+                 $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
 
-                $scope.scopeModel.currenttrace = $scope.scopeModel.trace[0]; // always disabled
-
+ 
                 if (routeEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
@@ -175,10 +173,9 @@
                 $scope.scopeModel.host = routeEntity.Host;
                 $scope.scopeModel.port = routeEntity.Port;
                 $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
-                $scope.scopeModel.pscore = routeEntity.PScore;
-
-                if (routeEntity.TransportModeId != undefined)
-                    $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
+ 
+                //if (routeEntity.TransportModeId != undefined)
+                //    $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
                 if (routeEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
                 if (routeEntity.WakeUpTime != undefined)
@@ -276,14 +273,12 @@
                 Host : $scope.scopeModel.host,
                 Port: $scope.scopeModel.port,
                 ConnectionTimeOut :$scope.scopeModel.connectiontimeout,
-                PScore:$scope.scopeModel.pscore,                
                 CurrentState: $scope.scopeModel.currentstate.value,
-                EnableTrace: $scope.scopeModel.currenttrace.value,
                 CodecProfileId: $scope.scopeModel.codecprofileid,
                 TransRuleId: $scope.scopeModel.translationruleid,
                 TariffId: $scope.scopeModel.tariffid,
                 WakeUpTime: $scope.scopeModel.wakeuptime,
-                TransportModeId : $scope.scopeModel.transportmodeid.value,
+         //       TransportModeId : $scope.scopeModel.transportmodeid.value,
 
             };
         }
