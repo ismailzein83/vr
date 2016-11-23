@@ -20,12 +20,15 @@ namespace Retail.BusinessEntity.Entities
     public class ActionDefinitionSettings
     {
         public string Description { get; set; }
-
-
+        
         /// <summary>
         /// = ServiceTypeId in case EntityType = EntityType.AccountService
         /// </summary>
         public Guid? EntityTypeId { get; set; }
+
+        public AccountCondition AvailabilityCondition { get; set; }
+
+        public AccountServiceCondition ServiceAvailabilityCondition { get; set; }
 
         public List<ActionStatusDefinition> SupportedOnStatuses { get; set; }
 

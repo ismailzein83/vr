@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Retail.Dealers.Entities
+namespace Retail.BusinessEntity.Entities
 {
-    public class DealerTypeExtendedSettingsConfig: ExtensionConfiguration
+    public class Account360DegreeViewConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_Dealers_DealerTypeExtendedSettings";
+        public const string EXTENSION_TYPE = "Retail_BE_Account360DegreeView";
+
         public string Editor { get; set; }
     }
 }

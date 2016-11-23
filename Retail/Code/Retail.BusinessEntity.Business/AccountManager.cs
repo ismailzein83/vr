@@ -206,6 +206,11 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
+        {
+            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
+        }
+
         #region Get Account Editor Runtime
 
         public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId)
@@ -349,6 +354,42 @@ namespace Retail.BusinessEntity.Business
                 return _dataManager.AreAccountsUpdated(ref _updateHandle);
             }
         }
+
+        private class AccountRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
+        {
+            Account _account;
+            AccountTypeManager _accountTypeManager = new AccountTypeManager();
+            public AccountRecordFilterGenericFieldMatchContext(Account account)
+            {
+                _account = account;
+            }
+
+            public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
+            {
+                Guid? partDefinitionId;
+                string partFieldName;
+                _accountTypeManager.ParseAccountGenericFieldName(fieldName, out partDefinitionId, out partFieldName);
+                fieldType = _accountTypeManager.GetAccountGenericFieldType(fieldName);
+                if (partDefinitionId.HasValue)
+                    return GetAccountPartFieldValue(partDefinitionId.Value, partFieldName);
+                else
+                    return GetAccountStaticFieldValue(partFieldName);
+            }
+
+            dynamic GetAccountStaticFieldValue(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            dynamic GetAccountPartFieldValue(Guid partDefinitionId, string fieldName)
+            {
+                AccountPart accountPart;
+                if (_account.Settings.Parts != null && _account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
+                    return accountPart.Settings.GetFieldValue(new AccountPartGetFieldValueContext(fieldName, partDefinitionId));
+                return null;
+            }
+        }
+
 
         #endregion
 

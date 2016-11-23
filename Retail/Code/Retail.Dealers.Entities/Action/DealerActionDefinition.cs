@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Retail.Dealers.Entities
 {
-    public class DealerActionDefinition
+    public class DealerActionDefinition : Vanrise.Entities.VRComponentType<DealerActionDefinitionSettings>
     {
-        public Guid DealerActionDefinitionId { get; set; }
-
-        public string Name { get; set; }
-
-        public DealerActionDefinitionSettings Settings { get; set; }
     }
 
-    public class DealerActionDefinitionSettings
+    public class DealerActionDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
     {
+        public override Guid VRComponentTypeConfigId
+        {
+            get { return new Guid("C16C3370-1053-4B50-B23C-8C967AC830BC"); }
+        }
+
         public string Description { get; set; }
 
-        public List<DealerActionStatusDefinition> SupportedOnStatuses { get; set; }
+        public DealerCondition AvailabilityCondition { get; set; }
 
         public DealerActionBPDefinitionSettings BPDefinitionSettings { get; set; }
     }

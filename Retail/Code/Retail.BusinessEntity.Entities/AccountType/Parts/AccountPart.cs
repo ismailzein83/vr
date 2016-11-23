@@ -17,6 +17,17 @@ namespace Retail.BusinessEntity.Entities
     {
         public abstract Guid ConfigId {get;}
 
+        public virtual dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            return null;
+        }
+    }
+
+    public interface IAccountPartGetFieldValueContext
+    {
+        string FieldName { get; }
+
+        AccountPartDefinition PartDefinition { get; }
     }
 
     public class AccountPartCollection : Dictionary<Guid, AccountPart>

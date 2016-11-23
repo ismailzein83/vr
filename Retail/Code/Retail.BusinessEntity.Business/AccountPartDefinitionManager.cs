@@ -101,6 +101,12 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public List<AccountPartDefinition> GetAccountPartDefinitions()
+        {
+            var cachedPartDefinitions = GetCachedAccountPartDefinitions();
+            return cachedPartDefinitions != null ? cachedPartDefinitions.Values.ToList() : null;
+        }
+
         #endregion
 
         #region Validation Methods

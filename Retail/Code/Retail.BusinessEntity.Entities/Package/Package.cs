@@ -23,10 +23,11 @@ namespace Retail.BusinessEntity.Entities
     {
         public List<PackageItem> Services { get; set; }
 
+        public PackageExtendedSettings ExtendedSettings { get; set; }
     }
 
-    public abstract class PackageValidity
+    public abstract class PackageExtendedSettings
     {
-
+        public abstract Guid ConfigId { get; }
     }
 }

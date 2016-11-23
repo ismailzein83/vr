@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Retail.Dealers.Entities
 {
-    public class DealerTypeSettings
+    public class DealerTypeSettings : Vanrise.Entities.VRComponentTypeSettings
     {
+        public override Guid VRComponentTypeConfigId
+        {
+            get { return new Guid("3C71CD27-F5A2-41FF-BF84-07375716FBBF"); }
+        }
+
         public bool CanBeRootDealer { get; set; }
 
         public List<Guid> SupportedParentDealerTypeIds { get; set; }
@@ -18,7 +23,7 @@ namespace Retail.Dealers.Entities
 
         public Guid? CreationActionDefinitionId { get; set; }
 
-        public DealerTypeExtendedSettings ExtendedSettings { get; set; }   
+        public DealerTypeExtendedSettings ExtendedSettings { get; set; }
     }
 
     public class DealerTypeActionSettings

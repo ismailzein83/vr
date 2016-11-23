@@ -54,13 +54,13 @@
     <Compile Include="Action\ActionBP\DealerActionBPSettings.cs" />
     <Compile Include="Action\ActionBP\DealerActionBPConfig.cs" />
     <Compile Include="Action\DealerActionDefinition.cs" />
+    <Compile Include="DealerCondition\DealerCondition.cs" />
     <Compile Include="Dealers\Dealer.cs" />
     <Compile Include="Dealers\DealerExtendedSettings.cs" />
     <Compile Include="Dealers\DealerSettings.cs" />
     <Compile Include="Dealers\Type\DealerType.cs" />
     <Compile Include="Dealers\Type\DealerTypeConfig.cs" />
     <Compile Include="Dealers\Type\DealerTypeExtendedSettings.cs" />
-    <Compile Include="Dealers\Type\DealerTypeExtendedSettingsConfig.cs" />
     <Compile Include="Dealers\Type\DealerTypeSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Status\DealerStatusDefinition.cs" />

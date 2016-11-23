@@ -9,6 +9,7 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -136,6 +137,39 @@ namespace Retail.BusinessEntity.Business
             }
 
             return updateOperationOutput;
+        }
+
+        public List<AccountGenericField> GetAccountGenericFields()
+        {
+            List<AccountGenericField> fields = new List<AccountGenericField>();
+            var accountPartDefinitions = new AccountPartDefinitionManager().GetAccountPartDefinitions();
+            if(accountPartDefinitions != null)
+            {
+                foreach(var partDefinition in accountPartDefinitions)
+                {
+                    var partFields = partDefinition.Settings.GetFields();
+                    if (partFields != null)
+                    {
+                        fields.AddRange(partFields.Select(partField => new AccountGenericField
+                        {
+                            Name = String.Format("{0}_{1}", partDefinition.AccountPartDefinitionId, partField.Name),
+                            Title = String.Format("{0} ({1})", partField.Title, partDefinition.Title),
+                            FieldType = partField.FieldType
+                        }));
+                    }
+                }
+            }
+            return fields;
+        }
+
+        public DataRecordFieldType GetAccountGenericFieldType(string fieldName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ParseAccountGenericFieldName(string fieldName, out Guid? accountPartDefinitionId, out string partFieldName)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -79,6 +79,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account360Degree\Account360DegreeView.cs" />
+    <Compile Include="Account360Degree\Account360DegreeViewConfig.cs" />
+    <Compile Include="Account360Degree\Account360DegreeViewExtendedSettings.cs" />
+    <Compile Include="Account360Degree\Account360DegreeViewSettings.cs" />
+    <Compile Include="AccountCondition\AccountCondition.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
     <Compile Include="AccountPackage\AccountPackage.cs" />
@@ -87,6 +92,8 @@
     <Compile Include="AccountPartDefinition\AccountPartDefinitionDetail.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionInfo.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionQuery.cs" />
+    <Compile Include="AccountPartDefinition\AccountPartGenericField.cs" />
+    <Compile Include="AccountServiceCondition\AccountServiceCondition.cs" />
     <Compile Include="AccountType\AccountTypeDetail.cs" />
     <Compile Include="AccountType\AccountTypeFilter.cs" />
     <Compile Include="AccountType\AccountTypeInfo.cs" />
@@ -98,6 +105,7 @@
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountEditorRuntime.cs" />
+    <Compile Include="Account\AccountGenericField.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="Account\AccountStatus.cs" />
@@ -156,7 +164,14 @@
     <Compile Include="Distributor\SourceDistributor.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="Event\Event.cs" />
+    <Compile Include="FixedCharging\Definition\AccountFixedChargingDefinitionSettings.cs" />
+    <Compile Include="FixedCharging\FixedCharging.cs" />
+    <Compile Include="FixedCharging\FixedChargingSettings.cs" />
     <Compile Include="OperatorDeclaredInfo.cs" />
+    <Compile Include="Package\IPackageAccountCharging.cs" />
+    <Compile Include="Package\IPackageServiceRecurringCharging.cs" />
+    <Compile Include="Package\IPackageServiceUsageChargingPolicy.cs" />
+    <Compile Include="Package\PackageConfig.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\MoneyPackageItem.cs" />

@@ -115,14 +115,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account360DegreeManager.cs" />
+    <Compile Include="AccountConditionEvaluationContext.cs" />
     <Compile Include="AccountIdentificationManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
+    <Compile Include="AccountPartGetFieldValueContext.cs" />
     <Compile Include="AccountServiceManager.cs" />
     <Compile Include="DistributorManager.cs" />
     <Compile Include="Extensions\DistributorSynchronizer.cs" />
     <Compile Include="Extensions\PosSynchronizer.cs" />
     <Compile Include="Extensions\AgentSynchronizer.cs" />
+    <Compile Include="PackageServiceUsageChargingPolicyContext.cs" />
     <Compile Include="POSManager.cs" />
     <Compile Include="AgentManager.cs" />
     <Compile Include="OperatorDeclaredInfoManager.cs" />

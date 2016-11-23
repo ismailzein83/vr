@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.Dealers.Entities
+namespace Retail.BusinessEntity.Entities
 {
-    public class DealerType : Vanrise.Entities.VRComponentType<DealerTypeSettings>
+    public class Account360DegreeView : Vanrise.Entities.VRComponentType<Account360DegreeViewSettings>
     {
     }
 }
