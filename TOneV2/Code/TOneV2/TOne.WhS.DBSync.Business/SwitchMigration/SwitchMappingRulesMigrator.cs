@@ -117,7 +117,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 {
                     if (!elt.InTrunk.Values.Any())
                         continue;
-                    MappingRule rule = GetRule(elt.CustomerId, elt.InTrunk, currentSwitchId, date, 1);
+                    MappingRule rule = GetRule(elt.CustomerId, elt.InTrunk, elt.InPrefix, currentSwitchId, date, 1);
                     if (rule == null) continue;
                     var output = AddGenericRule(rule);
                     if (output.Result == InsertOperationResult.Succeeded) Logger.InParsedMappingSuccededCount++;
@@ -130,7 +130,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 {
                     if (!elt.OutTrunk.Values.Any())
                         continue;
-                    MappingRule rule = GetRule(elt.SupplierId, elt.OutTrunk, currentSwitchId, date, 2);
+                    MappingRule rule = GetRule(elt.SupplierId, elt.OutTrunk, elt.OutPrefix, currentSwitchId, date, 2);
                     if (rule == null) continue;
                     var output = AddGenericRule(rule);
                     if (output.Result == InsertOperationResult.Succeeded) Logger.OutParsedMappingSuccededCount++;
@@ -144,7 +144,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 Logger.InfoMessage.AppendLine(exc.ToString());
             }
         }
-        private MappingRule GetRule(string carrierId, StaticValues inOutCarrier, int currentSwitchId, DateTime date, int carrierType)
+        private MappingRule GetRule(string carrierId, StaticValues inOutCarrier, StaticValues inPrefix, int currentSwitchId, DateTime date, int carrierType)
         {
             int carrierAccountId;
             if (CarrierAccounts.ContainsKey(carrierId)) carrierAccountId = CarrierAccounts[carrierId].CarrierAccountId;
@@ -169,6 +169,10 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 BeginEffectiveTime = date
 
             };
+            if (inPrefix != null)
+            {
+                rule.Criteria.FieldsValues["CDPNPrefix"] = inPrefix;
+            }
             rule.Criteria.FieldsValues["Type"] = new StaticValues
             {
                 Values = ((new List<long> { carrierType }).Cast<Object>()).ToList()

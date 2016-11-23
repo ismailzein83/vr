@@ -47,11 +47,20 @@ namespace TOne.WhS.DBSync.Business
                             string carrierAccountId = anode.Attributes["CarrierAccountID"] != null
                                 ? anode.Attributes["CarrierAccountID"].InnerText
                                 : "";
-                            string inPrefix = anode.Attributes["InPrefix"] != null ? anode.Attributes["InPrefix"].InnerText : "";
+
+                            string inPrefix = anode.Attributes["InPrefix"] != null
+                                ? (!anode.Attributes["InPrefix"].InnerText.Equals("---")
+                                    ? anode.Attributes["InPrefix"].InnerText
+                                    : "")
+                                : "";
+
                             string inTrunk = anode.Attributes["In"] != null ? anode.Attributes["In"].InnerText : "";
                             string outTrunk = anode.Attributes["Out"] != null ? anode.Attributes["Out"].InnerText : "";
+
                             string outCdpnOutPrefix = anode.Attributes["OutCDPNOutPrefix"] != null
-                                ? anode.Attributes["OutCDPNOutPrefix"].InnerText
+                                ? (!anode.Attributes["OutCDPNOutPrefix"].InnerText.Equals("---")
+                                    ? anode.Attributes["OutCDPNOutPrefix"].InnerText
+                                    : "")
                                 : "";
 
                             #region IN
@@ -61,7 +70,7 @@ namespace TOne.WhS.DBSync.Business
                                 CustomerId = carrierAccountId,
                                 InPrefix = new StaticValues
                                 {
-                                    Values = inPrefix.Split(',')
+                                    Values = inPrefix.Split(',').Cast<Object>().ToList()
                                 },
                                 InTrunk = new StaticValues()
                             };
@@ -70,7 +79,7 @@ namespace TOne.WhS.DBSync.Business
                             {
                                 trunkList.AddRange((from Match match in CdrInOutParser.Matches(inTrunkElt) select match.Groups["Cdr"].Value).ToList());
                             }
-                            inParsedMapping.InTrunk.Values = trunkList;
+                            inParsedMapping.InTrunk.Values = trunkList.Cast<Object>().ToList();
                             InParsedMappings.Add(inParsedMapping);
                             #endregion
                             #region OUT
@@ -80,7 +89,7 @@ namespace TOne.WhS.DBSync.Business
                                 SupplierId = carrierAccountId,
                                 OutPrefix = new StaticValues
                                 {
-                                    Values = outCdpnOutPrefix.Split(',')
+                                    Values = outCdpnOutPrefix.Split(',').Cast<Object>().ToList()
                                 },
                                 OutTrunk = new StaticValues()
                             };
@@ -89,7 +98,7 @@ namespace TOne.WhS.DBSync.Business
                             {
                                 outrunkList.AddRange((from Match match in CdrInOutParser.Matches(outTrunkElt) select match.Groups["Cdr"].Value).ToList());
                             }
-                            outParsedMapping.OutTrunk.Values = outrunkList;
+                            outParsedMapping.OutTrunk.Values = outrunkList.Cast<Object>().ToList();
                             OutParsedMappings.Add(outParsedMapping);
                             #endregion
                         }
