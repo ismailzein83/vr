@@ -21,9 +21,9 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
         function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions) {
             if (subSections == null)
                 return;
-            
+            if (dataItem.menuActions != undefined)
+                dataItem.menuActions.length = 0;
             var drillDownTabs = [];
-            var menuActions = [];
 
             for (var i = 0; i < subSections.length; i++) {
                 var subSection = subSections[i];
@@ -62,7 +62,6 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, undefined);
                 drillDownManager.setDrillDownExtensionObject(dataItem);
             }
-
             function setMenuActions() {
                 dataItem.menuActions = [];
                 for (var j = 0; j < dataItem.ActionTypeNames.length; j++)
@@ -96,9 +95,9 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                                         gridAPI.showLoader();
                                         var invoiceId = dataItem.Entity.InvoiceId;
                                         return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
-                                            promiseDeffered.resolve();
                                             defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
                                             gridAPI.itemUpdated(response);
+                                            promiseDeffered.resolve();
                                         }).catch(function (error) {
                                             promiseDeffered.reject(error);
                                         });

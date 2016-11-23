@@ -23,18 +23,8 @@ namespace Vanrise.Invoice.Business
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
-        
-            var result = BigDataManager.Instance.RetrieveData(input,  new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
 
-            if (result != null && result.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
-            {
-                RecordFilterManager recordFilterManager = new RecordFilterManager();
-                foreach(var data in result.Data)
-                {
-                    FillNeededDetailData(data, invoiceType);
-                }
-            }
-            return result;
+            return  BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
         }
         public Entities.Invoice GetInvoice(long invoiceId)
         {
@@ -145,14 +135,10 @@ namespace Vanrise.Invoice.Business
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            var invoiceDetail = InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
-            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceDetail.Entity.InvoiceTypeId);
-            FillNeededDetailData(invoiceDetail, invoiceType);
-            return invoiceDetail;
+            return InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
         }
 
-        private void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
+        private static void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
         {
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
             RecordFilterManager recordFilterManager = new RecordFilterManager();
@@ -203,8 +189,11 @@ namespace Vanrise.Invoice.Business
 
         private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice)
         {
+
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
+
+
             string partnerName = null;
             var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
             if (partnerSettings != null)
@@ -216,13 +205,15 @@ namespace Vanrise.Invoice.Business
                 partnerName = partnerSettings.GetPartnerName(context);
             }
             UserManager userManager = new UserManager();
-            return new InvoiceDetail
+            InvoiceDetail invoiceDetail = new InvoiceDetail
             {
                 Entity = invoice,
                 PartnerName = partnerName,
                 Paid = invoice.PaidDate.HasValue,
                 UserName = userManager.GetUserName(invoice.UserId)
             };
+            FillNeededDetailData(invoiceDetail, invoiceType);
+            return invoiceDetail;
         }
 
         #endregion
