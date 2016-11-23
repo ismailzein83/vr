@@ -125,32 +125,31 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
             function loadCarrierAccounts(attrs) {
                 ctrl.isloadingCarriers = true;
                 var filter = {};
-                if (ctrl.selectedCarrierTypes != undefined)
-                {
+                if (ctrl.selectedCarrierTypes != undefined) {
                     filter.CarrierTypes = [];
                     if (ctrl.selectedCarrierTypes.length > 0) {
                         for (var i = 0; i < ctrl.selectedCarrierTypes.length; i++) {
                             var selectedCarrierType = ctrl.selectedCarrierTypes[i];
                             filter.CarrierTypes.push(selectedCarrierType.value)
                         }
-                    }else
-                    {
+                    } else {
                         filter.CarrierTypes.push(ctrl.selectedCarrierTypes.value)
                     }
-                }
-                
+                };
+
                 filter.GetCustomers = attrs.getcustomers != undefined;
                 filter.GetSuppliers = attrs.getsuppliers != undefined;
                 var serializedFilter = {};
-                if (filter != undefined)
+                if (filter != undefined) {
                     serializedFilter = UtilsService.serializetoJson(filter);
+                };
                 return WhS_Invoice_InvoiceAPIService.GetInvoiceCarriers(serializedFilter).then(function (response) {
                     angular.forEach(response, function (itm) {
                         ctrl.datasource.push(itm);
                     });
                     ctrl.isloadingCarriers = false;
                 });
-            }
+            };
             this.initializeController = initializeController;
         }
 

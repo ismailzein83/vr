@@ -164,11 +164,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-filter-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-supplier-selector.js" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\Templates\CarrierInvoiceSettingsTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\whs-invoice-invoicetype-carrierinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\Templates\CustomerInvoiceGeneratorTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\whs-invoice-invoicetype-customerinvoicegenerator.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\PartnerSettings\Templates\CarrierPartnerSettingsTemplate.html" />
@@ -189,6 +192,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\AccountInvoice.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Report12.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="JSLintNet.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
