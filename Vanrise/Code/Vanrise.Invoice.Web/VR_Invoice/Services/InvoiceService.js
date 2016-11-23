@@ -111,7 +111,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                                     gridAPI.hideLoader();
                                 });
                             } else {
-                                gridAPI.showLoader();
+                                gridAPI.hideLoader();
                                 promiseDeffered.resolve();
                             }
                             return promiseDeffered.promise;

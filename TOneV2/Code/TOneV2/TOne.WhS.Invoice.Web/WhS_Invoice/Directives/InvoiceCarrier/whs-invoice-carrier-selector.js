@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_Invoice_InvoiceAPIService, UtilsService, VRUIUtilsService) {
+app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'UtilsService', 'VRUIUtilsService','$filter',
+    function (WhS_Invoice_InvoiceAPIService, UtilsService, VRUIUtilsService, $filter) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -144,7 +144,9 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     serializedFilter = UtilsService.serializetoJson(filter);
                 };
                 return WhS_Invoice_InvoiceAPIService.GetInvoiceCarriers(serializedFilter).then(function (response) {
-                    angular.forEach(response, function (itm) {
+                    var data = $filter('orderBy')(response, 'Name');
+                    angular.forEach(data, function (itm) {
+
                         ctrl.datasource.push(itm);
                     });
                     ctrl.isloadingCarriers = false;
