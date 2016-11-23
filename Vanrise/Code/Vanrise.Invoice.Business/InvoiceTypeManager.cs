@@ -33,7 +33,7 @@ namespace Vanrise.Invoice.Business
             var recordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
             if (recordType == null)
                 throw new NullReferenceException(String.Format("Record Type {0} Not Found.", invoiceType.Settings.InvoiceDetailsRecordTypeId));
-            foreach(var gridColumn in invoiceType.Settings.UISettings.MainGridColumns)
+            foreach(var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
             {
                 GridColumnAttribute attribute = null;
                 if(gridColumn.CustomFieldName != null)
@@ -51,50 +51,18 @@ namespace Vanrise.Invoice.Business
                     Header = gridColumn.Header
                 });
             }
+            invoiceTypeRuntime.InvoicePartnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+     
             return invoiceTypeRuntime;
         }
-        public IEnumerable<InvoiceGeneratorConfig> GetInvoiceGeneratorConfigs()
+        public GeneratorInvoiceTypeRuntime GetGeneratorInvoiceTypeRuntime(Guid invoiceTypeId)
         {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<InvoiceGeneratorConfig>(InvoiceGeneratorConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<InvoiceGridActionSettingsConfig> GetInvoiceGridActionSettingsConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<InvoiceGridActionSettingsConfig>(InvoiceGridActionSettingsConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<RDLCDataSourceSettingsConfig> GetRDLCDataSourceSettingsConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<RDLCDataSourceSettingsConfig>(RDLCDataSourceSettingsConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<RDLCParameterSettingsConfig> GetRDLCParameterSettingsConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<RDLCParameterSettingsConfig>(RDLCParameterSettingsConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<InvoicePartnerSettingsConfig> GetInvoicePartnerSettingsConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<InvoicePartnerSettingsConfig>(InvoicePartnerSettingsConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<ItemsFilterConfig> GetItemsFilterConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<ItemsFilterConfig>(ItemsFilterConfig.EXTENSION_TYPE);
-        }
-
-        
-        public IEnumerable<InvoiceUISubSectionSettingsConfig> GetInvoiceUISubSectionSettingsConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<InvoiceUISubSectionSettingsConfig>(InvoiceUISubSectionSettingsConfig.EXTENSION_TYPE);
-        }
-
-        public IEnumerable<InvoiceFilterConditionConfig> GetInvoiceFilterConditionConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<InvoiceFilterConditionConfig>(InvoiceFilterConditionConfig.EXTENSION_TYPE);
+            var invoiceTypes = GetCachedInvoiceTypes();
+            var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
+            GeneratorInvoiceTypeRuntime generatorInvoiceTypeRuntime = new Entities.GeneratorInvoiceTypeRuntime();
+            generatorInvoiceTypeRuntime.InvoiceType = invoiceType;
+            generatorInvoiceTypeRuntime.InvoicePartnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+            return generatorInvoiceTypeRuntime;
         }
         public IDataRetrievalResult<InvoiceTypeDetail> GetFilteredInvoiceTypes(DataRetrievalInput<InvoiceTypeQuery> input)
         {

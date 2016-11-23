@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
+app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSubSectionSettingsService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSubSectionSettingsService) {
 
         var directiveDefinitionObject = {
 
@@ -44,7 +44,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                         ctrl.datasource.push({ Entity: subSection });
                     };
 
-                    VR_Invoice_InvoiceTypeService.addSubSection(onSubSectionAdded, getContext());
+                    VR_Invoice_InvoiceSubSectionSettingsService.addSubSection(onSubSectionAdded, getContext());
                 };
 
                 ctrl.removeSubSection = function (dataItem) {
@@ -104,7 +104,7 @@ app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationServic
                     ctrl.datasource[index] = { Entity: subSection };
                 };
 
-                VR_Invoice_InvoiceTypeService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
+                VR_Invoice_InvoiceSubSectionSettingsService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
             }
             function getContext()
             {

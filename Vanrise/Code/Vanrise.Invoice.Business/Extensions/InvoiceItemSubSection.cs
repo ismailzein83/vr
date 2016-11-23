@@ -8,7 +8,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business
 {
-    public class InvoiceItemSubSection : InvoiceUISubSectionSettings
+    public class InvoiceItemSubSection : InvoiceSubSectionSettings
     {
         public override Guid ConfigId { get { return  new Guid("E46CBB79-5448-460E-A94A-3C6405C5BB5F"); } }
         public string ItemSetName { get; set; }

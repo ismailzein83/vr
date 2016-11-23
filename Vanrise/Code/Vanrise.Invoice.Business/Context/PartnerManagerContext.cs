@@ -7,8 +7,24 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business.Context
 {
-    public class PartnerManagerContext : IPartnerManagerContext
+    public class PartnerNameManagerContext : IPartnerNameManagerContext
     {
         public string PartnerId { get; set; }
+    }
+    public class PartnerDuePeriodContext : IPartnerDuePeriodContext
+    {
+        public string PartnerId { get; set; }
+    }
+    public class ActualPartnerContext : IActualPartnerContext
+    {
+        public string PartnerId { get; set; }
+    }
+    public class PartnerManagerInfoContext : IPartnerManagerInfoContext
+    {
+        public string PartnerId { get; set; }
+
+        public string InfoType { get; set; }
+
+        public InvoicePartnerSettings PartnerSettings { get; set; }
     }
 }

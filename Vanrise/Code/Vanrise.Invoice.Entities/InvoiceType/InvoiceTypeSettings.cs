@@ -9,18 +9,12 @@ namespace Vanrise.Invoice.Entities
 {
     public class InvoiceTypeSettings
     {
-        public InvoiceTypeUISettings UISettings { get; set; }
-
         public Guid InvoiceDetailsRecordTypeId { get; set; }
-
-        public InvoiceGenerator InvoiceGenerator { get; set; }
-        public List<SerialNumberPart> SerialNumberParts { get; set; }
-        public string SerialNumberPattern { get; set; }
-    }
-    public class SerialNumberPart
-    {
-        public string VariableName { get; set; }
-        public string Description { get; set; }
-        public Vanrise.Entities.VRConcatenatedPartSettings<IInvoiceSerialNumberConcatenatedPartContext> Settings { get; set; }
+        public List<InvoiceAction> InvoiceActions { get; set; }
+        public List<InvoiceGeneratorAction> InvoiceGeneratorActions { get; set; }
+        public InvoiceTypeExtendedSettings ExtendedSettings { get; set; }
+        public InvoiceGridSettings InvoiceGridSettings { get; set; }
+        public InvoiceSerialNumberSettings InvoiceSerialNumberSettings { get; set; }
+        public List<InvoiceSubSection> SubSections { get; set; }
     }
 }

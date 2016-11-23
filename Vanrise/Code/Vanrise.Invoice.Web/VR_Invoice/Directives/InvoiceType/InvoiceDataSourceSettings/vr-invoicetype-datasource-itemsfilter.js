@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ItemsfilterDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
+    ItemsfilterDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeConfigsAPIService'];
 
-    function ItemsfilterDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
+    function ItemsfilterDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeConfigsAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -76,7 +76,7 @@
                     promises.push(getItemsFilterConfigsPromise);
 
                     function getItemsFilterTemplateConfigs() {
-                        return VR_Invoice_InvoiceTypeAPIService.GetItemsFilterConfigs().then(function (response) {
+                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetItemsFilterConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

@@ -47,74 +47,75 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            function builDataSourceObjFromScope() {
+                return {
+                    DataSourceName: $scope.scopeModel.dataSourceName,
+                    Settings: dataSourceSettingsAPI.getData(),
+                    ItemsFilter: itemsFilterAPI != undefined ? itemsFilterAPI.getData() : undefined
+                };
+            }
+
+            function addDataSource() {
+                var dataSourceObj = builDataSourceObjFromScope();
+                if ($scope.onDataSourceAdded != undefined) {
+                    $scope.onDataSourceAdded(dataSourceObj);
+                }
+                $scope.modalContext.closeModal();
+            }
+
+            function updateDataSource() {
+                var dataSourceObj = builDataSourceObjFromScope();
+                if ($scope.onDataSourceUpdated != undefined) {
+                    $scope.onDataSourceUpdated(dataSourceObj);
+                }
+                $scope.modalContext.closeModal();
+            }
         }
 
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
-        }
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataSourceSettingsDirective, loadItemsFilterDirective]).then(function () {
+            function loadAllControls() {
+                function setTitle() {
+                    if (isEditMode && dataSourceEntity != undefined)
+                        $scope.title = UtilsService.buildTitleForUpdateEditor(dataSourceEntity.DataSourceName, 'DataSource');
+                    else
+                        $scope.title = UtilsService.buildTitleForAddEditor('DataSource');
+                }
+                function loadStaticData() {
+                    if (dataSourceEntity != undefined) {
+                        $scope.scopeModel.dataSourceName = dataSourceEntity.DataSourceName;
+                    }
+                }
+                function loadDataSourceSettingsDirective() {
+                    var dataSourceSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    dataSourceSettingsReadyPromiseDeferred.promise.then(function () {
+                        var dataSourcePayload = dataSourceEntity != undefined ? { dataSourceEntity: dataSourceEntity.Settings } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(dataSourceSettingsAPI, dataSourcePayload, dataSourceSettingsLoadPromiseDeferred);
+                    });
+                    return dataSourceSettingsLoadPromiseDeferred.promise;
+                }
+                function loadItemsFilterDirective() {
+                    if (context != undefined && context.showItemsFilter != undefined && context.showItemsFilter()) {
+                        $scope.scopeModel.showItemsFilter = true;
+                        var itemsFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        itemsFilterReadyPromiseDeferred.promise.then(function () {
+                            var itemsFilterPayload = dataSourceEntity != undefined ? { itemsFilterEntity: dataSourceEntity.ItemsFilter } : undefined;
+                            VRUIUtilsService.callDirectiveLoad(itemsFilterAPI, itemsFilterPayload, itemsFilterLoadPromiseDeferred);
+                        });
+                        return itemsFilterLoadPromiseDeferred.promise;
+                    }
+                }
 
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-        }
-        function setTitle() {
-            if (isEditMode && dataSourceEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(dataSourceEntity.DataSourceName, 'DataSource');
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor('DataSource');
-        }
-        function loadStaticData() {
-            if (dataSourceEntity != undefined) {
-                $scope.scopeModel.dataSourceName = dataSourceEntity.DataSourceName;
-            }
-        }
-        function loadDataSourceSettingsDirective() {
-            var dataSourceSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-           dataSourceSettingsReadyPromiseDeferred.promise.then(function () {
-               var dataSourcePayload = dataSourceEntity != undefined ? { dataSourceEntity: dataSourceEntity.Settings } : undefined;
-               VRUIUtilsService.callDirectiveLoad(dataSourceSettingsAPI, dataSourcePayload, dataSourceSettingsLoadPromiseDeferred);
-            });
-           return dataSourceSettingsLoadPromiseDeferred.promise;
-        }
-        function loadItemsFilterDirective() {
-            if (context != undefined && context.showItemsFilter != undefined && context.showItemsFilter())
-            {
-                $scope.scopeModel.showItemsFilter = true;
-                var itemsFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                itemsFilterReadyPromiseDeferred.promise.then(function () {
-                    var itemsFilterPayload = dataSourceEntity != undefined ? { itemsFilterEntity: dataSourceEntity.ItemsFilter } : undefined;
-                    VRUIUtilsService.callDirectiveLoad(itemsFilterAPI, itemsFilterPayload, itemsFilterLoadPromiseDeferred);
-                });
-                return itemsFilterLoadPromiseDeferred.promise;
-            }
-        }
-        function builDataSourceObjFromScope() {
-            return {
-                DataSourceName: $scope.scopeModel.dataSourceName,
-                Settings: dataSourceSettingsAPI.getData(),
-                ItemsFilter: itemsFilterAPI != undefined? itemsFilterAPI.getData():undefined
-            };
-        }
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataSourceSettingsDirective, loadItemsFilterDirective]).then(function () {
 
-        function addDataSource() {
-            var dataSourceObj = builDataSourceObjFromScope();
-            if ($scope.onDataSourceAdded != undefined) {
-                $scope.onDataSourceAdded(dataSourceObj);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
             }
-            $scope.modalContext.closeModal();
-        }
-
-        function updateDataSource() {
-            var dataSourceObj = builDataSourceObjFromScope();
-            if ($scope.onDataSourceUpdated != undefined) {
-                $scope.onDataSourceUpdated(dataSourceObj);
-            }
-            $scope.modalContext.closeModal();
         }
 
     }

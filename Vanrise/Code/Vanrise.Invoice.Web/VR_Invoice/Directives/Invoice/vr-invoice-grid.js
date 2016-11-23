@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService","VR_Invoice_InvoiceFieldEnum","VRUIUtilsService","VR_Invoice_InvoiceService","VR_Invoice_InvoiceTypeAPIService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VR_Invoice_InvoiceService, VR_Invoice_InvoiceTypeAPIService) {
+app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VR_Invoice_InvoiceService", "VR_Invoice_InvoiceTypeConfigsAPIService","VR_Invoice_InvoiceActionService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VR_Invoice_InvoiceService, VR_Invoice_InvoiceTypeConfigsAPIService, VR_Invoice_InvoiceActionService) {
 
         var directiveDefinitionObject = {
 
@@ -31,6 +31,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             var subSectionConfigs = [];
             var subSections = [];
             var invoiceTypeId;
+            var invoiceActions=[];
             var invoiceGridActions = [];
             var mainGridColumns = [];
             function initializeController() {
@@ -59,11 +60,12 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                         directiveAPI.loadGrid = function (payload) {
                             var query;
                             var promiseDeferred = UtilsService.createPromiseDeferred();
-                            VR_Invoice_InvoiceTypeAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
+                            VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
                                 if (response != undefined) {
                                     subSectionConfigs = response;
                                 }
                                 if (payload != undefined) {
+                                    invoiceActions = payload.invoiceActions;
                                     mainGridColumns = payload.mainGridColumns;
                                     subSections = payload.subSections;
                                     query = payload.query;
@@ -98,7 +100,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var dataItem = response.Data[i];
                                     buildGridFields(dataItem);
-                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId);
+                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
                                 }
                             }
                             onResponseReady(response);
@@ -185,13 +187,14 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             }
 
             function defineMenuActions(invoiceGridActions) {
+                console.log(invoiceGridActions);
                 $scope.gridMenuActions.length = 0;
                 if (invoiceGridActions != undefined)
                 {
                     for(var i=0;i<invoiceGridActions.length;i++)
                     {
                         var invoiceGridAction = invoiceGridActions[i];
-                        var actionType = VR_Invoice_InvoiceService.getActionTypeIfExist(invoiceGridAction.Settings.ActionTypeName);
+                        var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceGridAction.Settings.ActionTypeName);
                         if(actionType != undefined)
                         {
                             addgridMenuAction(invoiceGridAction,actionType);

@@ -2,7 +2,7 @@
     <vr-modalbody>
         <vr-form name="formGenericInvoiceEditor">
             <vr-row removeline>
-                <vr-directivewrapper directive="invoiceTypeEntity.Settings.UISettings.PartnerSettings.PartnerSelector" on-ready="onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
+                <vr-directivewrapper directive="invoiceTypeEntity.InvoicePartnerSettings.PartnerSelector" on-ready="onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
                 <vr-columns width="1/3row">
                     <vr-datetimepicker type="date" label="Issue Date" value="issueDate" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
@@ -20,9 +20,11 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Preview" formname="formGenericInvoiceEditor" data-onclick="preview"></vr-button>
-                <vr-button type="GenerateInvoice" formname="formGenericInvoiceEditor" data-onclick="generateInvoice"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <span ng-repeat="action in actions">
+                    <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" formname="formGenericInvoiceEditor"></vr-directivewrapper>
+                </span>
+        <vr-button type="GenerateInvoice" formname="formGenericInvoiceEditor" data-onclick="generateInvoice"></vr-button>
+        <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

@@ -65,7 +65,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
     }
 
     function notifyException(error, scope) {
-        showError("Error has been occured");
+        showError("An error has occured");
     }
 
     function notifyExceptionWithClose(error, scope) {

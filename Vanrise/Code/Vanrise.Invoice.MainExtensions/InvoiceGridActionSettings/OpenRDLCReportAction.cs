@@ -7,7 +7,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class OpenRDLCReportAction : InvoiceGridActionSettings
+    public class OpenRDLCReportAction : InvoiceActionSettings
     {
         public override string ActionTypeName { get { return "OpenRDLCReportAction"; } }
         public override Guid ConfigId { get { return new Guid("5B4BD540-832E-46E4-8C18-49073775D002"); } }

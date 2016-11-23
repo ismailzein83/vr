@@ -31,7 +31,8 @@ namespace Vanrise.Invoice.Business
                 PartnerId = this.PartnerId,
                 ToDate = this.ToDate
             };
-            invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
+            var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
+            invoiceGenerator.GenerateInvoice(context);
             PartnerManager partnerManager = new PartnerManager();
             var duePeriod = partnerManager.GetPartnerDuePeriod(this.InvoiceTypeId, this.PartnerId);
             this.GeneratedInvoice = context.Invoice;

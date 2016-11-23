@@ -201,6 +201,7 @@
     <Content Include="Client\Javascripts\Constants\TimeFormateTemplatesEnum.js" />
     <Content Include="Client\Javascripts\Constants\UpdateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ValidationMessagesEnum.js" />
+    <Content Include="Client\Javascripts\Constants\VRButtonTypeEnum.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\AMChartController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\CanvasJSChartController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\FusionChartController.js" />
@@ -216,6 +217,7 @@
     <Content Include="Client\Javascripts\Directives\Button\button-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Button\images\loader-mask.gif" />
     <Content Include="Client\Javascripts\Directives\Button\vr-button-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Button\vr-buttontype-selector.js" />
     <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />

@@ -17,26 +17,8 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
-        
         function GetFilteredInvoiceTypes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoiceTypes"), input);
-        }
-
-        function GetInvoiceGeneratorConfigs()
-        {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGeneratorConfigs"));
-        }
-        function GetInvoiceGridActionSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGridActionSettingsConfigs"));
-        }
-        function GetRDLCDataSourceSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetRDLCDataSourceSettingsConfigs"));
-        }
-        function GetRDLCParameterSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetRDLCParameterSettingsConfigs"));
-        }
-        function GetInvoiceUISubSectionSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceUISubSectionSettingsConfigs"));
         }
         function AddInvoiceType(invoiceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "AddInvoiceType"), invoiceType);
@@ -50,34 +32,21 @@
         function GetInvoiceTypesInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceTypesInfo"), { filter: filter });
         }
+        function GetGeneratorInvoiceTypeRuntime(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetGeneratorInvoiceTypeRuntime"), {
+                invoiceTypeId: invoiceTypeId
+            });
+        }
 
-        function GetInvoicePartnerSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoicePartnerSettingsConfigs"));
-        }
-        function GetItemsFilterConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetItemsFilterConfigs"));
-        }
-        function GetInvoiceFilterConditionConfigs()
-        {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceFilterConditionConfigs"));
-
-        }
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
-            GetInvoiceGeneratorConfigs: GetInvoiceGeneratorConfigs,
-            GetInvoiceGridActionSettingsConfigs: GetInvoiceGridActionSettingsConfigs,
-            GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
-            GetRDLCParameterSettingsConfigs: GetRDLCParameterSettingsConfigs,
             AddInvoiceType: AddInvoiceType,
             UpdateInvoiceType: UpdateInvoiceType,
             GetInvoiceTypeRuntime: GetInvoiceTypeRuntime,
-            GetInvoiceUISubSectionSettingsConfigs: GetInvoiceUISubSectionSettingsConfigs,
             CovertToGridColumnAttribute: CovertToGridColumnAttribute,
             GetInvoiceTypesInfo: GetInvoiceTypesInfo,
-            GetInvoicePartnerSettingsConfigs: GetInvoicePartnerSettingsConfigs,
-            GetItemsFilterConfigs: GetItemsFilterConfigs,
-            GetInvoiceFilterConditionConfigs: GetInvoiceFilterConditionConfigs
+            GetGeneratorInvoiceTypeRuntime: GetGeneratorInvoiceTypeRuntime
         });
     }
 

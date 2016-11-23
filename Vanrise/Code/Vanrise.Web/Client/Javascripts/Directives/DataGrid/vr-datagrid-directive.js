@@ -747,6 +747,13 @@
                     addBatchItemsToBeginSource(itemsToAdd);
                 };
 
+                gridApi.showLoader = function() {
+                    ctrl.isLoadingMoreData = true;
+                }
+
+                gridApi.hideLoader = function () {
+                    ctrl.isLoadingMoreData = false;
+                }
                 function addBatchItemsToBeginSource(items) {
                     var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
                     for (var i = 0; i < numberOfItems; i++) {

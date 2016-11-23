@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InvoiceUISubSectionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
+    InvoiceUISubSectionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeConfigsAPIService'];
 
-    function InvoiceUISubSectionSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
+    function InvoiceUISubSectionSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeConfigsAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -76,7 +76,7 @@
                     promises.push(getInvoiceUISubSectionSettingsConfigsPromise);
 
                     function getInvoiceUISubSectionSettingsConfigs() {
-                        return VR_Invoice_InvoiceTypeAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
+                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

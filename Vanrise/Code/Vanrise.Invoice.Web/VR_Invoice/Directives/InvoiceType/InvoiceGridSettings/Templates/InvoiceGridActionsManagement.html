@@ -1,0 +1,12 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addGridAction" standalone></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeAction" hidegridmenu>
+        <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Reload Grid Item'" field="'Entity.ReloadGridItem'" widthfactor="10" disablesorting>
+            <vr-icon icontype="dataItem.Entity.ReloadGridItem"></vr-icon>
+        </vr-datagridcolumn>
+
+    </vr-datagrid>
+</vr-validator>

@@ -26,7 +26,7 @@ namespace Vanrise.Invoice.Business
         
             var result = BigDataManager.Instance.RetrieveData(input,  new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
 
-            if(result != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            if (result != null && result.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 RecordFilterManager recordFilterManager = new RecordFilterManager();
                 foreach(var data in result.Data)
@@ -66,7 +66,8 @@ namespace Vanrise.Invoice.Business
                     ToDate = createInvoiceInput.ToDate,
                     InvoiceTypeId = createInvoiceInput.InvoiceTypeId
                 };
-                invoiceType.Settings.InvoiceGenerator.GenerateInvoice(context);
+                var generator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
+                generator.GenerateInvoice(context);
 
                 Entities.Invoice invoice = new Entities.Invoice
                 {
@@ -78,18 +79,19 @@ namespace Vanrise.Invoice.Business
                     ToDate = createInvoiceInput.ToDate,
                     IssueDate = createInvoiceInput.IssueDate,
                 };
+                var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
                 PartnerManager partnerManager = new PartnerManager();
                 var duePeriod = partnerManager.GetPartnerDuePeriod(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);
                 invoice.DueDate = createInvoiceInput.IssueDate.AddDays(duePeriod);
-                var serialNumber = invoiceType.Settings.SerialNumberPattern;
+                var serialNumber = invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
                 InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
                 {
                     Invoice = invoice,
                     InvoiceTypeId = createInvoiceInput.InvoiceTypeId
                 };
-                foreach (var part in invoiceType.Settings.SerialNumberParts)
+                foreach (var part in invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberParts)
                 {
-                    if (invoiceType.Settings.SerialNumberPattern != null && invoiceType.Settings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                    if (invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern != null && invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
                     {
                         serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
                     }
@@ -152,19 +154,19 @@ namespace Vanrise.Invoice.Business
         {
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
             RecordFilterManager recordFilterManager = new RecordFilterManager();
-            foreach (var section in invoiceType.Settings.UISettings.SubSections)
+            foreach (var section in invoiceType.Settings.SubSections)
             {
-                if (recordFilterManager.IsFilterGroupMatch(section.FilterGroup, context))
+                if (recordFilterManager.IsFilterGroupMatch(section.SubSectionFilter, context))
                 {
                     if (invoiceDetail.SectionsTitle == null)
                         invoiceDetail.SectionsTitle = new List<string>();
                     invoiceDetail.SectionsTitle.Add(section.SectionTitle);
                 }
             }
-            InvoiceFilterConditionContext invoiceFilterConditionContext = new InvoiceFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType };
-            foreach (var action in invoiceType.Settings.UISettings.InvoiceGridActions)
+            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType };
+            foreach (var action in invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions)
             {
-                if (action.InvoiceFilterCondition == null || action.InvoiceFilterCondition.IsFilterMatch(invoiceFilterConditionContext))
+                if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
                 {
                     if (invoiceDetail.ActionTypeNames == null)
                         invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
@@ -202,13 +204,14 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
             string partnerName = null;
-            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.UISettings != null && invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN != null)
+            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+            if (partnerSettings != null)
             {
-                PartnerManagerContext context = new PartnerManagerContext
+                PartnerNameManagerContext context = new PartnerNameManagerContext
                 {
                     PartnerId = invoice.PartnerId
                 };
-                partnerName = invoiceType.Settings.UISettings.PartnerSettings.PartnerManagerFQTN.GetPartnerName(context);
+                partnerName = partnerSettings.GetPartnerName(context);
             }
             UserManager userManager = new UserManager();
             return new InvoiceDetail

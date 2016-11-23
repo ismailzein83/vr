@@ -79,21 +79,24 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
             var menu;
             if ($attrs.menuactions != undefined ) {
                     menu = $scope.$parent.$eval($attrs.menuactions);
-              
-                    var checkMenuActionPermission = function () {
-                        for (var i = 0; i < menu.length; i++) {
-                            invokeHasPermission(menu[i]);
-                        }
-                    };
+                    if (menu != undefined)
+                    {
+                        var checkMenuActionPermission = function () {
+                            for (var i = 0; i < menu.length; i++) {
+                                invokeHasPermission(menu[i]);
+                            }
+                        };
 
-                    var invokeHasPermission = function (menuAction) {
-                        if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
-                        menuAction.disable = true;
-                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
-                            if (isAllowed) { menuAction.disable = false; }
-                        });
-                    };
-                    checkMenuActionPermission();
+                        var invokeHasPermission = function (menuAction) {
+                            if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
+                            menuAction.disable = true;
+                            UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
+                                if (isAllowed) { menuAction.disable = false; }
+                            });
+                        };
+                        checkMenuActionPermission();
+                    }
+                    
                
             }
             ctrl.menuActions = menu;

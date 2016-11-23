@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService'];
+    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRButtonTypeEnum', 'VR_Invoice_InvoiceActionService'];
 
-    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService) {
+    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
         var partnerSelectorAPI;
@@ -20,6 +20,8 @@
             }
         }
         function defineScope() {
+
+            $scope.actions = [];
             $scope.issueDate = new Date();
             $scope.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
@@ -53,7 +55,6 @@
                 var paramsurl = "";
                 paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
                 paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
-              //  paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
                 window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
             }
 
@@ -75,7 +76,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective, buildInvoiceGeneratorActions])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -87,7 +88,7 @@
             $scope.title = "Generate Invoice";
         }
         function getInvoiceType() {
-            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+            return VR_Invoice_InvoiceTypeAPIService.GetGeneratorInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                 $scope.invoiceTypeEntity = response;
             });
         }
@@ -112,6 +113,89 @@
                 IssueDate: $scope.issueDate
             };
             return obj;
+        }
+        function buildInvoiceGeneratorActions()
+        {
+            if($scope.invoiceTypeEntity != undefined)
+            {
+                if ($scope.invoiceTypeEntity.InvoiceType != undefined && $scope.invoiceTypeEntity.InvoiceType.Settings != undefined && $scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceGeneratorActions != undefined)
+                {
+                    var dictionay = {};
+
+                    for(var i=0;i<$scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceGeneratorActions.length ;i++)
+                    {
+                        var invoiceGeneratorAction = $scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceGeneratorActions[i];
+                        var buttonType = UtilsService.getEnum(VRButtonTypeEnum, "value", invoiceGeneratorAction.ButtonType);
+                        var invoiceAction = UtilsService.getItemByVal($scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceActions, invoiceGeneratorAction.InvoiceGeneratorActionId, "InvoiceActionId");
+
+                        if (dictionay[buttonType.value] == undefined)
+                        {
+                            dictionay[buttonType.value] = [];
+                        }
+                        dictionay[buttonType.value].push({
+                            buttonType: buttonType,
+                            invoiceAction: invoiceAction,
+                            invoiceGeneratorAction: invoiceGeneratorAction
+                        });
+                    }
+                    for(var prop in dictionay)
+                    {
+
+                        if(dictionay[prop].length > 1)
+                        {
+                            var menuActions = [];
+                            var type;
+                            for(var i=0;i<dictionay[prop].length;i++)
+                            {
+                                if (menuActions == undefined)
+                                    menuActions = [];
+                                var object = dictionay[prop][i];
+                                type = object.buttonType != undefined ? object.buttonType.type : undefined;
+                                addMenuAction(object.invoiceGeneratorAction, object.invoiceAction);
+                            }
+                            function addMenuAction(invoiceGeneratorAction, invoiceAction)
+                            {
+                                menuActions.push({
+                                    name: invoiceGeneratorAction.Title,
+                                    clicked: function () {
+                                        return callActionMethod(invoiceAction);
+                                    },
+                                });
+                            }
+                            $scope.actions.push({ type: type, menuActions: menuActions });
+                        }else
+                        {
+                            var object = dictionay[prop][0];
+                            $scope.actions.push( {
+                                type: object.buttonType != undefined ? object.buttonType.type : undefined,
+                                onclick: function () {
+                                    return callActionMethod(object.invoiceAction);
+                                },
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        function callActionMethod(invoiceAction)
+        {
+            var partnerObject = partnerSelectorAPI.getData();
+            var payload = {
+                generatorEntity: {
+                    invoiceTypeId: invoiceTypeId,
+                    partnerId: partnerObject != undefined ? partnerObject.selectedIds : undefined,
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate,
+                    issueDate: $scope.issueDate
+                },
+                invoiceAction: invoiceAction,
+                isPreGenerateAction:true
+            };
+            var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceAction.Settings.ActionTypeName);
+
+            var promise = actionType.actionMethod(payload);
+
+            return promise;
         }
         function generateInvoice() {
             var incvoiceObject = buildInvoiceObjFromScope();

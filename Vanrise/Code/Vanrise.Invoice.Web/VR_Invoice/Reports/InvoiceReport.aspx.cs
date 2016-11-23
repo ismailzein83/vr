@@ -44,20 +44,20 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                     InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
                     invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
 
-                    foreach (var action in invoiceType.Settings.UISettings.InvoiceGridActions)
+                    var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == actionId && x.Settings.ActionTypeName == actionTypeName);
+                    var gridAction = invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions.FirstOrDefault(x => x.InvoiceGridActionId == actionId);
+                    
+                    InvoiceGridActionFilterConditionContext context = new InvoiceGridActionFilterConditionContext
                     {
-                        InvoiceFilterConditionContext context = new InvoiceFilterConditionContext
-                        {
-                            Invoice = invoice,
-                            InvoiceType = invoiceType
-                        };
-                        if (action.InvoiceFilterCondition.IsFilterMatch(context) && action.Settings.ActionTypeName == actionTypeName)
-                        {
-                            openRDLCReportAction = action.Settings as OpenRDLCReportAction;
-                            if (actionId == Guid.Empty || actionId == openRDLCReportAction.ActionId)
-                              break;
-                        }
+                        Invoice = invoice,
+                        InvoiceType = invoiceType
+                    };
+
+                    if (invoiceAction != null && (gridAction.FilterCondition == null || gridAction.FilterCondition.IsFilterMatch(context)))
+                    {
+                        openRDLCReportAction = invoiceAction.Settings as OpenRDLCReportAction;
                     }
+                    
                     List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
                     if (openRDLCReportAction != null)
                     {

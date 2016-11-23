@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ParameterSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
+    ParameterSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeConfigsAPIService'];
 
-    function ParameterSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
+    function ParameterSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeConfigsAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -77,7 +77,7 @@
                     promises.push(getParameterSettingsConfigsPromise);
 
                     function getRDLCParameterSettingsTemplateConfigs() {
-                        return VR_Invoice_InvoiceTypeAPIService.GetRDLCParameterSettingsConfigs().then(function (response) {
+                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetRDLCParameterSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

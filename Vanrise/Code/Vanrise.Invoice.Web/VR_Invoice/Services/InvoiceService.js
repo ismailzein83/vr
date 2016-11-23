@@ -1,21 +1,7 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService','VRUIUtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService',
-    function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService) {
+app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService','VRUIUtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService','VR_Invoice_InvoiceActionService',
+    function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService) {
 
-        var actionTypes = [];
-        function registerActionType(actionType) {
-            actionTypes.push(actionType);
-        }
-
-        function getActionTypeIfExist(actionTypeName)
-        {
-            for(var i=0;i<actionTypes.length;i++)
-            {
-                var actionType = actionTypes[i];
-                if (actionType.ActionTypeName == actionTypeName)
-                    return actionType;
-            }
-        }
 
         function generateInvoice(onGenerateInvoice, invoiceTypeId) {
             var settings = {
@@ -32,53 +18,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/GenerateInvoiceEditor.html', parameters, settings);
         }
 
-        function registerInvoiceRDLCReport() {
-            
-            var actionType = {
-                ActionTypeName: "OpenRDLCReportAction",
-                actionMethod: function (payload) {
-                    var context = {
-                        $type: "Vanrise.Invoice.Business.PhysicalInvoiceActionContext,Vanrise.Invoice.Business",
-                        InvoiceId: payload.invoice.Entity.InvoiceId,
-                    };
-
-                    var paramsurl = "";
-                    paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
-                    paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
-                    paramsurl += "&actionId=" + payload.invoiceGridAction.Settings.ActionId;
-                    paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
-                    window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
-                }
-            };
-            registerActionType(actionType);
-        }
-
-        function registerSetInvoicePaidAction() {
-            var actionType = {
-                ActionTypeName: "SetInvoicePaidAction",
-                actionMethod: function (payload) {
-                    var promiseDeffered = UtilsService.createPromiseDeferred();
-                    VRNotificationService.showConfirmation().then(function (response) {
-                        if (response) {
-                            var context = {
-                                $type: "Vanrise.Invoice.Business.PhysicalInvoiceActionContext,Vanrise.Invoice.Business",
-                                InvoiceId: payload.invoice.Entity.InvoiceId
-                            };
-                            VR_Invoice_InvoiceAPIService.SetInvoicePaid(payload.invoice.Entity.InvoiceId, payload.invoiceGridAction.Settings.IsInvoicePaid).then(function (response) {
-                                promiseDeffered.resolve(response);
-                            });
-                        }else
-                        {
-                            promiseDeffered.resolve(response);
-                        }
-                    });
-                    return promiseDeffered.promise;
-                }
-            };
-            registerActionType(actionType);
-        }
-
-        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId) {
+        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions) {
             if (subSections == null)
                 return;
             
@@ -106,7 +46,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                         var invoiceItemGridPayload = {
                             query: {
                                 InvoiceId: invoice.Entity.InvoiceId,
-                                UniqueSectionID: subSection.UniqueSectionID,
+                                UniqueSectionID: subSection.InvoiceSubSectionId,
                                 InvoiceTypeId: invoiceTypeId
                             },
                             invoiceTypeId: invoiceTypeId,
@@ -128,32 +68,36 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                 for (var j = 0; j < dataItem.ActionTypeNames.length; j++)
                 {
                     var invoiceGridAction = dataItem.ActionTypeNames[j];
-                    var actionType = getActionTypeIfExist(invoiceGridAction.Settings.ActionTypeName);
-                    if (actionType != undefined) {
-                        addgridMenuAction(invoiceGridAction, actionType);
+                    var invoiceAction = UtilsService.getItemByVal(invoiceActions, invoiceGridAction.InvoiceGridActionId, "InvoiceActionId");
+                    if (invoiceAction != undefined)
+                    {
+                        var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceAction.Settings.ActionTypeName);
+                        if (actionType != undefined) {
+                            addgridMenuAction(invoiceGridAction, invoiceAction, actionType);
+                        }
                     }
                    
+                   
                 }
-                function addgridMenuAction(invoiceGridAction, actionType) {
+                function addgridMenuAction(invoiceGridAction, invoiceAction, actionType) {
                     dataItem.menuActions.push({
                         name: invoiceGridAction.Title,
                         clicked: function (dataItem) {
                             var payload = {
                                 invoice: dataItem,
-                                invoiceGridAction: invoiceGridAction
+                                invoiceAction: invoiceAction
                             };
                             var promiseDeffered = UtilsService.createPromiseDeferred();
 
                             var promise = actionType.actionMethod(payload);
                             if (promise != undefined && promise.then != undefined) {
-                              //  ctrl.isLodingGrid = true;
-
                                 promise.then(function (response) {
                                     if (invoiceGridAction.ReloadGridItem && response) {
+                                        gridAPI.showLoader();
                                         var invoiceId = dataItem.Entity.InvoiceId;
                                         return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
                                             promiseDeffered.resolve();
-                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs);
+                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
                                             gridAPI.itemUpdated(response);
                                         }).catch(function (error) {
                                             promiseDeffered.reject(error);
@@ -164,9 +108,10 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                                 }).catch(function (error) {
                                     promiseDeffered.reject(error);
                                 }).finally(function () {
-                                    //ctrl.isLodingGrid = false;
+                                    gridAPI.hideLoader();
                                 });
                             } else {
+                                gridAPI.showLoader();
                                 promiseDeffered.resolve();
                             }
                             return promiseDeffered.promise;
@@ -180,10 +125,6 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
         
         return ({
             generateInvoice: generateInvoice,
-            registerActionType: registerActionType,
-            getActionTypeIfExist: getActionTypeIfExist,
-            registerInvoiceRDLCReport: registerInvoiceRDLCReport,
-            registerSetInvoicePaidAction:registerSetInvoicePaidAction,
-            defineInvoiceTabsAndMenuActions: defineInvoiceTabsAndMenuActions
+            defineInvoiceTabsAndMenuActions: defineInvoiceTabsAndMenuActions,
         });
     }]);

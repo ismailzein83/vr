@@ -28,7 +28,8 @@
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(getFilterObject());
+                if (!$scope.isLoadingFilters)
+                  gridAPI.loadGrid(getFilterObject());
 
             };
             $scope.onPartnerSelectorReady = function (api) {
@@ -58,8 +59,9 @@
              partnerObject = partnerSelectorAPI.getData();
             var filter = {
                 mainGridColumns: $scope.invoiceTypeEntity.MainGridRuntimeColumns,
-                subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.SubSections,
-                invoiceGridActions: $scope.invoiceTypeEntity.InvoiceType.Settings.UISettings.InvoiceGridActions,
+                subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.SubSections,
+                invoiceGridActions: $scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceGridSettings.InvoiceGridActions,
+                invoiceActions:$scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceActions,
                 InvoiceTypeId:invoiceTypeId,
                 query: {
                     FromTime: $scope.fromDate,
@@ -73,7 +75,13 @@
             return filter;
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective])
+            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective]).then(function()
+            {
+                if(gridAPI != undefined)
+                {
+                    gridAPI.loadGrid(getFilterObject());
+                }
+            })
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })

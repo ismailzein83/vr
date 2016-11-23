@@ -7,14 +7,14 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class IsPaidInvoiceFilterCondition : InvoiceFilterCondition
+    public class IsPaidInvoiceFilterCondition : InvoiceGridActionFilterCondition
     {
         public override Guid ConfigId
         {
             get { return new Guid("20359B38-3A22-4D31-ACAA-CEB099D5A62C"); }
         }
         public bool IsPaid { get; set; }
-        public override bool IsFilterMatch(IInvoiceFilterConditionContext context)
+        public override bool IsFilterMatch(IInvoiceGridActionFilterConditionContext context)
         {
             return context.Invoice.PaidDate.HasValue == this.IsPaid;
         }

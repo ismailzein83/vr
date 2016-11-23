@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataSourceSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService'];
+    DataSourceSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeConfigsAPIService'];
 
-    function DataSourceSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
+    function DataSourceSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeConfigsAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -76,7 +76,7 @@
                     promises.push(getRDLCDataSourceSettingsConfigsPromise);
 
                     function getRDLCDataSourceSettingsTemplateConfigs() {
-                        return VR_Invoice_InvoiceTypeAPIService.GetRDLCDataSourceSettingsConfigs().then(function (response) {
+                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetRDLCDataSourceSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

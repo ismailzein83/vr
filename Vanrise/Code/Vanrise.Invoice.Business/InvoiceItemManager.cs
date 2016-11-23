@@ -97,12 +97,12 @@ namespace Vanrise.Invoice.Business
             public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(InvoiceType invoiceType, Guid uniqueSectionID)
             {
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
-                foreach(var subsection in invoiceType.Settings.UISettings.SubSections)
+                foreach(var subsection in invoiceType.Settings.SubSections)
                 {
                     var invoiceItemSubSection = subsection.Settings as InvoiceItemSubSection;
                     if (invoiceItemSubSection != null)
                     {
-                        if (subsection.UniqueSectionID == uniqueSectionID)
+                        if (subsection.InvoiceSubSectionId == uniqueSectionID)
                         {
                             gridColumns = invoiceItemSubSection.GridColumns;
                             break;

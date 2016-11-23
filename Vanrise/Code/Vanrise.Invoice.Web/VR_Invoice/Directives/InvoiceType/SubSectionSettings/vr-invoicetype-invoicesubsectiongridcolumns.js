@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService", "VR_Invoice_InvoiceFieldEnum",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService, VR_Invoice_InvoiceFieldEnum) {
+app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSubSectionSettingsService", "VR_Invoice_InvoiceFieldEnum",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSubSectionSettingsService, VR_Invoice_InvoiceFieldEnum) {
 
         var directiveDefinitionObject = {
 
@@ -43,7 +43,7 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
                     var onSubSectionGridColumnAdded = function (gridColumn) {
                         ctrl.datasource.push({ Entity: gridColumn });
                     };
-                    VR_Invoice_InvoiceTypeService.addSubSectionGridColumn(onSubSectionGridColumnAdded, ctrl.datasource);
+                    VR_Invoice_InvoiceSubSectionSettingsService.addSubSectionGridColumn(onSubSectionGridColumnAdded, ctrl.datasource);
                 };
 
                 ctrl.removeColumn = function (dataItem) {
@@ -106,7 +106,7 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
                     var index = ctrl.datasource.indexOf(columnObj);
                     ctrl.datasource[index] = { Entity: column };
                 };
-                VR_Invoice_InvoiceTypeService.editSubSectionGridColumn(columnObj.Entity, onSubSectionGridColumnUpdated, ctrl.datasource);
+                VR_Invoice_InvoiceSubSectionSettingsService.editSubSectionGridColumn(columnObj.Entity, onSubSectionGridColumnUpdated, ctrl.datasource);
             }
         }
 

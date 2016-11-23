@@ -1,5 +1,5 @@
-﻿app.run(['VR_Invoice_InvoiceService', function (VR_Invoice_InvoiceService) {
-    VR_Invoice_InvoiceService.registerInvoiceRDLCReport();
-    VR_Invoice_InvoiceService.registerSetInvoicePaidAction();
+﻿app.run(['VR_Invoice_InvoiceActionService', function (VR_Invoice_InvoiceActionService) {
+    VR_Invoice_InvoiceActionService.registerInvoiceRDLCReport();
+    VR_Invoice_InvoiceActionService.registerSetInvoicePaidAction();
 }]);
 

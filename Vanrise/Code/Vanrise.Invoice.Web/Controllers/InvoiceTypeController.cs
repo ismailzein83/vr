@@ -29,50 +29,18 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetInvoiceTypeRuntime(invoiceTypeId);
         }
+        [HttpGet]
+        [Route("GetGeneratorInvoiceTypeRuntime")]
+        public GeneratorInvoiceTypeRuntime GetGeneratorInvoiceTypeRuntime(Guid invoiceTypeId)
+        {
+            return _manager.GetGeneratorInvoiceTypeRuntime(invoiceTypeId);
+        }
         [HttpPost]
         [Route("GetFilteredInvoiceTypes")]
         public object GetFilteredInvoiceTypes(Vanrise.Entities.DataRetrievalInput<InvoiceTypeQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredInvoiceTypes(input));
         }
-
-        [HttpGet]
-        [Route("GetInvoiceGeneratorConfigs")]
-        public IEnumerable<InvoiceGeneratorConfig> GetInvoiceGeneratorConfigs()
-        {
-            return _manager.GetInvoiceGeneratorConfigs();
-        }
-        [HttpGet]
-        [Route("GetInvoiceGridActionSettingsConfigs")]
-        public IEnumerable<InvoiceGridActionSettingsConfig> GetInvoiceGridActionSettingsConfigs()
-        {
-            return _manager.GetInvoiceGridActionSettingsConfigs();
-        }
-        [HttpGet]
-        [Route("GetRDLCDataSourceSettingsConfigs")]
-        public IEnumerable<RDLCDataSourceSettingsConfig> GetRDLCDataSourceSettingsConfigs()
-        {
-            return _manager.GetRDLCDataSourceSettingsConfigs();
-        }
-        [HttpGet]
-        [Route("GetRDLCParameterSettingsConfigs")]
-        public IEnumerable<RDLCParameterSettingsConfig> GetRDLCParameterSettingsConfigs()
-        {
-            return _manager.GetRDLCParameterSettingsConfigs();
-        }
-        [HttpGet]
-        [Route("GetInvoiceUISubSectionSettingsConfigs")]
-        public IEnumerable<InvoiceUISubSectionSettingsConfig> GetInvoiceUISubSectionSettingsConfigs()
-        {
-            return _manager.GetInvoiceUISubSectionSettingsConfigs();
-        }
-        [HttpGet]
-        [Route("GetInvoiceFilterConditionConfigs")]
-        public IEnumerable<InvoiceFilterConditionConfig> GetInvoiceFilterConditionConfigs()
-        {
-            return _manager.GetInvoiceFilterConditionConfigs();
-        }
-
         
         [HttpPost]
         [Route("AddInvoiceType")]
@@ -99,18 +67,6 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             InvoiceTypeFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<InvoiceTypeFilter>(filter) : null;
             return _manager.GetInvoiceTypesInfo(serializedFilter);
-        }
-        [HttpGet]
-        [Route("GetInvoicePartnerSettingsConfigs")]
-        public IEnumerable<InvoicePartnerSettingsConfig> GetInvoicePartnerSettingsConfigs()
-        {
-            return _manager.GetInvoicePartnerSettingsConfigs();
-        }
-        [HttpGet]
-        [Route("GetItemsFilterConfigs")]
-        public IEnumerable<ItemsFilterConfig> GetItemsFilterConfigs()
-        {
-            return _manager.GetItemsFilterConfigs();
         }
         
     }

@@ -7,7 +7,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class SetInvoicePaidAction : InvoiceGridActionSettings
+    public class SetInvoicePaidAction : InvoiceActionSettings
     {
         public override Guid ConfigId { get { return new Guid("F974FC02-9C97-4C04-9DD3-2501A3807BFE"); } }
         public override string ActionTypeName
