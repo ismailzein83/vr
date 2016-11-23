@@ -1,0 +1,9 @@
+﻿{
+  "version": "2.3.0",
+  "output": "Message",
+  "ignore": [],
+  "options": {},
+  "globalVariables": [],
+  "errorLimit": 1,
+  "fileLimit": 1
+}

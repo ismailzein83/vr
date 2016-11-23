@@ -52,7 +52,9 @@ namespace Vanrise.Invoice.Business
 
             try
             {
-                if (CheckInvoiceOverlaping(createInvoiceInput.InvoiceTypeId,createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate))
+                var fromDate =createInvoiceInput.FromDate;
+                var toDate =  createInvoiceInput.ToDate.AddDays(1);
+                if (CheckInvoiceOverlaping(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId, fromDate, toDate))
                 {
                     throw new InvoiceGeneratorException("Invoices must not overlapped.");
                 }
@@ -61,9 +63,9 @@ namespace Vanrise.Invoice.Business
                 InvoiceGenerationContext context = new InvoiceGenerationContext
                 {
                     CustomSectionPayload = createInvoiceInput.CustomSectionPayload,
-                    FromDate = createInvoiceInput.FromDate,
+                    FromDate = fromDate,
                     PartnerId = createInvoiceInput.PartnerId,
-                    ToDate = createInvoiceInput.ToDate,
+                    ToDate = toDate,
                     InvoiceTypeId = createInvoiceInput.InvoiceTypeId
                 };
                 var generator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();

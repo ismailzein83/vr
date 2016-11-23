@@ -306,6 +306,9 @@
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\" />
     <Folder Include="VR_Invoice\Views\Definition\InvoicePartnerSettings\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="JSLintNet.json" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
