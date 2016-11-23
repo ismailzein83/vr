@@ -139,8 +139,8 @@
                         + '<span ng-show="ctrl.type == \'row\'">Row{{ctrl.value.row+1}}</span>'
                         + '</a>'
                         + '<span ng-show="ctrl.value ==null && (ctrl.type == \'cell\' || ctrl.type == undefined)" ng-click="updateRange()" class="vr-cellviewer-watermark"> Select cell from excel and click here.</span>'
-                        + '<span ng-show="ctrl.value ==null && (ctrl.type == \'row\')" ng-if="ctrl.readOnly" ng-click="updateRange()" class="vr-cellviewer-watermark"> Select row from excel and click here.</span>'
-                        + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor" ng-if="ctrl.readOnly" style="top: 0px; right: 1px;position:absolute" aria-hidden="true" ng-click="ctrl.remove()"></span>'
+                        + '<span ng-show="ctrl.value ==null && (ctrl.type == \'row\')" ng-if="!ctrl.readOnly" ng-click="updateRange()" class="vr-cellviewer-watermark"> Select row from excel and click here.</span>'
+                        + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor" ng-if="!ctrl.readOnly" style="top: 0px; right: 1px;position:absolute" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                         + '</div>'
                         + '</vr-validator>'
                         + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" html="true" style="color:#337AB7"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
