@@ -35,12 +35,11 @@
             $scope.scopeModel.onInvoiceActionsSelectorReady = function (api) {
                 invoiceActionsSelectorAPI = api;
                 invoiceActionsSelectorReadyPromiseDeferred.resolve();
-            }
-            $scope.scopeModel.onButtonTypesSelectorReady = function(api)
-            {
+            };
+            $scope.scopeModel.onButtonTypesSelectorReady = function (api) {
                 buttonTypesSelectorAPI = api;
                 buttonTypesSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateInvoiceGeneratorAction() : addeInvoiceGeneratorAction();
             };
@@ -122,7 +121,7 @@
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
+                });
             }
 
         }

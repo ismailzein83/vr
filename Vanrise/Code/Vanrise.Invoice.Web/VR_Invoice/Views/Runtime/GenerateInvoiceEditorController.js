@@ -26,28 +26,26 @@
             $scope.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
-            }
-            $scope.validateToDate = function()
-            {
+            };
+            $scope.validateToDate = function () {
                 var date = new Date();
                 if ($scope.toDate >= new Date(date.getFullYear(), date.getMonth(), date.getDate()))
                     return "Date must be less than date of today.";
                 return null;
-            }
+            };
             $scope.validateFromDate = function () {
                 if ($scope.toDate < $scope.fromDate)
                     return "From date must be less than to date.";
                 return null;
-            }
-            $scope.preview = function()
-            {
+            };
+            $scope.preview = function () {
                 var partnerObject = partnerSelectorAPI.getData();
 
                 var context = {
                     $type: "Vanrise.Invoice.Business.PreviewInvoiceActionContext,Vanrise.Invoice.Business",
                     InvoiceTypeId: invoiceTypeId,
                     PartnerId: partnerObject != undefined ? partnerObject.selectedIds : undefined,
-                    FromDate:$scope.fromDate,
+                    FromDate: $scope.fromDate,
                     ToDate: $scope.toDate,
                     IssueDate: $scope.issueDate
                 };
@@ -56,7 +54,7 @@
                 paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
                 paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
                 window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
-            }
+            };
 
             $scope.generateInvoice = function () {
                 return generateInvoice();

@@ -30,11 +30,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onInvoiceActionSettingsReady = function (api)
-            {
+            $scope.scopeModel.onInvoiceActionSettingsReady = function (api) {
                 invoiceActionSettingsAPI = api;
                 invoiceActionSettingsReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateInvoiceAction() : addInvoiceAction();
             };
@@ -86,7 +85,7 @@
             function loadInvoiceActionSettingsDirective() {
                 var invoiceActionSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 invoiceActionSettingsReadyPromiseDeferred.promise.then(function () {
-                    var invoiceActionPayload = { context: getContext() }
+                    var invoiceActionPayload = { context: getContext() };
                     if (invoiceActionEntity != undefined) {
                         invoiceActionPayload.invoiceActionEntity = invoiceActionEntity.Settings;
                     }
@@ -101,7 +100,7 @@
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
+            });
         }
 
         function getContext()

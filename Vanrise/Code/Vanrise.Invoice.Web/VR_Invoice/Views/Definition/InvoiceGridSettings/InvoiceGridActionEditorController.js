@@ -32,11 +32,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onInvoiceActionsSelectorReady = function(api)
-            {
+            $scope.scopeModel.onInvoiceActionsSelectorReady = function (api) {
                 invoiceActionsSelectorAPI = api;
                 invoiceActionsSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onInvoiceFilterConditionReady = function (api) {
                 invoiceFilterConditionAPI = api;
                 invoiceFilterConditionReadyPromiseDeferred.resolve();
@@ -124,7 +123,7 @@
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
+                });
             }
         }
 

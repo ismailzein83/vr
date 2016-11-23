@@ -30,30 +30,25 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.listItems = [];
-                ctrl.addItem = function()
-                {
-                    if(ctrl.itemsetName != undefined)
-                    {
+                ctrl.addItem = function () {
+                    if (ctrl.itemsetName != undefined) {
                         ctrl.listItems.push(ctrl.itemsetName);
                         ctrl.itemsetName = undefined;
                     }
-                }
+                };
                 ctrl.disableAddButton = true;
-                ctrl.disableAddItem = function()
-                {
-                    if (ctrl.itemsetName == undefined || ctrl.itemsetName == "")
-                    {
+                ctrl.disableAddItem = function () {
+                    if (ctrl.itemsetName == undefined || ctrl.itemsetName == "") {
                         ctrl.disableAddButton = true;
                         return null;
                     }
-                    if (UtilsService.contains(ctrl.listItems, ctrl.itemsetName))
-                    {
+                    if (UtilsService.contains(ctrl.listItems, ctrl.itemsetName)) {
                         ctrl.disableAddButton = true;
                         return "Same name exist.";
                     }
                     ctrl.disableAddButton = false;
                     return null;
-                }
+                };
                 defineAPI();
             }
 
@@ -63,10 +58,8 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                 api.load = function (payload) {
                     ctrl.listItems.length = 0;
                     if (payload != undefined) {
-                        if(payload.ItemSetNames != undefined)
-                        {
-                            for(var i=0;i<payload.ItemSetNames.length;i++)
-                            {
+                        if (payload.ItemSetNames != undefined) {
+                            for (var i = 0; i < payload.ItemSetNames.length; i++) {
                                 var itemSetName = payload.ItemSetNames[i];
                                 ctrl.listItems.push(itemSetName);
                             }
@@ -74,15 +67,15 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
-                  
+
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.ItemsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
-                        ItemSetNames : ctrl.listItems
+                        ItemSetNames: ctrl.listItems
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

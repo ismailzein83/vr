@@ -36,7 +36,7 @@ app.directive("vrInvoicetypeInvoicegeneratoractions", ["UtilsService", "VRNotifi
                 ctrl.addInvoiceGeneratorAction = function () {
                     var onInvoiceGeneratorActionAdded = function (invoiceGeneratorAction) {
                         ctrl.datasource.push({ Entity: invoiceGeneratorAction });
-                    }
+                    };
 
                     VR_Invoice_InvoiceGeneratorActionService.addInvoiceGeneratorAction(onInvoiceGeneratorActionAdded, getContext());
                 };
@@ -44,7 +44,7 @@ app.directive("vrInvoicetypeInvoicegeneratoractions", ["UtilsService", "VRNotifi
                 ctrl.removeGeneratorAction = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }
@@ -62,7 +62,7 @@ app.directive("vrInvoicetypeInvoicegeneratoractions", ["UtilsService", "VRNotifi
                         }
                     }
                     return invoiceGeneratorActions;
-                }
+                };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
@@ -74,7 +74,7 @@ app.directive("vrInvoicetypeInvoicegeneratoractions", ["UtilsService", "VRNotifi
                             }
                         }
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -89,14 +89,14 @@ app.directive("vrInvoicetypeInvoicegeneratoractions", ["UtilsService", "VRNotifi
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function editInvoiceGeneratorAction(invoiceGeneratorActionObj) {
                 var onInvoiceGeneratorActionUpdated = function (invoiceGeneratorAction) {
                     var index = ctrl.datasource.indexOf(invoiceGeneratorActionObj);
                     ctrl.datasource[index] = { Entity: invoiceGeneratorAction };
-                }
+                };
 
                 VR_Invoice_InvoiceGeneratorActionService.editInvoiceGeneratorAction(invoiceGeneratorActionObj.Entity, onInvoiceGeneratorActionUpdated, getContext());
             }

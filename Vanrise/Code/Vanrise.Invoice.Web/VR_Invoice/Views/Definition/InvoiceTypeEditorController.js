@@ -54,13 +54,12 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {}
+            $scope.scopeModel = {};
 
-            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api)
-            {
+            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 $scope.scopeModel.isLoading = true;
@@ -71,43 +70,42 @@
                         dataRecordTypeEntity = response;
                     });
                 }
-            }
+            };
 
             $scope.scopeModel.onConcatenatedPartsReady = function (api) {
                 concatenatedPartsAPI = api;
                 concatenatedPartsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onSerialNumberPatternReady = function (api) {
                 serialNumberPatternAPI = api;
                 serialNumberPatternReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onSubSectionsReady = function (api) {
                 subSectionsAPI = api;
                 subSectionsSectionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onMainGridColumnsReady = function (api) {
                 mainGridColumnsAPI = api;
                 mainGridColumnsSectionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onInvoiceGridActionsReady = function (api) {
                 invoiceGridActionsAPI = api;
                 invoiceGridActionsSectionReadyPromiseDeferred.resolve();
-            }
+            };
 
-            $scope.scopeModel.onInvoiceGeneratorActionsReady = function (api)
-            {
+            $scope.scopeModel.onInvoiceGeneratorActionsReady = function (api) {
                 invoiceGeneratorActionAPI = api;
                 invoiceGeneratorActionReadyPromiseDeferred.resolve();
-            }
+            };
           
             $scope.scopeModel.onInvoiceActionsReady = function (api) {
                 invoiceActionsAPI = api;
                 invoiceActionsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.saveInvoiceType = function () {
                 $scope.scopeModel.isLoading = true;
@@ -122,7 +120,7 @@
             $scope.scopeModel.onInvoiceExtendedSettingsReady = function (api) {
                 invoiceExtendedSettingsAPI = api;
                 invoiceExtendedSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.close = function () {
@@ -236,7 +234,7 @@
                     var mainGridColumnsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     mainGridColumnsSectionReadyPromiseDeferred.promise.then(function () {
-                        var mainGridColumnsPayload = { context: getContext() }
+                        var mainGridColumnsPayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings && invoiceTypeEntity.Settings.InvoiceGridSettings) {
                             mainGridColumnsPayload.mainGridColumns = invoiceTypeEntity.Settings.InvoiceGridSettings.MainGridColumns;
                         }
@@ -262,7 +260,7 @@
                     var invoiceGridActionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     invoiceGridActionsSectionReadyPromiseDeferred.promise.then(function () {
-                        var invoiceGridActionsPayload = { context: getContext() }
+                        var invoiceGridActionsPayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings && invoiceTypeEntity.Settings.InvoiceGridSettings) {
                             invoiceGridActionsPayload.invoiceGridActions = invoiceTypeEntity.Settings.InvoiceGridSettings.InvoiceGridActions;
                         }
@@ -274,7 +272,7 @@
                 function loadConcatenatedParts() {
                     var concatenatedPartsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     concatenatedPartsReadyPromiseDeferred.promise.then(function () {
-                        var concatenatedPartsDirectivePayload = { context: getContext() }
+                        var concatenatedPartsDirectivePayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceSerialNumberSettings != undefined) {
                             concatenatedPartsDirectivePayload.serialNumberParts = invoiceTypeEntity.Settings.InvoiceSerialNumberSettings.SerialNumberParts;
                         }
@@ -287,7 +285,7 @@
                 function loadSerialNumberPattern() {
                     var serialNumberPatternDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     serialNumberPatternReadyPromiseDeferred.promise.then(function () {
-                        var serialNumberPatternDirectivePayload = { context: getContext() }
+                        var serialNumberPatternDirectivePayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceSerialNumberSettings != undefined)
                             serialNumberPatternDirectivePayload.serialNumberPattern = invoiceTypeEntity.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
                         VRUIUtilsService.callDirectiveLoad(serialNumberPatternAPI, serialNumberPatternDirectivePayload, serialNumberPatternDeferredLoadPromiseDeferred);
@@ -298,7 +296,7 @@
                 function loadInvoiceActionsGrid() {
                     var invoiceActionsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceActionsReadyPromiseDeferred.promise.then(function () {
-                        var invoiceActionsPayload = { context: getContext() }
+                        var invoiceActionsPayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
                             invoiceActionsPayload.invoiceActions = invoiceTypeEntity.Settings.InvoiceActions;
                         VRUIUtilsService.callDirectiveLoad(invoiceActionsAPI, invoiceActionsPayload, invoiceActionsDeferredLoadPromiseDeferred);
@@ -309,7 +307,7 @@
                 function loadInvoiceGeneratorActionGrid() {
                     var invoiceGeneratorActionDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceGeneratorActionReadyPromiseDeferred.promise.then(function () {
-                        var invoiceGeneratorActionDirectivePayload = { context: getContext() }
+                        var invoiceGeneratorActionDirectivePayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
                             invoiceGeneratorActionDirectivePayload.invoiceGeneratorActions = invoiceTypeEntity.Settings.InvoiceGeneratorActions;
                         VRUIUtilsService.callDirectiveLoad(invoiceGeneratorActionAPI, invoiceGeneratorActionDirectivePayload, invoiceGeneratorActionDeferredLoadPromiseDeferred);
@@ -320,7 +318,7 @@
                 function loadInvoiceExtendedSettings() {
                     var invoiceExtendedSettingsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceExtendedSettingsReadyPromiseDeferred.promise.then(function () {
-                        var invoiceGeneratorActionDirectivePayload = { context: getContext() }
+                        var invoiceGeneratorActionDirectivePayload = { context: getContext() };
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
                             invoiceGeneratorActionDirectivePayload.extendedSettingsEntity = invoiceTypeEntity.Settings.ExtendedSettings;
                         VRUIUtilsService.callDirectiveLoad(invoiceExtendedSettingsAPI, invoiceGeneratorActionDirectivePayload, invoiceExtendedSettingsDeferredLoadPromiseDeferred);
@@ -351,21 +349,17 @@
                     }
                     return fields;
                 },
-                getParts:function()
-                {
+                getParts: function () {
                     return concatenatedPartsAPI.getData();
                 },
                 getExtensionType: function () {
                     return "VR_InvoiceType_SerialNumberParts";
                 },
-                getInvoiceActionsInfo :function()
-                {
+                getInvoiceActionsInfo: function () {
                     var invoiceActionsInfo = [];
                     var actions = invoiceActionsAPI.getData();
-                    if(actions != undefined && actions.length >0)
-                    {
-                        for(var i=0;i<actions.length ;i++)
-                        {
+                    if (actions != undefined && actions.length > 0) {
+                        for (var i = 0; i < actions.length ; i++) {
                             var action = actions[i];
                             invoiceActionsInfo.push({
                                 Title: action.Title,
@@ -374,8 +368,8 @@
                         }
                     }
                     return invoiceActionsInfo;
-                },
-            }
+                }
+            };
             return context;
         }
 

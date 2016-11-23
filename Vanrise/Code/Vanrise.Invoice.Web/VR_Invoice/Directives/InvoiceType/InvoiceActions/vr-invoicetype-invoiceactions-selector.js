@@ -69,18 +69,17 @@
                         context = payload.context;
                     }
 
-                    if (context != undefined)
-                    {
+                    if (context != undefined) {
                         ctrl.datasource = context.getInvoiceActionsInfo();
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'InvoiceActionId', attrs, ctrl);
                         }
                     }
-                }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('InvoiceActionId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }
