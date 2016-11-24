@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\CodePreparationController.cs" />
     <Compile Include="Controllers\CodePreparationPreviewController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
@@ -147,7 +148,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_NumberingPlan\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\CodeGroup\vr-np-codegroup-grid.js" />
+    <Content Include="VR_NumberingPlan\Directives\CodeGroup\vr-np-codegroup-selector.js" />
+    <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\Templates\SellingNumberPlanGridTemplate.html" />
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-selector.js" />
+    <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-grid.js" />
     <Content Include="VR_NumberingPlan\Images\Closed.png" />
     <Content Include="VR_NumberingPlan\Images\Decrease.png" />
     <Content Include="VR_NumberingPlan\Images\Increase.png" />
@@ -160,8 +166,22 @@
     <Content Include="VR_NumberingPlan\Images\Renamed.png" />
     <Content Include="VR_NumberingPlan\Images\ReOpen.png" />
     <Content Include="VR_NumberingPlan\Images\Zone.png" />
+    <Content Include="VR_NumberingPlan\ModuleInitialization.js" />
+    <Content Include="VR_NumberingPlan\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="VR_NumberingPlan\Services\APIServices\SellingNumberPlanAPIService.js" />
+    <Content Include="VR_NumberingPlan\Services\CodeGroupService.js" />
+    <Content Include="VR_NumberingPlan\Services\SellingNumberPlanService.js" />
     <Content Include="VR_NumberingPlan\Template\Code preperation sample.xls" />
+    <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupEditor.html" />
+    <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupEditorController.js" />
+    <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupManagement.html" />
+    <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupManagementController.js" />
+    <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupUploadEditor.html" />
+    <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="VR_NumberingPlan\Views\SellingNumberPlanEditor.html" />
+    <Content Include="VR_NumberingPlan\Views\SellingNumberPlanEditorController.js" />
+    <Content Include="VR_NumberingPlan\Views\SellingNumberPlanManagement.html" />
+    <Content Include="VR_NumberingPlan\Views\SellingNumberPlanManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_NumberingPlan\Constants\CodeChangeTypeEnum.js" />
@@ -212,6 +232,9 @@
     <Content Include="VR_NumberingPlan\Views\Dialogs\NewZoneDialogController.js" />
     <Content Include="VR_NumberingPlan\Views\Dialogs\RenameZoneDialog.html" />
     <Content Include="VR_NumberingPlan\Views\Dialogs\RenameZoneDialogController.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VR_NumberingPlan\Template\CodeGroupTemplate.xlsx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

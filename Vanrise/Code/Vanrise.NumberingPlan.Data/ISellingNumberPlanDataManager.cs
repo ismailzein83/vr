@@ -11,5 +11,9 @@ namespace Vanrise.NumberingPlan.Data
     {
         List<SellingNumberPlan> GetSellingNumberPlans();
         bool AreSellingNumberPlansUpdated(ref object updateHandle);
+
+        bool Update(SellingNumberPlanToEdit sellingNumberPlan);
+
+        bool Insert(SellingNumberPlan sellingNumberPlan, out int insertedId);
     }
 }

@@ -30,6 +30,20 @@ namespace Vanrise.NumberingPlan.Data.SQL
         {
             return base.IsDataUpdated("VR_NumberingPlan.SellingNumberPlan", ref updateHandle);
         }
+
+        public bool Update(Entities.SellingNumberPlanToEdit sellingNumberPlan)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[VR_NumberingPlan].[sp_SellingNumberPlan_Update]", sellingNumberPlan.SellingNumberPlanId, sellingNumberPlan.Name);
+            return (recordsEffected > 0);
+        }
+        public bool Insert(Entities.SellingNumberPlan sellingNumberPlan, out int insertedId)
+        {
+            object sellingNumberPlanId;
+            int recordsEffected = ExecuteNonQuerySP("[VR_NumberingPlan].[sp_SellingNumberPlan_Insert]", out sellingNumberPlanId, sellingNumberPlan.Name);
+            insertedId = (int)sellingNumberPlanId;
+            return (recordsEffected > 0);
+        }
+
         #endregion
 
         #region Private Methods

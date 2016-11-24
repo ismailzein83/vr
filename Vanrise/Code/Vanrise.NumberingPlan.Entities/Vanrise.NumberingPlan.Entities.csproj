@@ -58,7 +58,11 @@
     <Compile Include="ChangedData\ChangedZone.cs" />
     <Compile Include="Changes.cs" />
     <Compile Include="ChangesDetail.cs" />
-    <Compile Include="CodeGroup.cs" />
+    <Compile Include="CodeGroup\CodeGroup.cs" />
+    <Compile Include="CodeGroup\CodeGroupDetail.cs" />
+    <Compile Include="CodeGroup\CodeGroupInfo.cs" />
+    <Compile Include="CodeGroup\CodeGroupQuery.cs" />
+    <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="CodePrefixInfo.cs" />
     <Compile Include="CountryToProcess.cs" />
     <Compile Include="CPSettings\CPSettingsData.cs" />

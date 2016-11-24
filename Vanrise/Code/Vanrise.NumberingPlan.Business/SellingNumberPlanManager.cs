@@ -7,6 +7,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.NumberingPlan.Data;
 using Vanrise.NumberingPlan.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.NumberingPlan.Business
 {
@@ -39,6 +40,76 @@ namespace Vanrise.NumberingPlan.Business
             return null;
         }
 
+        public SellingNumberPlan GetMasterSellingNumberPlan()
+        {
+            var allNumberPlans = GetCachedSellingNumberPlans();
+            if (allNumberPlans != null)
+                return allNumberPlans.Values.FirstOrDefault();
+            else
+                return null;
+        }
+        public IDataRetrievalResult<SellingNumberPlanDetail> GetFilteredSellingNumberPlans(DataRetrievalInput<SellingNumberPlanQuery> input)
+        {
+            var allSellingNumberPlans = GetCachedSellingNumberPlans();
+            Func<SellingNumberPlan, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingNumberPlans.ToBigResult(input, filterExpression, SellingNumberPlanDetailMapper));
+
+        }
+
+        public InsertOperationOutput<SellingNumberPlanDetail> AddSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
+        {
+            ValidateSellingNumberPlanToAdd(sellingNumberPlan);
+
+            InsertOperationOutput<SellingNumberPlanDetail> insertOperationOutput = new InsertOperationOutput<SellingNumberPlanDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            int sellingNumberPlanId = -1;
+
+            ISellingNumberPlanDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+            bool insertActionSucc = dataManager.Insert(sellingNumberPlan, out sellingNumberPlanId);
+            if (insertActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                sellingNumberPlan.SellingNumberPlanId = sellingNumberPlanId;
+                insertOperationOutput.InsertedObject = SellingNumberPlanDetailMapper(sellingNumberPlan);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
+        {
+            ValidateSellingNumberPlanToEdit(sellingNumberPlan);
+
+            ISellingNumberPlanDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+
+            bool updateActionSucc = dataManager.Update(sellingNumberPlan);
+            UpdateOperationOutput<SellingNumberPlanDetail> updateOperationOutput = new UpdateOperationOutput<SellingNumberPlanDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = SellingNumberPlanDetailMapper(this.GetSellingNumberPlan(sellingNumberPlan.SellingNumberPlanId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         #endregion
 
 
@@ -68,7 +139,14 @@ namespace Vanrise.NumberingPlan.Business
                 SellingNumberPlanId = sellingNumberPlan.SellingNumberPlanId
             };
         }
-
+        public SellingNumberPlanDetail SellingNumberPlanDetailMapper(SellingNumberPlan sellingNumberPlan)
+        {
+            SellingNumberPlanDetail sellingNumberPlanDetail = new SellingNumberPlanDetail()
+            {
+                Entity = sellingNumberPlan
+            };
+            return sellingNumberPlanDetail;
+        }
         #endregion
 
         #region Private Methods
@@ -86,7 +164,25 @@ namespace Vanrise.NumberingPlan.Business
 
         #endregion
 
+        #region Validation Methods
 
+        void ValidateSellingNumberPlanToAdd(SellingNumberPlan sellingNumberPlan)
+        {
+            ValidateSellingNumberPlan(sellingNumberPlan.Name);
+        }
+
+        void ValidateSellingNumberPlanToEdit(SellingNumberPlanToEdit sellingNumberPlan)
+        {
+            ValidateSellingNumberPlan(sellingNumberPlan.Name);
+        }
+
+        void ValidateSellingNumberPlan(string snpName)
+        {
+            if (String.IsNullOrWhiteSpace(snpName))
+                throw new MissingArgumentValidationException("SellingNumberPlan.Name");
+        }
+
+        #endregion
        
     }
 }

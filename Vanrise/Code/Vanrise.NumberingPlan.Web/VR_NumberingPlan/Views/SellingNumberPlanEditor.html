@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="Vr_NP_SellingNumberPlanEditorController" vr-loader="isGettingData" width="'30%'">
+    <vr-modalbody maxheight="'300px'">
+        <vr-form validationcontext="sellingNumberPlanGroup">
+            <div>
+                <vr-row removeline>
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="sellingNumberPlanGroup" data-onclick="saveSellingNumberPlan" haspermission="hasSaveSellingNumberPlanPermission"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿<div vr-modalcontent ng-controller="Vr_NP_CodeGroupEditorController" vr-loader="isGettingData">
+    <vr-modalbody>
+        <vr-form name="formCountryEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox type="number" minvalue="0" decimalprecision="0" value="code" label="Code Group" isrequired></vr-textbox>
+                </vr-columns>
+                <span vr-disabled="disableCountry">
+                    <vr-columns width="1/2row" haschildcolumns>
+                        <vr-common-country-selector isrequired="true" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
+                    </vr-columns>
+                </span>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCountryEditor" data-onclick="saveCodeGroup" haspermission="hasSaveCodeGroupPermission"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

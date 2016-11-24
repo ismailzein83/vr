@@ -1,0 +1,29 @@
+﻿
+<vr-panel ng-controller="Vr_NP_CodeGroupManagementController" vr-loader="isGettingData">
+    <vr-form name="formFilter" vr-loader="isGettingData">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox type="number" decimalprecision="0" value="code" label="Code Group"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal" haschildcolumns>
+                    <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection selectedvalues="country"></vr-common-country-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Upload" formname="formFilter" data-onclick="uploadCodeGroup" haspermission="hasUploadCodeGroupListPermission"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewCodeGroup" haspermission="hasAddCodeGroupPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-be-codegroup-grid on-ready="onGridReady"></vr-whs-be-codegroup-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

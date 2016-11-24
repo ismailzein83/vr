@@ -19,5 +19,44 @@ namespace Vanrise.NumberingPlan.Web.Controllers
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.GetSellingNumberPlans();
         }
+
+        [HttpGet]
+        [Route("GetSellingNumberPlan")]
+        public SellingNumberPlan GetSellingNumberPlan(int sellingNumberPlanId)
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return manager.GetSellingNumberPlan(sellingNumberPlanId);
+        }
+        [HttpGet]
+        [Route("GetMasterSellingNumberPlan")]
+        public SellingNumberPlan GetMasterSellingNumberPlan()
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return manager.GetMasterSellingNumberPlan();
+        }
+        [HttpPost]
+        [Route("GetFilteredSellingNumberPlans")]
+        public object GetFilteredSellingNumberPlans(Vanrise.Entities.DataRetrievalInput<SellingNumberPlanQuery> input)
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return GetWebResponse(input, manager.GetFilteredSellingNumberPlans(input));
+        }
+
+        [HttpPost]
+        [Route("AddSellingNumberPlan")]
+        public Vanrise.Entities.InsertOperationOutput<SellingNumberPlanDetail> AddSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return manager.AddSellingNumberPlan(sellingNumberPlan);
+        }
+
+        [HttpPost]
+        [Route("UpdateSellingNumberPlan")]
+        public Vanrise.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return manager.UpdateSellingNumberPlan(sellingNumberPlan);
+        }
+
     }
 }
