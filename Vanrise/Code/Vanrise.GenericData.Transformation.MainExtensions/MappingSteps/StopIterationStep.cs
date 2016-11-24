@@ -3,22 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
-    public class AssignFieldStep : MappingStep
+    public class StopIterationStep : MappingStep
     {
-        public override Guid ConfigId { get { return new Guid("00e8e50c-017e-44ed-96a9-6d4291a9c4b6"); } }
+        public override Guid ConfigId { get { return new Guid("CB929C72-D08A-410A-B9E1-2B5D29D417FA"); } }
 
-        public string Source { get; set; }
-
-        public string Target { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1};", this.Target, this.Source);
+            context.AddCodeToCurrentInstanceExecutionBlock("continue;");
         }
     }
 }
