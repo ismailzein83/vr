@@ -123,13 +123,15 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             type: undefined,
                             numberprecision: undefined,
                         };
-                        switch (mainGridColumn.Field) {
-                            case VR_Invoice_InvoiceFieldEnum.CustomField.value:
+                        var invoiceField = UtilsService.getEnum(VR_Invoice_InvoiceFieldEnum, "value", mainGridColumn.Field);
+                        if (invoiceField != undefined)
+                        {
+                            if (invoiceField.value == VR_Invoice_InvoiceFieldEnum.CustomField.value)
+                            {
                                 if (dataItem != undefined && dataItem.Items != undefined) {
                                     for (var j = 0; j < dataItem.Items.length; j++) {
                                         var item = dataItem.Items[j];
-                                        if (item.FieldName == mainGridColumn.CustomFieldName)
-                                        {
+                                        if (item.FieldName == mainGridColumn.CustomFieldName) {
                                             field = "Items[" + j + "].Description";
                                         }
                                     }
@@ -138,51 +140,14 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     type: mainGridColumn.Attribute.Type,
                                     numberprecision: mainGridColumn.Attribute.NumberPrecision
                                 };
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.InvoiceId.value:
-                                field = field = "Entity." + VR_Invoice_InvoiceFieldEnum.InvoiceId.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.InvoiceId.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.Partner.value:
-                                field = VR_Invoice_InvoiceFieldEnum.Partner.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.Partner.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.SerialNumber.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.SerialNumber.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.SerialNumber.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.FromDate.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.FromDate.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.FromDate.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.ToDate.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.ToDate.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.ToDate.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.IssueDate.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.IssueDate.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.IssueDate.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.DueDate.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.DueDate.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.DueDate.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.Paid.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.Paid.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.Paid.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.UserId.value:
-                                field = VR_Invoice_InvoiceFieldEnum.UserId.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.UserId.type;
-                                break;
-                            case VR_Invoice_InvoiceFieldEnum.CreatedTime.value:
-                                field = "Entity." + VR_Invoice_InvoiceFieldEnum.CreatedTime.fieldName;
-                                attribute.type = VR_Invoice_InvoiceFieldEnum.CreatedTime.type;
-                                break;
+                            } else
+                            {
+                                field = invoiceField.fieldName;
+                                attribute.type = invoiceField.type;
+                            }
+                            $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, NumberPrecision: attribute.numberprecision });
                         }
-                        $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, NumberPrecision: attribute.numberprecision });
                     }
-                   
                 }
             }
 

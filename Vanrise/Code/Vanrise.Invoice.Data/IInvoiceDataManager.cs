@@ -16,5 +16,6 @@ namespace Vanrise.Invoice.Data
         Entities.Invoice GetInvoice(long invoiceId);
         bool CheckInvoiceOverlaping(Guid invoiceTypeId,string partnerId,DateTime fromDate, DateTime toDate);
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
+        bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate);
     }
 }

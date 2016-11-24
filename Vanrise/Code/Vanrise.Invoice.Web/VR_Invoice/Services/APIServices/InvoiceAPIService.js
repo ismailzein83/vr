@@ -24,6 +24,12 @@
                 isInvoicePaid: isInvoicePaid
             });
         }
+        function SetInvoiceLocked(invoiceId, setLocked) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SetInvoiceLocked'), {
+                invoiceId: invoiceId,
+                setLocked: setLocked
+            });
+        }
         function GetInvoiceDetail(invoiceId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetail'), {
                 invoiceId: invoiceId,
@@ -34,7 +40,8 @@
             GenerateInvoice: GenerateInvoice,
             GetFilteredInvoices: GetFilteredInvoices,
             SetInvoicePaid: SetInvoicePaid,
-            GetInvoiceDetail: GetInvoiceDetail
+            GetInvoiceDetail: GetInvoiceDetail,
+            SetInvoiceLocked: SetInvoiceLocked
         });
     }
 

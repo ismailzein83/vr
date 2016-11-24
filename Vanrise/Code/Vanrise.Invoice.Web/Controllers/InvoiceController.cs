@@ -32,7 +32,13 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.SetInvoicePaid(invoiceId, isInvoicePaid);
         }
-
+        [HttpGet]
+        [Route("SetInvoiceLocked")]
+        public bool SetInvoiceLocked(long invoiceId, bool setLocked)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.SetInvoiceLocked(invoiceId, setLocked);
+        }
         [HttpGet]
         [Route("GetInvoiceDetail")]
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)

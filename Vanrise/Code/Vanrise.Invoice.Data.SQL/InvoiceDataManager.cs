@@ -28,6 +28,11 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoicePaid", invoiceId, paidDate);
             return (affectedRows > -1);
         }
+        public bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceLock", invoiceId, lockedDate);
+            return (affectedRows > -1);
+        }
         public Entities.Invoice GetInvoice(long invoiceId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
@@ -95,6 +100,7 @@ namespace Vanrise.Invoice.Data.SQL
                 DueDate = GetReaderValue<DateTime>(reader, "DueDate"),
                 UserId = GetReaderValue<int>(reader, "UserId"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                LockDate = GetReaderValue<DateTime?>(reader, "LockDate"),
             };
             return invoice;
         }

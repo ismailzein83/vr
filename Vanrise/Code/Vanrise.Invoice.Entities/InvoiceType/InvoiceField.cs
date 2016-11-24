@@ -18,6 +18,7 @@ namespace Vanrise.Invoice.Entities
         DueDate = 7,
         Paid = 8,
         UserId = 9,
-        CreatedTime = 10
+        CreatedTime = 10,
+        Lock = 11
     }
 }

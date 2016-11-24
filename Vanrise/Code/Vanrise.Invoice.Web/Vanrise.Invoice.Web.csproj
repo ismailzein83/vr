@@ -180,10 +180,14 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterGroupConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-filtergroup.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\vr-invoicetype-invoicegeneratorfiltercondition.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SetInvoiceLockActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-setinvoicelock.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\Templates\InvoiceActionsGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceExtendedSettings\vr-invoicetype-extendedsettings.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\IsLockedInvoiceFilterConditionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-islockedinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceDateSerialNumberPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceFieldSerialNumberPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceCounterSerialNumberPartTemplate.html" />

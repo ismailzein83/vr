@@ -35,10 +35,6 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     var promiseDeffered = UtilsService.createPromiseDeferred();
                     VRNotificationService.showConfirmation().then(function (response) {
                         if (response) {
-                            var context = {
-                                $type: "Vanrise.Invoice.Business.PhysicalInvoiceActionContext,Vanrise.Invoice.Business",
-                                InvoiceId: payload.invoice.Entity.InvoiceId
-                            };
                             VR_Invoice_InvoiceAPIService.SetInvoicePaid(payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.IsInvoicePaid).then(function (response) {
                                 promiseDeffered.resolve(response);
                             });
@@ -51,6 +47,27 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             };
             registerActionType(actionType);
         }
+
+        function registerSetInvoiceLockedAction() {
+            var actionType = {
+                ActionTypeName: "LockInvoiceAction",
+                actionMethod: function (payload) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            VR_Invoice_InvoiceAPIService.SetInvoiceLocked(payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.SetLocked).then(function (response) {
+                                promiseDeffered.resolve(response);
+                            });
+                        } else {
+                            promiseDeffered.resolve(response);
+                        }
+                    });
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(actionType);
+        }
+
         function getInvoiceActionContext(payload)
         {
             var context;
@@ -107,6 +124,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             addInvoiceAction: addInvoiceAction,
             editInvoiceAction: editInvoiceAction,
             registerSetInvoicePaidAction: registerSetInvoicePaidAction,
+            registerSetInvoiceLockedAction:registerSetInvoiceLockedAction,
             registerInvoiceRDLCReport: registerInvoiceRDLCReport,
             registerActionType: registerActionType,
             getActionTypeIfExist: getActionTypeIfExist,
