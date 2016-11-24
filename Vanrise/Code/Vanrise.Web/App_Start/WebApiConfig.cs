@@ -24,7 +24,7 @@ namespace Vanrise.Web
             config.Filters.Add(new AuthorizationFilter());
 
             var json = config.Formatters.JsonFormatter;
-            json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+            json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 
             // Web API routes
             config.MapHttpAttributeRoutes();
