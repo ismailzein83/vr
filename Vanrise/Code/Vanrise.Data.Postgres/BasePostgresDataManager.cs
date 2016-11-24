@@ -152,17 +152,17 @@ namespace Vanrise.Data.Postgres
 
         public void Bulk(byte[] buf, string tableName)
         {
-            using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-                using (NpgsqlCommand command = new NpgsqlCommand(string.Format("COPY {0} FROM STDIN", tableName), conn))
-                {
-                    NpgsqlCopyIn cin = new NpgsqlCopyIn(command, conn);
-                    cin.Start();
-                    cin.CopyStream.Write(buf, 0, buf.Length);
-                    cin.End();
-                }
-            }
+            //using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
+            //{
+            //    if (conn.State == ConnectionState.Closed) conn.Open();
+            //    using (NpgsqlCommand command = new NpgsqlCommand(string.Format("COPY {0} FROM STDIN", tableName), conn))
+            //    {
+            //        NpgsqlCopyIn cin = new NpgsqlCopyIn(command, conn);
+            //        cin.Start();
+            //        cin.CopyStream.Write(buf, 0, buf.Length);
+            //        cin.End();
+            //    }
+            //}
         }
 
         #endregion
