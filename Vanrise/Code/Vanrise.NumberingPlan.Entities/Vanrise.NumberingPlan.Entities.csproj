@@ -85,9 +85,10 @@
     <Compile Include="PreviewData\ZonePreview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleAreaSettingsData.cs" />
-    <Compile Include="SaleCode.cs" />
-    <Compile Include="SaleCodeQuery.cs" />
-    <Compile Include="SaleCodeQueryByZone.cs" />
+    <Compile Include="SaleCode\SaleCode.cs" />
+    <Compile Include="SaleCodeMatch.cs" />
+    <Compile Include="SaleCode\SaleCodeQuery.cs" />
+    <Compile Include="SaleCode\SaleCodeQueryByZone.cs" />
     <Compile Include="SaleCode\CloseCodesInput.cs" />
     <Compile Include="SaleCode\CloseCodesOutput.cs" />
     <Compile Include="SaleCode\CodeItem.cs" />
