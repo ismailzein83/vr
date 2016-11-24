@@ -44,7 +44,7 @@
             function builInvoiceActionObjFromScope() {
                 return {
                     Title: $scope.scopeModel.actionTitle,
-                    InvoiceActionId: UtilsService.guid(),
+                    InvoiceActionId:invoiceActionEntity != undefined?invoiceActionEntity.InvoiceActionId: UtilsService.guid(),
                     Settings: invoiceActionSettingsAPI.getData()
                 };
             }
