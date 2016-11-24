@@ -94,7 +94,6 @@ namespace Vanrise.Invoice.Business
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
-                    FillNeededDetailData(invoiceDetail, invoiceType);
                     insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
