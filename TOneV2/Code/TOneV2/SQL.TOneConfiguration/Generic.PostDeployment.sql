@@ -25,10 +25,11 @@ Post-Deployment Script Template
 ('CD71025C-136F-4157-8922-A56294030E46','NormalizationRuleStep','NormalizationRuleStep','VR_GenericData_DataTransformationStepConfig'	,'{"Editor":"vr-genericdata-datatransformation-normalizationrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-normalizationrulestep-preview"}'),
 ('F02AC0B5-79A4-4343-8081-85CD3787B88C','InitializeRecordStep','InitializeRecordStep','VR_GenericData_DataTransformationStepConfig'		,'{"Editor":"vr-genericdata-datatransformation-initializerecordstep","StepPreviewUIControl":"vr-genericdata-datatransformation-initializerecordstep-preview"}'),
 ('00E8E50C-017E-44ED-96A9-6D4291A9C4B6','AssignFieldStep','AssignFieldStep','VR_GenericData_DataTransformationStepConfig'				,'{"Editor":"vr-genericdata-datatransformation-assignfieldstep","StepPreviewUIControl":"vr-genericdata-datatransformation-assignfieldstep-preview"}'),
+('FB8AB50E-77EB-40DD-B246-40E3B4E23539','CloneDataRecordStep','CloneDataRecordStep','VR_GenericData_DataTransformationStepConfig'		,'{"Editor":"vr-genericdata-datatransformation-clonedatarecordstep","StepPreviewUIControl":"vr-genericdata-datatransformation-clonedatarecordstep-preview"}'),
+('CB929C72-D08A-410A-B9E1-2B5D29D417FA','StopIterationStep','StopIterationStep','VR_GenericData_DataTransformationStepConfig'			,'{"Editor":"vr-genericdata-datatransformation-stopiterationstep","StepPreviewUIControl":"vr-genericdata-datatransformation-stopiterationstep-preview"}'),
 
 ('C01EEEAF-7D51-4FCE-8842-5DB1A8D1B39A','LoadBEByIDStep','LoadBEByIDStep','VR_GenericData_DataTransformationStepConfig'					,'{"Editor":"vr-genericdata-loadbebyidstep","StepPreviewUIControl":"vr-genericdata-loadbebyidstep-preview"}'),
 ('43932599-404B-4F18-9F5B-963915BF16DC','BELookupRuleStep','BELookupRuleStep','VR_GenericData_DataTransformationStepConfig'				,'{"Editor":"vr-genericdata-belookuprulestep","StepPreviewUIControl":"vr-genericdata-belookuprulestep-preview"}'),
-
 
 ('C47176FB-32EB-430C-B92D-D34DFADCDDF9','Time Interval','Time Interval','VR_GenericData_SummaryBatchIntervalSettings'											,'{"Editor":"vr-genericdata-summarytransformation-timeinterval-selector"}'),
 ('2AEEC2DE-EC44-4698-AAEF-8E9DBF669D1E','SQL','SQL','VR_GenericData_DataStoreConfig'																			,'{"Editor":"vr-genericdata-datastoresetting-sql","DataRecordSettingsEditor":"vr-genericdata-datarecordstoragesettings-sql"}'),
