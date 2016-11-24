@@ -652,10 +652,19 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
             if (propValue instanceof Date)
                 obj[k] = dateToServerFormat(propValue);
+            else if (isArray(propValue)) {
+                for (var i = 0; i < propValue.length; i++) {
+                    convertDatePropertiesToString(propValue[i]);
+                }
+            }
             else if (typeof propValue == "object")
                 convertDatePropertiesToString(propValue);
         }
         return obj;
+    }
+
+    function isArray(obj) {
+        return Object.prototype.toString.call(obj) === '[object Array]';
     }
 
     function parseStringToJson(jsonString)
