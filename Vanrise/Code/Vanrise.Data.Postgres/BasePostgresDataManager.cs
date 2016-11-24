@@ -150,18 +150,21 @@ namespace Vanrise.Data.Postgres
         #endregion
         #region BulkCopy
 
-        public void BulkCopy(string tableName, byte[] data, int dataCount)
+        public void Bulk(byte[] buf, string tableName)
         {
-            using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
+            using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
-                using (var outStream = conn.BeginRawBinaryCopy(String.Format("COPY {0} FROM STDIN (FORMAT BINARY)", tableName)))
+                using (NpgsqlCommand command = new NpgsqlCommand(string.Format("COPY {0} FROM STDIN", tableName), conn))
                 {
-                    outStream.Write(data, 0, dataCount);
-
+                    NpgsqlCopyIn cin = new NpgsqlCopyIn(command, conn);
+                    cin.Start();
+                    cin.CopyStream.Write(buf, 0, buf.Length);
+                    cin.End();
                 }
             }
         }
+
         #endregion
     }
 }

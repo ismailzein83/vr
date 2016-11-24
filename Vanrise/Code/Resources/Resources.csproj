@@ -143,6 +143,7 @@
     <Content Include="DLLs\Microsoft.SqlServer.ConnectionInfo.dll" />
     <Content Include="DLLs\Microsoft.SqlServer.Management.Sdk.Sfc.dll" />
     <Content Include="DLLs\Microsoft.SqlServer.Smo.dll" />
+    <Content Include="DLLs\Mono.Security.dll" />
     <Content Include="DLLs\MySql.Data.dll" />
     <Content Include="DLLs\MySql.Data.Entity.EF5.dll" />
     <Content Include="DLLs\MySql.Data.Entity.EF6.dll" />
