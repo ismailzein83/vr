@@ -224,7 +224,10 @@
 
         function loadTaxes() {
 
-            $scope.scopeModal.vat = carrierProfileEntity != undefined && carrierProfileEntity.Settings!=undefined && carrierProfileEntity.Settings.TaxSetting!=undefined ? carrierProfileEntity.Settings.TaxSetting.VAT : undefined;
+            $scope.scopeModal.vat = carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined ? carrierProfileEntity.Settings.TaxSetting.VAT : undefined;
+
+            $scope.scopeModal.vatId = carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined ? carrierProfileEntity.Settings.TaxSetting.VATId : undefined;
+
             WhS_BE_CarrierProfileAPIService.GetTaxesDefinition().then(function (response) {
                 if (response.length > 0) {
                     for (var i = 0; i < response.length; i++) {
@@ -395,6 +398,7 @@
             if ($scope.scopeModal.taxes.length > 0) {
                 obj.Settings.TaxSetting = {};
                 obj.Settings.TaxSetting.VAT = $scope.scopeModal.vat;
+                obj.Settings.TaxSetting.VATId = $scope.scopeModal.vatId;
                 obj.Settings.TaxSetting.Items = [];
                 for (var i = 0; i < $scope.scopeModal.taxes.length; i++) {
                     var item = $scope.scopeModal.taxes[i];

@@ -24,7 +24,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         RegNo = 8,
         RegAddress = 9,
         Name = 10,
-        VatID = 11
+        VatID = 11,
+        CustomerVatID = 12
     }
     public class CarrierPartnerSettings : InvoicePartnerSettings
     {
@@ -89,6 +90,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
                     if (carrierProfile != null)
                     {
+                        
                         if (carrierProfile.Settings.Address != null)
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, carrierProfile.Settings.Address, true);
                         if (carrierProfile.Settings.PhoneNumbers != null)
@@ -103,6 +105,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         if (carrierProfile.Settings.RegistrationNumber != null)
                         {
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerRegNo, carrierProfile.Settings.RegistrationNumber, true);
+                        }
+                        if (carrierProfile.Settings.TaxSetting != null && carrierProfile.Settings.TaxSetting.VATId != null)
+                        {
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerVatID, carrierProfile.Settings.TaxSetting.VATId, true);
                         }
                     }
                     if (companySetting != null)
