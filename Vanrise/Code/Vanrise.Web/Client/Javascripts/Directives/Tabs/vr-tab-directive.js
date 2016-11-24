@@ -30,7 +30,7 @@ app.directive("vrTab", ["MultiTranscludeService", function (MultiTranscludeServi
 
             ctrl.getMinHeight = function () {
                 return tabsCtrl.getMinHeight(ctrl);
-            }
+            };
             elem.bind("$destroy", function () {
                 if (ctrl.tabobject != undefined) {
                     tabsCtrl.removeTab(ctrl.tabobject);

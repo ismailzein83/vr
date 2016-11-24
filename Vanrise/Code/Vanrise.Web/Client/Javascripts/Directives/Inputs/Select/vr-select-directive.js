@@ -326,7 +326,7 @@
                     onViewHandler: onViewHandler,
                     includeOnViewHandler: includeOnViewHandler
                 });
-                var api = {}
+                var api = {};
                 api.clearDataSource = function () {
                     if (controller.isRemoteLoad()) {
                         controller.filtername = "";
@@ -342,7 +342,7 @@
                         else
                             controller.selectedvalues = undefined;
                     }
-                }
+                };
                 if (controller.onReady != null) {
                     controller.onReady(api);
                 }
@@ -551,9 +551,9 @@
                         var getInputeStyle = function () {
                             var div = iElem.find('div[validator-section]')[0];
                             if (iAttrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "-3px" })
-                            };
-                        }
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "-3px" });
+                            }
+                        };
                         getInputeStyle();
 
                         //baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);

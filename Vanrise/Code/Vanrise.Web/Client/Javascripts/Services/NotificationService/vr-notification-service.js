@@ -77,7 +77,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             var parameters = {
                 error: error,
                 previousUrl: $location.url()
-            }
+            };
             VRNavigationService.goto("/Common/Views/Error", parameters);
         }
     }
@@ -122,7 +122,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
     function notifyOnItemDeleted(itemType, deleteOperationOutput, usedIn) {//updateOperationOutput is of type UpdateOperationOutput
         switch (deleteOperationOutput.Result) {
             case DeleteOperationResultEnum.Succeeded.value:
-                var msg = itemType + " deleted successfully"
+                var msg = itemType + " deleted successfully";
                 notifyOnItemAction("success", msg, deleteOperationOutput);
                 return true;
                 break;
