@@ -164,8 +164,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_Invoice\Constants\CarrierTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-filter-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-selector.js" />

@@ -69,7 +69,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
         function carriersCtor(ctrl, $scope, attrs) {
 
             var selectorApi;
-
+            var context;
             function initializeController() {
 
                 ctrl.selectedvalues = [];
@@ -82,12 +82,16 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     value: 1,
                     description: "Account"
                 }];
-
+              
                 ctrl.carrierTypeSelectionChanged = function () {
                     if (selectorApi != undefined) {
                         selectorApi.clearDataSource();
                         ctrl.datasource.length = 0;
 
+                    }
+                    if (context != undefined)
+                    {
+                        context.reloadPregeneratorActions();
                     }
                     loadCarrierAccounts(attrs);
                 };
@@ -103,6 +107,10 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                 var api = {};
 
                 api.load = function (payload) {
+                    if(payload != undefined)
+                    {
+                        context = payload.context;
+                    }
                 };
                 api.getData = function () {
                     var partnerPrefix;

@@ -70,6 +70,7 @@
     <Compile Include="Extensions\CarrierPartnerSettings.cs" />
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
     <Compile Include="Extensions\CarrierInvoiceSettings.cs" />
+    <Compile Include="Extensions\InvoiceGeneratorActionPartnerCondition.cs" />
     <Compile Include="Extensions\SupplierInvoiceGenerator.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

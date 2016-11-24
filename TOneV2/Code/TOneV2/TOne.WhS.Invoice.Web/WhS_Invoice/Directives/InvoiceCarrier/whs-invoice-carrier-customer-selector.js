@@ -37,7 +37,7 @@ app.directive('whsInvoiceCarrierCustomerSelector', ['UtilsService', 'VRUIUtilsSe
 
             var directiveReadyAPI;
             var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+            var context;
             function initializeController() {
 
                 ctrl.onDirectiveReady = function (api) {
@@ -51,13 +51,18 @@ app.directive('whsInvoiceCarrierCustomerSelector', ['UtilsService', 'VRUIUtilsSe
                 var api = {};
 
                 api.load = function (payload) {
+                    if (payload != undefined)
+                    {
+                        context = payload.context;
+                    }
                     var promises = [];
 
                     var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(directiveLoadPromiseDeferred.promise);
 
                     directiveReadyPromiseDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, undefined, directiveLoadPromiseDeferred);
+                        var selectorPayload = { context: getContext() };
+                        VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, selectorPayload, directiveLoadPromiseDeferred);
                     });
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -72,6 +77,11 @@ app.directive('whsInvoiceCarrierCustomerSelector', ['UtilsService', 'VRUIUtilsSe
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                return currentContext;
             }
             this.initializeController = initializeController;
         }
