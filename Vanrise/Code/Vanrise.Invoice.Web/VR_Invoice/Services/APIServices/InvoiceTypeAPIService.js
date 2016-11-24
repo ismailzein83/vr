@@ -37,6 +37,9 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+        function GetInvoiceGeneratorActions(generateInvoiceInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGeneratorActions"), generateInvoiceInput);
+        }
 
         return ({
             GetInvoiceType: GetInvoiceType,
@@ -46,7 +49,8 @@
             GetInvoiceTypeRuntime: GetInvoiceTypeRuntime,
             CovertToGridColumnAttribute: CovertToGridColumnAttribute,
             GetInvoiceTypesInfo: GetInvoiceTypesInfo,
-            GetGeneratorInvoiceTypeRuntime: GetGeneratorInvoiceTypeRuntime
+            GetGeneratorInvoiceTypeRuntime: GetGeneratorInvoiceTypeRuntime,
+            GetInvoiceGeneratorActions: GetInvoiceGeneratorActions
         });
     }
 

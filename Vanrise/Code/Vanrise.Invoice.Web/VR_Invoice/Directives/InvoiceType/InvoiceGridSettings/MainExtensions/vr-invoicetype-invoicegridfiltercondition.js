@@ -79,7 +79,7 @@
                     promises.push(getInvoiceGeneratorConfigsPromise);
 
                     function getInvoiceGeneratorTemplateConfigs() {
-                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceFilterConditionConfigs().then(function (response) {
+                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceGridFilterConditionConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -153,6 +153,6 @@
         }
     }
 
-    app.directive('vrInvoicetypeInvoicefiltercondition', InvoiceFilterConditionDirective);
+    app.directive('vrInvoicetypeInvoicegridfiltercondition', InvoiceFilterConditionDirective);
 
 })(app);

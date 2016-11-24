@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="FilterCondition\FilterGroupCondition.cs" />
     <Compile Include="FilterCondition\IsPaidFilterCondition.cs" />
+    <Compile Include="InvoiceGeneratorActionFilter\InvoiceGeneratorActionFilterGroupCondition.cs" />
     <Compile Include="InvoiceGridActionSettings\RecreateInvoiceAction.cs" />
     <Compile Include="InvoiceGridActionSettings\SendEmailAction.cs" />
     <Compile Include="InvoiceGridActionSettings\SetInvoicePaidAction.cs" />

@@ -64,6 +64,26 @@ namespace Vanrise.Invoice.Business
             generatorInvoiceTypeRuntime.InvoicePartnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
             return generatorInvoiceTypeRuntime;
         }
+        public List<InvoiceGeneratorAction> GetInvoiceGeneratorActions(GenerateInvoiceInput generateInvoiceInput)
+        {
+            var invoiceTypes = GetCachedInvoiceTypes();
+            var invoiceType = invoiceTypes.GetRecord(generateInvoiceInput.InvoiceTypeId);
+            InvoiceGeneratorActionFilterConditionContext context = new InvoiceGeneratorActionFilterConditionContext
+            {
+                InvoiceType = invoiceType,
+                generateInvoiceInput = generateInvoiceInput
+            };
+
+            List<InvoiceGeneratorAction> actions = new List<InvoiceGeneratorAction>();
+            foreach(var action in invoiceType.Settings.InvoiceGeneratorActions)
+            {
+                if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(context))
+                {
+                    actions.Add(action);
+                }
+            }
+            return actions;
+        }
         public IDataRetrievalResult<InvoiceTypeDetail> GetFilteredInvoiceTypes(DataRetrievalInput<InvoiceTypeQuery> input)
         {
             var allItems = GetCachedInvoiceTypes();

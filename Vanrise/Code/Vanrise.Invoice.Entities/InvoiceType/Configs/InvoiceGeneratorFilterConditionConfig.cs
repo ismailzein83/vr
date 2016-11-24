@@ -7,10 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class InvoiceFilterConditionConfig:ExtensionConfiguration
+    public class InvoiceGeneratorFilterConditionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_Invoice_InvoiceType_InvoiceFilterCondition";
+        public const string EXTENSION_TYPE = "VR_Invoice_InvoiceType_InvoiceGeneratorFilterConditionConfig";
         public string Editor { get; set; }
-
     }
 }

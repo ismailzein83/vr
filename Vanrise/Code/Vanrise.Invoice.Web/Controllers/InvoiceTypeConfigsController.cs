@@ -39,10 +39,16 @@ namespace Vanrise.Invoice.Web.Controllers
             return _manager.GetInvoiceUISubSectionSettingsConfigs();
         }
         [HttpGet]
-        [Route("GetInvoiceFilterConditionConfigs")]
-        public IEnumerable<InvoiceFilterConditionConfig> GetInvoiceFilterConditionConfigs()
+        [Route("GetInvoiceGridFilterConditionConfigs")]
+        public IEnumerable<InvoiceGridFilterConditionConfig> GetInvoiceGridFilterConditionConfigs()
         {
-            return _manager.GetInvoiceFilterConditionConfigs();
+            return _manager.GetInvoiceGridFilterConditionConfigs();
+        }
+        [HttpGet]
+        [Route("GetInvoiceGeneratorFilterConditionConfigs")]
+        public IEnumerable<InvoiceGeneratorFilterConditionConfig> GetInvoiceGeneratorFilterConditionConfigs()
+        {
+            return _manager.GetInvoiceGeneratorFilterConditionConfigs();
         }
         [HttpGet]
         [Route("GetItemsFilterConfigs")]

@@ -52,10 +52,11 @@
     <Compile Include="InvoiceType1\ConvertToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceType1\IInvoiceActionContext.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceExtendedSettingsConfig.cs" />
+    <Compile Include="InvoiceType\Configs\InvoiceGeneratorFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\GeneratorInvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\InvoiceActions\InvoiceAction.cs" />
     <Compile Include="InvoiceType1\InvoiceDataSource\InvoiceDataSource.cs" />
-    <Compile Include="InvoiceType\Configs\InvoiceFilterConditionConfig.cs" />
+    <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGeneratorConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType1\InvoiceSubSectionGridColumn.cs" />

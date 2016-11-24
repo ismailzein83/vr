@@ -21,12 +21,17 @@
         function GetItemsFilterConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetItemsFilterConfigs"));
         }
-        function GetInvoiceFilterConditionConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceFilterConditionConfigs"));
+        function GetInvoiceGridFilterConditionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGridFilterConditionConfigs"));
 
         }
         function GetInvoiceExtendedSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceExtendedSettingsConfigs"));
+        }
+        function GetInvoiceGeneratorFilterConditionConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGeneratorFilterConditionConfigs"));
+
         }
 
         return ({
@@ -35,8 +40,9 @@
             GetRDLCParameterSettingsConfigs: GetRDLCParameterSettingsConfigs,
             GetInvoiceUISubSectionSettingsConfigs: GetInvoiceUISubSectionSettingsConfigs,
             GetItemsFilterConfigs: GetItemsFilterConfigs,
-            GetInvoiceFilterConditionConfigs: GetInvoiceFilterConditionConfigs,
-            GetInvoiceExtendedSettingsConfigs: GetInvoiceExtendedSettingsConfigs
+            GetInvoiceGridFilterConditionConfigs: GetInvoiceGridFilterConditionConfigs,
+            GetInvoiceExtendedSettingsConfigs: GetInvoiceExtendedSettingsConfigs,
+            GetInvoiceGeneratorFilterConditionConfigs: GetInvoiceGeneratorFilterConditionConfigs
         });
     }
 

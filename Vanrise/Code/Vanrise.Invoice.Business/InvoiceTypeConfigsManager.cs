@@ -36,11 +36,18 @@ namespace Vanrise.Invoice.Business
             return extensionConfiguration.GetExtensionConfigurations<InvoiceUISubSectionSettingsConfig>(InvoiceUISubSectionSettingsConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<InvoiceFilterConditionConfig> GetInvoiceFilterConditionConfigs()
+        public IEnumerable<InvoiceGridFilterConditionConfig> GetInvoiceGridFilterConditionConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<InvoiceFilterConditionConfig>(InvoiceFilterConditionConfig.EXTENSION_TYPE);
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceGridFilterConditionConfig>(InvoiceGridFilterConditionConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<InvoiceGeneratorFilterConditionConfig> GetInvoiceGeneratorFilterConditionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceGeneratorFilterConditionConfig>(InvoiceGeneratorFilterConditionConfig.EXTENSION_TYPE);
+        }
+
+
         public IEnumerable<InvoiceExtendedSettingsConfig> GetInvoiceExtendedSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
