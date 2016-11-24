@@ -102,16 +102,6 @@ namespace Vanrise.NumberingPlan.Business
         #endregion
 
         #region private Methode
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISaleCodeDataManager _dataManager = CodePrepDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired()
-            {
-                return _dataManager.AreZonesUpdated(ref _updateHandle);
-            }
-        }
 
         private SaleCodeDetail SaleCodeDetailMapper(SaleCode saleCode)
         {
