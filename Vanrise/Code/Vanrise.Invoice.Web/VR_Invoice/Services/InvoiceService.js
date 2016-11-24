@@ -95,8 +95,8 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                                         gridAPI.showLoader();
                                         var invoiceId = dataItem.Entity.InvoiceId;
                                         return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
-                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
                                             gridAPI.itemUpdated(response);
+                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
                                             promiseDeffered.resolve();
                                         }).catch(function (error) {
                                             promiseDeffered.reject(error);
