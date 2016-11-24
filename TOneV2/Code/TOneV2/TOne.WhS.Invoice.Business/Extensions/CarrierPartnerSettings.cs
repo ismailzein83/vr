@@ -109,7 +109,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         VRFileManager fileManager = new VRFileManager();
                         var logo = fileManager.GetFile(companySetting.CompanyLogo);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
+                        if (logo != null)
+                        {
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
+                        }
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);

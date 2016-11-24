@@ -29,7 +29,7 @@ namespace Vanrise.Invoice.Business
                 CustomSectionPayload = CustomSectionPayload,
                 FromDate = this.FromDate,
                 PartnerId = this.PartnerId,
-                ToDate = this.ToDate
+                ToDate = this.ToDate.AddDays(1)
             };
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             invoiceGenerator.GenerateInvoice(context);
