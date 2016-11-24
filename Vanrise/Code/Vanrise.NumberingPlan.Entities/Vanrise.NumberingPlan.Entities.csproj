@@ -119,6 +119,7 @@
     <Compile Include="SellingNumberPlan.cs" />
     <Compile Include="SellingNumberPlanDetail.cs" />
     <Compile Include="SellingNumberPlanInfo.cs" />
+    <Compile Include="SellingNumberPlanQuery.cs" />
     <Compile Include="ZoneToProcess.cs" />
   </ItemGroup>
   <ItemGroup>
