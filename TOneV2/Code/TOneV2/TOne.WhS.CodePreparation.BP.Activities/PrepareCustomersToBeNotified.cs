@@ -12,31 +12,45 @@ using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public sealed class BuildZonesChanges : CodeActivity
+    public sealed class PrepareCustomersToBeNotified : CodeActivity
     {
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
+        public InArgument<Dictionary<int, List<SalePLZoneChange>>> ZonesChangesByCountry { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<AddedZone>> AddedZones { get; set; }
+        public InArgument<int> SellingNumberPlanId { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<RatePreview>> RatesPreview { get; set; }
-
-        [RequiredArgument]
-        public InArgument<List<SalePLZoneChange>> SalePLZonesChanges { get; set; }
+        public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersToBeNotified { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            IEnumerable<RatePreview> ratesPreview = this.RatesPreview.Get(context);
-            IEnumerable<ExistingZone> existingZones = this.ExistingZones.Get(context);
-            IEnumerable<AddedZone> addedZones = this.AddedZones.Get(context);
-            List<SalePLZoneChange> salePLZonesChanges = this.SalePLZonesChanges.Get(context);
+            Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = this.ZonesChangesByCountry.Get(context);
+            int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
 
-            IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(ratesPreview, existingZones, addedZones);
+            CustomerZoneManager customerZoneManager = new CustomerZoneManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<CarrierAccountInfo> customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
+            DateTime today = DateTime.Today;
 
-            salePLZonesChanges.AddRange(zoneChanges);
+            List<CarrierAccountInfo> customersToBeNotified = new List<CarrierAccountInfo>();
+            if (customers != null)
+            {
+                foreach (CarrierAccountInfo customer in customers)
+                {
+                    IEnumerable<SaleZone> saleZones = customerZoneManager.GetCustomerSaleZones(customer.CarrierAccountId, sellingNumberPlanId, today, false);
+                    if (saleZones == null)
+                        continue;
+
+                    IEnumerable<int> customerSoldCountryIds = saleZones.Select(item => item.CountryId).Distinct();
+
+                    if (customerSoldCountryIds.Intersect(zonesChangesByCountry.Keys).Count() > 0)
+                        customersToBeNotified.Add(customer);
+                }
+            }
+
+            CustomersToBeNotified.Set(context, customersToBeNotified);
         }
 
         #region Private Methods
@@ -51,7 +65,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ratesPreviewByZoneName = StructureRatesPreviewByZoneName(newRatesPreview);
             }
 
-            List<RatePreview> ratesPreviewForZone;
             List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
             SaleZoneManager zoneManager = new SaleZoneManager();
 
@@ -78,7 +91,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 foreach (AddedZone addedZone in addedZones)
                 {
-                    ratesPreviewForZone = ratesPreviewByZoneName.GetRecord(addedZone.Name);
                     SalePLZoneChange zoneChange = new SalePLZoneChange()
                     {
                         ZoneName = addedZone.Name,
@@ -111,10 +123,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         if (customersAssignedToSellingProduct != null)
                         {
                             IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
-                            foreach (int id in ids)
-                            {
-                                customersIds.Add(id);
-                            }
+                            customersIds.UnionWith(ids);
                         }
                     }
                 }

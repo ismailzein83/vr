@@ -14,7 +14,7 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public sealed class BuildZonesNotifications : CodeActivity
+    public sealed class SendSalePLNotifications : CodeActivity
     {
         [RequiredArgument]
         public InArgument<IEnumerable<int>> CustomerIds { get; set; }

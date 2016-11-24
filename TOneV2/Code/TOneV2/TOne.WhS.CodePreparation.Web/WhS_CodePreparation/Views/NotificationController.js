@@ -7,7 +7,7 @@
     function NotificationController($scope, WhS_BE_CarrierAccountAPIService, WhS_Sales_CustomerSelectionTypeEnum, BusinessProcess_BPTaskAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var taskId;
-        var sellingNumberPlanId;
+        var customersToBeNotified;
 
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -28,18 +28,18 @@
             $scope.scopeModel.customers = [];
 
             $scope.scopeModel.onGridReady = function (api) {
-            	gridReadyDeferred.resolve();
+                gridReadyDeferred.resolve();
             };
 
             $scope.scopeModel.selectAll = function () {
-            	toggleSelection(true);
+                toggleSelection(true);
             };
             $scope.scopeModel.deselectAll = function () {
-            	toggleSelection(false);
+                toggleSelection(false);
             };
 
             $scope.scopeModel.sendMail = function () {
-            	var customerIds = getSelectedCustomerIds();
+                var customerIds = getSelectedCustomerIds();
                 return executeTask(customerIds, true);
             };
             $scope.scopeModel.skip = function () {
@@ -49,7 +49,7 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            getSellingNumberPlanId().then(function () {
+            getCustomersToBeNotified().then(function () {
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -57,10 +57,10 @@
             });
         }
 
-        function getSellingNumberPlanId() {
+        function getCustomersToBeNotified() {
             return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
                 if (response != null && response.TaskData != null) {
-                    sellingNumberPlanId = response.TaskData.SellingNumberPlanId;
+                    customersToBeNotified = response.TaskData.CustomersToBeNotified;
                 }
             });
         }
@@ -75,21 +75,12 @@
             $scope.title = 'Notify Customers';
         }
         function loadGrid() {
-
-        	var promises = [];
-        	promises.push(gridReadyDeferred.promise);
-
-        	var getCustomersPromise = WhS_BE_CarrierAccountAPIService.GetCustomersBySellingNumberPlanId(sellingNumberPlanId).then(function (response) {
-        		if (response != null) {
-        			for (var i = 0; i < response.length; i++) {
-        				$scope.scopeModel.customers.push(response[i]);
-        			}
-        			toggleSelection(true);
-        		}
-        	});
-        	promises.push(getCustomersPromise);
-
-        	return UtilsService.waitMultiplePromises(promises);
+            if (customersToBeNotified != null) {
+                for (var i = 0; i < customersToBeNotified.length; i++) {
+                    $scope.scopeModel.customers.push(customersToBeNotified[i]);
+                }
+                toggleSelection(true);
+            }
         }
 
         function executeTask(customerIds, taskAction) {
@@ -118,16 +109,16 @@
         }
 
         function getSelectedCustomerIds() {
-        	var customerIds = [];
-        	for (var i = 0; i < $scope.scopeModel.customers.length; i++) {
-        		if ($scope.scopeModel.customers[i].isSelected)
-        			customerIds.push($scope.scopeModel.customers[i].CarrierAccountId);
-        	}
-        	return customerIds;
+            var customerIds = [];
+            for (var i = 0; i < $scope.scopeModel.customers.length; i++) {
+                if ($scope.scopeModel.customers[i].isSelected)
+                    customerIds.push($scope.scopeModel.customers[i].CarrierAccountId);
+            }
+            return customerIds;
         }
         function toggleSelection(toggleValue) {
-        	for (var i = 0; i < $scope.scopeModel.customers.length; i++)
-        		$scope.scopeModel.customers[i].isSelected = toggleValue;
+            for (var i = 0; i < $scope.scopeModel.customers.length; i++)
+                $scope.scopeModel.customers[i].isSelected = toggleValue;
         }
     }
 

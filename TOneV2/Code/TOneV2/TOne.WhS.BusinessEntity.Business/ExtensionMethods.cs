@@ -72,6 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return connectedEntities;
         }
 
+
         public static List<T> GetLastConnectedEntities<T>(this List<T> entities) where T : IExistingEntity
         {
             if (entities == null)
@@ -83,16 +84,7 @@ namespace TOne.WhS.BusinessEntity.Business
             List<T> connectedEntities = new List<T>();
             int entitiesCount = entities.Count;
             connectedEntities.Add(entities[entitiesCount - 1]);
-            for (int i = entities.Count() - 1; i > 0; i--)
-            {
-                var currentElement = entities[i];
-                var previousElement = entities[i - 1];
-
-                if (previousElement.OriginalEED.HasValue && currentElement.BED == previousElement.OriginalEED && currentElement.IsSameEntity(previousElement))
-                    connectedEntities.Add(previousElement);
-                else
-                    break;
-            }
+            connectedEntities.AddRange(GetConnectedEntitiesToTheLeft(entities.GetRange(0, entitiesCount)));
 
             return connectedEntities;
         }
