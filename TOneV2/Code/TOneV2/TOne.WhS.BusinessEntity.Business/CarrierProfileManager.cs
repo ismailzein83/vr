@@ -105,7 +105,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-        
+
+        public void UpdateCarrierProfileExtendedSetting(int carrierProfileId, string extendedSettingName, Object extendedSetting)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
