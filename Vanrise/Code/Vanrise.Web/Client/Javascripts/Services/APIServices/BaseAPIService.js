@@ -90,27 +90,11 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         return deferred.promise;
     }
 
-    function convertDatePropertiesToString(obj) {
-        if (obj == null || typeof obj != "object")
-            return obj;
-        for (var k in obj) {
-            var propValue = obj[k];
-            if (propValue == null)
-                continue;
-            
-            if (propValue instanceof Date)
-                obj[k] = UtilsService.dateToServerFormat(propValue);
-            else if (typeof propValue == "object")
-                convertDatePropertiesToString(propValue);
-        }
-        return obj;
-    }
-
     function post(url, dataToSend, options) {
         var deferred = $q.defer();
         var data;
         if (dataToSend)
-            data = convertDatePropertiesToString(dataToSend);
+            data = UtilsService.convertDatePropertiesToString(dataToSend);
         var responseType = '';
         var ContentType = 'application/json;charset=utf-8';
         var isExport = dataToSend != undefined && dataToSend.DataRetrievalResultType != undefined && dataToSend.DataRetrievalResultType == DataRetrievalResultTypeEnum.Excel.value;

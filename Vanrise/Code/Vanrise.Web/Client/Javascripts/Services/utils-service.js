@@ -637,7 +637,25 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     }
 
     function serializetoJson(obj) {
+        if (obj != null)
+            obj = convertDatePropertiesToString(obj);
         return angular.toJson(obj);
+    }
+
+    function convertDatePropertiesToString(obj) {
+        if (obj == null || typeof obj != "object")
+            return obj;
+        for (var k in obj) {
+            var propValue = obj[k];
+            if (propValue == null)
+                continue;
+
+            if (propValue instanceof Date)
+                obj[k] = dateToServerFormat(propValue);
+            else if (typeof propValue == "object")
+                convertDatePropertiesToString(propValue);
+        }
+        return obj;
     }
 
     function parseStringToJson(jsonString)
@@ -816,6 +834,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         createPromiseDeferred: createPromiseDeferred,
         convertToPromiseIfUndefined: convertToPromiseIfUndefined,
         serializetoJson: serializetoJson,
+        convertDatePropertiesToString: convertDatePropertiesToString,
         generateJSVariableName: generateJSVariableName,
         buildTitleForUploadEditor: buildTitleForUploadEditor,
         safeApply: safeApply,
