@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService','NP_IVSwitch_StateEnum','UtilsService',
-    function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService, NP_IVSwitch_StateEnum, UtilsService) {
+app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService',
+    function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService ) {
         return {
             restrict: 'E',
             scope: {

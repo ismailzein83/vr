@@ -7,7 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.GenericData.Entities;
 
+ 
 
 namespace NP.IVSwitch.Business
 {
@@ -22,10 +26,24 @@ namespace NP.IVSwitch.Business
 
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
+             //Get Carrier by id
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(input.Query.CarrierAccountId.GetValueOrDefault());
+
+            //AccountExtended accountExtended = new AccountExtended();
+            //if (carrierAccount.ExtendedSettings != null)
+            //{
+            //    Dictionary<string, object> temp = carrierAccount.ExtendedSettings;
+            //    accountExtended = (AccountExtended)temp["NP_IVSwitch_ExtendedSettings"];
+            //}
+ 
             var allAccounts = this.GetCachedAccount();
             Func<Account, bool> filterExpression = (x) => (input.Query.Name == null || x.FirstName.ToLower().Contains(input.Query.Name.ToLower()))
                                                             &&
                                                           (input.Query.AccountTypes == null || input.Query.AccountTypes.Contains(x.TypeId));
+                                                    //      &&
+                                                      //    (accountExtended.AccountId != null || accountExtended.AccountId.Contains(x.AccountId));
+                                                         
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccounts.ToBigResult(input, filterExpression, AccountDetailMapper));
         }
 
@@ -33,6 +51,9 @@ namespace NP.IVSwitch.Business
 
         public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account accountItem)
         {
+            
+
+             
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -53,6 +74,13 @@ namespace NP.IVSwitch.Business
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
             }
+
+            //Update ExtendedSettings of carrierAccount
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            AccountExtended accountIdList = new AccountExtended();
+            accountIdList.AccountId = new List<int>();
+            accountIdList.AccountId.Add(accountId);
+            carrierAccountManager.UpdateCarrierAccountExtendedSetting(accountItem.CarrierId, "NP_IVSwitch_ExtendedSettings", accountIdList);
 
             return insertOperationOutput;
         }

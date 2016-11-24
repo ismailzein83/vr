@@ -9,10 +9,11 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Caching;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CarrierAccountManager : IBusinessEntityManager, ICarrierAccountManager
+    public class CarrierAccountManager : IBusinessEntityManager, ICarrierAccountManager 
     {
         #region ctor/Local Variables
         CarrierProfileManager _carrierProfileManager;
@@ -120,11 +121,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
 
-        public void UpdateCarrierAccountExtendedSetting(int carrierAccountId, string extendedSettingName, Object extendedSetting)
-        {
-            throw new NotImplementedException();
-        }
+         public void UpdateCarrierAccountExtendedSetting(int carrierAccountId, string extendedSettingName, Object extendedSetting)
+         {             
+             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
 
+             Dictionary<string, object> extendedSettings = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CarrierAccountExtendedSettings",
+                 () => new Dictionary<string, object>());
+             
+             extendedSettings.GetOrCreateItem(extendedSettingName, () => extendedSetting);
+
+             carrierAccount.ExtendedSettings = extendedSettings;
+         }
+ 
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             if (carrierAccountsIds.Count() > 0)

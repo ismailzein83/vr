@@ -10,6 +10,7 @@ namespace NP.IVSwitch.Entities
     {
         public String Name { get; set; }
         public List<AccountType> AccountTypes { get; set; }
+        public int? CarrierAccountId { get; set; }
 
     }
 }

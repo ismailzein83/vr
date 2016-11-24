@@ -5,10 +5,13 @@
     CarrierAccountService.$inject = ['VRModalService', 'UtilsService'];
 
     function CarrierAccountService(VRModalService, UtilsService) {
+        var drillDownDefinitions = [];
         return ({
             addCarrierAccount: addCarrierAccount,
             editCarrierAccount: editCarrierAccount,
-            viewCarrierAccount: viewCarrierAccount
+            viewCarrierAccount: viewCarrierAccount,
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addCarrierAccount(onCarrierAccountAdded, dataItem) {
@@ -50,6 +53,13 @@
                 UtilsService.setContextReadOnly(modalScope)
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
     }
 

@@ -110,8 +110,9 @@ namespace NP.IVSwitch.Business
         {
             EndPointDetail endPointDetail = new EndPointDetail()
             {
-                Entity = endPoint, 
-            };
+                Entity = endPoint,
+                CurrentStateDescription = Vanrise.Common.Utilities.GetEnumDescription<State>(endPoint.CurrentState),
+              };
 
             return endPointDetail;
         }

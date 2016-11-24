@@ -9,5 +9,11 @@ namespace NP.IVSwitch.Entities
     public class EndPointDetail
     {
         public EndPoint Entity { get; set; }
+
+        public string CurrentStateDescription { get; set; }
+
+        public string EndPointType { get; set; }        
+
+
     }
 }

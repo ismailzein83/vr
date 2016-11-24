@@ -20,6 +20,7 @@
         }
 
         function AddAccount(AccountItem) {
+            console.log(AccountItem)
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'AddAccount'), AccountItem);
         }
 

@@ -108,7 +108,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public void UpdateCarrierProfileExtendedSetting(int carrierProfileId, string extendedSettingName, Object extendedSetting)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+
+            Dictionary<string, object> extendedSettings = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CarrierProfileExtendedSettings",
+               () => new Dictionary<string, object>());
+            
+            extendedSettings.GetOrCreateItem(extendedSettingName, () => extendedSetting);
+
+            carrierProfile.ExtendedSettings = extendedSettings;
+
         }
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)

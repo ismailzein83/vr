@@ -10,6 +10,8 @@
         var selectorDirectiveAPI;
 
         var accountId;
+        var carrierId;
+
         var accountEntity;
 
         var selectorDirectiveAPI;
@@ -27,13 +29,17 @@
 
             if (parameters != undefined && parameters != null) {
                 accountId = parameters.AccountId;
-            }
+                carrierId = parameters.CarrierId;
+             }
 
 
             isEditMode = (accountId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.DisableSelector = false;
+
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -71,6 +77,8 @@
        
             if (isEditMode) {
                 getAccount().then(function () {
+                    $scope.scopeModel.DisableSelector = true;
+
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -160,6 +168,7 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
 
+            console.log(buildAccountObjFromScope())
             return NP_IVSwitch_AccountAPIService.AddAccount(buildAccountObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Account', response, 'Name')) {
 
@@ -194,8 +203,10 @@
         }
 
         function buildAccountObjFromScope() {
+            console.log(carrierId)
             return {
                 AccountId: accountEntity != undefined ? accountEntity.AccountId : undefined,
+                CarrierId: carrierId,
                 TypeId: $scope.scopeModel.TypeId,
                 FirstName: $scope.scopeModel.firstname,
                 LastName: $scope.scopeModel.lastname,
@@ -215,6 +226,7 @@
                 BillingCycle: $scope.scopeModel.billingcycle,
                 TaxGroupId : $scope.scopeModel.taxgroupid,
                 PaymentTerms: $scope.scopeModel.paymentterms,
+
 
              };
         }

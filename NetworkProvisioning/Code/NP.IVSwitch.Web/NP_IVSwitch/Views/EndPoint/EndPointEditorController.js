@@ -162,6 +162,7 @@
             $scope.scopeModel.onSelectionChangedRtpMode = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.selectedrtpmode = SelectedItem;
+                    $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value
                 }
  
             }
@@ -213,7 +214,7 @@
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
  
-                $scope.scopeModel.rtpmode = UtilsService.getArrayEnum(NP_IVSwitch_RtpModeEnum);
+                $scope.scopeModel.rtpmodes = UtilsService.getArrayEnum(NP_IVSwitch_RtpModeEnum);
 
                 $scope.scopeModel.endpointtypes = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
 
@@ -221,7 +222,7 @@
                 if (endPointEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
-                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[0];
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[0];
 
                     return;
                 }
@@ -246,12 +247,12 @@
                 if (endPointEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
                 if (endPointEntity.RtpMode != undefined) {
-                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[endPointEntity.RtpMode - 1];
+                     $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[endPointEntity.RtpMode - 1];
                     if ($scope.scopeModel.selectedrtpmode != undefined)
                         $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value;
                 }
                 else
-                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmode[0];
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[0];
 
                 if (endPointEntity.EndPointType != undefined)
                     $scope.scopeModel.endpointtype = $scope.scopeModel.endpointtypes[endPointEntity.EndPointType];
@@ -364,7 +365,7 @@
         function update() {
             $scope.scopeModel.isLoading = true;
  
-
+ 
             return NP_IVSwitch_EndPointAPIService.UpdateEndPoint(buildEndPointObjFromScope()).then(function (response) {
 
 
@@ -383,8 +384,7 @@
         }
 
         function buildEndPointObjFromScope() {
-             
-            return {
+             return {
                 EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
                 AccountId: accountId,
                 Description: $scope.scopeModel.description,

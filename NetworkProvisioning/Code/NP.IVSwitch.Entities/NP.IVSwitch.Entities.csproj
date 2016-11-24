@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountDetail.cs" />
+    <Compile Include="Account\AccountExtended.cs" />
     <Compile Include="Account\AccountQuery.cs" />
     <Compile Include="CodecDef\CodecDef.cs" />
     <Compile Include="CodecDef\CodecDefFilter.cs" />

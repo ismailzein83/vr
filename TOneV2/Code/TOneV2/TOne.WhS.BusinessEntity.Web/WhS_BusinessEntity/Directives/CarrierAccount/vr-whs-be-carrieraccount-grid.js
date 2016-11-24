@@ -34,36 +34,30 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         function initializeController() {
 
             $scope.hideProfileColumn = false;
-
-            $scope.isExpandable = function (dataItem) {
-                if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
-                    return false;
-                return true
+            $scope.menuActions = [];
+            $scope.gridMenuActions = function (dataItem) {
+                var menuActions = [];
+                if (dataItem.drillDownExtensionObject != undefined && dataItem.drillDownExtensionObject.menuActions != undefined) {
+                    for (var i = 0; i < dataItem.drillDownExtensionObject.menuActions.length; i++) {
+                        var menuAction = dataItem.drillDownExtensionObject.menuActions[i];
+                        menuActions.push(menuAction);
+                    }
+                }
+                return menuActions;
             };
-
+            $scope.isExpandable = function (dataItem) {
+                if (dataItem.drillDownExtensionObject !=undefined && dataItem.drillDownExtensionObject.drillDownDirectiveTabs != undefined && dataItem.drillDownExtensionObject.drillDownDirectiveTabs.length > 0)
+                    return true;
+                return false;
+            };
+ 
             $scope.carrierAccounts = [];
             defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                var drillDownDefinitions = [];
-                var drillDownDefinition = {};
-
-                drillDownDefinition.title = "Customer Selling Product";
-                drillDownDefinition.directive = "vr-whs-be-customersellingproduct-grid";
-
-                drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
-                    carrierAccountItem.customersellingproductGridAPI = directiveAPI;
-                    var payload = {
-                        query: {
-                            CustomersIds: [carrierAccountItem.Entity.CarrierAccountId]
-                        },
-                        hideCustomerColumn: true
-                    };
-                    return carrierAccountItem.customersellingproductGridAPI.loadGrid(payload);
-                };
-                drillDownDefinitions.push(drillDownDefinition);
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                var drillDownDefinitions = WhS_BE_CarrierAccountService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions,true);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -88,15 +82,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_CarrierAccountAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
                     .then(function (response) {
-
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                if (response.Data[i].Entity.AccountType != WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
-                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
-                                }
-                                if (response.Data[i].Entity.AccountType != WhS_BE_CarrierAccountTypeEnum.Customer.value)
-                                   addReadySericeApi(response.Data[i]);
-
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                               addReadySericeApi(response.Data[i]);
                             }
                         }
                         onResponseReady(response);
@@ -109,45 +98,18 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         }
 
         function defineMenuActions() {
-            var menuActionsWithSellingProduct = [{
+            $scope.menuActions.push({
                 name: "View",
                 clicked: viewCarrierAccount,
                 haspermission: hasViewCarrierAccountPermission
-            },{
+            });
+            
+            $scope.menuActions.push({
                 name: "Edit",
                 clicked: editCarrierAccount,
                 haspermission: hasUpdateCarrierAccountPermission
-            },{
-                name: "Assign Selling Product",
-                clicked: assignNew,
-                haspermission: hasAddCustomerSellingProductPermission
-            }];
-            var defaultMenuActions = [ {
-                name: "View",
-                clicked: viewCarrierAccount,
-                haspermission: hasViewCarrierAccountPermission
-            },{
-                name: "Edit",
-                clicked: editCarrierAccount,
-                haspermission: hasUpdateCarrierAccountPermission
-            }];
+            });
 
-            $scope.gridMenuActions = function (dataItem) {
-                if (!checkIfCarrierAccountIsInactive(dataItem.Entity) && (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Exchange.value)) {
-                    return menuActionsWithSellingProduct;
-                } else {
-                    return defaultMenuActions;
-                }
-            };
-
-            function checkIfCarrierAccountIsInactive(carrierAccount)
-            {
-                return (carrierAccount.CarrierAccountSettings != undefined && carrierAccount.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value);
-            }
-
-            function hasAddCustomerSellingProductPermission() {
-                return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
-            }
 
             function hasUpdateCarrierAccountPermission() {
                 return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
@@ -185,21 +147,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 dataItem.ServieApi.load({ selectedIds: dataItem.Services });
             };
         };
-        function assignNew(dataItem) {
-            if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
-                return;
-
-            gridAPI.expandRow(dataItem);
-            var onCustomerSellingProductAdded = function (customerSellingProductObj) {
-                if (dataItem.customersellingproductGridAPI != undefined) {
-                    for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        dataItem.customersellingproductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
-                    }
-                }
-            };
-            WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
-        }
-
         function deleteCarrierAccount(carrierAccountObj) {
             var onCarrierAccountDeleted = function () {
                 retrieveData();

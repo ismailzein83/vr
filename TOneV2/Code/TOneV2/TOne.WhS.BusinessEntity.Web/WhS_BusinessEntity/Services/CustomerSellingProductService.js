@@ -2,13 +2,14 @@
 
     'use strict';
 
-    CustomerSellingProductService.CustomerSellingProductService = ['UtilsService', 'VRModalService', 'VRNotificationService'];
+    CustomerSellingProductService.CustomerSellingProductService = ['UtilsService', 'VRModalService', 'VRNotificationService','WhS_BE_CarrierAccountService','WhS_BE_CarrierAccountTypeEnum','WhS_BE_CustomerSellingProductAPIService','WhS_BE_CarrierAccountActivationStatusEnum'];
 
-    function CustomerSellingProductService(UtilsService, VRModalService, VRNotificationService) {
+    function CustomerSellingProductService(UtilsService, VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountActivationStatusEnum) {
         return ({
             addCustomerSellingProduct: addCustomerSellingProduct,
             editCustomerSellingProduct: editCustomerSellingProduct,
-            deleteCustomerSellingProduct: deleteCustomerSellingProduct
+            deleteCustomerSellingProduct: deleteCustomerSellingProduct,
+            registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount
         });
 
         function addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem) {
@@ -58,6 +59,55 @@
                     }
                 });
         }
+
+        function registerDrillDownToCarrierAccount() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Customer Selling Product";
+            drillDownDefinition.directive = "vr-whs-be-customersellingproduct-grid";
+
+            drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
+                carrierAccountItem.customersellingproductGridAPI = directiveAPI;
+                 var payload = {
+                    query: {
+                        CustomersIds: [carrierAccountItem.Entity.CarrierAccountId]
+                    },
+                    hideCustomerColumn: true
+                };
+                return carrierAccountItem.customersellingproductGridAPI.loadGrid(payload);
+            };
+            drillDownDefinition.hideDrillDownFunction = function (dataItem) {
+                return !(!checkIfCarrierAccountIsInactive(dataItem.Entity) && (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Exchange.value));
+            };
+            drillDownDefinition.parentMenuActions = [{
+                name: "Assign Selling Product",
+                clicked: assignNew,
+                haspermission: hasAddCustomerSellingProductPermission
+            }];
+            WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
+
+            function checkIfCarrierAccountIsInactive(carrierAccount) {
+                return (carrierAccount.CarrierAccountSettings != undefined && carrierAccount.CarrierAccountSettings.ActivationStatus == WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value);
+            }
+            function hasAddCustomerSellingProductPermission() {
+                return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
+            }
+            function assignNew(dataItem) {
+                if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
+                    return;
+
+                gridAPI.expandRow(dataItem);
+                var onCustomerSellingProductAdded = function (customerSellingProductObj) {
+                    if (dataItem.customersellingproductGridAPI != undefined) {
+                        for (var i = 0; i < customerSellingProductObj.length; i++) {
+                            dataItem.customersellingproductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                        }
+                    }
+                };
+                WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
+            }
+        }
+        
     }
 
     appControllers.service('WhS_BE_CustomerSellingProductService', CustomerSellingProductService);

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_IVSwitch_EndPointService', 'VRNotificationService',
-    function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotificationService) {
+app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_IVSwitch_EndPointService', 'VRNotificationService', 'NP_IVSwitch_EndPointEnum', 'UtilsService',
+    function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotificationService, NP_IVSwitch_EndPointEnum, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,6 +25,10 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                 $scope.scopeModel = {};
                 $scope.scopeModel.endPoint = [];
                 $scope.scopeModel.menuActions = [];
+                $scope.scopeModel.Type = {};
+ 
+
+
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -32,12 +36,17 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                 };
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return NP_IVSwitch_EndPointAPIService.GetFilteredEndPoints(dataRetrievalInput).then(function (response) {
-                        for (var i = 0; i < response.Data.length; i++) {
-                            if (response.Data[i].Entity.Host != null)
-                                response.Data[i].HostLogin = response.Data[i].Entity.Host;
-                            else
-                                response.Data[i].HostLogin = response.Data[i].Entity.SipLogin;
-                        }
+
+                        var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
+
+                         for (var i = 0; i < response.Data.length; i++) {
+                             if (response.Data[i].Entity.EndPointType == NP_IVSwitch_EndPointEnum.ACL.value) {
+                                 response.Data[i].Entity.Type = NP_IVSwitch_EndPointEnum.ACL.description;
+                            }
+                             else {
+                                 response.Data[i].Entity.Type = NP_IVSwitch_EndPointEnum.SIP.description; 
+                             }
+                         }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

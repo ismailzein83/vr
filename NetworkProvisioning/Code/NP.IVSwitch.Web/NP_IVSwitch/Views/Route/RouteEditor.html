@@ -40,16 +40,16 @@
                         <vr-textbox label="Host" value="scopeModel.host" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Port" value="scopeModel.port"  ></vr-textbox>
+                        <vr-textbox label="Port" value="scopeModel.port" isrequired></vr-textbox>
                     </vr-columns>
                   
-                    <!--<vr-columns width="1/2row">
+                    <vr-columns width="1/2row">
                         <vr-select    datatextfield="description" datavaluefield="value" label="SIP Transport Mode"
                                    datasource="scopeModel.transportmode" selectedvalues="scopeModel.transportmodeid" onselectionchanged="scopeModel.onSelectionChangedTransportMode"></vr-select>
-                    </vr-columns>-->
+                    </vr-columns>
 
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Connection Timeout (s)" value="scopeModel.connectiontimeout"></vr-textbox>
+                        <vr-textbox label="Connection Timeout (s)" value="scopeModel.connectiontimeout" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-textbox label="Custom Route Parameters"  ></vr-textbox>

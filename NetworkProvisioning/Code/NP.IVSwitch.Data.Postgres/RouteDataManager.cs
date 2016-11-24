@@ -34,7 +34,7 @@ namespace NP.IVSwitch.Data.Postgres
             route.WakeUpTime =  (DateTime)reader["wakeup_time"];
             route.Host = reader["host"] as string;
             route.Port = reader["port"] as string;
-       //     route.TransportModeId = (TransportMode)(int)reader["transport_mode_id"];
+            route.TransportModeId = (TransportMode)(int)reader["transport_mode_id"];
             route.ConnectionTimeOut = (int)reader["timeout"];
  
 
@@ -45,7 +45,7 @@ namespace NP.IVSwitch.Data.Postgres
         public List<Route> GetRoutes()
         {
             String cmdText = @"SELECT route_id,account_id,description,group_id,tariff_id,log_alias,codec_profile_id,trans_rule_id,state_id,channels_limit,
-                                      wakeup_time,host,port ,timeout          
+                                      wakeup_time,host,port ,transport_mode_id,timeout          
                                        FROM routes;";
             return GetItemsText(cmdText, RouteMapper, (cmd) =>
             {
@@ -55,14 +55,14 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Update(Route route)
         {
 
-            int currentState  ;
+            int currentState, transportPortId;
 
-            MapEnum(route, out currentState );
+            MapEnum(route, out currentState, out transportPortId);
  
             String cmdText = @"UPDATE routes
 	                             SET  description=@description,group_id=@group_id,tariff_id=@tariff_id,
                                    log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
-                                   channels_limit=@channels_limit, wakeup_time=@wakeup_time,host=@host,port=@port,
+                                   channels_limit=@channels_limit, wakeup_time=@wakeup_time,host=@host,port=@port,transport_mode_id=@transport_mode_id,
                                      timeout=@timeout 
                                    WHERE  route_id = @route_id;";
 
@@ -79,8 +79,8 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@wakeup_time", route.WakeUpTime);
                 cmd.Parameters.AddWithValue("@host", route.Host);
-                cmd.Parameters.AddWithValue("@port", route.Port);
-           //     cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
+                cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
+                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
               
 
@@ -92,22 +92,22 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(Route route, out int insertedId)
         {
             object routeId;
-            int currentState;
+            int currentState, transportPortId;
 
 
-            MapEnum(route, out currentState );
+            MapEnum(route, out currentState, out transportPortId);
 
 
             String cmdText = @"INSERT INTO routes(account_id,description,group_id,tariff_id,
-                                   log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,
+                                   log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,transport_mode_id,
                                     timeout  )
 	                             SELECT  @account_id, @description, @group_id, @tariff_id, @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,  @wakeup_time, @host, @port,  @timeout 
+                                 @channels_limit,  @wakeup_time, @host, @port, @transport_mode_id, @timeout 
  	                             returning  route_id;";
 
             routeId = ExecuteScalarText(cmdText, (cmd) =>
             {
-                 cmd.Parameters.AddWithValue("@account_id", route.AccountId);
+                cmd.Parameters.AddWithValue("@account_id", route.AccountId);
                 cmd.Parameters.AddWithValue("@description", route.Description);
                 cmd.Parameters.AddWithValue("@group_id", route.GroupId);
                 cmd.Parameters.AddWithValue("@tariff_id", route.TariffId);
@@ -119,7 +119,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@wakeup_time", route.WakeUpTime);
                 cmd.Parameters.AddWithValue("@host", route.Host);
                 cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
-               // cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
+                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
  
             }
@@ -136,10 +136,13 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        private void MapEnum(Route route, out int currentState )
+        private void MapEnum(Route route, out int currentState, out int transportPortId)
         {
             var currentStateValue = Enum.Parse(typeof(State), route.CurrentState.ToString());
             currentState = (int)currentStateValue;
+
+            var transportPortIdValue = Enum.Parse(typeof(TransportMode), route.TransportModeId.ToString());
+            transportPortId = (int)transportPortIdValue;
   
      
 

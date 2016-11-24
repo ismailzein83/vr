@@ -11,6 +11,7 @@ namespace NP.IVSwitch.Entities
 
     public class Account
     {
+        public int CarrierId { get; set; }
         public AccountType TypeId { get; set; }
         public int AccountId { get; set; }//account_id
          public String FirstName { get; set; }//first_name

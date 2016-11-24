@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             object carrierAccountId;
 
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
-                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.ExtendedSettings));
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }

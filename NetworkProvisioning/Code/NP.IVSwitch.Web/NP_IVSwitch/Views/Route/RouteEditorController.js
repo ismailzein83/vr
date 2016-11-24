@@ -41,6 +41,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.port = "5060";
+            $scope.scopeModel.connectiontimeout = "60";
+            $scope.scopeModel.transportmodeid = { value: 1, description: "UDP" };
+
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -107,11 +111,11 @@
                 }
             }
 
-            //$scope.scopeModel.onSelectionChangedTransportMode = function (SelectedItem) {
-            //    if (SelectedItem != undefined) {
-            //        $scope.scopeModel.transportmodeid = SelectedItem;
-            //     }
-            //}
+            $scope.scopeModel.onSelectionChangedTransportMode = function (SelectedItem) {
+                if (SelectedItem != undefined) {
+                    $scope.scopeModel.transportmodeid = SelectedItem;
+                 }
+            }
            
         }
         function load() {
@@ -157,13 +161,13 @@
             function loadStaticData() {
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
-                 $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
+                $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
 
  
                 if (routeEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
- 
+  
                     return;
                 }
                 $scope.scopeModel.description = routeEntity.Description;
@@ -174,8 +178,8 @@
                 $scope.scopeModel.port = routeEntity.Port;
                 $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
  
-                //if (routeEntity.TransportModeId != undefined)
-                //    $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
+                if (routeEntity.TransportModeId != undefined)
+                    $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
                 if (routeEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
                 if (routeEntity.WakeUpTime != undefined)
@@ -264,7 +268,7 @@
         }
 
         function buildRouteObjFromScope() {
-             return {
+              return {
                 RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
                 AccountId: accountId ,
                 Description :$scope.scopeModel.description,
@@ -278,7 +282,7 @@
                 TransRuleId: $scope.scopeModel.translationruleid,
                 TariffId: $scope.scopeModel.tariffid,
                 WakeUpTime: $scope.scopeModel.wakeuptime,
-         //       TransportModeId : $scope.scopeModel.transportmodeid.value,
+                TransportModeId : $scope.scopeModel.transportmodeid.value,
 
             };
         }

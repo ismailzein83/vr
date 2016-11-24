@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace NP.IVSwitch.Entities 
 {
     public enum RtpMode {AdvancedProxying = 1,PassthruProxying = 2,NoProxying = 3}
-
-    public class EndPoint
+     public class EndPoint
     {
         public int EndPointId { get; set; } // user_id
 

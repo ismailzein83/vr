@@ -18,7 +18,6 @@
             $scope.scopeModel = {};
             $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
-
                 return gridAPI.load(query);
             };
             $scope.scopeModel.onSelectorDirectiveReady = function (api) {
