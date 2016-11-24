@@ -2,7 +2,7 @@
     
     "use strict";
 
-    function serviceObj($modal, $rootScope, VRNavigationService, $q) {
+    function serviceObj($modal, $rootScope, VRNavigationService, $q, UtilsService) {
         return ({
             showModal: showModal
         });
@@ -17,8 +17,8 @@
             modalScope.modalContext = {};
 
             var onhideModal = function () {
-              
-            }
+
+            };
             modalScope.modalContext.closeModal = function () {
                 if (modalInstance) modalInstance.hide();
                 deferred.resolve();
@@ -39,8 +39,18 @@
 
                 if (settings.onScopeReady != undefined)
                     settings.onScopeReady(modalScope);
-
-               
+                
+                if (UtilsService.isContextReadOnly(modalScope) === true) {
+                  
+                    setTimeout(function () {
+                        $('.modal-header').eq($('.modal-dialog').length - 1).css({
+                            backgroundColor: "#969696"
+                        });
+                        $('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly', 'true');
+                    }, 100);
+                   
+                }
+                   
                 if (settings.autoclose != undefined ) {
                     backdrop = settings.autoclose;
                 }
@@ -48,9 +58,11 @@
             }
 
             modalScope.$on('modal.hide.before', function () {
-               $('.modal-header').eq($('.modal-dialog').length - 2).css({
+                if ($('.modal-header').eq($('.modal-dialog').length - 2).attr('readonly') == undefined) {
+                    $('.modal-header').eq($('.modal-dialog').length - 2).css({
                         backgroundColor: "#20407D"
-               })
+                    });
+                }
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
 
@@ -59,7 +71,7 @@
         }
     }
 
-    serviceObj.$inject = ['$modal', '$rootScope', 'VRNavigationService', '$q'];
+    serviceObj.$inject = ['$modal', '$rootScope', 'VRNavigationService', '$q', 'UtilsService'];
     app.service('VRModalService', serviceObj);
 
 

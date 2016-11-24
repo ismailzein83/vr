@@ -69,7 +69,7 @@
                 $scope.$watchCollection('effectiveDataSource', function (newValue, oldValue) {
                     refreshBoundDataSource();
                 });
-
+               
                 controller.hideAddButton = false;
                 if (controller.haspermission != undefined && typeof (controller.haspermission) == 'function') {
                     controller.haspermission().then(function (isAllowed) {
@@ -78,12 +78,11 @@
                     });
                 }
 
-                function refreshBoundDataSource()
-                {
+                function refreshBoundDataSource() {
                     if (!$scope.isDropDownOpened)
                         return;
                     controller.boundDataSource.length = 0;
-                    
+
                     if ($scope.effectiveDataSource != undefined) {
                         itemsToAddToSource = [];
                         for (var i = 0; i < $scope.effectiveDataSource.length; i++)
@@ -100,7 +99,7 @@
                             itemsToAddToSource.splice(0, 1);
                         }
                     }
-                    
+
                     if (itemsToAddToSource.length > 0) {
                         setTimeout(function () {
                             addBatchItemsToSource();
@@ -166,11 +165,11 @@
                     return !(controller.hidefilterbox === "" || controller.hidefilterbox);
                 }
 
-                
 
-                
 
-                function  adjustTooltipPosition(e) {
+
+
+                function adjustTooltipPosition(e) {
                     setTimeout(function () {
                         var self = angular.element(e.currentTarget);
                         var selfHeight = $(self).height();
@@ -230,6 +229,16 @@
                     return utilsService.getItemIndexByVal(controller.selectedvalues, getObjectValue(item), controller.datavaluefield);
                 }
 
+                function onViewHandler(obj) {
+                    var onViewHandler = $scope.$parent.$eval($attrs.onviewclicked);
+                    onViewHandler(obj);
+                }
+
+                function includeOnViewHandler() {
+                    var onViewHandler = $scope.$parent.$eval($attrs.onviewclicked);
+                    return (onViewHandler != undefined && typeof (onViewHandler) == 'function');
+                }
+
                 function onAddhandler() {
                     var onAddHandler = $scope.$parent.$eval($attrs.onaddclicked);
                     onAddHandler();
@@ -287,7 +296,7 @@
                     if (!selectedSectionVisible()) return 'single-col-checklist';
                     return controller.selectedvalues.length === 0 || controller.readOnly ? 'single-col-checklist' : 'double-col-checklist';
                 }
-                
+
                 //Exports
                 angular.extend(this, {
                     isDropDownOpened: isDropDownOpened,
@@ -306,14 +315,16 @@
                     selectedSectionVisible: selectedSectionVisible,
                     getObjectText: getObjectText,
                     getObjectValue: getObjectValue,
-                    getObjectDisabled:getObjectDisabled,
+                    getObjectDisabled: getObjectDisabled,
                     findExsite: findExsite,
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
                     getLabel: getLabel,
                     getSelectedSectionClass: getSelectedSectionClass,
                     onAddhandler: onAddhandler,
-                    includeOnAddHandler: includeOnAddHandler
+                    includeOnAddHandler: includeOnAddHandler,
+                    onViewHandler: onViewHandler,
+                    includeOnViewHandler: includeOnViewHandler
                 });
                 var api = {}
                 api.clearDataSource = function () {
@@ -338,17 +349,17 @@
                 //Exports
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
-                        
+
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
 
                         setTimeout(function () { $('#filterInput').focus(); }, 1);
                         var selfHeight = $(this).height();
                         var selfOffset = $(this).offset();
                         var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
-                       
-                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 235 :200;
 
-                        if ((innerHeight- 100) - basetop < heigth) {
+                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 235 : 200;
+
+                        if ((innerHeight - 100) - basetop < heigth) {
                             var div = $(this).find('.dropdown-menu');
                             var height = div.css({
                                 display: "block"
@@ -369,68 +380,68 @@
                                     marginTop: ""
                                 });
                             });
-                           
+
                         }
                         else
-                           $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                     });
 
                     $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function () {
-                        
+
                         $('#filterInput').blur();
                         if (controller.onblurdropdown != null) {
                             controller.onblurdropdown()
                         }
                         vrSelectSharedObject.onCloseDropDown($attrs.id);
-                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();                        
-                        
+                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+
                     });
                 }, 100);
                 setTimeout(function () {
-                   // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
+                    // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
 
-                        $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
+                    $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
 
-                            var self = $(this);
-                            var selfHeight = $(this).parent().height();
-                            var selfOffset = $(self).offset();
-                            var dropDown = self.parent().find('ul');
-                            var top = 0;
-                            var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
-                            var baseleft = selfOffset.left - $(window).scrollLeft();
-                         
-                            var heigth = $(this).parents('.vr-pager-container').length > 0 ? 245 : 200;
-                            if ((innerHeight - 100) - basetop < heigth){
-                                top = basetop - (heigth + (selfHeight * 2.7));
-                                if (isRemoteLoad()) {
-                                    top = top - 35;
-                                }
-                                if (controller.hidefilterbox != undefined )
-                                    top = top + 30;
-                                if(controller.readOnly && controller.isRemoteLoad() )
-                                    top = top + 30;
+                        var self = $(this);
+                        var selfHeight = $(this).parent().height();
+                        var selfOffset = $(self).offset();
+                        var dropDown = self.parent().find('ul');
+                        var top = 0;
+                        var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                        var baseleft = selfOffset.left - $(window).scrollLeft();
 
+                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 245 : 200;
+                        if ((innerHeight - 100) - basetop < heigth) {
+                            top = basetop - (heigth + (selfHeight * 2.7));
+                            if (isRemoteLoad()) {
+                                top = top - 35;
                             }
-                            else
-                                top = selfOffset.top - $(window).scrollTop() + selfHeight;
-                            
+                            if (controller.hidefilterbox != undefined)
+                                top = top + 30;
+                            if (controller.readOnly && controller.isRemoteLoad())
+                                top = top + 30;
 
-                            
+                        }
+                        else
+                            top = selfOffset.top - $(window).scrollTop() + selfHeight;
 
-                            $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
-                        });
 
-                        $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
-                            fixDropdownPosition();
-                        });
-                        $(window).scroll(function () {
-                            fixDropdownPosition();
-                        });
-                        $(window).resize(function () {
-                            fixDropdownPosition();
-                        });
 
-                  //  }
+
+                        $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
+                    });
+
+                    $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
+                        fixDropdownPosition();
+                    });
+                    $(window).scroll(function () {
+                        fixDropdownPosition();
+                    });
+                    $(window).resize(function () {
+                        fixDropdownPosition();
+                    });
+
+                    //  }
 
                 }, 1);
                 var fixDropdownPosition = function () {
@@ -445,7 +456,7 @@
             controllerAs: 'ctrl',
             bindToController: true,
             compile: function (element, attrs) {
-               
+
 
                 function onLoad() {
 
@@ -512,7 +523,7 @@
                         var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
                                             + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                             + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
-                                            + (noCaret === true ? '' : '<span class="caret vr-select-caret"></span>')
+                                            + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
                                             + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
                     }
@@ -600,7 +611,7 @@
                         ctrl.selectValue = function (e, item) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
                                 return;
-                              selectItem(e, item);
+                            selectItem(e, item);
                         };
 
 
