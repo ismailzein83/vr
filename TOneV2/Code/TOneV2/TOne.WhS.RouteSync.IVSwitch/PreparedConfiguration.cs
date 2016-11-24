@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Vanrise.Caching;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -98,9 +99,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
     {
         public string RouteTableName { get; set; }
         public string TariffTableName { get; set; }
+        public StringBuilder StrRoutes { get; set; }
         public byte[] Routes { get; set; }
         public int RoutesCount { get; set; }
         public byte[] Tariffs { get; set; }
+        public StringBuilder StrTariff { get; set; }
         public int TariffCount { get; set; }
     }
     public class CarrierDefinition

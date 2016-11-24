@@ -41,7 +41,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 {
                     foreach (var customerMapping in carrierMapping.CustomerMapping)
                     {
-                        routes.Add(BuildRouteAndRouteOptions(route, customerMapping,preparedData));
+                        routes.Add(BuildRouteAndRouteOptions(route, customerMapping, preparedData));
                     }
                 }
             }
@@ -63,26 +63,30 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 PreparedRoute tempRoute;
                 if (customerRoutes.TryGetValue(ivSwitchConvertedRoute.CustomerID, out tempRoute))
                 {
-                    byte[] bytes = GetBytes(sbRoute.ToString());
                     tempRoute.RoutesCount += ivSwitchConvertedRoute.Routes.Count;
-                    tempRoute.Routes = Combine(tempRoute.Routes, bytes);
-                    bytes = GetBytes(sbTariff.ToString());
                     tempRoute.TariffCount += ivSwitchConvertedRoute.Tariffs.Count;
-                    tempRoute.Tariffs = Combine(tempRoute.Tariffs, bytes);
+                    tempRoute.StrRoutes = tempRoute.StrRoutes.Append(sbRoute);
+                    tempRoute.StrTariff = tempRoute.StrTariff.Append(sbTariff);
                 }
                 else
                 {
                     tempRoute = new PreparedRoute
                     {
-                        Routes = GetBytes(sbRoute.ToString()),
-                        Tariffs = GetBytes(sbTariff.ToString()),
                         TariffTableName = ivSwitchConvertedRoute.TariffTableName,
                         RouteTableName = ivSwitchConvertedRoute.RouteTableName,
                         RoutesCount = ivSwitchConvertedRoute.Routes.Count,
-                        TariffCount = ivSwitchConvertedRoute.Tariffs.Count
+                        TariffCount = ivSwitchConvertedRoute.Tariffs.Count,
+                        StrRoutes = sbRoute,
+                        StrTariff = sbTariff
                     };
                     customerRoutes[ivSwitchConvertedRoute.CustomerID] = tempRoute;
                 }
+            }
+            foreach (var convertedRoute in customerRoutes)
+            {
+                PreparedRoute tempRoute = convertedRoute.Value;
+                tempRoute.Routes = GetBytes(tempRoute.StrRoutes.ToString());
+                tempRoute.Tariffs = GetBytes(tempRoute.StrTariff.ToString());
             }
             return customerRoutes;
         }
@@ -93,8 +97,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
             IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var item in routes.Values)
             {
-                routeDataManager.BulkCopy(string.Format("{0}_temp", item.RouteTableName), item.Routes, item.RoutesCount);
-                tariffDataManager.BulkCopy(string.Format("{0}_temp", item.TariffTableName), item.Tariffs, item.TariffCount);
+                routeDataManager.Bulk(item.Routes, string.Format("{0}_temp", item.RouteTableName));
+                tariffDataManager.Bulk(item.Tariffs, string.Format("{0}_temp", item.TariffTableName));
             }
         }
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
@@ -182,6 +186,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             }
             decimal? optionsPercenatgeSum = route.Options.Sum(it => it.Percentage);
             Decimal? maxPercentage = route.Options.Max(it => it.Percentage);
+
 
             List<IVSwitchRoute> routes = new List<IVSwitchRoute>();
             int gatewayCount = route.Options.Count;
