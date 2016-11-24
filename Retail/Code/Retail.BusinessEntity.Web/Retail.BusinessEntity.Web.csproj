@@ -252,10 +252,14 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\ActivateTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\BlockTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\ReactivateTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\retail-be-balancealertrule-threshold-fixed.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\Templates\FixedBalanceAlertThresholdTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\WeeklyPeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountActions\Templates\EmailActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountActions\retail-be-accountaction-email.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-trafficdirection-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfo-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfoitem-grid.js" />

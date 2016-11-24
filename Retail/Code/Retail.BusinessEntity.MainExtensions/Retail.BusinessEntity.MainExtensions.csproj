@@ -66,6 +66,10 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -116,6 +120,8 @@
     <Compile Include="AccountParts\AccountPartResidentialProfile.cs" />
     <Compile Include="AccountParts\AccountPartResidentialProfileDefinition.cs" />
     <Compile Include="RadiusSQLProvisionerDefinitionSetting.cs" />
+    <Compile Include="AccountActions\SendEmailAction.cs" />
+    <Compile Include="AccountBalanceAlertRule\FixedBalanceAlertThreshold.cs" />
     <Compile Include="VRObjectTypes\FinancialRetailAccountPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountObjectType.cs" />
   </ItemGroup>
