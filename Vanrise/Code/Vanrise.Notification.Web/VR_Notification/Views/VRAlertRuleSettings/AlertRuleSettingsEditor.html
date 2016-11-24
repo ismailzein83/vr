@@ -3,7 +3,7 @@
         <vr-form name="formVRActionManagementEditor">
             <vr-tabs>
                 <vr-tab header="'Threshold'">
-                    <vr-accountbalance-balancealertthreshold on-ready="scopeModel.onBalanceAlertThresholdDirectiveReady" normal-col-num="4"></vr-accountbalance-balancealertthreshold>
+                    <vr-notification-balancealertrule-threshold-selector on-ready="scopeModel.onVRBalanceAlertRuleThresholdDirectiveReady" normal-col-num="4"></vr-notification-balancealertrule-threshold-selector>
                 </vr-tab>
                 <vr-tab header="'Actions'">
                     <vr-notification-vraction-management on-ready="scopeModel.onVRActionManagementDirectiveReady"></vr-notification-vraction-management>

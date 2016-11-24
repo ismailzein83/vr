@@ -145,6 +145,7 @@
   <ItemGroup>
     <Folder Include="VR_AccountBalance\Directives\BalanceAccountType\Templates\" />
     <Folder Include="VR_AccountBalance\Directives\BillingTransactionType\Templates\" />
+    <Folder Include="VR_AccountBalance\Views\BalanceAlertRule\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
@@ -152,17 +153,12 @@
     <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\vr-accountbalance-accounttype-settings.js" />
-    <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
-    <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\vr-accountbalance-balancealertthreshold.js" />
-    <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\vr-accountbalance-balancealertrulesettings.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-billingtransaction-grid.js" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\Templates\LiveBalanceTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
-    <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\FixedBalanceAlertThresholdTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-accountbalancerule-settings.js" />
-    <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-balancealertthreshold-fixed.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\Templates\AccountBalanceUpdateProcessManualTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\Templates\AccountBalanceUpdateProcessScheduledTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\vr-accountbalance-updateprocess-scheduled.js" />
@@ -178,8 +174,6 @@
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
     <Content Include="VR_AccountBalance\Services\BalanceAlertService.js" />
     <Content Include="VR_AccountBalance\Services\BillingTransactionService.js" />
-    <Content Include="VR_AccountBalance\Views\BalanceAlertRule\BalanceAlertThresholdActionEditor.html" />
-    <Content Include="VR_AccountBalance\Views\BalanceAlertRule\BalanceAlertThresholdActionEditorController.js" />
     <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditor.html" />
     <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditorController.js" />
   </ItemGroup>

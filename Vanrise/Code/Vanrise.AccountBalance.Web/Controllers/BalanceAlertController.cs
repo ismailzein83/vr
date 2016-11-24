@@ -14,11 +14,6 @@ namespace Vanrise.AccountBalance.Web.Controllers
     public class BalanceAlertController : BaseAPIController
     {
         BalanceAlertManager _manager = new BalanceAlertManager();
-        [HttpGet]
-        [Route("GetBalanceAlertThresholdConfigs")]
-        public IEnumerable<BalanceAlertThresholdConfig> GetBalanceAlertThresholdConfigs()
-        {
-            return _manager.GetBalanceAlertThresholdConfigs();
-        }
+   
     }
 }

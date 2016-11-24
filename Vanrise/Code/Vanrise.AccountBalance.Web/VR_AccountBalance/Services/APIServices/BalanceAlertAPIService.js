@@ -8,12 +8,9 @@
 
         var controllerName = "BalanceAlert";
 
-        function GetBalanceAlertThresholdConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetBalanceAlertThresholdConfigs"));
-        }
 
         return ({
-            GetBalanceAlertThresholdConfigs: GetBalanceAlertThresholdConfigs,
+          
         });
     }
 

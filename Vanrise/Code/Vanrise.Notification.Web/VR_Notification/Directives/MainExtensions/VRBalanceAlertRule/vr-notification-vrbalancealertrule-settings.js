@@ -59,13 +59,16 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                 api.load = function (payload) {
 
                     var promises = [];
-                    //console.log(payload);
                     if (payload != undefined) {
                         criteriaDefinitionFields = payload.alertTypeSettings.CriteriaDefinition.Fields;
                         extensionType = payload.alertTypeSettings.VRActionExtensionType;
-                        criteriaFieldsValues = payload.alertExtendedSettings.Criteria.FieldsValues;
+
                         alertExtendedSettings = payload.alertExtendedSettings;
                         alertTypeSettings = payload.alertTypeSettings;
+                    }
+
+                    if (alertExtendedSettings != undefined && alertExtendedSettings.Criteria != undefined) {
+                        criteriaFieldsValues = alertExtendedSettings.Criteria.FieldsValues;
                     }
 
                     var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -88,7 +91,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                     vrAlertRuleSettingsDirectiveReadyDeferred.promise.then(function () {
                         var payload = {
                             settings: alertExtendedSettings,
-                           alertTypeSettings: alertTypeSettings
+                            alertTypeSettings: alertTypeSettings
                         };
                         VRUIUtilsService.callDirectiveLoad(vrAlertRuleSettingsDirectiveAPI, payload, loadRuleSettingsSectionPromiseDeferred);
                     });

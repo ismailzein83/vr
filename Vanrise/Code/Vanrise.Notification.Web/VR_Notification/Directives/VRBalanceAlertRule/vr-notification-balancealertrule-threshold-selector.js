@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BalancealertthresholdDirective.$inject = ['VR_AccountBalance_BalanceAlertAPIService', 'UtilsService', 'VRUIUtilsService'];
+    VRBalanceAlertRuleThresholdDirective.$inject = ['VR_Notification_VRBalanceAlertRuleAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function BalancealertthresholdDirective(VR_AccountBalance_BalanceAlertAPIService, UtilsService, VRUIUtilsService) {
+    function VRBalanceAlertRuleThresholdDirective(VR_Notification_VRBalanceAlertRuleAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,7 +15,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ThresholdEntity($scope, ctrl, $attrs);
+                var ctor = new VRBalanceAlertRuleThreshold($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@
             }
         };
 
-        function ThresholdEntity($scope, ctrl, $attrs) {
+        function VRBalanceAlertRuleThreshold($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -62,9 +62,11 @@
 
                     var promises = [];
                     var thresholdEntity;
+                    var extensionType;
 
                     if (payload != undefined) {
                         thresholdEntity = payload.thresholdEntity;
+                        extensionType = payload.extensionType;
                     }
 
                     if (thresholdEntity != undefined) {
@@ -76,7 +78,7 @@
                     promises.push(getBalanceAlertTemplateConfigsPromise);
 
                     function getBalanceAlertTemplateConfigs() {
-                        return VR_AccountBalance_BalanceAlertAPIService.GetBalanceAlertThresholdConfigs().then(function (response) {
+                        return VR_Notification_VRBalanceAlertRuleAPIService.GetVRBalanceAlertThresholdConfigs(extensionType).then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -134,7 +136,6 @@
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + 'label="Threshold Type"'
-
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
                         + '</vr-select>'
@@ -147,6 +148,6 @@
         }
     }
 
-    app.directive('vrNotificationVrbalancealertruleThreshold', BalancealertthresholdDirective);
+    app.directive('vrNotificationBalancealertruleThresholdSelector', VRBalanceAlertRuleThresholdDirective);
 
 })(app);

@@ -25,6 +25,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
 
     function AlertRuleSettings(ctrl, $scope, $attrs) {
         var actionExtensionType;
+        var thresholdExtensionType;
         function initializeController() {
 
             ctrl.datasource = [];
@@ -43,7 +44,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
                     balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 }
-                VR_Notification_AlertRuleSettingsService.addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType);
+                VR_Notification_AlertRuleSettingsService.addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType, thresholdExtensionType);
             };
 
             ctrl.removeThresholdAction = function (dataItem) {
@@ -69,19 +70,22 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
             }
 
             api.load = function (payload) {
-                if (payload != undefined && payload.settings != undefined) {
+                if (payload != undefined && payload.alertTypeSettings != undefined) {
                     actionExtensionType = payload.alertTypeSettings.VRActionExtensionType;
-                    console.log(payload);
-                    if (payload.settings.ThresholdActions != undefined) {
-                        for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
-                            var thresholdAction = payload.settings.ThresholdActions[i];
-                            if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
-                                thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
+                    thresholdExtensionType = payload.alertTypeSettings.ThresholdExtensionType;
+
+                    if (payload.settings != undefined) {
+                        if (payload.settings.ThresholdActions != undefined) {
+                            for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
+                                var thresholdAction = payload.settings.ThresholdActions[i];
+                                if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
+                                    thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
+                                }
+                                if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
+                                    thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
+                                }
+                                ctrl.datasource.push({ Entity: thresholdAction });
                             }
-                            if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
-                                thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
-                            }
-                            ctrl.datasource.push({ Entity: thresholdAction });
                         }
                     }
                 }
@@ -123,7 +127,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
 
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
             }
-            VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated);
+            VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType);
         }
 
         this.initializeController = initializeController;

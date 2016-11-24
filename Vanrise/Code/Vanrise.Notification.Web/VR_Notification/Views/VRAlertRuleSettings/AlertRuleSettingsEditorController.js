@@ -10,6 +10,7 @@
         var balanceAlertThresholdAPI;
         var balanceAlertThresholdReadyDeferred = UtilsService.createPromiseDeferred();
         var balanceAlertActionExtensionType;
+        var thresholdActionExtensionType;
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,11 +24,11 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            console.log(parameters);
-            
+
             if (parameters != undefined) {
                 thresholdEntity = parameters.thresholdActionEntity;
                 balanceAlertActionExtensionType = parameters.actionExtensionType;
+                thresholdActionExtensionType = parameters.thresholdExtensionType;
                 isEditMode = (thresholdEntity != undefined);
             }
         }
@@ -35,7 +36,7 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onBalanceAlertThresholdDirectiveReady = function (api) {
+            $scope.scopeModel.onVRBalanceAlertRuleThresholdDirectiveReady = function (api) {
                 balanceAlertThresholdAPI = api;
                 balanceAlertThresholdReadyDeferred.resolve();
             };
@@ -106,7 +107,7 @@
         function loadBalanceAlertThresholdDirective() {
             var balanceAlertThresholdLoadDeferred = UtilsService.createPromiseDeferred();
             balanceAlertThresholdReadyDeferred.promise.then(function () {
-                var balanceAlertThresholdPayload = thresholdEntity != undefined ? { thresholdEntity: thresholdEntity.Threshold } : undefined
+                var balanceAlertThresholdPayload = { thresholdEntity: thresholdEntity != undefined ? thresholdEntity.Threshold : undefined, extensionType: thresholdActionExtensionType };
                 VRUIUtilsService.callDirectiveLoad(balanceAlertThresholdAPI, balanceAlertThresholdPayload, balanceAlertThresholdLoadDeferred);
             });
             return balanceAlertThresholdLoadDeferred.promises;

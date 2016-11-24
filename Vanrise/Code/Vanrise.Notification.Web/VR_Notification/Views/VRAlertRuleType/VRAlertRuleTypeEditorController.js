@@ -198,8 +198,6 @@
         function buildAlertTypeSettings() {
             var vrAlertRuleTypeSettings = directiveAPI.getData();
             vrAlertRuleTypeSettings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-            vrAlertRuleTypeSettings.ThresholdExtensionType = $scope.scopeModel.thresholdExtensionType;
-            vrAlertRuleTypeSettings.VRActionExtensionType = $scope.scopeModel.actionExtensionType;
             return vrAlertRuleTypeSettings;
         }
     }

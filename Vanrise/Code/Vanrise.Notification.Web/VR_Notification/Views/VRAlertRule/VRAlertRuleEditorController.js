@@ -183,7 +183,6 @@
             directiveReadyDeferred.promise.then(function () {
 
                 directiveReadyDeferred = undefined;
-                //console.log(vrAlertRuleTypeEntity);
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, getDirectiveWrapperPayload(), directiveLoadDeferred);
             });
 
@@ -193,7 +192,7 @@
         function getDirectiveWrapperPayload() {
             return {
                 alertTypeSettings: vrAlertRuleTypeEntity.Settings,
-                alertExtendedSettings: vrAlertRuleEntity.Settings.ExtendedSettings
+                alertExtendedSettings: vrAlertRuleEntity != undefined ? vrAlertRuleEntity.Settings.ExtendedSettings : undefined
             };
         }
 

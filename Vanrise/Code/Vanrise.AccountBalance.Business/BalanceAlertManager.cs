@@ -10,10 +10,6 @@ namespace Vanrise.AccountBalance.Business
 {
     public class BalanceAlertManager
     {
-        public IEnumerable<BalanceAlertThresholdConfig> GetBalanceAlertThresholdConfigs()
-        {
-            var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<BalanceAlertThresholdConfig>(BalanceAlertThresholdConfig.EXTENSION_TYPE);
-        }
+
     }
 }
