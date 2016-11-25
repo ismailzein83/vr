@@ -116,7 +116,22 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region ExecuteNonQuery
-
+        public void ExecuteNonQuery(string[] sqlStrings)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
+            {
+                if (connection.State == ConnectionState.Closed) connection.Open();
+                using (NpgsqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandType = CommandType.Text;
+                    foreach (string sql in sqlStrings)
+                    {
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
         protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand)
         {
             int rowsAffected;
@@ -150,19 +165,9 @@ namespace Vanrise.Data.Postgres
         #endregion
         #region BulkCopy
 
-        public void Bulk(byte[] buf, string tableName)
+        public void Bulk(byte[] data, string tableName)
         {
-            //using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
-            //{
-            //    if (conn.State == ConnectionState.Closed) conn.Open();
-            //    using (NpgsqlCommand command = new NpgsqlCommand(string.Format("COPY {0} FROM STDIN", tableName), conn))
-            //    {
-            //        NpgsqlCopyIn cin = new NpgsqlCopyIn(command, conn);
-            //        cin.Start();
-            //        cin.CopyStream.Write(buf, 0, buf.Length);
-            //        cin.End();
-            //    }
-            //}
+
         }
 
         #endregion
