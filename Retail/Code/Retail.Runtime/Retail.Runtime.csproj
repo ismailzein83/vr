@@ -461,6 +461,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tasks\AliAtouiTask.cs" />
     <Compile Include="Tasks\CustomParser.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="MainForm.cs">
