@@ -1,0 +1,19 @@
+﻿<div ng-show="showGrid">
+    <vr-datagrid datasource="salezones"
+                 on-ready="onGridReady"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 menuactions="gridMenuActions"
+                 idfield="Entity.SaleZoneId"
+                 defaultsortbyfieldname="'Entity.Name'">
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.SaleZoneId'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlanName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
+        <vr-datagridexpandablerow>
+            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+        </vr-datagridexpandablerow>
+    </vr-datagrid>
+</div>

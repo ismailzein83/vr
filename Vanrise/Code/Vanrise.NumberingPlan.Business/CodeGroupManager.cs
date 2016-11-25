@@ -240,7 +240,7 @@ namespace Vanrise.NumberingPlan.Business
         }
         public byte[] DownloadCodeGroupListTemplate()
         {
-            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadCodeGroupTemplatePath"]);
+            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadVRCodeGroupTemplatePath"]);
 
             byte[] bytes = File.ReadAllBytes(physicalFilePath);
 

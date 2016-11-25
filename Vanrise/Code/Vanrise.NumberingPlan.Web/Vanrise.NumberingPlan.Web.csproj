@@ -155,6 +155,10 @@
     <Content Include="VR_NumberingPlan\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="VR_NumberingPlan\Directives\CodeGroup\vr-np-codegroup-grid.js" />
     <Content Include="VR_NumberingPlan\Directives\CodeGroup\vr-np-codegroup-selector.js" />
+    <Content Include="VR_NumberingPlan\Directives\SaleZone\Templates\SaleZoneGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\SaleZone\vr-np-salezone-grid.js" />
+    <Content Include="VR_NumberingPlan\Directives\SaleZone\vr-np-salezone-masterplan-selector.js" />
+    <Content Include="VR_NumberingPlan\Directives\SaleZone\vr-np-salezone-selector.js" />
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\Templates\SellingNumberPlanGridTemplate.html" />
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-selector.js" />
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-grid.js" />
@@ -178,6 +182,7 @@
     <Content Include="VR_NumberingPlan\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="VR_NumberingPlan\Services\APIServices\SellingNumberPlanAPIService.js" />
     <Content Include="VR_NumberingPlan\Services\CodeGroupService.js" />
+    <Content Include="VR_NumberingPlan\Services\SaleZoneService.js" />
     <Content Include="VR_NumberingPlan\Services\SellingNumberPlanService.js" />
     <Content Include="VR_NumberingPlan\Template\Code preperation sample.xls" />
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupEditor.html" />
@@ -186,6 +191,12 @@
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupManagementController.js" />
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="VR_NumberingPlan\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\SaleCode\vr-np-salecode-grid.js" />
+    <Content Include="VR_NumberingPlan\Views\SaleCode\SaleCodeManagement.html" />
+    <Content Include="VR_NumberingPlan\Views\SaleCode\SaleCodeManagementController.js" />
+    <Content Include="VR_NumberingPlan\Views\SaleZone\SaleZoneManagement.html" />
+    <Content Include="VR_NumberingPlan\Views\SaleZone\SaleZoneManagementController.js" />
     <Content Include="VR_NumberingPlan\Views\SellingNumberPlanEditor.html" />
     <Content Include="VR_NumberingPlan\Views\SellingNumberPlanEditorController.js" />
     <Content Include="VR_NumberingPlan\Views\SellingNumberPlanManagement.html" />

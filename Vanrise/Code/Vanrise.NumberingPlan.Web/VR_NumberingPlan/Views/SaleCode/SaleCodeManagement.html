@@ -1,0 +1,33 @@
+﻿<vr-panel ng-controller="Vr_NP_SaleCodeManagementController" >
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
+            <vr-row removeline>
+
+                <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" normal-col-num="2" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-whs-be-sellingnumberplan-selector>
+
+                <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined" haschildcolumns>
+                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady">
+                    </vr-whs-be-salezone-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox type="Code" label="Code" value="code"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Effective On" value="effectiveOn" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row> 
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-np-salecode-grid on-ready="onGridReady"></vr-np-salecode-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
