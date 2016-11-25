@@ -27,7 +27,7 @@ app.directive('vrNpDatatransformationMasterplansalecodematch', ['UtilsService', 
             },
             templateUrl: function (element, attrs) {
                 return "/Client/Modules/VR_NumberingPlan/Directives/TransformationSteps/MasterPlanSaleCodeMatchStep/Templates/MasterPlanSaleCodeMatchStepTemplate.html";
-            }
+            } 
 
         };
 

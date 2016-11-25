@@ -104,7 +104,7 @@
     <Compile Include="SaleCode\SaleCodeManager.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SellingNumberPlanManager.cs" />
-    <Compile Include="TransformationSteps\MasterPlanSaleCodeStep.cs" />
+    <Compile Include="TransformationSteps\MasterPlanSaleCodeMatchStep.cs" />
     <Compile Include="ZonePreviewManager.cs" />
   </ItemGroup>
   <ItemGroup>

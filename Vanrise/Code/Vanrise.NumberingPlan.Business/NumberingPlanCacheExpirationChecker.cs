@@ -36,7 +36,7 @@ namespace Vanrise.NumberingPlan.Business
                 return IsCacheExpired(context, 10); //ToDo getting 10 from settings
             }
         }
-
+         
         private bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context, int entitiesIntervalInMinutes)
         {
             TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(entitiesIntervalInMinutes);

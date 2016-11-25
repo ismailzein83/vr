@@ -8,7 +8,7 @@ using Vanrise.NumberingPlan.Data;
 using Vanrise.NumberingPlan.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
-
+ 
 namespace Vanrise.NumberingPlan.Business
 {
     public class SellingNumberPlanManager :  ISellingNumberPlanManager

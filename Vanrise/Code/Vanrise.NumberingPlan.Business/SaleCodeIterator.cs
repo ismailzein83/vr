@@ -8,7 +8,7 @@ using Vanrise.NumberingPlan.Entities;
 namespace Vanrise.NumberingPlan.Business
 {
     public class SaleCodeIterator
-    {
+    { 
         public int SellingNumberPlanId { get; set; }
 
         public CodeIterator<SaleCode> CodeIterator { get; set; }

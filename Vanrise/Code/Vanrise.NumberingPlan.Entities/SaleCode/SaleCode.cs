@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.NumberingPlan.Entities
 {
-    public class SaleCode : ICode
+    public class SaleCode : ICode 
     {
         public long SaleCodeId { get; set; }
 

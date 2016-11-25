@@ -37,7 +37,7 @@ app.directive('vrNpDatatransformationMasterplansalecodematchPreview', ['UtilsSer
             function initializeController() {
                 ctrl.inputFields = [];
                 ctrl.outputFields = [];
-
+                 
                 defineAPI();
             }
             function defineAPI() {
