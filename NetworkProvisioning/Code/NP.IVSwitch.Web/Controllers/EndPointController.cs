@@ -31,14 +31,14 @@ namespace NP.IVSwitch.Web.Controllers
 
         [HttpPost]
         [Route("AddEndPoint")]
-        public Vanrise.Entities.InsertOperationOutput<EndPointDetail> AddEndPoint(EndPoint endPointItem)
+        public Vanrise.Entities.InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)
         {
             return _manager.AddEndPoint(endPointItem);
         }
 
         [HttpPost]
         [Route("UpdateEndPoint")]
-        public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPoint endPointItem)
+        public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
             return _manager.UpdateEndPoint(endPointItem);
         }

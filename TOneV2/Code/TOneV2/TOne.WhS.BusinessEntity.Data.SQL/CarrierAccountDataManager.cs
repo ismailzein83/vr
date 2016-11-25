@@ -25,13 +25,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             object carrierAccountId;
 
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
-                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.ExtendedSettings));
+                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
         public bool Update(CarrierAccountToEdit carrierAccount, int carrierProfileId)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierProfileId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            return (recordsEffected > 0);
+        }
+
+        public bool UpdateExtendedSettings(int carrierAccountId, Dictionary<string, object> extendedSettings)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_UpdateExtendedSettings", carrierAccountId, Vanrise.Common.Serializer.Serialize(extendedSettings));
             return (recordsEffected > 0);
         }
         public List<CarrierAccount> GetCarrierAccounts()
@@ -100,7 +106,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CarrierProfileId = (int)reader["CarrierProfileId"],
                 CarrierAccountSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
                 SourceId = reader["SourceID"] as string,
-                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted")
+                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
+                ExtendedSettings = Vanrise.Common.Serializer.Deserialize<Dictionary<string,object>>(reader["ExtendedSettings"] as string),
+
             };
             return carrierAccount;
         }

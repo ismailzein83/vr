@@ -29,7 +29,7 @@ namespace NP.IVSwitch.Data.Postgres
             account.CompanyName = reader["company_name"] as string;
             account.ContactDisplay = reader["contact_display"] as string;
             account.Email = reader["email"] as string;
-            account.WebSite = reader["web_site"] as string;
+            account.WebSite = GetReaderValue<string>(reader,"web_site");
             account.BillingCycle =  (Int16)reader["cycle_id"];
             account.TaxGroupId =  (Int16)reader["tax_group_id"];
             account.PaymentTerms =  (Int16)reader["pay_terms"];
@@ -122,7 +122,10 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@company_name", account.CompanyName);
                 cmd.Parameters.AddWithValue("@contact_display", account.ContactDisplay);
                 cmd.Parameters.AddWithValue("@email", account.Email);
-                cmd.Parameters.AddWithValue("@web_site", account.WebSite);
+             //   cmd.Parameters.AddWithValue("@web_site", account.WebSite);
+                var prmWebSite = new Npgsql.NpgsqlParameter("@web_site", DbType.String);
+                prmWebSite.Value = CheckIfNull(account.WebSite);
+                cmd.Parameters.Add(prmWebSite);
                 cmd.Parameters.AddWithValue("@cycle_id", account.BillingCycle);
                 cmd.Parameters.AddWithValue("@tax_group_id", account.TaxGroupId);
                 cmd.Parameters.AddWithValue("@pay_terms", account.PaymentTerms);
@@ -131,7 +134,10 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@threshold_credit", account.CreditThreshold);
                 cmd.Parameters.AddWithValue("@balance", account.CurrentBalance);
                 cmd.Parameters.AddWithValue("@log_alias", account.LogAlias);
-                cmd.Parameters.AddWithValue("@address", account.Address);
+               // cmd.Parameters.AddWithValue("@address", account.Address);
+                var prmAddress = new Npgsql.NpgsqlParameter("@address", DbType.String);
+                prmAddress.Value = CheckIfNull(account.Address);
+                cmd.Parameters.Add(prmAddress);
                 cmd.Parameters.AddWithValue("@peer_account_id", account.PeerVendorId);
                 cmd.Parameters.AddWithValue("@channels_limit", account.ChannelsLimit);
 
@@ -156,6 +162,14 @@ namespace NP.IVSwitch.Data.Postgres
 
             var typeIdValue = Enum.Parse(typeof(AccountType), account.TypeId.ToString());
             typeId = (int)typeIdValue;
+
+        }
+
+
+        private Object CheckIfNull(String parameter)
+        {
+
+            return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value : parameter;
 
         }
 

@@ -9,7 +9,8 @@
         var isEditMode;
  
         var routeId;
-        var accountId;
+        var carrierAccountId ;
+
         var routeEntity;
 
         var selectorCodecProfileAPI;
@@ -32,8 +33,9 @@
             var parameters = VRNavigationService.getParameters($scope);
  
             if (parameters != undefined && parameters != null) {
-                routeId = parameters.RouteId;
-                accountId = parameters.AccountId;
+                 routeId = parameters.RouteId;
+                 carrierAccountId = parameters.CarrierAccountId;
+
                }
 
             isEditMode = (routeId != undefined);
@@ -44,6 +46,7 @@
             $scope.scopeModel.port = "5060";
             $scope.scopeModel.connectiontimeout = "60";
             $scope.scopeModel.transportmodeid = { value: 1, description: "UDP" };
+            $scope.scopeModel.wakeuptime = Date.now();
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -250,7 +253,7 @@
         function update() {
             $scope.scopeModel.isLoading = true;
         
-            return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope()).then(function (response) {
+            return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope().Entity).then(function (response) {
 
 
                 if (VRNotificationService.notifyOnItemUpdated('Route', response, 'Name')) {
@@ -269,21 +272,24 @@
 
         function buildRouteObjFromScope() {
               return {
-                RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
-                AccountId: accountId ,
-                Description :$scope.scopeModel.description,
-                ChannelsLimit: $scope.scopeModel.channelslimit,
-                LogAlias : $scope.scopeModel.logalias,
-                Host : $scope.scopeModel.host,
-                Port: $scope.scopeModel.port,
-                ConnectionTimeOut :$scope.scopeModel.connectiontimeout,
-                CurrentState: $scope.scopeModel.currentstate.value,
-                CodecProfileId: $scope.scopeModel.codecprofileid,
-                TransRuleId: $scope.scopeModel.translationruleid,
-                TariffId: $scope.scopeModel.tariffid,
-                WakeUpTime: $scope.scopeModel.wakeuptime,
-                TransportModeId : $scope.scopeModel.transportmodeid.value,
+                  Entity : { RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
+                 //     AccountId: accountId ,
+                      Description :$scope.scopeModel.description,
+                      ChannelsLimit: $scope.scopeModel.channelslimit,
+                      LogAlias : $scope.scopeModel.logalias,
+                      Host : $scope.scopeModel.host,
+                      Port: $scope.scopeModel.port,
+                      ConnectionTimeOut :$scope.scopeModel.connectiontimeout,
+                      CurrentState: $scope.scopeModel.currentstate.value,
+                      CodecProfileId: $scope.scopeModel.codecprofileid,
+                      TransRuleId: $scope.scopeModel.translationruleid,
+                      TariffId: $scope.scopeModel.tariffid,
+                      WakeUpTime: $scope.scopeModel.wakeuptime,
+                      TransportModeId: $scope.scopeModel.transportmodeid.value,
+                  },
 
+                  CarrierAccountId:   carrierAccountId,
+               
             };
         }
     }

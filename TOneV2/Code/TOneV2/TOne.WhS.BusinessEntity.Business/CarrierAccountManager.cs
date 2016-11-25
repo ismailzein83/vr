@@ -121,18 +121,44 @@ namespace TOne.WhS.BusinessEntity.Business
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
 
-         public void UpdateCarrierAccountExtendedSetting(int carrierAccountId, string extendedSettingName, Object extendedSetting)
+         public void UpdateCarrierAccountExtendedSetting(int carrierAccountId, string extendedSettingName, Object extendedSettings)
          {             
              CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
 
-             Dictionary<string, object> extendedSettings = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CarrierAccountExtendedSettings",
-                 () => new Dictionary<string, object>());
-             
-             extendedSettings.GetOrCreateItem(extendedSettingName, () => extendedSetting);
+             Dictionary<string, object> extendedSettingsDic = carrierAccount.ExtendedSettings;
+             if (extendedSettingsDic == null)
+                 extendedSettingsDic = new Dictionary<string, object>();
 
-             carrierAccount.ExtendedSettings = extendedSettings;
+             Object exitingExtendedSettings = null;
+             if (extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings))
+             {
+                 extendedSettingsDic[extendedSettingName] = extendedSettings;
+             }else
+             {
+                 extendedSettingsDic.Add(extendedSettingName, extendedSettings);
+             }
+             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+             dataManager.UpdateExtendedSettings(carrierAccountId, extendedSettingsDic);
          }
- 
+
+         public Object GetExtendedSettingsObject(int carrierAccountId, string extendedSettingName)
+         {
+             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+
+             Dictionary<string, object> extendedSettingsDic = carrierAccount.ExtendedSettings;
+
+             Object exitingExtendedSettings;
+             if (extendedSettingsDic != null)
+             {
+                 extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings);
+                 if (exitingExtendedSettings != null)
+                     return exitingExtendedSettings;
+                 else return null;
+             }
+             else
+                 return null;
+         }
+
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             if (carrierAccountsIds.Count() > 0)

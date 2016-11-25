@@ -9,7 +9,7 @@
         var isEditMode;
 
         var endPointId;
-        var accountId;
+        var carrierAccountId;
         var endPointEntity;
 
  
@@ -44,7 +44,7 @@
 
             if (parameters != undefined && parameters != null) {
                 endPointId = parameters.EndPointId;
-                accountId = parameters.AccountId;
+                carrierAccountId = parameters.CarrierAccountId;
             }
 
             isEditMode = (endPointId != undefined);
@@ -384,9 +384,11 @@
         }
 
         function buildEndPointObjFromScope() {
-             return {
+            return {
+                Entity:
+             {
                 EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
-                AccountId: accountId,
+           //     AccountId: accountId,
                 Description: $scope.scopeModel.description,
                 TariffId: $scope.scopeModel.tariffid,
                 LogAlias: $scope.scopeModel.logalias,
@@ -403,7 +405,10 @@
                 SipLogin: $scope.scopeModel.siplogin,
                 SipPassword: $scope.scopeModel.sippassword,
                 EndPointType: $scope.scopeModel.endpointtype,
+             },
 
+                 CarrierAccountId:   carrierAccountId,
+               
             };
         }
     }

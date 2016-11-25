@@ -38,6 +38,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
             return (recordsEffected > 0);
         }
+
+        public bool UpdateExtendedSettings(int carrierProfileId, Dictionary<string,object> extendedSettings)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_UpdateExtendedSettings", carrierProfileId, Vanrise.Common.Serializer.Serialize(extendedSettings));
+            return (recordsEffected > 0);
+        }
         public bool AreCarrierProfilesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.CarrierProfile", ref updateHandle);
@@ -55,14 +61,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #region  Mappers
         private CarrierProfile CarrierProfileMapper(IDataReader reader)
         {
-            CarrierProfile carrierProfile = new CarrierProfile
-            {
-                CarrierProfileId = (int)reader["ID"],
-                Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string),
-                SourceId = reader["SourceId"] as string,
-                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted")
-            };
+            CarrierProfile carrierProfile = new CarrierProfile();
+             
+                carrierProfile.CarrierProfileId = (int)reader["ID"];
+                carrierProfile.Name = reader["Name"] as string;
+                carrierProfile.Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string);
+                carrierProfile.SourceId = reader["SourceId"] as string;
+                carrierProfile.ExtendedSettings = Vanrise.Common.Serializer.Deserialize<Dictionary<string,object>>(reader["ExtendedSettings"] as string);
+                carrierProfile.IsDeleted = GetReaderValue<bool>(reader, "IsDeleted");
+            
             return carrierProfile;
         }
 

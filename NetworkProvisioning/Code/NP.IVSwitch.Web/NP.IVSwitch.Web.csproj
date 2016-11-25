@@ -152,6 +152,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="NP_IVSwitch\Constant\AccountTypeEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EndPointEnum.js" />
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
     <Content Include="NP_IVSwitch\Constant\RtpModeEnum.js" />

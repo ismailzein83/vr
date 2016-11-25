@@ -12,19 +12,20 @@ using Vanrise.Data.Postgres;
 namespace NP.IVSwitch.Data.Postgres
 {
     public class EndPointDataManager : BasePostgresDataManager, IEndPointDataManager
-    {public EndPointDataManager()
+    {
+        public EndPointDataManager()
             : base(GetConnectionStringName("NetworkProvisioningDBConnStringKey", "NetworkProvisioningDBConnString"))
         {
 
         }
 
-        private EndPoint  EndPointMapper(IDataReader reader)
+        private EndPoint EndPointMapper(IDataReader reader)
         {
-            
+
 
             EndPoint endPoint = new EndPoint();
 
-            endPoint.EndPointId= (int)reader["user_id"];
+            endPoint.EndPointId = (int)reader["user_id"];
             endPoint.AccountId = (int)reader["account_id"];
             endPoint.Description = reader["description"] as string;
             endPoint.GroupId = (int)reader["group_id"];
@@ -33,19 +34,25 @@ namespace NP.IVSwitch.Data.Postgres
             endPoint.LogAlias = reader["log_alias"] as string;
             endPoint.CodecProfileId = (int)reader["codec_profile_id"];
             endPoint.TransRuleId = (int)reader["trans_rule_id"];
-            endPoint.CurrentState =  (State) GetReaderValue<Int16>(reader,"state_id");
-            endPoint.ChannelsLimit = GetReaderValue<int>(reader,"channels_limit");
-            endPoint.RouteTableId =  GetReaderValue<int>(reader,"route_table_id");
-            endPoint.MaxCallDuration =  (int)reader["max_call_dura"];
+            endPoint.CurrentState = (State)GetReaderValue<Int16>(reader, "state_id");
+            endPoint.ChannelsLimit = GetReaderValue<int>(reader, "channels_limit");
+            endPoint.RouteTableId = GetReaderValue<int>(reader, "route_table_id");
+            endPoint.MaxCallDuration = (int)reader["max_call_dura"];
             endPoint.RtpMode = (RtpMode)(int)reader["rtp_mode"];
-            endPoint.DomainId =  (Int16)reader["domain_id"];
+            endPoint.DomainId = (Int16)reader["domain_id"];
             endPoint.SipLogin = reader["sip_login"] as string;
             endPoint.SipPassword = reader["sip_password"] as string;
             endPoint.TechPrefix = reader["tech_prefix"] as string;
 
-            System.Net.IPAddress Host = GetReaderValue<System.Net.IPAddress>(reader,"host");
+            try
+            {
+                System.Net.IPAddress Host = GetReaderValue<System.Net.IPAddress>(reader, "host");
+                endPoint.Host = (Host == null) ? null : Host.ToString();
+            }
+            catch (Exception ec)
+            {
 
-            endPoint.Host = (Host == null) ? null : Host.ToString();
+            }
 
             if (endPoint.Host == null)
                 endPoint.EndPointType = 0;
@@ -55,7 +62,7 @@ namespace NP.IVSwitch.Data.Postgres
             return endPoint;
         }
 
-        
+
 
         public List<EndPoint> GetEndPoints()
         {
@@ -75,17 +82,17 @@ namespace NP.IVSwitch.Data.Postgres
             {
             });
 
-   
+
         }
 
         public bool SipUpdate(EndPoint endPoint)
         {
 
-            int currentState, rtpMode ;
- 
+            int currentState, rtpMode;
+
 
             MapEnum(endPoint, out currentState, out rtpMode);
- 
+
             String cmdText = @"UPDATE users
 	                             SET  description=@description,group_id=@group_id,tariff_id=@tariff_id,
                                    log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
@@ -93,32 +100,32 @@ namespace NP.IVSwitch.Data.Postgres
                                    sip_login=@sip_login,sip_password=@sip_password ,  tech_prefix= @tech_prefix
                                    WHERE  user_id = @user_id AND NOT EXISTS(SELECT 1 FROM  users WHERE (user_id != @user_id and
                                                                             domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix))";
-             int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) =>
-            {
-                cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);                 
-                cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
-                cmd.Parameters.AddWithValue("@tariff_id", endPoint.TariffId);
-                cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
-                cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
-                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", currentState);
-                cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-                cmd.Parameters.AddWithValue("@route_table_id", endPoint.RouteTableId);
-                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
-                cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
-                prmSipLogin.Value = CheckIfNull(endPoint.SipLogin);
-                cmd.Parameters.Add(prmSipLogin);
-                var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String);
-                prmPassword.Value = CheckIfNull(endPoint.SipPassword);
-                cmd.Parameters.Add(prmPassword);
-                cmd.Parameters.AddWithValue("@tech_prefix", ".");
-              
+            int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) =>
+           {
+               cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
+               cmd.Parameters.AddWithValue("@description", endPoint.Description);
+               cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
+               cmd.Parameters.AddWithValue("@tariff_id", endPoint.TariffId);
+               cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
+               cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
+               cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
+               cmd.Parameters.AddWithValue("@state_id", currentState);
+               cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
+               cmd.Parameters.AddWithValue("@route_table_id", endPoint.RouteTableId);
+               cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
+               cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
+               cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
+               var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
+               prmSipLogin.Value = CheckIfNull(endPoint.SipLogin);
+               cmd.Parameters.Add(prmSipLogin);
+               var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String);
+               prmPassword.Value = CheckIfNull(endPoint.SipPassword);
+               cmd.Parameters.Add(prmPassword);
+               cmd.Parameters.AddWithValue("@tech_prefix", ".");
 
-            }
-           );
+
+           }
+          );
             return (recordsEffected > 0);
         }
 
@@ -198,10 +205,10 @@ namespace NP.IVSwitch.Data.Postgres
         {
             object endPointId;
             int currentState, rtpMode;
- 
+
             MapEnum(endPoint, out currentState, out rtpMode);
 
-  
+
             String cmdText = @"INSERT INTO users(account_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, route_table_id,max_call_dura,rtp_mode,domain_id,
                                     sip_login,sip_password, tech_prefix,type_id)
@@ -226,16 +233,16 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                 var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
-                prmSipLogin.Value = CheckIfNull(endPoint.SipLogin) ;
+                prmSipLogin.Value = CheckIfNull(endPoint.SipLogin);
                 cmd.Parameters.Add(prmSipLogin);
                 var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String);
                 prmPassword.Value = CheckIfNull(endPoint.SipPassword);
                 cmd.Parameters.Add(prmPassword);
                 cmd.Parameters.AddWithValue("@tech_prefix", ".");
-                cmd.Parameters.AddWithValue("@type_id",2);
+                cmd.Parameters.AddWithValue("@type_id", 2);
 
 
- 
+
             }
             );
 
@@ -255,7 +262,7 @@ namespace NP.IVSwitch.Data.Postgres
             object endPointId;
             int currentState, rtpMode;
 
-            MapEnum(endPoint, out currentState, out rtpMode); 
+            MapEnum(endPoint, out currentState, out rtpMode);
 
             // insert into users and get user id
             String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
@@ -329,9 +336,9 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(EndPoint endPoint, out int insertedId)
         {
             if (endPoint.EndPointType == 1)
-               return AclInsert(endPoint, out insertedId);
+                return AclInsert(endPoint, out insertedId);
             else
-              return SipInsert(endPoint, out insertedId);
+                return SipInsert(endPoint, out insertedId);
 
         }
 
@@ -350,18 +357,18 @@ namespace NP.IVSwitch.Data.Postgres
             currentState = (int)currentStateValue;
             var rtpModeValue = Enum.Parse(typeof(RtpMode), endPoint.RtpMode.ToString());
             rtpMode = (int)rtpModeValue;
- 
+
 
         }
 
         private Object CheckIfNull(String parameter)
         {
 
-            return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value  : parameter;            
+            return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value : parameter;
 
         }
 
-        
+
 
     }
 }

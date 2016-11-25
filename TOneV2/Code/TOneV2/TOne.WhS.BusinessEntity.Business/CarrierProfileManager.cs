@@ -106,20 +106,46 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public void UpdateCarrierProfileExtendedSetting(int carrierProfileId, string extendedSettingName, Object extendedSetting)
+        public void UpdateCarrierProfileExtendedSetting(int carrierProfileId, string extendedSettingName, Object extendedSettings)
         {
-            //throw new NotImplementedException();
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
 
-            Dictionary<string, object> extendedSettings = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CarrierProfileExtendedSettings",
-               () => new Dictionary<string, object>());
-            
-            extendedSettings.GetOrCreateItem(extendedSettingName, () => extendedSetting);
+            Dictionary<string, object> extendedSettingsDic = carrierProfile.ExtendedSettings;
+            if (extendedSettingsDic == null)
+                extendedSettingsDic = new Dictionary<string, object>();
 
-            carrierProfile.ExtendedSettings = extendedSettings;
-
+            Object exitingExtendedSettings = null;
+            if (extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings))
+            {
+                extendedSettingsDic[extendedSettingName] = extendedSettings;
+            }
+            else
+            {
+                extendedSettingsDic.Add(extendedSettingName, extendedSettings);
+            }
+            ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic);
+ 
         }
 
+        public Object GetExtendedSettingsObject(int carrierProfileId, string extendedSettingName)
+        {
+            CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+
+            Dictionary<string, object> extendedSettingsDic = carrierProfile.ExtendedSettings;
+
+            Object exitingExtendedSettings;
+            if (extendedSettingsDic != null)
+            {
+                extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings);
+                if (exitingExtendedSettings != null)
+                    return exitingExtendedSettings;
+                else 
+                    return null;
+            }
+            else
+                return null;
+        }
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCarrierProfileName(Convert.ToInt32(context.EntityId));

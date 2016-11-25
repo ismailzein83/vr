@@ -168,8 +168,7 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
 
-            console.log(buildAccountObjFromScope())
-            return NP_IVSwitch_AccountAPIService.AddAccount(buildAccountObjFromScope()).then(function (response) {
+             return NP_IVSwitch_AccountAPIService.AddAccount(buildAccountObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Account', response, 'Name')) {
 
                     if ($scope.onAccountAdded != undefined)
@@ -203,8 +202,7 @@
         }
 
         function buildAccountObjFromScope() {
-            console.log(carrierId)
-            return {
+             return {
                 AccountId: accountEntity != undefined ? accountEntity.AccountId : undefined,
                 CarrierId: carrierId,
                 TypeId: $scope.scopeModel.TypeId,

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities 
 {
-    public class RouteQuery
+    public class RouteToAdd
     {
-         public int? CarrierAccountId { get; set; }
-
+        public Route Entity { get; set; }
+        public int CarrierAccountId { get; set; }
     }
 }

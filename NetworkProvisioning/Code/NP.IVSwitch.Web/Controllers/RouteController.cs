@@ -32,7 +32,7 @@ namespace NP.IVSwitch.Web.Controllers
 
         [HttpPost]
         [Route("AddRoute")]
-        public Vanrise.Entities.InsertOperationOutput<RouteDetail> AddRoute(Route routeItem)
+        public Vanrise.Entities.InsertOperationOutput<RouteDetail> AddRoute(RouteToAdd routeItem)
         {
             return _manager.AddRoute(routeItem);
         }

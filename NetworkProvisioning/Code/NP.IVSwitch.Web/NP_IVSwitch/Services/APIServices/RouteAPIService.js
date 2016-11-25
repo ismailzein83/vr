@@ -24,7 +24,7 @@
         }
 
         function UpdateRoute(RouteItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateRoute'), RouteItem);
+             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateRoute'), RouteItem);
         }
  
 

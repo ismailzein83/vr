@@ -8,6 +8,9 @@ namespace NP.IVSwitch.Entities
 {
     public class AccountExtended
     {      
-        public List<int> AccountId { get; set; }
+        public int? CustomerAccountId { get; set; }
+
+        public int? VendorAccountId { get; set; }
+
     }
 }

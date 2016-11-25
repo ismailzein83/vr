@@ -8,9 +8,8 @@ namespace NP.IVSwitch.Entities
 {
     public class EndPointQuery
     {
-        public String EndPointName { get; set; }
-
-        public int AccountId { get; set; }
+  
+        public int? CarrierAccountId { get; set; }
 
     }
 }

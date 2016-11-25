@@ -3,15 +3,15 @@
 
     "use strict";
 
-    EndPointService.$inject = ['VRModalService'];
+    EndPointService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum','UtilsService'];
 
-    function EndPointService(NPModalService) {
+    function EndPointService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService) {
 
-        function addEndPoint(AccountId, onEndPointAdded) {
+        function addEndPoint(CarrierAccountId, onEndPointAdded) {
             var settings = {};
 
             var parameters = {
-                AccountId: AccountId,
+                CarrierAccountId: CarrierAccountId,
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -32,44 +32,48 @@
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
         }
 
-        //function registerDrillDownToCarrierAccount() {
-        //    var drillDownDefinition = {};
+        function registerDrillDownToCarrierAccount() {
+            var drillDownDefinition = {};
+
+            var CarrierAccountTypeArray = UtilsService.getArrayEnum(NP_IVSwitch_CarrierAccountTypeEnum);
+
  
-        //    drillDownDefinition.title = "EndPoints";
-        //    drillDownDefinition.directive = "np-ivswitch-endpoint-grid";
-        //    drillDownDefinition.hideDrillDownFunction = function (dataItem) {
-        //         return false;
-        //    };
-        //    drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
-        //        carrierAccountItem.ivSwitchEndPointGridAPI = directiveAPI;
+            drillDownDefinition.title = "EndPoints";
+            drillDownDefinition.directive = "np-ivswitch-endpoint-grid";
+            drillDownDefinition.hideDrillDownFunction = function (carrierAccountItem) {
+                 return (carrierAccountItem.Entity.AccountType == NP_IVSwitch_CarrierAccountTypeEnum.Supplier.value);
 
-        //        var payload = {
-        //            CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
-        //        };
-        //        //     hideCustomerColumn: true
-        //        //  };
-        //        return carrierAccountItem.ivSwitchEndPointGridAPI.load(payload);
-        //    };
-        //    drillDownDefinition.parentMenuActions = [{
-        //        name: 'Add  EndPoint',
-        //        clicked: function (carrierAccountItem) {
-        //            //if (EndPointTab.setTabSelected != undefined)
-        //            //    EndPointTab.setTabSelected(parentAccount);
-        //            var onEndPointAdded = function (addedEndPoint) {
-        //                if (carrierAccountItem.ivSwitchEndPointGridAPI != undefined)
-        //                    carrierAccountItem.ivSwitchEndPointGridAPI.onEndPointAdded(addedEndPoint);
-        //            };
-        //            addAccount(carrierAccountItem.Entity.CarrierAccountId, onEndPointAdded);
-        //        },
-        //    }];
+             };
+            drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
+                carrierAccountItem.ivSwitchEndPointGridAPI = directiveAPI;
 
-        //    WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
+                var payload = {
+                    CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
+                };
+                //     hideCustomerColumn: true
+                //  };
+                return carrierAccountItem.ivSwitchEndPointGridAPI.load(payload);
+            };
+            drillDownDefinition.parentMenuActions = [{
+                name: 'Add  EndPoint',
+                clicked: function (carrierAccountItem) {
+                    //if (EndPointTab.setTabSelected != undefined)
+                    //    EndPointTab.setTabSelected(parentAccount);
+                    var onEndPointAdded = function (addedEndPoint) {
+                        if (carrierAccountItem.ivSwitchEndPointGridAPI != undefined)
+                            carrierAccountItem.ivSwitchEndPointGridAPI.onEndPointAdded(addedEndPoint);
+                    };
+                    addEndPoint(carrierAccountItem.Entity.CarrierAccountId, onEndPointAdded);
+                },
+            }];
 
-        //}
+            WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
+
+        }
         return {
             addEndPoint: addEndPoint,
             editEndPoint: editEndPoint,
-         //   registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount
+           registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount
         };
     }
 

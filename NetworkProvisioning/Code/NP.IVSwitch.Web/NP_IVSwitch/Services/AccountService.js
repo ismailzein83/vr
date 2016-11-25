@@ -3,9 +3,9 @@
 
     "use strict";
 
-    AccountService.$inject = ['VRModalService','WhS_BE_CarrierAccountService'];
+    AccountService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'UtilsService'];
 
-    function AccountService(NPModalService, WhS_BE_CarrierAccountService) {
+    function AccountService(NPModalService, WhS_BE_CarrierAccountService, UtilsService) {
 
         function addAccount(CarrierId, onAccountAdded) {
             var settings = {};

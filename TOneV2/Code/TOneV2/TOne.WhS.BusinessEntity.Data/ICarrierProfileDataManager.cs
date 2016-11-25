@@ -13,5 +13,6 @@ namespace TOne.WhS.BusinessEntity.Data
         bool Insert(CarrierProfile carrierProfile, out int carrierProfileId);
         bool Update(CarrierProfileToEdit carrierProfile);
         bool AreCarrierProfilesUpdated(ref object updateHandle);
+        bool UpdateExtendedSettings(int carrierProfileId, Dictionary<string, object> extendedSettings);
     }
 }

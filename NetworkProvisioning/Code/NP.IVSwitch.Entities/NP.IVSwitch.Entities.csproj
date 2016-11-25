@@ -61,11 +61,15 @@
     <Compile Include="Domain\DomainInfo.cs" />
     <Compile Include="EndPoint\EndPoint.cs" />
     <Compile Include="EndPoint\EndPointDetail.cs" />
+    <Compile Include="EndPoint\EndPointExtended.cs" />
     <Compile Include="EndPoint\EndPointQuery.cs" />
+    <Compile Include="EndPoint\EndPointToAdd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteTable\RouteTable.cs" />
     <Compile Include="RouteTable\RouteTableFilter.cs" />
     <Compile Include="RouteTable\RouteTableInfo.cs" />
+    <Compile Include="Route\RouteExtended.cs" />
+    <Compile Include="Route\RouteToAdd.cs" />
     <Compile Include="Route\Route.cs" />
     <Compile Include="Route\RouteDetail.cs" />
     <Compile Include="Route\RouteQuery.cs" />
