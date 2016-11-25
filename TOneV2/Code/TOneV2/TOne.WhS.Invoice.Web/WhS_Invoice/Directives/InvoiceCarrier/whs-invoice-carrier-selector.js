@@ -70,6 +70,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
 
             var selectorApi;
             var context;
+            var carrierTypeSelectedDeffered;
             function initializeController() {
 
                 ctrl.selectedvalues = [];
@@ -87,13 +88,18 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     if (selectorApi != undefined) {
                         selectorApi.clearDataSource();
                         ctrl.datasource.length = 0;
-
                     }
                     if (context != undefined)
                     {
                         context.reloadPregeneratorActions();
                     }
-                    loadCarrierAccounts(attrs);
+                    var setLoader = function (value) {
+                        ctrl.isloadingCarriers = value;
+                    };
+                    if (carrierTypeSelectedDeffered != undefined)
+                        carrierTypeSelectedDeffered.resolve();
+                    else
+                        loadCarrierAccounts(attrs, setLoader);
                 };
 
                 ctrl.onSelectorReady = function (api) {
@@ -110,7 +116,21 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     if(payload != undefined)
                     {
                         context = payload.context;
+
+                        var selectedIds = payload.selectedIds;
+                        if(selectedIds!=undefined)
+                        {
+                            carrierTypeSelectedDeffered = UtilsService.createPromiseDeferred();
+                            var partnerPrefix = selectedIds.split('_')[0];
+                            if (partnerPrefix != undefined) {
+                                ctrl.selectedCarrierTypes = UtilsService.getItemByVal(ctrl.carrierTypes, partnerPrefix, 'description');
+                            }
+                            return loadCarrierAccounts(attrs, undefined, selectedIds).then(function () {
+                                carrierTypeSelectedDeffered = undefined;
+                            })
+                        }
                     }
+
                 };
                 api.getData = function () {
                     var partnerPrefix;
@@ -130,8 +150,11 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     ctrl.onReady(api);
             }
 
-            function loadCarrierAccounts(attrs) {
-                ctrl.isloadingCarriers = true;
+            function loadCarrierAccounts(attrs, loaderFunc, selectedIds) {
+                if (loaderFunc != undefined)
+                {
+                    loaderFunc(true);
+                }
                 var filter = {};
                 if (ctrl.selectedCarrierTypes != undefined) {
                     filter.CarrierTypes = [];
@@ -154,10 +177,15 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                 return WhS_Invoice_InvoiceAPIService.GetInvoiceCarriers(serializedFilter).then(function (response) {
                     var data = $filter('orderBy')(response, 'Name');
                     angular.forEach(data, function (itm) {
-
                         ctrl.datasource.push(itm);
                     });
-                    ctrl.isloadingCarriers = false;
+                    if (selectedIds != undefined)
+                    {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'InvoiceCarrierId', attrs, ctrl);
+                    }
+                    if (loaderFunc != undefined) {
+                        loaderFunc(false);
+                    }
                 });
             };
             this.initializeController = initializeController;

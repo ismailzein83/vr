@@ -51,6 +51,7 @@ app.directive('whsInvoiceCarrierCustomerFilterSelector', ['UtilsService', 'VRUIU
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
 
                     var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
