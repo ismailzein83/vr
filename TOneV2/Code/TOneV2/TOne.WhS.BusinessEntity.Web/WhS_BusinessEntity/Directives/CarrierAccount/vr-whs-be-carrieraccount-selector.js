@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
-    function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
+app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile', 'WhS_BE_CarrierAccountService',
+    function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile, WhS_BE_CarrierAccountService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -73,6 +73,9 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         var hideremoveicon = "";
         if (attrs.hideremoveicon != undefined)
             hideremoveicon = "hideremoveicon";
+        var viewCliked = "";
+        if (attrs.showviewbutton != undefined)
+            viewCliked = 'onviewclicked="ctrl.ViewCarrierAccount"';
 
         //To be added on multiple selection to add grouping functionality, the style section is to be added to the outer div
         //var groupStyle = 'style="display:inline-block;width: calc(100% - 18px);"';
@@ -82,8 +85,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
-            + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+            + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' ></vr-select></vr-columns>';
     }
 
     function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
@@ -91,7 +94,9 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         var selectorApi;
 
         function initializeController() {
-
+            ctrl.ViewCarrierAccount = function (obj) {               
+                WhS_BE_CarrierAccountService.viewCarrierAccount(obj.CarrierAccountId);
+            };
             ctrl.onSelectorReady = function (api) {
                 selectorApi = api;
                 defineAPI();
