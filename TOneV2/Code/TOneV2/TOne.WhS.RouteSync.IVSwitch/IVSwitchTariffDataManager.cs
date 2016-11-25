@@ -1,10 +1,6 @@
 ﻿using Npgsql;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -23,22 +19,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
         {
             return _connectionString;
         }
-        private void ExecuteNonQuery(string[] sqlStrings)
-        {
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
-            {
-                if (connection.State == ConnectionState.Closed) connection.Open();
-                using (NpgsqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
-                    foreach (string sql in sqlStrings)
-                    {
-                        command.CommandText = sql;
-                        command.ExecuteNonQuery();
-                    }
-                }
-            }
-        }
         public void Swap(string tableName)
         {
             string[] swapQuery =
@@ -47,23 +27,35 @@ namespace TOne.WhS.RouteSync.IVSwitch
             };
             ExecuteNonQuery(swapQuery);
         }
+        public void Bulk(List<IVSwitchTariff> tariffs, string tableName)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                using (var inStream = conn.BeginTextImport(string.Format("COPY {0} FROM STDIN", tableName)))
+                {
+                    tariffs.ForEach(tariff => inStream.WriteLine(tariff));
+                }
+            }
+        }
         public void BuildTariffTable(string tariffTableName)
         {
-            string[] tableSql = { 
-              @"DROP TABLE IF EXISTS " + tariffTableName+"_temp" + "; ",
-              @"DROP TABLE IF EXISTS " + tariffTableName+"_OLD" + "; ",               
-              @"CREATE TABLE " + tariffTableName+"_temp" + @" (
-              dest_code character varying(30) NOT NULL,
-              time_frame character varying(50) NOT NULL,
-              dest_name character varying(100) DEFAULT NULL::character varying,
-              init_period integer,
-              next_period integer,
-              init_charge numeric(18,9) DEFAULT NULL::numeric,
-              next_charge numeric(18,9) DEFAULT NULL::numeric
-            );",
-             " ALTER TABLE "+tariffTableName+"_temp OWNER TO "+_ownerName+";"  
-                , "ALTER TABLE " + tariffTableName + "_temp" + "  ADD PRIMARY KEY (dest_code,time_frame)"
-                };
+            string[] tableSql =
+            {
+                string.Format("DROP TABLE IF EXISTS {0}_temp; ", tariffTableName),
+                string.Format("DROP TABLE IF EXISTS {0}_OLD;", tariffTableName),
+                string.Format(@"CREATE TABLE {0}_temp (
+                              dest_code character varying(30) NOT NULL,
+                              time_frame character varying(50) NOT NULL,
+                              dest_name character varying(100) DEFAULT NULL::character varying,
+                              init_period integer,
+                              next_period integer,
+                              init_charge numeric(18,9) DEFAULT NULL::numeric,
+                              next_charge numeric(18,9) DEFAULT NULL::numeric
+                            );", tariffTableName),
+                string.Format(" ALTER TABLE {0}_temp OWNER TO {1};", tariffTableName, _ownerName),
+                string.Format("ALTER TABLE {0}_temp ADD PRIMARY KEY (dest_code,time_frame)", tariffTableName)
+            };
             ExecuteNonQuery(tableSql);
         }
     }

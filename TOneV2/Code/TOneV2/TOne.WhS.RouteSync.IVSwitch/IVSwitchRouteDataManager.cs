@@ -1,11 +1,6 @@
 ﻿using Npgsql;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Data;
 using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -27,19 +22,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return _connectionString;
         }
 
-        private void ExecuteNonQuery(string[] sqlStrings)
+        public void Bulk(List<IVSwitchRoute> routeLst, string tableName)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
             {
-                if (connection.State == ConnectionState.Closed) connection.Open();
-                using (NpgsqlCommand command = connection.CreateCommand())
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                using (var inStream = conn.BeginTextImport(string.Format("COPY {0} FROM STDIN", tableName)))
                 {
-                    command.CommandType = CommandType.Text;
-                    foreach (string sql in sqlStrings)
-                    {
-                        command.CommandText = sql;
-                        command.ExecuteNonQuery();
-                    }
+                    foreach (var route in routeLst)
+                        inStream.WriteLine(route);
                 }
             }
         }

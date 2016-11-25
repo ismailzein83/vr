@@ -26,7 +26,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            PreparedConfiguration.GetCachedPreparedConfiguration(this);
+            PreparedConfiguration preparedData = PreparedConfiguration.GetCachedPreparedConfiguration(this);
+            BuildTempTables(preparedData);
         }
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
         {
@@ -52,21 +53,13 @@ namespace TOne.WhS.RouteSync.IVSwitch
             Dictionary<int, PreparedRoute> customerRoutes = new Dictionary<int, PreparedRoute>();
             foreach (var convertedRoute in context.ConvertedRoutes)
             {
-                StringBuilder sbRoute = new StringBuilder(), sbTariff = new StringBuilder();
                 IVSwitchConvertedRoute ivSwitchConvertedRoute = (IVSwitchConvertedRoute)convertedRoute;
-                foreach (var item in ivSwitchConvertedRoute.Routes)
-                    sbRoute.AppendLine(PrepareRouteString(item));
-
-                foreach (var itemTrff in ivSwitchConvertedRoute.Tariffs)
-                    sbTariff.AppendLine(PrepareTariffString(itemTrff));
 
                 PreparedRoute tempRoute;
                 if (customerRoutes.TryGetValue(ivSwitchConvertedRoute.CustomerID, out tempRoute))
                 {
-                    tempRoute.RoutesCount += ivSwitchConvertedRoute.Routes.Count;
-                    tempRoute.TariffCount += ivSwitchConvertedRoute.Tariffs.Count;
-                    tempRoute.StrRoutes = tempRoute.StrRoutes.Append(sbRoute);
-                    tempRoute.StrTariff = tempRoute.StrTariff.Append(sbTariff);
+                    tempRoute.Routes.AddRange(ivSwitchConvertedRoute.Routes);
+                    tempRoute.Tariffs.AddRange(ivSwitchConvertedRoute.Tariffs);
                 }
                 else
                 {
@@ -74,19 +67,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     {
                         TariffTableName = ivSwitchConvertedRoute.TariffTableName,
                         RouteTableName = ivSwitchConvertedRoute.RouteTableName,
-                        RoutesCount = ivSwitchConvertedRoute.Routes.Count,
-                        TariffCount = ivSwitchConvertedRoute.Tariffs.Count,
-                        StrRoutes = sbRoute,
-                        StrTariff = sbTariff
+                        Routes = ivSwitchConvertedRoute.Routes,
+                        Tariffs = ivSwitchConvertedRoute.Tariffs
                     };
                     customerRoutes[ivSwitchConvertedRoute.CustomerID] = tempRoute;
                 }
-            }
-            foreach (var convertedRoute in customerRoutes)
-            {
-                PreparedRoute tempRoute = convertedRoute.Value;
-                tempRoute.Routes = GetBytes(tempRoute.StrRoutes.ToString());
-                tempRoute.Tariffs = GetBytes(tempRoute.StrTariff.ToString());
             }
             return customerRoutes;
         }
@@ -114,36 +99,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
             }
         }
         #region private functions
-        private byte[] Combine(byte[] array1, byte[] array2)
+        private void BuildTempTables(PreparedConfiguration preparedData)
         {
-            byte[] rv = new byte[array1.Length + array2.Length];
-            Buffer.BlockCopy(array1, 0, rv, 0, array1.Length);
-            Buffer.BlockCopy(array2, 0, rv, array1.Length, array2.Length);
-            return rv;
-        }
-        private byte[] GetBytes(string value)
-        {
-            Encoding encoding = new UTF8Encoding();
-            return encoding.GetBytes(value);
-        }
-        private string PrepareTariffString(IVSwitchTariff tariff)
-        {
-            return string.Format(@"{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}",
-                "\t", tariff.DestinationCode, tariff.TimeFrame, tariff.DestinationName,
-                tariff.InitPeiod, tariff.NextPeriod, tariff.InitCharge, tariff.NextCharge);
-        }
-        private string PrepareRouteString(IVSwitchRoute route)
-        {
-            return
-                string.Format(
-                    @"{1}{23}{2}{23}{3}{23}{4}{23}{5}{23}{6}{23}{7}{23}{8}{23}{9}{23}{10}{23}{11}{23}{12}{23}{13}{23}{14}{23}{15}{23}{16}{23}{17}{23}{18}{23}{19}{23}{20}{23}{21}{23}{22}",
-                    string.Empty, route.Destination, route.RoutingMode, route.TimeFrame,
-                    route.Preference, route.HuntStop, route.HuntStopRc, route.MinProfit,
-                    route.StateId, route.WakeUpTime, route.Description
-                    , route.RoutingMode, route.TotalBkts, route.BktSerial, route.BktCapacity,
-                    route.BktToken, route.PScore, route.Flag1, route.Flag2, route.Flag3,
-                    route.Flag4, route.Flag5, route.TechPrefix
-                    , "\t");
+            IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
+            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
+            foreach (var customerTable in preparedData.CustomerTables)
+            {
+                routeDataManager.BuildRouteTable(customerTable.RouteTableName);
+                tariffDataManager.BuildTariffTable(customerTable.TariffTableName);
+            }
         }
         private IVSwitchTariff BuildTariff(Route route)
         {

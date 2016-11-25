@@ -27,7 +27,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
             if (preparedConfiguration.SupplierDefinitions.TryGetValue(sync.BlockedAccountMapping, out blockDefinition) && blockDefinition.RouteTableId.HasValue)
                 preparedConfiguration.BlockRouteId = blockDefinition.RouteTableId.Value;
             preparedConfiguration.BuildIvSwitchMapping(sync);
-            preparedConfiguration.BuildTempTables(sync);
             return preparedConfiguration;
         }
         private struct GetCachedPreparedConfigurationCacheName
@@ -43,16 +42,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 () => GetConfiguration(sync));
         }
 
-        private void BuildTempTables(IVSwitchSWSync sync)
-        {
-            IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(sync.RouteConnectionString, sync.OwnerName);
-            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(sync.TariffConnectionString, sync.OwnerName);
-            foreach (var customerTable in CustomerTables)
-            {
-                routeDataManager.BuildRouteTable(customerTable.RouteTableName);
-                tariffDataManager.BuildTariffTable(customerTable.TariffTableName);
-            }
-        }
         private void BuildIvSwitchMapping(IVSwitchSWSync sync)
         {
             IvSwitchMappings = new Dictionary<string, IvSwitchMapping>();
@@ -99,12 +88,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
     {
         public string RouteTableName { get; set; }
         public string TariffTableName { get; set; }
-        public StringBuilder StrRoutes { get; set; }
-        public byte[] Routes { get; set; }
-        public int RoutesCount { get; set; }
-        public byte[] Tariffs { get; set; }
-        public StringBuilder StrTariff { get; set; }
-        public int TariffCount { get; set; }
+        public List<IVSwitchRoute> Routes { get; set; }
+        public List<IVSwitchTariff> Tariffs { get; set; }
     }
     public class CarrierDefinition
     {
