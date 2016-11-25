@@ -91,6 +91,9 @@
                     if (payload != undefined) {
                         ivSwSynSettings = payload.switchSynchronizerSettings;
                     }
+                    else {
+                        $scope.scopeModel.Uid = utilsService.guid();
+                    }
                     if (ivSwSynSettings) {
                         $scope.scopeModel.MasterConnectionString = ivSwSynSettings.MasterConnectionString;
                         $scope.scopeModel.RouteConnectionString = ivSwSynSettings.RouteConnectionString;
@@ -99,6 +102,7 @@
                         $scope.scopeModel.NumberOfOptions = ivSwSynSettings.NumberOfOptions;
                         $scope.scopeModel.Separator = ivSwSynSettings.Separator;
                         $scope.scopeModel.BlockedAccountMapping = ivSwSynSettings.BlockedAccountMapping;
+                        $scope.scopeModel.Uid = ivSwSynSettings.Uid;
                     }
                     var loadCarrierMappingPromise = loadCarrierMappings(payload);
                     promises.push(loadCarrierMappingPromise);
@@ -115,7 +119,8 @@
                         OwnerName: $scope.scopeModel.OwnerName,
                         NumberOfOptions: $scope.scopeModel.NumberOfOptions,
                         Separator: $scope.scopeModel.Separator,
-                        BlockedAccountMapping: $scope.scopeModel.BlockedAccountMapping
+                        BlockedAccountMapping: $scope.scopeModel.BlockedAccountMapping,
+                        Uid: $scope.scopeModel.Uid
                     };
                     return data;
                 }
