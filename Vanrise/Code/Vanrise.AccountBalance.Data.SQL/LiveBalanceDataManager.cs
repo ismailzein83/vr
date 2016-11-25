@@ -230,6 +230,52 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
 
         #endregion
+        
+        public void UpdateBalanceRuleInfos(List<LiveBalance> liveBalances)
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+            };
 
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                DataTable liveBalanceThresholdToUpdate = GetLiveBalanceThresholdUpdateTable();
+                foreach (var liveBalance in liveBalances)
+                {
+                    DataRow dr = liveBalanceThresholdToUpdate.NewRow();
+                    FillLiveBalanceThresholdUpdateRow(dr, liveBalance);
+                    liveBalanceThresholdToUpdate.Rows.Add(dr);
+                }
+                liveBalanceThresholdToUpdate.EndLoadData();
+                if (liveBalanceThresholdToUpdate.Rows.Count > 0)
+                    ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThresholdAndRule]",
+                           (cmd) =>
+                           {
+                               var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdUpdateTable", SqlDbType.Structured);
+                               dtPrm.Value = liveBalanceThresholdToUpdate;
+                               cmd.Parameters.Add(dtPrm);
+                           });
+                scope.Complete();
+            }
+        }
+
+        void FillLiveBalanceThresholdUpdateRow(DataRow dr, LiveBalance liveBalance)
+        {
+            dr["AccountTypeID"] = liveBalance.AccountTypeId;
+            dr["AccountID"] = liveBalance.AccountId;
+            dr["NextAlertThreshold"] = liveBalance.NextAlertThreshold;
+            dr["AlertRuleId"] = liveBalance.AlertRuleId;
+        }
+
+        DataTable GetLiveBalanceThresholdUpdateTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("AccountTypeID", typeof(Guid));
+            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("NextAlertThreshold", typeof(decimal));
+            dt.Columns.Add("AlertRuleId", typeof(int));
+            return dt;
+        }
     }
 }

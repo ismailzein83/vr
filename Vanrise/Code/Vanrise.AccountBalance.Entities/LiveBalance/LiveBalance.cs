@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class LiveBalance : Vanrise.Notification.Entities.IVREntityBalanceInfo
+    public class LiveBalance : IVREntityBalanceInfo
     {
         public long AccountId { get; set; }
         public Guid AccountTypeId { get; set; }

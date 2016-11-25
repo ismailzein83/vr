@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Data;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Entities;
 
@@ -12,13 +14,14 @@ namespace Vanrise.AccountBalance.Business.Extensions
     {
         public override void LoadBalanceInfos(IVRBalanceAlertRuleLoadBalanceInfosContext context)
         {
-            throw new NotImplementedException();
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            dataManager.GetLiveBalanceAccounts(context.OnBalanceInfoLoaded);
         }
 
         public override GenericData.Entities.GenericRuleTarget CreateRuleTarget(IVRBalanceAlertRuleCreateRuleTargetContext context)
         {
             var ruleTypeSettings = GetRuleTypeSettings(context);
-            long accountId = (context.EntityBalanceInfo as Vanrise.AccountBalance.Entities.LiveBalance).AccountId;
+            long accountId = (context.EntityBalanceInfo as LiveBalance).AccountId;
             var accountManager = new AccountManager();
             var account = accountManager.GetAccount(ruleTypeSettings.AccountTypeId, accountId);
             GenericRuleTarget ruleTarget = new GenericRuleTarget
@@ -31,7 +34,9 @@ namespace Vanrise.AccountBalance.Business.Extensions
 
         public override void UpdateBalanceRuleInfos(IVRBalanceAlertRuleUpdateBalanceRuleInfosContext context)
         {
-            throw new NotImplementedException();
+            List<LiveBalance> liveBalances = context.BalanceRuleInfosToUpdate.Select(s => s.EntityBalanceInfo).Cast<LiveBalance>().ToList();
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            dataManager.UpdateBalanceRuleInfos(liveBalances);
         }
 
         public override void UpdateBalanceLastAlertInfos(IVRBalanceAlertRuleUpdateBalanceLastAlertInfosContext context)

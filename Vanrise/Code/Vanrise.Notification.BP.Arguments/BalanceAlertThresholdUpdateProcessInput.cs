@@ -10,7 +10,7 @@ namespace Vanrise.Notification.BP.Arguments
     {
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return "Balance Alert Threshold Update Process";
         }
 
         public Guid AlertRuleTypeId { get; set; }

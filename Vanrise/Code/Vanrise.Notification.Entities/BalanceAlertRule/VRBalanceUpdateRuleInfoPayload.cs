@@ -17,6 +17,10 @@ namespace Vanrise.Notification.Entities
 
     public class VRBalanceUpdateRuleInfoPayloadBatch
     {
+        public VRBalanceUpdateRuleInfoPayloadBatch()
+        {
+            this.Items = new List<VRBalanceUpdateRuleInfoPayload>();
+        }
         public List<VRBalanceUpdateRuleInfoPayload> Items { get; set; }
     }
 }
