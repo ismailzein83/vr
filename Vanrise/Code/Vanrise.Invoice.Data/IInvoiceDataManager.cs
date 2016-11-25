@@ -12,9 +12,9 @@ namespace Vanrise.Invoice.Data
     {
         IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
-        bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, out long insertedInvoiceId);
+        bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, out long insertedInvoiceId);
         Entities.Invoice GetInvoice(long invoiceId);
-        bool CheckInvoiceOverlaping(Guid invoiceTypeId,string partnerId,DateTime fromDate, DateTime toDate);
+        bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId);
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
         bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate);
     }

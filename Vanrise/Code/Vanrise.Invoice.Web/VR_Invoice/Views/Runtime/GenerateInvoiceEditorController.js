@@ -7,12 +7,15 @@
     function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService) {
         var invoiceTypeId;
         $scope.scopeModel = {};
-
+        var invoiceId;
         $scope.scopeModel.invoiceTypeEntity;
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var invoiceGeneratorActions;
+        var invoiceEntity;
         var validateResult = false;
+        $scope.scopeModel.isEditMode;
+
         defineScope();
         loadParameters();
         load();
@@ -21,7 +24,9 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 invoiceTypeId = parameters.invoiceTypeId;
+                invoiceId = parameters.invoiceId;
             }
+            $scope.scopeModel.isEditMode = (invoiceId != undefined);
         }
         function defineScope() {
             $scope.scopeModel.actions = [];
@@ -42,7 +47,12 @@
                 return null;
             };
             $scope.scopeModel.generateInvoice = function () {
-                return generateInvoice();
+                if ($scope.scopeModel.isEditMode) {
+                    return regenerateInvoice();
+                }
+                else {
+                    return generateInvoice();
+                }
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -79,16 +89,51 @@
                    $scope.scopeModel.isLoading = false;
                });
             }
+
+            function regenerateInvoice() {
+                $scope.scopeModel.isLoading = true;
+
+                var incvoiceObject = buildInvoiceObjFromScope();
+                return VR_Invoice_InvoiceAPIService.ReGenerateInvoice(incvoiceObject)
+               .then(function (response) {
+                   if (VRNotificationService.notifyOnItemAdded("Invoice", response)) {
+                       if ($scope.onGenerateInvoice != undefined)
+                           $scope.onGenerateInvoice(response.UpdatedObject);
+                       $scope.modalContext.closeModal();
+                   }
+               })
+               .catch(function (error) {
+                   VRNotificationService.notifyException(error, $scope);
+               }).finally(function () {
+                   $scope.scopeModel.isLoading = false;
+               });
+            }
+
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            getInvoiceType().then(function () {
-                loadAllControls();
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModel.isLoading = false;
-            });
-
+            if ($scope.scopeModel.isEditMode) {
+                UtilsService.waitMultipleAsyncOperations([getInvoiceType, getInvoice]).then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                  VRNotificationService.notifyExceptionWithClose(error, $scope);
+                  $scope.scopeModel.isLoading = false;
+              });
+            }
+            else {
+                getInvoiceType().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+            function getInvoice()
+            {
+              return  VR_Invoice_InvoiceAPIService.GetInvoice(invoiceId).then(function (response) {
+                  invoiceEntity = response;
+                });
+            }
             function getInvoiceType() {
                 return VR_Invoice_InvoiceTypeAPIService.GetGeneratorInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                     $scope.scopeModel.invoiceTypeEntity = response;
@@ -105,11 +150,20 @@
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
                     var partnerSelectorPayload = { context: getContext() };
+                    if (invoiceEntity != undefined) {
+                        partnerSelectorPayload.selectedIds = invoiceEntity.PartnerId;
+                    }
                     VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
                 });
                 return partnerSelectorPayloadLoadDeferred.promise;
             }
             function loadStaticData() {
+                if(invoiceEntity != undefined)
+                {
+                    $scope.scopeModel.fromDate = invoiceEntity.FromDate;
+                    $scope.scopeModel.toDate = invoiceEntity.ToDate;
+                    $scope.scopeModel.issueDate = invoiceEntity.IssueDate;
+                }
             }
            
             
@@ -126,6 +180,7 @@
             var partnerObject = partnerSelectorAPI.getData();
 
             var obj = {
+                InvoiceId:invoiceId,
                 InvoiceTypeId: invoiceTypeId,
                 PartnerId: partnerObject != undefined ? partnerObject.selectedIds:undefined,
                 FromDate: $scope.scopeModel.fromDate,

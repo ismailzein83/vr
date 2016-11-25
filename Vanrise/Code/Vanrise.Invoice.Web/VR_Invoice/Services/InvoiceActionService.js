@@ -91,6 +91,21 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             return context;
         }
 
+        function registerRecreateAction() {
+            var actionType = {
+                ActionTypeName: "RecreateInvoiceAction",
+                actionMethod: function (payload) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                    var onGenerateInvoice = function(invoiceGenerated)
+                    {
+                        promiseDeffered.resolve(invoiceGenerated);
+                    }
+                    reGenerateInvoice(onGenerateInvoice, payload.invoice.Entity.InvoiceTypeId, payload.invoice.Entity.InvoiceId);
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(actionType);
+        }
 
         function addInvoiceAction(onInvoiceActionAdded, context) {
             var settings = {
@@ -119,14 +134,45 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceActions/InvoiceActionEditor.html', parameters, settings);
         }
 
+        function reGenerateInvoice(onGenerateInvoice, invoiceTypeId, invoiceId) {
+            var settings = {
 
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenerateInvoice = onGenerateInvoice;
+            };
+            var parameters = {
+                invoiceTypeId: invoiceTypeId,
+                invoiceId: invoiceId
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/GenerateInvoiceEditor.html', parameters, settings);
+        }
+        function generateInvoice(onGenerateInvoice, invoiceTypeId) {
+            var settings = {
+
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenerateInvoice = onGenerateInvoice;
+            };
+            var parameters = {
+                invoiceTypeId: invoiceTypeId,
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/GenerateInvoiceEditor.html', parameters, settings);
+        }
         return ({
             addInvoiceAction: addInvoiceAction,
             editInvoiceAction: editInvoiceAction,
             registerSetInvoicePaidAction: registerSetInvoicePaidAction,
             registerSetInvoiceLockedAction:registerSetInvoiceLockedAction,
             registerInvoiceRDLCReport: registerInvoiceRDLCReport,
+            registerRecreateAction:registerRecreateAction,
             registerActionType: registerActionType,
             getActionTypeIfExist: getActionTypeIfExist,
+            generateInvoice: generateInvoice,
+            reGenerateInvoice: reGenerateInvoice
         });
     }]);

@@ -5,15 +5,18 @@
 
     function invoiceAPIService(BaseAPIService, UtilsService, VR_Invoice_ModuleConfig, SecurityService) {
 
-        var controllerName = 'InvoiceType';
+        var controllerName = 'Invoice';
 
         function GetInvoice(invoiceId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoice"), {
-                invoiceTypeId: invoiceId
+                invoiceId: invoiceId
             });
         }
         function GenerateInvoice(createInvoiceInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GenerateInvoice"), createInvoiceInput);
+        }
+        function ReGenerateInvoice(createInvoiceInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "ReGenerateInvoice"), createInvoiceInput);
         }
         function GetFilteredInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoices'), input);
@@ -41,7 +44,8 @@
             GetFilteredInvoices: GetFilteredInvoices,
             SetInvoicePaid: SetInvoicePaid,
             GetInvoiceDetail: GetInvoiceDetail,
-            SetInvoiceLocked: SetInvoiceLocked
+            SetInvoiceLocked: SetInvoiceLocked,
+            ReGenerateInvoice: ReGenerateInvoice
         });
     }
 

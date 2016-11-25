@@ -8,15 +8,29 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.Business;
 namespace Vanrise.Invoice.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "InvoiceType")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
     public class InvoiceController:BaseAPIController
     {
+        [HttpGet]
+        [Route("GetInvoice")]
+        public Entities.Invoice GetInvoice(long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetInvoice(invoiceId);
+        }
         [HttpPost]
         [Route("GenerateInvoice")]
         public Vanrise.Entities.InsertOperationOutput<InvoiceDetail> GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
             InvoiceManager manager = new InvoiceManager();
             return manager.GenerateInvoice(createInvoiceInput);
+        }
+        [HttpPost]
+        [Route("ReGenerateInvoice")]
+        public Vanrise.Entities.UpdateOperationOutput<InvoiceDetail> ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.ReGenerateInvoice(createInvoiceInput);
         }
         [HttpPost]
         [Route("GetFilteredInvoices")]

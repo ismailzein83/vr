@@ -3,21 +3,6 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
     function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService) {
 
 
-        function generateInvoice(onGenerateInvoice, invoiceTypeId) {
-            var settings = {
-
-            };
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onGenerateInvoice = onGenerateInvoice;
-            };
-            var parameters = {
-                invoiceTypeId: invoiceTypeId
-            };
-
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/GenerateInvoiceEditor.html', parameters, settings);
-        }
-
         function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions) {
             if (subSections == null)
                 return;
@@ -123,7 +108,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
         }
         
         return ({
-            generateInvoice: generateInvoice,
+
             defineInvoiceTabsAndMenuActions: defineInvoiceTabsAndMenuActions,
         });
     }]);

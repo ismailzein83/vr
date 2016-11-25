@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceService', 'VR_Invoice_InvoiceTypeAPIService','VRNotificationService'];
+    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceActionService', 'VR_Invoice_InvoiceTypeAPIService', 'VRNotificationService'];
 
-    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceService, VR_Invoice_InvoiceTypeAPIService, VRNotificationService) {
+    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VRNotificationService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
         var partnerSelectorAPI;
@@ -101,7 +101,7 @@
                 gridAPI.onGenerateInvoice(invoice);
             };
 
-            VR_Invoice_InvoiceService.generateInvoice(onGenerateInvoice, invoiceTypeId);
+            VR_Invoice_InvoiceActionService.generateInvoice(onGenerateInvoice, invoiceTypeId);
         }
         function loadPartnerSelectorDirective() {
             var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();

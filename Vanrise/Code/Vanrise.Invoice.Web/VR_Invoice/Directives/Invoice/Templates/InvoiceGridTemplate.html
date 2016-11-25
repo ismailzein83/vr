@@ -4,8 +4,9 @@
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  menuactions="menuActions"
-                 idfield="Entity.InvoiceId">
-        <vr-datagridcolumn headertext="'Invoice Id'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
+                 idfield="Entity.InvoiceId"
+                 defaultsortbyfieldname="'Entity.InvoiceId'">
+        <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
         </vr-datagridcolumn>
 
