@@ -130,12 +130,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
         Dictionary<string, PointOfSale> GetCachedPointOfSalesBySourceId()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedPointOfSalesBySourceId", () =>
-            {
-                IPOSDataManager dataManager = BEDataManagerFactory.GetDataManager<IPOSDataManager>();
-                IEnumerable<PointOfSale> pointOfSales = dataManager.GetPointOfSales();
-                return pointOfSales.ToDictionary(kvp => kvp.SourceId, kvp => kvp);
-            });
+            return GetCachedPointOfSales().ToDictionary(x => x.Value.SourceId, x => x.Value);
         }
 
         internal bool TryAddPOS(PointOfSale pos, out long posId)
