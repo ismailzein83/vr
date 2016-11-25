@@ -14,7 +14,7 @@
         loadParameters();
         defineScope();
         load();
-        $scope.scopemodal = {};
+        $scope.scopemodel = {};
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
