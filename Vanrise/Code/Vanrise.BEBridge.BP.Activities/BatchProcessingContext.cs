@@ -56,9 +56,9 @@ namespace Vanrise.BEBridge.BP.Activities
         internal void SetTargetBEs(List<ITargetBE> targetBEsToInsert, List<ITargetBE> targetBEsToUpdate)
         {
             if (targetBEsToInsert != null && targetBEsToInsert.Count > 0)
-                _targetBEsToInsert = new List<ITargetBE>(targetBEsToInsert);
+                _targetBEsToInsert = targetBEsToInsert;
             if (targetBEsToUpdate != null && targetBEsToUpdate.Count > 0)
-                _targetBEsToUpdate = new List<ITargetBE>(targetBEsToUpdate);
+                _targetBEsToUpdate = targetBEsToUpdate;
         }
 
         internal void SaveTargetBEs(Action<List<ITargetBE>> insertTargetBEs, Action<List<ITargetBE>> updateTargetBEs)

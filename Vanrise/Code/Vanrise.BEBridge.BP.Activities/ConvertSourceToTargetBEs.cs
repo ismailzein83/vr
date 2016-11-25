@@ -32,8 +32,6 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void DoWork(ConvertSourceToTargetBEsInput inputArgument,
             AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            List<ITargetBE> targetsToInsert;
-            List<ITargetBE> targetsToUpdate;
             int totalUpdateTargets = 0;
             int totalInsertTargets = 0;
 
@@ -45,12 +43,10 @@ namespace Vanrise.BEBridge.BP.Activities
                 {
                     hasItem = inputArgument.BatchProcessingContextQueue.TryDequeue((batchProcessingContextQueue) =>
                     {
-                        targetsToInsert = new List<ITargetBE>();
-                        targetsToUpdate = new List<ITargetBE>();
+                        List<ITargetBE> targetsToInsert = new List<ITargetBE>();
+                        List<ITargetBE> targetsToUpdate = new List<ITargetBE>();
                         TargetBEConvertorConvertSourceBEsContext targetBeConvertorContext =
                             new TargetBEConvertorConvertSourceBEsContext();
-                        TargetBETryGetExistingContext targetContext = new TargetBETryGetExistingContext();
-                        MergeTargetBEsContext mergeContext = new MergeTargetBEsContext();
 
                         targetBeConvertorContext.SourceBEBatch = batchProcessingContextQueue.SourceBEBatch;
                         inputArgument.TargetConverter.ConvertSourceBEs(targetBeConvertorContext);
@@ -59,6 +55,9 @@ namespace Vanrise.BEBridge.BP.Activities
                             Vanrise.Entities.LogEntryType.Information, "Targert BEs count {0}.", targetBEs.Count);
                         foreach (ITargetBE targetBe in targetBEs)
                         {
+                            TargetBETryGetExistingContext targetContext = new TargetBETryGetExistingContext();
+                            MergeTargetBEsContext mergeContext = new MergeTargetBEsContext();
+
                             targetContext.SourceBEId = targetBe.SourceBEId;
                             targetContext.TargetBE = targetBe;
                             if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(targetContext))

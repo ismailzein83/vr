@@ -15,11 +15,11 @@ namespace Vanrise.BEBridge.BP.Activities
         public InArgument<BEReceiveDefinition> BEReceiveDefinition { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<BaseQueue<BatchProcessingContext>>> BatchProcessingContexts { get; set; }
+        public OutArgument<List<BaseQueue<BatchProcessingContext>>> BatchProcessingContexts { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            BatchProcessingContexts.Get(context).AddRange(BEReceiveDefinition.Get(context).Settings.EntitySyncDefinitions.Select(def => new MemoryQueue<BatchProcessingContext>()));
+            BatchProcessingContexts.Set(context, new List<BaseQueue<BatchProcessingContext>>(BEReceiveDefinition.Get(context).Settings.EntitySyncDefinitions.Select(def => new MemoryQueue<BatchProcessingContext>())));
         }
     }
 }

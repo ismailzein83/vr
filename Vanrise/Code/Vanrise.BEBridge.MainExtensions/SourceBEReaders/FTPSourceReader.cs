@@ -12,58 +12,65 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 {
     public class FTPSourceReader : SourceBEReader
     {
-        Ftp _ftp;
         public FTPSourceReaderSetting Setting { get; set; }
         public override void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context)
         {
+
             FTPSourceReaderState state = context.ReaderState as FTPSourceReaderState;
             if (state == null)
             {
                 state = new FTPSourceReaderState();
             }
-            _ftp = new Ftp();
-            string mask = string.IsNullOrEmpty(Setting.Mask) ? "" : Setting.Mask;
-            Regex regEx = new Regex(mask);
-
-            EstablishConnection();
-            if (_ftp.GetConnectionState().Connected)
+            using (Ftp ftp = new Ftp())
             {
-                if (!_ftp.DirectoryExists(Setting.Directory))
-                    throw new DirectoryNotFoundException();
+                string mask = string.IsNullOrEmpty(Setting.Mask) ? "" : Setting.Mask;
+                Regex regEx = new Regex(mask);
 
-                _ftp.ChangeDirectory(Setting.Directory);
-                FtpList currentItems = _ftp.GetList(string.Format("*{0}", Setting.Extension));
-
-                if (currentItems.Count > 0)
+                EstablishConnection(ftp);
+                if (ftp.GetConnectionState().Connected)
                 {
-                    foreach (var fileObj in currentItems)
+                    if (!ftp.DirectoryExists(Setting.Directory))
+                        throw new DirectoryNotFoundException();
+
+                    ftp.ChangeDirectory(Setting.Directory);
+                    FtpList currentItems = ftp.GetList(string.Format("*{0}", Setting.Extension));
+
+                    if (currentItems.Count > 0)
                     {
-                        if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
+                        DateTime maxFileModifiedTime = state.LastRetrievedFileTime;
+                        foreach (var fileObj in currentItems)
                         {
-                            if (Setting.BasedOnTime && DateTime.Compare(state.LastRetrievedFileTime, fileObj.Modified) >= 0)
-                                continue;
-                            String filePath = Setting.Directory + "/" + fileObj.Name;
-                            context.OnSourceBEBatchRetrieved(GetFileSourceBatch(_ftp, fileObj, filePath), null);
-                            state.LastRetrievedFileTime = fileObj.Modified;
+
+                            if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
+                            {
+                                if (Setting.BasedOnTime && DateTime.Compare(state.LastRetrievedFileTime, fileObj.Modified) >= 0)
+                                    continue;
+                                String filePath = Setting.Directory + "/" + fileObj.Name;
+                                context.OnSourceBEBatchRetrieved(GetFileSourceBatch(ftp, fileObj, filePath), null);
+                                maxFileModifiedTime = fileObj.Modified;
+                            }
                         }
+                        state.LastRetrievedFileTime = maxFileModifiedTime;
+                        context.ReaderState = state;
                     }
-                    context.ReaderState = state;
+
                 }
-            }
-            else
-            {
-                throw new Exception("FTP adapter could not connect to FTP Server");
+                else
+                {
+                    throw new Exception("FTP adapter could not connect to FTP Server");
+                }
+                CloseConnection(ftp);
             }
         }
 
-        void EstablishConnection()
+        void EstablishConnection(Ftp ftp)
         {
-            _ftp.Connect(Setting.ServerIp);
-            _ftp.Login(Setting.UserName, Setting.Password);
+            ftp.Connect(Setting.ServerIp);
+            ftp.Login(Setting.UserName, Setting.Password);
         }
-        void CloseConnection()
+        void CloseConnection(Ftp ftp)
         {
-            _ftp.Dispose();
+            ftp.Dispose();
         }
 
         FileSourceBatch GetFileSourceBatch(Ftp ftp, FtpItem fileObj, String filePath)
@@ -78,11 +85,6 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
               };
         }
 
-        public override void SetBatchCompleted(ISourceBEReaderSetBatchImportedContext context)
-        {
-            CloseConnection();
-            base.SetBatchCompleted(context);
-        }
     }
 
     public class FTPSourceReaderSetting

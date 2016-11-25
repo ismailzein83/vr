@@ -78,11 +78,7 @@
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
           <Sequence.Variables>
             <Variable x:TypeArguments="vbe:BEReceiveDefinition" Name="beRecieveDefinition" />
-            <Variable x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))" Name="queueBatchProcessingContextList">
-              <Variable.Default>
-                <mca:CSharpValue x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">new List&lt;BaseQueue&lt;BatchProcessingContext&gt;&gt;()</mca:CSharpValue>
-              </Variable.Default>
-            </Variable>
+            <Variable x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))" Name="queueBatchProcessingContextList" />
             <Variable x:TypeArguments="x:Object" Name="readerState" />
           </Sequence.Variables>
           <vbba1:GetBEReceiveDefinition sap2010:WorkflowViewState.IdRef="GetBEReceiveDefinition_1">
@@ -104,9 +100,9 @@
               </InArgument>
             </vbba1:PrepareBatchProcessingContext.BEReceiveDefinition>
             <vbba1:PrepareBatchProcessingContext.BatchProcessingContexts>
-              <InArgument x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">
-                <mca:CSharpValue x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">queueBatchProcessingContextList</mca:CSharpValue>
-              </InArgument>
+              <OutArgument x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">
+                <mca:CSharpReference x:TypeArguments="scg:List(vq:BaseQueue(vbba1:BatchProcessingContext))">queueBatchProcessingContextList</mca:CSharpReference>
+              </OutArgument>
             </vbba1:PrepareBatchProcessingContext.BatchProcessingContexts>
           </vbba1:PrepareBatchProcessingContext>
           <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
@@ -241,7 +237,7 @@
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwnQwP1AQ4CAQFEBfMBDwIBAkcLR3QDAd8BTgnxARQCAQNTEVO0AQIBBFgLYyoDAdIBZAtvMQMBxQFwC3smAwG4AXwL5AEWAgEX5QEL8AEpAgEKWxFbeQMB2QFgEWBgAwHTAWwRbJoBAwHMAWcRZ3EDAcYBeBF4iwEDAb8BcxFz5QEDAbkBgQENoAEjAwGHAaEBDeMBHwIBGOgBEegBYAIBEe0BEe0BWgIBC5gBE5gBhgEDAbABhAEThAFiAwGoAYkBE4kBnAEDAaABnQETnQF6AwGYAY4BE44BZAMBkAGTAROTAYABAwGIAaQBE6QBpAECAX+rARHhARwCARmwARPPATQCATzQARPgASkCARq9ARm9AXgCAXSzARmzAeoBAgFpwgEZwgGIAQIBXrgBGbgBoAECAVPHARnHAZABAgFIzAEZzAGKAQIBPd0BGd0BkAECATHYARnYAYABAgEm0wEZ0wGYAQIBGw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwlQwPxAQ4CAQFEBe8BDwIBAkcLR3QDAdQBTgntARQCAQNUC18qAwHHAWALazEDAb8BbAt3JgMBsgF4C+ABFgIBEeEBC+wBKQIBBFcRV3kDAc4BXBFcYAMByAFjEWNxAwHAAXQRdIsBAwG5AW8Rb+UBAwGzAX0NnAEjAwGBAZ0BDd8BHwIBEuQBEeQBYAIBC+kBEekBWgIBBZQBE5QBhgEDAaoBgAETgAFiAwGiAYUBE4UBnAEDAZoBmQETmQF6AwGSAYoBE4oBZAMBigGPAROPAYABAwGCAaABE6ABpAECAXmnARHdARwCAROsARPLATQCATbMARPcASkCARS5ARm5AXgCAW6vARmvAeoBAgFjvgEZvgGIAQIBWLQBGbQBoAECAU3DARnDAZABAgFCyAEZyAGKAQIBN9kBGdkBkAECASvUARnUAYABAgEgzwEZzwGYAQIBFQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
