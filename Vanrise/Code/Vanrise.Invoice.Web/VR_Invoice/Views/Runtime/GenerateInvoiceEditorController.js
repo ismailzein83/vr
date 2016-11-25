@@ -144,6 +144,9 @@
         function loadAllControls() {
 
             function setTitle() {
+                if ($scope.scopeModel.isEditMode)
+                    $scope.title = "Regenerate Invoice";
+                else
                 $scope.title = "Generate Invoice";
             }
             function loadPartnerSelectorDirective() {

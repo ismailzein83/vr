@@ -3,6 +3,7 @@
     VR_Invoice_InvoiceActionService.registerSetInvoicePaidAction();
     VR_Invoice_InvoiceActionService.registerSetInvoiceLockedAction();
     VR_Invoice_InvoiceActionService.registerRecreateAction();
+    VR_Invoice_InvoiceActionService.registerInvoiceNoteAction();
 }]);
 
       

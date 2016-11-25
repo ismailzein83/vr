@@ -140,6 +140,11 @@ namespace Vanrise.Invoice.Business
                 paidDate = DateTime.Now;
             return dataManager.SetInvoicePaid(invoiceId, paidDate);
         }
+        public bool UpdateInvoiceNote(long invoiceId, string invoiceNote)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.UpdateInvoiceNote(invoiceId, invoiceNote);
+        }
         public bool SetInvoiceLocked(long invoiceId, bool setLocked)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
@@ -187,7 +192,8 @@ namespace Vanrise.Invoice.Business
                 PartnerName = partnerName,
                 Paid = invoice.PaidDate.HasValue,
                 Lock = invoice.LockDate.HasValue,
-                UserName = userManager.GetUserName(invoice.UserId)
+                UserName = userManager.GetUserName(invoice.UserId),
+                HasNote = invoice.Note != null
             };
             FillNeededDetailData(invoiceDetail, invoiceType);
             return invoiceDetail;

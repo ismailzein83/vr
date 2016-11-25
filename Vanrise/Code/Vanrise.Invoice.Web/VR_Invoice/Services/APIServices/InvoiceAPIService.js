@@ -33,6 +33,12 @@
                 setLocked: setLocked
             });
         }
+        function UpdateInvoiceNote(invoiceId, invoiceNote) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'UpdateInvoiceNote'), {
+                invoiceId: invoiceId,
+                invoiceNote: invoiceNote
+            });
+        }
         function GetInvoiceDetail(invoiceId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetail'), {
                 invoiceId: invoiceId,
@@ -45,7 +51,8 @@
             SetInvoicePaid: SetInvoicePaid,
             GetInvoiceDetail: GetInvoiceDetail,
             SetInvoiceLocked: SetInvoiceLocked,
-            ReGenerateInvoice: ReGenerateInvoice
+            ReGenerateInvoice: ReGenerateInvoice,
+            UpdateInvoiceNote: UpdateInvoiceNote
         });
     }
 

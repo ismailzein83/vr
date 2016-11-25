@@ -49,17 +49,17 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
     <Compile Include="InvoiceGeneratorException.cs" />
-    <Compile Include="InvoiceType1\ConvertToGridColumnAttributeInput.cs" />
-    <Compile Include="InvoiceType1\IInvoiceActionContext.cs" />
+    <Compile Include="InvoiceType\ConvertToGridColumnAttributeInput.cs" />
+    <Compile Include="InvoiceType\IInvoiceActionContext.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceExtendedSettingsConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGeneratorFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\GeneratorInvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\InvoiceActions\InvoiceAction.cs" />
-    <Compile Include="InvoiceType1\InvoiceDataSource\InvoiceDataSource.cs" />
+    <Compile Include="InvoiceType\InvoiceDataSource.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGeneratorConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
-    <Compile Include="InvoiceType1\InvoiceSubSectionGridColumn.cs" />
+    <Compile Include="InvoiceType\InvoiceSubSectionGridColumn.cs" />
     <Compile Include="InvoiceType\InvoiceTypeDetail.cs" />
     <Compile Include="InvoiceType\InvoiceGeneratorActions\InvoiceGeneratorAction.cs" />
     <Compile Include="InvoiceType\InvoiceGridSettings\InvoiceGridAction.cs" />
@@ -72,14 +72,14 @@
     <Compile Include="InvoiceType\InvoiceTypeQuery.cs" />
     <Compile Include="InvoiceType\InvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceUISubSectionSettingsConfig.cs" />
-    <Compile Include="InvoiceType1\ItemsFilter\ItemsFilter.cs" />
+    <Compile Include="InvoiceType\ItemsFilter.cs" />
     <Compile Include="InvoiceType\Configs\ItemsFilterConfig.cs" />
     <Compile Include="InvoiceType\Configs\RDLCDataSourceSettingsConfig.cs" />
-    <Compile Include="InvoiceType1\UISettings\InvoiceItemSubSectionOfSubSuction.cs" />
+    <Compile Include="InvoiceType\InvoiceItemSubSectionOfSubSuction.cs" />
     <Compile Include="InvoiceType\Configs\InvoicePartnerSettingsConfig.cs" />
-    <Compile Include="InvoiceType1\UISettings\IRDLCReportParameterValueContext.cs" />
+    <Compile Include="InvoiceType\IRDLCReportParameterValueContext.cs" />
     <Compile Include="InvoiceType\Configs\RDLCParameterSettingsConfig.cs" />
-    <Compile Include="InvoiceType1\UISettings\RDLCReportParameterValue.cs" />
+    <Compile Include="InvoiceType\RDLCReportParameterValue.cs" />
     <Compile Include="InvoiceType\ExtendedSettings\InvoicePartnerSettings.cs" />
     <Compile Include="InvoiceType\InvoiceGridSettings\InvoiceUIGridColumn.cs" />
     <Compile Include="Invoice\Invoice.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="InvoiceType\InvoiceType.cs" />
     <Compile Include="InvoiceType\InvoiceTypeSettings.cs" />
     <Compile Include="InvoiceViewSettings.cs" />
-    <Compile Include="InvoiceType1\UISettings\InvoiceDataSourceSettings.cs" />
+    <Compile Include="InvoiceType\InvoiceDataSourceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +109,11 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="InvoiceType1\InvoiceDataSource\" />
+    <Folder Include="InvoiceType1\ItemsFilter\" />
+    <Folder Include="InvoiceType1\UISettings\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

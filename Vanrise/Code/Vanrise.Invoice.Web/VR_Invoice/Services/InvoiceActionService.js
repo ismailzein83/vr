@@ -107,6 +107,34 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             registerActionType(actionType);
         }
 
+        function registerInvoiceNoteAction() {
+            var actionType = {
+                ActionTypeName: "InvoiceNoteAction",
+                actionMethod: function (payload) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                    var onNoteAdded = function (note) {
+                        promiseDeffered.resolve(note);
+                    }
+                    openInvoiceNote(onNoteAdded,payload.invoice.Entity.InvoiceId);
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(actionType);
+        }
+
+        function openInvoiceNote(onInvoiceNoteAdded, invoiceId) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceNoteAdded = onInvoiceNoteAdded;
+            };
+            var parameters = {
+                invoiceId: invoiceId
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceNoteActionEditor.html', parameters, settings);
+        }
+
         function addInvoiceAction(onInvoiceActionAdded, context) {
             var settings = {
 
@@ -169,6 +197,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             registerSetInvoicePaidAction: registerSetInvoicePaidAction,
             registerSetInvoiceLockedAction:registerSetInvoiceLockedAction,
             registerInvoiceRDLCReport: registerInvoiceRDLCReport,
+            registerInvoiceNoteAction:registerInvoiceNoteAction,
             registerRecreateAction:registerRecreateAction,
             registerActionType: registerActionType,
             getActionTypeIfExist: getActionTypeIfExist,

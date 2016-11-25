@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Entities
         public Boolean Paid { get; set; }
         public Boolean Lock { get; set; }
         public string UserName { get; set; }
+        public Boolean HasNote { get; set; }
         public List<InvoiceDetailObject> Items { get; set; }
 
     }

@@ -26,6 +26,7 @@ namespace Vanrise.Invoice.Entities
         public DateTime CreatedTime { get; set; }
         public dynamic Details { get; set; }
         public DateTime? PaidDate { get; set; }
+        public string Note { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {

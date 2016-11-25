@@ -10,5 +10,6 @@
     Paid: { value: 8, description: "Paid Date", fieldName: "Entity.PaidDate", type: "Datetime" },
     UserId: { value: 9, description: "User Name", fieldName: "UserName", type: "Text" },
     CreatedTime: { value: 10, description: "Created Date", fieldName: "Entity.CreatedTime", type: "Datetime" },
-    Lock: { value: 11, description: "Lock", fieldName: "Lock", type: "Datetime" }
+    Lock: { value: 11, description: "Lock", fieldName: "Lock", type: "Datetime" },
+    Note: { value: 12, description: "Note", fieldName: "HasNote", type: "Text" }
 });
