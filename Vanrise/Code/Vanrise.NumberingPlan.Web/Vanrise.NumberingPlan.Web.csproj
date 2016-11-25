@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -154,6 +158,10 @@
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\Templates\SellingNumberPlanGridTemplate.html" />
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-selector.js" />
     <Content Include="VR_NumberingPlan\Directives\SellingNumberPlan\vr-np-sellingnumberplan-grid.js" />
+    <Content Include="VR_NumberingPlan\Directives\TransformationSteps\MasterPlanSaleCodeMatchStep\Templates\MasterPlanSaleCodeMatchStepPreviewTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\TransformationSteps\MasterPlanSaleCodeMatchStep\Templates\MasterPlanSaleCodeMatchStepTemplate.html" />
+    <Content Include="VR_NumberingPlan\Directives\TransformationSteps\MasterPlanSaleCodeMatchStep\vr-np-datatransformation-masterplansalecodematch-preview.js" />
+    <Content Include="VR_NumberingPlan\Directives\TransformationSteps\MasterPlanSaleCodeMatchStep\vr-np-datatransformation-masterplansalecodematch.js" />
     <Content Include="VR_NumberingPlan\Images\Closed.png" />
     <Content Include="VR_NumberingPlan\Images\Decrease.png" />
     <Content Include="VR_NumberingPlan\Images\Increase.png" />
