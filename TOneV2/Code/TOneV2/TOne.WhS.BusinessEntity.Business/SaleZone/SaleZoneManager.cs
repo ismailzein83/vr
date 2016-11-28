@@ -13,7 +13,7 @@ using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleZoneManager : IBusinessEntityManager
+    public class SaleZoneManager : IBusinessEntityManager, ISaleZoneManager
     {
         #region Public Methods
 
@@ -90,8 +90,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds, DateTime effectiveOn, bool withFutureZones)
         {
-            IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(x => countryIds.Contains(x.CountryId));
-            return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
+			IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(x => countryIds.Contains(x.CountryId));
+			return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
+
+			//if (countryIds == null)
+			//	return null;
+
+			//IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(x => countryIds.Contains(x.CountryId));
+			
+			//if (withFutureZones)
+			//	return saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn));
+			//else
+			//	return saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
         }
 
         public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
@@ -241,15 +251,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZone> GetSaleZonesByOwner(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, DateTime effectiveOn, bool withFutureZones)
         {
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
-                return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
-            }
-            else
-            {
-                return new CustomerZoneManager().GetCustomerSaleZones(ownerId, sellingNumberPlanId, effectiveOn, withFutureZones);
-            }
+			if (ownerType == SalePriceListOwnerType.SellingProduct)
+			{
+				IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+				return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
+			}
+			else
+			{
+				return new CustomerZoneManager().GetCustomerSaleZones(ownerId, sellingNumberPlanId, effectiveOn, withFutureZones);
+			}
+
+			//if (ownerType == SalePriceListOwnerType.SellingProduct)
+			//{
+			//	IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+			//	return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
+			//}
+			//else
+			//{
+			//	IEnumerable<int> customerCountryIds = new CustomerCountryManager().GetCustomerCountryIds(ownerId, effectiveOn, withFutureZones);
+			//	return GetSaleZonesByCountryIds(sellingNumberPlanId, customerCountryIds, effectiveOn, withFutureZones);
+			//}
         }
 
         #endregion
