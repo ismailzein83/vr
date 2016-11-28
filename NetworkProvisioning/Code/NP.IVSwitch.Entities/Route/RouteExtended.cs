@@ -8,7 +8,7 @@ namespace NP.IVSwitch.Entities
 {
     public class RouteExtended
     {
-        public List<int> RouteIdList { get; set; }
+        public List<int> RouteIds { get; set; }
 
     }
 }

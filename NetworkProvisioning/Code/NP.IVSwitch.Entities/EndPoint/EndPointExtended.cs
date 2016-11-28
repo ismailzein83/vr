@@ -8,7 +8,7 @@ namespace NP.IVSwitch.Entities
 {
     public class EndPointExtended
     {
-        public List<int> EndPointIdList { get; set; }
+        public List<int> EndPointIds { get; set; }
 
     }
 }

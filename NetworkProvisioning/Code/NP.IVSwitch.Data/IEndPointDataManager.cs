@@ -11,6 +11,9 @@ namespace NP.IVSwitch.Data
     {
         List<EndPoint> GetEndPoints();
 
+        bool InsertTariff(String carrierAccountName);
+
+
         bool  Update(EndPoint endPoint);
         bool  Insert(EndPoint endPoint, out int insertedId);
 

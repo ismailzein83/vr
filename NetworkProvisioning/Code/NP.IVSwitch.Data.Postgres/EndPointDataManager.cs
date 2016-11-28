@@ -57,8 +57,6 @@ namespace NP.IVSwitch.Data.Postgres
             return endPoint;
         }
 
-
-
         public List<EndPoint> GetEndPoints()
         {
 
@@ -341,6 +339,52 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
+        public bool InsertTariff(String carrierAccountName)
+        {
+            object tariffId;
+            int insertedId;
+
+            String cmdText = @"INSERT INTO tariffs(tariff_name,description)
+                               SELECT @tariff_name, @description
+                               WHERE  NOT EXISTS(SELECT 1 FROM  tariffs WHERE (tariff_name=@tariff_name)  
+  	                           returning  tariff_id;";
+
+            tariffId = ExecuteScalarText(cmdText, (cmd) =>
+            {
+                cmd.Parameters.AddWithValue("@tariff_name", carrierAccountName);
+                cmd.Parameters.AddWithValue("@description", carrierAccountName);
+            }
+            );
+
+//            if (tariffId != null)
+//            {
+//                insertedId = Convert.ToInt32(tariffId);
+//                // Create tariff table
+//                String cmdText = "CREATE TABLE trf" + insertedId.ToString() + @" (
+//                                  dest_code character varying(30) NOT NULL,
+//                                  time_frame character varying(50) NOT NULL,
+//                                  dest_name character varying(100) DEFAULT NULL::character varying,
+//                                  init_period integer,
+//                                  next_period integer,
+//                                  init_charge numeric(18,9) DEFAULT NULL::numeric,
+//                                  next_charge numeric(18,9) DEFAULT NULL::numeric,
+//                                  CONSTRAINT trf" + insertedId.ToString() + @"_pkey PRIMARY KEY (dest_code, time_frame)
+//                                )
+//                                WITH (
+//                                  OIDS=FALSE
+//                                );
+//                                ALTER TABLE public.trf" + insertedId.ToString()+@"
+//                                OWNER TO zeinab;";
+
+               // int recordsEffected = ExecuteNonQueryText(cmdText);
+
+            //    return (recordsEffected > 0);
+            //}
+            //else
+            //    return false;
+            return false;
+        }
+
         private void MapEnum(EndPoint endPoint, out int currentState, out int rtpMode)
         {
             var currentStateValue = Enum.Parse(typeof(State), endPoint.CurrentState.ToString());
@@ -357,6 +401,8 @@ namespace NP.IVSwitch.Data.Postgres
             return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value : parameter;
 
         }
+
+        
 
 
 

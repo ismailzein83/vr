@@ -13,34 +13,34 @@ namespace NP.IVSwitch.Web.Controllers
     [JSONWithTypeAttribute]
     public class AccountController : BaseAPIController
     {
-        AccountManager _manager = new AccountManager();
+    //    AccountManager _manager = new AccountManager();
 
-        [HttpPost]
-        [Route("GetFilteredAccounts")]
-        public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredAccounts(input));
-        }
+        //[HttpPost]
+        //[Route("GetFilteredAccounts")]
+        //public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
+        //{
+        //    return GetWebResponse(input, _manager.GetFilteredAccounts(input));
+        //}
 
-        [HttpGet]
-        [Route("GetAccount")]
-        public Account GetAccount(int accountId)
-        {
-            return _manager.GetAccount(accountId);
-        }
+        //[HttpGet]
+        //[Route("GetAccount")]
+        //public Account GetAccount(int accountId)
+        //{
+        //    return _manager.GetAccount(accountId);
+        //}
 
-        [HttpPost]
-        [Route("AddAccount")]
-        public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account accountItem)
-        {
-            return _manager.AddAccount(accountItem);
-        }
+        //[HttpPost]
+        //[Route("AddAccount")]
+        //public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account accountItem)
+        //{
+        //    return _manager.AddAccount(accountItem);
+        //}
 
-        [HttpPost]
-        [Route("UpdateAccount")]
-        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(Account accountItem)
-        {
-            return _manager.UpdateAccount(accountItem);
-        }
+        //[HttpPost]
+        //[Route("UpdateAccount")]
+        //public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(Account accountItem)
+        //{
+        //    return _manager.UpdateAccount(accountItem);
+        //}
     }
 }

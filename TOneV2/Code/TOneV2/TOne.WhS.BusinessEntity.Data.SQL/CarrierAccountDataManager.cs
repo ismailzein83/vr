@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool UpdateExtendedSettings<T>(int carrierAccountId, Dictionary<string, T> extendedSettings)
+        public bool UpdateExtendedSettings(int carrierAccountId, Dictionary<string, Object> extendedSettings)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_UpdateExtendedSettings", carrierAccountId, Vanrise.Common.Serializer.Serialize(extendedSettings));
             return (recordsEffected > 0);
@@ -107,8 +107,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CarrierAccountSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
                 SourceId = reader["SourceID"] as string,
                 IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
-
             };
+            carrierAccount.ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, Object>;
+
             return carrierAccount;
         }
         #endregion
