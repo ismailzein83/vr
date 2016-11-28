@@ -64,6 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NP.IVSwitch.Entities">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql">
       <HintPath>..\..\..\..\Vanrise\Code\packages\Npgsql.3.1.8\lib\net45\Npgsql.dll</HintPath>
     </Reference>

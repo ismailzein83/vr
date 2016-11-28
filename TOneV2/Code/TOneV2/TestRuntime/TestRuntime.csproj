@@ -134,6 +134,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NP.IVSwitch.Entities">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql, Version=2.0.11.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Npgsql.dll</HintPath>
