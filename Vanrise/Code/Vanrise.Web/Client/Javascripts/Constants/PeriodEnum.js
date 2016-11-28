@@ -5,7 +5,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), 0, 1),
-            to: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59)
+            to: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0)
         };
     }
 
@@ -34,7 +34,7 @@
         var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
         return {
             from: new Date(beforeLastMonday.getFullYear(), beforeLastMonday.getMonth(), beforeLastMonday.getDate(), 0, 0, 0),
-            to: new Date(lastSunday.getFullYear(), lastSunday.getMonth(), lastSunday.getDate(), 23, 59, 59)
+            to: new Date(lastSunday.getFullYear(), lastSunday.getMonth(), lastSunday.getDate() + 1, 0, 0, 0)
         };
     }
 
@@ -42,7 +42,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), date.getMonth(), 1),
-            to: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59)
+            to: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0)
         };
     }
 
@@ -50,7 +50,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0),
-            to: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59)
+            to: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0)
         };
     }
 
@@ -58,7 +58,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0),
-            to: new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59)
+            to: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0)
         };
     }
 
@@ -66,7 +66,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear(), date.getMonth() - 1, 1),
-            to: new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59)
+            to: new Date(date.getFullYear(), date.getMonth() , 1, 0, 0, 0)
         };
     }
 
@@ -74,7 +74,7 @@
         var date = new Date();
         return {
             from: new Date(date.getFullYear() - 1, 0, 1, 0, 0, 0),
-            to: new Date(date.getFullYear() - 1, 11, 31, 23, 59, 59)
+            to: new Date(date.getFullYear(), 0, 1, 0, 0, 0)
         };
     }
 
