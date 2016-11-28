@@ -32,14 +32,14 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         #endregion
         private ReleaseCodeQuery query;
-        private List<string> codes; 
+        private List<string> codes;
         #region Public Methods
 
-        public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input , List<string> salecodesIds)
+        public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input, List<string> salecodesIds)
         {
             query = input.Query;
             codes = salecodesIds;
-            List<ReleaseCodeStat> releaseCodes = new List<ReleaseCodeStat>();        
+            List<ReleaseCodeStat> releaseCodes = new List<ReleaseCodeStat>();
             ExecuteReaderText(GetQuery(input.Query.Filter), (reader) =>
             {
 
@@ -60,8 +60,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                         releaseCode.DurationInMinutes = GetReaderValue<decimal>(reader, "DurationsInMinutes");
                         releaseCode.FailedAttempt = releaseCode.Attempt - (int)reader["SuccessfulAttempts"];
                         releaseCode.FirstAttempt = GetReaderValue<DateTime?>(reader, "FirstAttempt");
-                        releaseCode.LastAttempt = GetReaderValue<DateTime?>(reader, "LastAttempt");                
-                        releaseCode.Percentage = decimal.Round(((decimal)GetReaderValue<int>(reader, "Attempt") * 100 / totalCount),2);
+                        releaseCode.LastAttempt = GetReaderValue<DateTime?>(reader, "LastAttempt");
+                        releaseCode.Percentage = decimal.Round(((decimal)GetReaderValue<int>(reader, "Attempt") * 100 / totalCount), 2);
                         if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
                         {
                             if (query.Filter.Dimession.Contains(ReleaseCodeDimension.Supplier))
@@ -88,7 +88,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
                 if (input.Query.To.HasValue)
-                   cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
+                    cmd.Parameters.Add(new SqlParameter("@ToDate", input.Query.To));
 
 
             });
@@ -108,13 +108,28 @@ namespace TOne.WhS.Analytics.Data.SQL
                         GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex),
                         GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex),
                         GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex));
-               
+
             StringBuilder queryBuilder = new StringBuilder(String.Format(@"  SELECT *
                                                                 INTO #RESULT FROM (#Query#) {0}
                                                                 SELECT SUM(Attempt) AS TotalAttempts FROM #RESULT
-                                                                SELECT * FROM #RESULT", aliasTableName));
+                                                                SELECT #SELECTCOLUMNPART# FROM #RESULT  GROUP BY #GROUPBYPART# ", aliasTableName));
+            selectColumnBuilder.Append(String.Format(@"    SwitchId,
+                                                            ReleaseCode,
+                                                            ReleaseSource,
+                                                            Count(*)  Attempt,
+                                                            SUM(SuccessfulAttempts) SuccessfulAttempts,
+			                                                Min(FirstAttempt) FirstAttempt,	
+			                                                Max(LastAttempt) LastAttempt,
+                                                            SUM(DurationsInMinutes) AS DurationsInMinutes  "));
+            AddSelectColumnToGenaralQuery(selectColumnBuilder);
+            groupByBuilder.Append(String.Format(@"SwitchId,ReleaseCode,ReleaseSource"));
+            AddGroupingToGenaralQuery(groupByBuilder);
+
             queryBuilder.Replace("#SELECTCOLUMNPART#", selectColumnBuilder.ToString());
-            queryBuilder.Replace("#Query#", queryData);            
+
+            queryBuilder.Replace("#GROUPBYPART#", groupByBuilder.ToString());
+
+            queryBuilder.Replace("#Query#", queryData);
             return queryBuilder.ToString();
         }
         private string GetSingleQuery(string tableName, string alias, ReleaseCodeFilter filter, string tableIndex)
@@ -134,7 +149,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate ", alias));
             if (query.To.HasValue)
-                whereBuilder.AppendFormat("AND {0}.AttemptDateTime<= @ToDate  ", alias);
+                whereBuilder.AppendFormat("AND {0}.AttemptDateTime< @ToDate  ", alias);
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
@@ -142,7 +157,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                             SUM( CASE WHEN {0}.DurationInSeconds > 0 THEN 1 ELSE 0 END) SuccessfulAttempts,
 			                                                Min({0}.AttemptDateTime) FirstAttempt,	
 			                                                Max({0}.AttemptDateTime) LastAttempt,
-                                                            CONVERT(DECIMAL,SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes  ", alias , tableIndex));
+                                                            CONVERT(DECIMAL,SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes  ", alias, tableIndex));
             AddSelectColumnToQuery(selectQueryPart, alias);
             AddGroupingToQuery(groupByBuilder, alias);
             queryBuilder.Replace("#SELECTPART#", selectQueryPart.ToString());
@@ -152,6 +167,42 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             return queryBuilder.ToString();
         }
+
+        private void AddSelectColumnToGenaralQuery(StringBuilder selectColumnBuilder)
+        {
+            if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
+            {
+
+                foreach (ReleaseCodeDimension a in Enum.GetValues(typeof(ReleaseCodeDimension)))
+                {
+                    if (query.Filter.Dimession.Contains(a))
+                    {
+                        selectColumnBuilder.Append(String.Format(@",{0}", Utilities.GetEnumDescription(a)));
+                    }
+                }
+
+            }
+
+
+        }
+        private void AddGroupingToGenaralQuery(StringBuilder groupBuilder)
+        {
+            if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
+            {
+
+                foreach (ReleaseCodeDimension a in Enum.GetValues(typeof(ReleaseCodeDimension)))
+                {
+                    if (query.Filter.Dimession.Contains(a))
+                    {
+                        groupBuilder.Append(String.Format(@",{0}", Utilities.GetEnumDescription(a)));
+                    }
+                }
+
+            }
+        }
+
+
+
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder, string aliasTableName)
         {
             if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
@@ -164,7 +215,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                         selectColumnBuilder.Append(String.Format(@",{0}.{1}", aliasTableName, Utilities.GetEnumDescription(a)));
                     }
                 }
-                
+
             }
 
 
@@ -184,32 +235,34 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             }
         }
-               
+
         private void AddFilterToQuery(ReleaseCodeFilter filter, StringBuilder whereBuilder)
         {
             AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");
             AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
             AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
             AddFilter(whereBuilder, codes, "SaleCode");
-          
-            
+
+
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
-            if (values != null )
+            if (values != null)
             {
-                if(values.Count() > 0){
-                   if (typeof(T) == typeof(string))
-                    whereBuilder.AppendFormat(" {0} IN ('{1}') AND ", column, String.Join("', '", values));
-                  else
-                    whereBuilder.AppendFormat(" {0} IN ({1}) AND ", column, String.Join(", ", values));
+                if (values.Count() > 0)
+                {
+                    if (typeof(T) == typeof(string))
+                        whereBuilder.AppendFormat(" {0} IN ('{1}') AND ", column, String.Join("', '", values));
+                    else
+                        whereBuilder.AppendFormat(" {0} IN ({1}) AND ", column, String.Join(", ", values));
                 }
-                else if (values.Count() == 0){
+                else if (values.Count() == 0)
+                {
                     whereBuilder.AppendFormat(" 0 = 1 AND ");
                 }
             }
         }
-      
+
         #endregion
     }
 }
