@@ -137,7 +137,7 @@ namespace Vanrise.Invoice.Business
 
             return updateOperationOutput;
         }
-        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
+        public IEnumerable<GridColumnAttribute> ConvertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
         {
             List<GridColumnAttribute> gridColumnAttributes = null;
             if(input.GridColumns != null)

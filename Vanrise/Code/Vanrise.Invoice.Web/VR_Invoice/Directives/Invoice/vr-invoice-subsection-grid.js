@@ -65,7 +65,7 @@ app.directive("vrInvoiceSubsectionGrid", ["UtilsService", "VRNotificationService
                                     var input = {
                                         GridColumns: payload.settings.GridColumns
                                     };
-                                    VR_Invoice_InvoiceTypeAPIService.CovertToGridColumnAttribute(input).then(function (response) {
+                                    VR_Invoice_InvoiceTypeAPIService.ConvertToGridColumnAttribute(input).then(function (response) {
                                         buildGridFields(response, payload.settings.GridColumns);
 
                                         drillDownTabs.length = 0;

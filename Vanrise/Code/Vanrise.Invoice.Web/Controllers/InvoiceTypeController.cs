@@ -56,10 +56,10 @@ namespace Vanrise.Invoice.Web.Controllers
             return _manager.UpdateInvoiceType(invoiceType);
         }
         [HttpPost]
-        [Route("CovertToGridColumnAttribute")]
-        public IEnumerable<GridColumnAttribute> CovertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
+        [Route("ConvertToGridColumnAttribute")]
+        public IEnumerable<GridColumnAttribute> ConvertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
         {
-            return _manager.CovertToGridColumnAttribute(input);
+            return _manager.ConvertToGridColumnAttribute(input);
         }
         [HttpGet]
         [Route("GetInvoiceTypesInfo")]

@@ -26,8 +26,8 @@
         function UpdateInvoiceType(invoiceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "UpdateInvoiceType"), invoiceType);
         }
-        function CovertToGridColumnAttribute(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "CovertToGridColumnAttribute"), input);
+        function ConvertToGridColumnAttribute(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "ConvertToGridColumnAttribute"), input);
         }
         function GetInvoiceTypesInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceTypesInfo"), { filter: filter });
@@ -47,7 +47,7 @@
             AddInvoiceType: AddInvoiceType,
             UpdateInvoiceType: UpdateInvoiceType,
             GetInvoiceTypeRuntime: GetInvoiceTypeRuntime,
-            CovertToGridColumnAttribute: CovertToGridColumnAttribute,
+            ConvertToGridColumnAttribute: ConvertToGridColumnAttribute,
             GetInvoiceTypesInfo: GetInvoiceTypesInfo,
             GetGeneratorInvoiceTypeRuntime: GetGeneratorInvoiceTypeRuntime,
             GetInvoiceGeneratorActions: GetInvoiceGeneratorActions
