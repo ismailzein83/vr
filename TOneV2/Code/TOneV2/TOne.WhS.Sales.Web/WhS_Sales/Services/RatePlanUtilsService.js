@@ -11,6 +11,7 @@
             validateNewRate: validateNewRate,
             validateNewRateDates: validateNewRateDates,
             getNowPlusDays: getNowPlusDays,
+            getNowMinusDays: getNowMinusDays,
             isSameNewService: isSameNewService,
             isStringEmpty: isStringEmpty
         };
@@ -42,6 +43,9 @@
         }
         function getNowPlusDays(days) {
             return new Date(new Date().setDate(new Date().getDate() + days));
+        }
+        function getNowMinusDays(days) {
+        	return new Date(new Date().setDate(new Date().getDate() - days));
         }
 
         function formatNewRate(dataItem) {
