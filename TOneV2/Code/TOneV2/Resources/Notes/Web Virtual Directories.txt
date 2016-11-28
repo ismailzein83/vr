@@ -16,7 +16,7 @@
 	BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 	Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 	Queueing				C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing
-	Billing					C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
+	-removed-Billing					C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
 	-removed-CDR						C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
 	WhS_CodePreparation		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CodePreparation.Web\WhS_CodePreparation
 	WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
