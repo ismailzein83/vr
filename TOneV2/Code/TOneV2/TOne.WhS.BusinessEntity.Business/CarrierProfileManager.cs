@@ -128,6 +128,17 @@ namespace TOne.WhS.BusinessEntity.Business
  
         }
 
+        public void UpdateCarrierProfileExtendedSetting<T>(int carrierProfileId, T extendedSettings)
+        {
+            string extendedSettingName = typeof(T).FullName;
+            throw new NotImplementedException();
+        }
+
+        public T GetExtendedSettingsObject<T>(int carrierProfileId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Object GetExtendedSettingsObject(int carrierProfileId, string extendedSettingName)
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
