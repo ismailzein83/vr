@@ -124,14 +124,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CodecDefController.cs" />
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
-    <Compile Include="Controllers\RouteTableController.cs" />
-    <Compile Include="Controllers\TariffController.cs" />
     <Compile Include="Controllers\TranslationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -151,31 +148,24 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="NP_IVSwitch\Constant\AccountTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EndPointEnum.js" />
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
     <Content Include="NP_IVSwitch\Constant\RtpModeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\StateEnum.js" />
-    <Content Include="NP_IVSwitch\Constant\TraceEnum.js" />
     <Content Include="NP_IVSwitch\Constant\TransportModeEnum.js" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-selector.js" />
     <Content Include="NP_IVSwitch\Directives\Domain\np-ivswitch-domain-selector.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-grid.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-selector.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\Templates\EndPointGridTemplate.html" />
-    <Content Include="NP_IVSwitch\Directives\RouteTable\np-ivswitch-routetable-selector.js" />
     <Content Include="NP_IVSwitch\Directives\Route\Templates\RouteGridTemplate.html" />
-    <Content Include="NP_IVSwitch\Directives\Account\np-ivswitch-account-grid.js" />
-    <Content Include="NP_IVSwitch\Directives\Account\np-ivswitch-account-selector.js" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-grid.js" />
-    <Content Include="NP_IVSwitch\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-selector.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\Templates\CodecDefGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\Templates\CodecProfileGridTemplate.html" />
-    <Content Include="NP_IVSwitch\Directives\Tariff\np-ivswitch-tariff-selector.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-grid.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-selector.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
@@ -183,22 +173,14 @@
     <Content Include="NP_IVSwitch\Services\APIServices\DomainAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
-    <Content Include="NP_IVSwitch\Services\APIServices\RouteTableAPIService.js" />
-    <Content Include="NP_IVSwitch\Services\APIServices\TariffAPIService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
     <Content Include="NP_IVSwitch\Services\RouteService.js" />
-    <Content Include="NP_IVSwitch\Services\AccountService.js" />
-    <Content Include="NP_IVSwitch\Services\APIServices\AccountAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CodecDefAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CodecProfileAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\TranslationRuleAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CodecDefService.js" />
     <Content Include="NP_IVSwitch\Services\CodecProfileService.js" />
     <Content Include="NP_IVSwitch\Services\TranslationRuleService.js" />
-    <Content Include="NP_IVSwitch\Views\Account\AccountEditor.html" />
-    <Content Include="NP_IVSwitch\Views\Account\AccountEditorController.js" />
-    <Content Include="NP_IVSwitch\Views\Account\AccountManagement.html" />
-    <Content Include="NP_IVSwitch\Views\Account\AccountManagementController.js" />
     <Content Include="NP_IVSwitch\Views\EndPoint\EndPointEditor.html" />
     <Content Include="NP_IVSwitch\Views\EndPoint\EndPointEditorController.js" />
     <Content Include="NP_IVSwitch\Views\CodecDef\CodecDefEditor.html" />

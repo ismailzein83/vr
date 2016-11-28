@@ -9,8 +9,6 @@ namespace NP.IVSwitch.Data
 {
     public interface  IAccountDataManager:IDataManager
     {
-        List<Account> GetAccounts();
-        bool Update(Account Account);
-        bool Insert(Account Account, out int insertedId);
+          bool Insert(Account Account, out int insertedId);
     }
 }

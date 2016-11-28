@@ -36,11 +36,7 @@
 
 
                     <np-ivswitch-domain-selector on-ready="scopeModel.onSelectorDomainReady" onselectionchanged="scopeModel.onSelectionDomainChanged"
-                                                 normal-col-num="6"></np-ivswitch-domain-selector>
-                    <vr-columns width="1/2row">
-                        <vr-select ng-if="scopeModel.ShowSIP"  label="RTP Mode" datatextfield="description" datavaluefield="value" datasource="scopeModel.rtpmodes"
-                                   selectedvalues=" scopeModel.selectedrtpmode" onselectionchanged="scopeModel.onSelectionChangedRtpMode" isrequired></vr-select>
-                    </vr-columns>
+                                                 normal-col-num="6"></np-ivswitch-domain-selector>                  
 
 
                     <vr-columns width="1/2row">
@@ -51,12 +47,16 @@
                     </vr-columns>
 
                     <vr-columns width="1/2row">
+                        <vr-select ng-if="scopeModel.ShowSIP" label="RTP Mode" datatextfield="description" datavaluefield="value" datasource="scopeModel.rtpmodes"
+                                   selectedvalues=" scopeModel.selectedrtpmode" onselectionchanged="scopeModel.onSelectionChangedRtpMode" isrequired></vr-select>
+                    </vr-columns>
+
+                    <vr-columns width="1/2row">
                         <vr-textbox label="SIP Login" value="scopeModel.siplogin" ng-if="scopeModel.ShowSIP" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-textbox label="SIP Password" value="scopeModel.sippassword" ng-if="scopeModel.ShowSIP" isrequired></vr-textbox>
-                    </vr-columns>
-                  
+                    </vr-columns>                
                      
                      
 

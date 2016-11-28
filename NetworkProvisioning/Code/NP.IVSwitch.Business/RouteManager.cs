@@ -25,25 +25,17 @@ namespace NP.IVSwitch.Business
         {
             //Get Carrier by id
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(input.Query.CarrierAccountId.GetValueOrDefault());
+ 
+            RouteExtended extendedSettingsObject = carrierAccountManager.GetExtendedSettingsObject<RouteExtended>(input.Query.CarrierAccountId.Value);
 
-            Dictionary<string, object> temp = carrierAccount.ExtendedSettings;
-
-             object tempObject;
             List<int> routeIdList = new List<int>();
 
-            if (temp != null)
+            if (extendedSettingsObject != null)
             {
-                if (temp.TryGetValue("Routes", out  tempObject))
-                {
-                    RouteExtended routeExtended = (RouteExtended)tempObject;
-                    routeIdList = routeExtended.RouteIdList;
-                 }
+                routeIdList = extendedSettingsObject.RouteIds;
             }
 
-            var allRoutes = this.GetCachedRoute();                                               
-                                                         
-
+            var allRoutes = this.GetCachedRoute(); 
             Func<Route, bool> filterExpression = (x) =>  (routeIdList.Contains(x.RouteId));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutes.ToBigResult(input, filterExpression, RouteDetailMapper));
         }
@@ -54,38 +46,31 @@ namespace NP.IVSwitch.Business
             int carrierAccountId = routeItem.CarrierAccountId;
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId); // Get CarrierAccount
             int carrierProfileId = (int)carrierAccountManager.GetCarrierProfileId(carrierAccountId); // Get CarrierProfileId
 
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
             CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId); // Get CarrierProfile
 
-           Dictionary<string, object> temp = carrierProfile.ExtendedSettings; 
- 
-            AccountExtended accountExtended = new AccountExtended();
-            object tempObject;
-             int accountId = -1 ;
 
-            if (temp != null)
-            {
-                if (temp.TryGetValue("IVSwitchAccounts", out  tempObject))
-                {
-                    accountExtended = (AccountExtended)tempObject;
-                    if (accountExtended.VendorAccountId != null)
-                        accountId = (int)accountExtended.VendorAccountId;
-                 }
-            }
-            if (temp == null || accountId == -1)
-            {
+            AccountExtended accountExtended = carrierProfileManager.GetExtendedSettingsObject<AccountExtended>(carrierProfileId);
+            int accountId = -1;
+
+ 
+             if (accountExtended != null && accountExtended.VendorAccountId.HasValue)
+             {
+                 accountId = accountExtended.VendorAccountId.Value;
+             }
+             else
+             {
+                              
                 //create the account
                 AccountManager accountManager = new AccountManager();
                 Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, false);
-                Vanrise.Entities.InsertOperationOutput<AccountDetail> accountDetail = accountManager.AddAccount(account);
-                accountId = accountDetail.InsertedObject.Entity.AccountId;
+                accountId = accountManager.AddAccount(account);
  
                 // add it to extendedsettings
                 AccountExtended extendedSettings = new AccountExtended();
-                Object ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject<AccountExtended>(carrierProfileId);
+                AccountExtended ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject<AccountExtended>(carrierProfileId);
                 if (ExtendedSettingsObject != null)
                     extendedSettings = (AccountExtended)ExtendedSettingsObject;
 
@@ -119,12 +104,12 @@ namespace NP.IVSwitch.Business
                 if (routesExtendedSettings == null)
                     routesExtendedSettings = new RouteExtended();
 
-                List<int> routeIdList = new List<int>();
-                if(routesExtendedSettings.RouteIdList != null)
-                    routeIdList = routesExtendedSettings.RouteIdList;
+                List<int> routeIds = new List<int>();
+                if(routesExtendedSettings.RouteIds != null)
+                    routeIds = routesExtendedSettings.RouteIds;
 
-                routeIdList.Add(routeId);
-                routesExtendedSettings.RouteIdList = routeIdList;
+                routeIds.Add(routeId);
+                routesExtendedSettings.RouteIds = routeIds;
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, routesExtendedSettings);
             }

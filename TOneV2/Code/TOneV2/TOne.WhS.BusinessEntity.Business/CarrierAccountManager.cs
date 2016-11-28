@@ -121,16 +121,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
 
-         public void UpdateCarrierAccountExtendedSetting<T>(int carrierAccountId, T extendedSettings)
+         public void UpdateCarrierAccountExtendedSetting<T>(int carrierAccountId, T extendedSettings) where T:class
          {             
              CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
 
-             Dictionary<string, T> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, T>;
+             Dictionary<string, Object> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, Object>;
              if (extendedSettingsDic == null)
-                 extendedSettingsDic = new Dictionary<string, T>();
+                 extendedSettingsDic = new Dictionary<string, Object>();
              string extendedSettingName = typeof(T).FullName;
 
-             T exitingExtendedSettings;
+             Object exitingExtendedSettings;
              if (extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings))
              {
                  extendedSettingsDic[extendedSettingName] = extendedSettings;
@@ -139,21 +139,21 @@ namespace TOne.WhS.BusinessEntity.Business
                  extendedSettingsDic.Add(extendedSettingName, extendedSettings);
              }
              ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-             dataManager.UpdateExtendedSettings<T>(carrierAccountId, extendedSettingsDic);
+             dataManager.UpdateExtendedSettings(carrierAccountId, extendedSettingsDic);
          }
 
-         public T GetExtendedSettingsObject<T>(int carrierAccountId)
+         public T GetExtendedSettingsObject<T>(int carrierAccountId) where T : class
          {
              CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
              string extendedSettingName = typeof(T).FullName;
-             Dictionary<string, T> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, T>;
+             Dictionary<string, Object> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, Object>;
 
-             T exitingExtendedSettings;
+             Object exitingExtendedSettings;
              if (extendedSettingsDic != null)
              {
                  extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings);
                  if (exitingExtendedSettings != null)
-                     return exitingExtendedSettings;
+                     return exitingExtendedSettings as T;
                  else return default(T);
              }
              else

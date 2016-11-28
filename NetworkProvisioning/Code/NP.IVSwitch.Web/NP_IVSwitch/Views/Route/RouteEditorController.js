@@ -33,7 +33,6 @@
             if (parameters != undefined && parameters != null) {
                  routeId = parameters.RouteId;
                  carrierAccountId = parameters.CarrierAccountId;
-
                }
 
             isEditMode = (routeId != undefined);
@@ -69,15 +68,12 @@
                 selectorTranslationRuleReadyDeferred.resolve();
             };
 
-
-
             $scope.scopeModel.onSelectionChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.TypeId = SelectedItem.value;
                 }
             }
-
 
             $scope.scopeModel.onSelectionCodecProfileChanged = function (SelectedItem) {
 
@@ -91,10 +87,7 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
                  }
-            }
-
-
-            
+            }                        
 
             $scope.scopeModel.onSelectionChangedState = function (SelectedItem) {
                 if (SelectedItem != undefined) {
@@ -124,7 +117,6 @@
                 loadAllControls();
             }            
         }
-
 
 
         function getRoute() {
@@ -248,8 +240,8 @@
         function buildRouteObjFromScope() {
               return {
                   Entity : { RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
-                 //     AccountId: accountId ,
-                      Description :$scope.scopeModel.description,
+
+                      Description: $scope.scopeModel.description,
                       ChannelsLimit: $scope.scopeModel.channelslimit,
                       LogAlias : $scope.scopeModel.logalias,
                       Host : $scope.scopeModel.host,
@@ -258,7 +250,6 @@
                       CurrentState: $scope.scopeModel.currentstate.value,
                       CodecProfileId: $scope.scopeModel.codecprofileid,
                       TransRuleId: $scope.scopeModel.translationruleid,
-                 //     TariffId: $scope.scopeModel.tariffid,
                       WakeUpTime: $scope.scopeModel.wakeuptime,
                       TransportModeId: $scope.scopeModel.transportmodeid.value,
                       GroupId : carrierAccountId,

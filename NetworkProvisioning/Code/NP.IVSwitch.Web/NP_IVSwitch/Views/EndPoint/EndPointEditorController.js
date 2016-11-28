@@ -2,9 +2,9 @@
 
     "use strict";
 
-    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_TraceEnum', 'NP_IVSwitch_RtpModeEnum', 'NP_IVSwitch_EndPointEnum'];
+    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum',  'NP_IVSwitch_RtpModeEnum', 'NP_IVSwitch_EndPointEnum'];
 
-    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TraceEnum, NP_IVSwitch_RtpModeEnum, NP_IVSwitch_EndPointEnum) {
+    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum,   NP_IVSwitch_RtpModeEnum, NP_IVSwitch_EndPointEnum) {
 
         var isEditMode;
 
@@ -17,14 +17,10 @@
         var selectorCodecProfileReadyDeferred = UtilsService.createPromiseDeferred();
 
         var selectorTranslationRuleAPI;
-        var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();
-
-      
+        var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();      
 
         var selectorEndPointAPI;
-        var selectorEndPointReadyDeferred = UtilsService.createPromiseDeferred();
-
-      
+        var selectorEndPointReadyDeferred = UtilsService.createPromiseDeferred();      
 
         var selectorDomainAPI;
         var selectorDomainReadyDeferred = UtilsService.createPromiseDeferred();
@@ -75,12 +71,10 @@
                 selectorTranslationRuleReadyDeferred.resolve();
             };
 
-
             $scope.scopeModel.onSelectorEndPointReady = function (api) {
                  selectorEndPointAPI = api; 
                 selectorEndPointReadyDeferred.resolve();
             };
-
 
             $scope.scopeModel.onSelectorDomainReady = function (api) {
                 selectorDomainAPI = api;
@@ -108,7 +102,6 @@
                 }
             }
 
-
             $scope.scopeModel.onSelectionEndPointChanged = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.endpointtype = SelectedItem.value;
@@ -124,7 +117,6 @@
 
                  }
             }
-
 
             $scope.scopeModel.onSelectionDomainChanged = function (SelectedItem) {
                 if (SelectedItem != undefined) {
@@ -210,14 +202,11 @@
                 $scope.scopeModel.logalias = endPointEntity.LogAlias;
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
                 $scope.scopeModel.host = endPointEntity.Host;
-
-            //    $scope.scopeModel.tariffid = endPointEntity.TariffId;
                 $scope.scopeModel.codecprofileid = endPointEntity.CodecProfileId;
                 $scope.scopeModel.translationruleid = endPointEntity.TranslationRuleId;
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
-             //   $scope.scopeModel.routetableid = endPointEntity.RouteTableId;
                 $scope.scopeModel.maxcallduration = endPointEntity.MaxCallDuration;
-                 $scope.scopeModel.domaineid = endPointEntity.DomainId;
+                $scope.scopeModel.domaineid = endPointEntity.DomainId;
                 $scope.scopeModel.techprefix = endPointEntity.TechPrefix;
                 $scope.scopeModel.siplogin = endPointEntity.SipLogin;
                 $scope.scopeModel.sippassword = endPointEntity.SipPassword;
@@ -267,7 +256,6 @@
                 return selectorTranslationRuleLoadDeferred.promise;
             }
 
-
             function loadSelectorEndPoint() {
 
                 var selectorEndPointLoadDeferred = UtilsService.createPromiseDeferred();
@@ -282,7 +270,6 @@
 
                 return selectorEndPointLoadDeferred.promise;
             }
-
 
             function loadSelectorDomain() {
                 var selectorDomainLoadDeferred = UtilsService.createPromiseDeferred();
@@ -317,11 +304,9 @@
             });
         }
         function update() {
-            $scope.scopeModel.isLoading = true;
- 
+            $scope.scopeModel.isLoading = true; 
  
             return NP_IVSwitch_EndPointAPIService.UpdateEndPoint(buildEndPointObjFromScope()).then(function (response) {
-
 
                 if (VRNotificationService.notifyOnItemUpdated('EndPoint', response, 'Name')) {
 
@@ -342,15 +327,12 @@
                 Entity:
              {
                 EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
-           //     AccountId: accountId,
                 Description: $scope.scopeModel.description,
-             //   TariffId: $scope.scopeModel.tariffid,
                 LogAlias: $scope.scopeModel.logalias,
                 CodecProfileId: $scope.scopeModel.codecprofileid,
                 TransRuleId: $scope.scopeModel.translationruleid,
                 CurrentState: $scope.scopeModel.currentstate.value,
                 ChannelsLimit: $scope.scopeModel.channelslimit,
-             //   RouteTableId : $scope.scopeModel.routetableid,
                 MaxCallDuration : $scope.scopeModel.maxcallduration,
                 RtpMode: $scope.scopeModel.rtpmode ,
                 DomainId :$scope.scopeModel.domaineid,

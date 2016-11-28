@@ -65,8 +65,6 @@
   <ItemGroup>
     <Compile Include="DomainDataManager.cs" />
     <Compile Include="EndPointDataManager.cs" />
-    <Compile Include="RouteTableDataManager.cs" />
-    <Compile Include="TariffDataManager.cs" />
     <Compile Include="AccountDataManager.cs" />
     <Compile Include="CodecDefDataManager.cs" />
     <Compile Include="CodecProfileDataManager.cs" />

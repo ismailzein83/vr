@@ -47,58 +47,6 @@ namespace NP.IVSwitch.Data.Postgres
             return account;
         }
 
-
-        public List<Account> GetAccounts()
-        {
-            String cmdText = @"SELECT  account_id,type_id,first_name,last_name,company_name, contact_display,email,web_site,cycle_id,tax_group_id,pay_terms,state_id,credit_limit,
-                                       threshold_credit,balance,log_alias,address,peer_account_id,channels_limit            
-                                       FROM accounts;";
-            return GetItemsText(cmdText, AccountMapper, (cmd) =>
-            {
-            });
-        }
-
-        public bool Update(Account account)
-        {
-
-            int currentState, typeId;
-
-            MapEnum(account, out currentState, out  typeId);
-
-            String cmdText = @"UPDATE accounts
-	                             SET type_id = @type_id, first_name = @first_name, last_name = @last_name, company_name = @company_name,
-	                               contact_display = @contact_display, email = @email, web_site = @web_site, cycle_id = @cycle_id, tax_group_id = @tax_group_id,
-	                               pay_terms = @pay_terms, state_id = @state_id, credit_limit = @credit_limit, threshold_credit = @threshold_credit, balance = @balance,
-	                               log_alias = @log_alias, address = @address, peer_account_id = @peer_account_id, channels_limit = @channels_limit
-                                   WHERE  account_id = @account_id and  NOT EXISTS(SELECT 1 FROM  accounts WHERE account_id != @account_id and type_id = @type_id and email = @email);";
-
-            int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) =>
-            {
-                cmd.Parameters.AddWithValue("@account_id", account.AccountId);
-                cmd.Parameters.AddWithValue("@type_id",  typeId);
-                cmd.Parameters.AddWithValue("@first_name", account.FirstName);
-                cmd.Parameters.AddWithValue("@last_name", account.LastName);
-                cmd.Parameters.AddWithValue("@company_name", account.CompanyName);
-                cmd.Parameters.AddWithValue("@contact_display", account.ContactDisplay);
-                cmd.Parameters.AddWithValue("@email", account.Email);
-                cmd.Parameters.AddWithValue("@web_site", account.WebSite);
-                cmd.Parameters.AddWithValue("@cycle_id", account.BillingCycle);
-                cmd.Parameters.AddWithValue("@tax_group_id", account.TaxGroupId);
-                cmd.Parameters.AddWithValue("@pay_terms", account.PaymentTerms);
-                cmd.Parameters.AddWithValue("@state_id",  currentState);
-                cmd.Parameters.AddWithValue("@credit_limit", account.CreditLimit);
-                cmd.Parameters.AddWithValue("@threshold_credit", account.CreditThreshold);
-                cmd.Parameters.AddWithValue("@balance", account.CurrentBalance);
-                cmd.Parameters.AddWithValue("@log_alias", account.LogAlias);
-                cmd.Parameters.AddWithValue("@address", account.Address);
-                cmd.Parameters.AddWithValue("@peer_account_id", account.PeerVendorId);
-                cmd.Parameters.AddWithValue("@channels_limit", account.ChannelsLimit);
-
-            }
-           );
-            return (recordsEffected > 0);
-        }
-
         public bool Insert(Account account, out int insertedId)
         {
             object accountId;
@@ -164,7 +112,6 @@ namespace NP.IVSwitch.Data.Postgres
             typeId = (int)typeIdValue;
 
         }
-
 
         private Object CheckIfNull(String parameter)
         {

@@ -106,17 +106,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public void UpdateCarrierProfileExtendedSetting<T>(int carrierProfileId, T extendedSettings)
+        public void UpdateCarrierProfileExtendedSetting<T>(int carrierProfileId, T extendedSettings) where T : class
         {
             string extendedSettingName = typeof(T).FullName;
 
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
 
-            Dictionary<string, T> extendedSettingsDic = carrierProfile.ExtendedSettings as Dictionary<string, T>;
+            Dictionary<string, Object> extendedSettingsDic = carrierProfile.ExtendedSettings as Dictionary<string, Object>;
             if (extendedSettingsDic == null)
-                extendedSettingsDic = new Dictionary<string, T>();
+                extendedSettingsDic = new Dictionary<string, Object>();
 
-            T exitingExtendedSettings ;
+            Object exitingExtendedSettings;
             if (extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings))
             {
                 extendedSettingsDic[extendedSettingName] = extendedSettings;
@@ -129,19 +129,19 @@ namespace TOne.WhS.BusinessEntity.Business
             dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic);
         }
 
-        public T GetExtendedSettingsObject<T>(int carrierProfileId)
+        public T GetExtendedSettingsObject<T>(int carrierProfileId) where T : class
         {
             string extendedSettingName = typeof(T).FullName;
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
 
-            Dictionary<string, T> extendedSettingsDic = carrierProfile.ExtendedSettings as Dictionary<string, T>;
+            Dictionary<string, Object> extendedSettingsDic = carrierProfile.ExtendedSettings as Dictionary<string, Object>;
 
-            T exitingExtendedSettings;
+            Object exitingExtendedSettings;
             if (extendedSettingsDic != null)
             {
                 extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings);
                 if (exitingExtendedSettings != null)
-                    return exitingExtendedSettings;
+                    return exitingExtendedSettings as T;
                 else
                     return default(T);
             }
