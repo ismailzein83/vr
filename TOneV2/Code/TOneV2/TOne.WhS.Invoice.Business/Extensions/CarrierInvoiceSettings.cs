@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
@@ -23,6 +24,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override InvoicePartnerSettings GetPartnerSettings()
         {
             return new CarrierPartnerSettings { InvoiceType = this.InvoiceType };
+        }
+
+        public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
+        {
+            switch(context.InfoType)
+            {
+                
+            }
+            return null;
         }
     }
 }

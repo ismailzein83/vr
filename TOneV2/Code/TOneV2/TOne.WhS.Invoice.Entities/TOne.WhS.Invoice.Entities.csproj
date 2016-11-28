@@ -41,12 +41,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerInvoiceDetails.cs" />
     <Compile Include="CustomerInvoiceItemDetails.cs" />
     <Compile Include="InvoiceCarrier.cs" />
     <Compile Include="InvoiceCarrierFilter.cs" />
+    <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceItemDetails.cs" />
