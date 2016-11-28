@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery()
                 {
-                    DimensionFields = new List<string> { "Day", "Customer", "Supplier", "SaleZone", "SaleRate", "CostRate" },
+                    DimensionFields = new List<string> {"Customer", "Supplier", "SaleZone", "SaleRate", "CostRate" },
                     MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNet", "CostNet", "Profit" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -56,20 +56,20 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 foreach (var analyticRecord in result.Data)
                 {
                     RoutingByCustomerFormatted customerFormatted = new RoutingByCustomerFormatted();
-                    var customer = analyticRecord.DimensionValues[1];
+                    var customer = analyticRecord.DimensionValues[0];
                     if (customer != null)
                         customerFormatted.Customer = customer.Name;
-                    var supplier = analyticRecord.DimensionValues[2];
+                    var supplier = analyticRecord.DimensionValues[1];
                     if (supplier != null)
                         customerFormatted.Supplier = supplier.Name;
-                    var zoneValue = analyticRecord.DimensionValues[3];
+                    var zoneValue = analyticRecord.DimensionValues[2];
                     if (zoneValue != null)
                         customerFormatted.Destination = zoneValue.Name;
-                    var saleRateValue = analyticRecord.DimensionValues[4];
+                    var saleRateValue = analyticRecord.DimensionValues[3];
                     if (saleRateValue != null)
                         customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
 
-                    var costRateValue = analyticRecord.DimensionValues[5];
+                    var costRateValue = analyticRecord.DimensionValues[4];
                     if (costRateValue != null)
                         customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(costRateValue.Value ?? 0.0));
 
