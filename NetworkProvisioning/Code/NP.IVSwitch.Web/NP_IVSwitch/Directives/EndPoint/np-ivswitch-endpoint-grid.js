@@ -39,14 +39,14 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 
                         var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
 
-                         for (var i = 0; i < response.Data.length; i++) {
-                             if (response.Data[i].Entity.EndPointType == NP_IVSwitch_EndPointEnum.ACL.value) {
-                                 response.Data[i].Entity.Type = NP_IVSwitch_EndPointEnum.ACL.description;
-                            }
-                             else {
-                                 response.Data[i].Entity.Type = NP_IVSwitch_EndPointEnum.SIP.description; 
-                             }
-                         }
+                         //for (var i = 0; i < response.Data.length; i++) {
+                         //    if (response.Data[i].Entity.EndPointType == NP_IVSwitch_EndPointEnum.ACL.value) {
+                         //        response.Data[i].Entity.Type = NP_IVSwitch_EndPointEnum.ACL.description;
+                         //   }
+                         //    else {
+                         //        response.Data[i].Entity.Type = NP_IVSwitch_EndPointEnum.SIP.description; 
+                         //    }
+                         //}
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

@@ -12,7 +12,7 @@ namespace NP.IVSwitch.Entities
 
         public string CurrentStateDescription { get; set; }
 
-        public string EndPointType { get; set; }        
+        public string CurrentEndPointType { get; set; }        
 
 
     }

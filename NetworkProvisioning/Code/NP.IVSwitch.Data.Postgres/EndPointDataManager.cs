@@ -43,21 +43,16 @@ namespace NP.IVSwitch.Data.Postgres
             endPoint.SipLogin = reader["sip_login"] as string;
             endPoint.SipPassword = reader["sip_password"] as string;
             endPoint.TechPrefix = reader["tech_prefix"] as string;
-
-            try
-            {
+ 
                 System.Net.IPAddress Host = GetReaderValue<System.Net.IPAddress>(reader, "host");
                 endPoint.Host = (Host == null) ? null : Host.ToString();
-            }
-            catch (Exception ec)
-            {
 
-            }
 
-            if (endPoint.Host == null)
-                endPoint.EndPointType = 0;
-            else
-                endPoint.EndPointType = 1;
+
+                if (endPoint.Host == null)
+                    endPoint.EndPointType = EndPointType.SIP;
+                else
+                    endPoint.EndPointType = EndPointType.ACL;
 
             return endPoint;
         }
@@ -335,7 +330,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool Insert(EndPoint endPoint, out int insertedId)
         {
-            if (endPoint.EndPointType == 1)
+            if (endPoint.EndPointType == EndPointType.ACL)
                 return AclInsert(endPoint, out insertedId);
             else
                 return SipInsert(endPoint, out insertedId);
@@ -344,7 +339,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool Update(EndPoint endPoint)
         {
-            if (endPoint.EndPointType == 1)
+            if (endPoint.EndPointType == EndPointType.ACL)
                 return AclUpdate(endPoint);
             else
                 return SipUpdate(endPoint);

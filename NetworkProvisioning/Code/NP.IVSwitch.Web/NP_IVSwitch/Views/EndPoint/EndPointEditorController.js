@@ -244,6 +244,7 @@
                 $scope.scopeModel.sippassword = endPointEntity.SipPassword;
                 $scope.scopeModel.endpointtype = endPointEntity.EndPointType;
   
+  
                 if (endPointEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
                 if (endPointEntity.RtpMode != undefined) {

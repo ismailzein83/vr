@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 namespace NP.IVSwitch.Entities 
 {
     public enum RtpMode {AdvancedProxying = 1,PassthruProxying = 2,NoProxying = 3}
+
+    public enum EndPointType { SIP = 0, ACL = 1 }
      public class EndPoint
     {
         public int EndPointId { get; set; } // user_id
 
-        public int EndPointType { get; set; }
+        public EndPointType EndPointType { get; set; }
 
         public String Host { get; set; }
         public Int16 DomainId { get; set; }

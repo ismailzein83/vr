@@ -193,6 +193,8 @@ namespace NP.IVSwitch.Business
             {
                 Entity = endPoint,
                 CurrentStateDescription = Vanrise.Common.Utilities.GetEnumDescription<State>(endPoint.CurrentState),
+                CurrentEndPointType = Vanrise.Common.Utilities.GetEnumDescription<EndPointType>(endPoint.EndPointType),
+
               };
 
             return endPointDetail;
