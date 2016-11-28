@@ -23,8 +23,14 @@
         function AddInvoiceType(invoiceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "AddInvoiceType"), invoiceType);
         }
+        function HasAddInvoiceTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Invoice_ModuleConfig.moduleName, controllerName, ['AddInvoiceType']));
+        }
         function UpdateInvoiceType(invoiceType) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "UpdateInvoiceType"), invoiceType);
+        }
+        function HasUpdateInvoiceTypePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Invoice_ModuleConfig.moduleName, controllerName, ['UpdateInvoiceType']));
         }
         function ConvertToGridColumnAttribute(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "ConvertToGridColumnAttribute"), input);
@@ -45,7 +51,9 @@
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
             AddInvoiceType: AddInvoiceType,
+            HasAddInvoiceTypePermission: HasAddInvoiceTypePermission,
             UpdateInvoiceType: UpdateInvoiceType,
+            HasUpdateInvoiceTypePermission: HasUpdateInvoiceTypePermission,
             GetInvoiceTypeRuntime: GetInvoiceTypeRuntime,
             ConvertToGridColumnAttribute: ConvertToGridColumnAttribute,
             GetInvoiceTypesInfo: GetInvoiceTypesInfo,

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    invoiceTypeManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceTypeService', 'VRNotificationService'];
+    invoiceTypeManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceTypeService', 'VR_Invoice_InvoiceTypeAPIService', 'VRNotificationService'];
 
-    function invoiceTypeManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceTypeService, VRNotificationService) {
+    function invoiceTypeManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceTypeService, VR_Invoice_InvoiceTypeAPIService, VRNotificationService) {
         var gridAPI;
         loadParameters();
         defineScope();
@@ -23,6 +23,9 @@
             };
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
+            };
+            $scope.hasAddInvoiceTypePermission = function () {
+                return VR_Invoice_InvoiceTypeAPIService.HasAddInvoiceTypePermission();
             };
             $scope.addInvoiceType = addInvoiceType;
         }

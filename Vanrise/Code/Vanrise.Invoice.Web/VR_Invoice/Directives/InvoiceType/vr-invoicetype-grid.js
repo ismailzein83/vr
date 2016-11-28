@@ -65,8 +65,12 @@ app.directive("vrInvoicetypeGrid", ["UtilsService", "VRNotificationService", "VR
             function defineMenuActions() {
                 $scope.gridMenuActions.push({
                     name: "Edit",
-                    clicked: editInvoiceType
+                    clicked: editInvoiceType,
+                    haspermission: hasUpdateInvoiceTypePermission
                 });
+            }
+            function hasUpdateInvoiceTypePermission() {
+                return VR_Invoice_InvoiceTypeAPIService.HasUpdateInvoiceTypePermission();
             }
             function editInvoiceType(dataItem)
             {
