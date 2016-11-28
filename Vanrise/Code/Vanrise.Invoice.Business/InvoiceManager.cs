@@ -163,7 +163,12 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
         }
-
+        public void SendEmail(long invoiceId)
+        {
+            var invoice = GetInvoice(invoiceId);
+            InvoiceTypeManager manager = new InvoiceTypeManager();
+            var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
+        }
         #endregion
 
         #region Mappers

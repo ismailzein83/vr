@@ -4,6 +4,8 @@
     VR_Invoice_InvoiceActionService.registerSetInvoiceLockedAction();
     VR_Invoice_InvoiceActionService.registerRecreateAction();
     VR_Invoice_InvoiceActionService.registerInvoiceNoteAction();
+    VR_Invoice_InvoiceActionService.registerSendEmailAction();
+
 }]);
 
       

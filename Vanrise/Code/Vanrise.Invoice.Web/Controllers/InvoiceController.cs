@@ -67,5 +67,12 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceDetail(invoiceId);
         }
+        [HttpGet]
+        [Route("SendEmail")]
+        public void SendEmail(long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            manager.SendEmail(invoiceId);
+        }
     }
 }

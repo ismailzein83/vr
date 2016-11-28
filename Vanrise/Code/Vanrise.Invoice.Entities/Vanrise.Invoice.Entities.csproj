@@ -109,11 +109,7 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="InvoiceType1\InvoiceDataSource\" />
-    <Folder Include="InvoiceType1\ItemsFilter\" />
-    <Folder Include="InvoiceType1\UISettings\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

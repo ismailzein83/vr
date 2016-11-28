@@ -44,6 +44,11 @@
                 invoiceId: invoiceId,
             });
         }
+        function SendEmail(invoiceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SendEmail'), {
+                invoiceId: invoiceId,
+            });
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -52,7 +57,8 @@
             GetInvoiceDetail: GetInvoiceDetail,
             SetInvoiceLocked: SetInvoiceLocked,
             ReGenerateInvoice: ReGenerateInvoice,
-            UpdateInvoiceNote: UpdateInvoiceNote
+            UpdateInvoiceNote: UpdateInvoiceNote,
+            SendEmail: SendEmail
         });
     }
 

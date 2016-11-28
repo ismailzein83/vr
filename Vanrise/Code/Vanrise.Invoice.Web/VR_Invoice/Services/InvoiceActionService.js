@@ -121,7 +121,25 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             };
             registerActionType(actionType);
         }
-
+        function registerSendEmailAction() {
+            var actionType = {
+                ActionTypeName: "SendEmailAction",
+                actionMethod: function (payload) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            VR_Invoice_InvoiceAPIService.SendEmail(payload.invoice.Entity.InvoiceId).then(function (response) {
+                                promiseDeffered.resolve(response);
+                            });
+                        } else {
+                            promiseDeffered.resolve(response);
+                        }
+                    });
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(actionType);
+        }
         function openInvoiceNote(onInvoiceNoteAdded, invoiceId) {
             var settings = {
 
@@ -202,6 +220,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             registerActionType: registerActionType,
             getActionTypeIfExist: getActionTypeIfExist,
             generateInvoice: generateInvoice,
-            reGenerateInvoice: reGenerateInvoice
+            reGenerateInvoice: reGenerateInvoice,
+            registerSendEmailAction: registerSendEmailAction
         });
     }]);

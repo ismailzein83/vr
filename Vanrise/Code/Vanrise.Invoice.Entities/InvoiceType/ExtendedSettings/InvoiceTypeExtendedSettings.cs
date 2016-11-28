@@ -12,6 +12,7 @@ namespace Vanrise.Invoice.Entities
         public virtual string GenerationCustomSectionDirective { get; set; }
         public abstract InvoiceGenerator GetInvoiceGenerator();
         public abstract InvoicePartnerSettings GetPartnerSettings();
+        public abstract dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context);
     }
    
     public abstract class InvoiceGenerator
@@ -30,5 +31,10 @@ namespace Vanrise.Invoice.Entities
         dynamic CustomSectionPayload { get; }
 
         GeneratedInvoice Invoice { set; }
+    }
+    public interface IInvoiceTypeExtendedSettingsInfoContext
+    {
+        string InfoType { get; set; }
+        Entities.Invoice Invoice { get; set; }
     }
 }

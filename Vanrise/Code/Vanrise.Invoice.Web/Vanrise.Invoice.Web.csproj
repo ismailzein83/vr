@@ -180,9 +180,11 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterGroupConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-filtergroup.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\vr-invoicetype-invoicegeneratorfiltercondition.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SendEmailActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\InvoiceNoteActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\RecreateActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SetInvoiceLockActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-sendemail.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-note.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-recreate.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-setinvoicelock.js" />
