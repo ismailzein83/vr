@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int CarrierProfileId { get; set; }
         public int? SellingNumberPlanId { get; set; }
-        public Dictionary<string, Object> ExtendedSettings { get; set; }
+        public Dictionary<string,object> ExtendedSettings { get; set; }
         public CarrierAccountType AccountType { get; set; }
 
         public bool IsDeleted { get; set; }

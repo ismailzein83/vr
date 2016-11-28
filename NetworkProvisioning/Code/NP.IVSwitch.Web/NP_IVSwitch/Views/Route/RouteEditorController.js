@@ -19,8 +19,6 @@
         var selectorTranslationRuleAPI;
         var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var selectorTariffAPI;
-        var selectorTariffReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
 
@@ -71,10 +69,6 @@
                 selectorTranslationRuleReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onSelectorTariffReady = function (api) {
-                selectorTariffAPI = api;
-                selectorTariffReadyDeferred.resolve();
-            };
 
 
             $scope.scopeModel.onSelectionChanged = function (SelectedItem) {
@@ -100,12 +94,6 @@
             }
 
 
-            $scope.scopeModel.onSelectionTariffChanged = function (SelectedItem) {
-
-                if (SelectedItem != undefined) {
-                    $scope.scopeModel.tariffid = SelectedItem.TariffId;
-                }
-            }
             
 
             $scope.scopeModel.onSelectionChangedState = function (SelectedItem) {
@@ -146,7 +134,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadSelectorTariff]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -219,19 +207,6 @@
                 return selectorTranslationRuleLoadDeferred.promise;
             }
 
-            function loadSelectorTariff() {
-                var selectorTariffLoadDeferred = UtilsService.createPromiseDeferred();
-
-                selectorTariffReadyDeferred.promise.then(function () {
-                    var selectorTariffPayload = {};
-                    if (routeEntity != undefined && routeEntity.TariffId != 0)
-                        selectorTariffPayload.selectedIds = routeEntity.TariffId;
-
-                    VRUIUtilsService.callDirectiveLoad(selectorTariffAPI, selectorTariffPayload, selectorTariffLoadDeferred);
-                });
-
-                return selectorTariffLoadDeferred.promise;
-            }
         }
 
         function insert() {
@@ -283,9 +258,10 @@
                       CurrentState: $scope.scopeModel.currentstate.value,
                       CodecProfileId: $scope.scopeModel.codecprofileid,
                       TransRuleId: $scope.scopeModel.translationruleid,
-                      TariffId: $scope.scopeModel.tariffid,
+                 //     TariffId: $scope.scopeModel.tariffid,
                       WakeUpTime: $scope.scopeModel.wakeuptime,
                       TransportModeId: $scope.scopeModel.transportmodeid.value,
+                      GroupId : carrierAccountId,
                   },
 
                   CarrierAccountId:   carrierAccountId,

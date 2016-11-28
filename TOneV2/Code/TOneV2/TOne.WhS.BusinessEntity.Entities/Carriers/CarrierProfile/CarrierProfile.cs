@@ -51,7 +51,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public VRTaxSetting TaxSetting { get; set; }
     }
 
-    public class CarrierProfile : BaseCarrierProfile
+    public class CarrierProfile: BaseCarrierProfile
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "WHS_BE_CarrierProfile";
         public Dictionary<string, Object> ExtendedSettings { get; set; }

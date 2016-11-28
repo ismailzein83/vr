@@ -84,13 +84,13 @@ namespace NP.IVSwitch.Business
 
                 // add it to extendedsettings
                 AccountExtended extendedSettings = new AccountExtended();
-                Object ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject(carrierProfileId, "IVSwitchAccounts");
+                AccountExtended ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject<AccountExtended>(carrierProfileId);
                 if (ExtendedSettingsObject != null)
                     extendedSettings = (AccountExtended)ExtendedSettingsObject;
 
                 extendedSettings.CustomerAccountId = accountId;
 
-                carrierProfileManager.UpdateCarrierProfileExtendedSetting(carrierProfileId, "IVSwitchAccounts", extendedSettings);
+                carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountExtended>(carrierProfileId, extendedSettings);
             }
 
             endPointItem.Entity.AccountId = accountId;
@@ -112,7 +112,7 @@ namespace NP.IVSwitch.Business
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = EndPointDetailMapper(this.GetEndPoint(endPointId));
 
-                EndPointExtended endPointsExtendedSettings = (EndPointExtended)carrierAccountManager.GetExtendedSettingsObject(carrierAccountId, "EndPoints");
+                EndPointExtended endPointsExtendedSettings =carrierAccountManager.GetExtendedSettingsObject<EndPointExtended>(carrierAccountId);
                 //add route to carrier account
                 if (endPointsExtendedSettings == null)
                     endPointsExtendedSettings = new EndPointExtended();
@@ -124,7 +124,7 @@ namespace NP.IVSwitch.Business
                 endPointIdList.Add(endPointId);
                 endPointsExtendedSettings.EndPointIdList = endPointIdList;
 
-                carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, "EndPoints", endPointsExtendedSettings);
+                carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointExtended>(carrierAccountId, endPointsExtendedSettings);
 
             }
             else

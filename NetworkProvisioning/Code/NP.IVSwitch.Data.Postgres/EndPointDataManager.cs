@@ -89,9 +89,8 @@ namespace NP.IVSwitch.Data.Postgres
             MapEnum(endPoint, out currentState, out rtpMode);
 
             String cmdText = @"UPDATE users
-	                             SET  description=@description,group_id=@group_id,tariff_id=@tariff_id,
-                                   log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
-                                   channels_limit=@channels_limit, route_table_id=@route_table_id,max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id,
+	                             SET  description=@description ,log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
+                                   channels_limit=@channels_limit, max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id,
                                    sip_login=@sip_login,sip_password=@sip_password ,  tech_prefix= @tech_prefix
                                    WHERE  user_id = @user_id AND NOT EXISTS(SELECT 1 FROM  users WHERE (user_id != @user_id and
                                                                             domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix))";
@@ -99,14 +98,11 @@ namespace NP.IVSwitch.Data.Postgres
            {
                cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
                cmd.Parameters.AddWithValue("@description", endPoint.Description);
-               cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
-               cmd.Parameters.AddWithValue("@tariff_id", endPoint.TariffId);
                cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                cmd.Parameters.AddWithValue("@state_id", currentState);
                cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-               cmd.Parameters.AddWithValue("@route_table_id", endPoint.RouteTableId);
                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
                cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
@@ -132,7 +128,7 @@ namespace NP.IVSwitch.Data.Postgres
             MapEnum(endPoint, out currentState, out rtpMode);
 
             String cmdText1 = @"UPDATE users
-	                             SET group_id=@group_id,trans_rule_id=@trans_rule_id,state_id=@state_id,channels_limit=@channels_limit, 
+	                             SET  trans_rule_id=@trans_rule_id,state_id=@state_id,channels_limit=@channels_limit, 
                                      max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id, tech_prefix= @tech_prefix
                                    WHERE  user_id = @user_id  ";
 
@@ -140,7 +136,6 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
-                cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                 cmd.Parameters.AddWithValue("@state_id", 1);
                 cmd.Parameters.AddWithValue("@channels_limit", 1);

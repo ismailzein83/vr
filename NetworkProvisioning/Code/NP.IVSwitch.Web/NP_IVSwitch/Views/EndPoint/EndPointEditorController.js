@@ -19,14 +19,12 @@
         var selectorTranslationRuleAPI;
         var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var selectorTariffAPI;
-        var selectorTariffReadyDeferred = UtilsService.createPromiseDeferred();
+      
 
         var selectorEndPointAPI;
         var selectorEndPointReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var selectorRouteTableAPI;
-        var selectorRouteTableReadyDeferred = UtilsService.createPromiseDeferred();
+      
 
         var selectorDomainAPI;
         var selectorDomainReadyDeferred = UtilsService.createPromiseDeferred();
@@ -77,20 +75,12 @@
                 selectorTranslationRuleReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onSelectorTariffReady = function (api) {
-                selectorTariffAPI = api;
-                selectorTariffReadyDeferred.resolve();
-            };
 
             $scope.scopeModel.onSelectorEndPointReady = function (api) {
                  selectorEndPointAPI = api; 
                 selectorEndPointReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onSelectorRouteTableReady = function (api) {
-                selectorRouteTableAPI = api;
-                selectorRouteTableReadyDeferred.resolve();
-            };
 
             $scope.scopeModel.onSelectorDomainReady = function (api) {
                 selectorDomainAPI = api;
@@ -118,12 +108,6 @@
                 }
             }
 
-            $scope.scopeModel.onSelectionTariffChanged = function (SelectedItem) {
-
-                 if (SelectedItem != undefined) {
-                    $scope.scopeModel.tariffid = SelectedItem.TariffId;
-                }
-            }
 
             $scope.scopeModel.onSelectionEndPointChanged = function (SelectedItem) {
                 if (SelectedItem != undefined) {
@@ -141,11 +125,6 @@
                  }
             }
 
-            $scope.scopeModel.onSelectionRouteTableChanged = function (SelectedItem) {
-                if (SelectedItem != undefined) {
-                    $scope.scopeModel.routetableid = SelectedItem.RouteTableId;
-                }
-            }
 
             $scope.scopeModel.onSelectionDomainChanged = function (SelectedItem) {
                 if (SelectedItem != undefined) {
@@ -195,7 +174,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadSelectorTariff, loadSelectorEndPoint, loadSelectorRouteTable, loadSelectorDomain]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadSelectorEndPoint, loadSelectorDomain]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -232,11 +211,11 @@
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
                 $scope.scopeModel.host = endPointEntity.Host;
 
-                $scope.scopeModel.tariffid = endPointEntity.TariffId;
+            //    $scope.scopeModel.tariffid = endPointEntity.TariffId;
                 $scope.scopeModel.codecprofileid = endPointEntity.CodecProfileId;
                 $scope.scopeModel.translationruleid = endPointEntity.TranslationRuleId;
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
-                $scope.scopeModel.routetableid = endPointEntity.RouteTableId;
+             //   $scope.scopeModel.routetableid = endPointEntity.RouteTableId;
                 $scope.scopeModel.maxcallduration = endPointEntity.MaxCallDuration;
                  $scope.scopeModel.domaineid = endPointEntity.DomainId;
                 $scope.scopeModel.techprefix = endPointEntity.TechPrefix;
@@ -288,19 +267,6 @@
                 return selectorTranslationRuleLoadDeferred.promise;
             }
 
-            function loadSelectorTariff() {
-                var selectorTariffLoadDeferred = UtilsService.createPromiseDeferred();
-
-                selectorTariffReadyDeferred.promise.then(function () {
-                    var selectorTariffPayload = {};
-                    if (endPointEntity != undefined && endPointEntity.TariffId != undefined)
-                        selectorTariffPayload.selectedIds = endPointEntity.TariffId;
-
-                    VRUIUtilsService.callDirectiveLoad(selectorTariffAPI, selectorTariffPayload, selectorTariffLoadDeferred);
-                });
-
-                return selectorTariffLoadDeferred.promise;
-            }
 
             function loadSelectorEndPoint() {
 
@@ -317,19 +283,6 @@
                 return selectorEndPointLoadDeferred.promise;
             }
 
-            function loadSelectorRouteTable() {
-                var selectorRouteTableLoadDeferred = UtilsService.createPromiseDeferred();
-
-                selectorRouteTableReadyDeferred.promise.then(function () {
-                    var selectorRouteTablePayload = {};
-                    if (endPointEntity != undefined && endPointEntity.RouteTableId != undefined)
-                        selectorRouteTablePayload.selectedIds = endPointEntity.RouteTableId;
-                    
-                    VRUIUtilsService.callDirectiveLoad(selectorRouteTableAPI, selectorRouteTablePayload, selectorRouteTableLoadDeferred);
-                });
-
-                return selectorRouteTableLoadDeferred.promise;
-            }
 
             function loadSelectorDomain() {
                 var selectorDomainLoadDeferred = UtilsService.createPromiseDeferred();
@@ -391,13 +344,13 @@
                 EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
            //     AccountId: accountId,
                 Description: $scope.scopeModel.description,
-                TariffId: $scope.scopeModel.tariffid,
+             //   TariffId: $scope.scopeModel.tariffid,
                 LogAlias: $scope.scopeModel.logalias,
                 CodecProfileId: $scope.scopeModel.codecprofileid,
                 TransRuleId: $scope.scopeModel.translationruleid,
                 CurrentState: $scope.scopeModel.currentstate.value,
                 ChannelsLimit: $scope.scopeModel.channelslimit,
-                RouteTableId : $scope.scopeModel.routetableid,
+             //   RouteTableId : $scope.scopeModel.routetableid,
                 MaxCallDuration : $scope.scopeModel.maxcallduration,
                 RtpMode: $scope.scopeModel.rtpmode ,
                 DomainId :$scope.scopeModel.domaineid,
@@ -406,6 +359,7 @@
                 SipLogin: $scope.scopeModel.siplogin,
                 SipPassword: $scope.scopeModel.sippassword,
                 EndPointType: $scope.scopeModel.endpointtype,
+                GroupdId: carrierAccountId,
              },
 
                  CarrierAccountId:   carrierAccountId,

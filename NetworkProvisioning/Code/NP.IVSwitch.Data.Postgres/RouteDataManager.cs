@@ -60,8 +60,7 @@ namespace NP.IVSwitch.Data.Postgres
             MapEnum(route, out currentState, out transportPortId);
  
             String cmdText = @"UPDATE routes
-	                             SET  description=@description,group_id=@group_id,tariff_id=@tariff_id,
-                                   log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
+	                             SET  description=@description,log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
                                    channels_limit=@channels_limit, wakeup_time=@wakeup_time,host=@host,port=@port,transport_mode_id=@transport_mode_id,
                                      timeout=@timeout 
                                    WHERE  route_id = @route_id;";
@@ -70,8 +69,6 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@route_id", route.RouteId);                 
                 cmd.Parameters.AddWithValue("@description", route.Description);
-                cmd.Parameters.AddWithValue("@group_id", route.GroupId);
-                cmd.Parameters.AddWithValue("@tariff_id", route.TariffId);
                 cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);

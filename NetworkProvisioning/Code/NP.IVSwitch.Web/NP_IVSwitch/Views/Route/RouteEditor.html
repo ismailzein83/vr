@@ -7,12 +7,9 @@
                     <vr-columns width="1/2row">
                         <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Group Membership Tag" ></vr-textbox>
-                    </vr-columns>
+                   
 
-                    <np-ivswitch-tariff-selector on-ready="scopeModel.onSelectorTariffReady" onselectionchanged="scopeModel.onSelectionTariffChanged"
-                                                          normal-col-num="6"></np-ivswitch-tariff-selector>   
+               
                     <vr-columns width="1/2row">
                         <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired></vr-textbox>
                     </vr-columns>
@@ -28,7 +25,7 @@
                                    datasource="scopeModel.states" selectedvalues="scopeModel.currentstate" onselectionchanged="scopeModel.onSelectionChangedState"></vr-select>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Channels Limit" value="scopeModel.channelslimit" isrequired></vr-textbox>
+                        <vr-textbox label="Channels Limit" value="scopeModel.channelslimit" type="number" isrequired></vr-textbox>
                     </vr-columns>
 
                     <vr-columns width="1/2row">

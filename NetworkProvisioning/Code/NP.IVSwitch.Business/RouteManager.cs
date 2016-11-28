@@ -85,13 +85,13 @@ namespace NP.IVSwitch.Business
  
                 // add it to extendedsettings
                 AccountExtended extendedSettings = new AccountExtended();
-                Object ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject(carrierProfileId, "IVSwitchAccounts");
+                Object ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject<AccountExtended>(carrierProfileId);
                 if (ExtendedSettingsObject != null)
                     extendedSettings = (AccountExtended)ExtendedSettingsObject;
 
                 extendedSettings.VendorAccountId = accountId;
 
-                carrierProfileManager.UpdateCarrierProfileExtendedSetting(carrierProfileId, "IVSwitchAccounts", extendedSettings);
+                carrierProfileManager.UpdateCarrierProfileExtendedSetting(carrierProfileId, extendedSettings);
             }
 
             routeItem.Entity.AccountId = accountId;
@@ -114,7 +114,7 @@ namespace NP.IVSwitch.Business
                 insertOperationOutput.InsertedObject = RouteDetailMapper(this.GetRoute(routeId));
 
 
-                RouteExtended routesExtendedSettings = (RouteExtended)carrierAccountManager.GetExtendedSettingsObject(carrierAccountId, "Routes");
+                RouteExtended routesExtendedSettings = carrierAccountManager.GetExtendedSettingsObject<RouteExtended>(carrierAccountId);
                 //add route to carrier account
                 if (routesExtendedSettings == null)
                     routesExtendedSettings = new RouteExtended();
@@ -126,7 +126,7 @@ namespace NP.IVSwitch.Business
                 routeIdList.Add(routeId);
                 routesExtendedSettings.RouteIdList = routeIdList;
 
-                carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, "Routes", routesExtendedSettings);
+                carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, routesExtendedSettings);
             }
             else
             {

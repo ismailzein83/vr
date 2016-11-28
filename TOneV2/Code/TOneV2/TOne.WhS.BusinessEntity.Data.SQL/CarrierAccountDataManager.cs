@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool UpdateExtendedSettings(int carrierAccountId, Dictionary<string, object> extendedSettings)
+        public bool UpdateExtendedSettings<T>(int carrierAccountId, Dictionary<string, T> extendedSettings)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_UpdateExtendedSettings", carrierAccountId, Vanrise.Common.Serializer.Serialize(extendedSettings));
             return (recordsEffected > 0);
