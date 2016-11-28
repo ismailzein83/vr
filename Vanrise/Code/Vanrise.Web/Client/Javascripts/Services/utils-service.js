@@ -802,7 +802,12 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return diffDays ;
     }
    
-
+    function createDateFromString(value)
+    {
+        var date = new Date(value)
+        var userTimezoneOffset = new Date().getTimezoneOffset() * 60000;
+        return new Date(date.getTime() + userTimezoneOffset);
+    }
 
     function getDateFromDateTime(dateTime) {
         var date = new Date(dateTime);
@@ -864,7 +869,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         parseStringToJson: parseStringToJson,
         getItemIndexByStringVal: getItemIndexByStringVal,
         isContextReadOnly: isContextReadOnly,
-        setContextReadOnly: setContextReadOnly
+        setContextReadOnly: setContextReadOnly,
+        createDateFromString: createDateFromString
     });
 
 }]);
