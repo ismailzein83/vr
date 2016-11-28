@@ -68,7 +68,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 carrierProfile.Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string);
                 carrierProfile.SourceId = reader["SourceId"] as string;
 
-                carrierProfile.ExtendedSettings = reader["ExtendedSettings"] as string != null? Vanrise.Common.Serializer.Deserialize<Dictionary<string,Object>>(reader["ExtendedSettings"] as string):null;
                 carrierProfile.IsDeleted = GetReaderValue<bool>(reader, "IsDeleted");
             
             return carrierProfile;

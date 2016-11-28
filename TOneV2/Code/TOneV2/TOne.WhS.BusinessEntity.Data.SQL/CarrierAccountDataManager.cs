@@ -107,7 +107,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CarrierAccountSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
                 SourceId = reader["SourceID"] as string,
                 IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
-                ExtendedSettings = Vanrise.Common.Serializer.Deserialize<Dictionary<string,object>>(reader["ExtendedSettings"] as string),
 
             };
             return carrierAccount;
