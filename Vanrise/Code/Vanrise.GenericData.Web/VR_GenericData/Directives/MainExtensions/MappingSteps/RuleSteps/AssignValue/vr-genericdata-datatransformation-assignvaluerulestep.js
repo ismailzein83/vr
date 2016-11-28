@@ -59,6 +59,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
                     var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
@@ -67,6 +68,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                             payloadRuleStep.context = payload.context;
                         if (payload != undefined && payload.stepDetails) {
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
+                            payloadRuleStep.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
                             payloadRuleStep.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
                             payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;

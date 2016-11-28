@@ -146,7 +146,7 @@
                     var payload = {};
 
                     if (objectVariables != undefined) {
-                        payload.objects = objectVariables                        
+                        payload.objects = objectVariables
                     }
                     if (criteriaFieldEntity != undefined) {
                         var property = { objectName: criteriaFieldEntity.ValueObjectName, propertyName: criteriaFieldEntity.ValuePropertyName };
@@ -178,9 +178,12 @@
         function buildCriteriaFieldObjectFromScope() {
 
             var property = objectPropertySelectorAPI.getData();
+            var valueObjectName;
+            var valuePropertyName;
+
             if (property != undefined) {
-                var valueObjectName = property.valueObjectName;
-                var valuePropertyName = property.valuePropertyName;
+                valueObjectName = property.valueObjectName;
+                valuePropertyName = property.valuePropertyName;
             }
 
             return {

@@ -93,21 +93,22 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     $scope.scopeModel.ruleFieldsMappings.length = 0;
                     $scope.scopeModel.ruleObjectsMappings.length = 0;
                     loadRuleDefinition(selectedItem.GenericRuleDefinitionId).then(function (response) {
+
                         if (response.CriteriaDefinition.Fields) {
                             for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
                                 var fuleField = response.CriteriaDefinition.Fields[i];
-                                var filterItem = {
+                                var fieldsFilterItem = {
                                     RuleFields: fuleField,
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                     loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                 };
-                                var payload;
+                                var fieldsPayload;
                                 if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && mainPayload.ruleFieldsMappings.length > 0 && firstTimeload) {
                                     var ruleFieldsMapping = UtilsService.getItemByVal(mainPayload.ruleFieldsMappings, fuleField.FieldName, "RuleCriteriaFieldName");
                                     if (ruleFieldsMapping != undefined)
-                                        payload = ruleFieldsMapping.Value;
+                                        fieldsPayload = ruleFieldsMapping.Value;
                                 }
-                                addFilterItemToGrid(filterItem, payload);
+                                addFilterItemToGrid(fieldsFilterItem, fieldsPayload);
                             }
                         }
                         if (response.Objects) {
@@ -115,15 +116,15 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                             for (var prop in response.Objects) {
                                 if (prop != '$type') {
 
-                                    var filterItem = {
+                                    var objectsFilterItem = {
                                         RuleObject: response.Objects[prop],
                                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                         loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
-                                    var payload;
+                                    var objectsPayload;
                                     if (mainPayload != undefined && mainPayload.ruleObjectsMappings != undefined && mainPayload.ruleObjectsMappings.length > 0 && firstTimeload)
-                                        payload = mainPayload.ruleObjectsMappings[count].Value;
-                                    addFilterObjectsToGrid(filterItem, payload);
+                                        objectsPayload = mainPayload.ruleObjectsMappings[count].Value;
+                                    addFilterObjectsToGrid(objectsFilterItem, objectsPayload);
                                     count++;
                                 }
 
@@ -165,6 +166,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                 }
 
                 function addFilterObjectsToGrid(filterItem, payload) {
+
                     var dataItem = {
                         ObjectName: filterItem.RuleObject.ObjectName,
                         Title: filterItem.RuleObject.ObjectName
@@ -281,7 +283,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
 
                         }
                     }
-                    var ruleObjectsMappings = [];
+                    var ruleObjectsMappings =[];
                     if ($scope.scopeModel.ruleObjectsMappings.length > 0) {
                         for (var i = 0; i < $scope.scopeModel.ruleObjectsMappings.length; i++) {
                             var ruleObjectsMapping = $scope.scopeModel.ruleObjectsMappings[i];
@@ -294,7 +296,6 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                             }
                         }
                     }
-
 
                     obj.ConfigId = ruleTypeEntity != undefined ? ruleTypeEntity.ExtensionConfigurationId : undefined;
                     obj.RuleDefinitionId = $scope.selectedRuleDefinition != undefined ? $scope.selectedRuleDefinition.GenericRuleDefinitionId : undefined;

@@ -11,8 +11,6 @@ namespace Vanrise.Entities
         public string ObjectName { get; set; }
 
         public Guid VRObjectTypeDefinitionId { get; set; }
-
-        public VRObjectType ObjectType { get; set; }
     }
 
     public class VRObjectVariableCollection : Dictionary<string, VRObjectVariable>

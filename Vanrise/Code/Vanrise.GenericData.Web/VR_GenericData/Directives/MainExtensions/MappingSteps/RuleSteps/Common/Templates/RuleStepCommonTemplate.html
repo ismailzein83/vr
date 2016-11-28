@@ -25,7 +25,7 @@
                     <vr-datagrid datasource="scopeModel.ruleObjectsMappings"
                                  hidegridmenu norowhighlightonclick="true">
                         <vr-datagridcolumn headertext="'Rule Object Name'" type="'Text'" field="'Title'" widthfactor="7" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="''" widthfactor="15" disablesorting>
+                        <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="'ObjectName'" widthfactor="15" disablesorting>
                             <vr-genericdata-expressionbuilder on-ready="dataItem.onObjectSourceMappingReady" hidelabel label="From"></vr-genericdata-expressionbuilder>
                         </vr-datagridcolumn>
                     </vr-datagrid>

@@ -31,10 +31,11 @@ namespace Vanrise.GenericData.Transformation.Entities
             if (this.IsEffectiveInFuture != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0}.IsEffectiveInFuture = {1};", ruleTargetVariableName, this.IsEffectiveInFuture);
 
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
 
             if (this.RuleFieldsMappings != null)
             {
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
+
                 foreach (var ruleFieldMapping in this.RuleFieldsMappings)
                 {
                     context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.TargetFieldValues.Add({3}{2}{3}, {0});",
@@ -43,6 +44,8 @@ namespace Vanrise.GenericData.Transformation.Entities
             }
             if (this.RuleObjectsMappings != null)
             {
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.Objects = new Dictionary<string, dynamic>();", ruleTargetVariableName);
+
                 foreach (var ruleObjectMapping in this.RuleObjectsMappings)
                 {
                     context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.Objects.Add({3}{2}{3}, {0});",

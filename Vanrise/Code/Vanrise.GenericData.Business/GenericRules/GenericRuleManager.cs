@@ -167,25 +167,33 @@ namespace Vanrise.GenericData.Business
 
             foreach (var criteriaField in criteriaDefinition.Fields)
             {
-                if (criteriaField.ValueObjectName != null || criteriaField.ValueEvaluator != null)
+                if (criteriaField.ValueObjectName != null || criteriaField.ValuePropertyName != null)
                 {
                     if (criteriaField.ValueObjectName == null)
                         throw new NullReferenceException("criteriaField.ValueObjectName");
-                    if (criteriaField.ValueEvaluator == null)
-                        throw new NullReferenceException("criteriaField.ValueEvaluator");
+                    if (criteriaField.ValuePropertyName == null)
+                        throw new NullReferenceException("criteriaField.ValuePropertyName");
                     if (objects == null)
-                        throw new NullReferenceException("objects");
+                        throw new NullReferenceException("VRObjectVariableCollection objects");
+
                     VRObjectVariable objectVariable;
                     if (!objects.TryGetValue(criteriaField.ValueObjectName, out objectVariable))
                         throw new NullReferenceException(String.Format("objectVariable '{0}'", criteriaField.ValueObjectName));
-                    if (objectVariable.ObjectType == null)
-                        throw new NullReferenceException(String.Format("objectVariable.ObjectType '{0}'", criteriaField.ValueObjectName));
+
+                    VRObjectTypeDefinitionManager vrObjectTypeDefinitionManager = new VRObjectTypeDefinitionManager();
+                    VRObjectTypeDefinition vrObjectTypeDefinition = vrObjectTypeDefinitionManager.GetVRObjectTypeDefinition(objectVariable.VRObjectTypeDefinitionId);
+                    if (vrObjectTypeDefinition.Settings == null)
+                        throw new NullReferenceException(String.Format("vrObjectTypeDefinition.Settings: '{0}'", criteriaField.ValueObjectName));
+
+                    if (vrObjectTypeDefinition.Settings.ObjectType == null)
+                        throw new NullReferenceException(String.Format("vrObjectTypeDefinition.Settings.ObjectType: '{0}'", criteriaField.ValueObjectName));
+
                     ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
                     {
                         CriteriaName = criteriaField.FieldName,
                         ObjectName = criteriaField.ValueObjectName,
-                        ObjectType = objectVariable.ObjectType,
-                        PropertyEvaluator = criteriaField.ValueEvaluator
+                        ObjectType = vrObjectTypeDefinition.Settings.ObjectType,
+                        PropertyEvaluator = vrObjectTypeDefinition.Settings.Properties[criteriaField.ValuePropertyName].PropertyEvaluator
                     });
                 }
             }
@@ -193,7 +201,7 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-        
+
         #region Private Methods
 
         bool RuleCriteriaFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, Dictionary<string, object> filterValues)
@@ -305,9 +313,9 @@ namespace Vanrise.GenericData.Business
                 }
             });
         }
-        
+
         #endregion
-        
+
         #region Protected Methods
 
         public override GenericRuleDetail MapToDetails(T rule)

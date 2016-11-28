@@ -26,7 +26,5 @@ namespace Vanrise.GenericData.Entities
         public string ValueObjectName { get; set; }
 
         public string ValuePropertyName { get; set; }
-
-        public VRObjectPropertyEvaluator ValueEvaluator { get; set; }
     }
 }

@@ -131,11 +131,14 @@
 
                 api.getData = function () {
 
+                    var valueObjectName;
+                    var valuePropertyName;
+
                     if ($scope.scopeModel.selectedObject != undefined) {
-                        var valueObjectName = $scope.scopeModel.selectedObject.ObjectName;
+                        valueObjectName = $scope.scopeModel.selectedObject.ObjectName;
                     }
                     if ($scope.scopeModel.selectedProperty) {
-                        var valuePropertyName = $scope.scopeModel.selectedProperty.Name;
+                        valuePropertyName = $scope.scopeModel.selectedProperty.Name;
                     }
 
                     var data;
