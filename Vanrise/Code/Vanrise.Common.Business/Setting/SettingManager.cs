@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common.Data;
-using Vanrise.Security.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
     public class SettingManager
     {
-        SecurityContext _securityContext;
+        ISecurityContext _securityContext;
 
         public SettingManager()
         {
-            _securityContext = new SecurityContext();
+            _securityContext = ContextFactory.GetContext();
         }
         public T GetSetting<T>(string type) where T : SettingData
         {
