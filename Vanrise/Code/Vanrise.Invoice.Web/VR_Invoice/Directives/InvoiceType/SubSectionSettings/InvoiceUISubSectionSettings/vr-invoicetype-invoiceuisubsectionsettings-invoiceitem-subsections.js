@@ -39,7 +39,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsections", 
                     return "You Should add at least one sub section.";
                 };
 
-                ctrl.addSubSection = function () {
+                $scope.addSubSection = function () {
                     var onSubSectionAdded = function (subSection) {
                         ctrl.datasource.push({ Entity: subSection });
                     };

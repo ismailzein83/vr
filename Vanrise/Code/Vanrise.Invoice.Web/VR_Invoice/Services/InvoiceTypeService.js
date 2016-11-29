@@ -36,7 +36,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemSubSectionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/InvoiceItemSubSectionEditor.html', parameters, settings);
         }
 
         function editInvoiceItemSubSection(subSectionEntity, onInvoiceItemSubSectionUpdated, context) {
@@ -51,7 +51,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemSubSectionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/InvoiceItemSubSectionEditor.html', parameters, settings);
         }
 
         function addDataSource(onDataSourceAdded, context) {

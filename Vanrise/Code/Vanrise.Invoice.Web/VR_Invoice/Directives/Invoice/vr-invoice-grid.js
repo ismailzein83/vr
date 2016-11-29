@@ -152,7 +152,6 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             }
 
             function defineMenuActions(invoiceGridActions) {
-                console.log(invoiceGridActions);
                 $scope.gridMenuActions.length = 0;
                 if (invoiceGridActions != undefined)
                 {
