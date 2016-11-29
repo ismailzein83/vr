@@ -60,7 +60,7 @@
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
 
-    <add key="NumberingPlanDBConnStringKey" value="NumberingPlanDBConnString"/>
+    <add key="NumberingPlanDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
   </appSettings>
 
