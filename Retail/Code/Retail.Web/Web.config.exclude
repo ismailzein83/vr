@@ -56,12 +56,15 @@
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TOneWhS_BE_DBConnStringKey" value="RetailDBConnString"/>
     <add key="VR_AccountBalance_TransactionDBConnStringKey" value="VR_AccountBalance_TransactionDBConnString"/>
+    
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
 
     <add key="NumberingPlanDBConnStringKey" value="ConfigurationDBConnString"/>
+    
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
+    <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
   </appSettings>
 
   <system.web>
