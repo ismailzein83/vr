@@ -8,9 +8,17 @@
 	@IssueDate datetime,
 	@DueDate datetime,
 	@Details nvarchar(MAX),
+	@InvoiceIdToDelete bigint = Null,
 	@ID bigint out
 AS
 BEGIN
+	
+	If(@InvoiceIdToDelete IS NOT Null)
+	BEGIN
+		Update VR_Invoice.Invoice Set IsDeleted = 1
+		Where ID =@InvoiceIdToDelete;
+  	END
+
 	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details)
 	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details)
 	SET @ID = @@Identity
