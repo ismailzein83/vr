@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities 
 {
-    public class EndPointExtended
+    public class EndPointToUpdate
     {
-        public List<int> EndPointIds { get; set; }
-
+        public int? TariffId { get; set; }
+        public int? RouteTableId { get; set; }
     }
 }

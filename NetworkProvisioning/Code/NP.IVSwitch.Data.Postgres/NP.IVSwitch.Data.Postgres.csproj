@@ -70,6 +70,8 @@
     <Compile Include="CodecProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteDataManager.cs" />
+    <Compile Include="RouteTableDataManager.cs" />
+    <Compile Include="TariffDataManager.cs" />
     <Compile Include="TranslationRuleDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

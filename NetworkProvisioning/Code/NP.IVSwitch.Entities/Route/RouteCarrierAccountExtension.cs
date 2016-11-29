@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities 
 {
-    public class AccountExtended
-    {      
-        public int? CustomerAccountId { get; set; }
-
-        public int? VendorAccountId { get; set; }
+    public class RouteCarrierAccountExtension
+    {
+        public List<int> RouteIds { get; set; }
 
     }
 }

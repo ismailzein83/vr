@@ -133,6 +133,26 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
+      
+
+        public void  CheckTariffTable()
+        {
+            // check if exists/insert
+            String cmdText = @"insert into tariffs (tariff_name, description) 
+                               select  'Global' ,'Global' 
+                               where not exists(select 1 from tariffs where tariff_name = 'Global')";
+
+            int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) => { });
+
+            if (recordsEffected > 0)
+            {
+                //create global table in tariffs database
+                TariffDataManager tariffDataManager = new TariffDataManager();
+                tariffDataManager.CreateGlobalTable();
+            }
+            
+        }
+
         private void MapEnum(Route route, out int currentState, out int transportPortId)
         {
             var currentStateValue = Enum.Parse(typeof(State), route.CurrentState.ToString());

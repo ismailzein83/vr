@@ -11,9 +11,6 @@ namespace NP.IVSwitch.Data
     {
         List<EndPoint> GetEndPoints();
 
-        bool InsertTariff(String carrierAccountName);
-
-
         bool  Update(EndPoint endPoint);
         bool  Insert(EndPoint endPoint, out int insertedId);
 
@@ -22,5 +19,8 @@ namespace NP.IVSwitch.Data
 
         bool SipUpdate(EndPoint endPoint);
         bool SipInsert(EndPoint endPoint, out int insertedId);
+ 
+
+         void CheckTariffAndRouteTables(EndPoint  endPoint ,  string carrierAccountName);
     }
 }

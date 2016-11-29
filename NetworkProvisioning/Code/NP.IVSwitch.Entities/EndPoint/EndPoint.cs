@@ -26,8 +26,7 @@ namespace NP.IVSwitch.Entities
         public int ChannelsLimit {get;set;}
         public int ChannelsActive {get;set;}
         public  String LogAlias {get;set;}   
-        public int TariffId {get;set;}        
-        public int RouteTableId {get;set;}
+   
         public Trace EnableTrace { get; set; }
         public int CodecProfileId { get; set; }
         public int GroupId {get;set;}       
