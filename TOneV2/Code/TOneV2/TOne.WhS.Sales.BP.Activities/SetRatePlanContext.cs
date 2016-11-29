@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 
@@ -11,6 +12,13 @@ namespace TOne.WhS.Sales.BP.Activities
 {
 	public sealed class SetRatePlanContext : CodeActivity
 	{
+		#region Input Arguments
+
+		[RequiredArgument]
+		public InArgument<TOne.WhS.BusinessEntity.Entities.SalePriceListOwnerType> OwnerType { get; set; }
+
+		#endregion
+
 		protected override void CacheMetadata(CodeActivityMetadata metadata)
 		{
 			metadata.AddDefaultExtensionProvider<IRatePlanContext>(() => new RatePlanContext());
@@ -19,7 +27,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
 		protected override void Execute(CodeActivityContext context)
 		{
-
+			SalePriceListOwnerType ownerType = OwnerType.Get(context);
+			RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
+			ratePlanContext.OwnerType = ownerType;
 		}
 	}
 
@@ -45,6 +55,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			_retroactiveDate = DateTime.Now.Date.AddDays(-saleAreaSettings.RetroactiveDayOffset);
 		}
 
+		public SalePriceListOwnerType OwnerType { get; set; }
 		public DateTime RetroactiveDate
 		{
 			get

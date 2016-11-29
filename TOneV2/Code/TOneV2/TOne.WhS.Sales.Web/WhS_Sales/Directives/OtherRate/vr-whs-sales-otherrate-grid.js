@@ -8,18 +8,15 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var rateTypeGrid = new RateTypeGrid($scope, ctrl, $attrs);
-            rateTypeGrid.initializeController();
+            var otherRateGrid = new OtherRateGrid($scope, ctrl, $attrs);
+            otherRateGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
-        compile: function (element, attrs) {
-
-        },
         templateUrl: "/Client/Modules/WhS_Sales/Directives/OtherRate/Templates/OtherRateGridTemplate.html"
     };
 
-    function RateTypeGrid($scope, ctrl, $attrs) {
+    function OtherRateGrid($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -70,7 +67,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 return WhS_Sales_RatePlanUtilsService.validateNewRateDates(otherRate);
             };
         }
-
         function defineAPI() {
 
             var api = {};
@@ -79,6 +75,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             {
             	zoneItem = query.zoneItem;
             	settings = query.settings;
+
+            	$scope.isSellingProductZone = zoneItem.isSellingProductZone;
 
             	if (zoneItem.NewRates == null)
             		zoneItem.NewRates = [];

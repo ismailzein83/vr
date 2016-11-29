@@ -260,6 +260,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         {
             zoneItem.IsDirty = false;
             zoneItem.OwnerType = gridQuery.OwnerType;
+            zoneItem.isSellingProductZone = (zoneItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
             zoneItem.showRateChangeType = true;
 
             zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
