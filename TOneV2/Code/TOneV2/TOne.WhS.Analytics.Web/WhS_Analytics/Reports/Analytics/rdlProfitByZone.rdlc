@@ -12,7 +12,7 @@
               <Width>2.45126in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3in</Width>
+              <Width>3.11458in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3in</Width>
@@ -1590,14 +1590,14 @@
         </TablixRowHierarchy>
         <DataSetName>ZoneProfit</DataSetName>
         <Height>1in</Height>
-        <Width>16.9808in</Width>
+        <Width>17.09538in</Width>
         <Style />
       </Tablix>
     </ReportItems>
     <Height>1in</Height>
     <Style />
   </Body>
-  <Width>16.9808in</Width>
+  <Width>17.09538in</Width>
   <Page>
     <PageHeader>
       <Height>2in</Height>
