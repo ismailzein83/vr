@@ -64,9 +64,14 @@
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarrierPartnerManager.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="Extensions\CarrierPartnerSettings.cs" />
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
     <Compile Include="Extensions\CarrierInvoiceSettings.cs" />
