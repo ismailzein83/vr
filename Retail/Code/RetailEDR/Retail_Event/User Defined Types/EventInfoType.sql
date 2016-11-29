@@ -2,7 +2,7 @@
     [ID]                  BIGINT           NULL,
     [EventTime]           DATETIME         NULL,
     [SubscriberAccountID] BIGINT           NULL,
-    [ServiceTypeID]       INT              NULL,
+    [ServiceTypeID]       UNIQUEIDENTIFIER NULL,
     [Volume]              DECIMAL (20, 10) NULL,
     [VolumeUnit]          VARCHAR (50)     NULL,
     [Amount]              DECIMAL (20, 10) NULL,
@@ -12,4 +12,6 @@
     [EventDirection]      INT              NULL,
     [ChargingPolicyID]    INT              NULL,
     [PackageID]           INT              NULL);
+
+
 

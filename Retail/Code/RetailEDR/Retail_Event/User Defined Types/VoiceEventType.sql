@@ -2,7 +2,7 @@
     [ID]                     BIGINT           NULL,
     [EventTime]              DATETIME         NULL,
     [SubscriberAccountID]    BIGINT           NULL,
-    [ServiceTypeID]          INT              NULL,
+    [ServiceTypeID]          UNIQUEIDENTIFIER NULL,
     [TrafficDirection]       INT              NULL,
     [Calling]                VARCHAR (20)     NULL,
     [Called]                 VARCHAR (20)     NULL,
@@ -15,4 +15,6 @@
     [Amount]                 DECIMAL (20, 10) NULL,
     [ChargingPolicyId]       INT              NULL,
     [PackageId]              INT              NULL);
+
+
 

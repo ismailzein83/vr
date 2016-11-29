@@ -2,7 +2,8 @@
     [ID]                     BIGINT           IDENTITY (1, 1) NOT NULL,
     [EventTime]              DATETIME         NULL,
     [SubscriberAccountID]    BIGINT           NULL,
-    [ServiceTypeID]          INT              NULL,
+    [ServiceTypeID]          UNIQUEIDENTIFIER NULL,
+    [OldServiceTypeID]       INT              NULL,
     [TrafficDirection]       INT              NULL,
     [Calling]                VARCHAR (20)     NULL,
     [Called]                 VARCHAR (20)     NULL,
@@ -17,6 +18,8 @@
     [PackageId]              INT              NULL,
     CONSTRAINT [IX_VoiceEvent_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO
