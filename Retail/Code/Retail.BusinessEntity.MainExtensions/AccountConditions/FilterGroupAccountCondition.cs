@@ -19,4 +19,31 @@ namespace Retail.BusinessEntity.MainExtensions.AccountConditions
             return s_accountManager.IsAccountMatchWithFilterGroup(context.Account, this.FilterGroup);
         }
     }
+
+    public class FilterGroupAccountServiceCondition : AccountServiceCondition
+    {
+        public Dictionary<Guid, ServiceTypeFilterGroup> ServiceTypeFilterGroups { get; set; }
+
+        static AccountServiceManager s_accountServiceManager = new AccountServiceManager();
+        public override bool Evaluate(IAccountServiceConditionEvaluationContext context)
+        {
+            ServiceTypeFilterGroup serviceTypeFilterGroup;
+            if (this.ServiceTypeFilterGroups.TryGetValue(context.AccountService.ServiceTypeId, out serviceTypeFilterGroup))
+            {
+                if (serviceTypeFilterGroup.FilterGroup == null 
+                    || s_accountServiceManager.IsAccountServiceMatchWithFilterGroup(context.Account, context.AccountService, serviceTypeFilterGroup.FilterGroup))
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+    }
+
+    public class ServiceTypeFilterGroup
+    {
+        public RecordFilterGroup FilterGroup { get; set; }
+    }
+
 }

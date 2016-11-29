@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountPartGenericField
+    public class GenericFieldDefinition
     {
         public string Name { get; set; }
 

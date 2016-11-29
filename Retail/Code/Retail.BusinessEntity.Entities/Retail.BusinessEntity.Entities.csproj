@@ -92,7 +92,7 @@
     <Compile Include="AccountPartDefinition\AccountPartDefinitionDetail.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionInfo.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionQuery.cs" />
-    <Compile Include="AccountPartDefinition\AccountPartGenericField.cs" />
+    <Compile Include="GenericFieldDefinition.cs" />
     <Compile Include="AccountServiceCondition\AccountServiceCondition.cs" />
     <Compile Include="AccountType\AccountTypeDetail.cs" />
     <Compile Include="AccountType\AccountTypeFilter.cs" />
@@ -164,13 +164,12 @@
     <Compile Include="Distributor\SourceDistributor.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="Event\Event.cs" />
-    <Compile Include="FixedCharging\Definition\AccountFixedChargingDefinitionSettings.cs" />
-    <Compile Include="FixedCharging\FixedCharging.cs" />
-    <Compile Include="FixedCharging\FixedChargingSettings.cs" />
+    <Compile Include="FixedCharging\Definition\FixedChargingDefinitionSettings.cs" />
+    <Compile Include="FixedCharging\FixedChargingPolicy.cs" />
+    <Compile Include="FixedCharging\FixedChargingPolicySettings.cs" />
     <Compile Include="OperatorDeclaredInfo.cs" />
-    <Compile Include="Package\IPackageAccountCharging.cs" />
-    <Compile Include="Package\IPackageServiceRecurringCharging.cs" />
-    <Compile Include="Package\IPackageServiceUsageChargingPolicy.cs" />
+    <Compile Include="Package\IPackageFixedChargingPolicy.cs" />
+    <Compile Include="Package\IPackageUsageChargingPolicy.cs" />
     <Compile Include="Package\PackageConfig.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />
@@ -191,6 +190,7 @@
     <Compile Include="RevenueComparison\RevenueComparison.cs" />
     <Compile Include="RevenueComparison\RevenueComparisonDetail.cs" />
     <Compile Include="RevenueComparison\RevenueComparisonQuery.cs" />
+    <Compile Include="ServiceType\AccountServiceGenericField.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />

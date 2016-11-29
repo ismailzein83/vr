@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountGenericField
+    public abstract class AccountServiceGenericField
     {
         public abstract string Name { get; }
 
@@ -14,11 +14,13 @@ namespace Retail.BusinessEntity.Entities
 
         public abstract Vanrise.GenericData.Entities.DataRecordFieldType FieldType { get; }
 
-        public abstract dynamic GetValue(IAccountGenericFieldContext context);
+        public abstract dynamic GetValue(IAccountServiceGenericFieldContext context);
     }
 
-    public interface IAccountGenericFieldContext
+    public interface IAccountServiceGenericFieldContext
     {
         Account Account { get; }
+
+        AccountService AccountService { get; }
     }
 }

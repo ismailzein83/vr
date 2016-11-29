@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -139,6 +141,13 @@ namespace Retail.BusinessEntity.Business
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
             return dataManager.Update(accountService);
         }
+
+
+        public bool IsAccountServiceMatchWithFilterGroup(Account account, AccountService accountService, RecordFilterGroup filterGroup)
+        {
+            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountServiceRecordFilterGenericFieldMatchContext(account, accountService));
+        }
+
         #endregion
 
 
@@ -216,6 +225,28 @@ namespace Retail.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAccountServicesUpdated(ref _updateHandle);
+            }
+        }
+
+        private class AccountServiceRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
+        {
+            Account _account;
+            AccountService _accountService;
+            ServiceTypeManager _serviceTypeManager = new ServiceTypeManager();
+
+            public AccountServiceRecordFilterGenericFieldMatchContext(Account account, AccountService accountService)
+            {
+                _account = account;
+                _accountService = accountService;
+            }
+
+            public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
+            {
+                var accountServiceGenericField = _serviceTypeManager.GetAccountServiceGenericField(_accountService.ServiceTypeId, fieldName);
+                if (accountServiceGenericField == null)
+                    throw new NullReferenceException(String.Format("accountServiceGenericField '{0}'", fieldName));
+                fieldType = accountServiceGenericField.FieldType;
+                return accountServiceGenericField.GetValue(new AccountServiceGenericFieldContext(_account, _accountService));
             }
         }
 

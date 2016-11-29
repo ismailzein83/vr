@@ -88,6 +88,44 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        private struct GetAccountServiceGenericFieldsCacheName
+        {
+            public Guid ServiceTypeId { get; set; }
+        }
+
+        public Dictionary<string, AccountServiceGenericField> GetAccountServiceGenericFields(Guid serviceTypeId)
+        {
+            var cacheName = new GetAccountServiceGenericFieldsCacheName { ServiceTypeId = serviceTypeId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    List<AccountServiceGenericField> fields = new List<AccountServiceGenericField>();
+                    FillAccountServiceCommonGenericFields(fields);
+                    var serviceType = GetServiceType(serviceTypeId);
+                    if (serviceType == null)
+                        throw new NullReferenceException(String.Format("serviceType '{0}'", serviceTypeId));
+                    if(serviceType.Settings != null && serviceType.Settings.ExtendedSettings != null)
+                    {
+                        var fieldDefinitions = serviceType.Settings.ExtendedSettings.GetFieldDefinitions();
+                        if(fieldDefinitions != null)
+                        {
+                            fields.AddRange(fieldDefinitions.Select(fldDefinition => new AccountServiceTypeGenericField(serviceType, fldDefinition)));
+                        }
+                    }
+                    return fields.ToDictionary(fld => fld.Name, fld => fld);
+                });
+        }
+
+        public AccountServiceGenericField GetAccountServiceGenericField(Guid serviceTypeId, string fieldName)
+        {
+            return GetAccountServiceGenericFields(serviceTypeId).GetRecord(fieldName);
+        }
+
+        void FillAccountServiceCommonGenericFields(List<AccountServiceGenericField> fields)
+        {
+            fields.Add(new AccountServiceStatusGenericField());
+        }
+
         #endregion
 
         #region Validation Methods

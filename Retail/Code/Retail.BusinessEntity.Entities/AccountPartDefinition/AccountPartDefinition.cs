@@ -31,7 +31,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public abstract Guid ConfigId { get;}
 
-        public virtual List<AccountPartGenericField> GetFields()
+        public virtual List<GenericFieldDefinition> GetFieldDefinitions()
         {
             return null;
         }

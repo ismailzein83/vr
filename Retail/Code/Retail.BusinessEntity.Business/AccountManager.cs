@@ -179,6 +179,32 @@ namespace Retail.BusinessEntity.Business
             return dataManager.Update(account, parentId);
         }
 
+        public bool TryGetAccountPart(long accountId, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
+        {
+            var account = GetAccount(accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("account '{0}'", accountId));
+            return TryGetAccountPart(account, partDefinitionId, getInherited, out accountPart);
+        }
+
+        public bool TryGetAccountPart(Account account, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
+        {
+            if (account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
+                return true;
+            else if (getInherited && account.ParentAccountId.HasValue)
+            {
+                var parentAccount = GetAccount(account.ParentAccountId.Value);
+                if (parentAccount == null)
+                    throw new NullReferenceException(String.Format("parentAccount '{0}'", account.ParentAccountId.Value));
+                return TryGetAccountPart(parentAccount, partDefinitionId, getInherited, out accountPart);
+            }
+            else
+            {
+                accountPart = null;
+                return false;
+            }
+        }
+
         public bool HasAccountPayment(long accountId, bool getInherited, out IAccountPayment accountPayment)
         {
             var account = GetAccount(accountId);
@@ -366,27 +392,11 @@ namespace Retail.BusinessEntity.Business
 
             public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
             {
-                Guid? partDefinitionId;
-                string partFieldName;
-                _accountTypeManager.ParseAccountGenericFieldName(fieldName, out partDefinitionId, out partFieldName);
-                fieldType = _accountTypeManager.GetAccountGenericFieldType(fieldName);
-                if (partDefinitionId.HasValue)
-                    return GetAccountPartFieldValue(partDefinitionId.Value, partFieldName);
-                else
-                    return GetAccountStaticFieldValue(partFieldName);
-            }
-
-            dynamic GetAccountStaticFieldValue(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            dynamic GetAccountPartFieldValue(Guid partDefinitionId, string fieldName)
-            {
-                AccountPart accountPart;
-                if (_account.Settings.Parts != null && _account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
-                    return accountPart.Settings.GetFieldValue(new AccountPartGetFieldValueContext(fieldName, partDefinitionId));
-                return null;
+                var accountGenericField = _accountTypeManager.GetAccountGenericField(fieldName);
+                if (accountGenericField == null)
+                    throw new NullReferenceException(String.Format("accountGenericField '{0}'", fieldName));
+                fieldType = accountGenericField.FieldType;
+                return accountGenericField.GetValue(new AccountGenericFieldContext(_account));
             }
         }
 

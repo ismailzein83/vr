@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class FixedCharging
+    public class FixedChargingPolicy
     {
-        public int FixedChargingId { get; set; }
+        public int FixedChargingPolicyId { get; set; }
 
         public string Name { get; set; }
 
-        public FixedChargingSettings Settings { get; set; }
+        public FixedChargingPolicySettings Settings { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public interface IPackageServiceUsageChargingPolicy
+    public interface IPackageUsageChargingPolicy
     {
         bool TryGetServiceUsageChargingPolicyId(IPackageServiceUsageChargingPolicyContext context);
     }

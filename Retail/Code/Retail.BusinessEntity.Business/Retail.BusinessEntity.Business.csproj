@@ -117,10 +117,18 @@
   <ItemGroup>
     <Compile Include="Account360DegreeManager.cs" />
     <Compile Include="AccountConditionEvaluationContext.cs" />
+    <Compile Include="AccountGenericFields\AccountGenericFieldContext.cs" />
+    <Compile Include="AccountGenericFields\AccountPartGenericField.cs" />
+    <Compile Include="AccountGenericFields\AccountStatusGenericField.cs" />
     <Compile Include="AccountIdentificationManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
-    <Compile Include="AccountPartGetFieldValueContext.cs" />
+    <Compile Include="AccountGenericFields\AccountPartGetFieldValueContext.cs" />
+    <Compile Include="AccountServiceGenericFields\AccountServiceAccountGenericField.cs" />
+    <Compile Include="AccountServiceGenericFields\AccountServiceGenericFieldContext.cs" />
+    <Compile Include="AccountServiceGenericFields\AccountServiceGetFieldValueContext.cs" />
+    <Compile Include="AccountServiceGenericFields\AccountServiceStatusGenericField.cs" />
+    <Compile Include="AccountServiceGenericFields\AccountServiceTypeGenericField.cs" />
     <Compile Include="AccountServiceManager.cs" />
     <Compile Include="DistributorManager.cs" />
     <Compile Include="Extensions\DistributorSynchronizer.cs" />

@@ -27,6 +27,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                 dtContext.SetRecordValue("RawCDR", context.RawCDR);
                 dtContext.SetRecordValue("MappedCDR", context.MappedCDR);
                 dtContext.SetRecordValue("Duration", context.Duration);
+                dtContext.SetRecordValue("EventTime", context.EventTime);
                 dtContext.SetRecordValue("ChargingPolicyId", context.ChargingPolicyId);
             });
             VoiceEventPricingInfo pricingInfo = output.GetRecordValue("EventPricingInfo");

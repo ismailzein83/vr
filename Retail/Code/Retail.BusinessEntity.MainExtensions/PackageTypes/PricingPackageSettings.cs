@@ -7,48 +7,34 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
-    public class PricingPackageSettings : PackageExtendedSettings, IPackageAccountCharging, IPackageServiceUsageChargingPolicy, IPackageServiceRecurringCharging
+    public class PricingPackageSettings : PackageExtendedSettings, IPackageFixedChargingPolicy, IPackageUsageChargingPolicy
     {
         public override Guid ConfigId
         {
             get { return new Guid("B78610BA-4CA2-4E60-8143-73CEF6E99D14"); }
         }
 
-        public int? AccountRecurringChargingId { get; set; }
+        public int? FixedChargingPolicyId { get; set; }
 
-        public Dictionary<Guid, ServiceTypeUsageChargingSettings> ServiceTypeUsageChargings { get; set; }
+        public Dictionary<Guid, ServiceTypeUsageChargingPolicySettings> ServiceTypeUsageChargingPolicies { get; set; }
 
-        public Dictionary<Guid, ServiceTypeRecurringChargingSettings> ServiceTypeRecurringChargings { get; set; }
-
-        bool IPackageAccountCharging.TryGetAccountRecurringChargingId(IPackageAccountChargingContext context)
+        bool IPackageFixedChargingPolicy.TryGetFixedChargingPolicyId(IPackageFixedChargingPolicyContext context)
         {
-            if (this.AccountRecurringChargingId.HasValue)
+            if (this.FixedChargingPolicyId.HasValue)
             {
-                context.RecurringChargingId = this.AccountRecurringChargingId.Value;
+                context.ChargingPolicyId = this.FixedChargingPolicyId.Value;
                 return true;
             }
             else
                 return false;
         }
 
-        bool IPackageServiceUsageChargingPolicy.TryGetServiceUsageChargingPolicyId(IPackageServiceUsageChargingPolicyContext context)
+        bool IPackageUsageChargingPolicy.TryGetServiceUsageChargingPolicyId(IPackageServiceUsageChargingPolicyContext context)
         {
-            ServiceTypeUsageChargingSettings serviceUsageChargingSettings;
-            if (this.ServiceTypeUsageChargings != null && this.ServiceTypeUsageChargings.TryGetValue(context.ServiceTypeId, out serviceUsageChargingSettings))
+            ServiceTypeUsageChargingPolicySettings serviceUsageChargingPolicySettings;
+            if (this.ServiceTypeUsageChargingPolicies != null && this.ServiceTypeUsageChargingPolicies.TryGetValue(context.ServiceTypeId, out serviceUsageChargingPolicySettings))
             {
-                context.ChargingPolicyId = serviceUsageChargingSettings.UsageChargingId;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        bool IPackageServiceRecurringCharging.TryGetServiceRecurringChargingId(IPackageServiceRecurringChargingContext context)
-        {
-            ServiceTypeRecurringChargingSettings serviceRecurringChargingSettings;
-            if (this.ServiceTypeRecurringChargings != null && this.ServiceTypeRecurringChargings.TryGetValue(context.ServiceTypeId, out serviceRecurringChargingSettings))
-            {
-                context.RecurringChargingId = serviceRecurringChargingSettings.RecurringChargingId;
+                context.ChargingPolicyId = serviceUsageChargingPolicySettings.UsageChargingPolicyId;
                 return true;
             }
             else
@@ -56,14 +42,8 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         }
     }
 
-    public class ServiceTypeUsageChargingSettings
+    public class ServiceTypeUsageChargingPolicySettings
     {
-        public int UsageChargingId { get; set; }
-    }
-
-
-    public class ServiceTypeRecurringChargingSettings
-    {
-        public int RecurringChargingId { get; set; }
+        public int UsageChargingPolicyId { get; set; }
     }
 }

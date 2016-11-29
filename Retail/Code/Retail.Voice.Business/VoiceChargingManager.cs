@@ -14,10 +14,10 @@ namespace Retail.Voice.Business
     {
         #region Public Methods
 
-        public List<VoiceEventPricedPart> PriceVoiceEvent(long accountId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration)
+        public List<VoiceEventPricedPart> PriceVoiceEvent(long accountId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime)
         {
             List<VoiceEventPricedPart> eventPricingInfos = new List<VoiceEventPricedPart>();
-            var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountId, serviceTypeId);
+            var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountId, serviceTypeId, eventTime);
             Decimal remainingDurationToPrice = duration;
             foreach (var voiceUsageCharger in voiceUsageChargers)
             {
@@ -26,7 +26,8 @@ namespace Retail.Voice.Business
                     ServiceTypeId = serviceTypeId,
                     RawCDR = rawCDR,
                     MappedCDR = mappedCDR,
-                    Duration = remainingDurationToPrice
+                    Duration = remainingDurationToPrice,
+                    EventTime = eventTime
                 };
                 voiceUsageCharger.VoiceUsageCharger.TryChargeVoiceEvent(context);
                 if (context.PricedPartInfos != null)
@@ -46,7 +47,7 @@ namespace Retail.Voice.Business
             return eventPricingInfos;
         }
 
-        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration)
+        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime)
         {
             VoiceChargingPolicyEvaluator chargingPolicyEvaluator = GetVoiceChargingPolicyEvaluator(serviceTypeId);
             var context = new VoiceChargingPolicyEvaluatorContext
@@ -54,7 +55,8 @@ namespace Retail.Voice.Business
                 ChargingPolicyId = chargingPolicyId,
                 RawCDR = rawCDR,
                 MappedCDR = mappedCDR,
-                Duration = duration
+                Duration = duration,
+                EventTime = eventTime
             };
             chargingPolicyEvaluator.ApplyChargingPolicyToVoiceEvent(context);
             return context.EventPricingInfo;
@@ -66,8 +68,18 @@ namespace Retail.Voice.Business
 
         static ServiceTypeManager s_serviceTypeManager = new ServiceTypeManager();
 
-        List<VoiceUsageChargerWithParentPackage> GetVoiceUsageChargersByPriority(long accountId, Guid serviceTypeId)
+        private struct GetVoiceUsageChargersByPriorityCacheName
         {
+            public long AccountId { get; set; }
+
+            public Guid ServiceTypeId { get; set; }
+
+            public DateTime EventDate { get; set; }
+        }
+
+        List<VoiceUsageChargerWithParentPackage> GetVoiceUsageChargersByPriority(long accountId, Guid serviceTypeId, DateTime eventTime)
+        {
+            var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
             //needs caching
             List<Package> accountPackagesByPriority = null;//get account packages by priority
             List<VoiceUsageChargerWithParentPackage> voiceUsageChargersByPriority = new List<VoiceUsageChargerWithParentPackage>();
@@ -77,7 +89,7 @@ namespace Retail.Voice.Business
                 if(packageSettingVoiceUsageCharger != null)
                 {
                     IPackageVoiceUsageCharger voiceUsageCharger;
-                    if(packageSettingVoiceUsageCharger.TryGetVoiceUsageCharging(serviceTypeId, out voiceUsageCharger))
+                    if(packageSettingVoiceUsageCharger.TryGetVoiceUsageCharger(serviceTypeId, out voiceUsageCharger))
                     {
                         voiceUsageChargersByPriority.Add(new VoiceUsageChargerWithParentPackage
                             {
@@ -88,7 +100,7 @@ namespace Retail.Voice.Business
                 }
                 else
                 {
-                    IPackageServiceUsageChargingPolicy packageServiceUsageChargingPolicy = package.Settings.ExtendedSettings as IPackageServiceUsageChargingPolicy;
+                    IPackageUsageChargingPolicy packageServiceUsageChargingPolicy = package.Settings.ExtendedSettings as IPackageUsageChargingPolicy;
                     if(packageServiceUsageChargingPolicy != null)
                     {
                         var context = new PackageServiceUsageChargingPolicyContext{ ServiceTypeId = serviceTypeId};
@@ -153,6 +165,8 @@ namespace Retail.Voice.Business
             get;
             set;
         }
+
+        public DateTime EventTime { get; set; }
         
         public List<VoiceEventPricedPart> PricedPartInfos
         {
@@ -186,6 +200,8 @@ namespace Retail.Voice.Business
             get;
             set;
         }
+
+        public DateTime EventTime { get; set; }
 
         public Entities.VoiceEventPricingInfo EventPricingInfo
         {

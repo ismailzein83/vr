@@ -29,10 +29,6 @@ namespace Retail.BusinessEntity.Entities
         public Guid? InitiationActionDefinitionId { get; set; }
 
         public ServiceTypeExtendedSettings ExtendedSettings { get; set; }
-
-        public Dictionary<Guid, ServiceRecurringChargingDefinitionItem> RecurringChargingDefinitionItems { get; set; }
-
-        public Dictionary<Guid, ServiceSetupChargingDefinitionItem> SetupChargingDefinitionItems { get; set; }
     }
 
     public class ServiceTypeStatusSettings
@@ -50,23 +46,10 @@ namespace Retail.BusinessEntity.Entities
     public abstract class ServiceTypeExtendedSettings
     {
         public abstract Guid ConfigId { get; }
-    }
 
-    public class ServiceRecurringChargingDefinitionItem
-    {
-        public Guid ItemId { get; set; }
-
-        public string Title { get; set; }
-
-        public AccountServiceCondition ChargeCondition { get; set; }
-    }
-
-    public class ServiceSetupChargingDefinitionItem
-    {
-        public Guid ItemId { get; set; }
-
-        public string Title { get; set; }
-
-        public AccountServiceCondition ChargeCondition { get; set; }
+        public virtual List<GenericFieldDefinition> GetFieldDefinitions()
+        {
+            return null;
+        }
     }
 }

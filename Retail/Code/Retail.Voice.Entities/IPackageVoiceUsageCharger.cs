@@ -13,7 +13,7 @@ namespace Retail.Voice.Entities
 
     public interface IPackageSettingVoiceUsageCharger
     {
-        bool TryGetVoiceUsageCharging(Guid serviceTypeId, out IPackageVoiceUsageCharger voiceUsageCharging);
+        bool TryGetVoiceUsageCharger(Guid serviceTypeId, out IPackageVoiceUsageCharger voiceUsageCharging);
     }
 
     public interface IVoiceUsageChargerContext
@@ -26,6 +26,8 @@ namespace Retail.Voice.Entities
 
         Decimal Duration { get; }
 
+        DateTime EventTime { get; }
+
         List<VoiceEventPricedPart> PricedPartInfos { set; }
     }
 
@@ -33,7 +35,7 @@ namespace Retail.Voice.Entities
     {
         public int PackageId { get; set; }
 
-        public int? ChargingPolicyId { get; set; }
+        public int? UsageChargingPolicyId { get; set; }
 
         public Decimal PricedDuration { get; set; }
 

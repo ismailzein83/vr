@@ -28,6 +28,8 @@ namespace Retail.Voice.Entities
 
         Decimal Duration { get; }
 
+        DateTime EventTime { get; }
+
         VoiceEventPricingInfo EventPricingInfo { set; }
     }
 

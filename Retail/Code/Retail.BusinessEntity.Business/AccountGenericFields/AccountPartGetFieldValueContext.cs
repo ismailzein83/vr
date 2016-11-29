@@ -9,19 +9,22 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountPartGetFieldValueContext : IAccountPartGetFieldValueContext
     {
-        public AccountPartGetFieldValueContext(string fieldName, Guid partDefinitionId)
+        string _fieldName;
+        AccountPartDefinition _partDefinition;
+        public AccountPartGetFieldValueContext(string fieldName, AccountPartDefinition partDefinition)
         {
-
+            _fieldName = fieldName;
+            _partDefinition = partDefinition;
         }
 
         public string FieldName
         {
-            get { throw new NotImplementedException(); }
+            get { return _fieldName; }
         }
 
         public AccountPartDefinition PartDefinition
         {
-            get { throw new NotImplementedException(); }
+            get { return _partDefinition; }
         }
     }
 }

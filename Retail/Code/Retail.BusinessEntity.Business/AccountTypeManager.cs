@@ -139,37 +139,37 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public List<AccountGenericField> GetAccountGenericFields()
+        public Dictionary<string, AccountGenericField> GetAccountGenericFields()
         {
-            List<AccountGenericField> fields = new List<AccountGenericField>();
-            var accountPartDefinitions = new AccountPartDefinitionManager().GetAccountPartDefinitions();
-            if(accountPartDefinitions != null)
-            {
-                foreach(var partDefinition in accountPartDefinitions)
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountGenericFields",
+                () =>
                 {
-                    var partFields = partDefinition.Settings.GetFields();
-                    if (partFields != null)
+                    List<AccountGenericField> fields = new List<AccountGenericField>();
+                    FillAccountCommonGenericFields(fields);
+                    var accountPartDefinitions = new AccountPartDefinitionManager().GetAccountPartDefinitions();
+                    if (accountPartDefinitions != null)
                     {
-                        fields.AddRange(partFields.Select(partField => new AccountGenericField
+                        foreach (var partDefinition in accountPartDefinitions)
                         {
-                            Name = String.Format("{0}_{1}", partDefinition.AccountPartDefinitionId, partField.Name),
-                            Title = String.Format("{0} ({1})", partField.Title, partDefinition.Title),
-                            FieldType = partField.FieldType
-                        }));
+                            var partFieldDefinitions = partDefinition.Settings.GetFieldDefinitions();
+                            if (partFieldDefinitions != null)
+                            {
+                                fields.AddRange(partFieldDefinitions.Select(partFieldDefinition => new AccountPartGenericField(partDefinition, partFieldDefinition)));
+                            }
+                        }
                     }
-                }
-            }
-            return fields;
+                    return fields.ToDictionary(fld => fld.Name, fld => fld);
+                });
         }
 
-        public DataRecordFieldType GetAccountGenericFieldType(string fieldName)
+        public AccountGenericField GetAccountGenericField(string fieldName)
         {
-            throw new NotImplementedException();
+            return GetAccountGenericFields().GetRecord(fieldName);
         }
 
-        public void ParseAccountGenericFieldName(string fieldName, out Guid? accountPartDefinitionId, out string partFieldName)
+        void FillAccountCommonGenericFields(List<AccountGenericField> fields)
         {
-            throw new NotImplementedException();
+            fields.Add(new AccountStatusGenericField());
         }
 
         #endregion
@@ -206,10 +206,13 @@ namespace Retail.BusinessEntity.Business
         {
             IAccountTypeDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
             object _updateHandle;
+            DateTime? _accountPartDefinitionCacheLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreAccountTypesUpdated(ref _updateHandle);
+                return _dataManager.AreAccountTypesUpdated(ref _updateHandle)
+                    |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck);
             }
         }
 
