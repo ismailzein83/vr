@@ -39,6 +39,12 @@
         var invoiceExtendedSettingsAPI;
         var invoiceExtendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var viewPermissionAPI;
+        var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var generatePermissionAPI;
+        var generatePermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         var dataRecordTypeEntity;
         defineScope();
@@ -106,6 +112,14 @@
                 invoiceActionsAPI = api;
                 invoiceActionsReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                viewPermissionAPI = api;
+                viewPermissionReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onGenerateRequiredPermissionReady = function (api) {
+                generatePermissionAPI = api;
+                generatePermissionReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.saveInvoiceType = function () {
                 $scope.scopeModel.isLoading = true;
@@ -144,6 +158,11 @@
                             SerialNumberPattern: serialNumberPatternAPI.getData(),
                         },
                         SubSections: subSectionsAPI.getData(),
+                        Security: {
+                            ViewRequiredPermission: viewPermissionAPI.getData(),
+                            GenerateRequiredPermission: generatePermissionAPI.getData()
+                        }
+
                     }
                 };
                 return obj;
@@ -326,7 +345,42 @@
                     return invoiceExtendedSettingsDeferredLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings])
+                function loadViewRequiredPermission() {
+                    var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    viewPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.ViewRequiredPermission != null) {
+                            payload = {
+                                data: invoiceTypeEntity.Settings.Security.ViewRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, payload, viewPermissionLoadDeferred);
+                    });
+
+                    return viewPermissionLoadDeferred.promise;
+                }
+                function loadGenerateRequiredPermission() {
+                    var generatePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                    generatePermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.GenerateRequiredPermission != null) {
+                            payload = {
+                                data: invoiceTypeEntity.Settings.Security.GenerateRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(generatePermissionAPI, payload, generatePermissionLoadDeferred);
+                    });
+                    return generatePermissionLoadDeferred.promise;
+                }
+               
+
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

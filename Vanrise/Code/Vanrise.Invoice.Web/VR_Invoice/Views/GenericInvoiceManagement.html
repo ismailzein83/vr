@@ -19,7 +19,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="GenerateInvoice" data-onclick="generateInvoice"></vr-button>
+                    <vr-button type="GenerateInvoice" data-onclick="generateInvoice" haspermission="hasGenerateInvoicePermission"></vr-button>
                </div>
             </vr-actionbar>
         </vr-row>

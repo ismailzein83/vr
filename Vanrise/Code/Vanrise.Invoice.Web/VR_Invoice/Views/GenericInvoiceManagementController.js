@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceActionService', 'VR_Invoice_InvoiceTypeAPIService', 'VRNotificationService'];
+    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceActionService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService'];
 
-    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VRNotificationService) {
+    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRNotificationService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
         var partnerSelectorAPI;
@@ -39,6 +39,9 @@
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
 
+            };
+            $scope.hasGenerateInvoicePermission = function () {
+                return VR_Invoice_InvoiceAPIService.DoesUserHaveGenerateAccess(invoiceTypeId);
             };
             $scope.generateInvoice = generateInvoice;
         }

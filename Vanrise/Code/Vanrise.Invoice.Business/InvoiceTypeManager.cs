@@ -10,9 +10,11 @@ using Vanrise.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Caching;
 using Vanrise.GenericData.Business;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 namespace Vanrise.Invoice.Business
 {
-    public class InvoiceTypeManager
+    public class InvoiceTypeManager : IInvoiceTypeManager
     {
 
         #region Public Methods
@@ -164,6 +166,27 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceTypes.MapRecords(InvoiceTypeInfoMapper);
         }
+        public bool DoesUserHaveViewAccess(Guid invoiceTypeId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId, invoiceTypeId);
+        }
+        public bool DoesUserHaveViewAccess(int userId, Guid invoiceTypeId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            if (invoiceType != null &&   invoiceType.Settings !=null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.ViewRequiredPermission != null)
+                return DoesUserHaveAccess(userId, invoiceType.Settings.Security.ViewRequiredPermission);
+            return true;
+        }
+
+        public bool DoesUserHaveGenerateAccess(Guid invoiceTypeId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.GenerateRequiredPermission != null)
+                return DoesUserHaveAccess(invoiceType.Settings.Security.GenerateRequiredPermission);
+            return true;
+        }
+
 
         #endregion
 
@@ -192,6 +215,23 @@ namespace Vanrise.Invoice.Business
                   IEnumerable<InvoiceType> invoiceTypes = dataManager.GetInvoiceTypes();
                   return invoiceTypes.ToDictionary(c => c.InvoiceTypeId, c => c);
               });
+        }
+        private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
+        {
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
+        private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
         }
         #endregion
      

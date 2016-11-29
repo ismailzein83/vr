@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
@@ -14,5 +15,12 @@ namespace Vanrise.Invoice.Entities
         {
             return String.Format("#/viewwithparams/VR_Invoice/Views/GenericInvoiceManagement/{{\"invoiceTypeId\":\"{0}\"}}", this.InvoiceTypeId);
         }
+
+        public override bool DoesUserHaveAccess(IViewUserAccessContext context)
+        {
+            return BusinessManagerFactory.GetManager<IInvoiceTypeManager>().DoesUserHaveViewAccess(context.UserId, this.InvoiceTypeId);
+
+        }
+
     }
 }

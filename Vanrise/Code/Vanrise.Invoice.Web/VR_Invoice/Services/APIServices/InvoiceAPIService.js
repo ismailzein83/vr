@@ -48,6 +48,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SendEmail'), invoiceTemplate);
         }
 
+        function DoesUserHaveGenerateAccess(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'DoesUserHaveGenerateAccess'), {
+                invoiceTypeId: invoiceTypeId
+            });
+        }
+
         function GetInvoiceTemplate(invoiceId)
         {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceTemplate'), {
@@ -57,6 +63,7 @@
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
+            DoesUserHaveGenerateAccess:DoesUserHaveGenerateAccess,
             GetFilteredInvoices: GetFilteredInvoices,
             SetInvoicePaid: SetInvoicePaid,
             GetInvoiceDetail: GetInvoiceDetail,

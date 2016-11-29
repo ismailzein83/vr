@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
@@ -16,5 +17,16 @@ namespace Vanrise.Invoice.Entities
         public InvoiceGridSettings InvoiceGridSettings { get; set; }
         public InvoiceSerialNumberSettings InvoiceSerialNumberSettings { get; set; }
         public List<InvoiceSubSection> SubSections { get; set; }
+
+        public InvoiceTypeSecurity Security { get; set; }
+
     }
+    public class InvoiceTypeSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+        public RequiredPermissionSettings GenerateRequiredPermission { get; set; }
+
+    }
+
+
 }

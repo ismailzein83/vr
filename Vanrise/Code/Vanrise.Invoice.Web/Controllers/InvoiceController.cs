@@ -10,8 +10,11 @@ using Vanrise.Entities;
 namespace Vanrise.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
+
     public class InvoiceController:BaseAPIController
     {
+        InvoiceTypeManager _invoiceTypeManager = new InvoiceTypeManager();
+
         [HttpGet]
         [Route("GetInvoice")]
         public Entities.Invoice GetInvoice(long invoiceId)
@@ -21,11 +24,21 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpPost]
         [Route("GenerateInvoice")]
-        public Vanrise.Entities.InsertOperationOutput<InvoiceDetail> GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
+        public object GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
+            if (!DoesUserHaveGenerateAccess(createInvoiceInput.InvoiceTypeId))
+                return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
             return manager.GenerateInvoice(createInvoiceInput);
         }
+
+        [HttpGet]
+        [Route("DoesUserHaveGenerateAccess")]
+        public bool DoesUserHaveGenerateAccess(Guid invoiceTypeId)
+        {
+            return _invoiceTypeManager.DoesUserHaveGenerateAccess(invoiceTypeId);
+        }
+
         [HttpPost]
         [Route("ReGenerateInvoice")]
         public Vanrise.Entities.UpdateOperationOutput<InvoiceDetail> ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
@@ -37,6 +50,8 @@ namespace Vanrise.Invoice.Web.Controllers
         [Route("GetFilteredInvoices")]
         public object GetFilteredInvoices(Vanrise.Entities.DataRetrievalInput<InvoiceQuery> input)
         {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.Query.InvoiceTypeId))
+                return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
