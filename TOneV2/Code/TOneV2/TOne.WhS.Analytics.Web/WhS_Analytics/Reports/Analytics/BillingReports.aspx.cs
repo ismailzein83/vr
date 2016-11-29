@@ -58,7 +58,8 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                     ReportParameters parameters = new ReportParameters();
 
                     parameters.FromTime = from;
-                    parameters.ToTime = to;
+                    parameters.ToTime = (from == to) ? to.Value.AddDays(1) : to;
+
                     parameters.GroupByCustomer = groupByCustomer;
                     parameters.CustomersId = customers;
                     parameters.SuppliersId = suppliers;
