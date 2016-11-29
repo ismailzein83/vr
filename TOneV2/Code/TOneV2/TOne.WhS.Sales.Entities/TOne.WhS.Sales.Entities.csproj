@@ -80,7 +80,6 @@
     <Compile Include="RateManagement\Actions\Service\DefaultServiceToClose.cs" />
     <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToAdd.cs" />
     <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToClose.cs" />
-    <Compile Include="RateManagement\Context\IRatePlanContext.cs" />
     <Compile Include="RateManagement\Country\ChangedCountry.cs" />
     <Compile Include="RateManagement\Country\ExistingCustomerCountry.cs" />
     <Compile Include="RateManagement\Country\IProcessCustomerCountriesContext.cs" />
