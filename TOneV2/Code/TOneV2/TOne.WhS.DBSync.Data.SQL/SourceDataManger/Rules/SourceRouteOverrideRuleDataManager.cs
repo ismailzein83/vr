@@ -25,6 +25,14 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
             });
         }
 
+        public IEnumerable<SourceRouteOverrideRule> GetRouteOverrideOptionBlockRules()
+        {
+            return GetItemsText(query_getRouteOverrideRules_BlockedSuppliers, SourceRouteOverrideRuleMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
+            });
+        }
+
         SourceRouteOverrideRule SourceRouteOverrideRuleMapper(IDataReader reader)
         {
             return new SourceRouteOverrideRule
@@ -40,8 +48,25 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 ExcludedCodes = reader["ExcludedCodes"] as string,
                 IncludeSubCode = string.IsNullOrEmpty((reader["IncludeSubCodes"] as string)) ? false : (reader["IncludeSubCodes"] as string).Equals("Y"),
                 Reason = reader["Reason"] as string,
-                ExcludedCodesList = GetExcludedCodes(reader["ExcludedCodes"] as string)
+                ExcludedCodesList = GetExcludedCodes(reader["ExcludedCodes"] as string),
+                BlockedOptions = GetBlockedOptions(reader["BlockedSuppliers"] as string),
+                BlockedOptionsString = reader["BlockedSuppliers"] as string
             };
+        }
+
+        private IEnumerable<BlockedOption> GetBlockedOptions(string option)
+        {
+            if (string.IsNullOrEmpty(option))
+                return null;
+            List<BlockedOption> blockedOptions = new List<BlockedOption>();
+            string[] options = option.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var optionString in options)
+            {
+                BlockedOption bOption = new BlockedOption { SupplierId = optionString };
+                blockedOptions.Add(bOption);
+            }
+            return blockedOptions;
         }
         private HashSet<string> GetExcludedCodes(string codes)
         {
@@ -80,12 +105,28 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                        ro.IncludeSubCodes,
 		                                                        CASE WHEN ro.Code != '*ALL*' THEN NULL ELSE ro.OurZoneID END ZoneID,
 		                                                        ro.RouteOptions,
+                                                                ro.BlockedSuppliers,
 		                                                        ro.BeginEffectiveDate,
 		                                                        ro.EndEffectiveDate,
 		                                                        ro.ExcludedCodes,
 		                                                        ro.Reason
 	                                                    FROM    RouteOverride ro 
 	                                                    WHERE   ro.RouteOptions != 'BLK' AND ro.RouteOptions IS NOT NULL
+		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+
+        const string query_getRouteOverrideRules_BlockedSuppliers = @"	SELECT  ro.RouteOverrideID,
+		                                                        ro.CustomerID,
+		                                                        CASE WHEN ro.Code = '*ALL*' THEN NULL ELSE ro.Code END Code,
+		                                                        ro.IncludeSubCodes,
+		                                                        CASE WHEN ro.Code != '*ALL*' THEN NULL ELSE ro.OurZoneID END ZoneID,
+		                                                        ro.RouteOptions,
+                                                                ro.BlockedSuppliers,
+		                                                        ro.BeginEffectiveDate,
+		                                                        ro.EndEffectiveDate,
+		                                                        ro.ExcludedCodes,
+		                                                        ro.Reason
+	                                                    FROM    RouteOverride ro 
+	                                                    WHERE   ro.BlockedSuppliers IS NOT NULL and  ro.BlockedSuppliers<> ''
 		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
     }
 }

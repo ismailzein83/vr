@@ -76,12 +76,15 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.Tariff:
                         _rulesBaseMigrator = new TariffRuleMigrator(ruleContext);
                         break;
-                    case RuleEntitiesEnum.Tod:
-                        _rulesBaseMigrator = new CommissionRuleMigrator(ruleContext);
-                        break;
+                    //case RuleEntitiesEnum.Tod:
+                    //   _rulesBaseMigrator = new TodRuleMigrator(ruleContext);
+                    //    break;
                     //case RuleEntitiesEnum.SwitchRules:
                     //    _rulesBaseMigrator = new SwitchRuleMigrator(ruleContext);
                     //    break;
+                    case RuleEntitiesEnum.RouteOptionBlockFromOverride:
+                        _rulesBaseMigrator = new RouteOptionBlockFromOverrideRuleMigrator(ruleContext);
+                        break;
                     default:
                         _rulesBaseMigrator = null;
                         break;

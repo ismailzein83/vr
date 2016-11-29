@@ -21,4 +21,10 @@ namespace TOne.WhS.DBSync.Entities
             return this.GetHashCode();
         }
     }
+
+    public class BlockedOption
+    {
+        public string SupplierId { get; set; }
+       
+    }
 }

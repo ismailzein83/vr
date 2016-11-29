@@ -15,6 +15,7 @@ namespace TOne.WhS.DBSync.Entities
         SaleMarketPrice,
         RouteBlock,
         Tod,
-        SwitchRules
+        SwitchRules,
+        RouteOptionBlockFromOverride
     }
 }
