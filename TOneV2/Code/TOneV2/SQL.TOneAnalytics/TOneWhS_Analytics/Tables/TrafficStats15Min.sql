@@ -35,8 +35,11 @@
     [SwitchID]                    INT             NULL,
     [CustomerProfileId]           INT             NULL,
     [SupplierProfileId]           INT             NULL,
+    [ReleaseSourceSCount]         INT             NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

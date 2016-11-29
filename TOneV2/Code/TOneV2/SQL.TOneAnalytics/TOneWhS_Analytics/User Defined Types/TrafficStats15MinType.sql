@@ -34,7 +34,10 @@
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
     [CustomerProfileId]           INT             NULL,
-    [SupplierProfileId]           INT             NULL);
+    [SupplierProfileId]           INT             NULL,
+    [ReleaseSourceSCount]         INT             NULL);
+
+
 
 
 

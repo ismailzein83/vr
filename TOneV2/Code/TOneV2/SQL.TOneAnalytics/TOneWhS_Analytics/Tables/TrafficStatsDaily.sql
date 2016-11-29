@@ -35,8 +35,11 @@
     [PortOUT]                     VARCHAR (42)    NULL,
     [CustomerProfileId]           INT             NULL,
     [SupplierProfileId]           INT             NULL,
+    [ReleaseSourceSCount]         INT             NULL,
     CONSTRAINT [IX_TrafficStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
