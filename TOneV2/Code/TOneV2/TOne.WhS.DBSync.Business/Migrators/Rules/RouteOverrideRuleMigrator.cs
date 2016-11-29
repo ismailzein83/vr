@@ -133,8 +133,8 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
             foreach (var routeRule in overrideRules)
             {
-                string key = string.Format("{0},{1},{2},{3}", routeRule.CustomerId,
-                    routeRule.SupplierOptions.Select(s => s.ToString()).Aggregate((i, j) => i + j), routeRule.BED, routeRule.EED);
+                string key = string.Format("{0},{1},{2},{3},{4},{5}", routeRule.CustomerId,
+                    routeRule.SupplierOptions.Select(s => s.ToString()).Aggregate((i, j) => i + j), routeRule.BED, routeRule.EED, routeRule.Code, routeRule.ExcludedCodes);
 
                 List<SourceRouteOverrideRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
@@ -230,7 +230,7 @@ namespace TOne.WhS.DBSync.Business
             }
             else
             {
-                return new RouteRuleCriteria
+                RouteRuleCriteria routeRuleCriteria = new RouteRuleCriteria
                 {
                     CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
                     {
@@ -241,6 +241,9 @@ namespace TOne.WhS.DBSync.Business
                         CustomerIds = new List<int>() { customer.CarrierAccountId },
                     }
                 };
+                if (sourceRule.ExcludedCodesList != null)
+                    routeRuleCriteria.ExcludedCodes = new List<string>(sourceRule.ExcludedCodesList);
+                return routeRuleCriteria;
             }
         }
         SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOverrideRule> rules)
@@ -297,7 +300,7 @@ namespace TOne.WhS.DBSync.Business
         {
             var rule = new FixedRouteRule()
             {
-                Filters= GetSuppliersFilters(sourceRule),
+                Filters = GetSuppliersFilters(sourceRule),
                 Options = GetOptions(sourceRule),
             };
             return rule;
@@ -326,8 +329,6 @@ namespace TOne.WhS.DBSync.Business
                 }
             }
 
-            if (filters.Count == 0)
-                return null;
             return filters;
 
         }
@@ -352,12 +353,13 @@ namespace TOne.WhS.DBSync.Business
         }
         FixedOptionPercentage GetOptionPercentageSettings(SourceRouteOverrideRule sourceRule)
         {
-            if (sourceRule.SupplierOptions.Sum(s => s.Percentage) != (short)100)
+            if (sourceRule.SupplierOptions.Where(s => s.Percentage.HasValue).Sum(s => s.Percentage) != (short)100)
                 return null;
 
             FixedOptionPercentage setting = new FixedOptionPercentage { Percentages = new List<decimal>() };
             foreach (var option in sourceRule.SupplierOptions)
-                setting.Percentages.Add(option.Percentage);
+                if (option.Percentage.HasValue)
+                    setting.Percentages.Add(option.Percentage.Value);
             return setting;
         }
         List<RouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)

@@ -90,7 +90,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 {
                     SupplierId = supplierOptionEntries[0],
                     IsLoss = supplierOptionEntries.Length > 1 && supplierOptionEntries[1].Equals("1"),
-                    Percentage = supplierOptionEntries.Length < 3 || string.IsNullOrEmpty(supplierOptionEntries[2]) ? 0 : Convert.ToDecimal(supplierOptionEntries[2]),
+                    Percentage = supplierOptionEntries.Length < 3 || string.IsNullOrEmpty(supplierOptionEntries[2]) ? default(decimal?) : Convert.ToDecimal(supplierOptionEntries[2]),
                     Priority = index++
                 };
 

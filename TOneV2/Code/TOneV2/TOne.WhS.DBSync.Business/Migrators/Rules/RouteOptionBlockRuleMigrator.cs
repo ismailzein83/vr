@@ -77,7 +77,7 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceRouteOptionBlockRule>> dicRules = new Dictionary<string, List<SourceRouteOptionBlockRule>>();
             foreach (var routeRule in blockedRules)
             {
-                string key = string.Format("{0}_{1}_{2}_{3}_{4}", routeRule.SupplierId, routeRule.CustomerId, routeRule.Code, routeRule.BED, routeRule.EED);
+                string key = string.Format("{0}_{1}_{2}_{3}_{4}_{5}", routeRule.SupplierId, routeRule.CustomerId, routeRule.Code, routeRule.ExcludedCodes, routeRule.BED, routeRule.EED);
 
                 List<SourceRouteOptionBlockRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))

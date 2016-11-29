@@ -57,7 +57,7 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
             foreach (var routeRule in sourceRules)
             {
-                string key = string.Format("{0},{1},{2}", routeRule.CustomerId, routeRule.BED, routeRule.EED);
+                string key = string.Format("{0},{1},{2},{3},{4}", routeRule.CustomerId, routeRule.Code, routeRule.ExcludedCodes, routeRule.BED, routeRule.EED);
 
                 List<SourceRouteOverrideRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
@@ -232,7 +232,9 @@ namespace TOne.WhS.DBSync.Business
                     Code = sourceRouteOverrideRule.Code,
                     WithSubCodes = sourceRouteOverrideRule.IncludeSubCode
                 };
+
                 criterias.Add(codeCriteria);
+
             }
             return criterias;
         }
@@ -245,17 +247,22 @@ namespace TOne.WhS.DBSync.Business
             }
             else
             {
-                return new RouteRuleCriteria
+                RouteRuleCriteria routeRuleCriteria = new RouteRuleCriteria
                 {
                     CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
                     {
                         Codes = codeCriterias,
+
                     },
+
                     CustomerGroupSettings = new SelectiveCustomerGroup
                     {
                         CustomerIds = new List<int>() { customer.CarrierAccountId },
                     }
                 };
+                if (sourceRule.ExcludedCodesList != null)
+                    routeRuleCriteria.ExcludedCodes = new List<string>(sourceRule.ExcludedCodesList);
+                return routeRuleCriteria;
             }
         }
 

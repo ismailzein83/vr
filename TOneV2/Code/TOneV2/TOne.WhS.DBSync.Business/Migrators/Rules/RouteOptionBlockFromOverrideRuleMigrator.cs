@@ -80,8 +80,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
             Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
             foreach (var routeRule in blockedRules)
             {
-                string key = string.Format("{0},{1},{2},{3}", routeRule.CustomerId,
-                    routeRule.BlockedOptionsString, routeRule.BED, routeRule.EED);
+                string key = string.Format("{0},{1},{2},{3},{4},{5}", routeRule.CustomerId,
+                    routeRule.BlockedOptionsString, routeRule.Code, routeRule.ExcludedCodes, routeRule.BED, routeRule.EED);
 
                 List<SourceRouteOverrideRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
