@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThreshold]
+	@AccountTypeId uniqueidentifier,
 	@LiveBalanceThresholdTable [VR_AccountBalance].[LiveBalanceThresholdTableType] READONLY
 AS
 BEGIN
@@ -11,5 +12,6 @@ BEGIN
 
 	FROM [VR_AccountBalance].LiveBalance 
 	inner join @LiveBalanceThresholdTable as lbtt ON  LiveBalance.AccountID = lbtt.AccountID
+	where AccountTypeID = @AccountTypeId
 
 END

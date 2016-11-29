@@ -3,14 +3,16 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 --- =============================================
-create PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_InsertFromLiveBalance] 
+CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_CreateUsageTransactionFromLiveBalance] 
 	@ClosingTime datetime,
+	@AccountTypeID uniqueidentifier,
 	@UsageTransactionTypeId uniqueidentifier,
 	@ClosingPeriodID bigint
 AS
 BEGIN
 	INSERT INTO [VR_AccountBalance].[BillingTransaction]
 				   ([AccountID]
+				   ,[AccountTypeID]
 				   ,[TransactionTypeID]
 				   ,[Amount]
 				   ,[CurrencyId]
@@ -18,6 +20,7 @@ BEGIN
 				   ,[IsBalanceUpdated]
 				   ,[ClosingPeriodId])
 		SELECT [AccountID]
+			   ,@AccountTypeID
 			   ,@UsageTransactionTypeId
 			   ,[UsageBalance]
 			   ,[CurrencyID]

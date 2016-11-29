@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [VR_AccountBalance].[LiveBalance] (
+    [AccountTypeID]               UNIQUEIDENTIFIER NOT NULL,
     [AccountID]                   BIGINT           NOT NULL,
-    [AccountTypeID]               UNIQUEIDENTIFIER NULL,
     [CurrencyID]                  INT              NOT NULL,
     [InitialBalance]              DECIMAL (20, 6)  NOT NULL,
     [UsageBalance]                DECIMAL (20, 6)  NOT NULL,
@@ -11,8 +11,11 @@
     [AlertRuleID]                 INT              NULL,
     [ThresholdActionIndex]        INT              NULL,
     [timestamp]                   ROWVERSION       NULL,
-    CONSTRAINT [PK_LiveBalance] PRIMARY KEY CLUSTERED ([AccountID] ASC)
+    [CreatedTime]                 DATETIME         CONSTRAINT [DF_LiveBalance_CreatedTime] DEFAULT (getdate()) NULL,
+    CONSTRAINT [PK_LiveBalance_1] PRIMARY KEY CLUSTERED ([AccountTypeID] ASC, [AccountID] ASC)
 );
+
+
 
 
 

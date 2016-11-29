@@ -1,7 +1,8 @@
-﻿create PROCEDURE [VR_AccountBalance].[sp_BalanceUsageQueue_Update]
+﻿CREATE PROCEDURE [VR_AccountBalance].[sp_BalanceUsageQueue_Update]
+	@AccountTypeID uniqueidentifier,
 	@UsageDetails varbinary(max)
 AS
 BEGIN
 		insert into [VR_AccountBalance].BalanceUsageQueue
-		(UsageDetails) values (@UsageDetails)
+		([AccountTypeID], UsageDetails) values (@AccountTypeID, @UsageDetails)
 END
