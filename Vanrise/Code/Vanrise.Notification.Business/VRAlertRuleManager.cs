@@ -92,7 +92,7 @@ namespace Vanrise.Notification.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRAlertRuleDataManager _dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
             object _updateHandle;
@@ -110,12 +110,7 @@ namespace Vanrise.Notification.Business
 
         private Dictionary<Guid, List<VRAlertRule>> GetCachedRulesByType()
         {
-            throw new NotImplementedException();
-        }
-
-        private Dictionary<long, VRAlertRule> GetCachedRules()
-        {
-            throw new NotImplementedException();
+            return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.ToList());
         }
 
         Dictionary<long, VRAlertRule> GetCachedVRAlertRules()

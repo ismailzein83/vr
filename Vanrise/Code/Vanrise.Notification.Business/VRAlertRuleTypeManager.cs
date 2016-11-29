@@ -107,7 +107,7 @@ namespace Vanrise.Notification.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRAlertRuleTypeDataManager _dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleTypeDataManager>();
             object _updateHandle;

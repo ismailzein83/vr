@@ -17,6 +17,8 @@ namespace Vanrise.AccountBalance.Data
         bool TryAddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);
         bool UpdateLiveBalanceThreshold(Guid accountTypeId, List<BalanceAccountThreshold> balanceAccountsThresholds);
         void UpdateLiveBalanceAlertRule(List<AccountBalanceAlertRule> accountBalanceAlertRules);
-        void UpdateBalanceRuleInfos(List<LiveBalance> liveBalances);
+        void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities);
+        void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady);
+        void GetLiveBalancesToClearAlert(Action<LiveBalance> onLiveBalanceReady);
     }
 }

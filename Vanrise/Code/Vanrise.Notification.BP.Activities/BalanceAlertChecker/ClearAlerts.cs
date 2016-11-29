@@ -5,11 +5,16 @@ using System.Text;
 using System.Activities;
 using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
+using Vanrise.BusinessProcess;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {
-
-    public sealed class ClearAlerts : CodeActivity
+    public class ClearAlertsInput
+    {
+        public VRBalanceAlertRuleTypeSettings RuleTypeSettings { get; set; }
+        public BaseQueue<VREntityBalanceInfoBatch> InputQueue { get; set; }
+    }
+    public sealed class ClearAlerts : DependentAsyncActivity<ClearAlertsInput>
     {
         [RequiredArgument]
         public InArgument<VRBalanceAlertRuleTypeSettings> RuleTypeSettings { get; set; }
@@ -17,9 +22,18 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
         [RequiredArgument]
         public InArgument<BaseQueue<VREntityBalanceInfoBatch>> InputQueue { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(ClearAlertsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+            
+        }
+
+        protected override ClearAlertsInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ClearAlertsInput
+            {
+                InputQueue = this.InputQueue.Get(context),
+                RuleTypeSettings = this.RuleTypeSettings.Get(context)
+            };
         }
     }
 }

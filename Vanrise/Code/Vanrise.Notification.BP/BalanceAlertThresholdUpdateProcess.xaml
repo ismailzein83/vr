@@ -97,7 +97,12 @@
           </OutArgument>
         </vnbab:LoadBalanceInfos.Status>
       </vnbab:LoadBalanceInfos>
-      <vnbab:CalculateNextAlertThresholds Status="{x:Null}" sap2010:WorkflowViewState.IdRef="CalculateNextAlertThresholds_1">
+      <vnbab:CalculateNextAlertThresholds sap2010:WorkflowViewState.IdRef="CalculateNextAlertThresholds_1">
+        <vnbab:CalculateNextAlertThresholds.AlertTypeId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.AlertRuleTypeId</mca:CSharpValue>
+          </InArgument>
+        </vnbab:CalculateNextAlertThresholds.AlertTypeId>
         <vnbab:CalculateNextAlertThresholds.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">queueEntityBalanceInfoBatch</mca:CSharpValue>
@@ -118,8 +123,13 @@
             <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceAlertRuleTypeSettings</mca:CSharpValue>
           </InArgument>
         </vnbab:CalculateNextAlertThresholds.RuleTypeSettings>
+        <vnbab:CalculateNextAlertThresholds.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">calculateNextAlertThresholdStatus</mca:CSharpReference>
+          </OutArgument>
+        </vnbab:CalculateNextAlertThresholds.Status>
       </vnbab:CalculateNextAlertThresholds>
-      <vnbab:UpdateBalanceRuleInfos Status="{x:Null}">
+      <vnbab:UpdateBalanceRuleInfos Status="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateBalanceRuleInfos_1">
         <vnbab:UpdateBalanceRuleInfos.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateRuleInfoPayloadBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateRuleInfoPayloadBatch)">queueBalanceUpdateRuleInfoPayloadBatch</mca:CSharpValue>
@@ -135,10 +145,9 @@
             <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceAlertRuleTypeSettings</mca:CSharpValue>
           </InArgument>
         </vnbab:UpdateBalanceRuleInfos.RuleTypeSettings>
-        <sap2010:WorkflowViewState.IdRef>UpdateBalanceRuleInfos_1</sap2010:WorkflowViewState.IdRef>
       </vnbab:UpdateBalanceRuleInfos>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydFRocmVzaG9sZFVwZGF0ZVByb2Nlc3MueGFtbBI8A44BDgIBAUAFSy8CAUxMBYwBEAIBAkgLSIkBAgFQQwtDXAIBTVMHYyACATZkB3ksAgEZegeLASYCAQNbDVuDAQIBRWANYHcCAT5WDVaQAQIBN3YNdoMBAgEvcQ1xbwIBKGcNZ4gBAgEhbA1spgECARqHAQ2HAYMBAgESggENggF6AgELfQ19ngECAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydFRocmVzaG9sZFVwZGF0ZVByb2Nlc3MueGFtbBQ8A5cBDgIBAUAFSy8CAVpMBZUBEAIBAkgLSIkBAgFeQwtDXAIBW1MHYyACAURkB4MBLAIBGYQBB5QBJgIBA1sNW4MBAgFTYA1gdwIBTFYNVpABAgFFew17gwECAT12DXZvAgE2bA1siAECAS+AAQ2AAYIBAgEocQ1xpgECASFnDWdeAgEakQENkQGDAQIBEowBDYwBegIBC4cBDYcBngECAQQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

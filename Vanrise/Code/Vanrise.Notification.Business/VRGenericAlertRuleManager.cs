@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
 using Vanrise.Rules;
 
@@ -35,7 +36,9 @@ namespace Vanrise.Notification.Business
             var cacheName = new GetCachedPreparedDataCacheName { RuleTypeId = ruleTypeId };
             return GetCachedOrCreate(cacheName, () =>
             {
-                VRAlertRuleType alertRuleType = null;
+                VRAlertRuleTypeManager manager = new VRAlertRuleTypeManager();
+                VRAlertRuleManager ruleManager = new VRAlertRuleManager();
+                VRAlertRuleType alertRuleType = manager.GetVRAlertRuleType(ruleTypeId);
                 if (alertRuleType.Settings == null)
                     throw new NullReferenceException("alertRuleType.Settings");
                 VRGenericAlertRuleTypeSettings ruleTypeSettingsAsGeneric = alertRuleType.Settings as VRGenericAlertRuleTypeSettings;
@@ -45,7 +48,7 @@ namespace Vanrise.Notification.Business
                 if (criteriaDefinition == null)
                     throw new NullReferenceException(String.Format("criteriaDefinition. ruleTypeId '{0}'", ruleTypeId));
                 var objects = ruleTypeSettingsAsGeneric.Objects;
-                List<VRAlertRule> alertRules = null;
+                List<VRAlertRule> alertRules = ruleManager.GetActiveRules(ruleTypeId);
                 var ruleTree = GenericRuleManager<GenericRule>.BuildRuleTree<AlertRuleAsGeneric>(criteriaDefinition, alertRules.Select(r => new AlertRuleAsGeneric { OriginalAlertRule = r }));
                 var criteriaEvaluationInfos = GenericRuleManager<GenericRule>.BuildCriteriaEvaluationInfos(criteriaDefinition, objects);
                 return new CachedPreparedData
@@ -67,10 +70,13 @@ namespace Vanrise.Notification.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _alertRuleCacheLastCheck;
+            DateTime? _alertRuleTypeCacheLastCheck;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                //TODO
-                throw new NotImplementedException();
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRAlertRuleManager.CacheManager>().IsCacheExpired(ref _alertRuleCacheLastCheck) |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRAlertRuleTypeManager.CacheManager>().IsCacheExpired(ref _alertRuleTypeCacheLastCheck);
             }
         }
 
