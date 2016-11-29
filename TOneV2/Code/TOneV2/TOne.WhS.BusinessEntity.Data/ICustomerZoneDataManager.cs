@@ -15,4 +15,11 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool AreAllCustomerZonesUpdated(ref object updateHandle);
     }
+
+	public interface ICustomerCountryDataManager : IDataManager
+	{
+		IEnumerable<CustomerCountry2> GetAll();
+
+		bool AreAllCustomerCountriesUpdated(ref object updateHandle);
+	}
 }

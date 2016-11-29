@@ -16,6 +16,8 @@ namespace TOne.WhS.Sales.Entities
 
         IEnumerable<ExistingZone> ExistingZones { get; }
 
+		IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; }
+
         IEnumerable<NewRate> NewRates { set; }
 
         IEnumerable<ChangedRate> ChangedRates { set; }

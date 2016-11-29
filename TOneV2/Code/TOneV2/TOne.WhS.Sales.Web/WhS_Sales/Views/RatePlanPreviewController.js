@@ -24,6 +24,9 @@
         var summaryServiceViewerAPI;
         var summaryServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var changedCountryGridAPI;
+        var changedCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -65,6 +68,11 @@
                 summaryServiceViewerReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onChangedCountryPreviewGridReady = function (api) {
+            	changedCountryGridAPI = api;
+            	changedCountryGridReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.save = function () {
                 return executeTask(true);
             };
@@ -91,7 +99,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid]).catch(function (error) {
+        	return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadChangedCountryPreviewGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -245,6 +253,16 @@
             });
 
             return saleZoneRoutingProductGridLoadDeferred.promise;
+        }
+        function loadChangedCountryPreviewGrid() {
+        	var changedCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
+        	changedCountryGridReadyDeferred.promise.then(function () {
+        		var changedCountryGridPayload = {
+        			ProcessInstanceId: processInstanceId
+        		};
+        		VRUIUtilsService.callDirectiveLoad(changedCountryGridAPI, changedCountryGridPayload, changedCountryGridLoadDeferred);
+        	});
+        	return changedCountryGridLoadDeferred.promise;
         }
 
         function executeTask(decision) {

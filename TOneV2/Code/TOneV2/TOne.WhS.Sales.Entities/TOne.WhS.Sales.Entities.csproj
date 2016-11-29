@@ -68,6 +68,8 @@
     <Compile Include="RateCalculation\RateCalculationMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateCalculation\RateCalculationMethodSetting.cs" />
+    <Compile Include="RateManagement\Actions\Country\CustomerCountryToAdd.cs" />
+    <Compile Include="RateManagement\Actions\Country\CustomerCountryToChange.cs" />
     <Compile Include="RateManagement\Actions\Rate\RateToChange.cs" />
     <Compile Include="RateManagement\Actions\Rate\RateToClose.cs" />
     <Compile Include="RateManagement\Actions\RoutingProduct\DefaultRoutingProductToAdd.cs" />
@@ -78,7 +80,13 @@
     <Compile Include="RateManagement\Actions\Service\DefaultServiceToClose.cs" />
     <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToAdd.cs" />
     <Compile Include="RateManagement\Actions\Service\SaleZoneServiceToClose.cs" />
+    <Compile Include="RateManagement\Context\IRatePlanContext.cs" />
+    <Compile Include="RateManagement\Country\ChangedCountry.cs" />
+    <Compile Include="RateManagement\Country\ExistingCustomerCountry.cs" />
+    <Compile Include="RateManagement\Country\IProcessCustomerCountriesContext.cs" />
+    <Compile Include="RateManagement\Country\NewCustomerCountry.cs" />
     <Compile Include="RateManagement\Default\DefaultData.cs" />
+    <Compile Include="RateManagement\Preview\ChangedCustomerCountryPreview.cs" />
     <Compile Include="RateManagement\Preview\DefaultRoutingProductPreview.cs" />
     <Compile Include="RateManagement\Preview\DefaultServicePreview.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewQuery.cs" />
@@ -104,6 +112,11 @@
     <Compile Include="RateManagement\Service\Zone\IProcessSaleZoneServicesContext.cs" />
     <Compile Include="RateManagement\Service\Zone\NewSaleZoneService.cs" />
     <Compile Include="RateManagement\Zone\DataByZone.cs" />
+    <Compile Include="RatePlanning\Country\SoldCountryDetail.cs" />
+    <Compile Include="RatePlanning\Country\SoldCountryQuery.cs" />
+    <Compile Include="RatePlanning\Draft\CountryChanges.cs" />
+    <Compile Include="RatePlanning\Draft\Country\DraftChangedCountries.cs" />
+    <Compile Include="RatePlanning\Draft\Country\DraftNewCountry.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftChangedDefaultRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Default\DraftNewDefaultRoutingProduct.cs" />
     <Compile Include="RateManagement\RoutingProduct\Default\ExistingDefaultRoutingProduct.cs" />
@@ -112,9 +125,9 @@
     <Compile Include="RatePlanning\Draft\RoutingProduct\Zone\DraftChangedSaleZoneRoutingProduct.cs" />
     <Compile Include="RatePlanning\Draft\RoutingProduct\Zone\DraftNewSaleZoneRoutingProduct.cs" />
     <Compile Include="RateManagement\Zone\ExistingZone.cs" />
-    <Compile Include="RatePlanning\DefaultChanges.cs" />
+    <Compile Include="RatePlanning\Draft\DefaultChanges.cs" />
     <Compile Include="RatePlanning\BaseChanges.cs" />
-    <Compile Include="RatePlanning\Changes.cs" />
+    <Compile Include="RatePlanning\Draft\Changes.cs" />
     <Compile Include="RatePlanning\Draft\Rate\DraftRateToChange.cs" />
     <Compile Include="RatePlanning\Draft\Service\Default\DraftClosedDefaultService.cs" />
     <Compile Include="RatePlanning\Draft\Service\Default\DraftNewDefaultService.cs" />
@@ -138,7 +151,8 @@
     <Compile Include="RatePlanning\DefaultItem.cs" />
     <Compile Include="RatePlanning\ChangesSummary.cs" />
     <Compile Include="RatePlanning\CalculatedRate.cs" />
-    <Compile Include="RatePlanning\ZoneChanges.cs" />
+    <Compile Include="RatePlanning\Draft\ZoneChanges.cs" />
+    <Compile Include="RatePlanning\Country\SoldCountry.cs" />
     <Compile Include="RatePlanning\ZoneItem.cs" />
     <Compile Include="RatePlanning\ZoneRateChangesDetail.cs" />
     <Compile Include="RatePlanning\ZoneRoutingProductChangesDetail.cs" />

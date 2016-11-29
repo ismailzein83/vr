@@ -1,31 +1,45 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_SellNewCountriesController" vr-loader="isLoading">
-    <vr-modalbody>
-        <vr-form name="formSellNewCountries">
-            <vr-row>
-                <vr-columns width="fullrow" validationcontext="CountryGroup">
-                    <vr-validator validate="validateSelection()">
-                        <vr-datagrid on-ready="onCountryGridReady"
-                                     datasource="countries"
-                                     idfield="CountryId"
-                                     maxheight="500px"
-                                     hidegridmenu>
-                            <vr-datagridcolumn headertext="'Select'" field="'CountryId'" widthfactor="3" disablesorting>
-                                <vr-check value="dataItem.isSelected"></vr-check>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting></vr-datagridcolumn>
-                        </vr-datagrid>
-                    </vr-validator>
-                </vr-columns>
-            </vr-row>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="SelectAll" data-onclick="selectAllCountries"></vr-button>
-                <vr-button type="Save" formname="formSellNewCountries" data-onclick="sellNewCountries" validationcontext="CountryGroup"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+	<vr-modalbody>
+		<vr-form name="formManageCountries">
+			<vr-tabs>
+				<vr-tab header="'New Countries'">
+					<vr-row removeline="true">
+						<vr-common-country-selector on-ready="scopeModel.onCountrySelectorReady"
+													ismultipleselection="true"
+													selectedvalues="scopeModel.selectedCountries"
+													onselectitem="scopeModel.onCountrySelected"
+													ondeselectitem="scopeModel.onCountryDeselected"
+													normal-col-num="6">
+						</vr-common-country-selector>
+					</vr-row>
+					<vr-row>
+						<vr-columns width="fullrow">
+							<vr-datagrid on-ready="scopeModel.onNewCountryGridReady"
+										 datasource="scopeModel.newCountries"
+										 ondeleterow="scopeModel.onGridRowDeleted"
+										 hidegridmenu="true"
+										 norowhighlightonclick="true"
+										 maxheight="500px">
+								<vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'" widthfactor="75" disablesorting="true"></vr-datagridcolumn>
+								<vr-datagridcolumn headertext="'BED'" widthfactor="25" disablesorting="true">
+									<vr-datetimepicker type="date" value="dataItem.Entity.BED" customvalidate="viewScope.scopeModel.isNewCountryBEDValid(dataItem)" isrequired="true"></vr-datetimepicker>
+								</vr-datagridcolumn>
+							</vr-datagrid>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Sold Countries'">
+					<vr-whs-sales-soldcountry-grid on-ready="scopeModel.onSoldCountryGridReady" normal-col-num="6"></vr-whs-sales-soldcountry-grid>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formManageCountries" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

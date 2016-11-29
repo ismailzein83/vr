@@ -1,0 +1,27 @@
+﻿<vr-row removeline="true">
+	<vr-columns colnum="{{soldCountryCtrl.normalColNum}}">
+		<vr-datetimepicker type="date" label="EED" value="scopeModel.endEffectiveDate" customvalidate="scopeModel.isEEDValid()" isrequired="scopeModel.isEEDRequired()"></vr-datetimepicker>
+	</vr-columns>
+</vr-row>
+<vr-row>
+	<vr-columns width="fullrow">
+		<vr-datagrid on-ready="scopeModel.onGridReady"
+					 datasource="scopeModel.soldCountries"
+					 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+					 pagingtype="'PagingOnScroll'"
+					 defaultsortbyfieldname="'Entity.Name'"
+					 hidegridmenu="true"
+					 norowhighlightonclick="true">
+			<vr-datagridcolumn widthfactor="5" disablesorting="true">
+				<vr-check ng-if="!dataItem.IsSoldInFuture" value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onCheckValueChanged(dataItem)"></vr-check>
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'BED'" type="'Text'" widthfactor="50" disablesorting="true">
+				<vr-validator vr-input validate="viewScope.scopeModel.validateTimeRange(dataItem)">
+					<vr-label isvalue="true">{{dataItem.beginEffectiveDate}}</vr-label>
+				</vr-validator>
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'EED'" field="'endEffectiveDate'" type="'Text'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+		</vr-datagrid>
+	</vr-columns>
+</vr-row>

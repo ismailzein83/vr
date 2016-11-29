@@ -117,7 +117,17 @@
       <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="CustomerIdsToEmail" />
       <Variable x:TypeArguments="x:Boolean" Name="ShouldNotifyCustomers" />
       <Variable x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)" Name="SalePLZoneChanges" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)" Name="CustomerCountriesToAdd" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)" Name="CustomerCountriesToChange" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)" Name="ExistingSaleCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)" Name="ExistingCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)" Name="NewCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)" Name="ChangedCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:DraftNewCountry)" Name="DraftNewCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)" Name="ExplicitlyChangedExistingCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)" Name="ChangedCustomerCountryPreviews" />
     </Sequence.Variables>
+    <twsba1:SetRatePlanContext sap2010:WorkflowViewState.IdRef="SetRatePlanContext_1" />
     <twsba1:GetChanges sap2010:WorkflowViewState.IdRef="GetChanges_1">
       <twsba1:GetChanges.Changes>
         <OutArgument x:TypeArguments="twse:Changes">
@@ -148,6 +158,16 @@
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
         </InArgument>
       </twsba1:PrepareActions.CurrencyId>
+      <twsba1:PrepareActions.CustomerCountriesToAdd>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.CustomerCountriesToAdd>
+      <twsba1:PrepareActions.CustomerCountriesToChange>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.CustomerCountriesToChange>
       <twsba1:PrepareActions.DefaultRoutingProductToAdd>
         <OutArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
           <mca:CSharpReference x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpReference>
@@ -178,6 +198,16 @@
           <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
         </OutArgument>
       </twsba1:PrepareActions.MinimumDate>
+      <twsba1:PrepareActions.OwnerId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.OwnerId>
+      <twsba1:PrepareActions.OwnerType>
+        <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+          <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.OwnerType>
       <twsba1:PrepareActions.RatesToChange>
         <OutArgument x:TypeArguments="scg:IEnumerable(twse:RateToChange)">
           <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:RateToChange)">RatesToChange</mca:CSharpReference>
@@ -248,6 +278,11 @@
             <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpReference>
           </OutArgument>
         </twsba1:StructureDataByZones.DataByZone>
+        <twsba1:StructureDataByZones.DraftNewCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:DraftNewCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DraftNewCountry)">(Changes != null &amp;&amp; Changes.CountryChanges != null) ? Changes.CountryChanges.NewCountries : null</mca:CSharpValue>
+          </InArgument>
+        </twsba1:StructureDataByZones.DraftNewCountries>
         <twsba1:StructureDataByZones.OwnerId>
           <InArgument x:TypeArguments="x:Int32">
             <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
@@ -426,6 +461,28 @@
           </InArgument>
         </twsba1:GetExistingSaleEntityZoneServices.OwnerType>
       </twsba1:GetExistingSaleEntityZoneServices>
+      <twsba1:GetExistingCustomerCountries Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingCustomerCountries_2">
+        <twsba1:GetExistingCustomerCountries.ExistingSaleCustomerCountries>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">ExistingSaleCustomerCountries</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingCustomerCountries.ExistingSaleCustomerCountries>
+        <twsba1:GetExistingCustomerCountries.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingCustomerCountries.MinimumDate>
+        <twsba1:GetExistingCustomerCountries.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingCustomerCountries.OwnerId>
+        <twsba1:GetExistingCustomerCountries.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingCustomerCountries.OwnerType>
+      </twsba1:GetExistingCustomerCountries>
     </Parallel>
     <Parallel DisplayName="Parallel_PrepareExistingEntities" sap2010:WorkflowViewState.IdRef="Parallel_3">
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
@@ -446,28 +503,47 @@
             </OutArgument>
           </twsba1:PrepareExistingZones.ExistingZonesById>
         </twsba1:PrepareExistingZones>
-        <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_2">
-          <twsba1:PrepareExistingRates.CurrencyId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
-            </InArgument>
-          </twsba1:PrepareExistingRates.CurrencyId>
-          <twsba1:PrepareExistingRates.ExistingRates>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">ExistingRates</mca:CSharpReference>
-            </OutArgument>
-          </twsba1:PrepareExistingRates.ExistingRates>
-          <twsba1:PrepareExistingRates.ExistingSaleRates>
-            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingSaleRates</mca:CSharpValue>
-            </InArgument>
-          </twsba1:PrepareExistingRates.ExistingSaleRates>
-          <twsba1:PrepareExistingRates.ExistingZonesById>
-            <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">
-              <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">ExistingZonesById</mca:CSharpValue>
-            </InArgument>
-          </twsba1:PrepareExistingRates.ExistingZonesById>
-        </twsba1:PrepareExistingRates>
+        <Parallel sap2010:WorkflowViewState.IdRef="Parallel_7">
+          <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_2">
+            <twsba1:PrepareExistingRates.CurrencyId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingRates.CurrencyId>
+            <twsba1:PrepareExistingRates.ExistingRates>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">ExistingRates</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:PrepareExistingRates.ExistingRates>
+            <twsba1:PrepareExistingRates.ExistingSaleRates>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingSaleRates</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingRates.ExistingSaleRates>
+            <twsba1:PrepareExistingRates.ExistingZonesById>
+              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">ExistingZonesById</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingRates.ExistingZonesById>
+          </twsba1:PrepareExistingRates>
+          <twsba1:PrepareExistingSaleZoneRoutingProducts sap2010:WorkflowViewState.IdRef="PrepareExistingSaleZoneRoutingProducts_2">
+            <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">ExistingSaleEntityZoneRoutingProducts</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
+            <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">ExistingSaleZoneRoutingProducts</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
+            <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingZonesById>
+              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">ExistingZonesById</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingZonesById>
+          </twsba1:PrepareExistingSaleZoneRoutingProducts>
+        </Parallel>
       </Sequence>
       <twsba1:PrepareExistingDefaultRoutingProducts sap2010:WorkflowViewState.IdRef="PrepareExistingDefaultRoutingProducts_1">
         <twsba1:PrepareExistingDefaultRoutingProducts.ExistingDefaultRoutingProducts>
@@ -481,18 +557,6 @@
           </InArgument>
         </twsba1:PrepareExistingDefaultRoutingProducts.ExistingSaleEntityDefaultRoutingProducts>
       </twsba1:PrepareExistingDefaultRoutingProducts>
-      <twsba1:PrepareExistingSaleZoneRoutingProducts sap2010:WorkflowViewState.IdRef="PrepareExistingSaleZoneRoutingProducts_2">
-        <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
-          <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">ExistingSaleEntityZoneRoutingProducts</mca:CSharpValue>
-          </InArgument>
-        </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
-        <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
-          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">
-            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">ExistingSaleZoneRoutingProducts</mca:CSharpReference>
-          </OutArgument>
-        </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
-      </twsba1:PrepareExistingSaleZoneRoutingProducts>
       <twsba1:PrepareExistingDefaultServices sap2010:WorkflowViewState.IdRef="PrepareExistingDefaultServices_1">
         <twsba1:PrepareExistingDefaultServices.ExistingDefaultServices>
           <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultService)">
@@ -517,10 +581,64 @@
           </OutArgument>
         </twsba1:PrepareExistingSaleZoneServices.ExistingSaleZoneServices>
       </twsba1:PrepareExistingSaleZoneServices>
+      <twsba1:PrepareExistingCustomerCountries sap2010:WorkflowViewState.IdRef="PrepareExistingCustomerCountries_2">
+        <twsba1:PrepareExistingCustomerCountries.ExistingCustomerCountries>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExistingCustomerCountries</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareExistingCustomerCountries.ExistingCustomerCountries>
+        <twsba1:PrepareExistingCustomerCountries.ExistingSaleCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">ExistingSaleCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingCustomerCountries.ExistingSaleCustomerCountries>
+        <twsba1:PrepareExistingCustomerCountries.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingCustomerCountries.OwnerType>
+      </twsba1:PrepareExistingCustomerCountries>
     </Parallel>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Processing changes..." />
+    <twsba1:ProcessCustomerCountries Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCustomerCountries_1">
+      <twsba1:ProcessCustomerCountries.ChangedCustomerCountries>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">ChangedCustomerCountries</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCustomerCountries.ChangedCustomerCountries>
+      <twsba1:ProcessCustomerCountries.CustomerCountriesToAdd>
+        <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessCustomerCountries.CustomerCountriesToAdd>
+      <twsba1:ProcessCustomerCountries.CustomerCountriesToChange>
+        <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessCustomerCountries.CustomerCountriesToChange>
+      <twsba1:ProcessCustomerCountries.ExistingCustomerCountries>
+        <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExistingCustomerCountries</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessCustomerCountries.ExistingCustomerCountries>
+      <twsba1:ProcessCustomerCountries.ExplicitlyChangedExistingCustomerCountries>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExplicitlyChangedExistingCustomerCountries</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCustomerCountries.ExplicitlyChangedExistingCustomerCountries>
+      <twsba1:ProcessCustomerCountries.NewCustomerCountries>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">NewCustomerCountries</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ProcessCustomerCountries.NewCustomerCountries>
+      <twsba1:ProcessCustomerCountries.OwnerType>
+        <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+          <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ProcessCustomerCountries.OwnerType>
+    </twsba1:ProcessCustomerCountries>
     <Parallel DisplayName="Parallel_ProcessActions" sap2010:WorkflowViewState.IdRef="Parallel_4">
-      <twsba1:ProcessRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessRates_2">
+      <twsba1:ProcessRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessRates_3">
         <twsba1:ProcessRates.ChangedRates>
           <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedRate)">
             <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedRate)">ChangedRates</mca:CSharpReference>
@@ -536,6 +654,11 @@
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
           </InArgument>
         </twsba1:ProcessRates.ExistingZones>
+        <twsba1:ProcessRates.ExplicitlyChangedExistingCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExplicitlyChangedExistingCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessRates.ExplicitlyChangedExistingCustomerCountries>
         <twsba1:ProcessRates.NewRates>
           <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewRate)">
             <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewRate)">NewRates</mca:CSharpReference>
@@ -595,6 +718,11 @@
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
           </InArgument>
         </twsba1:ProcessSaleZoneRoutingProducts.ExistingZones>
+        <twsba1:ProcessSaleZoneRoutingProducts.ExplicitlyChangedExistingCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExplicitlyChangedExistingCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ProcessSaleZoneRoutingProducts.ExplicitlyChangedExistingCustomerCountries>
         <twsba1:ProcessSaleZoneRoutingProducts.NewSaleZoneRoutingProducts>
           <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">
             <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">NewSaleZoneRoutingProducts</mca:CSharpReference>
@@ -693,7 +821,7 @@
     <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
       <vbw:CombineLists.InputLists>
         <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
-          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt;() { DataByZone, new List&lt;DefaultData&gt;() { DefaultData } };</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt;() { DataByZone, new List&lt;DefaultData&gt;() { DefaultData }, CustomerCountriesToAdd, CustomerCountriesToChange };</mca:CSharpValue>
         </InArgument>
       </vbw:CombineLists.InputLists>
       <vbw:CombineLists.OutputList>
@@ -712,6 +840,11 @@
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Changes have been processed" />
     <Parallel DisplayName="Parallel_PrepareForDBApply" sap2010:WorkflowViewState.IdRef="Parallel_5">
       <twsba1:ReserveIdsForNewEntities Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ReserveIdsForNewEntities_1">
+        <twsba1:ReserveIdsForNewEntities.NewCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">NewCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ReserveIdsForNewEntities.NewCustomerCountries>
         <twsba1:ReserveIdsForNewEntities.NewDefaultRoutingProduct>
           <InArgument x:TypeArguments="twse:NewDefaultRoutingProduct">
             <mca:CSharpValue x:TypeArguments="twse:NewDefaultRoutingProduct">NewDefaultRoutingProduct</mca:CSharpValue>
@@ -940,6 +1073,23 @@
           </InArgument>
         </twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicesToClose>
       </twsba1:PrepareSaleZoneServicePreviews>
+      <twsba1:PrepareCustomerCountryPreviews Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareCustomerCountryPreviews_1">
+        <twsba1:PrepareCustomerCountryPreviews.ChangedCustomerCountryPreviews>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">ChangedCustomerCountryPreviews</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareCustomerCountryPreviews.ChangedCustomerCountryPreviews>
+        <twsba1:PrepareCustomerCountryPreviews.CustomerCountriesToChange>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareCustomerCountryPreviews.CustomerCountriesToChange>
+        <twsba1:PrepareCustomerCountryPreviews.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareCustomerCountryPreviews.OwnerType>
+      </twsba1:PrepareCustomerCountryPreviews>
     </Parallel>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6" Message="Preparing preview page..." />
     <Parallel DisplayName="Parallel_ApplyToDB" sap2010:WorkflowViewState.IdRef="Parallel_2">
@@ -1055,6 +1205,42 @@
           </InArgument>
         </twsba1:ApplySaleZoneServicePreviewsToDB.SaleZoneServicePreviews>
       </twsba1:ApplySaleZoneServicePreviewsToDB>
+      <twsba1:ApplyNewCustomerCountriesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewCustomerCountriesToDB_1">
+        <twsba1:ApplyNewCustomerCountriesToDB.NewCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">NewCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyNewCustomerCountriesToDB.NewCustomerCountries>
+        <twsba1:ApplyNewCustomerCountriesToDB.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyNewCustomerCountriesToDB.OwnerType>
+      </twsba1:ApplyNewCustomerCountriesToDB>
+      <twsba1:ApplyChangedCustomerCountriesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCustomerCountriesToDB_1">
+        <twsba1:ApplyChangedCustomerCountriesToDB.ChangedCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">ChangedCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyChangedCustomerCountriesToDB.ChangedCustomerCountries>
+        <twsba1:ApplyChangedCustomerCountriesToDB.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyChangedCustomerCountriesToDB.OwnerType>
+      </twsba1:ApplyChangedCustomerCountriesToDB>
+      <twsba1:ApplyChangedCustomerCountryPreviewsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCustomerCountryPreviewsToDB_1">
+        <twsba1:ApplyChangedCustomerCountryPreviewsToDB.ChangedCustomerCountryPreviews>
+          <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">ChangedCustomerCountryPreviews</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyChangedCustomerCountryPreviewsToDB.ChangedCustomerCountryPreviews>
+        <twsba1:ApplyChangedCustomerCountryPreviewsToDB.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:ApplyChangedCustomerCountryPreviewsToDB.OwnerType>
+      </twsba1:ApplyChangedCustomerCountryPreviewsToDB>
     </Parallel>
     <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_1" TaskTitle="Rate Plan Preview">
       <vbw:AssignTask.AssignedTo>
@@ -1285,13 +1471,12 @@
             </If.Condition>
             <If.Then>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-                <vbw:WriteTrackingMessage Message="Sending pricelists">
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_11" Message="Sending pricelists">
                   <vbw:WriteTrackingMessage.Severity>
                     <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                       <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
-                  <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_11</sap2010:WorkflowViewState.IdRef>
                 </vbw:WriteTrackingMessage>
                 <twsba1:PrepareZoneChanges sap2010:WorkflowViewState.IdRef="PrepareZoneChanges_1">
                   <twsba1:PrepareZoneChanges.ExistingZones>
@@ -1337,13 +1522,12 @@
                     </InArgument>
                   </twsba1:NotifyCustomers.SalePLZoneChanges>
                 </twsba1:NotifyCustomers>
-                <vbw:WriteTrackingMessage Message="Sending pricelists is successfully done">
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_12" Message="Sending pricelists is successfully done">
                   <vbw:WriteTrackingMessage.Severity>
                     <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                       <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
-                  <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_12</sap2010:WorkflowViewState.IdRef>
                 </vbw:WriteTrackingMessage>
               </Sequence>
             </If.Then>
@@ -1360,24 +1544,26 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetChanges_1" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="PrepareActions_1" sap:VirtualizedContainerService.HintSize="3914,22" />
+      <sap2010:ViewStateData Id="SetRatePlanContext_1" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="GetChanges_1" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="PrepareActions_1" sap:VirtualizedContainerService.HintSize="4634,22" />
       <sap2010:ViewStateData Id="StructureDefaultData_4" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="3914,86" />
+      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="4634,86" />
       <sap2010:ViewStateData Id="GetExistingSaleZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingSaleRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingSaleEntityDefaultRoutingProducts_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingSaleEntityZoneRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingSaleEntityDefaultServices_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingSaleEntityZoneServices_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="3914,86">
+      <sap2010:ViewStateData Id="GetExistingCustomerCountries_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="4634,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1385,20 +1571,22 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="PrepareExistingZones_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="PrepareExistingRates_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="PrepareExistingZones_3" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="PrepareExistingRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareExistingSaleZoneRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="576,272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="PrepareExistingDefaultRoutingProducts_1" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="PrepareExistingSaleZoneRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="PrepareExistingDefaultServices_1" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="PrepareExistingSaleZoneServices_1" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="3914,254">
+      <sap2010:ViewStateData Id="PrepareExistingDefaultRoutingProducts_1" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="PrepareExistingDefaultServices_1" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="PrepareExistingSaleZoneServices_1" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="PrepareExistingCustomerCountries_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="4634,318">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1406,13 +1594,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="ProcessRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="ProcessCustomerCountries_1" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="ProcessRates_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessDefaultRoutingProduct_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessSaleZoneRoutingProducts_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessDefaultService_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessSaleZoneServices_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="3914,86">
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="4634,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1420,11 +1609,11 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UpdateZonesData_1" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_8" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="3914,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="3914,22" />
+      <sap2010:ViewStateData Id="UpdateZonesData_1" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_8" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="4634,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="4634,22" />
       <sap2010:ViewStateData Id="ReserveIdsForNewEntities_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareRatePlanPreviewSummary_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareRatePreviews_2" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -1432,7 +1621,8 @@
       <sap2010:ViewStateData Id="PrepareSaleZoneRoutingProductPreviews_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareDefaultServicePreview_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareSaleZoneServicePreviews_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="3914,86">
+      <sap2010:ViewStateData Id="PrepareCustomerCountryPreviews_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="4634,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1440,7 +1630,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="3914,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="4634,22" />
       <sap2010:ViewStateData Id="ApplyNewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyChangedRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyNewDefaultRoutingProductToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -1457,7 +1647,10 @@
       <sap2010:ViewStateData Id="ApplyNewSaleZoneServicesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyChangedSaleZoneServicesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplySaleZoneServicePreviewsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="3914,86">
+      <sap2010:ViewStateData Id="ApplyNewCustomerCountriesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCustomerCountriesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCustomerCountryPreviewsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="4634,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1465,7 +1658,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="3914,22" />
+      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="4634,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="798,22" />
       <sap2010:ViewStateData Id="ReserveSalePriceListId_1" sap:VirtualizedContainerService.HintSize="798,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_9" sap:VirtualizedContainerService.HintSize="798,22" />
@@ -1507,15 +1700,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="3914,1880" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="3936,3672">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="4634,1880" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="4656,3860">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Sales.BP.RatePlan_1" sap:VirtualizedContainerService.HintSize="3976,3752" />
+      <sap2010:ViewStateData Id="TOne.WhS.Sales.BP.RatePlan_1" sap:VirtualizedContainerService.HintSize="4696,3940" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -14,15 +14,17 @@
             viewZoneInfo: viewZoneInfo
         };
 
-        function sellNewCountries(customerId, onCountriesSold) {
-            var parameters = {
-                CustomerId: customerId
+        function sellNewCountries(customerId, countryChanges, saleAreaSettings, onCountryChangesUpdated) {
+
+        	var parameters = {
+        		customerId: customerId,
+        		countryChanges: countryChanges,
+        		saleAreaSettings: saleAreaSettings
             };
 
             var settings = {};
-
             settings.onScopeReady = function (modalScope) {
-                modalScope.onCountriesSold = onCountriesSold;
+            	modalScope.onCountryChangesUpdated = onCountryChangesUpdated;
             };
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);

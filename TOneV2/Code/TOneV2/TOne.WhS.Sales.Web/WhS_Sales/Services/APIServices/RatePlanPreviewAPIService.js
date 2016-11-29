@@ -32,13 +32,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDefaultServicePreview"), query);
         }
 
+        function GetFilteredChangedCustomerCountryPreviews(query) {
+        	return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredChangedCustomerCountryPreviews"), query);
+        }
+
         return {
             GetRatePlanPreviewSummary: GetRatePlanPreviewSummary,
             GetFilteredRatePreviews: GetFilteredRatePreviews,
             GetFilteredSaleZoneRoutingProductPreviews: GetFilteredSaleZoneRoutingProductPreviews,
             GetDefaultRoutingProductPreview: GetDefaultRoutingProductPreview,
             GetFilteredSaleZoneServicePreviews: GetFilteredSaleZoneServicePreviews,
-            GetDefaultServicePreview: GetDefaultServicePreview
+            GetDefaultServicePreview: GetDefaultServicePreview,
+            GetFilteredChangedCustomerCountryPreviews: GetFilteredChangedCustomerCountryPreviews
         };
     }
 

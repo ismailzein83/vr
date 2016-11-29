@@ -35,6 +35,12 @@
             });
         }
 
+        function GetCountryChanges(customerId) {
+        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCountryChanges"), {
+        		customerId: customerId
+        	});
+        }
+
         function GetCostCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCostCalculationMethodTemplates"));
         }
@@ -100,12 +106,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetZoneInheritedService"), input);
         }
 
+        function GetFilteredSoldCountries(input) {
+        	return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSoldCountries"), input);
+        }
+
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
             GetDefaultItem: GetDefaultItem,
             GetZoneItems: GetZoneItems,
             GetZoneItem: GetZoneItem,
+            GetCountryChanges: GetCountryChanges,
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
             GetRateCalculationMethodTemplates: GetRateCalculationMethodTemplates,
             SaveChanges: SaveChanges,
@@ -118,7 +129,8 @@
             GetDraftCurrencyId: GetDraftCurrencyId,
             DeleteChangedRates: DeleteChangedRates,
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
-            GetZoneInheritedService: GetZoneInheritedService
+            GetZoneInheritedService: GetZoneInheritedService,
+            GetFilteredSoldCountries: GetFilteredSoldCountries
         };
 
     }

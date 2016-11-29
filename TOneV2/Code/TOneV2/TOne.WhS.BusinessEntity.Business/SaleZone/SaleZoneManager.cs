@@ -90,18 +90,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<SaleZone> GetSaleZonesByCountryIds(int sellingNumberPlanId, IEnumerable<int> countryIds, DateTime effectiveOn, bool withFutureZones)
         {
+			if (countryIds == null)
+				return null;
+
 			IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(x => countryIds.Contains(x.CountryId));
-			return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
 
-			//if (countryIds == null)
-			//	return null;
-
-			//IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(x => countryIds.Contains(x.CountryId));
-			
-			//if (withFutureZones)
-			//	return saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn));
-			//else
-			//	return saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
+			if (withFutureZones)
+				return saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn));
+			else
+				return saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
         }
 
         public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
@@ -258,19 +255,9 @@ namespace TOne.WhS.BusinessEntity.Business
 			}
 			else
 			{
-				return new CustomerZoneManager().GetCustomerSaleZones(ownerId, sellingNumberPlanId, effectiveOn, withFutureZones);
+				IEnumerable<int> customerCountryIds = new CustomerCountryManager().GetCustomerCountryIds(ownerId, effectiveOn, withFutureZones);
+				return GetSaleZonesByCountryIds(sellingNumberPlanId, customerCountryIds, effectiveOn, withFutureZones);
 			}
-
-			//if (ownerType == SalePriceListOwnerType.SellingProduct)
-			//{
-			//	IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
-			//	return withFutureZones ? saleZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn)) : saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
-			//}
-			//else
-			//{
-			//	IEnumerable<int> customerCountryIds = new CustomerCountryManager().GetCustomerCountryIds(ownerId, effectiveOn, withFutureZones);
-			//	return GetSaleZonesByCountryIds(sellingNumberPlanId, customerCountryIds, effectiveOn, withFutureZones);
-			//}
         }
 
         #endregion

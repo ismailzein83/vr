@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Business
+namespace TOne.WhS.Sales.Entities
 {
-	class NotSoldToCustomerCountryFilter
+	public interface IRatePlanContext
 	{
+		DateTime RetroactiveDate { get; }
 	}
 }

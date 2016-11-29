@@ -72,10 +72,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyChangedCustomerCountriesToDB.cs" />
+    <Compile Include="ApplyChangedCustomerCountryPreviewsToDB.cs" />
     <Compile Include="ApplyChangedDefaultServicesToDB.cs" />
     <Compile Include="ApplyChangedSaleZoneServicesToDB.cs" />
     <Compile Include="ApplyDefaultRoutingProductPreviewToDB.cs" />
     <Compile Include="ApplyDefaultServicePreviewToDB.cs" />
+    <Compile Include="ApplyNewCustomerCountriesToDB.cs" />
     <Compile Include="ApplyNewDefaultServiceToDB.cs" />
     <Compile Include="ApplyNewSaleZoneServicesToDB.cs" />
     <Compile Include="ApplyRatePlanPreviewSummaryToDB.cs" />
@@ -83,10 +86,15 @@
     <Compile Include="ApplySaleZoneRoutingProductPreviewsToDB.cs" />
     <Compile Include="ApplySaleZoneServicePreviewsToDB.cs" />
     <Compile Include="BackupData.cs" />
+    <Compile Include="GetExistingCustomerCountries.cs" />
+    <Compile Include="PrepareCustomerCountryPreviews.cs" />
+    <Compile Include="PrepareExistingCustomerCountries.cs" />
     <Compile Include="PrepareZoneChanges.cs" />
     <Compile Include="GetExistingSaleEntityDefaultServices.cs" />
     <Compile Include="GetExistingSaleEntityZoneServices.cs" />
     <Compile Include="NotifyCustomers.cs" />
+    <Compile Include="ProcessCustomerCountries.cs" />
+    <Compile Include="SetRatePlanContext.cs" />
     <Compile Include="StructureDefaultData.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />
     <Compile Include="PrepareDefaultServicePreview.cs" />

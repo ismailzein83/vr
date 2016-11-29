@@ -13,6 +13,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public long ZoneId { get; set; }
         public string ZoneName { get; set; }
+		public int CountryId { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
         public bool IsFutureZone { get; set; }

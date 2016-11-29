@@ -11,19 +11,24 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ReserveIdsForNewEntitiesInput
-    {
-        public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
-        public IEnumerable<NewRate> NewRates { get; set; }
-        public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
-        public NewDefaultService NewDefaultService { get; set; }
-        public IEnumerable<NewSaleZoneService> NewSaleZoneServices { get; set; }
-    }
+	#region Classes
 
-    public class ReserveIdsForNewEntitiesOutput
-    {
+	public class ReserveIdsForNewEntitiesInput
+	{
+		public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
+		public IEnumerable<NewRate> NewRates { get; set; }
+		public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
+		public NewDefaultService NewDefaultService { get; set; }
+		public IEnumerable<NewSaleZoneService> NewSaleZoneServices { get; set; }
+		public IEnumerable<NewCustomerCountry> NewCustomerCountries { get; set; }
+	}
 
-    }
+	public class ReserveIdsForNewEntitiesOutput
+	{
+
+	}
+	
+	#endregion
 
     public class ReserveIdsForNewEntities : BaseAsyncActivity<ReserveIdsForNewEntitiesInput, ReserveIdsForNewEntitiesOutput>
     {
@@ -44,6 +49,9 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<NewSaleZoneService>> NewSaleZoneServices { get; set; }
 
+		[RequiredArgument]
+		public InArgument<IEnumerable<NewCustomerCountry>> NewCustomerCountries { get; set; }
+
         #endregion
         
         protected override ReserveIdsForNewEntitiesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -54,7 +62,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 NewRates = this.NewRates.Get(context),
                 NewSaleZoneRoutingProducts = this.NewSaleZoneRoutingProducts.Get(context),
                 NewDefaultService = this.NewDefaultService.Get(context),
-                NewSaleZoneServices = this.NewSaleZoneServices.Get(context)
+                NewSaleZoneServices = this.NewSaleZoneServices.Get(context),
+				NewCustomerCountries = NewCustomerCountries.Get(context)
             };
         }
 
@@ -70,12 +79,14 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts = inputArgument.NewSaleZoneRoutingProducts;
             NewDefaultService newDefaultService = inputArgument.NewDefaultService;
             IEnumerable<NewSaleZoneService> newSaleZoneServices = inputArgument.NewSaleZoneServices;
+			IEnumerable<NewCustomerCountry> newCustomerCountries = inputArgument.NewCustomerCountries;
 
             ReserveNewDefaultRoutingProductId(newDefaultRoutingProduct);
             ReserveNewRateIds(newRates);
             ReserveNewSaleZoneRoutingProductIds(newSaleZoneRoutingProducts);
             ReserveNewDefaultServiceId(newDefaultService);
             ReserveNewSaleZoneServiceIds(newSaleZoneServices);
+			ReserveNewCustomerCountryIds(newCustomerCountries);
 
             return new ReserveIdsForNewEntitiesOutput() { };
         }
@@ -138,6 +149,18 @@ namespace TOne.WhS.Sales.BP.Activities
             foreach (NewSaleZoneService newSaleZoneService in newSaleZoneServices)
                 newSaleZoneService.SaleEntityServiceId = startingId++;
         }
+
+		private void ReserveNewCustomerCountryIds(IEnumerable<NewCustomerCountry> newCustomerCountries)
+		{
+			if (newCustomerCountries == null)
+				return;
+
+			var customerCountryManager = new TOne.WhS.BusinessEntity.Business.CustomerCountryManager();
+			long startingId = customerCountryManager.ReserveIdRange(newCustomerCountries.Count());
+
+			foreach (NewCustomerCountry newCustomerCountry in newCustomerCountries)
+				newCustomerCountry.CustomerCountryId = startingId++;
+		}
 
         #endregion
     }

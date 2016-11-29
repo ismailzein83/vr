@@ -88,7 +88,6 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
     				salePLTemplateSelectorReadyDeferred.resolve();
     			};
     		}
-
     		function defineAPI() {
 
     			var api = {};
@@ -129,7 +128,9 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
     					DefaultRate: ctrl.defaultRate,
     					PrimarySaleEntity: ctrl.primarySaleEntity.value,
     					DefaultSalePLMailTemplateId: mailMsgTemplateSelectorAPI.getSelectedIds(),
-    					DefaultSalePLTemplateId: salePLTemplateSelectorAPI.getSelectedIds()
+    					DefaultSalePLTemplateId: salePLTemplateSelectorAPI.getSelectedIds(),
+    					EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
+    					RetroactiveDayOffset: ctrl.retroactiveDayOffset
     				};
     			};
 
@@ -144,6 +145,8 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
 
     			ctrl.defaultRate = data.DefaultRate;
     			ctrl.primarySaleEntity = UtilsService.getItemByVal(ctrl.primarySaleEntities, data.PrimarySaleEntity, 'value');
+    			ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
+    			ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
 
     			if (data.FixedKeywords != null) {
     				for (var i = 0; i < data.FixedKeywords.length; i++)

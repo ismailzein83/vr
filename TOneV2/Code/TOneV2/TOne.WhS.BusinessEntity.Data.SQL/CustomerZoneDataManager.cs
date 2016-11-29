@@ -61,4 +61,47 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #endregion
     }
+
+	public class CustomerCountryDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ICustomerCountryDataManager
+	{
+		#region Constructors
+
+		public CustomerCountryDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public IEnumerable<CustomerCountry2> GetAll()
+        {
+			return base.GetItemsSP("TOneWhS_BE.sp_CustomerCountry_GetAll", CustomerCountryMapper);
+        }
+
+		public bool AreAllCustomerCountriesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.CustomerCountry", ref updateHandle);
+        }
+        
+		#endregion  
+		
+        #region Mappers
+
+		private CustomerCountry2 CustomerCountryMapper(IDataReader reader)
+        {
+			return new CustomerCountry2()
+			{
+				CustomerCountryId = (int)reader["ID"],
+				CustomerId = (int)reader["CustomerID"],
+				CountryId = (int)reader["CountryID"],
+				BED = (DateTime)reader["BED"],
+				EED = base.GetReaderValue<DateTime?>(reader, "EED")
+			};
+        }
+
+        #endregion
+	}
 }

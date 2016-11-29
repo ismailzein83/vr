@@ -34,6 +34,7 @@
         var textFilterReadyDeferred = UtilsService.createPromiseDeferred();
 
         var defaultItem;
+        var countryChanges;
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -226,14 +227,19 @@
                 return loadRatePlan();
             };
             $scope.sellNewCountries = function () {
-                var customerId = $scope.selectedCustomer.CarrierAccountId;
-                var onCountriesSold = function (customerZones)
-                {
-                    if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
-                        loadRatePlan();
-                };
+            	var customerId = $scope.selectedCustomer.CarrierAccountId;
+            	var onCountryChangesUpdated = function (updatedCountryChanges)
+            	{
+            		countryChanges = updatedCountryChanges;
 
-                WhS_Sales_RatePlanService.sellNewCountries(customerId, onCountriesSold);
+            		saveDraft(false).then(function () {
+            			if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
+            				loadRatePlan();
+            		}).catch(function (error) {
+            			VRNotificationService.notifyException(error, $scope);
+            		});
+            	};
+            	WhS_Sales_RatePlanService.sellNewCountries(customerId, countryChanges, saleAreaSettingsData, onCountryChangesUpdated);
             };
             $scope.editSettings = function ()
             {
@@ -423,10 +429,12 @@
                 confirmPromise.then(function (confirmed) {
                     if (confirmed) {
                         return WhS_Sales_RatePlanAPIService.DeleteDraft(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId()).then(function (response) {
-                            if (response) {
+                        	if (response) {
                                 deleteDeferred.resolve();
                                 VRNotificationService.showSuccess("Draft deleted");
                                 $scope.showCancelButton = false;
+
+                                countryChanges = undefined;
                                 loadRatePlan();
                             }
                             else {
@@ -447,11 +455,11 @@
 
             defineSaveButtonMenuActions();
         }
-
         function load() {
             $scope.isLoadingFilterSection = true;
             loadAllControls();
         }
+
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, loadSaleAreaSettingsData, getSystemCurrencyId, loadCountrySelector, loadTextFilter]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -459,7 +467,6 @@
                 $scope.isLoadingFilterSection = false;
             });
         }
-
         function loadOwnerFilterSection() {
             var promises = [];
 
@@ -769,36 +776,35 @@
             var defaultDraft = getDefaultDraft();
             var zoneDrafts = gridAPI.getZoneDrafts();
 
-            if (defaultDraft != undefined || zoneDrafts != undefined)
+            if (defaultDraft != undefined || zoneDrafts != undefined || countryChanges != undefined)
             {
                 newDraft = {
                     CurrencyId: getCurrencyId(),
                     DefaultChanges: defaultDraft,
-                    ZoneChanges: zoneDrafts
+                    ZoneChanges: zoneDrafts,
+                    CountryChanges: countryChanges
                 };
             }
             return newDraft;
         }
         function getDefaultDraft()
         {
-            var defaultDraft;
+        	if (defaultItem == undefined || !defaultItem.IsDirty)
+        		return null;
 
-            if (defaultItem.IsDirty)
-            {
-                defaultDraft = {};
-                for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-                    var defaultTab = $scope.defaultItemTabs[i];
-                    if (defaultTab.directiveAPI != undefined)
-                        defaultTab.directiveAPI.applyChanges(defaultDraft);
-                }
-                defaultDraft.NewService = defaultItem.NewService;
-                defaultDraft.ClosedService = defaultItem.ClosedService;
-                defaultDraft.ResetService = defaultItem.ResetService;
-            }
-            return defaultDraft;
+        	var defaultDraft = {};
+        	for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+        		var defaultTab = $scope.defaultItemTabs[i];
+        		if (defaultTab.directiveAPI != undefined)
+        			defaultTab.directiveAPI.applyChanges(defaultDraft);
+        	}
+        	defaultDraft.NewService = defaultItem.NewService;
+        	defaultDraft.ClosedService = defaultItem.ClosedService;
+        	defaultDraft.ResetService = defaultItem.ResetService;
+        	return defaultDraft;
         }
 
-        function onCustomerChanged(selectedCarrierAccountId) {
+        function onCustomerChanged(customerId) {
             var promises = [];
 
             var isCustomerValid;
@@ -810,6 +816,9 @@
             var getCustomerCurrencyIdDeferred = UtilsService.createPromiseDeferred();
             promises.push(getCustomerCurrencyIdDeferred.promise);
 
+            var getCountryChangesDeferred = UtilsService.createPromiseDeferred();
+            promises.push(getCountryChangesDeferred.promise);
+
             validateCustomerPromise.then(function () {
                 if (isCustomerValid) {
                     getCustomerCurrencyId().then(function () {
@@ -817,24 +826,35 @@
                     }).catch(function (error) {
                         getCustomerCurrencyIdDeferred.reject(error);
                     });
+                    getCountryChanges().then(function () {
+						getCountryChangesDeferred.resolve();
+                    }).catch(function (error) {
+                    	getCountryChangesDeferred.reject(error, $scope);
+                    });
                 }
                 else {
-                    getCustomerCurrencyIdDeferred.resolve();
+                	getCustomerCurrencyIdDeferred.resolve();
+                	getCountryChangesDeferred.resolve();
                     VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not assigned to a selling product");
                     $scope.selectedCustomer = undefined;
                 }
             });
 
             function validateCustomer() {
-                return WhS_Sales_RatePlanAPIService.ValidateCustomer(selectedCarrierAccountId, new Date()).then(function (response) {
+            	return WhS_Sales_RatePlanAPIService.ValidateCustomer(customerId, new Date()).then(function (response) {
                     isCustomerValid = response;
                 });
             }
             function getCustomerCurrencyId() {
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(selectedCarrierAccountId).then(function (response) {
+            	return WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(customerId).then(function (response) {
                     defaultCustomerCurrencyId = response;
                     currencySelectorAPI.selectedCurrency(response);
                 });
+            }
+            function getCountryChanges() {
+            	return WhS_Sales_RatePlanAPIService.GetCountryChanges(customerId).then(function (response) {
+            		countryChanges = response;
+            	});
             }
 
             return UtilsService.waitMultiplePromises(promises);
@@ -906,7 +926,8 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
 
                         var processTrackingContext = {
-                            onClose: function () {
+                        	onClose: function () {
+                        		countryChanges = undefined;
                                 loadRatePlan();
                             }
                         };

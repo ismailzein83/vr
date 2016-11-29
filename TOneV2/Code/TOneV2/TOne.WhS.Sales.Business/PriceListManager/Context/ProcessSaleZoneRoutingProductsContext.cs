@@ -9,7 +9,6 @@ namespace TOne.WhS.Sales.Business
 {
     public class ProcessSaleZoneRoutingProductsContext : IProcessSaleZoneRoutingProductsContext
     {
-        // Input Properties
         public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }
 
         public IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; set; }
@@ -18,7 +17,8 @@ namespace TOne.WhS.Sales.Business
 
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
-        // Output Properties
+		public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+
         public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
 
         public IEnumerable<ChangedSaleZoneRoutingProduct> ChangedSaleZoneRoutingProducts { get; set; }

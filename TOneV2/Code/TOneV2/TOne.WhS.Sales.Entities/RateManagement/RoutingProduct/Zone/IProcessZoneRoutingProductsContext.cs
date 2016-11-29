@@ -8,7 +8,6 @@ namespace TOne.WhS.Sales.Entities
 {
     public interface IProcessSaleZoneRoutingProductsContext
     {
-        // Input Properties
         IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; }
 
         IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; }
@@ -17,7 +16,8 @@ namespace TOne.WhS.Sales.Entities
 
         IEnumerable<ExistingZone> ExistingZones { get; }
 
-        // Output Properties
+		IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; }
+
         IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { set; }
 
         IEnumerable<ChangedSaleZoneRoutingProduct> ChangedSaleZoneRoutingProducts { set; }

@@ -15,6 +15,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public PrimarySaleEntity PrimarySaleEntity { get; set; }
         public Guid DefaultSalePLMailTemplateId { get; set; }
 		public int DefaultSalePLTemplateId { get; set; }
+		public int EffectiveDateDayOffset { get; set; }
+		public int RetroactiveDayOffset { get; set; }
     }
 
     public enum PrimarySaleEntity { SellingProduct = 0, Customer = 1 }

@@ -103,9 +103,9 @@
     <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Country\NotSoldToCustomerCountryFilter.cs" />
+    <Compile Include="Country\CountryNotSoldToCustomerFilter.cs" />
     <Compile Include="CustomerSellingProductManager.cs" />
-    <Compile Include="CustomerZoneManager.cs" />
+    <Compile Include="Country\CustomerZoneManager.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />

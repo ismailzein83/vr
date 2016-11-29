@@ -93,7 +93,7 @@ namespace TOne.WhS.Sales.BP.Activities
         private int GetSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
         {
             var ratePlanManager = new RatePlanManager();
-            int? sellingNumberPlanId = ratePlanManager.GetSellingNumberPlanId(ownerType, ownerId);
+            int? sellingNumberPlanId = ratePlanManager.GetOwnerSellingNumberPlanId(ownerType, ownerId);
 
             if (!sellingNumberPlanId.HasValue)
                 throw new NullReferenceException("sellingNumberPlanId");

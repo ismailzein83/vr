@@ -56,6 +56,14 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetDefaultItem(ownerType, ownerId, effectiveOn);
         }
 
+		[HttpGet]
+		[Route("GetCountryChanges")]
+		public CountryChanges GetCountryChanges(int customerId)
+		{
+			var manager = new RatePlanDraftManager();
+			return manager.GetCountryChanges(customerId);
+		}
+
         [HttpGet]
         [Route("GetCostCalculationMethodTemplates")]
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
@@ -159,5 +167,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new RatePlanZoneManager();
             return manager.GetZoneInheritedService(input);
         }
+
+		[HttpPost]
+		[Route("GetFilteredSoldCountries")]
+		public object GetFilteredSoldCountries(Vanrise.Entities.DataRetrievalInput<SoldCountryQuery> input)
+		{
+			var manager = new SoldCountryManager();
+			return base.GetWebResponse(input, manager.GetFilteredSoldCountries(input));
+		}
     }
 }

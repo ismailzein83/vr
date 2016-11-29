@@ -10,23 +10,25 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ProcessSaleZoneRoutingProductsInput
-    {
-        public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }
+	#region Classes
 
-        public IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; set; }
+	public class ProcessSaleZoneRoutingProductsInput
+	{
+		public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }
+		public IEnumerable<SaleZoneRoutingProductToClose> SaleZoneRoutingProductsToClose { get; set; }
+		public IEnumerable<ExistingSaleZoneRoutingProduct> ExistingSaleZoneRoutingProducts { get; set; }
+		public IEnumerable<ExistingZone> ExistingZones { get; set; }
+		public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+	}
 
-        public IEnumerable<ExistingSaleZoneRoutingProduct> ExistingSaleZoneRoutingProducts { get; set; }
+	public class ProcessSaleZoneRoutingProductsOutput
+	{
+		public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
 
-        public IEnumerable<ExistingZone> ExistingZones { get; set; }
-    }
+		public IEnumerable<ChangedSaleZoneRoutingProduct> ChangedSaleZoneRoutingProducts { get; set; }
+	}
 
-    public class ProcessSaleZoneRoutingProductsOutput
-    {
-        public IEnumerable<NewSaleZoneRoutingProduct> NewSaleZoneRoutingProducts { get; set; }
-
-        public IEnumerable<ChangedSaleZoneRoutingProduct> ChangedSaleZoneRoutingProducts { get; set; }
-    }
+	#endregion
 
     public class ProcessSaleZoneRoutingProducts : BaseAsyncActivity<ProcessSaleZoneRoutingProductsInput, ProcessSaleZoneRoutingProductsOutput>
     {
@@ -43,6 +45,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
+
+		[RequiredArgument]
+		public InArgument<IEnumerable<ExistingCustomerCountry>> ExplicitlyChangedExistingCustomerCountries { get; set; }
 
         #endregion
 
@@ -63,7 +68,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 SaleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context),
                 SaleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context),
                 ExistingSaleZoneRoutingProducts = this.ExistingSaleZoneRoutingProducts.Get(context),
-                ExistingZones = this.ExistingZones.Get(context)
+                ExistingZones = this.ExistingZones.Get(context),
+				ExplicitlyChangedExistingCustomerCountries = ExplicitlyChangedExistingCustomerCountries.Get(context)
             };
         }
 
@@ -84,13 +90,15 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = inputArgument.SaleZoneRoutingProductsToClose;
             IEnumerable<ExistingSaleZoneRoutingProduct> existingSaleZoneRoutingProducts = inputArgument.ExistingSaleZoneRoutingProducts;
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
+			IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries = inputArgument.ExplicitlyChangedExistingCustomerCountries;
 
             var processSaleZoneRoutingProductsContext = new ProcessSaleZoneRoutingProductsContext()
             {
                 SaleZoneRoutingProductsToAdd = saleZoneRoutingProductsToAdd,
                 SaleZoneRoutingProductsToClose = saleZoneRoutingProductsToClose,
                 ExistingSaleZoneRoutingProducts = existingSaleZoneRoutingProducts,
-                ExistingZones = existingZones
+                ExistingZones = existingZones,
+				ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries
             };
 
             var priceListSaleZoneRoutingProductManager = new PriceListSaleZoneRoutingProductManager();

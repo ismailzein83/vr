@@ -487,7 +487,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             if (zoneItem.IsDirty) {
                 var zoneItemChanges = {
                     ZoneId: zoneItem.ZoneId,
-                    ZoneName: zoneItem.ZoneName
+                    ZoneName: zoneItem.ZoneName,
+					CountryId: zoneItem.CountryId
                 };
 
                 setDraftRateToChange(zoneItemChanges, zoneItem);

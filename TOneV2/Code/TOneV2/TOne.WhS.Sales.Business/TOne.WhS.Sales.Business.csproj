@@ -79,6 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
+    <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\MissingSellingProductDefaultServiceCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
@@ -89,23 +91,26 @@
     <Compile Include="BusinessRules\Conditions\ServiceEEDGreaterThanZoneEED.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="NotificationContext.cs" />
+    <Compile Include="Preview\ChangedCustomerCountryPreviewManager.cs" />
+    <Compile Include="PriceListManager\Context\ProcessCustomerCountriesContext.cs" />
+    <Compile Include="PriceListManager\PriceListCustomerCountryManager.cs" />
     <Compile Include="Reader\RatePlanServiceReadWithCache.cs" />
     <Compile Include="Preview\DefaultServicePreviewManager.cs" />
     <Compile Include="Preview\SaleZoneServicePreviewManager.cs" />
-    <Compile Include="PriceListDefaultServiceManager.cs" />
-    <Compile Include="PriceListSaleZoneServiceManager.cs" />
-    <Compile Include="ProcessDefaultServiceContext.cs" />
-    <Compile Include="ProcessSaleZoneServicesContext.cs" />
+    <Compile Include="PriceListManager\PriceListDefaultServiceManager.cs" />
+    <Compile Include="PriceListManager\PriceListSaleZoneServiceManager.cs" />
+    <Compile Include="PriceListManager\Context\ProcessDefaultServiceContext.cs" />
+    <Compile Include="PriceListManager\Context\ProcessSaleZoneServicesContext.cs" />
     <Compile Include="RatePlanDraftManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CostCalculationMethodContext.cs" />
     <Compile Include="Preview\DefaultRoutingProductPreviewManager.cs" />
-    <Compile Include="PriceListRateManager.cs" />
-    <Compile Include="PriceListDefaultRoutingProductManager.cs" />
-    <Compile Include="PriceListSaleZoneRoutingProductManager.cs" />
-    <Compile Include="ProcessDefaultRoutingProductContext.cs" />
-    <Compile Include="ProcessRatesContext.cs" />
-    <Compile Include="ProcessSaleZoneRoutingProductsContext.cs" />
+    <Compile Include="PriceListManager\PriceListRateManager.cs" />
+    <Compile Include="PriceListManager\PriceListDefaultRoutingProductManager.cs" />
+    <Compile Include="PriceListManager\PriceListSaleZoneRoutingProductManager.cs" />
+    <Compile Include="PriceListManager\Context\ProcessDefaultRoutingProductContext.cs" />
+    <Compile Include="PriceListManager\Context\ProcessRatesContext.cs" />
+    <Compile Include="PriceListManager\Context\ProcessSaleZoneRoutingProductsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateCalculationMethodContext.cs" />
     <Compile Include="RatePlanExtensionConfigManager.cs" />
@@ -120,6 +125,7 @@
     <Compile Include="SellingRules\FixedRule.cs" />
     <Compile Include="SellingRules\MarginRule.cs" />
     <Compile Include="SellingRules\SellingRuleSettingsConfig.cs" />
+    <Compile Include="SoldCountryManager.cs" />
     <Compile Include="UtilitiesManager.cs" />
     <Compile Include="ZoneItem\ZoneRateManager.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionManager.cs" />

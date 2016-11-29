@@ -11,125 +11,162 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class RatePlanDraftManager
-    {
-        public Changes GetDraft(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-        }
+	public class RatePlanDraftManager
+	{
+		public Changes GetDraft(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			return ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+		}
 
-        public bool DoesDraftExist(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            Changes changes = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+		public bool DoesDraftExist(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			Changes changes = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
 
-            if (changes == null)
-                return false;
+			if (changes == null)
+				return false;
 
-            if (changes.ZoneChanges != null)
-                return true;
+			if (changes.ZoneChanges != null)
+				return true;
 
-            if (changes.DefaultChanges != null)
-                if (changes.DefaultChanges.NewDefaultRoutingProduct != null || changes.DefaultChanges.DefaultRoutingProductChange != null)
-                    return true;
+			if (changes.DefaultChanges != null)
+				if (changes.DefaultChanges.NewDefaultRoutingProduct != null || changes.DefaultChanges.DefaultRoutingProductChange != null)
+					return true;
 
-            return false;
-        }
+			return false;
+		}
 
-        #region Save Draft
+		public CountryChanges GetCountryChanges(int customerId)
+		{
+			Changes draft = GetDraft(SalePriceListOwnerType.Customer, customerId);
+			if (draft != null)
+				return draft.CountryChanges;
+			return null;
+		}
 
-        public void SaveDraft(SalePriceListOwnerType ownerType, int ownerId, Changes newChanges)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+		#region Save Draft
 
-            Changes existingChanges = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-            Changes allChanges = MergeChanges(existingChanges, newChanges);
+		public void SaveDraft(SalePriceListOwnerType ownerType, int ownerId, Changes newChanges)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
 
-            if (allChanges != null)
-                ratePlanDataManager.InsertOrUpdateChanges(ownerType, ownerId, allChanges, RatePlanStatus.Draft);
-        }
+			Changes existingChanges = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+			Changes allChanges = MergeChanges(existingChanges, newChanges);
 
-        private Changes MergeChanges(Changes existingChanges, Changes newChanges)
-        {
-            return Merge(existingChanges, newChanges, () =>
-            {
-                Changes allChanges = new Changes();
+			if (allChanges != null)
+				ratePlanDataManager.InsertOrUpdateChanges(ownerType, ownerId, allChanges, RatePlanStatus.Draft);
+		}
 
-                allChanges.CurrencyId = newChanges.CurrencyId;
-                allChanges.DefaultChanges = newChanges.DefaultChanges == null ? existingChanges.DefaultChanges : newChanges.DefaultChanges;
-                allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges);
+		private Changes MergeChanges(Changes existingChanges, Changes newChanges)
+		{
+			return Merge(existingChanges, newChanges, () =>
+			{
+				Changes allChanges = new Changes();
 
-                return allChanges;
-            });
-        }
+				allChanges.CurrencyId = newChanges.CurrencyId;
+				allChanges.DefaultChanges = newChanges.DefaultChanges == null ? existingChanges.DefaultChanges : newChanges.DefaultChanges;
 
-        private List<ZoneChanges> MergeZoneChanges(List<ZoneChanges> existingZoneChanges, List<ZoneChanges> newZoneChanges)
-        {
-            return Merge(existingZoneChanges, newZoneChanges, () =>
-            {
-                foreach (ZoneChanges existingZoneDraft in existingZoneChanges)
-                {
-                    if (!newZoneChanges.Any(x => x.ZoneId == existingZoneDraft.ZoneId))
-                        newZoneChanges.Add(existingZoneDraft);
-                }
-                return newZoneChanges;
-            });
-        }
+				IEnumerable<DraftNewCountry> existingCountries = (existingChanges.CountryChanges != null) ? existingChanges.CountryChanges.NewCountries : null;
+				IEnumerable<DraftNewCountry> newCountries = (newChanges.CountryChanges != null) ? newChanges.CountryChanges.NewCountries : null;
+				IEnumerable<int> removedCountryIds = GetRemovedCountryIds(existingCountries, newCountries);
+				allChanges.CountryChanges = newChanges.CountryChanges;
+				
+				allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges, removedCountryIds);
+				
+				return allChanges;
+			});
+		}
 
-        private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
-        {
-            if (existingChanges != null && newChanges != null)
-                return mergeLogic();
-            return existingChanges != null ? existingChanges : newChanges;
-        }
+		private IEnumerable<int> GetRemovedCountryIds(IEnumerable<DraftNewCountry> existingCountries, IEnumerable<DraftNewCountry> newCountries)
+		{
+			if (existingCountries == null)
+				return null;
+			
+			if (newCountries == null)
+				return existingCountries.MapRecords(x => x.CountryId);
+			
+			IEnumerable<int> existingCountryIds = existingCountries.MapRecords(x => x.CountryId);
+			IEnumerable<int> newCountryIds = newCountries.MapRecords(x => x.CountryId);
+			return existingCountryIds.FindAllRecords(x => !newCountryIds.Contains(x));
+		}
 
-        #endregion
+		private List<ZoneChanges> MergeZoneChanges(List<ZoneChanges> existingZoneChanges, List<ZoneChanges> newZoneChanges, IEnumerable<int> removedCountryIds)
+		{
+			return Merge(existingZoneChanges, newZoneChanges, () =>
+			{
+				foreach (ZoneChanges existingZoneDraft in existingZoneChanges)
+				{
+					if (!newZoneChanges.Any(x => x.ZoneId == existingZoneDraft.ZoneId))
+						newZoneChanges.Add(existingZoneDraft);
+				}
+				if (removedCountryIds != null)
+					return newZoneChanges.FindAll(x => !removedCountryIds.Contains(x.CountryId));
+				else
+					return newZoneChanges;
+			});
+		}
 
-        public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.CancelRatePlanChanges(ownerType, ownerId);
-        }
+		private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
+		{
+			if (existingChanges != null && newChanges != null)
+				return mergeLogic();
+			return existingChanges != null ? existingChanges : newChanges;
+		}
 
-        public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            Changes draft = GetDraft(ownerType, ownerId);
-            if (draft != null)
-                return draft.CurrencyId;
-            return null;
-        }
+		#endregion
 
-        public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
-        {
-            Changes draft = GetDraft(ownerType, ownerId);
+		public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			return ratePlanDataManager.CancelRatePlanChanges(ownerType, ownerId);
+		}
 
-            if (draft != null)
-            {
-                draft.CurrencyId = newCurrencyId;
+		public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			Changes draft = GetDraft(ownerType, ownerId);
+			if (draft != null)
+				return draft.CurrencyId;
+			return null;
+		}
 
-                if (draft.ZoneChanges != null)
-                {
-                    foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
-                        zoneDraft.NewRates = GetChangedOtherRates(zoneDraft.NewRates);
-                }
+		public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
+		{
+			Changes draft = GetDraft(ownerType, ownerId);
 
-                SaveDraft(ownerType, ownerId, draft);
-            }
-        }
+			if (draft != null)
+			{
+				draft.CurrencyId = newCurrencyId;
 
-        private IEnumerable<DraftRateToChange> GetChangedOtherRates(IEnumerable<DraftRateToChange> changedRates)
-        {
-            var changedOtherRates = new List<DraftRateToChange>();
-            if (changedRates != null)
-            {
-                foreach (DraftRateToChange changedRate in changedRates)
-                {
-                    if (changedRate.RateTypeId.HasValue)
-                        changedOtherRates.Add(changedRate);
-                }
-            }
-            return changedOtherRates.Count > 0 ? changedOtherRates : null;
-        }
-    }
+				if (draft.ZoneChanges != null)
+				{
+					foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
+						zoneDraft.NewRates = GetChangedOtherRates(zoneDraft.NewRates);
+				}
+
+				SaveDraft(ownerType, ownerId, draft);
+			}
+		}
+
+		private IEnumerable<DraftRateToChange> GetChangedOtherRates(IEnumerable<DraftRateToChange> changedRates)
+		{
+			var changedOtherRates = new List<DraftRateToChange>();
+			if (changedRates != null)
+			{
+				foreach (DraftRateToChange changedRate in changedRates)
+				{
+					if (changedRate.RateTypeId.HasValue)
+						changedOtherRates.Add(changedRate);
+				}
+			}
+			return changedOtherRates.Count > 0 ? changedOtherRates : null;
+		}
+	}
+
+	public class SaveCountryChangesInput
+	{
+		public SalePriceListOwnerType OwnerType { get; set; }
+		public int OwnerId { get; set; }
+		public CountryChanges CountryChanges { get; set; }
+	}
 }

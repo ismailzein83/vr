@@ -10,23 +10,29 @@ using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class ProcessRatesInput
-    {
-        public IEnumerable<RateToChange> RatesToChange { get; set; }
+	#region Classes
 
-        public IEnumerable<RateToClose> RatesToClose { get; set; }
+	public class ProcessRatesInput
+	{
+		public IEnumerable<RateToChange> RatesToChange { get; set; }
 
-        public IEnumerable<ExistingZone> ExistingZones { get; set; }
+		public IEnumerable<RateToClose> RatesToClose { get; set; }
 
-        public IEnumerable<ExistingRate> ExistingRates { get; set; }
-    }
+		public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
-    public class ProcessRatesOutput
-    {
-        public IEnumerable<NewRate> NewRates { get; set; }
+		public IEnumerable<ExistingRate> ExistingRates { get; set; }
 
-        public IEnumerable<ChangedRate> ChangedRates { get; set; }
-    }
+		public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+	}
+
+	public class ProcessRatesOutput
+	{
+		public IEnumerable<NewRate> NewRates { get; set; }
+
+		public IEnumerable<ChangedRate> ChangedRates { get; set; }
+	}
+	
+	#endregion
 
     public class ProcessRates : BaseAsyncActivity<ProcessRatesInput, ProcessRatesOutput>
     {
@@ -43,6 +49,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
+
+		[RequiredArgument]
+		public InArgument<IEnumerable<ExistingCustomerCountry>> ExplicitlyChangedExistingCustomerCountries { get; set; }
 
         #endregion
 
@@ -63,7 +72,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 RatesToChange = this.RatesToChange.Get(context),
                 RatesToClose = this.RatesToClose.Get(context),
                 ExistingZones = this.ExistingZones.Get(context),
-                ExistingRates = this.ExistingRates.Get(context)
+                ExistingRates = this.ExistingRates.Get(context),
+				ExplicitlyChangedExistingCustomerCountries = ExplicitlyChangedExistingCustomerCountries.Get(context)
             };
         }
 
@@ -84,6 +94,7 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<RateToClose> ratesToClose = inputArgument.RatesToClose;
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
             IEnumerable<ExistingRate> existingRates = inputArgument.ExistingRates;
+			IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries = inputArgument.ExplicitlyChangedExistingCustomerCountries;
 
             var priceListRateManager = new PriceListRateManager();
 
@@ -92,7 +103,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 RatesToChange = ratesToChange,
                 RatesToClose = ratesToClose,
                 ExistingZones = existingZones,
-                ExistingRates = existingRates
+                ExistingRates = existingRates,
+				ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries
             };
 
             priceListRateManager.ProcessCountryRates(processRatesContext);

@@ -8,6 +8,8 @@ namespace TOne.WhS.Sales.Entities
 
         public string ZoneName { get; set; }
 
+		public int CountryId { get; set; }
+
         public IEnumerable<DraftRateToChange> NewRates { get; set; }
 
         public IEnumerable<DraftRateToClose> ClosedRates { get; set; }

@@ -1,130 +1,223 @@
 ﻿(function (appControllers) {
 
-    "use strict";
+	"use strict";
 
-    SellNewCountriesController.$inject = ["$scope", "WhS_BE_CustomerZoneAPIService", "UtilsService", "VRNavigationService", "VRNotificationService"];
+	SellNewCountriesController.$inject = ["$scope", 'WhS_Sales_RatePlanUtilsService', "UtilsService", 'VRUIUtilsService', 'VRValidationService', "VRNavigationService", "VRNotificationService"];
 
-    function SellNewCountriesController($scope, WhS_BE_CustomerZoneAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+	function SellNewCountriesController($scope, WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, VRValidationService, VRNavigationService, VRNotificationService) {
 
-        var customerId;
-        var countryGridReadyDeferred = UtilsService.createPromiseDeferred();
-        var selectedSaleZones;
+		var customerId;
+		var countryChanges;
+		var saleAreaSettings;
 
-        var allCountriesSelected = false;
+		var effectiveDateDayOffset = 0;
+		var retroactiveDayOffset = 0;
+		var retroactiveDate = UtilsService.getDateFromDateTime(new Date());
 
-        loadParameters();
-        defineScope();
-        load();
+		var countrySelectorAPI;
+		var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
+		var newCountryGridAPI;
+		var newCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-            if (parameters != undefined && parameters != null) {
-                customerId = parameters.CustomerId;
-            }
-        }
-        function defineScope() {
-            $scope.title = "Sell New Countries";
+		var soldCountryGridAPI;
+		var soldCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.countries = [];
-            
-            $scope.onCountryGridReady = function (api) {
-                countryGridReadyDeferred.resolve();
-            };
+		loadParameters();
+		defineScope();
+		load();
 
-            $scope.selectAllCountries = function () {
-                allCountriesSelected = !allCountriesSelected;
-                for (var i = 0; i < $scope.countries.length; i++) {
-                    $scope.countries[i].isSelected = allCountriesSelected;
-                }
-            };
+		function loadParameters() {
+			var parameters = VRNavigationService.getParameters($scope);
+			if (parameters != undefined) {
+				customerId = parameters.customerId;
+				countryChanges = parameters.countryChanges;
+				saleAreaSettings = parameters.saleAreaSettings;
+			}
+			if (saleAreaSettings != undefined) {
+				// Make sure that the offsets are valid numbers
+				var effectiveDateDayOffsetValue = Number(saleAreaSettings.EffectiveDateDayOffset);
+				if (!isNaN(effectiveDateDayOffsetValue))
+					effectiveDateDayOffset = effectiveDateDayOffsetValue;
+				var retroactiveDayOffsetValue = Number(saleAreaSettings.RetroactiveDayOffset);
+				if (!isNaN(retroactiveDayOffsetValue))
+					retroactiveDayOffset = retroactiveDayOffsetValue;
+			}
+			if (retroactiveDayOffset > 0) {
+				var retroactiveDateValue = WhS_Sales_RatePlanUtilsService.getNowMinusDays(retroactiveDayOffset);
+				retroactiveDate = UtilsService.getDateFromDateTime(retroactiveDateValue);
+			}
+		}
+		function defineScope() {
 
-            $scope.sellNewCountries = function () {
-                var customerZonesObj = buildCutomerZonesObjFromScope();
+			$scope.scopeModel = {};
+			$scope.scopeModel.newCountries = [];
 
-                WhS_BE_CustomerZoneAPIService.AddCustomerZones(customerZonesObj).then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Countries", response)) {
-                        if ($scope.onCountriesSold != undefined) {
-                            $scope.onCountriesSold(response.InsertedObject);
-                        }
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-            };
+			$scope.scopeModel.onCountrySelectorReady = function (api) {
+				countrySelectorAPI = api;
+				countrySelectorReadyDeferred.resolve();
+			};
+			$scope.scopeModel.onCountrySelected = function (country) {
+				addCountry(country);
+			};
+			$scope.scopeModel.onCountryDeselected = function (country) {
+				removeCountry(country.CountryId);
+			};
 
-            $scope.validateSelection = function () {
-                var country = UtilsService.getItemByVal($scope.countries, true, "isSelected");
-                if (country != undefined)
-                    return null;
-                return 'No countries selected';
-            };
+			$scope.scopeModel.onNewCountryGridReady = function (api) {
+				newCountryGridAPI = api;
+				newCountryGridReadyDeferred.resolve();
+			};
+			$scope.scopeModel.onGridRowDeleted = function (dataItem) {
+				removeCountry(dataItem.Entity.CountryId);
+			};
 
-            $scope.close = function () {
-                $scope.modalContext.closeModal();
-            };
-        }
-        function load() {
-            $scope.isLoading = true;
-            loadAllControls();
-        }
+			$scope.scopeModel.onSoldCountryGridReady = function (api) {
+				soldCountryGridAPI = api;
+				soldCountryGridReadyDeferred.resolve();
+			};
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountryGrid]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
-        }
-        function loadCountryGrid() {
-            var countries;
+			$scope.scopeModel.isNewCountryBEDValid = function (dataItem) {
+				if (dataItem.Entity.BED == null)
+					return 'BED is a required field';
+				if (dataItem.Entity.BED < retroactiveDate)
+					return 'Retroactive Date: ' + UtilsService.getShortDate(retroactiveDate);
+				return null;
+			};
 
-            function getCountries() {
-                return WhS_BE_CustomerZoneAPIService.GetCountriesToSell(customerId).then(function (response) {
-                    countries = response;
-                });
-            }
+			$scope.scopeModel.save = function () {
+				if ($scope.onCountryChangesUpdated != undefined) {
+					var updatedCountryChanges = buildCountryChanges();
+					$scope.onCountryChangesUpdated(updatedCountryChanges);
+				}
+				$scope.modalContext.closeModal();
+			};
+			$scope.scopeModel.close = function () {
+				$scope.modalContext.closeModal();
+			};
+		}
+		function load() {
+			$scope.isLoading = true;
+			loadAllControls();
+		}
 
-            return UtilsService.waitMultiplePromises([countryGridReadyDeferred.promise, getCountries()]).then(function () {
-                if (countries != undefined) {
-                    for (var i = 0; i < countries.length; i++)
-                        $scope.countries.push(countries[i]);
-                }
-            });
-        }
+		function loadAllControls() {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountrySelector, loadNewCountryGrid, loadSoldCountryGrid]).then(function () {
+				countryChanges = undefined;
+			}).catch(function (error) {
+				VRNotificationService.notifyExceptionWithClose(error, $scope);
+			}).finally(function () {
+				$scope.isLoading = false;
+			});
+		}
+		function setTitle() {
+			$scope.title = 'Manage Selling Countries';
+		}
+		function loadCountrySelector() {
+			var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-        function buildCutomerZonesObjFromScope()
-        {
-        	var startEffectiveTime = UtilsService.getDateFromDateTime(new Date());
+			countrySelectorReadyDeferred.promise.then(function () {
+				var countrySelectorPayload = {
+					filter: getCountrySelectorFilter()
+				};
+				if (countryChanges != undefined && countryChanges.NewCountries != null) {
+					countrySelectorPayload.selectedIds = UtilsService.getPropValuesFromArray(countryChanges.NewCountries, 'CountryId');
+				}
+				VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countrySelectorPayload, countrySelectorLoadDeferred);
+			});
 
-            return {
-                CustomerId: customerId,
-                Countries: getSelectedCountries(startEffectiveTime),
-                StartEffectiveTime: startEffectiveTime
-            };
-        }
-        function getSelectedCountries(startEffectiveTime) {
-            if ($scope.countries.length == 0)
-                return null;
+			function getCountrySelectorFilter() {
+				var filter = {};
 
-            var selectedCountries = [];
+				filter.Filters = [];
+				var notSoldToCustomerFilter = {
+					$type: 'TOne.WhS.BusinessEntity.Business.CountryNotSoldToCustomerFilter, TOne.WhS.BusinessEntity.Business',
+					CustomerId: customerId,
+					EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+				};
+				filter.Filters.push(notSoldToCustomerFilter);
 
-            for (var i = 0; i < $scope.countries.length; i++) {
-                var country = $scope.countries[i];
+				return filter;
+			}
 
-                if (country.isSelected) {
-                    selectedCountries.push({
-                        CountryId: country.CountryId,
-                        StartEffectiveTime: startEffectiveTime
-                    });
-                }
-            }
+			return countrySelectorLoadDeferred.promise;
+		}
+		function loadNewCountryGrid() {
+			var newCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-            return selectedCountries;
-        }
-    }
+			if (countryChanges != undefined && countryChanges.NewCountries != null) {
+				for (var i = 0; i < countryChanges.NewCountries.length; i++) {
+					var newCountry = countryChanges.NewCountries[i];
+					var dataItem = {
+						Entity: {
+							CountryId: newCountry.CountryId,
+							Name: newCountry.Name,
+							BED: newCountry.BED,
+							EED: newCountry.EED
+						}
+					};
+					$scope.scopeModel.newCountries.push(dataItem);
+				}
+			}
 
-    appControllers.controller("WhS_Sales_SellNewCountriesController", SellNewCountriesController);
+			newCountryGridLoadDeferred.resolve();
+			return newCountryGridLoadDeferred.promise;
+		}
+		function loadSoldCountryGrid() {
+			var soldCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
+			soldCountryGridReadyDeferred.promise.then(function () {
+				var soldCountryGridPayload = {
+					query: {
+						CustomerId: customerId,
+						EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+					},
+					settings: {
+						effectiveDateDayOffset: effectiveDateDayOffset
+					}
+				};
+				if (countryChanges != undefined)
+					soldCountryGridPayload.changedCountries = countryChanges.ChangedCountries;
+				VRUIUtilsService.callDirectiveLoad(soldCountryGridAPI, soldCountryGridPayload, soldCountryGridLoadDeferred);
+			});
+			return soldCountryGridLoadDeferred.promise;
+		}
+
+		function addCountry(country) {
+			var dataItem = {
+				Entity: {
+					CountryId: country.CountryId,
+					Name: country.Name,
+					BED: WhS_Sales_RatePlanUtilsService.getNowPlusDays(effectiveDateDayOffset),
+					EED: null
+				}
+			};
+			$scope.scopeModel.newCountries.push(dataItem);
+		}
+		function removeCountry(countryId) {
+
+			var countrySelectorIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedCountries, countryId, 'CountryId');
+			$scope.scopeModel.selectedCountries.splice(countrySelectorIndex, 1);
+
+			var newCountryEntities = getNewCountryEntities();
+			var countryGridIndex = UtilsService.getItemIndexByVal(newCountryEntities, countryId, 'CountryId');
+			$scope.scopeModel.newCountries.splice(countryGridIndex, 1);
+		}
+
+		function buildCountryChanges() {
+
+			var countryChanges = {};
+			countryChanges.ChangedCountries = soldCountryGridAPI.getData();
+
+			if ($scope.scopeModel.newCountries.length > 0)
+				countryChanges.NewCountries = getNewCountryEntities();
+
+			return countryChanges;
+		}
+		function getNewCountryEntities() {
+			return UtilsService.getPropValuesFromArray($scope.scopeModel.newCountries, 'Entity');
+		}
+	}
+
+	appControllers.controller("WhS_Sales_SellNewCountriesController", SellNewCountriesController);
 
 })(appControllers);

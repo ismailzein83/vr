@@ -9,39 +9,47 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class PrepareExistingSaleZoneRoutingProducts : CodeActivity
-    {
-        #region Input Arguments
+	public class PrepareExistingSaleZoneRoutingProducts : CodeActivity
+	{
+		#region Input Arguments
 
-        [RequiredArgument]
-        public InArgument<IEnumerable<SaleZoneRoutingProduct>> ExistingSaleEntityZoneRoutingProducts { get; set; }
+		[RequiredArgument]
+		public InArgument<IEnumerable<SaleZoneRoutingProduct>> ExistingSaleEntityZoneRoutingProducts { get; set; }
 
-        #endregion
+		[RequiredArgument]
+		public InArgument<Dictionary<long, ExistingZone>> ExistingZonesById { get; set; }
 
-        #region Output Arguments
+		#endregion
 
-        [RequiredArgument]
-        public OutArgument<IEnumerable<ExistingSaleZoneRoutingProduct>> ExistingSaleZoneRoutingProducts { get; set; }
-        
-        #endregion
+		#region Output Arguments
 
-        protected override void Execute(CodeActivityContext context)
-        {
-            IEnumerable<SaleZoneRoutingProduct> existingSaleEntityZoneRoutingProducts = ExistingSaleEntityZoneRoutingProducts.Get(context);
-            var existingSaleZoneRoutingProducts = new List<ExistingSaleZoneRoutingProduct>();
+		[RequiredArgument]
+		public OutArgument<IEnumerable<ExistingSaleZoneRoutingProduct>> ExistingSaleZoneRoutingProducts { get; set; }
 
-            if (existingSaleEntityZoneRoutingProducts != null)
-            {
-                foreach (SaleZoneRoutingProduct saleEntityZoneRoutingProduct in existingSaleEntityZoneRoutingProducts)
-                {
-                    existingSaleZoneRoutingProducts.Add(new ExistingSaleZoneRoutingProduct()
-                    {
-                        SaleZoneRoutingProductEntity = saleEntityZoneRoutingProduct
-                    });
-                }
-            }
+		#endregion
 
-            ExistingSaleZoneRoutingProducts.Set(context, existingSaleZoneRoutingProducts);
-        }
-    }
+		protected override void Execute(CodeActivityContext context)
+		{
+			IEnumerable<SaleZoneRoutingProduct> existingSaleEntityZoneRoutingProducts = ExistingSaleEntityZoneRoutingProducts.Get(context);
+			Dictionary<long, ExistingZone> existingZonesById = ExistingZonesById.Get(context);
+
+			var existingSaleZoneRoutingProducts = new List<ExistingSaleZoneRoutingProduct>();
+
+			if (existingSaleEntityZoneRoutingProducts != null)
+			{
+				foreach (SaleZoneRoutingProduct saleEntityZoneRoutingProduct in existingSaleEntityZoneRoutingProducts)
+				{
+					var existingZoneRoutingProduct = new ExistingSaleZoneRoutingProduct() { SaleZoneRoutingProductEntity = saleEntityZoneRoutingProduct };
+					existingSaleZoneRoutingProducts.Add(existingZoneRoutingProduct);
+
+					ExistingZone existingZone;
+					if (!existingZonesById.TryGetValue(saleEntityZoneRoutingProduct.SaleZoneId, out existingZone))
+						throw new NullReferenceException(string.Format("SaleZone '{0}' was not found", saleEntityZoneRoutingProduct.SaleZoneId));
+					existingZone.ExistingZoneRoutingProducts.Add(existingZoneRoutingProduct);
+				}
+			}
+
+			ExistingSaleZoneRoutingProducts.Set(context, existingSaleZoneRoutingProducts);
+		}
+	}
 }
