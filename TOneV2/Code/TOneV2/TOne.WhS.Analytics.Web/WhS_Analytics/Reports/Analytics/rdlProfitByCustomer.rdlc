@@ -1334,7 +1334,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(Sum(Fields!Profit.Value)/Sum(Fields!SaleDuration.Value),Parameters!Digit.Value)</Value>
+                                  <Value>=FormatNumber(Sum(Fields!Profit.Value)/Sum(Fields!SaleDuration.Value),4)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
