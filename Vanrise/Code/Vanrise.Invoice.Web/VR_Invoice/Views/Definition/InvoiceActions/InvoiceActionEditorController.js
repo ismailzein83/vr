@@ -14,6 +14,9 @@
         var invoiceActionSettingsAPI;
         var invoiceActionSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var actionPermissionAPI;
+        var actionPermissionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -23,7 +26,6 @@
             if (parameters != undefined) {
                 context = parameters.context;
                 invoiceActionEntity = parameters.invoiceActionEntity;
-                console.log(invoiceActionEntity);
             }
             isEditMode = (invoiceActionEntity != undefined);
         }
@@ -33,6 +35,10 @@
             $scope.scopeModel.onInvoiceActionSettingsReady = function (api) {
                 invoiceActionSettingsAPI = api;
                 invoiceActionSettingsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onActionRequiredPermissionReady = function (api) {
+                actionPermissionAPI = api;
+                actionPermissionReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateInvoiceAction() : addInvoiceAction();
@@ -45,7 +51,8 @@
                 return {
                     Title: $scope.scopeModel.actionTitle,
                     InvoiceActionId:invoiceActionEntity != undefined?invoiceActionEntity.InvoiceActionId: UtilsService.guid(),
-                    Settings: invoiceActionSettingsAPI.getData()
+                    Settings: invoiceActionSettingsAPI.getData(),
+                    RequiredPermission: actionPermissionAPI.getData()
                 };
             }
             function addInvoiceAction() {
@@ -94,7 +101,20 @@
                 return invoiceActionSettingsLoadPromiseDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceActionSettingsDirective]).then(function () {
+            function loadActionPermissionDirective() {
+                var actionPermissionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                actionPermissionReadyPromiseDeferred.promise.then(function () {
+                    var payload;
+                    if (invoiceActionEntity != undefined) {
+                        payload = {
+                            data: invoiceActionEntity.RequiredPermission
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(actionPermissionAPI, payload, actionPermissionLoadPromiseDeferred);
+                });
+                return actionPermissionLoadPromiseDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceActionSettingsDirective, loadActionPermissionDirective]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
@@ -12,6 +13,9 @@ namespace Vanrise.Invoice.Entities
 
         public string Title { get; set; }
         public InvoiceActionSettings Settings { get; set; }
+
+        public RequiredPermissionSettings RequiredPermission { get; set; }
+
     }
     public abstract class InvoiceActionSettings
     {

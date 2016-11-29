@@ -12,6 +12,14 @@
                 <vr-tab header="'Settings'">
                     <vr-invoicetype-actionsettings on-ready="scopeModel.onInvoiceActionSettingsReady" normal-col-num="4"></vr-invoicetype-actionsettings>
                 </vr-tab>
+                <vr-tab header="'Security'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onActionRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

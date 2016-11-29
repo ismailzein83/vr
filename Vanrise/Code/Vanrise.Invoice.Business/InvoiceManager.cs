@@ -13,6 +13,7 @@ using Vanrise.Invoice.Business.Extensions;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Business
 {
@@ -214,6 +215,8 @@ namespace Vanrise.Invoice.Business
                 HasNote = invoice.Note != null
             };
             FillNeededDetailData(invoiceDetail, invoiceType);
+
+
             return invoiceDetail;
         }
 
@@ -298,8 +301,11 @@ namespace Vanrise.Invoice.Business
             {
                 if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
                 {
+                    var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == action.InvoiceGridActionId);
+
                     if (invoiceDetail.ActionTypeNames == null)
                         invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
+                    if (DoesUserHaveAccess(invoiceAction.RequiredPermission))
                     invoiceDetail.ActionTypeNames.Add(action);
                 }
             }
@@ -319,6 +325,16 @@ namespace Vanrise.Invoice.Business
                     });
                 }
             }
+        }
+
+        private static bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
         }
         private bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId)
         {
