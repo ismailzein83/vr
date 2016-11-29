@@ -4,10 +4,10 @@
                datavaluefield="value"
                selectedvalues="scopeModel.selectedInvoiceField"
                isrequired="true"
-               label="Field">
+               label="Invoice Field">
     </vr-select>
 </vr-columns>
-<vr-columns width="1/2row" ng-if="scopeModel.isCustomFieldRequired()">
+<vr-columns width="1/2row" ng-show="scopeModel.isCustomFieldRequired()">
     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
                                                   isrequired="scopeModel.isCustomFieldRequired()">
     </vr-genericdata-datarecordtypefields-selector>

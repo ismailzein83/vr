@@ -18,6 +18,7 @@ namespace Vanrise.Invoice.MainExtensions
             get { return new Guid("259F1D17-09A0-4BDA-A83A-BFC5624AD73B"); }
         }
         public InvoiceField InvoiceField { get; set; }
+        public string FieldName { get; set; }
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             Vanrise.Invoice.Entities.Invoice invoice = context.Object as Vanrise.Invoice.Entities.Invoice;
@@ -54,7 +55,7 @@ namespace Vanrise.Invoice.MainExtensions
                 case InvoiceField.SerialNumber:
                     return invoice.SerialNumber;
                 case InvoiceField.CustomField:
-                    return null;
+                    return Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
                 case InvoiceField.Paid:
                     return invoice.PaidDate;
                 default: return null;

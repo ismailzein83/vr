@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InvoicePropertyEvaluator.$inject = ['VR_Invoice_InvoiceFieldEnum', 'UtilsService', 'VRUIUtilsService'];
+    InvoicePropertyEvaluator.$inject = ['VR_Invoice_InvoiceFieldEnum', 'UtilsService', 'VRUIUtilsService','VR_Invoice_InvoiceTypeAPIService'];
 
-    function InvoicePropertyEvaluator(VR_Invoice_InvoiceFieldEnum, UtilsService, VRUIUtilsService) {
+    function InvoicePropertyEvaluator(VR_Invoice_InvoiceFieldEnum, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -61,19 +61,26 @@
                         var objectType = payload.objectType;
                         if(objectType != undefined)
                         {
+                            var promiseDeffered = UtilsService.createPromiseDeferred();
                             VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(objectType.InvoiceTypeId).then(function (response) {
-
                                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                                 dataRecordFieldSelectorReadyDeferred.promise.then(function () {
                                     var dataRecordFieldSelectorPayload = { dataRecordTypeId: response.Settings.InvoiceDetailsRecordTypeId };
-                                    if (invoiceEntity != undefined) {
-                                        dataRecordFieldSelectorPayload.selectedIds = invoiceEntity.FieldName;
+                                    if (payload.objectPropertyEvaluator != undefined) {
+                                        dataRecordFieldSelectorPayload.selectedIds = payload.objectPropertyEvaluator.FieldName;
                                     }
                                     VRUIUtilsService.callDirectiveLoad(dataRecordFieldSelectorAPI, dataRecordFieldSelectorPayload, partnerSelectorPayloadLoadDeferred);
                                 });
-                                promises.push(partnerSelectorPayloadLoadDeferred.promise);
+                                partnerSelectorPayloadLoadDeferred.promise.finally(function () {
+                                    promiseDeffered.resolve();
+                                }).catch(function (error) {
+                                    promiseDeffered.reject(error);
+                                })
 
+                            }).catch(function (error) {
+                                promiseDeffered.reject(error);
                             });
+                            promises.push(promiseDeffered.promise);
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
@@ -84,7 +91,7 @@
                     var data = {
                         $type: "Vanrise.Invoice.MainExtensions.InvoiceFieldPropertyEvaluator, Vanrise.Invoice.MainExtensions",
                         InvoiceField: $scope.scopeModel.selectedInvoiceField.value,
-                        FieldName: dataRecordFieldSelectorAPI != undefined ? dataRecordFieldSelectorAPI.getSelectedIds() : undefined
+                        FieldName: $scope.scopeModel.isCustomFieldRequired()  ? dataRecordFieldSelectorAPI.getSelectedIds() : undefined
                     };
                     return data;
                 };

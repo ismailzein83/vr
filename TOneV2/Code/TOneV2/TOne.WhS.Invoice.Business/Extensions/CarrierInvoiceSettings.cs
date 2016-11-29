@@ -41,7 +41,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     VRMailManager vrMailManager = new VRMailManager();
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     var invoiceDetails = context.Invoice.Details as CustomerInvoiceDetails;
-                    objects.Add("CustomerInvoice", invoiceDetails);
+                    objects.Add("CustomerInvoice", context.Invoice);
                     VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
                     return template;
             }
