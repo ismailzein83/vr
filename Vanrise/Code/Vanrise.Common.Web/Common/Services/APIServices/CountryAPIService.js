@@ -9,8 +9,10 @@
         function GetFilteredCountries(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredCountries"), input);
         }
-        function GetCountriesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesInfo"));
+        function GetCountriesInfo(filter) {
+        	return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesInfo"), {
+        		filter: filter
+        	});
         }
         function GetCountry(countryId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountry"), {

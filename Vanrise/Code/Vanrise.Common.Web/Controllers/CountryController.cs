@@ -15,86 +15,87 @@ using System.Data;
 
 namespace Vanrise.Common.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "Country")]
-    public class VRCommon_CountryController : BaseAPIController
-    {
+	[RoutePrefix(Constants.ROUTE_PREFIX + "Country")]
+	public class VRCommon_CountryController : BaseAPIController
+	{
+		[HttpPost]
+		[Route("GetFilteredCountries")]
+		public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
+		{
+			CountryManager manager = new CountryManager();
+			return GetWebResponse(input, manager.GetFilteredCountries(input));
+		}
 
-        [HttpPost]
-        [Route("GetFilteredCountries")]
-        public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
-        {
-            CountryManager manager = new CountryManager();
-            return GetWebResponse(input, manager.GetFilteredCountries(input));
-        }
+		[HttpGet]
+		[Route("GetCountriesInfo")]
+		public IEnumerable<CountryInfo> GetCountriesInfo(string filter = null)
+		{
+			var manager = new CountryManager();
+			CountryFilter countryFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<CountryFilter>(filter) : null;
+			return manager.GeCountriesInfo(countryFilter);
+		}
 
-        [HttpGet]
-        [Route("GetCountriesInfo")]
-        public IEnumerable<CountryInfo> GetCountriesInfo()
-        {
-            CountryManager manager = new CountryManager();
-            return manager.GeCountriesInfo();
-        }
-        [HttpGet]
-        [Route("GetCountry")]
-        public Country GetCountry(int countryId)
-        {
-            CountryManager manager = new CountryManager();
-            return manager.GetCountry(countryId);
-        }
+		[HttpGet]
+		[Route("GetCountry")]
+		public Country GetCountry(int countryId)
+		{
+			CountryManager manager = new CountryManager();
+			return manager.GetCountry(countryId);
+		}
 
-        [HttpPost]
-        [Route("AddCountry")]
-        public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
-        {
-            CountryManager manager = new CountryManager();
-            return manager.AddCountry(country);
-        }
-        [HttpPost]
-        [Route("UpdateCountry")]
-        public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
-        {
-            CountryManager manager = new CountryManager();
-            return manager.UpdateCountry(country);
-        }
-        [HttpGet]
-        [Route("GetCountrySourceTemplates")]
-        public IEnumerable<SourceCountryReaderConfig> GetCountrySourceTemplates()
-        {
-            CountryManager manager = new CountryManager();
-            return manager.GetCountrySourceTemplates();
-        }
+		[HttpPost]
+		[Route("AddCountry")]
+		public Vanrise.Entities.InsertOperationOutput<CountryDetail> AddCountry(Country country)
+		{
+			CountryManager manager = new CountryManager();
+			return manager.AddCountry(country);
+		}
 
-        [HttpGet]
-        [Route("DownloadCountriesTemplate")]
-        public object DownloadCountriesTemplate()
-        {
-            var template = "~/Client/Modules/Common/Template/Country Add sample.xls";
-            string physicalPath = HttpContext.Current.Server.MapPath(template);
-            byte[] bytes = File.ReadAllBytes(physicalPath);
+		[HttpPost]
+		[Route("UpdateCountry")]
+		public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
+		{
+			CountryManager manager = new CountryManager();
+			return manager.UpdateCountry(country);
+		}
 
-            MemoryStream memStreamRate = new System.IO.MemoryStream();
-            memStreamRate.Write(bytes, 0, bytes.Length);
-            memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
-            return GetExcelResponse(memStreamRate,"Country Template.xls");
-        }
+		[HttpGet]
+		[Route("GetCountrySourceTemplates")]
+		public IEnumerable<SourceCountryReaderConfig> GetCountrySourceTemplates()
+		{
+			CountryManager manager = new CountryManager();
+			return manager.GetCountrySourceTemplates();
+		}
 
+		[HttpGet]
+		[Route("DownloadCountriesTemplate")]
+		public object DownloadCountriesTemplate()
+		{
+			var template = "~/Client/Modules/Common/Template/Country Add sample.xls";
+			string physicalPath = HttpContext.Current.Server.MapPath(template);
+			byte[] bytes = File.ReadAllBytes(physicalPath);
 
-        [HttpGet]
-        [Route("UploadCountries")]
-        public UploadCountryLog UploadCountries(int fileID)
-        {
-            CountryManager manager = new CountryManager();
-            return manager.AddCountries(fileID);
-        }
+			MemoryStream memStreamRate = new System.IO.MemoryStream();
+			memStreamRate.Write(bytes, 0, bytes.Length);
+			memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+			return GetExcelResponse(memStreamRate, "Country Template.xls");
+		}
 
+		[HttpGet]
+		[Route("UploadCountries")]
+		public UploadCountryLog UploadCountries(int fileID)
+		{
+			CountryManager manager = new CountryManager();
+			return manager.AddCountries(fileID);
+		}
 
-        [HttpGet]
-        [Route("DownloadCountryLog")]
-        public object DownloadCountryLog(long fileID)
-        {
-            CountryManager manager = new CountryManager();
-            byte[] bytes = manager.DownloadCountryLog(fileID);
-            return GetExcelResponse(bytes, "ImportedCountriesResults.xls");
-        }
-    }
+		[HttpGet]
+		[Route("DownloadCountryLog")]
+		public object DownloadCountryLog(long fileID)
+		{
+			CountryManager manager = new CountryManager();
+			byte[] bytes = manager.DownloadCountryLog(fileID);
+			return GetExcelResponse(bytes, "ImportedCountriesResults.xls");
+		}
+	}
 }

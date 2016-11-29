@@ -85,12 +85,15 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
 
             api.load = function (payload) {
 
-                var selectedIds;
+            	var selectedIds;
+            	var filter;
+
                 if (payload != undefined) {
-                    selectedIds = payload.selectedIds;
+                	selectedIds = payload.selectedIds;
+                	filter = payload.filter;
                 }
 
-                return getCountriesInfo(attrs, ctrl, selectedIds);
+                return getCountriesInfo(attrs, ctrl, selectedIds, filter);
             };
 
             api.getSelectedIds = function () {
@@ -103,8 +106,8 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
         this.initializeController = initializeController;
     }
 
-    function getCountriesInfo(attrs, ctrl, selectedIds) {
-        return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
+    function getCountriesInfo(attrs, ctrl, selectedIds, filter) {
+        return VRCommon_CountryAPIService.GetCountriesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
             ctrl.datasource.length = 0;
             angular.forEach(response, function (itm) {
                 ctrl.datasource.push(itm);
