@@ -45,7 +45,7 @@ app.directive('vrWhsBeSettingsCachingexpirationintervals', ['UtilsService', 'VRU
                     if (cachingExpirationIntervals != undefined && cachingExpirationIntervals.TodayEntitiesIntervalInMinutes != undefined)
                         $scope.scopeModel.todayEntitiesIntervalInMinutes = cachingExpirationIntervals.TodayEntitiesIntervalInMinutes;
 
-                    if (cachingExpirationIntervals != undefined && cachingExpirationIntervals.TodayEntitiesIntervalInMinutes != undefined)
+                    if (cachingExpirationIntervals != undefined && cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes != undefined)
                         $scope.scopeModel.previousEntitiesIntervalInMinutes = cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes;
 
                 };
