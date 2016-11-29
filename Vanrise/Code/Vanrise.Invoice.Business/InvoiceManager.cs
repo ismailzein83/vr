@@ -9,6 +9,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business.Context;
+using Vanrise.Invoice.Business.Extensions;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
@@ -163,11 +164,23 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
         }
-        public void SendEmail(long invoiceId)
+        public void SendEmail(VRMailEvaluatedTemplate invoiceTemplate)
+        {
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(invoiceTemplate.To, invoiceTemplate.CC, invoiceTemplate.Subject, invoiceTemplate.Body);
+        }
+        public VRMailEvaluatedTemplate GetInvoiceTemplate(long invoiceId)
         {
             var invoice = GetInvoice(invoiceId);
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
+            InvoiceTypeExtendedSettingsInfoContext context = new InvoiceTypeExtendedSettingsInfoContext
+            {
+                InfoType = "CustomerMailTemplate",
+                Invoice = invoice
+
+            };
+          return invoiceType.Settings.ExtendedSettings.GetInfo(context);
         }
         #endregion
 

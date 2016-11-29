@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeGridactionsettingsNote", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeGridactionsettingsSendemail", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {

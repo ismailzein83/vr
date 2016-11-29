@@ -67,6 +67,8 @@
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceDateSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceFieldSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceCounterSerialNumberPart.cs" />
+    <Compile Include="VRObjectTypes\InvoiceFieldPropertyEvaluator.cs" />
+    <Compile Include="VRObjectTypes\InvoiceObjectType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
@@ -96,6 +98,10 @@
     <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
       <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
       <Name>Vanrise.Invoice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

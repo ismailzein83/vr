@@ -53,6 +53,7 @@
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
     <Compile Include="Context\RDLCReportParameterValueContext.cs" />
     <Compile Include="Extensions\InvoiceItemSubSection.cs" />
+    <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />

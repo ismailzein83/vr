@@ -6,6 +6,7 @@ using System.Web.Http;
 using Vanrise.Web.Base;
 using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.Business;
+using Vanrise.Entities;
 namespace Vanrise.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
@@ -67,12 +68,19 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceDetail(invoiceId);
         }
-        [HttpGet]
+        [HttpPost]
         [Route("SendEmail")]
-        public void SendEmail(long invoiceId)
+        public void SendEmail(VRMailEvaluatedTemplate invoiceTemplate)
         {
             InvoiceManager manager = new InvoiceManager();
-            manager.SendEmail(invoiceId);
+            manager.SendEmail(invoiceTemplate);
+        }
+        [HttpGet]
+        [Route("GetInvoiceTemplate")]
+        public VRMailEvaluatedTemplate GetInvoiceTemplate(long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetInvoiceTemplate(invoiceId);
         }
     }
 }

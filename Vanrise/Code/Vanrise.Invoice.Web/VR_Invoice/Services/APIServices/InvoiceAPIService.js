@@ -44,8 +44,13 @@
                 invoiceId: invoiceId,
             });
         }
-        function SendEmail(invoiceId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SendEmail'), {
+        function SendEmail(invoiceTemplate) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SendEmail'), invoiceTemplate);
+        }
+
+        function GetInvoiceTemplate(invoiceId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceTemplate'), {
                 invoiceId: invoiceId,
             });
         }
@@ -58,7 +63,8 @@
             SetInvoiceLocked: SetInvoiceLocked,
             ReGenerateInvoice: ReGenerateInvoice,
             UpdateInvoiceNote: UpdateInvoiceNote,
-            SendEmail: SendEmail
+            SendEmail: SendEmail,
+            GetInvoiceTemplate: GetInvoiceTemplate
         });
     }
 

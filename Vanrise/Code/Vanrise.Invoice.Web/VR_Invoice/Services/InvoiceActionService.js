@@ -125,17 +125,20 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             var actionType = {
                 ActionTypeName: "SendEmailAction",
                 actionMethod: function (payload) {
-                    var promiseDeffered = UtilsService.createPromiseDeferred();
-                    VRNotificationService.showConfirmation().then(function (response) {
-                        if (response) {
-                            VR_Invoice_InvoiceAPIService.SendEmail(payload.invoice.Entity.InvoiceId).then(function (response) {
-                                promiseDeffered.resolve(response);
-                            });
-                        } else {
-                            promiseDeffered.resolve(response);
-                        }
-                    });
-                    return promiseDeffered.promise;
+                    var onInvoiceEmailSend = function(response)
+                    {
+
+                    }
+                    openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId);
+                    //VRNotificationService.showConfirmation().then(function (response) {
+                    //    if (response) {
+                    //        VR_Invoice_InvoiceAPIService.SendEmail(payload.invoice.Entity.InvoiceId).then(function (response) {
+                    //            promiseDeffered.resolve(response);
+                    //        });
+                    //    } else {
+                    //        promiseDeffered.resolve(response);
+                    //    }
+                    //});
                 }
             };
             registerActionType(actionType);
@@ -152,7 +155,18 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceNoteActionEditor.html', parameters, settings);
         }
+        function openEmailTemplate(onInvoiceEmailSend, invoiceId) {
+            var settings = {
 
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceEmailSend = onInvoiceEmailSend;
+            };
+            var parameters = {
+                invoiceId: invoiceId
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceEmailTemplate.html', parameters, settings);
+        }
         function addInvoiceAction(onInvoiceActionAdded, context) {
             var settings = {
 
