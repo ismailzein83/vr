@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
             _supplierRatesByZones = GetRatesBySuppliers(supplierInfos);
         }
 
-        public SupplierRatesByZone GetSupplierRates(int supplierId, DateTime effectiveOn)
+        public SupplierRatesByZone GetSupplierRates(int supplierId, DateTime? effectiveOn)
         {
             if (_supplierRatesByZones == null)
                 return null;

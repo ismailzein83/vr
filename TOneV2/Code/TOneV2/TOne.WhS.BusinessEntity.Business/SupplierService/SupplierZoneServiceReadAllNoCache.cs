@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
             _allSupplierZoneServicesBySupplier = GetAllSupplierZoneServicesBySupplier(supplierInfos, effectiveOn, isEffectiveInFuture);
         }
 
-        public SupplierDefaultService GetSupplierDefaultService(int supplierId, DateTime effectiveOn)
+        public SupplierDefaultService GetSupplierDefaultService(int supplierId, DateTime? effectiveOn)
         {
             if (_allSupplierDefaultServicesBySupplier == null)
                 return null;
@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return _allSupplierDefaultServicesBySupplier.GetRecord(supplierId);
         }
 
-        public SupplierZoneService GetSupplierZoneServicesByZone(int supplierId, long supplierZoneId, DateTime effectiveOn)
+        public SupplierZoneService GetSupplierZoneServicesByZone(int supplierId, long supplierZoneId, DateTime? effectiveOn)
         {
             if (_allSupplierZoneServicesBySupplier == null)
                 return null;

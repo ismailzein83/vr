@@ -11,19 +11,43 @@ namespace TOne.WhS.Routing.Entities
     {
         public string Name { get; set; }
 
-        public string Description { get; set; }
-
         public RouteOptionRuleCriteria Criteria { get; set; }
 
         public RouteOptionRuleSettings Settings { get; set; }
 
-
         public override bool IsAnyCriteriaExcluded(object target)
         {
-            IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
-            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(ruleCodeTarget.Code))
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            RouteOptionRuleTarget routeOptionRuleTarget = target as RouteOptionRuleTarget;
+            if (routeOptionRuleTarget == null)
+                throw new Exception(String.Format("target is not of type RouteOptionRuleTarget. it is of type '{0}'", target.GetType()));
+
+            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(routeOptionRuleTarget.RouteTarget.Code))
                 return true;
-            return false;
+
+            if (routeOptionRuleTarget.IsEffectiveInFuture)
+            {
+                ISupplierZoneManager supplierZoneManager = BEManagerFactory.GetManager<ISupplierZoneManager>();
+                SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(routeOptionRuleTarget.SupplierZoneId);
+
+                if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < supplierZone.BED)
+                    return true;
+
+                if (supplierZone.EED.HasValue && this.BeginEffectiveTime > supplierZone.EED.Value)
+                    return true;
+
+                ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
+                SaleZone saleZone = saleZoneManager.GetSaleZone(routeOptionRuleTarget.RouteTarget.SaleZoneId);
+
+                if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < saleZone.BED)
+                    return true;
+
+                if (saleZone.EED.HasValue && this.BeginEffectiveTime > saleZone.EED.Value)
+                    return true;
+            }
+            return base.IsAnyCriteriaExcluded(target);
         }
 
         public ISaleZoneGroupContext GetSaleZoneGroupContext()
@@ -89,10 +113,7 @@ namespace TOne.WhS.Routing.Entities
                 {
                     var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
-                    {
-                        ISupplierZoneManager supplierZoneManager = BEManagerFactory.GetManager<ISupplierZoneManager>();
-                        return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : supplierZoneManager.GetSupplierZoneIdsByDates(itm.SupplierId, BeginEffectiveTime, EndEffectiveTime));
-                    }
+                        return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : new List<long>());
                 }
                 return null;
             }
@@ -143,7 +164,5 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
-
-
     }
 }

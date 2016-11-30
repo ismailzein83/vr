@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Business
             _carrierAccountManager = new CarrierAccountManager();
         }
 
-        public SupplierEntityService GetSupplierZoneServices(int supplierId, long supplierZoneId, DateTime effectiveOn)
+        public SupplierEntityService GetSupplierZoneServices(int supplierId, long supplierZoneId, DateTime? effectiveOn)
         {
             SupplierZoneService supplierZoneService;
             Dictionary<int, ZoneService> servicesAndChildServices = new Dictionary<int, ZoneService>();
@@ -52,13 +52,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private bool HasSupplierZoneServices(int supplierId, long supplierZoneId, DateTime effectiveOn, out SupplierZoneService supplierZoneService)
+        private bool HasSupplierZoneServices(int supplierId, long supplierZoneId, DateTime? effectiveOn, out SupplierZoneService supplierZoneService)
         {
             supplierZoneService = _reader.GetSupplierZoneServicesByZone(supplierId, supplierZoneId, effectiveOn);
             return supplierZoneService != null;
         }
 
-        private SupplierDefaultService GetDefaultSupplierServices(int supplierId, DateTime effectiveOn)
+        private SupplierDefaultService GetDefaultSupplierServices(int supplierId, DateTime? effectiveOn)
         {
             var defaultService = _reader.GetSupplierDefaultService(supplierId, effectiveOn);
             if (defaultService == null)

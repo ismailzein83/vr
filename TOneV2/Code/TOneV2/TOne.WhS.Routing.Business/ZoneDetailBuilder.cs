@@ -54,7 +54,7 @@ namespace TOne.WhS.Routing.Business
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
-            DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
+            DateTime currencyEffectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
 
             Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
@@ -121,7 +121,7 @@ namespace TOne.WhS.Routing.Business
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
 
-                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
+                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
 
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
@@ -162,7 +162,7 @@ namespace TOne.WhS.Routing.Business
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
-            DateTime effectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
+            DateTime currencyEffectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
 
             ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
             DataTransformer dataTransformer = new DataTransformer();
@@ -170,17 +170,17 @@ namespace TOne.WhS.Routing.Business
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             foreach (RoutingSupplierInfo supplierInfo in supplierInfos)
             {
-                List<SupplierZone> supplierZones = supplierZoneManager.GetSupplierZones(supplierInfo.SupplierId, effectiveDate);
+                List<SupplierZone> supplierZones = supplierZoneManager.GetEffectiveSupplierZones(supplierInfo.SupplierId, effectiveOn, isEffectiveInFuture);
                 if (supplierZones == null)
                     continue;
 
                 foreach (var supplierZone in supplierZones)
                 {
-                    SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId, effectiveDate);
+                    SupplierZoneRate supplierZoneRate = supplierZoneRateLocator.GetSupplierZoneRate(supplierInfo.SupplierId, supplierZone.SupplierZoneId, effectiveOn);
 
                     if (supplierZoneRate != null && supplierZoneRate.Rate != null)
                     {
-                        SupplierEntityService supplierEntityService = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId, effectiveDate);
+                        SupplierEntityService supplierEntityService = supplierZoneServiceLocator.GetSupplierZoneServices(supplierInfo.SupplierId, supplierZone.SupplierZoneId, effectiveOn);
                         List<ZoneService> exactSupplierZoneServices = supplierEntityService.Services;
                         IEnumerable<ZoneServiceConfig> supplierZoneServicesWithChildren = zoneServiceConfigManager.GetDistinctZoneServiceConfigsWithChildren(exactSupplierZoneServices.Select(itm => itm.ServiceId));
 
@@ -196,7 +196,7 @@ namespace TOne.WhS.Routing.Business
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SupplierCurrencyId");
-                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, effectiveDate), 8);
+                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
 
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {

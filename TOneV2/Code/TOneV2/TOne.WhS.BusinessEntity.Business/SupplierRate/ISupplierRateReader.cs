@@ -7,7 +7,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public interface ISupplierRateReader
     {
-        SupplierRatesByZone GetSupplierRates(int supplierId, DateTime effectiveOn);
+        SupplierRatesByZone GetSupplierRates(int supplierId, DateTime? effectiveOn);
     }
 
     public class SupplierRatesByZone : VRDictionary<long, SupplierZoneRate>

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 
@@ -31,10 +28,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetByDate", SupplierZoneMapper, supplierId, minimumDate);
         }
+
+        public List<SupplierZone> GetEffectiveSupplierZones(int supplierId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetEffective", SupplierZoneMapper, supplierId, effectiveOn, isEffectiveInFuture);
+        }
+        
         public List<SupplierZone> GetSupplierZones()
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZone_GetAll", SupplierZoneMapper);
         }
+
         public bool AreSupplierZonesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierZone", ref updateHandle);

@@ -21,12 +21,27 @@ namespace TOne.WhS.Routing.Entities
         {
             if (target == null)
                 throw new ArgumentNullException("target");
-            IRuleCodeTarget ruleCodeTarget = target as IRuleCodeTarget;
-            if (ruleCodeTarget == null)
-                throw new Exception(String.Format("target is not of type IRuleCodeTarget. it is of type '{0}'", target.GetType()));
-            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(ruleCodeTarget.Code))
+            RouteRuleTarget routeRuleTarget = target as RouteRuleTarget;
+            if (routeRuleTarget == null)
+                throw new Exception(String.Format("target is not of type RouteRuleTarget. it is of type '{0}'", target.GetType()));
+            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(routeRuleTarget.Code))
                 return true;
-            return false;
+
+            if (routeRuleTarget.IsEffectiveInFuture)
+            {
+                if (routeRuleTarget.IsEffectiveInFuture)
+                {
+                    ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
+                    SaleZone saleZone = saleZoneManager.GetSaleZone(routeRuleTarget.SaleZoneId);
+
+                    if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < saleZone.BED)
+                        return true;
+
+                    if (saleZone.EED.HasValue && this.BeginEffectiveTime > saleZone.EED.Value)
+                        return true;
+                }
+            }
+            return base.IsAnyCriteriaExcluded(target);
         }
 
         public ISaleZoneGroupContext GetSaleZoneGroupContext()

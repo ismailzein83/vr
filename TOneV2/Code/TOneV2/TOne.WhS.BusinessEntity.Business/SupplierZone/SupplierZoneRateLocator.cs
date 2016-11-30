@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Business
             _reader = reader;
         }
 
-        public SupplierZoneRate GetSupplierZoneRate(int supplierId, long supplierZoneId, DateTime effectiveOn)
+        public SupplierZoneRate GetSupplierZoneRate(int supplierId, long supplierZoneId, DateTime? effectiveOn)
         {
             var supplierRates = _reader.GetSupplierRates(supplierId, effectiveOn);
             if (supplierRates != null)

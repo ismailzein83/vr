@@ -78,10 +78,14 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             _effectiveOn = effectiveOn;
         }
-        public SupplierRatesByZone GetSupplierRates(int supplierId, DateTime effectiveOn)
+
+        public SupplierRatesByZone GetSupplierRates(int supplierId, DateTime? effectiveOn)
         {
+            if (!effectiveOn.HasValue)
+                throw new NullReferenceException("effectiveOn must have a value");
+
             List<SupplierRatesByZoneInfo> supplierRatesByZoneInfoList = GetCachedSupplierRates(supplierId);
-            SupplierRatesByZoneInfo SupplierRatesByZoneInfo = Helper.GetBusinessEntityInfo<SupplierRatesByZoneInfo>(supplierRatesByZoneInfoList, effectiveOn);
+            SupplierRatesByZoneInfo SupplierRatesByZoneInfo = Helper.GetBusinessEntityInfo<SupplierRatesByZoneInfo>(supplierRatesByZoneInfoList, effectiveOn.Value);
 
             if (SupplierRatesByZoneInfo == null)
                 return null;

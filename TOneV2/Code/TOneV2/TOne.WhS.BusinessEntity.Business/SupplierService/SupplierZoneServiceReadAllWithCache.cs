@@ -23,19 +23,25 @@ namespace TOne.WhS.BusinessEntity.Business
             _effectiveOn = effectiveOn;
         }
 
-        public SupplierDefaultService GetSupplierDefaultService(int supplierId, DateTime effectiveOn)
+        public SupplierDefaultService GetSupplierDefaultService(int supplierId, DateTime? effectiveOn)
         {
+            if (!effectiveOn.HasValue)
+                throw new NullReferenceException("effectiveOn must have a value");
+
             Dictionary<int, List<SupplierDefaultService>> defaultZoneServicesBySupplier = GetCachedSupplierDefaultServices();
             List<SupplierDefaultService> supplierDefaultServices =  defaultZoneServicesBySupplier.GetRecord(supplierId);
 
             if (supplierDefaultServices == null)
                 return null;
 
-            return Helper.GetBusinessEntityInfo<SupplierDefaultService>(supplierDefaultServices, effectiveOn);
+            return Helper.GetBusinessEntityInfo<SupplierDefaultService>(supplierDefaultServices, effectiveOn.Value);
         }
 
-        public SupplierZoneService GetSupplierZoneServicesByZone(int supplierId, long supplierZoneId, DateTime effectiveOn)
+        public SupplierZoneService GetSupplierZoneServicesByZone(int supplierId, long supplierZoneId, DateTime? effectiveOn)
         {
+            if (!effectiveOn.HasValue)
+                throw new NullReferenceException("effectiveOn must have a value");
+
             SupplierZoneServicesByZoneData supplierZoneServicesByZoneData = GetCachedSupplierZoneServices(supplierId);
             if (supplierZoneServicesByZoneData == null)
                 return null;
@@ -44,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (supplierZoneServices == null)
                 return null;
 
-            return Helper.GetBusinessEntityInfo<SupplierZoneService>(supplierZoneServices, effectiveOn);
+            return Helper.GetBusinessEntityInfo<SupplierZoneService>(supplierZoneServices, effectiveOn.Value);
         }
 
 

@@ -16,7 +16,6 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SupplierZoneManager : IBusinessEntityManager, ISupplierZoneManager
     {
         #region Public Methods
-
         public Dictionary<long, SupplierZone> GetCachedSupplierZones()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
@@ -26,31 +25,6 @@ namespace TOne.WhS.BusinessEntity.Business
                    List<SupplierZone> allSupplierZones = dataManager.GetSupplierZones();
                    return allSupplierZones.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
                });
-        }
-
-        public List<long> GetSupplierZoneIdsByDates(int supplierId, DateTime fromDate, DateTime? toDate)
-        {
-            List<long> matchingSupplierZoneIds = new List<long>();
-            var allsupplierZones = GetCachedSupplierZones();
-            Func<SupplierZone, bool> filterExpression = (item) =>
-                {
-                    if (item.SupplierId != supplierId)
-                        return false;
-
-                    if (toDate.HasValue && toDate < item.BED)
-                        return false;
-
-                    if (item.EED.HasValue && fromDate > item.EED)
-                        return false;
-
-                    return true;
-
-                };
-            var matchingSupplierZones = allsupplierZones.FindAllRecords(filterExpression);
-            if (matchingSupplierZones != null)
-                matchingSupplierZoneIds = matchingSupplierZones.Select(itm => itm.SupplierZoneId).ToList();
-
-            return matchingSupplierZoneIds;
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SupplierZoneDetails> GetFilteredSupplierZones(Vanrise.Entities.DataRetrievalInput<SupplierZoneQuery> input)
@@ -65,6 +39,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper));
         }
+        
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
             string nameFilterLower = searchValue != null ? searchValue.ToLower() : null;
@@ -113,26 +88,37 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZonesEffectiveAfter(supplierId, minimumDate);
         }
+        
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZones(supplierId, effectiveDate);
         }
+
+        public List<SupplierZone> GetEffectiveSupplierZones(int supplierId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+            return dataManager.GetEffectiveSupplierZones(supplierId, effectiveOn, isEffectiveInFuture);
+        }
+        
         public SupplierZone GetSupplierZone(long zoneId)
         {
             var supplierZones = GetCachedSupplierZones();
             return supplierZones.GetRecord(zoneId);
         }
+        
         public string GetSupplierZoneName(long zoneId)
         {
             SupplierZone supplierZone = GetSupplierZone(zoneId);
             return supplierZone != null ? supplierZone.Name : null;
         }
+        
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
             var allSupplierZones = GetCachedSupplierZones();
             return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId)).OrderBy(x => x.Name);
         }
+        
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
@@ -176,7 +162,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISupplierZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
@@ -224,9 +209,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Methods
-
         private IEnumerable<SupplierZone> GetSupplierZonesBySupplier(int supplierId)
         {
             IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
@@ -254,7 +237,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
-
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             Func<SupplierZone, bool> filter;
@@ -277,7 +259,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
             }
         }
-
 
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
