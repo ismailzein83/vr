@@ -139,7 +139,7 @@ namespace Retail.BusinessEntity.Business
         public bool UpdateExecutedActions(long accountId, ExecutedActions executedActions)
         {
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
-            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId,executedActions);
+            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId, executedActions);
             if (updateExecutedAction)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -417,40 +417,35 @@ namespace Retail.BusinessEntity.Business
 
         Dictionary<string, Account> GetCachedAccountsBySourceId()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountsBySource", () =>
-            {
-                return GetCachedAccounts().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
-            });
+            return GetCachedAccounts().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
+
         }
 
         Dictionary<long, List<Account>> GetCachedAccountsByParent()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsByParent", () =>
+            IEnumerable<Account> accounts = GetCachedAccounts().Values;
+            Dictionary<long, List<Account>> accountsByParent = new Dictionary<long, List<Account>>();
+            foreach (var account in accounts)
             {
-                IEnumerable<Account> accounts = GetCachedAccounts().Values;
-                Dictionary<long, List<Account>> accountsByParent = new Dictionary<long, List<Account>>();
-                foreach (var account in accounts)
+                if (account.ParentAccountId != null)
                 {
-                    if (account.ParentAccountId != null)
+                    List<Account> accountsofParent;
+                    if (accountsByParent.TryGetValue(account.ParentAccountId.Value, out accountsofParent))
                     {
-                        List<Account> accountsofParent;
-                        if (accountsByParent.TryGetValue(account.ParentAccountId.Value, out accountsofParent))
-                        {
-                            accountsofParent.Add(account);
-                        }
-                        else
-                        {
-                            accountsofParent = new List<Account>() { account };
-                            accountsByParent.Add(account.ParentAccountId.Value, accountsofParent);
-
-                        }
+                        accountsofParent.Add(account);
                     }
+                    else
+                    {
+                        accountsofParent = new List<Account>() { account };
+                        accountsByParent.Add(account.ParentAccountId.Value, accountsofParent);
 
+                    }
                 }
-                return accountsByParent;
-            });
-        }
 
+            }
+            return accountsByParent;
+
+        }
         IEnumerable<GenericRuleDefinition> GetAccountsMappingRuleDefinitions()
         {
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
