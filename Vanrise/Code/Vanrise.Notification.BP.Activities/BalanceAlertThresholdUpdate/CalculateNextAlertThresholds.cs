@@ -80,7 +80,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                     }
                                 }
 
-                                if (finalAlertRuleId != currentAlertRuleId || (finalNextThreshold != null && finalNextThreshold != currentNextThreshold))
+                                if (finalAlertRuleId != currentAlertRuleId || finalNextThreshold != currentNextThreshold)
                                 {
                                     VRBalanceUpdateRuleInfoPayload updateRuleInfoPayload = new VRBalanceUpdateRuleInfoPayload
                                     {
@@ -116,32 +116,34 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
             base.OnBeforeExecute(context, handle);
         }
 
-        #region Contexts Implementation
-        class VRBalanceAlertRuleCreateRuleTargetContext : IVRBalanceAlertRuleCreateRuleTargetContext
-        {
 
-            public IVREntityBalanceInfo EntityBalanceInfo
-            {
-                get;
-                set;
-            }
-
-            public VRBalanceAlertRuleTypeSettings RuleTypeSettings
-            {
-                get;
-                set;
-            }
-        }
-
-        public class VRBalanceAlertThresholdContext : IVRBalanceAlertThresholdContext
-        {
-            public IVREntityBalanceInfo EntityBalanceInfo
-            {
-                get;
-                set;
-            }
-        }
-
-        #endregion
     }
+
+    #region Contexts Implementation
+    class VRBalanceAlertRuleCreateRuleTargetContext : IVRBalanceAlertRuleCreateRuleTargetContext
+    {
+
+        public IVREntityBalanceInfo EntityBalanceInfo
+        {
+            get;
+            set;
+        }
+
+        public VRBalanceAlertRuleTypeSettings RuleTypeSettings
+        {
+            get;
+            set;
+        }
+    }
+
+    public class VRBalanceAlertThresholdContext : IVRBalanceAlertThresholdContext
+    {
+        public IVREntityBalanceInfo EntityBalanceInfo
+        {
+            get;
+            set;
+        }
+    }
+
+    #endregion
 }

@@ -8,6 +8,7 @@ using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Business;
+using Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {
@@ -41,7 +42,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                             foreach (var entityBalanceInfo in vrEntityBalanceInfoBatch.BalanceInfos)
                             {
                                 bool hasAlert = false;
-                                VRBalanceAlertRuleCreateRuleTargetContext_CreateAlerts context = new VRBalanceAlertRuleCreateRuleTargetContext_CreateAlerts
+                                VRBalanceAlertRuleCreateRuleTargetContext context = new VRBalanceAlertRuleCreateRuleTargetContext
                                 {
                                     EntityBalanceInfo = entityBalanceInfo,
                                     RuleTypeSettings = inputArgument.RuleTypeSettings
@@ -58,9 +59,9 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 List<VRAction> vrRollbackActions = new List<VRAction>();
                                 foreach (VRBalanceAlertThresholdAction balanceAlertThresholdAction in balanceAlertRuleSettings.ThresholdActions)
                                 {
-                                    VRBalanceAlertThresholdContext_CreateAlerts vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext_CreateAlerts { EntityBalanceInfo = entityBalanceInfo };
+                                    VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo };
                                     threshold = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
-                                    if (entityBalanceInfo.NextAlertThreshold == threshold && entityBalanceInfo.CurrentBalance < threshold)
+                                    if (entityBalanceInfo.NextAlertThreshold == threshold)
                                     {
                                         vrActions = balanceAlertThresholdAction.Actions;
                                         vrRollbackActions = balanceAlertThresholdAction.RollbackActions;
@@ -106,28 +107,5 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
             };
         }
 
-        public class VRBalanceAlertThresholdContext_CreateAlerts : IVRBalanceAlertThresholdContext
-        {
-            public IVREntityBalanceInfo EntityBalanceInfo
-            {
-                get;
-                set;
-            }
-        }
-
-        public class VRBalanceAlertRuleCreateRuleTargetContext_CreateAlerts : IVRBalanceAlertRuleCreateRuleTargetContext
-        {
-            public IVREntityBalanceInfo EntityBalanceInfo
-            {
-                get;
-                set;
-            }
-
-            public VRBalanceAlertRuleTypeSettings RuleTypeSettings
-            {
-                get;
-                set;
-            }
-        }
     }
 }

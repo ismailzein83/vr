@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     {
         public Guid AccountTypeId { get; set; }
         public long AccountId { get; set; }
-        public decimal NextAlertThreshold { get; set; }
-        public long AlertRuleId { get; set; }
+        public decimal? NextAlertThreshold { get; set; }
+        public long? AlertRuleId { get; set; }
     }
 }

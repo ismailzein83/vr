@@ -235,31 +235,22 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         public void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities)
         {
-            var options = new TransactionOptions
+            DataTable liveBalanceThresholdToUpdate = GetLiveBalanceThresholdUpdateTable();
+            foreach (var liveBalance in updateEntities)
             {
-                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-            };
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                DataTable liveBalanceThresholdToUpdate = GetLiveBalanceThresholdUpdateTable();
-                foreach (var liveBalance in updateEntities)
-                {
-                    DataRow dr = liveBalanceThresholdToUpdate.NewRow();
-                    FillLiveBalanceThresholdUpdateRow(dr, liveBalance);
-                    liveBalanceThresholdToUpdate.Rows.Add(dr);
-                }
-                liveBalanceThresholdToUpdate.EndLoadData();
-                if (liveBalanceThresholdToUpdate.Rows.Count > 0)
-                    ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThresholdAndRule]",
-                           (cmd) =>
-                           {
-                               var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdUpdateTable", SqlDbType.Structured);
-                               dtPrm.Value = liveBalanceThresholdToUpdate;
-                               cmd.Parameters.Add(dtPrm);
-                           });
-                scope.Complete();
+                DataRow dr = liveBalanceThresholdToUpdate.NewRow();
+                FillLiveBalanceThresholdUpdateRow(dr, liveBalance);
+                liveBalanceThresholdToUpdate.Rows.Add(dr);
             }
+            liveBalanceThresholdToUpdate.EndLoadData();
+            if (liveBalanceThresholdToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThresholdAndRule]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdUpdateTable", SqlDbType.Structured);
+                           dtPrm.Value = liveBalanceThresholdToUpdate;
+                           cmd.Parameters.Add(dtPrm);
+                       });
         }
 
         public void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady)
