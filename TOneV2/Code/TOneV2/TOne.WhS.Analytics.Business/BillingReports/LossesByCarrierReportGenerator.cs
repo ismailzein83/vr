@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone", "Customer" },
-                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "DurationNet" },
+                    MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "DurationNet" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -77,14 +77,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         lossesByCarrier.CustomerName = customerValue.Name;
 
                     MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out saleNet);
 
                     lossesByCarrier.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     lossesByCarrier.SaleNetFormatted = lossesByCarrier.SaleNet == 0 ? "" :
                         ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.SaleNet);
 
                     MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
                     lossesByCarrier.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     lossesByCarrier.CostNetFormatted = lossesByCarrier.CostNet == 0 ? "" :
                         ReportHelpers.FormatNormalNumberDigit(lossesByCarrier.CostNet);

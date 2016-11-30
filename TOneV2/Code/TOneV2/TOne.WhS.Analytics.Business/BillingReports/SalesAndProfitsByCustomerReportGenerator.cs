@@ -20,7 +20,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> { "Customer" },
-                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration", "CostDuration" },
+                    MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "SaleDuration", "CostDuration" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -55,14 +55,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         salesAndProfitsByCustomer.Customer = customerValue.Name;
 
                     MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out saleNet);
 
                     salesAndProfitsByCustomer.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     salesAndProfitsByCustomer.SaleNetFormatted = salesAndProfitsByCustomer.SaleNet == 0 ? "" : (salesAndProfitsByCustomer.SaleNet.HasValue) ?
                         ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.SaleNet) : "0.00";
 
                     MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
                     salesAndProfitsByCustomer.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     salesAndProfitsByCustomer.CostNetFormatted = (salesAndProfitsByCustomer.CostNet.HasValue)
                         ? ReportHelpers.FormatNumberDigitRate(salesAndProfitsByCustomer.CostNet)

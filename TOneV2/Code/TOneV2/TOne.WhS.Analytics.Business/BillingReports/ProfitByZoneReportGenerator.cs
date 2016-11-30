@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> { "Supplier", "SaleZone", "SupplierZone" },
-                    MeasureFields = new List<string>() { "SaleNet", "CostNet", "SaleDuration", "CostDuration", "DurationNet", "NumberOfCalls" },
+                    MeasureFields = new List<string>() { "SaleNetNotNULL", "CostNetNotNULL", "SaleDuration", "CostDuration", "DurationNet", "NumberOfCalls" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -82,14 +82,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     }
 
                     MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out saleNet);
 
                     profitByZone.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     profitByZone.SaleNetFormated = profitByZone.SaleNet == 0 ? "" : (profitByZone.SaleNet.HasValue) ?
                         ReportHelpers.FormatNormalNumberDigit(profitByZone.SaleNet) : "0.00";
 
                     MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
                     profitByZone.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     profitByZone.CostNetFormated = (profitByZone.CostNet.HasValue)
                         ? ReportHelpers.FormatNormalNumberDigit(profitByZone.CostNet)

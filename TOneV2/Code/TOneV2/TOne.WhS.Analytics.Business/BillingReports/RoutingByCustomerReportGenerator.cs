@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = new List<string> {"Customer", "Supplier", "SaleZone", "SaleRate", "CostRate" },
-                    MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNet", "CostNet", "Profit" },
+                    MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNetNotNULL", "CostNetNotNULL", "ProfitNotNULL" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -85,17 +85,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     customerFormatted.CostDuration = ReportHelpers.FormatNormalNumberDigit(costDurationValue);
 
                     MeasureValue profit;
-                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                    analyticRecord.MeasureValues.TryGetValue("ProfitNotNULL", out profit);
                     customerFormatted.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                     customerFormatted.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(customerFormatted.Profit);
 
                     MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
                     customerFormatted.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
                     customerFormatted.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(customerFormatted.CostNet);
 
                     MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out saleNet);
                     customerFormatted.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     customerFormatted.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(customerFormatted.SaleNet);
 

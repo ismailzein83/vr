@@ -43,7 +43,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 listMeasures.Add("CostRate");
                 listMeasures.Add("CostDuration");
-                listMeasures.Add("CostNet");
+                listMeasures.Add("CostNetNotNULL");
                 //  listMeasures.Add("CostCommissions");
                 listMeasures.Add("CostExtraCharges");
             }
@@ -51,7 +51,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 listMeasures.Add("SaleRate");
                 listMeasures.Add("SaleDuration");
-                listMeasures.Add("SaleNet");
+                listMeasures.Add("SaleNetNotNULL");
                 // listMeasures.Add("SaleCommissions");
                 listMeasures.Add("SaleExtraCharges");
             }
@@ -144,9 +144,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     MeasureValue net;
                     if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostNet", out net);
+                        analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out net);
                     else
-                        analyticRecord.MeasureValues.TryGetValue("SaleNet", out net);
+                        analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out net);
                     summaryByZone.Net = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
                     summaryByZone.NetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.Net);
 

@@ -20,9 +20,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             listMeasures.Add("NumberOfCalls");
             listMeasures.Add("DurationNet");
             listMeasures.Add("SaleDuration");
-            listMeasures.Add("SaleNet");
-            listMeasures.Add("CostNet");
-            listMeasures.Add("Profit");
+            listMeasures.Add("SaleNetNotNULL");
+            listMeasures.Add("CostNetNotNULL");
+            listMeasures.Add("ProfitNotNULL");
 
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -91,17 +91,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     dailySummary.SaleDurationFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleDuration.HasValue) ? ReportHelpers.FormatNormalNumberDigit(dailySummary.SaleDuration) : "0.00";
 
                     MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out saleNet);
                     dailySummary.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     dailySummary.SaleNetFormatted = dailySummary.SaleNet == 0 ? "" : (dailySummary.SaleNet.HasValue) ? ReportHelpers.FormatNormalNumberDigit(dailySummary.SaleNet) : "0.00";
 
                     MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
                     dailySummary.CostNet = Convert.ToDouble(costNet == null ? 0.0 : costNet.Value ?? 0.0);
                     dailySummary.CostNetFormatted = (dailySummary.CostNet.HasValue) ? ReportHelpers.FormatNormalNumberDigit(dailySummary.CostNet) : "0.00";
 
                     MeasureValue profit;
-                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                    analyticRecord.MeasureValues.TryGetValue("ProfitNotNULL", out profit);
                     dailySummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                     dailySummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(dailySummary.Profit);
 
