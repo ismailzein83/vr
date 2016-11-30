@@ -30,7 +30,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "Customer", "Supplier" },
-                    MeasureFields = new List<string> { "SaleDuration", "SaleNet", "CostDuration", "CostNet", "CostExtraCharges", "SaleExtraCharges", "Profit", "PercentageProfit" },
+                    MeasureFields = new List<string> { "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "CostExtraCharges", "SaleExtraCharges", "ProfitNotNULL", "PercentageProfitNotNULL" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -98,19 +98,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     totalCostDur = totalCostDur + carrierSummary.CostDuration;
 
                     MeasureValue costNet;
-                    analyticRecord.MeasureValues.TryGetValue("CostNet", out costNet);
+                    analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
                     carrierSummary.CostNet = Convert.ToDouble(costNet.Value ?? 0.0);
                     carrierSummary.CostNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostNet);
                     totalCostNt = totalCostNt + carrierSummary.CostNet;
 
                     MeasureValue saleNet;
-                    analyticRecord.MeasureValues.TryGetValue("SaleNet", out saleNet);
+                    analyticRecord.MeasureValues.TryGetValue("SaleNetNotNULL", out saleNet);
                     carrierSummary.SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
                     carrierSummary.SaleNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.SaleNet);
                     totalSaleNt = totalSaleNt + carrierSummary.SaleNet;
 
                     MeasureValue profit;
-                    analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                    analyticRecord.MeasureValues.TryGetValue("ProfitNotNULL", out profit);
                     carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                     carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
                     totalProft = totalProft + carrierSummary.Profit;
@@ -128,7 +128,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     totalSaleExtraChrg = totalSaleExtraChrg + Math.Abs(carrierSummary.SaleExtraChargeValue.Value);
 
                     MeasureValue percentageProfit;
-                    analyticRecord.MeasureValues.TryGetValue("PercentageProfit", out percentageProfit);
+                    analyticRecord.MeasureValues.TryGetValue("PercentageProfitNotNULL", out percentageProfit);
                     carrierSummary.PercentageProfit = Convert.ToDouble(percentageProfit.Value ?? 0.0);
                     carrierSummary.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage(carrierSummary.PercentageProfit);
 
