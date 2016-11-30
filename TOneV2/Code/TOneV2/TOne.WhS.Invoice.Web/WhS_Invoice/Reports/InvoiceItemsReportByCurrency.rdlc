@@ -407,14 +407,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox1">
+                    <Textbox Name="FromDate">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -425,7 +425,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <rd:DefaultName>FromDate</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -471,14 +471,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox2">
+                    <Textbox Name="ToDate">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -489,7 +489,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <rd:DefaultName>ToDate</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -500,6 +500,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -683,7 +684,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>USD</Value>
+                <Value>=Parameters!CurrencyName.Value</Value>
                 <Style>
                   <FontSize>11pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -872,6 +873,14 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="CurrencyName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="ID1111201655117PM">
       <MIMEType>image/png</MIMEType>

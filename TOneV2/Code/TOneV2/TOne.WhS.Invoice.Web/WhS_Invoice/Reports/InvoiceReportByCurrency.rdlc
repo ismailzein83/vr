@@ -1605,7 +1605,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!TotalNumberOfCalls.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!NumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1872,36 +1872,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Rectangle Name="Rectangle1">
-        <ReportItems>
-          <Subreport Name="InvoiceItemsReportNameByCurrency">
-            <ReportName>InvoiceItemsReportByCurrency</ReportName>
-            <Top>0.14722in</Top>
-            <Left>0.00459in</Left>
-            <Height>3in</Height>
-            <Width>7.98583in</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Subreport>
-        </ReportItems>
-        <PageBreak>
-          <BreakLocation>Start</BreakLocation>
-        </PageBreak>
-        <KeepTogether>true</KeepTogether>
-        <Top>8.97653in</Top>
-        <Left>0.1425in</Left>
-        <Height>3.18888in</Height>
-        <Width>7.99042in</Width>
-        <ZIndex>32</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Rectangle>
       <Textbox Name="Textbox26">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -1925,7 +1895,7 @@
         <Left>5.50944in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>33</ZIndex>
+        <ZIndex>32</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1959,7 +1929,7 @@
         <Left>6.54779in</Left>
         <Height>0.16667in</Height>
         <Width>1.6893in</Width>
-        <ZIndex>34</ZIndex>
+        <ZIndex>33</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1970,6 +1940,79 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Tablix Name="Tablix3">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>7.98583in</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>2.85417in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Rectangle Name="Rectangle3">
+                      <ReportItems>
+                        <Subreport Name="InvoiceItemsReportNameByCurrency">
+                          <ReportName>InvoiceItemsReportByCurrency</ReportName>
+                          <Parameters>
+                            <Parameter Name="CurrencyName">
+                              <Value>=Fields!OriginalSaleCurrency.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                          <Top>0.15625in</Top>
+                          <Height>2.69792in</Height>
+                          <Width>7.98583in</Width>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
+                      </ReportItems>
+                      <KeepTogether>true</KeepTogether>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </Rectangle>
+                    <rd:Selected>true</rd:Selected>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember>
+              <Group Name="Details2" />
+            </TablixMember>
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>ItemsDetails</DataSetName>
+        <PageBreak>
+          <BreakLocation>Start</BreakLocation>
+        </PageBreak>
+        <Top>9.15501in</Top>
+        <Left>0.1425in</Left>
+        <Height>2.85417in</Height>
+        <Width>7.98583in</Width>
+        <ZIndex>34</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
     </ReportItems>
     <Height>12.16542in</Height>
     <Style />
@@ -2076,70 +2119,15 @@
       </ConnectionProperties>
       <rd:DataSourceID>fb05ec18-6748-4153-b858-4873e80e8ed4</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSInvoiceEntities2">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>d84a7cf0-fd54-44f5-85c3-6a11540f9cb5</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ItemsDetails">
-      <Query>
-        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="TotalNumberOfCalls">
-          <DataField>TotalNumberOfCalls</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleAmount">
-          <DataField>OriginalSaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="Duration">
-          <DataField>Duration</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="PartnerType">
-          <DataField>PartnerType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SaleCurrencyId">
-          <DataField>SaleCurrencyId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="SaleCurrency">
-          <DataField>SaleCurrency</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleCurrencyId">
-          <DataField>OriginalSaleCurrencyId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleCurrency">
-          <DataField>OriginalSaleCurrency</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FromDate">
-          <DataField>FromDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ToDate">
-          <DataField>ToDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="TotalAmount">
-          <DataField>TotalAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
     <DataSet Name="BankDetails">
       <Query>
         <DataSourceName>VanriseInvoiceEntities1</DataSourceName>
@@ -2192,6 +2180,84 @@
         <rd:TableName>DataSourceBankDetails</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetBankDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
         <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.DataSourceBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="ItemsDetails">
+      <Query>
+        <DataSourceName>TOneWhSInvoiceEntities2</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="NumberOfCalls">
+          <DataField>NumberOfCalls</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmount">
+          <DataField>SaleAmount</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleAmount">
+          <DataField>OriginalSaleAmount</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="Duration">
+          <DataField>Duration</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CustomerId">
+          <DataField>CustomerId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CustomerName">
+          <DataField>CustomerName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleZoneId">
+          <DataField>SaleZoneId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="SaleZoneName">
+          <DataField>SaleZoneName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleCurrencyId">
+          <DataField>OriginalSaleCurrencyId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleCurrency">
+          <DataField>OriginalSaleCurrency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleCurrencyId">
+          <DataField>SaleCurrencyId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="SaleCurrency">
+          <DataField>SaleCurrency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SaleRate">
+          <DataField>SaleRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleRateTypeId">
+          <DataField>SaleRateTypeId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FromDate">
+          <DataField>FromDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ToDate">
+          <DataField>ToDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

@@ -199,6 +199,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             if (analyticRecords != null)
             {
                 Dictionary<int, InvoiceBillingRecord> groupedByCustomerDic = new Dictionary<int, InvoiceBillingRecord>();
+                Dictionary<int, InvoiceBillingRecord> groupedByCurrencyDic = new Dictionary<int, InvoiceBillingRecord>();
+                Dictionary<int, InvoiceBillingRecord> groupedByCustomerCurrencyDic = new Dictionary<int, InvoiceBillingRecord>();
+
                 foreach (var analyticRecord in analyticRecords)
                 {
 
@@ -239,45 +242,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
 
                     AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
+                    GroupingData(groupedByCurrencyDic, invoiceBillingRecord.OriginalSaleCurrencyId, invoiceBillingRecord);
+                    AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCurrency_{0}", invoiceBillingRecord.OriginalSaleCurrencyId), invoiceBillingRecord);
 
                     #region Grouping By Customer
                     if (isGroupedByCustomer)
                     {
+
+                        GroupingData(groupedByCustomerCurrencyDic, invoiceBillingRecord.OriginalSaleCurrencyId, invoiceBillingRecord);
+
                         AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCustomer_{0}", invoiceBillingRecord.CustomerId), invoiceBillingRecord);
 
-                        InvoiceBillingRecord customerInvoiceBillingRecord = null;
-                        if (!groupedByCustomerDic.TryGetValue(invoiceBillingRecord.CustomerId, out customerInvoiceBillingRecord))
-                        {
-                            customerInvoiceBillingRecord = new InvoiceBillingRecord
-                            {
-                                SaleRateTypeId = invoiceBillingRecord.SaleRateTypeId,
-                                SaleRate = invoiceBillingRecord.SaleRate,
-                                SaleZoneId = invoiceBillingRecord.SaleZoneId,
-                                SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId,
-                                OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId,
-                                CustomerId = invoiceBillingRecord.CustomerId,
-                                InvoiceMeasures = new InvoiceMeasures
-                                {
-                                    SaleNet = invoiceBillingRecord.InvoiceMeasures.SaleNet,
-                                    SaleDuration = invoiceBillingRecord.InvoiceMeasures.SaleDuration,
-                                    BillingPeriodFrom = invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom,
-                                    BillingPeriodTo = invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo,
-                                    NumberOfCalls = invoiceBillingRecord.InvoiceMeasures.NumberOfCalls,
-                                    SaleNet_OrigCurr = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr,
-                                }
-                            };
-                            groupedByCustomerDic.Add(invoiceBillingRecord.CustomerId, customerInvoiceBillingRecord);
-                        }
-                        else
-                        {
-                            customerInvoiceBillingRecord.InvoiceMeasures.SaleDuration += invoiceBillingRecord.InvoiceMeasures.SaleDuration;
-                            customerInvoiceBillingRecord.InvoiceMeasures.SaleNet += invoiceBillingRecord.InvoiceMeasures.SaleNet;
-                            customerInvoiceBillingRecord.InvoiceMeasures.NumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
-
-                            customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo > invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo : invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
-                            customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom < invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? customerInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom : invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
-                            groupedByCustomerDic[invoiceBillingRecord.CustomerId] = customerInvoiceBillingRecord;
-                        }
+                        GroupingData(groupedByCustomerDic, invoiceBillingRecord.CustomerId, invoiceBillingRecord);
 
                     }
                     #endregion
@@ -288,11 +264,56 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     foreach (var item in groupedByCustomerDic)
                     {
                         AddItemToDictionary(itemSetNamesDic, "GroupedByCustomer", item.Value);
+                        foreach (var itemByCurrency in groupedByCustomerCurrencyDic)
+                        {
+                            AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCustomer_{0}_Currancy_{1}", itemByCurrency.Value.CustomerId, itemByCurrency.Value.OriginalSaleCurrencyId), item.Value);
+                        }
                     }
+                }
+                foreach (var item in groupedByCurrencyDic)
+                {
+                    AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCurrency"), item.Value);
                 }
             }
            
             return itemSetNamesDic;
+        }
+
+
+        private void GroupingData(Dictionary<int, InvoiceBillingRecord> groupedDic, int key, InvoiceBillingRecord newInvoiceBillingRecord)
+        {
+            InvoiceBillingRecord invoiceBillingRecord = null;
+            if (!groupedDic.TryGetValue(key, out invoiceBillingRecord))
+            {
+                invoiceBillingRecord = new InvoiceBillingRecord
+                {
+                    SaleRateTypeId = newInvoiceBillingRecord.SaleRateTypeId,
+                    SaleRate = newInvoiceBillingRecord.SaleRate,
+                    SaleZoneId = newInvoiceBillingRecord.SaleZoneId,
+                    SaleCurrencyId = newInvoiceBillingRecord.SaleCurrencyId,
+                    OriginalSaleCurrencyId = newInvoiceBillingRecord.OriginalSaleCurrencyId,
+                    CustomerId = newInvoiceBillingRecord.CustomerId,
+                    InvoiceMeasures = new InvoiceMeasures
+                    {
+                        SaleNet = newInvoiceBillingRecord.InvoiceMeasures.SaleNet,
+                        SaleDuration = newInvoiceBillingRecord.InvoiceMeasures.SaleDuration,
+                        BillingPeriodFrom = newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom,
+                        BillingPeriodTo = newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo,
+                        NumberOfCalls = newInvoiceBillingRecord.InvoiceMeasures.NumberOfCalls,
+                        SaleNet_OrigCurr = newInvoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr,
+                    }
+                };
+                groupedDic.Add(key, invoiceBillingRecord);
+            }
+            else
+            {
+                invoiceBillingRecord.InvoiceMeasures.SaleDuration += newInvoiceBillingRecord.InvoiceMeasures.SaleDuration;
+                invoiceBillingRecord.InvoiceMeasures.SaleNet += newInvoiceBillingRecord.InvoiceMeasures.SaleNet;
+                invoiceBillingRecord.InvoiceMeasures.NumberOfCalls += newInvoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
+                invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo > newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo : newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
+                invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom < newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom : newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
+                groupedDic[key] = invoiceBillingRecord;
+            }
         }
         private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
         {

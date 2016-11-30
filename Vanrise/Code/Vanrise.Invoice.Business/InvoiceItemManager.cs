@@ -122,17 +122,22 @@ namespace Vanrise.Invoice.Business
             {
                 if (subSections == null || subSections.Count == 0)
                     return null;
+                List<InvoiceSubSectionGridColumn> gridColumns = null;
+
                 foreach (var subsection in subSections)
                 {
                     if (subsection.UniqueSectionID == uniqueSectionID)
                     {
-                        return subsection.Settings.GridColumns;
+                        gridColumns= subsection.Settings.GridColumns;
+                         break;
                     }else
                     {
-                        return GetInvoiceSubSectionGridColumn(subsection.Settings.SubSections, uniqueSectionID);
+                        gridColumns = GetInvoiceSubSectionGridColumn(subsection.Settings.SubSections, uniqueSectionID);
+                        if (gridColumns != null)
+                            break;
                     }
                 }
-                return null;
+                return gridColumns;
             }
         }
         #endregion
