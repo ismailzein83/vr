@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -70,9 +71,12 @@ namespace Vanrise.Common.Business
         //    SendMail(to, cc, subject, body);
         //}
 
-        
-
         public void SendMail(string to, string cc, string subject, string body)
+        {
+            SendMail(to, cc, subject, body, null);
+        }
+
+        public void SendMail(string to, string cc, string subject, string body, List<VRMailAttachement> attachements)
         {
             if (String.IsNullOrWhiteSpace(to))
                 throw new NullReferenceException("to");
@@ -99,6 +103,21 @@ namespace Vanrise.Common.Business
             mailMessage.Subject = subject;
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
+
+            if(attachements != null)
+            {
+                foreach(var vrAttachment in attachements)
+                {
+                    MemoryStream memStr = new MemoryStream(vrAttachment.Content);
+                    var attachment = new Attachment(memStr, vrAttachment.Name);
+                    //attachment.ContentType = new ContentType("application/vnd.ms-excel");
+                    //attachment.TransferEncoding = TransferEncoding.Base64;
+                    //attachment.NameEncoding = Encoding.UTF8;
+                    //attachment.Name = "SalePriceList.xls";
+
+                    mailMessage.Attachments.Add(attachment);
+                }
+            }
 
             SmtpClient client = GetSMTPClient(emailSettingData);
             

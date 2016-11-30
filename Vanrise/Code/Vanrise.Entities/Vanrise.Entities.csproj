@@ -78,6 +78,9 @@
     <Compile Include="TextManipulation\TextManipulationSettings.cs" />
     <Compile Include="TextManipulation\TextManipulationTarget.cs" />
     <Compile Include="VRButtonType.cs" />
+    <Compile Include="VRMail\VRMailAttachement.cs" />
+    <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
+    <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
     <Compile Include="VRMail\VRMailEvaluatedTemplate.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />
     <Compile Include="VRTax\VRTaxItem.cs" />
