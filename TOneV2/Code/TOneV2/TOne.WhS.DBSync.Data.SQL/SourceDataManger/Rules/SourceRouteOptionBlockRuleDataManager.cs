@@ -39,9 +39,17 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 BED = (DateTime)reader["BeginEffectiveDate"],
                 EED = GetReaderValue<DateTime?>(reader, "EndEffectiveDate"),
                 ExcludedCodes = reader["ExcludedCodes"] as string,
+                ExcludedCodesList = GetExcludedCodes(reader["ExcludedCodes"] as string),
                 IncludeSubCode = string.IsNullOrEmpty((reader["IncludeSubCodes"] as string)) ? false : (reader["IncludeSubCodes"] as string).Equals("Y"),
                 Reason = reader["Reason"] as string
             };
+        }
+        HashSet<string> GetExcludedCodes(string codes)
+        {
+            if (string.IsNullOrEmpty(codes))
+                return null;
+            return new HashSet<string>(codes.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).OrderBy(s => s));
+
         }
 
         const string query_getRouteOptionBlockRules = @"SELECT
