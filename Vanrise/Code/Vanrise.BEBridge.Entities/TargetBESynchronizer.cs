@@ -8,7 +8,7 @@ namespace Vanrise.BEBridge.Entities
 {
     public abstract class TargetBESynchronizer
     {
-        public string Name { get; set; }
+        public virtual string Name { get { return "Target BE Synchronizer"; } }
         public Guid ConfigId { get; set; }
 
         public abstract bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context);

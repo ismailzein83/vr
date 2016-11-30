@@ -32,8 +32,9 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void DoWork(ConvertSourceToTargetBEsInput inputArgument,
             AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            int totalUpdateTargets = 0;
-            int totalInsertTargets = 0;
+
+
+            Dictionary<Object, ITargetBE> existingTargetBEsBySourceId = new Dictionary<object, ITargetBE>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -43,6 +44,8 @@ namespace Vanrise.BEBridge.BP.Activities
                 {
                     hasItem = inputArgument.BatchProcessingContextQueue.TryDequeue((batchProcessingContextQueue) =>
                     {
+                        int totalUpdateTargets = 0;
+                        int totalInsertTargets = 0;
                         List<ITargetBE> targetsToInsert = new List<ITargetBE>();
                         List<ITargetBE> targetsToUpdate = new List<ITargetBE>();
                         TargetBEConvertorConvertSourceBEsContext targetBeConvertorContext =
@@ -51,46 +54,54 @@ namespace Vanrise.BEBridge.BP.Activities
                         targetBeConvertorContext.SourceBEBatch = batchProcessingContextQueue.SourceBEBatch;
                         inputArgument.TargetConverter.ConvertSourceBEs(targetBeConvertorContext);
                         List<ITargetBE> targetBEs = targetBeConvertorContext.TargetBEs;
-                        handle.SharedInstanceData.WriteTrackingMessage(
-                            Vanrise.Entities.LogEntryType.Information, "Targert BEs count {0}.", targetBEs.Count);
+
                         foreach (ITargetBE targetBe in targetBEs)
                         {
-                            TargetBETryGetExistingContext targetContext = new TargetBETryGetExistingContext();
-                            MergeTargetBEsContext mergeContext = new MergeTargetBEsContext();
-
-                            targetContext.SourceBEId = targetBe.SourceBEId;
-                            targetContext.TargetBE = targetBe;
-                            if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(targetContext))
+                            ITargetBE existingBE;
+                            if (!existingTargetBEsBySourceId.TryGetValue(targetBe.SourceBEId, out existingBE))
                             {
-                                mergeContext.ExistingBE = targetContext.TargetBE;
-                                mergeContext.NewBE = targetBe;
-                                inputArgument.TargetConverter.MergeTargetBEs(mergeContext);
-                                if (inputArgument.TargetConverter.CompareBeforeUpdate)
+                                TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext
                                 {
-                                    if (
-                                        String.CompareOrdinal(Serializer.Serialize(mergeContext.FinalBE),
-                                            Serializer.Serialize(targetContext.TargetBE)) != 0)
-                                        targetsToUpdate.Add(mergeContext.FinalBE);
-                                }
-                                else
-                                    targetsToUpdate.Add(mergeContext.FinalBE);
+                                    SourceBEId = targetBe.SourceBEId
+                                };
+                                if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(tryGetExistingContext))
+                                    existingBE = tryGetExistingContext.TargetBE;
+                            }
 
-                                totalUpdateTargets++;
+                            if (existingBE != null)
+                            {
+                                MergeTargetBEsContext mergeContext = new MergeTargetBEsContext
+                                {
+                                    ExistingBE = existingBE,
+                                    NewBE = targetBe
+                                };
+                                inputArgument.TargetConverter.MergeTargetBEs(mergeContext);
+                                if (!inputArgument.TargetConverter.CompareBeforeUpdate ||
+                                    String.CompareOrdinal(Serializer.Serialize(mergeContext.FinalBE),
+                                            Serializer.Serialize(existingBE)) != 0)
+                                {
+                                    targetsToUpdate.Add(mergeContext.FinalBE);
+                                    totalUpdateTargets++;
+                                    if (existingTargetBEsBySourceId.ContainsKey(mergeContext.FinalBE.SourceBEId))
+                                        existingTargetBEsBySourceId[mergeContext.FinalBE.SourceBEId] = mergeContext.FinalBE;
+                                    else
+                                        existingTargetBEsBySourceId.Add(mergeContext.FinalBE.SourceBEId, mergeContext.FinalBE);
+                                }
                             }
                             else
                             {
                                 targetsToInsert.Add(targetBe);
                                 totalInsertTargets++;
+                                existingTargetBEsBySourceId.Add(targetBe.SourceBEId, targetBe);
                             }
                         }
-                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Insert Targets Converted.", totalInsertTargets);
-                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Update Targets Converted.", totalUpdateTargets);
-                        totalUpdateTargets = 0;
-                        totalInsertTargets = 0;
+                        if (totalInsertTargets > 0)
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} {1} Converted.", totalInsertTargets, inputArgument.TargetConverter.Name);
+                        if (totalUpdateTargets > 0)
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} {1} Converted.", totalUpdateTargets, inputArgument.TargetConverter.Name);
 
                         batchProcessingContextQueue.SetTargetBEs(targetsToInsert, targetsToUpdate);
                         inputArgument.OutputQueue.Enqueue(batchProcessingContextQueue);
-
                     });
                 } while (!ShouldStop(handle) && hasItem);
 

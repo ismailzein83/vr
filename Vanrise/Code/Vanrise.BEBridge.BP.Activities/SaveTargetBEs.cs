@@ -35,12 +35,12 @@ namespace Vanrise.BEBridge.BP.Activities
                         {
                             insertContext.TargetBE = targetsToInsert;
                             inputArgument.TargetBESynchronizer.InsertBEs(insertContext);
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Targets Inserted.", insertContext.TargetBE.Count);
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} {1} Inserted.", insertContext.TargetBE.Count, inputArgument.TargetBESynchronizer.Name);
                         }, (targetsToUpdate) =>
                         {
                             updateContext.TargetBE = targetsToUpdate;
                             inputArgument.TargetBESynchronizer.UpdateBEs(updateContext);
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Targets Updated.", updateContext.TargetBE.Count);
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} {1} Updated.", updateContext.TargetBE.Count, inputArgument.TargetBESynchronizer.Name);
                         });
                     });
 
