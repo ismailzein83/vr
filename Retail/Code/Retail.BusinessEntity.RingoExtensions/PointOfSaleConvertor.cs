@@ -13,6 +13,13 @@ namespace Retail.BusinessEntity.RingoExtensions
 {
     public class PointOfSaleConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "Pont of Sales";
+            }
+        }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;

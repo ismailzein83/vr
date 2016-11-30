@@ -9,8 +9,16 @@ using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
+
     public class DistributorSynchronizer : TargetBESynchronizer
     {
+        public override string Name
+        {
+            get
+            {
+                return "Distributors";
+            }
+        }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             if (context.TargetBE == null)

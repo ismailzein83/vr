@@ -13,6 +13,13 @@ namespace Retail.BusinessEntity.RingoExtensions
 {
     public class AgentConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "Agents";
+            }
+        }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;

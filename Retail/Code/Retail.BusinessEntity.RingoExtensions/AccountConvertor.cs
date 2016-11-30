@@ -19,6 +19,14 @@ namespace Retail.BusinessEntity.RingoExtensions
 {
     public class AccountConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "Accounts";
+            }
+        }
+
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
 
@@ -34,17 +42,20 @@ namespace Retail.BusinessEntity.RingoExtensions
                     if (accountRecords != null)
                     {
                         accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
+                        var sourceId = accountRecords[22];
+                        if (sourceId == "NA")
+                            continue;
                         string accountName = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
                         SourceAccountData accountData = new SourceAccountData
                         {
-                            Account = new Account { TypeId =  Guid.Parse("19A97F72-8C56-441E-A74D-AA185961B242") },
+                            Account = new Account { TypeId = Guid.Parse("19A97F72-8C56-441E-A74D-AA185961B242") },
                             IdentificationRulesToInsert = new List<MappingRule>
                             {
                                 GetMappingRule(accountRecords[22], accountName)
                             },
                             IdentificationRulesToUpdate = new List<MappingRule>()
                         };
-                        var sourceId = accountRecords[22];
+
                         accountData.Account.Name = accountName;
                         accountData.Account.SourceId = sourceId;
                         FillAccountSettings(accountData, accountRecords);

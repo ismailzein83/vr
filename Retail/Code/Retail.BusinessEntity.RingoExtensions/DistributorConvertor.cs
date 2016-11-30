@@ -13,6 +13,13 @@ namespace Retail.BusinessEntity.RingoExtensions
 {
     public class DistributorConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "Distributors";
+            }
+        }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
@@ -68,7 +75,8 @@ namespace Retail.BusinessEntity.RingoExtensions
             finalBe.Distributor.Name = newBe.Distributor.Name;
             finalBe.Distributor.Settings = newBe.Distributor.Settings;
             finalBe.Distributor.Type = newBe.Distributor.Type;
-
+            finalBe.Distributor.SourceId = newBe.Distributor.SourceId;
+            
             context.FinalBE = finalBe;
         }
     }

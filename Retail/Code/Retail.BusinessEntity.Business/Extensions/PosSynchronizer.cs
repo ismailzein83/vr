@@ -11,6 +11,13 @@ namespace Retail.BusinessEntity.Business
 {
     public class PosSynchronizer : TargetBESynchronizer
     {
+        public override string Name
+        {
+            get
+            {
+                return "Point of Sales";
+            }
+        }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             if (context.TargetBE == null)
@@ -32,7 +39,7 @@ namespace Retail.BusinessEntity.Business
             {
                 context.TargetBE = new SourcePOS()
                 {
-                     PointOfSale = Serializer.Deserialize<PointOfSale>(Serializer.Serialize(pointOfSale))
+                    PointOfSale = Serializer.Deserialize<PointOfSale>(Serializer.Serialize(pointOfSale))
                 };
                 return true;
             }

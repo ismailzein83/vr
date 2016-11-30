@@ -14,6 +14,13 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountSynchronizer : TargetBESynchronizer
     {
+        public override string Name
+        {
+            get
+            {
+                return "Accounts";
+            }
+        }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             if (context.TargetBE == null)
@@ -33,7 +40,6 @@ namespace Retail.BusinessEntity.Business
                     }
             }
         }
-
         IGenericRuleManager GetRuleManager(Guid ruleDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
@@ -59,8 +65,6 @@ namespace Retail.BusinessEntity.Business
             }
             return false;
         }
-
-
         public override void UpdateBEs(ITargetBESynchronizerUpdateBEsContext context)
         {
             if (context.TargetBE == null)

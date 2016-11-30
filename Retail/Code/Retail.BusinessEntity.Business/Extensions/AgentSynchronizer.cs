@@ -11,6 +11,13 @@ namespace Retail.BusinessEntity.Business
 {
     public class AgentSynchronizer : TargetBESynchronizer
     {
+        public override string Name
+        {
+            get
+            {
+                return "Agents";
+            }
+        }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             if (context.TargetBE == null)
