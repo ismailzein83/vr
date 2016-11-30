@@ -20,6 +20,8 @@ namespace Retail.Voice.Entities
 
     public interface IVoiceChargingPolicyEvaluatorContext
     {
+        Guid ServiceTypeId { get; }
+
         int ChargingPolicyId { get; }
 
         dynamic RawCDR { get; }

@@ -52,6 +52,7 @@ namespace Retail.Voice.Business
             VoiceChargingPolicyEvaluator chargingPolicyEvaluator = GetVoiceChargingPolicyEvaluator(serviceTypeId);
             var context = new VoiceChargingPolicyEvaluatorContext
             {
+                ServiceTypeId = serviceTypeId,
                 ChargingPolicyId = chargingPolicyId,
                 RawCDR = rawCDR,
                 MappedCDR = mappedCDR,
@@ -177,6 +178,7 @@ namespace Retail.Voice.Business
 
     public class VoiceChargingPolicyEvaluatorContext : IVoiceChargingPolicyEvaluatorContext
     {
+        public Guid ServiceTypeId { get; set; }
         public int ChargingPolicyId
         {
             get;
