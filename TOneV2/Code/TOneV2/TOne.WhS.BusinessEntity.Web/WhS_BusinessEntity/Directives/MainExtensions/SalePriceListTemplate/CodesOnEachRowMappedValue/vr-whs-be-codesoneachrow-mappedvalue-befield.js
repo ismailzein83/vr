@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueBefield', ['WhS_BE_BasicSalePriceListTemplateSettingsBEFieldEnum', 'UtilsService', function (WhS_BE_BasicSalePriceListTemplateSettingsBEFieldEnum, UtilsService) {
+app.directive('vrWhsBeCodesoneachrowMappedvalueBefield', ['WhS_BE_SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum', 'UtilsService', function (WhS_BE_SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum, UtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -13,7 +13,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueBefield', ['W
 			var basicSettingsBEFieldMappedValue = new BasicSettingsBEFieldMappedValue($scope, ctrl, $attrs);
 			basicSettingsBEFieldMappedValue.initializeController();
 		},
-		controllerAs: "beFieldMappedValueCtrl",
+		controllerAs: "codesOnEachRowBeFieldMappedValueCtrl",
 		bindToController: true,
 		template: function (element, attrs) {
 			return getTemplate(attrs);
@@ -29,7 +29,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueBefield', ['W
 		function initializeController() {
 
 			$scope.scopeModel = {};
-			$scope.scopeModel.beFields = UtilsService.getArrayEnum(WhS_BE_BasicSalePriceListTemplateSettingsBEFieldEnum);
+			$scope.scopeModel.beFields = UtilsService.getArrayEnum(WhS_BE_SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum);
 
 			$scope.scopeModel.onSelectorReady = function (api) {
 				selectorAPI = api;
@@ -48,7 +48,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueBefield', ['W
 
 			api.getData = function getData() {
 				return {
-					$type: 'TOne.WhS.BusinessEntity.MainExtensions.BEFieldMappedValue, TOne.WhS.BusinessEntity.MainExtensions',
+				    $type: 'TOne.WhS.BusinessEntity.MainExtensions.CodeOnEachRowBEFieldMappedValue, TOne.WhS.BusinessEntity.MainExtensions',
 					BEField: $scope.scopeModel.selectedBEField.value
 				};
 			};
@@ -59,14 +59,14 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueBefield', ['W
 	}
 
 	function getTemplate() {
-		return '<vr-columns colnum="{{beFieldMappedValueCtrl.normalColNum}}">\
+	    return '<vr-columns colnum="{{codesOnEachRowBeFieldMappedValueCtrl.normalColNum}}">\
 					<vr-select on-ready="scopeModel.onSelectorReady"\
 						datasource="scopeModel.beFields"\
 						selectedvalues="scopeModel.selectedBEField"\
 						datavaluefield="value"\
 						datatextfield="description"\
-						isrequired="beFieldMappedValueCtrl.isrequired"\
-						hideremoveicon="beFieldMappedValueCtrl.isrequired">\
+						isrequired="codesOnEachRowBeFieldMappedValueCtrl.isrequired"\
+						hideremoveicon="codesOnEachRowBeFieldMappedValueCtrl.isrequired">\
 					</vr-select>\
 				</vr-columns>';
 	}

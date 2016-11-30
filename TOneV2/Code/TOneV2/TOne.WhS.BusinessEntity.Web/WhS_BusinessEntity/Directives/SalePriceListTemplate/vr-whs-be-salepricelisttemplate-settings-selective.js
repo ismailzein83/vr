@@ -27,6 +27,8 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsSelective', ['WhS_BE_SalePric
 		var directiveAPI;
 		var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+ 
+
 		function initializeController() {
 
 			$scope.extensionConfigs = [];
@@ -72,17 +74,10 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsSelective', ['WhS_BE_SalePric
 
 			api.getData = function getData() {
 
-				// Require both directiveData and selectedExtensionConfigId for valid output
-
 				if (directiveAPI == undefined)
 					return undefined;
 
-				var directiveData = directiveAPI.getData();
-				if (directiveData == undefined || $scope.selectedExtensionConfig == undefined)
-					return undefined;
-
-				directiveData.ConfigId = $scope.selectedExtensionConfig.ExtensionConfigurationId;
-				return directiveData;
+				return directiveAPI.getData();
 			};
 
 			if (ctrl.onReady != null)

@@ -12,11 +12,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 {
 	public class BasicSalePriceListTemplateSettings : SalePriceListTemplateSettings
 	{
-		public Guid ConfigId { get; set; }
+        public override Guid ConfigId
+        {
+            get { return new Guid("9da89204-193a-4fe1-8416-98f1620848b0"); }
+        }
 
 		public long TemplateFileId { get; set; }
 
-		public List<MappedSheet> MappedSheets { get; set; }
+		public List<MappedTable> MappedTables { get; set; }
 
 		public string DateTimeFormat { get; set; }
 
@@ -45,14 +48,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
 		private void SetWorkbookData(ISalePriceListTemplateSettingsContext context, Workbook workbook)
 		{
-			foreach (MappedSheet mappedSheet in MappedSheets)
+			foreach (MappedTable mappedSheet in MappedTables)
 			{
 				Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
 				SetWorksheetData(context, worksheet, mappedSheet);
 			}
 		}
 
-		private void SetWorksheetData(ISalePriceListTemplateSettingsContext context, Worksheet worksheet, MappedSheet mappedSheet)
+		private void SetWorksheetData(ISalePriceListTemplateSettingsContext context, Worksheet worksheet, MappedTable mappedSheet)
 		{
 			int currentRowIndex = mappedSheet.FirstRowIndex;
 
@@ -103,5 +106,5 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 		}
 
 		#endregion
-	}
+    }
 }

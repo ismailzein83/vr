@@ -1,0 +1,20 @@
+﻿<vr-row>
+    <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="onFirstRowMappingReady"
+                                                      label="First Row"
+                                                      type="'row'"
+                                                      isrequired="true">
+    </vr-excelconversion-fieldmapping-cellfieldmapping>
+</vr-row>
+<vr-row removeline="true">
+    <vr-columns colnum="{{basicSettingsCtrl.normalColNum}}">
+        <vr-button type="Add" data-onclick="addMappedCol" standalone="true"></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row vr-loader="isLoadingMappedCol">
+    <vr-columns width="fullrow">
+        <vr-whs-be-pricelisttemplate-mappedcolumns-grid on-ready="onMappedColumnsGridReady">
+
+        </vr-whs-be-pricelisttemplate-mappedcolumns-grid>
+    
+    </vr-columns>
+</vr-row>

@@ -1,0 +1,14 @@
+﻿<span>
+    <vr-columns colnum="{{mappedTableCtrl.normalColNum}}">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="extensionConfigs"
+                   selectedvalues="selectedExtensionConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   isrequired="mappedTableCtrl.isrequired"
+                   hideremoveicon="mappedTableCtrl.isrequired"
+                   label="Mapped Table">
+        </vr-select>
+    </vr-columns>
+   
+</span>

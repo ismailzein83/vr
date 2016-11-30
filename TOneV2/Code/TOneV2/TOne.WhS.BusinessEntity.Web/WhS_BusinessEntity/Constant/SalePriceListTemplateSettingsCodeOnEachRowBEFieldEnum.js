@@ -1,4 +1,4 @@
-﻿app.constant('WhS_BE_BasicSalePriceListTemplateSettingsBEFieldEnum', {
+﻿app.constant('WhS_BE_SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum', {
 	Zone: { value: 0, description: "Zone" },
 	Code: { value: 1, description: "Code" },
 	CodeBED: { value: 2, description: "CodeBED" },

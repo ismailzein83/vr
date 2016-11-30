@@ -41,10 +41,15 @@ namespace TOne.WhS.BusinessEntity.Business
 			return extensionConfigManager.GetExtensionConfigurations<SalePriceListTemplateSettingsExtensionConfig>(SalePriceListTemplateSettingsExtensionConfig.EXTENSION_TYPE);
 		}
 
-		public IEnumerable<BasicSalePriceListTemplateSettingsMappedValueExtensionConfig> GetBasicSettingsMappedValueExtensionConfigs()
+        public IEnumerable<SalePriceListTemplateSettingsMappedTableExtensionConfig> GetMappedTablesExtensionConfigs()
 		{
 			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
-			return extensionConfigManager.GetExtensionConfigurations<BasicSalePriceListTemplateSettingsMappedValueExtensionConfig>(BasicSalePriceListTemplateSettingsMappedValueExtensionConfig.EXTENSION_TYPE);
+            return extensionConfigManager.GetExtensionConfigurations<SalePriceListTemplateSettingsMappedTableExtensionConfig>(SalePriceListTemplateSettingsMappedTableExtensionConfig.EXTENSION_TYPE);
+		}
+        public IEnumerable<BasicMappedValueExtensionConfig> GetBasicSettingsMappedValueExtensionConfigs(string configType)
+		{
+			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<BasicMappedValueExtensionConfig>(configType);
 		}
 
 		public Vanrise.Entities.InsertOperationOutput<SalePriceListTemplateDetail> AddSalePriceListTemplate(SalePriceListTemplate salePriceListTemplate)

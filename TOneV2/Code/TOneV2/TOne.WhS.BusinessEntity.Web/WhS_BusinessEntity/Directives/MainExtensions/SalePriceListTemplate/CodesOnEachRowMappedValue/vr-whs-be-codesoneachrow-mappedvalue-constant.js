@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueConstant', [function () {
+app.directive('vrWhsBeCodesoneachrowMappedvalueConstant', [function () {
 	return {
 		restrict: "E",
 		scope: {
@@ -13,7 +13,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueConstant', [f
 			var basicSettingsConstantMappedValue = new BasicSettingsConstantMappedValue($scope, ctrl, $attrs);
 			basicSettingsConstantMappedValue.initializeController();
 		},
-		controllerAs: "constMappedValueCtrl",
+		controllerAs: "codesOnEachRowConstMappedValueCtrl",
 		bindToController: true,
 		template: function (element, attrs) {
 			return getTemplate(attrs);
@@ -40,7 +40,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueConstant', [f
 
 			api.getData = function getData() {
 				return {
-					$type: 'TOne.WhS.BusinessEntity.MainExtensions.ConstantMappedValue, TOne.WhS.BusinessEntity.MainExtensions',
+				    $type: 'TOne.WhS.BusinessEntity.MainExtensions.CodeOnEachRowConstantMappedValue, TOne.WhS.BusinessEntity.MainExtensions',
 					Value: $scope.scopeModel.value
 				};
 			};
@@ -51,8 +51,8 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueConstant', [f
 	}
 
 	function getTemplate() {
-		return '<vr-columns colnum={{constMappedValueCtrl.normalColNum}}>\
-					<vr-textbox value="scopeModel.value" isrequried="constMappedValueCtrl.isrequried"></vr-textbox>\
+	    return '<vr-columns colnum={{codesOnEachRowConstMappedValueCtrl.normalColNum}}>\
+					<vr-textbox value="scopeModel.value" isrequried="codesOnEachRowConstMappedValueCtrl.isrequried"></vr-textbox>\
 				</vr-columns>';
 	}
 }]);

@@ -28,8 +28,14 @@
 			return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplateSettingsExtensionConfigs'));
 		}
 
-		function GetBasicSettingsMappedValueExtensionConfigs() {
-			return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetBasicSettingsMappedValueExtensionConfigs'));
+		function GetMappedTablesExtensionConfigs() {
+		    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetMappedTablesExtensionConfigs'));
+		}
+
+		function GetBasicSettingsMappedValueExtensionConfigs(priceListType) {
+		    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetBasicSettingsMappedValueExtensionConfigs'), {
+		        priceListType: priceListType
+		    });
 		}
 
 		function AddSalePriceListTemplate(salePriceListTemplate) {
@@ -54,6 +60,7 @@
 			GetSalePriceListTemplatesInfo: GetSalePriceListTemplatesInfo,
 			GetSalePriceListTemplateSettingsExtensionConfigs: GetSalePriceListTemplateSettingsExtensionConfigs,
 			GetBasicSettingsMappedValueExtensionConfigs: GetBasicSettingsMappedValueExtensionConfigs,
+			GetMappedTablesExtensionConfigs : GetMappedTablesExtensionConfigs,
 			AddSalePriceListTemplate: AddSalePriceListTemplate,
 			UpdateSalePriceListTemplate: UpdateSalePriceListTemplate,
 			HasAddSalePriceListTemplatePermission: HasAddSalePriceListTemplatePermission,

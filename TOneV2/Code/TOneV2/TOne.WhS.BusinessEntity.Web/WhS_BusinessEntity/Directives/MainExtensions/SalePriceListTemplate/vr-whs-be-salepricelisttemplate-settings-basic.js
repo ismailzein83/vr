@@ -1,264 +1,224 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
-	return {
-		restrict: "E",
-		scope: {
-			onReady: "=",
-			normalColNum: '@',
-			isrequired: '='
-		},
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			var basicSalePriceListTemplateSettings = new BasicSalePriceListTemplateSettings($scope, ctrl, $attrs);
-			basicSalePriceListTemplateSettings.initializeController();
-		},
-		controllerAs: "basicSettingsCtrl",
-		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SalePriceListTemplate/Templates/BasicSalePriceListTemplateSettingsTemplate.html'
-	};
+app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRUIUtilsService', 'WhS_BE_SalePriceListTemplateAPIService', function (UtilsService, VRUIUtilsService, WhS_BE_SalePriceListTemplateAPIService) {
+    return {
+        restrict: "E",
+        scope: {
+            onReady: "=",
+            normalColNum: '@',
+            isrequired: '='
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var basicSalePriceListTemplateSettings = new BasicSalePriceListTemplateSettings($scope, ctrl, $attrs);
+            basicSalePriceListTemplateSettings.initializeController();
+        },
+        controllerAs: "basicSettingsCtrl",
+        bindToController: true,
+        templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SalePriceListTemplate/Templates/BasicSalePriceListTemplateSettingsTemplate.html'
+    };
 
-	function BasicSalePriceListTemplateSettings($scope, ctrl, $attrs) {
+    function BasicSalePriceListTemplateSettings($scope, ctrl, $attrs) {
 
-		this.initializeController = initializeController;
+        this.initializeController = initializeController;
 
-		var excelWorkbookAPI;
-		var excelWorkbookReadyDeferred = UtilsService.createPromiseDeferred();
+        var excelWorkbookAPI;
+        var excelWorkbookReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var firstRowDirectiveAPI;
-		var firstRowDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var mappedTableDirectiveAPI;
+        var mappedTableDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-		var gridAPI;
-		var gridReadyDeferred = UtilsService.createPromiseDeferred();
+        var mappedTables = [];
+        var mappedTablesSelective;
 
-		function initializeController() {
+        var tableIndex = 1;
 
-			$scope.scopeModel = {};
+        function initializeController() {
 
-			$scope.scopeModel.mappedCols = [];
-			$scope.scopeModel.dateTimeFormat = 'd'; // Short date pattern
+            $scope.scopeModel = {};
 
-			$scope.scopeModel.onExcelWorkbookReady = function (api) {
-				excelWorkbookAPI = api;
-				excelWorkbookReadyDeferred.resolve();
-			};
+            $scope.scopeModel.mappedCols = [];
+            $scope.scopeModel.tables = [];
+            $scope.scopeModel.dateTimeFormat = 'd'; // Short date pattern
 
-			$scope.scopeModel.onFirstRowMappingReady = function (api) {
-				firstRowDirectiveAPI = api;
-				firstRowDirectiveReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onExcelWorkbookReady = function (api) {
+                excelWorkbookAPI = api;
+                excelWorkbookReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onGridReady = function (api) {
-				gridAPI = api;
-				gridReadyDeferred.resolve();
-			};
 
-			$scope.scopeModel.addMappedCol = function () {
-				var mappedCol = getMappedCol();
-				$scope.scopeModel.mappedCols.push(mappedCol);
-			};
+            $scope.scopeModel.onMappedTableDirectiveReady = function (api) {
+                mappedTableDirectiveAPI = api;
+                mappedTableDirectiveReadyPromiseDeferred.resolve();
+            }
 
-			UtilsService.waitMultiplePromises([excelWorkbookReadyDeferred.promise, firstRowDirectiveReadyDeferred.promise, gridReadyDeferred.promise]).then(function () {
-				defineAPI();
-			});
-		}
-		function defineAPI() {
+            $scope.scopeModel.addMappedTable = function () {
+                var mappedTableItem = {
+                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                };
+                addMappedTableTab(mappedTableItem);
+            }
 
-			var api = {};
+            UtilsService.waitMultiplePromises([excelWorkbookReadyDeferred.promise, mappedTableDirectiveReadyPromiseDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
+        function defineAPI() {
 
-			api.load = function (payload) {
+            var api = {};
 
-				var promises = [];
-				var settings;
+            api.load = function (payload) {
 
-				if (payload != undefined) {
-					settings = payload.settings;
-				}
+                var promises = [];
+                var settings;
 
-				var mappedSheet;
+                if (payload != undefined) {
+                    settings = payload.settings;
+                }
 
-				if (settings != undefined) {
 
-					$scope.scopeModel.file = { fileId: settings.TemplateFileId };
-					$scope.scopeModel.dateTimeFormat = settings.DateTimeFormat;
+                if (settings != undefined) {
 
-					if (settings.MappedSheets != null && settings.MappedSheets.length > 0)
-						mappedSheet = settings.MappedSheets[0];
-				}
+                    $scope.scopeModel.file = { fileId: settings.TemplateFileId };
+                    $scope.scopeModel.dateTimeFormat = settings.DateTimeFormat;
 
-				var loadFirstRowDirectivePromise = loadFirstRowDirective(mappedSheet);
-				promises.push(loadFirstRowDirectivePromise);
+                    if (settings.MappedTables != null && settings.MappedTables.length > 0) {
+                        mappedTables = settings.MappedTables;
+                        tableIndex = mappedTables.length - 1;
+                    }
+                }
 
-				var loadMappedColumnsPromise = loadMappedColumns(mappedSheet);
-				promises.push(loadMappedColumnsPromise);
+                var promiseDeffered = UtilsService.createPromiseDeferred();
+                //promises.push(promiseDeffered.promise);
 
-				return UtilsService.waitMultiplePromises(promises);
-			};
 
-			api.getData = function getData() {
+                WhS_BE_SalePriceListTemplateAPIService.GetMappedTablesExtensionConfigs().then(function (response) {
+                    mappedTablesSelective = response;
+                    loadMappedTables().finally(function () {
+                        promiseDeffered.resolve();
+                    }).catch(function (error) {
+                        promiseDeffered.reject(error);
+                    });
+                }).catch(function (error) {
+                    promiseDeffered.reject(error);
+                });
 
-				var data = {
-					$type: 'TOne.WhS.BusinessEntity.MainExtensions.BasicSalePriceListTemplateSettings, TOne.WhS.BusinessEntity.MainExtensions',
-					TemplateFileId: $scope.scopeModel.file.fileId,
-					DateTimeFormat: $scope.scopeModel.dateTimeFormat
-				};
-				
-				var mappedSheet = getMappedSheet();
-				data.MappedSheets = [mappedSheet];
+                var loadMappedTableDirectivePromise = loadMappedTableDirective();
+                promises.push(loadMappedTableDirectivePromise);
 
-				return data;
-			};
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
-			if (ctrl.onReady != null)
-				ctrl.onReady(api);
-		}
+            api.getData = function getData() {
 
-		function loadFirstRowDirective(mappedSheet) {
+                var data = {
+                    $type: 'TOne.WhS.BusinessEntity.MainExtensions.BasicSalePriceListTemplateSettings, TOne.WhS.BusinessEntity.MainExtensions',
+                    TemplateFileId: $scope.scopeModel.file.fileId,
+                    DateTimeFormat: $scope.scopeModel.dateTimeFormat
+                };
 
-			var firstRowDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                var mappedTables = [];
+                if ($scope.scopeModel.tables != undefined) {
+                    for (var i = 0; i < $scope.scopeModel.tables.length; i++) {
+                        var table = $scope.scopeModel.tables[i];
+                        mappedTables.push(table.directiveAPI.getData());
+                    }
 
-			firstRowDirectiveReadyDeferred.promise.then(function () {
-				var firstRowDirectivePayload = {
-					context: getCellFieldMappingContext()
-				};
-				if (mappedSheet != undefined) {
-					firstRowDirectivePayload.fieldMapping = {
-						SheetIndex: mappedSheet.SheetIndex,
-						RowIndex: mappedSheet.FirstRowIndex,
-						CellIndex: 0
-					};
-				}
-				VRUIUtilsService.callDirectiveLoad(firstRowDirectiveAPI, firstRowDirectivePayload, firstRowDirectiveLoadDeferred);
-			});
+                }
 
-			return firstRowDirectiveLoadDeferred.promise;
-		}
-		function loadMappedColumns(mappedSheet) {
+                data.MappedTables = mappedTables;
 
-			var promises = [];
+                return data;
+            };
 
-			if (mappedSheet != undefined && mappedSheet.MappedColumns != null) {
-				for (var i = 0; i < mappedSheet.MappedColumns.length; i++) {
-					var mappedCol = getMappedCol(mappedSheet.MappedColumns[i], mappedSheet.SheetIndex, mappedSheet.FirstRowIndex);
-					promises.push(mappedCol.directiveLoadDeferred.promise);
-					$scope.scopeModel.mappedCols.push(mappedCol);
-				}
-			}
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
 
-			return UtilsService.waitMultiplePromises(promises);
-		}
-		function getMappedCol(mappedColumn, sheetIndex, firstRowIndex) {
+        function loadMappedTables() {
+            var promises = [];
 
-			if (mappedColumn != undefined)
-				$scope.scopeModel.isLoadingMappedCol = true;
+            for (var i = 0 ; i < mappedTables.length; i++) {
+                var mappedTableItem = {
+                    payload: mappedTables[i],
+                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                };
+                promises.push(mappedTableItem.loadPromiseDeferred.promise);
 
-			var mappedCol = {};
+                addMappedTableTab(mappedTableItem);
+            }
+            return UtilsService.waitMultiplePromises(promises);
+        }
 
-			mappedCol.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+        function addMappedTableTab(mappedTableItem) {
+            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+            var mappedTableTab = {
+                header: "Table " + tableIndex,
+                tableTabIndex: tableIndex++,
+                Editor: mappedTableItem.payload != undefined ? getEditorByConfigId(mappedTableItem.payload.ConfigId) : getEditorByConfigId(mappedTableDirectiveAPI.getData().ExtensionConfigurationId),
+                onDirectiveReady: function (api) {
+                    mappedTableTab.directiveAPI = api;
+                    mappedTableItem.readyPromiseDeferred.resolve();
+                }
+            };
+            var directivePayload = {
+                context: getContext(),
+                mappedTable: mappedTableItem.payload,
+                priceListType: mappedTableItem.payload != undefined ? getConfigTypeByConfigId(mappedTableItem.payload.ConfigId) : getConfigTypeByConfigId(mappedTableDirectiveAPI.getData().ExtensionConfigurationId),
+            }
 
-			mappedCol.onDirectiveReady = function (api) {
-				mappedCol.directiveAPI = api;
-				var directivePayload = {
-					context: getCellFieldMappingContext()
-				};
-				if (mappedColumn != undefined) {
-					directivePayload.fieldMapping = {
-						SheetIndex: sheetIndex,
-						RowIndex: firstRowIndex,
-						CellIndex: mappedColumn.ColumnIndex
-					};
-				}
-				VRUIUtilsService.callDirectiveLoad(mappedCol.directiveAPI, directivePayload, mappedCol.directiveLoadDeferred);
-			};
+            mappedTableItem.readyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
+            });
 
-			mappedCol.mappedValueSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            $scope.scopeModel.tables.push(mappedTableTab);
+        }
 
-			mappedCol.onMappedValueSelectiveReady = function (api) {
-				mappedCol.mappedValueSelectiveAPI = api;
-				var mappedValueSelectivePayload;
-				if (mappedColumn != undefined) {
-					mappedValueSelectivePayload = { mappedValue: mappedColumn.MappedValue };
-				}
-				VRUIUtilsService.callDirectiveLoad(mappedCol.mappedValueSelectiveAPI, mappedValueSelectivePayload, mappedCol.mappedValueSelectiveLoadDeferred);
-			};
 
-			UtilsService.waitMultiplePromises([mappedCol.directiveLoadDeferred.promise, mappedCol.mappedValueSelectiveLoadDeferred.promise]).catch(function (error) {
-				VRNotificationService.notifyException(error, $scope);
-			}).finally(function () {
-				$scope.scopeModel.isLoadingMappedCol = false;
-			});
+        function loadMappedTableDirective() {
 
-			return mappedCol;
-		};
-		function getCellFieldMappingContext() {
+            var mappedTableDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-			function selectCellAtSheet(sheetIndex, rowIndex, columnIndex) {
-				var rowIndexAsInt = parseInt(rowIndex);
-				var columnIndexAsInt = parseInt(columnIndex);
-				if (excelWorkbookAPI.getSelectedSheetApi() != undefined)
-					excelWorkbookAPI.selectCellAtSheet(rowIndex, columnIndex, sheetIndex);
-			}
-			function getSelectedCell() {
-				var selectedSheetAPI = excelWorkbookAPI.getSelectedSheetApi();
-				if (selectedSheetAPI != undefined)
-					return selectedSheetAPI.getSelected();
-			}
-			function getSelectedSheet() {
-				return excelWorkbookAPI.getSelectedSheet();
-			}
-			function getFirstRowIndex() {
-				var firstRowDirectiveData = firstRowDirectiveAPI.getData();
-				if (firstRowDirectiveData != undefined) {
-					return {
-						sheet: firstRowDirectiveData.SheetIndex,
-						row: firstRowDirectiveData.RowIndex
-					};
-				}
-			}
+            mappedTableDirectiveReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(mappedTableDirectiveAPI, undefined, mappedTableDirectiveLoadDeferred);
+            });
 
-			return {
-				setSelectedCell: selectCellAtSheet,
-				getSelectedCell: getSelectedCell,
-				getSelectedSheet: getSelectedSheet,
-				getFirstRowIndex: getFirstRowIndex
-			};
-		}
+            return mappedTableDirectiveLoadDeferred.promise;
+        }
 
-		function getMappedSheet() {
-			
-			var firstRowDirectiveData = firstRowDirectiveAPI.getData();
-			if (firstRowDirectiveData == undefined)
-				return null;
+        function getEditorByConfigId(configId) {
+            for (var i = 0 ; i < mappedTablesSelective.length; i++) {
+                var currentMappedTableSelective = mappedTablesSelective[i];
+                if (currentMappedTableSelective.ExtensionConfigurationId == configId)
+                    return currentMappedTableSelective.Editor;
+            }
+        }
 
-			var mappedSheet = {
-				SheetIndex: firstRowDirectiveData.SheetIndex,
-				FirstRowIndex: firstRowDirectiveData.RowIndex,
-				MappedColumns: getMappedColumns()
-			};
-			return mappedSheet;
-		}
-		function getMappedColumns() {
+        function getConfigTypeByConfigId(configId) {
+            for (var i = 0 ; i < mappedTablesSelective.length; i++) {
+                var currentMappedTableSelective = mappedTablesSelective[i];
+                if (currentMappedTableSelective.ExtensionConfigurationId == configId)
+                    return currentMappedTableSelective.PriceListType;
+            }
+        }
+        
 
-			if ($scope.scopeModel.mappedCols.length == 0)
-				return null;
+        function getContext() {
+            var context = {
+                getSelectedSheetApi: function () {
+                    return excelWorkbookAPI.getSelectedSheetApi()
+                },
+                selectCellAtSheet: function (rowIndex, columnIndex, sheetIndex) {
+                    return excelWorkbookAPI.selectCellAtSheet(rowIndex, columnIndex, sheetIndex)
+                },
+                getSelectedSheet: function () {
+                    return excelWorkbookAPI.getSelectedSheet()
+                } 
+            }
+            return context;
+        }
 
-			var mappedColumns = [];
-
-			for (var i = 0; i < $scope.scopeModel.mappedCols.length; i++) {
-
-				var mappedCol = $scope.scopeModel.mappedCols[i];
-				var mappedColumn = {};
-
-				var directiveData = mappedCol.directiveAPI.getData();
-				if (directiveData != undefined)
-					mappedColumn.ColumnIndex = directiveData.CellIndex;
-
-				mappedColumn.MappedValue = mappedCol.mappedValueSelectiveAPI.getData();
-
-				mappedColumns.push(mappedColumn);
-			}
-
-			return mappedColumns;
-		}
-	}
+    }
 }]);

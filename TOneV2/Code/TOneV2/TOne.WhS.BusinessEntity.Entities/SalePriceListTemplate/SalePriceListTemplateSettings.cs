@@ -8,6 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
 	public abstract class SalePriceListTemplateSettings
 	{
+        public abstract Guid ConfigId { get; }
+
 		public abstract byte[] Execute(ISalePriceListTemplateSettingsContext context);
 	}
 }

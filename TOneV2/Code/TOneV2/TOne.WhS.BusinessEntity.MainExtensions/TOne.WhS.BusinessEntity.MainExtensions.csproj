@@ -83,8 +83,12 @@
     <Compile Include="MappingSteps\GetCDPNsForZoneMatchStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\BasicSalePriceListTemplateSettings.cs" />
-    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\BEFieldMappedValue.cs" />
-    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\ConstantMappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedTable\CodeOnEachRowMappedTable.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedTable\CodesByZoneMappedTable.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneBEFieldMappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodeOnEachRowBEFieldMappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneConstantMappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodeOnEachRowConstantMappedValue.cs" />
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />

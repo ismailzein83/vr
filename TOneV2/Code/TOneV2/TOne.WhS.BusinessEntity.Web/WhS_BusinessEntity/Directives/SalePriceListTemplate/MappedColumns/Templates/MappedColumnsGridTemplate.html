@@ -1,0 +1,18 @@
+﻿<vr-datagrid on-ready="onGridReady"
+             datasource="mappedCols"
+             ondeleterow="removeMappedCol"
+             hidegridmenu="true"
+             norowhighlightonclick="true">
+    <vr-datagridcolumn headertext="'Cell'" widthfactor="30" disablesorting="true">
+        <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onDirectiveReady"
+                                                          isrequired="true"
+                                                          normal-col-num="6">
+        </vr-excelconversion-fieldmapping-cellfieldmapping>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Value'" widthfactor="70" disablesorting="true">
+        <vr-whs-be-salepricelisttemplate-settings-basic-mappedvalue-selective on-ready="dataItem.onMappedValueSelectiveReady"
+                                                                              isrequired="true"
+                                                                              normal-col-num="6">
+        </vr-whs-be-salepricelisttemplate-settings-basic-mappedvalue-selective>
+    </vr-datagridcolumn>
+</vr-datagrid>
