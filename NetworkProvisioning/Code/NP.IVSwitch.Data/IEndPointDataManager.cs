@@ -12,13 +12,13 @@ namespace NP.IVSwitch.Data
         List<EndPoint> GetEndPoints();
 
         bool  Update(EndPoint endPoint);
-        bool  Insert(EndPoint endPoint, out int insertedId);
+        bool Insert(EndPoint endPoint, List<int> endPointIds, out int insertedId);
 
         bool AclUpdate(EndPoint endPoint);
-        bool AclInsert(EndPoint endPoint, out int insertedId);
+        bool AclInsert(EndPoint  endPoint, List<int> endPointIds, out int insertedId);
 
         bool SipUpdate(EndPoint endPoint);
-        bool SipInsert(EndPoint endPoint, out int insertedId);
+        bool SipInsert(EndPoint  endPoint, List<int> endPointIds, out int insertedId);
  
 
          void CheckTariffAndRouteTables(EndPoint  endPoint ,  string carrierAccountName);

@@ -24,7 +24,6 @@ namespace NP.IVSwitch.Data.Postgres
             route.RouteId = (int)reader["route_id"];
             route.AccountId = (int)reader["account_id"];
             route.Description = reader["description"] as string;
-            route.GroupId = (int)reader["group_id"];
             route.TariffId = (int)reader["tariff_id"];
             route.LogAlias = reader["log_alias"] as string;
             route.CodecProfileId = (int)reader["codec_profile_id"];
@@ -86,11 +85,14 @@ namespace NP.IVSwitch.Data.Postgres
             return (recordsEffected > 0);
         }
 
-        public bool Insert(Route route, out int insertedId)
+        public bool Insert(Route route,    out int insertedId)
         {
+            
+
             object routeId;
             int currentState, transportPortId;
 
+            int groupId = GetGroupId(route);
 
             MapEnum(route, out currentState, out transportPortId);
 
@@ -106,7 +108,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@account_id", route.AccountId);
                 cmd.Parameters.AddWithValue("@description", route.Description);
-                cmd.Parameters.AddWithValue("@group_id", route.GroupId);
+                cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@tariff_id", route.TariffId);
                 cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
@@ -172,5 +174,50 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-    }
+        private int GetGroupId(Route route)
+        {
+             
+                int groupId = 0, nextGroupId = 0;
+
+                String cmdText = @"Select max(group_id) as group_id
+                                from routes
+                                where account_id = @account_id";
+                int groupIdIncremented = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
+                {
+                    cmd.Parameters.AddWithValue("@account_id", route.AccountId);
+                });
+
+                if (groupIdIncremented != 0)
+                {
+                    groupId = groupIdIncremented - route.AccountId;
+
+                    String cmdText2 = @"Select next_group_id  from(
+                                        Select  group_id as  group_id,  lead(group_id) OVER (ORDER BY group_id ) as next_group_id   
+                                        from user_groups)  x
+                                         where  group_id = @group_id;";
+
+                    nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "next_group_id"); }, (cmd) =>
+                  {
+                      cmd.Parameters.AddWithValue("@group_id", groupId);
+                  });
+
+                }
+
+                else
+                {
+                    String cmdText2 = @"Select  group_id
+                                       from user_groups 
+                                       order by group_id
+                                       limit 1 ";
+
+                    nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) => { });
+                }
+
+
+                return nextGroupId + route.AccountId;
+
+            }
+
+           
+        }
 }

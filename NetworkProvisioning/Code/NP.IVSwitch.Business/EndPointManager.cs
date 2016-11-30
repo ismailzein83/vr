@@ -94,21 +94,24 @@ namespace NP.IVSwitch.Business
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
 
             int endPointId = -1;
+
+
+            EndPointCarrierAccountExtension endPointsExtendedSettings = carrierAccountManager.GetExtendedSettingsObject<EndPointCarrierAccountExtension>(carrierAccountId);
+
+            if (endPointsExtendedSettings == null)
+                endPointsExtendedSettings = new EndPointCarrierAccountExtension();
+
+            List<int> endPointIds = new List<int>();
+            if (endPointsExtendedSettings.EndPointIds != null)
+                endPointIds = endPointsExtendedSettings.EndPointIds;
+
  
-            if (dataManager.Insert(endPointItem.Entity,out  endPointId))
+            if (dataManager.Insert(endPointItem.Entity, endPointIds, out  endPointId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = EndPointDetailMapper(this.GetEndPoint(endPointId));
 
-                EndPointCarrierAccountExtension endPointsExtendedSettings =carrierAccountManager.GetExtendedSettingsObject<EndPointCarrierAccountExtension>(carrierAccountId);
- 
-                if (endPointsExtendedSettings == null)
-                    endPointsExtendedSettings = new EndPointCarrierAccountExtension();
-
-                List<int> endPointIds = new List<int>();
-                if (endPointsExtendedSettings.EndPointIds != null)           
-                    endPointIds = endPointsExtendedSettings.EndPointIds;
 
                 // tariffs and routes
                 dataManager.CheckTariffAndRouteTables(insertOperationOutput.InsertedObject.Entity,  carrierAccount.NameSuffix);

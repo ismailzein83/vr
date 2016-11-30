@@ -29,7 +29,6 @@ namespace NP.IVSwitch.Entities
    
         public Trace EnableTrace { get; set; }
         public int CodecProfileId { get; set; }
-        public int GroupId {get;set;}       
         public RtpMode RtpMode {get;set;}  
         public int MaxCallDuration {get;set;}
         public  String TracePattern {get;set;}   

@@ -27,15 +27,12 @@ namespace NP.IVSwitch.Data.Postgres
             endPoint.EndPointId = (int)reader["user_id"];
             endPoint.AccountId = (int)reader["account_id"];
             endPoint.Description = reader["description"] as string;
-            endPoint.GroupId = (int)reader["group_id"];
-
-         //   endPoint.TariffId = GetReaderValue<int>(reader, "tariff_id");
+ 
             endPoint.LogAlias = reader["log_alias"] as string;
             endPoint.CodecProfileId = (int)reader["codec_profile_id"];
             endPoint.TransRuleId = (int)reader["trans_rule_id"];
             endPoint.CurrentState = (State)GetReaderValue<Int16>(reader, "state_id");
             endPoint.ChannelsLimit = GetReaderValue<int>(reader, "channels_limit");
-          //  endPoint.RouteTableId = GetReaderValue<int>(reader, "route_table_id");
             endPoint.MaxCallDuration = (int)reader["max_call_dura"];
             endPoint.RtpMode = (RtpMode)(int)reader["rtp_mode"];
             endPoint.DomainId = (Int16)reader["domain_id"];
@@ -65,6 +62,7 @@ namespace NP.IVSwitch.Data.Postgres
             
             return endPointToUpdate;
         }
+
         public List<EndPoint> GetEndPoints()
         {
 
@@ -158,7 +156,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
 
                 String cmdText = @"UPDATE access_list
-	                             SET  description=@description,group_id=@group_id, 
+	                             SET  description=@description , 
                                    log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
                                    channels_limit=@channels_limit, max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id,
                                    host=@host,tech_prefix=@tech_prefix 
@@ -170,8 +168,7 @@ namespace NP.IVSwitch.Data.Postgres
                 {
                     cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
                     cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                    cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
-                     cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
+                      cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                     cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                     cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                     cmd.Parameters.AddWithValue("@state_id", currentState);
@@ -195,13 +192,16 @@ namespace NP.IVSwitch.Data.Postgres
             return false;
         }
 
-        public bool SipInsert(EndPoint endPoint, out int insertedId)
+        public bool SipInsert(EndPoint endPoint, List<int> endPointIds, out int insertedId)
         {
+          
             object endPointId;
             int currentState, rtpMode;
+             MapEnum(endPoint, out currentState, out rtpMode);
 
-            MapEnum(endPoint, out currentState, out rtpMode);
-
+            // get group_id   
+            int groupId = GetGroupId(endPoint,  endPointIds);
+            
 
             String cmdText = @"INSERT INTO users(account_id,description,group_id, 
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, max_call_dura,rtp_mode,domain_id,
@@ -215,7 +215,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
+                cmd.Parameters.AddWithValue("@group_id", groupId);
                  cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
@@ -232,9 +232,6 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.Add(prmPassword);
                 cmd.Parameters.AddWithValue("@tech_prefix", ".");
                 cmd.Parameters.AddWithValue("@type_id", 2);
-
-
-
             }
             );
 
@@ -249,12 +246,17 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        public bool AclInsert(EndPoint endPoint, out int insertedId)
+        public bool AclInsert(EndPoint  endPoint, List<int> endPointIds, out int insertedId)
         {
+          
+
             object endPointId;
             int currentState, rtpMode;
 
             MapEnum(endPoint, out currentState, out rtpMode);
+
+            // get group_id from previous endpoint
+            int groupId = GetGroupId(endPoint,  endPointIds);
 
             // insert into users and get user id
             String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
@@ -267,7 +269,7 @@ namespace NP.IVSwitch.Data.Postgres
             endPointId = ExecuteScalarText(cmdText1, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
-                cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
+                cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                 cmd.Parameters.AddWithValue("@state_id", 1);
                 cmd.Parameters.AddWithValue("@channels_limit", 1);
@@ -299,7 +301,7 @@ namespace NP.IVSwitch.Data.Postgres
                    cmd.Parameters.AddWithValue("@user_id", endPointId);
                    cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                    cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                   cmd.Parameters.AddWithValue("@group_id", endPoint.GroupId);
+                   cmd.Parameters.AddWithValue("@group_id", groupId);
                     cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                    cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                    cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
@@ -323,12 +325,12 @@ namespace NP.IVSwitch.Data.Postgres
             return false;
         }
 
-        public bool Insert(EndPoint endPoint, out int insertedId)
+        public bool Insert(EndPoint endPoint, List<int> endPointIds, out int insertedId)
         {
             if (endPoint.EndPointType == EndPointType.ACL)
-                return AclInsert(endPoint, out insertedId);
+                return AclInsert(endPoint, endPointIds, out insertedId);
             else
-                return SipInsert(endPoint, out insertedId);
+                return SipInsert(endPoint, endPointIds, out insertedId);
 
         }
 
@@ -340,7 +342,6 @@ namespace NP.IVSwitch.Data.Postgres
                 return SipUpdate(endPoint);
 
         }
-
 
         public void CheckTariffAndRouteTables(EndPoint endPoint, String carrierAccountName)
         {
@@ -503,7 +504,67 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
+        private int GetGroupId(EndPoint endPoint,  List<int> endPointIds)
+        {
+            if (endPointIds.Count == 0)
+            {
+                int groupId = 0, nextGroupId = 0;
 
+                String cmdText = @"Select max(group_id) as group_id
+                                from users
+                                where account_id = @account_id";
+                int groupIdIncremented = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
+                {
+                    cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
+                });
+
+                if (groupIdIncremented != 0)
+                {
+                    groupId = groupIdIncremented - endPoint.AccountId;
+
+                    String cmdText2 = @"Select next_group_id
+                                from(
+                                Select  group_id as  group_id,  lead(group_id) OVER (ORDER BY group_id ) as next_group_id   
+                                from user_groups)  x
+                                 where  group_id = @group_id;";
+
+                    nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "next_group_id"); }, (cmd) =>
+                  {
+                      cmd.Parameters.AddWithValue("@group_id", groupId);
+                  });
+
+                }
+
+                else
+                {
+                    String cmdText2 = @"Select  group_id
+                                   from user_groups 
+                                   order by group_id
+                                   limit 1 ";
+
+                    nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) => { });
+                }
+
+
+                return nextGroupId + endPoint.AccountId;
+
+            }
+
+            else
+            {
+ 
+                String cmdText = @"Select group_id  
+                                   from users
+                                   where user_id = @user_id";
+                int groupId  = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
+                {
+                    cmd.Parameters.AddWithValue("@user_id", endPointIds[0]);
+                });
+
+                return groupId;
+            }
+        }
+         
 
 
 

@@ -341,8 +341,7 @@
                 SipLogin: $scope.scopeModel.siplogin,
                 SipPassword: $scope.scopeModel.sippassword,
                 EndPointType: $scope.scopeModel.endpointtype,
-                GroupId: carrierAccountId,
-             },
+              },
 
                  CarrierAccountId:   carrierAccountId,
                

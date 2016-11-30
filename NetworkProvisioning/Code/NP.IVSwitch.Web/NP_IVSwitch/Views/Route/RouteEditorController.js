@@ -252,8 +252,7 @@
                       TransRuleId: $scope.scopeModel.translationruleid,
                       WakeUpTime: $scope.scopeModel.wakeuptime,
                       TransportModeId: $scope.scopeModel.transportmodeid.value,
-                      GroupId : carrierAccountId,
-                  },
+                   },
 
                   CarrierAccountId:   carrierAccountId,
                
