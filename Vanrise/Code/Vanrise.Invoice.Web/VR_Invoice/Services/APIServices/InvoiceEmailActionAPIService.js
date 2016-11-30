@@ -8,7 +8,7 @@
         var controllerName = 'InvoiceEmailAction';
 
         function SendEmail(input) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "SendEmail"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "SendEmail"), input);
         }
 
         function GetEmailTemplate(invoiceId) {

@@ -26,19 +26,25 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 sendEmailAction = action.Settings as SendEmailAction;
             }
-             if(sendEmailAction != null)
-             {
-                 List<InvoiceFile> invoiceFiles = new List<InvoiceFile>();
-                foreach(var attachement in sendEmailAction.EmailAttachments)
+            List<VRMailAttachement> vrMailAttachments = new List<Vanrise.Entities.VRMailAttachement>();
+            if (sendEmailAction != null && sendEmailAction.EmailAttachments != null)
+            {
+
+                foreach (var attachement in sendEmailAction.EmailAttachments)
                 {
-                    InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext{
+                    InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext
+                    {
                         InvoiceId = input.InvoiceId
                     };
-                    invoiceFiles.Add(attachement.InvoiceFileConverter.ConvertToInvoiceFile(context));
+                    var invoicefile = attachement.InvoiceFileConverter.ConvertToInvoiceFile(context);
+                    if (invoicefile != null)
+                    {
+                        vrMailAttachments.Add(invoicefile.ConvertToAttachment());
+                    }
                 }
-             }
+            }
             VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendMail(input.EmailTemplate.To, input.EmailTemplate.CC, input.EmailTemplate.Subject, input.EmailTemplate.Body);
+            vrMailManager.SendMail(input.EmailTemplate.To, input.EmailTemplate.CC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
         }
          public VRMailEvaluatedTemplate GetEmailTemplate(long invoiceId)
          {

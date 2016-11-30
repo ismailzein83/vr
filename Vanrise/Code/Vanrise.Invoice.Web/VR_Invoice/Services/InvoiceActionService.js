@@ -130,7 +130,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     {
 
                     }
-                    openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId);
+                    openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId);
                     //VRNotificationService.showConfirmation().then(function (response) {
                     //    if (response) {
                     //        VR_Invoice_InvoiceAPIService.SendEmail(payload.invoice.Entity.InvoiceId).then(function (response) {
@@ -156,7 +156,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceNoteActionEditor.html', parameters, settings);
         }
-        function openEmailTemplate(onInvoiceEmailSend, invoiceId) {
+        function openEmailTemplate(onInvoiceEmailSend, invoiceId,invoiceActionId) {
             var settings = {
 
             };
@@ -164,7 +164,8 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                 modalScope.onInvoiceEmailSend = onInvoiceEmailSend;
             };
             var parameters = {
-                invoiceId: invoiceId
+                invoiceId: invoiceId,
+                invoiceActionId: invoiceActionId
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceEmailTemplate.html', parameters, settings);
         }

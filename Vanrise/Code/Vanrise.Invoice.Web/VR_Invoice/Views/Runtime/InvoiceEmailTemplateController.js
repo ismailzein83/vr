@@ -6,6 +6,7 @@
 
     function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService) {
         var invoiceId;
+        var invoiceActionId;
         var invoiceTemplateEntity;
 
         defineScope();
@@ -16,6 +17,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 invoiceId = parameters.invoiceId;
+                invoiceActionId = parameters.invoiceActionId;
             }
         }
         function defineScope() {
@@ -84,10 +86,15 @@
         }
         function buildInvoiceTemplateObjFromScope() {
             var obj = {
-                CC: $scope.scopeModel.cc,
-                To: $scope.scopeModel.to,
-                Subject: $scope.scopeModel.subject,
-                Body: $scope.scopeModel.body,
+                InvoiceId:invoiceId,
+                InvoiceActionId: invoiceActionId,
+                EmailTemplate: {
+                    CC: $scope.scopeModel.cc,
+                    To: $scope.scopeModel.to,
+                    Subject: $scope.scopeModel.subject,
+                    Body: $scope.scopeModel.body,
+                }
+               
             };
             return obj;
         }

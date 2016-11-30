@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
@@ -15,13 +16,17 @@ namespace Vanrise.Invoice.Entities
     {
         public string Name { get; set; }
         public byte[] Content { get; set; }
-        public abstract void ConvertToAttachment();
+        public abstract VRMailAttachement ConvertToAttachment();
     }
     public class PDFInvoiceFile : InvoiceFile
     {
-        public override void ConvertToAttachment()
+        public override VRMailAttachement ConvertToAttachment()
         {
-            throw new NotImplementedException();
+            return new VRMailAttachmentPDF
+            {
+                Content = this.Content,
+                Name = "Invoice.pdf",
+            };
         }
     }
 }
