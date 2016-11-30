@@ -201,6 +201,18 @@ namespace NP.IVSwitch.Data.Postgres
                       cmd.Parameters.AddWithValue("@group_id", groupId);
                   });
 
+                    if (nextGroupId == 0)
+                    {
+                        //insert new record
+                        String cmdText3 = @"INSERT INTO user_groups(description)
+	                                        VALUES('Dummy Group')
+                                            returning group_id;";
+
+                        object nextGroupIdObject = ExecuteScalarText(cmdText3, (cmd) => { });
+
+                        nextGroupId =  Convert.ToInt32(nextGroupIdObject);
+                    }
+
                 }
 
                 else

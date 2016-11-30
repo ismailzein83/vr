@@ -8,7 +8,12 @@ namespace NP.IVSwitch.Entities
 {
     public class EndPointCarrierAccountExtension
     {
-        public List<int> EndPointIds { get; set; }
+        public List<EndPointInfo> EndPointInfo { get; set; }
 
+    }
+
+    public class EndPointInfo
+    {
+        public int EndPointId { get; set; }        
     }
 }

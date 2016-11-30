@@ -8,7 +8,14 @@ namespace NP.IVSwitch.Entities
 {
     public class RouteCarrierAccountExtension
     {
-        public List<int> RouteIds { get; set; }
+        public List<RouteInfo> RouteInfo { get; set; }
 
+    }
+
+    public class RouteInfo
+    {
+        public int RouteId { get; set; }
+
+        public int Percentage { get; set; }
     }
 }

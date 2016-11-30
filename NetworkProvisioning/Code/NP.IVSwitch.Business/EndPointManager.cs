@@ -29,15 +29,15 @@ namespace NP.IVSwitch.Business
 
             EndPointCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettingsObject<EndPointCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
-            List<int> endPointIdList = new List<int>();
+            Dictionary<int,EndPointInfo> endPointDic = new Dictionary<int,EndPointInfo>();
 
             if (extendedSettingsObject != null)
             {
-                endPointIdList = extendedSettingsObject.EndPointIds;
+                endPointDic = extendedSettingsObject.EndPointInfo.ToDictionary(k=>k.EndPointId,v=>v);
             }
 
              var allEndPoints = this.GetCachedEndPoint();
-             Func<EndPoint, bool> filterExpression = (x) => (endPointIdList.Contains(x.EndPointId));                                                             
+             Func<EndPoint, bool> filterExpression = (x) => (endPointDic.ContainsKey(x.EndPointId));                                                             
             
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allEndPoints.ToBigResult(input, filterExpression, EndPointDetailMapper));
         }
@@ -101,12 +101,12 @@ namespace NP.IVSwitch.Business
             if (endPointsExtendedSettings == null)
                 endPointsExtendedSettings = new EndPointCarrierAccountExtension();
 
-            List<int> endPointIds = new List<int>();
-            if (endPointsExtendedSettings.EndPointIds != null)
-                endPointIds = endPointsExtendedSettings.EndPointIds;
+            List<EndPointInfo> endPointInfoList = new List<EndPointInfo>();
+            if (endPointsExtendedSettings.EndPointInfo != null)
+                endPointInfoList = endPointsExtendedSettings.EndPointInfo;
 
- 
-            if (dataManager.Insert(endPointItem.Entity, endPointIds, out  endPointId))
+
+            if (dataManager.Insert(endPointItem.Entity, endPointInfoList, out  endPointId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -116,10 +116,12 @@ namespace NP.IVSwitch.Business
                 // tariffs and routes
                 dataManager.CheckTariffAndRouteTables(insertOperationOutput.InsertedObject.Entity,  carrierAccount.NameSuffix);
 
-              
 
-                endPointIds.Add(endPointId);
-                endPointsExtendedSettings.EndPointIds = endPointIds;
+                EndPointInfo endPointInfo = new EndPointInfo();
+                endPointInfo.EndPointId = endPointId;
+
+                endPointInfoList.Add(endPointInfo);
+                endPointsExtendedSettings.EndPointInfo = endPointInfoList;
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId, endPointsExtendedSettings);
 

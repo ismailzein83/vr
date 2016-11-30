@@ -192,7 +192,7 @@ namespace NP.IVSwitch.Data.Postgres
             return false;
         }
 
-        public bool SipInsert(EndPoint endPoint, List<int> endPointIds, out int insertedId)
+        public bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
         {
           
             object endPointId;
@@ -200,7 +200,7 @@ namespace NP.IVSwitch.Data.Postgres
              MapEnum(endPoint, out currentState, out rtpMode);
 
             // get group_id   
-            int groupId = GetGroupId(endPoint,  endPointIds);
+             int groupId = GetGroupId(endPoint, endPointInfoList);
             
 
             String cmdText = @"INSERT INTO users(account_id,description,group_id, 
@@ -246,7 +246,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        public bool AclInsert(EndPoint  endPoint, List<int> endPointIds, out int insertedId)
+        public bool AclInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
         {
           
 
@@ -256,7 +256,7 @@ namespace NP.IVSwitch.Data.Postgres
             MapEnum(endPoint, out currentState, out rtpMode);
 
             // get group_id from previous endpoint
-            int groupId = GetGroupId(endPoint,  endPointIds);
+            int groupId = GetGroupId(endPoint, endPointInfoList);
 
             // insert into users and get user id
             String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
@@ -325,12 +325,12 @@ namespace NP.IVSwitch.Data.Postgres
             return false;
         }
 
-        public bool Insert(EndPoint endPoint, List<int> endPointIds, out int insertedId)
+        public bool Insert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
         {
             if (endPoint.EndPointType == EndPointType.ACL)
-                return AclInsert(endPoint, endPointIds, out insertedId);
+                return AclInsert(endPoint, endPointInfoList, out insertedId);
             else
-                return SipInsert(endPoint, endPointIds, out insertedId);
+                return SipInsert(endPoint, endPointInfoList, out insertedId);
 
         }
 
@@ -504,9 +504,9 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
-        private int GetGroupId(EndPoint endPoint,  List<int> endPointIds)
+        private int GetGroupId(EndPoint endPoint, List<EndPointInfo> endPointInfoList)
         {
-            if (endPointIds.Count == 0)
+            if (endPointInfoList.Count == 0)
             {
                 int groupId = 0, nextGroupId = 0;
 
@@ -533,6 +533,18 @@ namespace NP.IVSwitch.Data.Postgres
                       cmd.Parameters.AddWithValue("@group_id", groupId);
                   });
 
+                    if (nextGroupId == 0)
+                    {
+                        //insert new record
+                        String cmdText3 = @"INSERT INTO user_groups(description)
+	                                        VALUES('Dummy Group')
+                                            returning group_id;";
+
+                        object nextGroupIdObject = ExecuteScalarText(cmdText3, (cmd) => { });
+
+                        nextGroupId = Convert.ToInt32(nextGroupIdObject);
+                    }
+
                 }
 
                 else
@@ -558,7 +570,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    where user_id = @user_id";
                 int groupId  = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
                 {
-                    cmd.Parameters.AddWithValue("@user_id", endPointIds[0]);
+                    cmd.Parameters.AddWithValue("@user_id", endPointInfoList[0].EndPointId);
                 });
 
                 return groupId;

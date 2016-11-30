@@ -28,15 +28,15 @@ namespace NP.IVSwitch.Business
  
             RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
-            List<int> routeIdList = new List<int>();
-
+            Dictionary<int, RouteInfo> routeDic = new Dictionary<int, RouteInfo>();
+ 
             if (extendedSettingsObject != null)
             {
-                routeIdList = extendedSettingsObject.RouteIds;
+                routeDic = extendedSettingsObject.RouteInfo.ToDictionary(k => k.RouteId, v => v);
             }
 
-            var allRoutes = this.GetCachedRoute(); 
-            Func<Route, bool> filterExpression = (x) =>  (routeIdList.Contains(x.RouteId));
+            var allRoutes = this.GetCachedRoute();
+            Func<Route, bool> filterExpression = (x) => (routeDic.ContainsKey(x.RouteId));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutes.ToBigResult(input, filterExpression, RouteDetailMapper));
         }
 
@@ -104,16 +104,18 @@ namespace NP.IVSwitch.Business
                 if (routesExtendedSettings == null)
                     routesExtendedSettings = new RouteCarrierAccountExtension();
 
-                List<int> routeIds = new List<int>();
-                if (routesExtendedSettings.RouteIds != null)
-                    routeIds = routesExtendedSettings.RouteIds;
+                List<RouteInfo> routeInfoList = new List<RouteInfo>();
+                if (routesExtendedSettings.RouteInfo != null)
+                    routeInfoList = routesExtendedSettings.RouteInfo;
 
                 // tariffs
-                dataManager.CheckTariffTable();                 
-                 
+                dataManager.CheckTariffTable();
 
-                routeIds.Add(routeId);
-                routesExtendedSettings.RouteIds = routeIds;
+                RouteInfo routeInfo = new RouteInfo();
+                routeInfo.RouteId = routeId;
+
+                routeInfoList.Add(routeInfo);
+                routesExtendedSettings.RouteInfo = routeInfoList;
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, routesExtendedSettings);
             }
