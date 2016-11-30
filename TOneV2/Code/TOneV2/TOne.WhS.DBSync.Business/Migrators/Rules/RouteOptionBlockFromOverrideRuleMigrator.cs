@@ -115,6 +115,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
         }
         RouteOptionRule GetRouteOptionRuleSettings(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
         {
+            List<int> lstZoneIds = rules.Where(r => r.SaleZoneId.HasValue).Select(r => r.SaleZoneId.Value).ToList();
             RouteOptionRule settings = new RouteOptionRule()
             {
                 BeginEffectiveTime = sourceRule.BED,
@@ -162,18 +163,21 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 if (sourceRule.ExcludedCodesList != null)
                     settings.Criteria.ExcludedCodes = new List<string>(sourceRule.ExcludedCodesList);
             }
-            if (sourceRule.SaleZoneId.HasValue)
+            if (lstZoneIds.Count > 0)
             {
-                long zoneId;
-                if (!_allSaleZones.ContainsKey(sourceRule.SaleZoneId.ToString()))
+                List<long> zoneIds = new List<long>();
+                foreach (var zoneId in lstZoneIds)
                 {
-                    this.TotalRowsFailed++;
-                    return null;
+                    if (!_allSaleZones.ContainsKey(zoneId.ToString()))
+                    {
+                        this.TotalRowsFailed++;
+                    }
+                    else
+                        zoneIds.Add(_allSaleZones[zoneId.ToString()].SaleZoneId);
                 }
-                else
-                    zoneId = _allSaleZones[sourceRule.SaleZoneId.ToString()].SaleZoneId;
 
-                settings.Criteria.SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = new List<long> { zoneId }, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId };
+
+                settings.Criteria.SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = zoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId };
 
             }
             return settings;
