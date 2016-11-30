@@ -57,7 +57,7 @@ app.directive("vrInvoicetypeGridactionsettingsSendemail", ["UtilsService", "VRNo
                     if (payload != undefined) {
                         invoiceActionEntity = payload.invoiceActionEntity;
                         context = payload.context;
-                        if (invoiceActionEntity != undefined) {
+                        if (invoiceActionEntity != undefined && invoiceActionEntity.EmailAttachments != undefined) {
                             for (var i = 0; i < invoiceActionEntity.EmailAttachments.length; i++) {
                                 var emailAttachment = invoiceActionEntity.EmailAttachments[i];
                                 ctrl.datasource.push({ Entity: emailAttachment });
