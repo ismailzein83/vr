@@ -182,11 +182,9 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterGroupConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-filtergroup.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\vr-invoicetype-invoicegeneratorfiltercondition.js" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SendEmailActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\InvoiceNoteActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\RecreateActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SetInvoiceLockActionTemplate.html" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-sendemail.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-note.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-recreate.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-setinvoicelock.js" />
@@ -294,6 +292,15 @@
     <Content Include="VR_Invoice\Views\Definition\InvoiceSerialNumberSettings\SerialNumberPartEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSerialNumberSettings\SerialNumberPatternHelper.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSerialNumberSettings\SerialNumberPatternHelperController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\SendEmail\MainExtensions\Templates\EmailAttachmentRDLCFileConverterTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\SendEmail\Templates\SendEmailActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\SendEmail\MainExtensions\vr-invoiceactions-sendemail-attachmenttype-rdlfileconverter.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\SendEmail\vr-invoicetype-gridactionsettings-sendemail.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\SendEmail\vr-invoiceactions-sendemail-attachmenttype.js" />
+    <Content Include="VR_Invoice\Services\APIServices\InvoiceEmailActionAPIService.js" />
+    <Content Include="VR_Invoice\Services\InvoiceEmailActionService.js" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceActions\InvoiceEmailAttachmentEditor.html" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceActions\InvoiceEmailAttachmentEditorController.js" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditor.html" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceDataSourceEditor.html" />

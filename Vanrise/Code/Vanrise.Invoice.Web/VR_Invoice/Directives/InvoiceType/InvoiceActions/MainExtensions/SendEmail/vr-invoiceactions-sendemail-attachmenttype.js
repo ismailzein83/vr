@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ActionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeConfigsAPIService'];
+    SendemailAttachmenttypeDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService'];
 
-    function ActionSettingsDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeConfigsAPIService) {
+    function SendemailAttachmenttypeDirective(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -15,7 +15,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ActionSettings($scope, ctrl, $attrs);
+                var ctor = new SendemailAttachmenttype($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@
             }
         };
 
-        function ActionSettings($scope, ctrl, $attrs) {
+        function SendemailAttachmenttype($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -62,30 +62,30 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var invoiceActionEntity;
+                    var invoiceFileConverter;
 
                     if (payload != undefined) {
-                        invoiceActionEntity = payload.invoiceActionEntity;
+                        invoiceFileConverter = payload.invoiceFileConverter;
                         context = payload.context;
                     }
 
-                    if (invoiceActionEntity != undefined) {
+                    if (invoiceFileConverter != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getInvoiceGeneratorConfigsPromise = getInvoiceGeneratorTemplateConfigs();
-                    promises.push(getInvoiceGeneratorConfigsPromise);
+                    var getSendEmailAttachmentTypeConfigsPromise = getSendEmailAttachmentTypeConfigs();
+                    promises.push(getSendEmailAttachmentTypeConfigsPromise);
 
-                    function getInvoiceGeneratorTemplateConfigs() {
-                        return VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceActionSettingsConfigs().then(function (response) {
+                    function getSendEmailAttachmentTypeConfigs() {
+                        return VR_Invoice_InvoiceEmailActionAPIService.GetSendEmailAttachmentTypeConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (invoiceActionEntity != undefined) {
+                                if (invoiceFileConverter != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, invoiceActionEntity.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, invoiceFileConverter.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -97,7 +97,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { context: getContext(), invoiceActionEntity: invoiceActionEntity };
+                            var directivePayload = { context: getContext(), invoiceFileConverter: invoiceFileConverter };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -110,12 +110,10 @@
                 api.getData = function () {
                     var data;
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-
                         data = directiveAPI.getData();
-                        if (data != undefined) {
+                        if(data != undefined)
+                        {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                            data.ActionId = UtilsService.guid();
-
                         }
                     }
                     return data;
@@ -125,12 +123,8 @@
                     ctrl.onReady(api);
                 }
             }
-            function getContext()
-            {
-                var currectContext = context;
-                if (currectContext == undefined)
-                    currectContext = {};
-                return currectContext;
+            function getContext() {
+                return context;
             }
         }
 
@@ -144,8 +138,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Action Type"'
-
+                            + 'label="Attachment Type"'
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
                         + '</vr-select>'
@@ -158,6 +151,6 @@
         }
     }
 
-    app.directive('vrInvoicetypeActionsettings', ActionSettingsDirective);
+    app.directive('vrInvoiceactionsSendemailAttachmenttype', SendemailAttachmenttypeDirective);
 
 })(app);

@@ -15,8 +15,6 @@ namespace Vanrise.Invoice.MainExtensions
         public List<RDLCReportParameter> MainReportParameters { get; set; }
         public List<InvoiceDataSource> MainReportDataSources { get; set; }
         public List<RDLCSubReport> SubReports { get; set; }
-
-
        
     }
     public class RDLCSubReport

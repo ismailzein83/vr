@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
+    <Compile Include="Context\InvoiceRDLCFileConverterContext.cs" />
     <Compile Include="Context\InvoiceSerialNumberConcatenatedPartContext.cs" />
     <Compile Include="Context\ItemsFilterContext.cs" />
     <Compile Include="Context\PartnerManagerContext.cs" />

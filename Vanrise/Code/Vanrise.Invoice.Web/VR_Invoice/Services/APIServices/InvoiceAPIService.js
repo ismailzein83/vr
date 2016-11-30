@@ -44,9 +44,6 @@
                 invoiceId: invoiceId,
             });
         }
-        function SendEmail(invoiceTemplate) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SendEmail'), invoiceTemplate);
-        }
 
         function DoesUserHaveGenerateAccess(invoiceTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'DoesUserHaveGenerateAccess'), {
@@ -54,12 +51,6 @@
             });
         }
 
-        function GetInvoiceTemplate(invoiceId)
-        {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceTemplate'), {
-                invoiceId: invoiceId,
-            });
-        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -70,8 +61,6 @@
             SetInvoiceLocked: SetInvoiceLocked,
             ReGenerateInvoice: ReGenerateInvoice,
             UpdateInvoiceNote: UpdateInvoiceNote,
-            SendEmail: SendEmail,
-            GetInvoiceTemplate: GetInvoiceTemplate
         });
     }
 

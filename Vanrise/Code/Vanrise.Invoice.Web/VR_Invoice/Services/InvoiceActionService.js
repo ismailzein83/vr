@@ -14,6 +14,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             actionTypes.push(actionType);
         }
         function registerInvoiceRDLCReport() {
+
             var actionType = {
                 ActionTypeName: "OpenRDLCReportAction",
                 actionMethod: function (payload) {
@@ -23,7 +24,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
                     paramsurl += "&actionId=" + payload.invoiceAction.InvoiceActionId;
                     paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
-                    window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
+                   window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
                 }
             };
             registerActionType(actionType);

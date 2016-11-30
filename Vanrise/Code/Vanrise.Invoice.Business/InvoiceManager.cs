@@ -165,24 +165,7 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
         }
-        public void SendEmail(VRMailEvaluatedTemplate invoiceTemplate)
-        {
-            VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendMail(invoiceTemplate.To, invoiceTemplate.CC, invoiceTemplate.Subject, invoiceTemplate.Body);
-        }
-        public VRMailEvaluatedTemplate GetInvoiceTemplate(long invoiceId)
-        {
-            var invoice = GetInvoice(invoiceId);
-            InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
-            InvoiceTypeExtendedSettingsInfoContext context = new InvoiceTypeExtendedSettingsInfoContext
-            {
-                InfoType = "CustomerMailTemplate",
-                Invoice = invoice
-
-            };
-          return invoiceType.Settings.ExtendedSettings.GetInfo(context);
-        }
+       
         #endregion
 
         #region Mappers

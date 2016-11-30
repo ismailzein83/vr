@@ -2,9 +2,9 @@
 
     "use strict";
 
-    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceAPIService'];
+    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService'];
 
-    function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService) {
+    function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService) {
         var invoiceId;
         var invoiceTemplateEntity;
 
@@ -32,7 +32,7 @@
                 $scope.scopeModel.isLoading = true;
 
                 var emailObject = buildInvoiceTemplateObjFromScope();
-                return VR_Invoice_InvoiceAPIService.SendEmail(emailObject)
+                return VR_Invoice_InvoiceEmailActionAPIService.SendEmail(emailObject)
                .then(function (response) {
                        if ($scope.onInvoiceEmailSend != undefined)
                            $scope.onInvoiceEmailSend(response);
@@ -54,7 +54,7 @@
                     $scope.scopeModel.isLoading = false;
                 });
             function getInvoiceEmail() {
-                return VR_Invoice_InvoiceAPIService.GetInvoiceTemplate(invoiceId).then(function (response) {
+                return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId).then(function (response) {
                     invoiceTemplateEntity = response;
                 });
             }

@@ -7,11 +7,16 @@ using Vanrise.Web.Base;
 using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Entities;
+using Microsoft.Reporting.WebForms;
+using Vanrise.Invoice.MainExtensions;
+using Vanrise.GenericData.Business;
+using Vanrise.Invoice.Business.Context;
+using System.IO;
 namespace Vanrise.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
 
-    public class InvoiceController:BaseAPIController
+    public class InvoiceController : BaseAPIController
     {
         InvoiceTypeManager _invoiceTypeManager = new InvoiceTypeManager();
 
@@ -83,19 +88,7 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceDetail(invoiceId);
         }
-        [HttpPost]
-        [Route("SendEmail")]
-        public void SendEmail(VRMailEvaluatedTemplate invoiceTemplate)
-        {
-            InvoiceManager manager = new InvoiceManager();
-            manager.SendEmail(invoiceTemplate);
-        }
-        [HttpGet]
-        [Route("GetInvoiceTemplate")]
-        public VRMailEvaluatedTemplate GetInvoiceTemplate(long invoiceId)
-        {
-            InvoiceManager manager = new InvoiceManager();
-            return manager.GetInvoiceTemplate(invoiceId);
-        }
+
+      
     }
 }
