@@ -21,6 +21,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
             this.initializeController = initializeController;
              var gridAPI;
 
+             var carrierAccountId;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.route = [];
@@ -47,6 +49,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                 var api = {};
 
                 api.load = function (query) {
+                    
+                    carrierAccountId = query;
                     return gridAPI.retrieveData(query);
                 };
 
@@ -68,8 +72,10 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
             function editRoute(RouteItem) {
                 var onRouteUpdated = function (updatedRoute) {
                     gridAPI.itemUpdated(updatedRoute);
-                };
-                 NP_IVSwitch_RouteService.editRoute(RouteItem.Entity.RouteId, onRouteUpdated);
+                };         
+            
+
+                NP_IVSwitch_RouteService.editRoute(RouteItem.Entity.RouteId, carrierAccountId.CarrierAccountId, onRouteUpdated);
             }
             function hasEditRoutePermission() {
                 return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();

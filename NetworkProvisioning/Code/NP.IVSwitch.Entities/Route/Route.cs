@@ -24,6 +24,8 @@ namespace NP.IVSwitch.Entities
         public DateTime WakeUpTime {get;set;}
         public String Host{get;set;}
         public String Port { get; set; }
+
+        public int Percentage { get; set; }
   
         public TransportMode TransportModeId { get; set; }
         public int ConnectionTimeOut {get;set;}

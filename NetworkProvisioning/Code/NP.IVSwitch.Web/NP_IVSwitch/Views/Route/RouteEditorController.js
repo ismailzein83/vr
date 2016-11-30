@@ -33,7 +33,7 @@
             if (parameters != undefined && parameters != null) {
                  routeId = parameters.RouteId;
                  carrierAccountId = parameters.CarrierAccountId;
-               }
+                }
 
             isEditMode = (routeId != undefined);
          }
@@ -160,6 +160,7 @@
                 $scope.scopeModel.host = routeEntity.Host;
                 $scope.scopeModel.port = routeEntity.Port;
                 $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
+                $scope.scopeModel.percentage = routeEntity.Percentage;
  
                 if (routeEntity.TransportModeId != undefined)
                     $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
@@ -220,7 +221,7 @@
         function update() {
             $scope.scopeModel.isLoading = true;
         
-            return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope().Entity).then(function (response) {
+             return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope()).then(function (response) {
 
 
                 if (VRNotificationService.notifyOnItemUpdated('Route', response, 'Name')) {
@@ -238,9 +239,10 @@
         }
 
         function buildRouteObjFromScope() {
-              return {
-                  Entity : { RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
+            return {
 
+                  Entity: {
+                      RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
                       Description: $scope.scopeModel.description,
                       ChannelsLimit: $scope.scopeModel.channelslimit,
                       LogAlias : $scope.scopeModel.logalias,
@@ -252,6 +254,7 @@
                       TransRuleId: $scope.scopeModel.translationruleid,
                       WakeUpTime: $scope.scopeModel.wakeuptime,
                       TransportModeId: $scope.scopeModel.transportmodeid.value,
+                      Percentage : $scope.scopeModel.percentage,
                    },
 
                   CarrierAccountId:   carrierAccountId,

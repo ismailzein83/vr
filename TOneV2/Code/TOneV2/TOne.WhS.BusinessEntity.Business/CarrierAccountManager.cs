@@ -139,7 +139,10 @@ namespace TOne.WhS.BusinessEntity.Business
                  extendedSettingsDic.Add(extendedSettingName, extendedSettings);
              }
              ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-             dataManager.UpdateExtendedSettings(carrierAccountId, extendedSettingsDic);
+             if (dataManager.UpdateExtendedSettings(carrierAccountId, extendedSettingsDic))
+                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+
          }
 
          public T GetExtendedSettingsObject<T>(int carrierAccountId) where T : class

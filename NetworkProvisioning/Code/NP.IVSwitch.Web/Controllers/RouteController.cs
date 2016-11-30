@@ -39,7 +39,7 @@ namespace NP.IVSwitch.Web.Controllers
 
         [HttpPost]
         [Route("UpdateRoute")]
-        public Vanrise.Entities.UpdateOperationOutput<RouteDetail> UpdateRoute(Route routeItem)
+        public Vanrise.Entities.UpdateOperationOutput<RouteDetail> UpdateRoute(RouteToAdd routeItem)
         {
             return _manager.UpdateRoute(routeItem);
         }

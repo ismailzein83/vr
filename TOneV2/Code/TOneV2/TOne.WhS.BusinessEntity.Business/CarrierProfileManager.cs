@@ -126,7 +126,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 extendedSettingsDic.Add(extendedSettingName, extendedSettings);
             }
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-            dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic);
+            
+           if( dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic))
+                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
         public T GetExtendedSettingsObject<T>(int carrierProfileId) where T : class

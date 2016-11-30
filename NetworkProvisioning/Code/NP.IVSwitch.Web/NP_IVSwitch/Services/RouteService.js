@@ -19,11 +19,13 @@
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
         };
-        function editRoute(RouteId, onRouteUpdated) {
+        function editRoute(RouteId, CarrierAccountId, onRouteUpdated) {
             var settings = {};
+                      
 
             var parameters = {
                 RouteId: RouteId,
+                CarrierAccountId: CarrierAccountId,
             };
 
             settings.onScopeReady = function (modalScope) {

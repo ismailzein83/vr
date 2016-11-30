@@ -28,16 +28,26 @@ namespace NP.IVSwitch.Business
  
             RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
-            Dictionary<int, RouteInfo> routeDic = new Dictionary<int, RouteInfo>();
+            Dictionary<int,RouteInfo> routeInfoDic = new Dictionary<int,RouteInfo>();
  
             if (extendedSettingsObject != null)
             {
-                routeDic = extendedSettingsObject.RouteInfo.ToDictionary(k => k.RouteId, v => v);
+                routeInfoDic = extendedSettingsObject.RouteInfo.ToDictionary(k => k.RouteId, v => v);
             }
-
+            Dictionary<int,Route> routeDic = new Dictionary<int,Route>();
             var allRoutes = this.GetCachedRoute();
+
+            foreach (var item in routeInfoDic)
+            {
+                Route route = null;
+                if (allRoutes.TryGetValue(item.Key, out route))
+                {
+                    route.Percentage = item.Value.Percentage;
+                    routeDic.Add(route.RouteId, route);
+                }
+            }
             Func<Route, bool> filterExpression = (x) => (routeDic.ContainsKey(x.RouteId));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutes.ToBigResult(input, filterExpression, RouteDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeDic.ToBigResult(input, filterExpression, RouteDetailMapper));
         }
 
         public Vanrise.Entities.InsertOperationOutput<RouteDetail> AddRoute(RouteToAdd routeItem)
@@ -113,6 +123,8 @@ namespace NP.IVSwitch.Business
 
                 RouteInfo routeInfo = new RouteInfo();
                 routeInfo.RouteId = routeId;
+                routeInfo.Percentage = routeItem.Entity.Percentage;
+                
 
                 routeInfoList.Add(routeInfo);
                 routesExtendedSettings.RouteInfo = routeInfoList;
@@ -127,8 +139,20 @@ namespace NP.IVSwitch.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<RouteDetail> UpdateRoute(Route routeItem)
+        public Vanrise.Entities.UpdateOperationOutput<RouteDetail> UpdateRoute(RouteToAdd routeItem)
         {
+            int carrierAccountId = routeItem.CarrierAccountId;
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            int carrierProfileId = (int)carrierAccountManager.GetCarrierProfileId(carrierAccountId); // Get CarrierProfileId
+
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId); // Get CarrierProfile
+
+
+            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettingsObject<AccountCarrierProfileExtension>(carrierProfileId);
+
+
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<RouteDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -137,11 +161,38 @@ namespace NP.IVSwitch.Business
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
 
 
-            if (dataManager.Update(routeItem))
+            if (dataManager.Update(routeItem.Entity))
             {
+               
+
+                RouteCarrierAccountExtension routesExtendedSettings = carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(carrierAccountId);
+                //add route to carrier account
+                if (routesExtendedSettings == null)
+                    routesExtendedSettings = new RouteCarrierAccountExtension();
+
+                List<RouteInfo> routeInfoList = new List<RouteInfo>();
+                if (routesExtendedSettings.RouteInfo != null)
+                    routeInfoList = routesExtendedSettings.RouteInfo;
+
+                // tariffs
+                dataManager.CheckTariffTable();
+
+                RouteInfo routeInfo = new RouteInfo();
+
+                Dictionary<int, RouteInfo> routeInfoDic = routeInfoList.ToDictionary(k => k.RouteId, v => v);
+
+                routeInfo = routeInfoDic.GetRecord(routeItem.Entity.RouteId);
+                routeInfo.Percentage = routeItem.Entity.Percentage;
+                 
+                routesExtendedSettings.RouteInfo = routeInfoList;
+
+                carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, routesExtendedSettings);
+
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = RouteDetailMapper(this.GetRoute(routeItem.RouteId));
+
+                
+                updateOperationOutput.UpdatedObject = RouteDetailMapper(this.GetRoute(routeItem.Entity.RouteId));
             }
             else
             {
