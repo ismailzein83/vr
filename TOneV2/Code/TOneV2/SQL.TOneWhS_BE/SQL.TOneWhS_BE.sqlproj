@@ -418,5 +418,16 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListTemplate_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListTemplate_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListTemplate_GetAll.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_CustomerCountry_NewPreview.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_CustomerCountry_New.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_CustomerCountry_ChangedPreview.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_CustomerCountry_Changed.sql" />
+    <Build Include="TOneWhS_BE\Tables\CustomerCountry.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_CustomerCountry_GetNewPreviews.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_CustomerCountry_GetChangedPreviews.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZone_GetEffective.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerCountry_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_UpdateExtendedSettings.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccount_UpdateExtendedSettings.sql" />
   </ItemGroup>
 </Project>

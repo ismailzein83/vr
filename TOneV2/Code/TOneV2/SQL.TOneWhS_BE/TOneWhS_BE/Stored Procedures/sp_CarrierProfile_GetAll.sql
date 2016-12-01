@@ -8,6 +8,7 @@ BEGIN
 			cp.Name,
 			cp.Settings,
 			cp.SourceID,
-			cp.IsDeleted
+			cp.IsDeleted,
+			cp.ExtendedSettings
 	FROM	[TOneWhS_BE].CarrierProfile  as cp WITH(NOLOCK) 
 END
