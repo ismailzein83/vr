@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+
 namespace Retail.BusinessEntity.Business
 {
     public class ServiceTypeManager : IBusinessEntityManager
@@ -26,11 +27,6 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedServiceTypes.ToBigResult(input, filterExpression, ServiceTypeDetailMapper));
         }
 
-        public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo()
-        {
-            return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Title);
-        }
-
         public ServiceType GetServiceType(Guid serviceTypeId)
         {
             Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
@@ -41,12 +37,6 @@ namespace Retail.BusinessEntity.Business
         {
             ServiceType serviceType = this.GetServiceType(serviceTypeId);
             return (serviceType != null) ? serviceType.Title : null;
-        }
-
-        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
-        {
-            ServiceType serviceType = this.GetServiceType(serviceTypeId);
-            return (serviceType != null && serviceType.Settings != null) ? serviceType.Settings.ChargingPolicyDefinitionSettings : null;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit updatedServiceType)
@@ -63,8 +53,8 @@ namespace Retail.BusinessEntity.Business
                 IdentificationRuleDefinitionId = updatedServiceType.IdentificationRuleDefinitionId,
                 InitialStatusId = updatedServiceType.InitialStatusId
             };
-            if (serviceType.Settings.ChargingPolicyDefinitionSettings !=null)
-              serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
+            if (serviceType.Settings.ChargingPolicyDefinitionSettings != null)
+                serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
 
 
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail>();
@@ -88,6 +78,28 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo(ServiceTypeInfoFilter filter)
+        {
+            if (filter == null)
+                return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Title);
+
+            Func<ServiceType, bool> filterPredicate = (serviceType) =>
+            {
+                if (filter.ExcludedServiceTypeIds != null && filter.ExcludedServiceTypeIds.Count() > 0 && filter.ExcludedServiceTypeIds.Contains(serviceType.ServiceTypeId))
+                    return false;
+
+                return true;
+            };
+
+            return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper, filterPredicate).OrderBy(x => x.Title);
+        }
+
+        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
+        {
+            ServiceType serviceType = this.GetServiceType(serviceTypeId);
+            return (serviceType != null && serviceType.Settings != null) ? serviceType.Settings.ChargingPolicyDefinitionSettings : null;
+        }
+
         private struct GetAccountServiceGenericFieldsCacheName
         {
             public Guid ServiceTypeId { get; set; }
@@ -104,10 +116,10 @@ namespace Retail.BusinessEntity.Business
                     var serviceType = GetServiceType(serviceTypeId);
                     if (serviceType == null)
                         throw new NullReferenceException(String.Format("serviceType '{0}'", serviceTypeId));
-                    if(serviceType.Settings != null && serviceType.Settings.ExtendedSettings != null)
+                    if (serviceType.Settings != null && serviceType.Settings.ExtendedSettings != null)
                     {
                         var fieldDefinitions = serviceType.Settings.ExtendedSettings.GetFieldDefinitions();
-                        if(fieldDefinitions != null)
+                        if (fieldDefinitions != null)
                         {
                             fields.AddRange(fieldDefinitions.Select(fldDefinition => new AccountServiceTypeGenericField(serviceType, fldDefinition)));
                         }
@@ -121,9 +133,19 @@ namespace Retail.BusinessEntity.Business
             return GetAccountServiceGenericFields(serviceTypeId).GetRecord(fieldName);
         }
 
-        void FillAccountServiceCommonGenericFields(List<AccountServiceGenericField> fields)
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
-            fields.Add(new AccountServiceStatusGenericField());
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -136,15 +158,15 @@ namespace Retail.BusinessEntity.Business
 
             if (serviceTypeEntity == null)
                 throw new DataIntegrityValidationException(String.Format("ServiceType '{0}' does not exist", serviceType.ServiceTypeId));
-            if(serviceType.ChargingPolicyDefinitionSettings == null)
-                  throw new DataIntegrityValidationException(String.Format("ChargingPolicyDefinitionSettings is null"));
+            if (serviceType.ChargingPolicyDefinitionSettings == null)
+                throw new DataIntegrityValidationException(String.Format("ChargingPolicyDefinitionSettings is null"));
 
-             if(serviceType.ChargingPolicyDefinitionSettings.PartDefinitions == null)
-                  throw new DataIntegrityValidationException(String.Format("No parts definitions"));
+            if (serviceType.ChargingPolicyDefinitionSettings.PartDefinitions == null)
+                throw new DataIntegrityValidationException(String.Format("No parts definitions"));
 
-            foreach(var part in serviceType.ChargingPolicyDefinitionSettings.PartDefinitions)
+            foreach (var part in serviceType.ChargingPolicyDefinitionSettings.PartDefinitions)
             {
-                if(serviceType.ChargingPolicyDefinitionSettings.PartDefinitions.Count(x=>x.PartTypeId == part.PartTypeId)>1)
+                if (serviceType.ChargingPolicyDefinitionSettings.PartDefinitions.Count(x => x.PartTypeId == part.PartTypeId) > 1)
                     throw new DataIntegrityValidationException(String.Format("Same PartTypeId {0} used more than once", part.PartTypeId));
             }
         }
@@ -167,7 +189,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<Guid, ServiceType> GetCachedServiceTypes()
+        private Dictionary<Guid, ServiceType> GetCachedServiceTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypes", () =>
             {
@@ -176,6 +198,12 @@ namespace Retail.BusinessEntity.Business
                 return serviceTypes.ToDictionary(kvp => kvp.ServiceTypeId, kvp => kvp);
             });
         }
+
+        private void FillAccountServiceCommonGenericFields(List<AccountServiceGenericField> fields)
+        {
+            fields.Add(new AccountServiceStatusGenericField());
+        }
+
         #endregion
 
         #region Mappers
@@ -222,22 +250,5 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
-
-
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
