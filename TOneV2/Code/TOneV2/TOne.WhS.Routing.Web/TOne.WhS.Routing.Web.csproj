@@ -214,6 +214,8 @@
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration.js" />
     <Content Include="WhS_Routing\Directives\Routing\Templates\RouteStatusSelectorTemplate.html" />
     <Content Include="WhS_Routing\Directives\Routing\vr-whs-routing-routestatus-selector.js" />
+    <Content Include="WhS_Routing\Directives\ScheduleTask\Templates\BuildRouteTaskTemplate.html" />
+    <Content Include="WhS_Routing\Directives\ScheduleTask\vr-whs-routing-buildroutetask.js" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealCompletionProgressRoutingOptimizerItemSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\DealProfitRoutingOptimizerItemSettingsTemplate.html" />
     <Content Include="WhS_Routing\Directives\Settings\Extensions\Templates\MarginRoutingOptimizerItemSettingsTemplate.html" />

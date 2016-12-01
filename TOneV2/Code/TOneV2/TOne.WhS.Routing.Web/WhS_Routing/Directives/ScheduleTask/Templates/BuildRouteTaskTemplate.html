@@ -1,0 +1,17 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datatextfield="description" datavaluefield="value" label="Routing Database Type" datasource="routingDatabaseTypes"
+                   selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingDatabaseTypeSelectionChanged" hideremoveicon />
+    </vr-columns>
+
+    <vr-columns width="1/2row">
+        <vr-switch value="storeCodeMatches" label="Store Code Matches" isrequired></vr-switch>
+    </vr-columns>
+</vr-row>
+<vr-row ng-show="!isFuture">
+    <vr-columns width="fullrow">
+        <vr-section title="Route Sync">
+            <vr-whs-be-switch-selector on-ready="onSwitchSelectorReady" normal-col-num="6" ismultipleselection="true"></vr-whs-be-switch-selector>
+        </vr-section>
+    </vr-columns>
+</vr-row>
