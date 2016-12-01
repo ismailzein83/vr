@@ -8,9 +8,12 @@
     [timestamp]         ROWVERSION   NULL,
     [SourceID]          VARCHAR (50) NULL,
     [ProcessInstanceID] BIGINT       NULL,
+    [FileID]            BIGINT       NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF_SalePriceList_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SalePriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
