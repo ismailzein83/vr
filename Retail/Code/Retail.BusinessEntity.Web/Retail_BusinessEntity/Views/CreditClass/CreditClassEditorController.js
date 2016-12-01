@@ -145,12 +145,12 @@
             var settings = {
                 BalanceLimit: $scope.scopeModel.balanceLimit,
                 CurrencyId: currencyAPI.getSelectedIds()
-            }
+            };
 
             return {
                 CreditClassId: creditClassEntity != undefined ? creditClassEntity.CreditClassId : undefined,
                 Name: $scope.scopeModel.name,
-                Settings: settings,
+                Settings: settings
             };
         }
     }

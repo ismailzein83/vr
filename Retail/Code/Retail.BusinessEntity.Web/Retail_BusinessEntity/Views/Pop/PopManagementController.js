@@ -19,7 +19,7 @@
                 gridAPI = api;
                 var filter = {};
                 api.loadGrid(filter);
-            }
+            };
 
             $scope.AddNewPop = addNewPop;
 

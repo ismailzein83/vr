@@ -52,11 +52,11 @@ app.directive('retailBeCreditclassGrid', ['Retail_BE_CreditClassAPIService', 'Re
 
                 api.onCreditClassAdded = function (addedCreditClass) {
                     gridAPI.itemAdded(addedCreditClass);
-                }
+                };
 
                 api.onCreditClassUpdated = function (updatedCreditClass) {
                     gridAPI.itemUpdated(updatedCreditClass);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

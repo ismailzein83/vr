@@ -68,7 +68,7 @@
                 var setLoader = function (value) {
                     $scope.scopeModel.isLoadingDirective = value;
                 };
-                var payload = { serviceTypeId: serviceTypeSelectorAPI.getSelectedIds() }
+                var payload = { serviceTypeId: serviceTypeSelectorAPI.getSelectedIds() };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
             };
 
@@ -78,10 +78,10 @@
 
             $scope.scopeModel.validateServiceTypeSelection = function () {
 
-                if (context != undefined && $scope.scopeModel.selectedServiceType !=undefined && context.checkIfServiceTypeUsed($scope.scopeModel.selectedServiceType.ServiceTypeId))
+                if (context != undefined && $scope.scopeModel.selectedServiceType != undefined && context.checkIfServiceTypeUsed($scope.scopeModel.selectedServiceType.ServiceTypeId))
                     return "Same service type already selected.";
                 return null;
-            }
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };

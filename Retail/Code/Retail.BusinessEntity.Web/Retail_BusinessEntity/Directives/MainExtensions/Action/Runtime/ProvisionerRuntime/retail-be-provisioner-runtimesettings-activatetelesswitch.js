@@ -49,11 +49,11 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.Extensions.TelesSwitch.ActivateTelesSwitchUserProvisionerRuntimeSettings,Retail.BusinessEntity.Extensions.TelesSwitch",
-                        Domain:$scope.scopeModel.domain,
+                        Domain: $scope.scopeModel.domain,
                         GateWay: $scope.scopeModel.gateWay,
                         LoginName: $scope.scopeModel.loginName,
-                        Password: $scope.scopeModel.password,
-                    }
+                        Password: $scope.scopeModel.password
+                    };
                     return data;
                 }
             }

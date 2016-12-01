@@ -85,7 +85,7 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
                 settings: {
                     Value: accountId,
                 }
-            }
+            };
 
             var accessibility = {
                 settingNotAccessible :true

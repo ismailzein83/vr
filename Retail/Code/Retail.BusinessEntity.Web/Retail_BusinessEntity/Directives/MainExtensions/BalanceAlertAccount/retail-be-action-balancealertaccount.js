@@ -23,7 +23,7 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/BalanceAlertAccount/Templates/BalanceAlertAccountActionTemplate.html';
@@ -46,24 +46,19 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
 
                 $scope.scopeModel.extensionConfigs = [];
 
-                $scope.scopeModel.onActionDefinitionSelectorReady = function (api)
-                {
+                $scope.scopeModel.onActionDefinitionSelectorReady = function (api) {
                     actionDefinitionAPI = api;
                     actionDefinitionSelectorReadyDeferred.resolve();
-                }
+                };
 
-                $scope.scopeModel.onActionDeinitionSelectionChanged = function()
-                {
+                $scope.scopeModel.onActionDeinitionSelectionChanged = function () {
                     var selectedActionDefinitionId = actionDefinitionAPI.getSelectedIds();
-                    if(selectedActionDefinitionId != undefined)
-                    {
-                        getActionDefinitionById(selectedActionDefinitionId).then(function ()
-                        {
+                    if (selectedActionDefinitionId != undefined) {
+                        getActionDefinitionById(selectedActionDefinitionId).then(function () {
 
-                           
 
-                            if(actionDefinitionRuntimeAPI != undefined)
-                            {
+
+                            if (actionDefinitionRuntimeAPI != undefined) {
                                 var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
                                 var setLoader = function (value) {
                                     $scope.scopeModel.isLoadingDirective = value;
@@ -71,21 +66,20 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader, actionDefinitionRuntimeReadyDeferred);
                             }
 
-                          
+
                         })
                     }
 
-                }
+                };
 
-                $scope.scopeModel.onActionDefinitionRuntimeReady = function(api)
-                {
+                $scope.scopeModel.onActionDefinitionRuntimeReady = function (api) {
                     actionDefinitionRuntimeAPI = api;
                     var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader, actionDefinitionRuntimeReadyDeferred);
-                }
+                };
 
                 defineAPI();
             }
@@ -113,8 +107,7 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     var loadActionBPDefinitionExtensionConfigsPromise = loadActionBPDefinitionExtensionConfigs();
                     promises.push(loadActionBPDefinitionExtensionConfigsPromise);
 
-                    if (vrActionEntity)
-                    {
+                    if (vrActionEntity) {
                         var promiseDiffered = UtilsService.createPromiseDeferred();
                         promises.push(promiseDiffered.promise);
                         loadActionBPDefinitionExtensionConfigsPromise.then(function () {
@@ -124,20 +117,19 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                                 }).catch(function (error) {
                                     promiseDiffered.reject(error);
                                 });
-                            }else
-                            {
+                            } else {
                                 promiseDiffered.resolve();
                             }
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.getData = function () {
                     var actionBPSettings = actionDefinitionRuntimeAPI.getData();
-                    if(actionBPSettings !=undefined)
-                        actionBPSettings.ConfigId =  $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId;
+                    if (actionBPSettings != undefined)
+                        actionBPSettings.ConfigId = $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId;
 
                     return {
                         $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertAccountAction, Retail.BusinessEntity.Business",
@@ -145,7 +137,7 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                         ActionBPSettings: actionBPSettings,
                         ActionName: $scope.scopeModel.selectedActionDefinition.nameValue
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -153,13 +145,12 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
 
             function getActionDefinitionById(actionDefinitionId)
             {
-               return Retail_BE_ActionDefinitionAPIService.GetActionDefinition(actionDefinitionId).then(function (response)
-                {
-                   actionDefinitionEntity = response;
+                return Retail_BE_ActionDefinitionAPIService.GetActionDefinition(actionDefinitionId).then(function (response) {
+                    actionDefinitionEntity = response;
 
-                   if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined)
-                       $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, actionDefinitionEntity.Settings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
-                })
+                    if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined)
+                        $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, actionDefinitionEntity.Settings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                });
             }
 
             function loadActionBPDefinitionExtensionConfigs() {

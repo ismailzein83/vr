@@ -38,18 +38,17 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
             $scope.scopeModel.onCreditClassDirectiveReady = function (api) {
                 creditClassSelectorAPI = api;
                 creditClassReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
-            }
-            $scope.scopeModel.onDirectiveReady = function(api)
-            {
+            };
+            $scope.scopeModel.onDirectiveReady = function (api) {
                 paymentMethodDirectiveAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingPaymentMethod = value };
-                var payload
+                var payload;
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, paymentMethodDirectiveAPI, payload, setLoader, paymentMethodReadyPromiseDeferred);
-            }
+            };
 
             defineAPI();
         }
@@ -87,14 +86,14 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
 
                 var creditClassSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 creditClassReadyPromiseDeferred.promise.then(function () {
-                    var directivePayload = (payload != undefined && payload.partSettings != undefined) ? { selectedIds: payload.partSettings.CreditClassId } : undefined
+                    var directivePayload = (payload != undefined && payload.partSettings != undefined) ? { selectedIds: payload.partSettings.CreditClassId } : undefined;
                     VRUIUtilsService.callDirectiveLoad(creditClassSelectorAPI, directivePayload, creditClassSelectorLoadPromiseDeferred);
                 });
                 promises.push(creditClassSelectorLoadPromiseDeferred.promise);
 
                 var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 currencySelectorReadyPromiseDeferred.promise.then(function () {
-                        var directivePayload = (payload != undefined && payload.partSettings != undefined) ? { selectedIds: payload.partSettings.CurrencyId } : undefined
+                    var directivePayload = (payload != undefined && payload.partSettings != undefined) ? { selectedIds: payload.partSettings.CurrencyId } : undefined;
 
                         VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, directivePayload, loadCurrencySelectorPromiseDeferred);
                     });
@@ -112,7 +111,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
                     PostpaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Postpaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
                     PrepaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Prepaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
                     BillingCycleId: $scope.scopeModel.selectedBillingCycle.value,
-                    CreditClassId: creditClassSelectorAPI.getSelectedIds(),
+                    CreditClassId: creditClassSelectorAPI.getSelectedIds()
                 };
             };
 

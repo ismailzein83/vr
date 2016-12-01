@@ -32,7 +32,7 @@
 
         function getEntityId(entityType,actionEntityId)
         {
-            var entityId = "Retail_BE"
+            var entityId = "Retail_BE";
             switch(entityType)
             {
                 case Retail_BE_EntityTypeEnum.Account.value:

@@ -29,7 +29,7 @@
             $scope.scopeModel.accountPartDefinitionDirectiveReady = function (api) {
                 accountPartDefinitionAPI = api;
                 accountPartDefinitionReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAccountPartDefinition() : insertAccountPartDefinition();

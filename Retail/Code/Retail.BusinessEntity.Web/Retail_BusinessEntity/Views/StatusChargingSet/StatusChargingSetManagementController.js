@@ -30,7 +30,7 @@
             $scope.scopeModel.add = function () {
                 var onStatusChargingSetAdded = function (addedStatusChargingSet) {
                     gridAPI.onStatusChargingSetAdded(addedStatusChargingSet);
-                }
+                };
                 retailBeStatusChargingSetService.addStatusChargingSet(onStatusChargingSetAdded);
             };
 
@@ -42,7 +42,7 @@
             $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
-            }
+            };
         }
 
         function loadEntityTypeSelector() {

@@ -52,11 +52,11 @@ app.directive('retailBeStatusdefinitionGrid', ['Retail_BE_StatusDefinitionAPISer
 
                 api.onStatusDefinitionAdded = function (addedStatusDefinition) {
                     gridAPI.itemAdded(addedStatusDefinition);
-                }
+                };
 
                 api.onStatusDefinitionUpdated = function (updatedStatusDefinition) {
                     gridAPI.itemUpdated(updatedStatusDefinition);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -27,7 +27,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getAccountTemplate(attrs);
@@ -57,7 +57,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                    + ' entityName="' + label + '"'
                    + '  >'
                    + '</vr-select>'
-                   + '</vr-columns>'
+                   + '</vr-columns>';
         }
 
         function AccountCtor(ctrl, $scope, attrs) {
@@ -75,12 +75,12 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(defineAPI());
                     }
-                }
+                };
 
 
                 ctrl.search = function (nameFilter) {
                     return Retail_BE_AccountAPIService.GetAccountsInfo(nameFilter);
-                }
+                };
 
             }
 
@@ -90,14 +90,13 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 api.load = function (payload) {
 
                     var selectedIds;
-                    
+
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
 
-                    if (selectedIds != undefined)
-                    {
+                    if (selectedIds != undefined) {
                         var selectedAccountIds = [];
                         if (attrs.ismultipleselection != undefined)
                             selectedAccountIds = selectedIds;
@@ -106,13 +105,13 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
                         return GetAccountsInfo(attrs, ctrl, selectedAccountIds);
                     }
-                       
 
-                }
+
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

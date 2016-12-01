@@ -34,11 +34,11 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
             $scope.scopeModel.onGenericDirectiveReady = function (api) {
                 genericDirectiveAPI = api;
                 genericDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onDataRecordTypeSelectorDirectiveReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRecordTypeSelectionChanged = function (value) {
                 if (value != undefined) {
                     getDataRecordType(value.DataRecordTypeId).then(function () {
@@ -47,7 +47,7 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericDirectiveAPI, payload, setLoader, selectedDataRecordTypeReadyPromiseDeferred);
                     });
                 }
-            }
+            };
 
             defineAPI();
         }
@@ -87,7 +87,7 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
         function loadDataRecordTypeSelector() {
             var loadDataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             dataRecordTypeSelectorReadyPromiseDeferred.promise.then(function () {
-                    var directivePayload = (currentPayload != undefined) ? { selectedIds: currentPayload.RecordTypeId } : undefined
+                var directivePayload = (currentPayload != undefined) ? { selectedIds: currentPayload.RecordTypeId } : undefined;
                     VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, directivePayload, loadDataRecordTypeSelectorPromiseDeferred);
                 });
 
@@ -100,7 +100,7 @@ app.directive('retailBeAccounttypePartDefinitionGeneric', ["VRUIUtilsService", "
 
             var loadGenericPromiseDeferred = UtilsService.createPromiseDeferred();
             UtilsService.waitMultiplePromises([genericDirectiveReadyPromiseDeferred.promise, selectedDataRecordTypeReadyPromiseDeferred.promise]).then(function () {
-                    var directivePayload = (currentPayload != undefined && recordTypeEntity != undefined) ? { sections: currentPayload.UISections, recordTypeFields: recordTypeEntity.Fields } : undefined
+                var directivePayload = (currentPayload != undefined && recordTypeEntity != undefined) ? { sections: currentPayload.UISections, recordTypeFields: recordTypeEntity.Fields } : undefined;
                     genericDirectiveReadyPromiseDeferred = undefined;
                     selectedDataRecordTypeReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(genericDirectiveAPI, directivePayload, loadGenericPromiseDeferred);

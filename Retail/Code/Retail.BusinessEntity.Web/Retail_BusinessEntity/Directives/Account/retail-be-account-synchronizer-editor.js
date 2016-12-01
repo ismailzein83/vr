@@ -35,7 +35,7 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
@@ -43,7 +43,7 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                         Name: "Account Synchronizer"
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -26,7 +26,7 @@ function (Retail_BE_OperatorDeclaredInfoService, Retail_BE_ServiceTypeAPIService
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();
@@ -51,12 +51,12 @@ function (Retail_BE_OperatorDeclaredInfoService, Retail_BE_ServiceTypeAPIService
             ctrl.addItem = function () {
                 var onOperatorDeclaredInfoItemAdded = function (obj) {
                     ctrl.items.push(obj);
-                }
+                };
                 Retail_BE_OperatorDeclaredInfoService.addOperatorDeclaredInfoItem(onOperatorDeclaredInfoItemAdded);
-            }
+            };
             ctrl.removeitem = function (obj) {
                 ctrl.items.splice(ctrl.items.indexOf(obj), 1);
-            }
+            };
 
             ctrl.menuActions = [{
                 name: 'Edit',
@@ -65,7 +65,7 @@ function (Retail_BE_OperatorDeclaredInfoService, Retail_BE_ServiceTypeAPIService
             function editItem(obj) {
                 var onOperatorDeclaredInfoItemUpdated = function (updatedObj) {
                     ctrl.items[ctrl.items.indexOf(obj)] = updatedObj;
-                }
+                };
                 Retail_BE_OperatorDeclaredInfoService.editOperatorDeclaredInfoItem(obj, onOperatorDeclaredInfoItemUpdated);
             }
 
@@ -75,18 +75,17 @@ function (Retail_BE_OperatorDeclaredInfoService, Retail_BE_ServiceTypeAPIService
 
 
             api.load = function (payload) {
-                if (payload!=undefined && payload.items.length > 0) {
+                if (payload != undefined && payload.items.length > 0) {
                     return Retail_BE_ServiceTypeAPIService.GetServiceTypesInfo(UtilsService.serializetoJson({})).then(function (response) {
-                            console.log(response)
-                            for (var i = 0; i < payload.items.length; i++) {
-                                var obj = payload.items[i];
-                                obj.ServiceTypeName = UtilsService.getItemByVal(response, obj.ServiceTypeId, "ServiceTypeId").Title;
-                                obj.TrafficDirectionValue = UtilsService.getItemByVal(UtilsService.getArrayEnum(Retail_Be_TrafficDirectionEnum), obj.TrafficDirection, "value").description;
-                                ctrl.items.push(obj);
-                            }
-                        });
-                  }
-             }
+                        for (var i = 0; i < payload.items.length; i++) {
+                            var obj = payload.items[i];
+                            obj.ServiceTypeName = UtilsService.getItemByVal(response, obj.ServiceTypeId, "ServiceTypeId").Title;
+                            obj.TrafficDirectionValue = UtilsService.getItemByVal(UtilsService.getArrayEnum(Retail_Be_TrafficDirectionEnum), obj.TrafficDirection, "value").description;
+                            ctrl.items.push(obj);
+                        }
+                    });
+                }
+            };
            
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -32,12 +32,12 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onCityDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.scopeModel.onCountrySelectionChanged = function () {
@@ -53,7 +53,7 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
                 }
                 else if (cityDirectiveAPI != undefined)
                     cityDirectiveAPI.clearDataSource();
-            }
+            };
 
 
             defineAPI();
@@ -118,7 +118,7 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
                     var citiesPayload = {
                         countryId: mainPayload.partSettings.CountryId,
                         selectedIds: mainPayload.partSettings.CityId
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;

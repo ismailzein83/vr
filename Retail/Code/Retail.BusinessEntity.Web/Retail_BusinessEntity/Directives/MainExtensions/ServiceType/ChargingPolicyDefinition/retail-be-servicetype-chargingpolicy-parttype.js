@@ -70,7 +70,7 @@
                     partDirectiveAPI = api;
                     if (partDirectiveReadyDeffered)
                         partDirectiveReadyDeffered.resolve();
-                }
+                };
 
                 $scope.onPartTypeSelectionChanged = function () {
                     var directivePayload = $scope.selectedTemplateConfig != undefined ? {
@@ -80,7 +80,7 @@
                         $scope.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partDirectiveAPI, directivePayload, setLoader, partDirectiveReadyDeffered);
-                }
+                };
             }
 
             function defineAPI() {

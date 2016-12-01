@@ -29,10 +29,9 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             $scope.scopeModel.accounts = [];
             $scope.scopeModel.menuActions = [];
 
-            $scope.scopeModel.getStatusColor = function(dataItem)
-            {
+            $scope.scopeModel.getStatusColor = function (dataItem) {
                 return dataItem.Style;
-            }
+            };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions, true);

@@ -24,7 +24,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Zone/Templates/CountryZoneTemplate.html"
 
@@ -43,25 +43,25 @@
                 $scope.onCountrySelectorReady = function (api) {
                     countryAPI = api;
                     countryReadyDeferred.resolve();
-                }
+                };
                 $scope.onZoneSelectorReady = function (api) {
                     zoneAPI = api;
-                    if (zoneReadyDeferred !=undefined)
-                      zoneReadyDeferred.resolve();
-                }
+                    if (zoneReadyDeferred != undefined)
+                        zoneReadyDeferred.resolve();
+                };
 
                 $scope.onCountrySelectionChanged = function () {
-                        if (countryAPI != undefined) {
-                            var selectedCountries = countryAPI.getSelectedIds();
-                            if (selectedCountries != undefined) {
-                                var setLoader = function (value) {
-                                    $scope.isLoadingDirective = value;
-                                };
-                                var payload = { filter: { CountryId: selectedCountries } }
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneAPI, payload, setLoader, countrySelectedPromiseDeferred);
-                            }
+                    if (countryAPI != undefined) {
+                        var selectedCountries = countryAPI.getSelectedIds();
+                        if (selectedCountries != undefined) {
+                            var setLoader = function (value) {
+                                $scope.isLoadingDirective = value;
+                            };
+                            var payload = { filter: { CountryId: selectedCountries } };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneAPI, payload, setLoader, countrySelectedPromiseDeferred);
                         }
-                }
+                    }
+                };
                 defineAPI();
 
             }
@@ -75,21 +75,20 @@
 
                     api.load = function (payload) {
                         var promises = [];
-                       
+
                         var loadCountryDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         if (payload != undefined && payload.CountryId != undefined)
-                           countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                            countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         countryReadyDeferred.promise.then(function () {
                             var payloadCountryDirective = {
                                 selectedIds: payload != undefined ? payload.CountryId : undefined
                             };
-                           
+
                             VRUIUtilsService.callDirectiveLoad(countryAPI, payloadCountryDirective, loadCountryDirectivePromiseDeferred);
                         });
                         promises.push(loadCountryDirectivePromiseDeferred.promise);
                         var loadZoneDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        if (countrySelectedPromiseDeferred != undefined)
-                        {
+                        if (countrySelectedPromiseDeferred != undefined) {
                             UtilsService.waitMultiplePromises([zoneReadyDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
                                 var payloadZoneDirective;
                                 if (payload != undefined) {
@@ -101,21 +100,20 @@
                                 VRUIUtilsService.callDirectiveLoad(zoneAPI, payloadZoneDirective, loadZoneDirectivePromiseDeferred);
                                 countrySelectedPromiseDeferred = undefined;
                             });
-                        } else
-                        {
+                        } else {
                             loadZoneDirectivePromiseDeferred.resolve();
                         }
-                        
+
                         promises.push(loadZoneDirectivePromiseDeferred.promise);
                         return UtilsService.waitMultiplePromises(promises);
-                    }
+                    };
                     api.getData = function () {
                         var data = {
                             CountryId: countryAPI.getSelectedIds(),
                             ZonesIds: zoneAPI.getSelectedIds()
-                        }
+                        };
                         return data;
-                    }
+                    };
 
                     return api;
                 }

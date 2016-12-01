@@ -49,7 +49,7 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.Extensions.TelesSwitch.ReactivateTelesSwitchUserProvisionerRuntimeSettings,Retail.BusinessEntity.Extensions.TelesSwitch"
-                    }
+                    };
                     return data;
                 }
             }

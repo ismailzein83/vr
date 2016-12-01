@@ -24,7 +24,7 @@
             $scope.scopeModel.add = function () {
                 var onCreditClassAdded = function (addedCreditClass) {
                     gridAPI.onCreditClassAdded(addedCreditClass);
-                }
+                };
                 Reprocess_CreditClassService.addCreditClass(onCreditClassAdded);
             };
 

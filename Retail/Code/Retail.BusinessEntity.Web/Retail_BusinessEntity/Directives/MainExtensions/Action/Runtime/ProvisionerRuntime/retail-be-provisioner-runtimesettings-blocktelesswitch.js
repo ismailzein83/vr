@@ -48,8 +48,8 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.Extensions.TelesSwitch.BlockTelesSwitchUserProvisionerRuntimeSettings,Retail.BusinessEntity.Extensions.TelesSwitch",
-                    }
+                        $type: "Retail.BusinessEntity.Extensions.TelesSwitch.BlockTelesSwitchUserProvisionerRuntimeSettings,Retail.BusinessEntity.Extensions.TelesSwitch"
+                    };
                     return data;
                 }
             }

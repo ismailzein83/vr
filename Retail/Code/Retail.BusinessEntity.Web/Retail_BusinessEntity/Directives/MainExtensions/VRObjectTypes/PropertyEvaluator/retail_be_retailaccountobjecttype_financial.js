@@ -45,9 +45,9 @@
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.VRObjectTypes.FinancialRetailAccountPropertyEvaluator, Retail.BusinessEntity.MainExtensions",
                         FinancialField: $scope.scopeModel.selectedFinancialRetailAccount.value
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

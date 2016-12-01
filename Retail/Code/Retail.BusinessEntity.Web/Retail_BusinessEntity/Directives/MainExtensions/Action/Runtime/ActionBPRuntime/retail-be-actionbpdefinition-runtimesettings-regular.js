@@ -34,7 +34,7 @@
                 $scope.scopeModel.onProvisionerRuntimeSettingReady = function (api) {
                     provisionerRuntimeAPI = api;
                     provisionerReadyDeferred.resolve();
-                }
+                };
 
                 defineAPI();
             }
@@ -79,7 +79,7 @@
                         var provisionerSettingLoadDeferred = UtilsService.createPromiseDeferred();
 
                         provisionerReadyDeferred.promise.then(function () {
-                            var settingPayload = provisionerDefinitionSettings != undefined ? { provisionerRuntimeSettings: provisionerDefinitionSettings } : undefined
+                            var settingPayload = provisionerDefinitionSettings != undefined ? { provisionerRuntimeSettings: provisionerDefinitionSettings } : undefined;
                             VRUIUtilsService.callDirectiveLoad(provisionerRuntimeAPI, settingPayload, provisionerSettingLoadDeferred);
                         });
                         return provisionerSettingLoadDeferred.promise;
@@ -98,7 +98,7 @@
                     var data = {
                         $type: "Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPSettings, Retail.BusinessEntity.MainActionBPs.Entities",
                         ActionProvisioner: provisionerRuntimeAPI.getData()
-                    }
+                    };
                     return data;
                 }
             }

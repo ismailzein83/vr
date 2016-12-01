@@ -33,12 +33,12 @@
             $scope.scopeModel.onServiceTypeDirectiveReady = function (api) {
                 serviceTypeSelectorAPI = api;
                 serviceTypeSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onTrafficDirectionReady = function (api) {
                 trafficDirectionSelectorAPI = api;
                 trafficDirectionSelectorReadyDeferred.resolve();
-            }
+            };
 
            
             $scope.scopeModel.save = function () {

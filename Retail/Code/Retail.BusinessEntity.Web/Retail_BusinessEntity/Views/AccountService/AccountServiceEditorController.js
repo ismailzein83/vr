@@ -46,7 +46,7 @@
                     return Retail_BE_AccountServiceAPIService.HasUpdateAccountServicePermission();
                 else
                     return Retail_BE_AccountServiceAPIService.HasAddAccountServicePermission();
-            }
+            };
 
             $scope.scopeModel.saveAccountService = function () {
                 if (isEditMode) {
@@ -60,22 +60,21 @@
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountAPI = api;
                 accountReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onServiceTypeSelectorReady = function (api) {
                 serviceTypeAPI = api;
                 serviceTypeReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onChargingPolicySelectorReady = function (api) {
                 chargingPolicyAPI = api;
                 chargingPolicyReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onServiceTypeSelectionChanged = function () {
                 var serviceTypeId = serviceTypeAPI.getSelectedIds();
-                if(serviceTypeId !=undefined)
-                {
+                if (serviceTypeId != undefined) {
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
@@ -84,7 +83,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, chargingPolicyAPI, payloadChargingPolicyDirective, setLoader, serviceTypeSelectedPromiseDeferred);
                 }
-            }
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()

@@ -34,7 +34,7 @@
             $scope.scopeModel.chargingSetPeriodDefinitionDirectiveReady = function (api) {
                 chargingSetPeriodDefinitionAPI = api;
                 chargingSetPeriodDefinitionReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -48,7 +48,7 @@
             $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onEntityTypeSelectionChanged = function () {
                 if (entityTypeSelectedReadyDeferred == undefined) {
                     var selectedEntityType = entityTypeAPI.getSelectedIds();
@@ -62,7 +62,7 @@
                         });
                     }
                 }
-            }
+            };
         }
 
         function addApiToSectionItemObj(tempItem) {
@@ -118,13 +118,13 @@
                     RecurringCharge: item.RecurringCharge ? item.RecurringCharge : 0,
                     StatusDefinitionId: item.StatusDefinitionId,
                     RecurringPeriodSettings: item.directiveAPI.getData()
-                }
+                };
                 statusCharges.push(statusCharge);
             }
             var settings = {
                 EntityType: entityTypeAPI.getSelectedIds(),
                 StatusCharges: statusCharges
-            }
+            };
 
             return {
                 StatusChargingSetId: statusChargingEntity != undefined ? statusChargingEntity.StatusChargingSetId : undefined,
@@ -208,7 +208,7 @@
                                 entityStatusChargeInfo: currentItem,
                                 readyPromiseDeferred: utilsService.createPromiseDeferred(),
                                 loadPromiseDeferred: utilsService.createPromiseDeferred(),
-                            }
+                            };
                             promises.push(sectionItem.loadPromiseDeferred.promise);
                             AddAPIToSectionItem(sectionItem);
                         }

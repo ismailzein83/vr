@@ -48,8 +48,8 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.RadiusSQLProvisionerRuntimeSetting,Retail.BusinessEntity.MainExtensions",
-                    }
+                        $type: "Retail.BusinessEntity.MainExtensions.RadiusSQLProvisionerRuntimeSetting,Retail.BusinessEntity.MainExtensions"
+                    };
                     return data;
                 }
             }

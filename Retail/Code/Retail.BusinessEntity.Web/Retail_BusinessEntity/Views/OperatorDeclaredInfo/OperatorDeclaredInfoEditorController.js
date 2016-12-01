@@ -31,7 +31,7 @@
             $scope.scopeModel.onOperatorItemsReady = function (api) {
                 operatorItemsAPI = api;
                 operatorItemsReadyDeferred.resolve()
-            }
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateOperatorDeclaredInfo() : insertOperatorDeclaredInfo();
             };
@@ -98,8 +98,8 @@
                 var payload;
                 if (operatorDeclaredInfoEntity != undefined && operatorDeclaredInfoEntity.Settings != undefined && operatorDeclaredInfoEntity.Settings.Items != undefined)
                     payload = {
-                        items:operatorDeclaredInfoEntity.Settings.Items
-                    }
+                        items: operatorDeclaredInfoEntity.Settings.Items
+                    };
                 VRUIUtilsService.callDirectiveLoad(operatorItemsAPI, payload, operatorItemsLoadDeferred);
             });
             return operatorItemsLoadDeferred.promise;

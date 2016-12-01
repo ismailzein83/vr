@@ -58,8 +58,8 @@
                         $type: "Retail.BusinessEntity.MainExtensions.Package.DataService,Retail.BusinessEntity.MainExtensions",
                         ConnectionType: $scope.scopeModel.selectedConnectionType.value,
                         DownloadSpeed: $scope.scopeModel.downloadSpeed,
-                        UploadSpeed: $scope.scopeModel.uploadSpeed,
-                    }
+                        UploadSpeed: $scope.scopeModel.uploadSpeed
+                    };
                     return data;
                 }
             }

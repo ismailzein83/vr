@@ -33,7 +33,7 @@
             $scope.scopeModel.partTypeDirectiveReady = function (api) {
                 partTypeAPI = api;
                 partTypeReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updatePartType() : insertPartType();

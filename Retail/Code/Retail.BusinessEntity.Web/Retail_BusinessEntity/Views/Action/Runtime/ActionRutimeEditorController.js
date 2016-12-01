@@ -57,12 +57,11 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         var context = {
                             onClose: function () {
-                                if (onActionExecuted != undefined && typeof (onActionExecuted) == 'function')
-                                {
+                                if (onActionExecuted != undefined && typeof (onActionExecuted) == 'function') {
                                     return onActionExecuted();
                                 }
                             }
-                        }
+                        };
                         $scope.modalContext.closeModal();
                         BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                     }

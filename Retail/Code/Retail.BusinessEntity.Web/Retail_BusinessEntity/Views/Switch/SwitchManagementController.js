@@ -27,13 +27,13 @@
             $scope.scopeModel.add = function () {
                 var onSwitchAdded = function (addedSwitch) {
                     gridAPI.onSwitchAdded(addedSwitch);
-                }
+                };
                 Retail_BE_SwitchService.addSwitch(onSwitchAdded);
             };
 
             $scope.onSwitchUpdated = function (updatedSwitch) {
                 gridAPI.onSwitchUpdated(updatedSwitch);
-            }
+            };
 
         }
 

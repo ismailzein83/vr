@@ -54,7 +54,7 @@
                         $type: "Retail.BusinessEntity.MainExtensions.RadiusSQLProvisionerDefinitionSetting,Retail.BusinessEntity.MainExtensions",
                         Query: $scope.scopeModel.query,
                         ConnectionString: $scope.scopeModel.connectionString
-                    }
+                    };
                     return data;
                 }
             }

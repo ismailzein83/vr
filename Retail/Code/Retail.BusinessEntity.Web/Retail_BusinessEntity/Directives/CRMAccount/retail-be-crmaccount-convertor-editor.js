@@ -35,7 +35,7 @@ app.directive('retailBeCrmaccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
@@ -43,7 +43,7 @@ app.directive('retailBeCrmaccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         Name: "CRM Account Convertor"
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

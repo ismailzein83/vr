@@ -30,11 +30,10 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.chargeTypes = UtilsService.getArrayEnum(Retail_BE_ChargeTypeEnum);
                 $scope.scopeModel.selectedChargeType = Retail_BE_ChargeTypeEnum.PerMinute;
-                $scope.scopeModel.onVoiceTypeDirectiveReady = function(api)
-                {
+                $scope.scopeModel.onVoiceTypeDirectiveReady = function (api) {
                     voiceTypeDirectiveAPI = api;
                     voiceTypeReadyPromiseDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -70,7 +69,7 @@
                         $type: "Retail.BusinessEntity.MainExtensions.Package.VoiceService,Retail.BusinessEntity.MainExtensions",
                         VoiceType: voiceTypeDirectiveAPI.getData(),
                         ChargeType: $scope.scopeModel.selectedChargeType.value
-                    }
+                    };
                     return data;
                 }
             }

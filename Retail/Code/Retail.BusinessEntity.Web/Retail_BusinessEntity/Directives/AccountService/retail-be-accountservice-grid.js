@@ -37,7 +37,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
 
             $scope.scopeModel.getStatusColor = function (dataItem) {
                 return dataItem.Style;
-            }
+            };
 
             defineMenuActions();
 
@@ -51,11 +51,11 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAccountServiceAdded = function (accountServiceObject) {
                         drillDownManager.setDrillDownExtensionObject(accountServiceObject);
                         gridAPI.itemAdded(accountServiceObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -148,7 +148,7 @@ function (UtilsService, VRNotificationService, Retail_BE_AccountServiceAPIServic
                 drillDownManager.setDrillDownExtensionObject(accountServiceObject);
                 gridAPI.itemUpdated(accountServiceObject);
 
-            }
+            };
             Retail_BE_AccountServiceService.editAccountService(accountServiceObj.Entity.AccountServiceId, onAccountServiceUpdated);
         }
 

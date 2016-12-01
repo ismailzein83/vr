@@ -36,17 +36,17 @@ app.directive('retailBeAccounttypePartRuntimeEntitiesinfo', ["UtilsService", "VR
             $scope.scopeModel.onAgentSelectorDirectiveReady = function (api) {
                 agentDirectiveApi = api;
                 agentReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onPointOfSaleSelectorDirectiveReady = function (api) {
                 posDirectiveApi = api;
                 posReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onDistributorSelectorDirectiveReady = function (api) {
                 distributorDirectiveApi = api;
                 distributorReadyPromiseDeferred.resolve();
-            }
+            };
 
             defineAPI();
         }

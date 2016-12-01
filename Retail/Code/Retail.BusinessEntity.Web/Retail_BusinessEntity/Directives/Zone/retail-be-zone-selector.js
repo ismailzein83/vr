@@ -34,7 +34,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -53,7 +53,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
             }
 
             function getDirectiveAPI() {
@@ -67,8 +67,7 @@
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
-                    if (filter != undefined)
-                    {
+                    if (filter != undefined) {
                         return Retail_BE_ZoneAPIService.GetZonesByCountryId(UtilsService.serializetoJson(filter)).then(function (response) {
                             selectorAPI.clearDataSource();
                             ctrl.datasource.length = 0;
@@ -82,12 +81,12 @@
                             }
                         });
                     }
-                   
-                }
+
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('ZoneId', attrs, ctrl);
-                }
+                };
 
                 return api;
             }

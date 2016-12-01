@@ -59,8 +59,8 @@
                         $type: "Retail.BusinessEntity.MainExtensions.SwitchIntegrations.Radius,Retail.BusinessEntity.MainExtensions",
                         ConnectionString: $scope.scopeModel.connectionString,
                         TableName: $scope.scopeModel.tableName,
-                        MappingLogic: $scope.scopeModel.mappingLogic,
-                    }
+                        MappingLogic: $scope.scopeModel.mappingLogic
+                    };
                     return data;
                 }
             }

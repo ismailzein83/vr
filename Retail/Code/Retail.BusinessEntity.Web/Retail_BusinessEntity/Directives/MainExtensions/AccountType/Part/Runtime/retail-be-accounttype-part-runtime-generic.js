@@ -25,11 +25,10 @@ app.directive('retailBeAccounttypePartRuntimeGeneric', ['UtilsService', 'VRUIUti
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onGenericPartDirectiveReady = function(api)
-            {
+            $scope.scopeModel.onGenericPartDirectiveReady = function (api) {
                 genericpartDirectiveAPI = api;
                 genericpartDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
 
             defineAPI();
         }

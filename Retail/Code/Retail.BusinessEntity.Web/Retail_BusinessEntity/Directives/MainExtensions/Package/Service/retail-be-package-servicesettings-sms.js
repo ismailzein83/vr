@@ -55,8 +55,8 @@
                         $type: "Retail.BusinessEntity.MainExtensions.Package.SMSService,Retail.BusinessEntity.MainExtensions",
                         MMSSupport: $scope.scopeModel.mMSSupport,
                         Unicode: $scope.scopeModel.unicode,
-                        NbofCharPerMessage: $scope.scopeModel.nbofCharPerMessage,
-                    }
+                        NbofCharPerMessage: $scope.scopeModel.nbofCharPerMessage
+                    };
                     return data;
                 }
             }

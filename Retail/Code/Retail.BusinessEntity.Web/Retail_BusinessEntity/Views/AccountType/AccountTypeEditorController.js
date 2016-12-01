@@ -37,16 +37,16 @@
             $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
                 statusDefinitionSelectorAPI = api;
                 statusDefinitionSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.datasource = [];
 
             $scope.scopeModel.onSelectItem = function (dataItem) {
                 addAccountPart(dataItem);
-            }
+            };
             $scope.scopeModel.onDeselectItem = function (dataItem) {
                 var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.AccountPartDefinitionId, 'AccountPartDefinitionId');
                 $scope.scopeModel.datasource.splice(datasourceIndex, 1);
-            }
+            };
             $scope.scopeModel.removeFilter = function (dataItem) {
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedPartDefinitions, dataItem.AccountPartDefinitionId, 'AccountPartDefinitionId');
                 $scope.scopeModel.selectedPartDefinitions.splice(index, 1);

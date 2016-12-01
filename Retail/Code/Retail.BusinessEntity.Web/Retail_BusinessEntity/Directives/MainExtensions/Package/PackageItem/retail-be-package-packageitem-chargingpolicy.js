@@ -26,11 +26,10 @@
             var settingsDirectiveAPI;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onChargingPolicySettingReady = function (api)
-                {
+                $scope.scopeModel.onChargingPolicySettingReady = function (api) {
                     settingsDirectiveAPI = api;
                     defineAPI();
-                }
+                };
                
             }
 
@@ -66,7 +65,7 @@
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.ServicePackageItem.ServicePackageChargingPolicyItem,Retail.BusinessEntity.MainExtensions",
                         ChargingPolicySettings: settingsDirectiveAPI.getData()
-                    }
+                    };
                     return data;
                 }
             }

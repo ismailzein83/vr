@@ -24,7 +24,7 @@
             $scope.add = function () {
                 var onStatusDefinitionAdded = function (addedStatusDefinition) {
                     gridAPI.onStatusDefinitionAdded(addedStatusDefinition);
-                }
+                };
                 Retail_BE_StatusDefinitionService.addStatusDefinition(onStatusDefinitionAdded);
             };
             $scope.hasAddStatusDefinitionPermission = function () {               
@@ -39,7 +39,7 @@
             $scope.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
-            }
+            };
         }
 
         function load(){

@@ -35,7 +35,7 @@ app.directive('retailBeDistributorSynchronizerEditor', ['UtilsService', 'VRUIUti
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
@@ -43,7 +43,7 @@ app.directive('retailBeDistributorSynchronizerEditor', ['UtilsService', 'VRUIUti
                         Name: "Distributor Synchronizer"
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

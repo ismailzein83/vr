@@ -32,15 +32,15 @@ function (UtilsService, VRUIUtilsService) {
             ctrl.onRuleDefinitionSelectorReady = function (api) {
                 ruleDefinitionSelectorAPI = api;
                 ruleDefinitionSelectorReadyDeferred.resolve();
-            }
+            };
             ctrl.datasource = [];
             ctrl.onSelectItem = function (selectedItem) {
                 addRuleDefinitionFunction(selectedItem);
-            }
+            };
             ctrl.onDeselectItem = function (dataItem) {
                 var datasourceIndex = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.RuleDefinitionId, 'RuleDefinitionId');
                 ctrl.datasource.splice(datasourceIndex, 1);
-            }
+            };
 
             function addRuleDefinitionFunction(selectedItem) {
                 var dataItem = {
@@ -73,12 +73,12 @@ function (UtilsService, VRUIUtilsService) {
                     });
                 }
                 return ruleDefinitions;
-            }
+            };
 
             api.load = function (payload) {
 
                 var ruleDefinitionIds = [];
-                if (payload != undefined && payload.ruleDefinitions !=undefined) {
+                if (payload != undefined && payload.ruleDefinitions != undefined) {
                     for (var i = 0; i < payload.ruleDefinitions.length; i++) {
                         var obj = payload.ruleDefinitions[i];
                         ruleDefinitionIds.push(obj.RuleDefinitionId);
@@ -96,16 +96,15 @@ function (UtilsService, VRUIUtilsService) {
                 });
 
                 return ruleDefinitionLoadDeferred.promise.then(function () {
-                    if(payload !=undefined && payload.ruleDefinitions !=undefined)
-                    {
+                    if (payload != undefined && payload.ruleDefinitions != undefined) {
                         for (var i = 0; i < payload.ruleDefinitions.length; i++) {
                             var ruleDefinition = payload.ruleDefinitions[i];
                             addDataItemToGrid(ruleDefinition)
                         }
                     }
                 });
-               
-            }
+
+            };
 
             function addDataItemToGrid(ruleDefinition) {
                 var item = UtilsService.getItemByVal(ctrl.selectedRuleDefinitions, ruleDefinition.RuleDefinitionId, 'GenericRuleDefinitionId');

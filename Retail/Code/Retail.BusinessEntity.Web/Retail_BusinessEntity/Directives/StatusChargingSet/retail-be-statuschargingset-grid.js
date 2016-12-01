@@ -35,11 +35,11 @@ app.directive('retailBeStatuschargingsetGrid', ['Retail_BE_StatusChargingSetAPIS
 
                 api.onStatusChargingSetAdded = function (addedStatusChargingSet) {
                     gridAPI.itemAdded(addedStatusChargingSet);
-                }
+                };
 
                 api.onStatusChargingSetUpdated = function (updatedStatusChargingSet) {
                     gridAPI.itemUpdated(updatedStatusChargingSet);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

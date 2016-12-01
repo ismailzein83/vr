@@ -41,12 +41,12 @@ function (UtilsService, VRNotificationService, Retail_BE_PopAPIService, Retail_B
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onPopAdded = function (popObject) {
                         gridAPI.itemAdded(popObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -74,7 +74,7 @@ function (UtilsService, VRNotificationService, Retail_BE_PopAPIService, Retail_B
         function editPop(popObj) {
             var onPopUpdated = function (popObj) {
                 gridAPI.itemUpdated(popObj);
-            }
+            };
             Retail_BE_PopService.editPop(popObj.PopId, onPopUpdated);
         }
         

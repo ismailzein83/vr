@@ -35,7 +35,7 @@ app.directive('retailBePosConvertorEditor', ['UtilsService', 'VRUIUtilsService',
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
@@ -43,7 +43,7 @@ app.directive('retailBePosConvertorEditor', ['UtilsService', 'VRUIUtilsService',
                         Name: "POS Convertor"
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

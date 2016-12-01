@@ -38,10 +38,10 @@
 
                     };
                     $scope.selectedZones.push(item);
-                }
+                };
                 $scope.removeZone = function (zone) {
                     $scope.selectedZones.splice($scope.selectedZones.indexOf(zone), 1);
-                }
+                };
 
                 defineAPI();
             }
@@ -108,8 +108,8 @@
                     }
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.Package.InterNationalVoiceType,Retail.BusinessEntity.MainExtensions",
-                        TargetZones: targetZones,
-                    }
+                        TargetZones: targetZones
+                    };
                     return data;
                 }
             }

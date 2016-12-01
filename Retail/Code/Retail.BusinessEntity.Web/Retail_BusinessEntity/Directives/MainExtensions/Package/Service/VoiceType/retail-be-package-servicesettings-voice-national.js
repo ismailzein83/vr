@@ -53,8 +53,8 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.Package.NationalVoiceType,Retail.BusinessEntity.MainExtensions",
-                        NetworkType: $scope.scopeModel.selectedNetworkType.value,
-                    }
+                        NetworkType: $scope.scopeModel.selectedNetworkType.value
+                    };
                     return data;
                 }
             }

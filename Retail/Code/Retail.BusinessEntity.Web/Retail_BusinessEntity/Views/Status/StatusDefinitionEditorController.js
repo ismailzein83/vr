@@ -49,12 +49,12 @@
             $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
                 entityTypeAPI = api;
                 entityTypeSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onStyleDefinitionSelectorReady = function (api) {
                 styleDefinitionAPI = api;
                 styleDefinitionSelectorReadyDeferred.resolve();
-            }
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -165,7 +165,7 @@
                 StyleDefinitionId: styleDefinitionAPI.getSelectedIds(),
                 HasInitialCharge: $scope.scopeModel.HasInitialCharge,
                 HasRecurringCharge: $scope.scopeModel.HasRecurringCharge
-            }
+            };
 
             return {
                 StatusDefinitionId: statusDefinitionEntity != undefined ? statusDefinitionEntity.StatusDefinitionId : undefined,

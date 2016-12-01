@@ -35,7 +35,7 @@ app.directive('retailBeAccountConvertorEditor', ['UtilsService', 'VRUIUtilsServi
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                     }
-                }
+                };
 
                 api.getData = function () {
                     var data = {
@@ -43,7 +43,7 @@ app.directive('retailBeAccountConvertorEditor', ['UtilsService', 'VRUIUtilsServi
                         Name: "Account Convertor"
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

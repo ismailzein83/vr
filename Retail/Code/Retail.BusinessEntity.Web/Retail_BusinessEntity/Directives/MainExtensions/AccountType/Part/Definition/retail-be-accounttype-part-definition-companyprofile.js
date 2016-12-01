@@ -32,34 +32,33 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
 
             $scope.scopeModel.addContactType = function () {
                 var dataItem = {
-                    ContactId:counter+1,
+                    ContactId: counter + 1,
                     Name: undefined,
-                    Title:undefined
-                }
+                    Title: undefined
+                };
                 counter++;
                 $scope.scopeModel.contactTypes.push(dataItem);
-            }
+            };
 
             $scope.scopeModel.removeContactType = function (contactTypeObj) {
                 $scope.scopeModel.contactTypes.splice($scope.scopeModel.contactTypes.indexOf(contactTypeObj), 1);
-            }
+            };
 
             $scope.scopeModel.validateContactTypes = function () {
-                for (var i = 0; i < $scope.scopeModel.contactTypes.length; i++)
-                {
+                for (var i = 0; i < $scope.scopeModel.contactTypes.length; i++) {
                     var contactType = $scope.scopeModel.contactTypes[i];
                     for (var j = 0; j < $scope.scopeModel.contactTypes.length; j++) {
-                       var currentContactType = $scope.scopeModel.contactTypes[j];
-                       if (contactType.Name == currentContactType.Name && contactType.ContactId != currentContactType.ContactId)
+                        var currentContactType = $scope.scopeModel.contactTypes[j];
+                        if (contactType.Name == currentContactType.Name && contactType.ContactId != currentContactType.ContactId)
                             return "Contact types with same name exist.";
                     }
                 }
                 if ($scope.scopeModel.contactTypes.length > 0)
                     return null;
-               
+
                 return "One contact type at least should be added.";
 
-            }
+            };
             defineAPI();
         }
         function defineAPI() {

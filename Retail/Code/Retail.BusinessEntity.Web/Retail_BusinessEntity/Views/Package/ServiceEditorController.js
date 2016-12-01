@@ -29,7 +29,7 @@
             $scope.scopeModel.onServiceDirectiveReady = function (api) {
                 serviceSettingsAPI = api;
                 serviceReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.saveService = function () {
                 if ($scope.scopeModel.isEditMode) {

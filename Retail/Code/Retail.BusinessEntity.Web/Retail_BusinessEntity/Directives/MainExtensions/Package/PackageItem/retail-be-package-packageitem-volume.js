@@ -47,7 +47,7 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.ServicePackageItem.ServicePackageVolumeItem,Retail.BusinessEntity.MainExtensions",
-                    }
+                    };
                     return data;
                 }
             }

@@ -64,7 +64,7 @@
             accountTypeSelectorReadyDeferred.promise.then(function () {
                 var payload = {
                     filter: { RootAccountTypeOnly: true }
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payload, accountTypeSelectorLoadDeferred);
             });
 

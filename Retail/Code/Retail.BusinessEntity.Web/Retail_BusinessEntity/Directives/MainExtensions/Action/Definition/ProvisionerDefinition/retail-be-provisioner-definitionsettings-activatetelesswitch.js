@@ -28,11 +28,10 @@
             var serviceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onServiceTypeReady = function (api)
-                {
+                $scope.scopeModel.onServiceTypeReady = function (api) {
                     serviceTypeAPI = api;
                     serviceTypeSelectorReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -70,7 +69,7 @@
                     var data = {
                         $type: "Retail.BusinessEntity.Extensions.TelesSwitch.ActivateTelesSwitchUserProvisionerDefinitionSettings,Retail.BusinessEntity.Extensions.TelesSwitch",
                         ServiceTypeIds: serviceTypeAPI.getSelectedIds()
-                    }
+                    };
                     return data;
                 }
             }

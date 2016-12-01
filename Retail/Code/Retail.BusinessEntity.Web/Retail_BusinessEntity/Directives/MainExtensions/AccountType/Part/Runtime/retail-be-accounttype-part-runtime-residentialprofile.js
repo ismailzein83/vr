@@ -37,21 +37,21 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.disabledfax = true;
             $scope.scopeModel.onFaxValueChange = function (value) {
                 $scope.scopeModel.disabledfax = (value == undefined);
-            }
+            };
             $scope.scopeModel.disabledphone = true;
             $scope.scopeModel.onPhoneValueChange = function (value) {
                 $scope.scopeModel.disabledphone = (value == undefined);
-            }
+            };
 
             $scope.scopeModel.addPhoneNumberOption = function () {
 
@@ -66,8 +66,9 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
             $scope.scopeModel.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingCities = value
-                };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingCities = value
+                    };
                     var payload = {
                         countryId: selectedCountryId
                     };
@@ -75,7 +76,7 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
                 }
                 else if (cityDirectiveAPI != undefined)
                     cityDirectiveAPI.clearDataSource();
-            }
+            };
 
 
             $scope.scopeModel.addFaxOption = function () {
@@ -168,7 +169,7 @@ app.directive('retailBeAccounttypePartRuntimeResidentialprofile', ["UtilsService
                     var citiesPayload = {
                         countryId: mainPayload.partSettings.CountryId,
                         selectedIds: mainPayload.partSettings.CityId
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;

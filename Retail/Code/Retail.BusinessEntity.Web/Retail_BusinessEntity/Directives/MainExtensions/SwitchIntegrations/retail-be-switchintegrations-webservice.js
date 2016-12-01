@@ -65,8 +65,8 @@
                         URL: $scope.scopeModel.url,
                         RequestType: $scope.scopeModel.selectedRequestType.value,
                         CredentialLogic: $scope.scopeModel.credentialLogic,
-                        MappingLogic: $scope.scopeModel.mappingLogic,
-                    }
+                        MappingLogic: $scope.scopeModel.mappingLogic
+                    };
                     return data;
                 }
             }

@@ -29,15 +29,15 @@
             $scope.scopeModel.onRuleDefinitionSelectorReady = function (api) {
                 ruleDefinitionSelectorAPI = api;
                 ruleDefinitionSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.assignIdentificationRule = function () {
-               addGenericRule(ruleDefinitionSelectorAPI.getSelectedIds());
-            }
+                addGenericRule(ruleDefinitionSelectorAPI.getSelectedIds());
+            };
         }
 
         function load() {
@@ -94,7 +94,7 @@
                 settings: {
                     Value: accountId,
                 }
-            }
+            };
 
             $scope.modalContext.closeModal();
 

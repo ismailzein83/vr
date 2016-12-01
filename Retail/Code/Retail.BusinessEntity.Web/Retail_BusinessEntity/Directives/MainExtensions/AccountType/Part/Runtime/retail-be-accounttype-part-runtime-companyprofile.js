@@ -39,21 +39,21 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.disabledfax = true;
             $scope.scopeModel.onFaxValueChange = function (value) {
                 $scope.scopeModel.disabledfax = (value == undefined);
-            }
+            };
             $scope.scopeModel.disabledphone = true;
             $scope.scopeModel.onPhoneValueChange = function (value) {
                 $scope.scopeModel.disabledphone = (value == undefined);
-            }
+            };
 
             $scope.scopeModel.addPhoneNumberOption = function () {
 
@@ -76,7 +76,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 }
                 else if (cityDirectiveAPI != undefined)
                     cityDirectiveAPI.clearDataSource();
-            }
+            };
 
 
             $scope.scopeModel.addFaxOption = function () {
@@ -150,8 +150,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         $scope.scopeModel.email = payload.partSettings.Email;
                         $scope.scopeModel.street = payload.partSettings.Street;
                         $scope.scopeModel.town = payload.partSettings.Town;
-                        $scope.scopeModel.website = payload.partSettings.Website
-                        $scope.scopeModel.poBox = payload.partSettings.POBox
+                        $scope.scopeModel.website = payload.partSettings.Website;
+                        $scope.scopeModel.poBox = payload.partSettings.POBox;
 
                         $scope.scopeModel.phoneNumbers = [];
                         if (payload.partSettings.PhoneNumbers != undefined)
@@ -189,7 +189,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             ContactName: contact.name,
                             ContactType: contact.contactType,
                             Email: contact.email,
-                            PhoneNumbers: UtilsService.getPropValuesFromArray(contact.phoneNumbers, "phoneNumber"),
+                            PhoneNumbers: UtilsService.getPropValuesFromArray(contact.phoneNumbers, "phoneNumber")
                         });
                     }
                 }
@@ -204,7 +204,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     POBox:$scope.scopeModel.poBox,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModel.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax"),
-                    Contacts: contacts,
+                    Contacts: contacts
                 };
             };
 
@@ -241,7 +241,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     var citiesPayload = {
                         countryId: mainPayload.partSettings.CountryId,
                         selectedIds: mainPayload.partSettings.CityId
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;
