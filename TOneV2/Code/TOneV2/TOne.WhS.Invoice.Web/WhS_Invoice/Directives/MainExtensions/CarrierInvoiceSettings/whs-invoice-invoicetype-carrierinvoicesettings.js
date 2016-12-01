@@ -37,23 +37,21 @@ app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "V
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
-                        if(payload.extendedSettingsEntity != undefined)
-                        {
+                    if (payload != undefined) {
+                        if (payload.extendedSettingsEntity != undefined) {
                             $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceTypes, payload.extendedSettingsEntity.InvoiceType, "value");
                         }
                     }
-                }
+                };
 
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Invoice.Business.Extensions.CarrierInvoiceSettings ,TOne.WhS.Invoice.Business",
-                        InvoiceType: $scope.scopeModel.selectedInvoiceType.value,
+                        InvoiceType: $scope.scopeModel.selectedInvoiceType.value
 
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

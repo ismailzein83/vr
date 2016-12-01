@@ -46,8 +46,7 @@ app.directive('whsInvoiceInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
                     var customerInvoiceMailTemplateLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(customerInvoiceMailTemplateLoadPromiseDeferred.promise);
-                    WhS_Invoice_InvoiceSettingService.getCustomerInvoiceMailType().then(function(response)
-                    {
+                    WhS_Invoice_InvoiceSettingService.getCustomerInvoiceMailType().then(function (response) {
                         customerInvoiceMailTemplateReadyPromiseDeferred.promise.then(function () {
                             var selectorPayload = { filter: { VRMailMessageTypeId: response } };
                             if (invoiceSettingsPayload != undefined && invoiceSettingsPayload.CustomerInvoiceSettings != undefined) {
@@ -55,7 +54,7 @@ app.directive('whsInvoiceInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsServ
                             }
                             VRUIUtilsService.callDirectiveLoad(customerInvoiceMailTemplateReadyAPI, selectorPayload, customerInvoiceMailTemplateLoadPromiseDeferred);
                         });
-                    })
+                    });
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
