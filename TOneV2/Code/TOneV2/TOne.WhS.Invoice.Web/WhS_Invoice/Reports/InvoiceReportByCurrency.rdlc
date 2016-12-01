@@ -1944,7 +1944,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.98583in</Width>
+              <Width>7.99042in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1961,8 +1961,18 @@
                             <Parameter Name="CurrencyName">
                               <Value>=Fields!OriginalSaleCurrency.Value</Value>
                             </Parameter>
+                            <Parameter Name="TotalDuration">
+                              <Value>=Fields!Duration.Value</Value>
+                            </Parameter>
+                            <Parameter Name="TotalCalls">
+                              <Value>=Fields!NumberOfCalls.Value</Value>
+                            </Parameter>
+                            <Parameter Name="TotalAmount">
+                              <Value>=Fields!SaleAmount.Value</Value>
+                            </Parameter>
                           </Parameters>
                           <Top>0.15625in</Top>
+                          <Left>0.00459in</Left>
                           <Height>2.69792in</Height>
                           <Width>7.98583in</Width>
                           <Style>
@@ -1979,7 +1989,6 @@
                         </Border>
                       </Style>
                     </Rectangle>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2005,7 +2014,7 @@
         <Top>9.15501in</Top>
         <Left>0.1425in</Left>
         <Height>2.85417in</Height>
-        <Width>7.98583in</Width>
+        <Width>7.99042in</Width>
         <ZIndex>34</ZIndex>
         <Style>
           <Border>

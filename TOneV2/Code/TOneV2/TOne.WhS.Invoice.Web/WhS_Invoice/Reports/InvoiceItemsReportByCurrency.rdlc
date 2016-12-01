@@ -22,7 +22,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>2.94791in</Top>
+        <Top>1.19791in</Top>
         <Left>2.57578in</Left>
         <Height>0.20833in</Height>
         <Width>0.90277in</Width>
@@ -38,7 +38,7 @@
       </Textbox>
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
-        <Top>2.87152in</Top>
+        <Top>1.12152in</Top>
         <Left>2.37786in</Left>
         <Height>0.02083in</Height>
         <Width>4.82985in</Width>
@@ -500,7 +500,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -664,7 +663,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.34895in</Top>
+        <Top>0.59895in</Top>
         <Left>0.02627in</Left>
         <Height>0.46875in</Height>
         <Width>7.23897in</Width>
@@ -696,7 +695,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox49</rd:DefaultName>
-        <Top>1.94617in</Top>
+        <Top>0.19617in</Top>
         <Left>0.05751in</Left>
         <Height>0.25in</Height>
         <Width>7.23897in</Width>
@@ -706,6 +705,111 @@
             <Style>None</Style>
           </Border>
           <BackgroundColor>DarkBlue</BackgroundColor>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox17">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=FormatNumber(Parameters!TotalDuration.Value,2)</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>1.19791in</Top>
+        <Left>3.68436in</Left>
+        <Height>0.20833in</Height>
+        <Width>1.0778in</Width>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox18">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!TotalCalls.Value</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>1.21179in</Top>
+        <Left>4.76216in</Left>
+        <Height>0.20833in</Height>
+        <Width>0.76592in</Width>
+        <ZIndex>5</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox19">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=FormatNumber(Parameters!TotalAmount.Value,2)</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>1.21179in</Top>
+        <Left>6.37093in</Left>
+        <Height>0.20833in</Height>
+        <Width>0.89431in</Width>
+        <ZIndex>6</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
           <PaddingTop>2pt</PaddingTop>
@@ -875,6 +979,24 @@
   </DataSets>
   <ReportParameters>
     <ReportParameter Name="CurrencyName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalDuration">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalCalls">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalAmount">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
