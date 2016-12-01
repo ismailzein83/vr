@@ -77,7 +77,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return new SaleEntityZoneService
             {
                 SaleEntityServiceId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
                 Services = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["Services"] as string),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED")

@@ -48,7 +48,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 TechnicalEmail = reader["TechnicalEmail"].ToString(),
                 Telephone = reader["Telephone"] as string,
                 Website = reader["Website"] as string,
-                IsDeleted = (reader["IsDeleted"] as string) != "N",
+                IsDeleted = (reader["IsDeleted"] as string).Equals("Y", System.StringComparison.InvariantCultureIgnoreCase),
                 CurrencyId = reader["CurrencyID"] as string,
                 DuePeriod = GetReaderValue<byte>(reader, "DuePeriod")
             };
@@ -61,7 +61,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [SupportContact]   ,[SupportEmail] ,[CurrencyID]  ,[RegistrationNumber]   , 
                                                                [AccountManagerEmail]   ,[SMSPhoneNumber] ,[Website]  ,[BillingDisputeEmail]  , 
                                                                [TechnicalContact] ,[TechnicalEmail]   ,[CommercialContact]   ,[CommercialEmail] , 
-                                                               [AccountManagerContact], [IsDeleted], [CurrencyID], [DuePeriod] FROM [dbo].[CarrierProfile]  
+                                                               [AccountManagerContact], [IsDeleted], [DuePeriod] FROM [dbo].[CarrierProfile]  
                                                         WITH (NOLOCK)";
     }
 }

@@ -33,7 +33,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 AccountType = (SourceAccountType)reader["AccountType"],
                 CurrencyId = reader["CurrencyID"] as string,
                 CarrierMask = reader["CarrierMask"] as string,
-                IsDeleted = (reader["IsDeleted"] as string) != "N"
+                IsDeleted = (reader["IsDeleted"] as string).Equals("Y", System.StringComparison.InvariantCultureIgnoreCase)
             };
             return sourceCarrierAccount;
         }

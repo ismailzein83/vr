@@ -71,7 +71,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return new SupplierZoneService
             {
                 SupplierZoneServiceId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
                 SupplierId = GetReaderValue<int>(reader, "SupplierID"),
                 ReceivedServices = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["ReceivedServicesFlag"] as string),
                 EffectiveServices = Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(reader["EffectiveServiceFlag"] as string),
