@@ -34,7 +34,7 @@ namespace Vanrise.Queueing.Data.SQL
             _mapper.Add("Entity.RetryCount", "RetryCount");
             _mapper.Add("Entity.CreatedTime", "CreatedTime");
             _mapper.Add("Entity.LastUpdatedTime", "LastUpdatedTime");
- 
+            _mapper.Add("Entity.QueueId", "QueueId");
         }
 
 
