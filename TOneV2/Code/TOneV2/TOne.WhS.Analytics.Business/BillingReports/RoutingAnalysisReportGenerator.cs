@@ -11,13 +11,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public class RoutingAnalysisReportGenerator : IReportGenerator
     {
+        private class TopZone
+        {
+            public long id{ get; set; }
+            public decimal duration { get; set; }
+        }
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
 
             #region BillingStats
             List<long> topZoneIds = new List<long>();
-
+            List<TopZone> topZones = new List<TopZone>();
+            List<TopZone> topZonesOrdered = new List<TopZone>();
             DataRetrievalInput<AnalyticQuery> topNSaleZoneQuery = new DataRetrievalInput<AnalyticQuery>
             {
                 Query = new AnalyticQuery
@@ -29,8 +35,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
                     ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>(),
-                    TopRecords = parameters.Top
+                    Filters = new List<DimensionFilter>()
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
@@ -61,15 +66,24 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 foreach (var analyticRecord in resultN.Data)
                 {
-                    RoutingAnalysisFormatted routingAnalysis = new RoutingAnalysisFormatted();
-
                     var zoneValue = analyticRecord.DimensionValues[0];
                     if (zoneValue != null)
                     {
-                        topZoneIds.Add((long)zoneValue.Value);
+                        MeasureValue duration;
+                        analyticRecord.MeasureValues.TryGetValue("DurationNet", out duration);
+
+                        topZones.Add(new TopZone()
+                        {
+                            id = (long) zoneValue.Value,
+                            duration = Convert.ToDecimal(duration.Value ?? 0.0)
+                        });
                     }
                 }
-
+                topZonesOrdered = topZones.OrderByDescending(x => x.duration).ToList();
+                foreach (var zone in topZonesOrdered)
+                {
+                    topZoneIds.Add(zone.id);
+                }
                 DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
                 {
                     Query = new AnalyticQuery
@@ -141,9 +155,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 double TotalSale = 0;
                 double TotalCost = 0;
                 double TotalProfit = 0;
-                DateTime start = DateTime.Now;
                 var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
-                TimeSpan spent = DateTime.Now.Subtract(start);
                 if (result != null)
                     foreach (var analyticRecord in result.Data)
                     {
@@ -238,11 +250,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     }
 
             }
-            var list = listRoutingAnalysisFormatteds;
+
             Dictionary<string, System.Collections.IEnumerable> dataSources =
                 new Dictionary<string, System.Collections.IEnumerable>
                 {
-                    {"RoutingAnalysis", listRoutingAnalysisFormatteds}//.OrderByDescending(r=>r.SaleZone).Take(parameters.Top)}
+                    {"RoutingAnalysis", listRoutingAnalysisFormatteds}
                 };
 
             return dataSources;
