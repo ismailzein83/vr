@@ -17,19 +17,19 @@ namespace Retail.BusinessEntity.Business.Extensions
 
         public ActionBPSettings ActionBPSettings { get; set; }
 
-        public override void Execute(IVRActionExecutionContext context)
+        public override bool TryConvertToBPInputArgument(IVRActionConvertToBPInputArgumentContext context)
         {
             BalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as BalanceAlertEventPayload;
             if (balanceAlertEventPayload == null)
                 throw new NullReferenceException("balanceAlertEventPayload");
             Account account = new AccountManager().GetAccount(balanceAlertEventPayload.AccountId);
-            if(account == null)
+            if (account == null)
                 throw new NullReferenceException("account");
 
-            var actionDefinition = GetActionDefinition();                       
+            var actionDefinition = GetActionDefinition();
 
             long entityId;
-            switch(actionDefinition.EntityType)
+            switch (actionDefinition.EntityType)
             {
                 case Entities.EntityType.Account: entityId = account.AccountId; break;
                 case Entities.EntityType.AccountService:
@@ -37,22 +37,21 @@ namespace Retail.BusinessEntity.Business.Extensions
                         throw new NullReferenceException(String.Format("actionDefinition.Settings.EntityTypeId. actionDefinitionId '{0}'", this.ActionDefinitionId));
                     var accountService = new AccountServiceManager().GetAccountService(account.AccountId, actionDefinition.Settings.EntityTypeId.Value);
                     if (accountService == null)//service type is not assigned to account
-                        return;
+                    {
+                        return false;
+                    }
                     entityId = accountService.AccountServiceId;
                     break;
                 default: throw new NotSupportedException(string.Format("actionDefinition.Settings.EntityType '{0}'", actionDefinition.EntityType));
             }
 
-            var actionBPInput = new ActionBPInputArgument
+            context.BPInputArgument = new ActionBPInputArgument
             {
                 ActionDefinitionId = this.ActionDefinitionId,
                 ActionEntityId = entityId,
                 ActionBPSettings = this.ActionBPSettings
             };
-            var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput { InputArguments = actionBPInput };
-            createProcessInput.InputArguments.UserId = context.UserID;
-            Vanrise.BusinessProcess.Business.BPInstanceManager bpInstanceManager = new Vanrise.BusinessProcess.Business.BPInstanceManager();
-            var output = bpInstanceManager.CreateNewProcess(createProcessInput);            
+            return true;
         }
 
         private ActionDefinition GetActionDefinition()

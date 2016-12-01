@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class FixedChargingDefinitionSettings
+    public class FixedChargingDefinition
     {
         public Dictionary<Guid, FixedChargingDefinitionRecurringItem> RecurringItems { get; set; }
 

@@ -115,7 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account360DegreeManager.cs" />
+    <Compile Include="AccountViewManager.cs" />
     <Compile Include="AccountConditionEvaluationContext.cs" />
     <Compile Include="AccountGenericFields\AccountGenericFieldContext.cs" />
     <Compile Include="AccountGenericFields\AccountPartGenericField.cs" />

@@ -8,17 +8,16 @@ using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class Account360DegreeManager
+    public class AccountViewManager
     {
-        public List<Account360DegreeView> GetAccount360DegreeViews(long accountId)
+        public List<AccountViewDefinition> GetAccountViews(long accountId)
         {
-            VRComponentTypeManager componentTypeManager = new VRComponentTypeManager();
-            var allViews = componentTypeManager.GetComponentTypes<Account360DegreeViewSettings, Account360DegreeView>();
+            var allViews = new ConfigurationManager().GetAccountViewDefinitions();
             var account = new AccountManager().GetAccount(accountId);
             if (account == null)
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
             var accountConditionContext = new AccountConditionEvaluationContext { Account = account };
-            return allViews.Where(itm => itm.Settings.AvailabilityCondition == null || itm.Settings.AvailabilityCondition.Evaluate(accountConditionContext)).ToList();
+            return allViews.Where(itm => itm.AvailabilityCondition == null || itm.AvailabilityCondition.Evaluate(accountConditionContext)).ToList();
         }
     }
 }

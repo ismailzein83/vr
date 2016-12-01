@@ -9,7 +9,17 @@ namespace Retail.BusinessEntity.Business
 {
     public class ConfigurationManager
     {
-        public Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria GetCriteriaDefinition(int serviceTypeId, string chargingPolicyPartTypeName)
+        public AccountGridDefinition GetAccountGridDefinition()
+        {
+            return GetBETechnicalSetting().GridDefinition;
+        }
+
+        public List<AccountViewDefinition> GetAccountViewDefinitions()
+        {
+            return GetBETechnicalSetting().AccountViewDefinitions;
+        }
+
+        private RetailBETechnicalSetting GetBETechnicalSetting()
         {
             throw new NotImplementedException();
         }

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.Account360DegreeViews
+namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
-    public class AccountInfo : Account360DegreeViewExtendedSettings
+    public class AccountInfo : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {

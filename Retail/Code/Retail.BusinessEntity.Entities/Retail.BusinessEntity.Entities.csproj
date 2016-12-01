@@ -79,10 +79,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account360Degree\Account360DegreeView.cs" />
-    <Compile Include="Account360Degree\Account360DegreeViewConfig.cs" />
-    <Compile Include="Account360Degree\Account360DegreeViewExtendedSettings.cs" />
-    <Compile Include="Account360Degree\Account360DegreeViewSettings.cs" />
+    <Compile Include="UISettings\AccountGridDefinition.cs" />
+    <Compile Include="UISettings\AccountViewDefinition.cs" />
+    <Compile Include="UISettings\AccountViewDefinitionConfig.cs" />
+    <Compile Include="RetailBETechnicalSetting.cs" />
     <Compile Include="AccountCondition\AccountCondition.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />

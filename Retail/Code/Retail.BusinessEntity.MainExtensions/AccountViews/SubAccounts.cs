@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.Account360DegreeViews
+namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
-    public class Services : Account360DegreeViewExtendedSettings
+    public class SubAccounts : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("71AB18ED-F2AC-4E71-B4E4-4826D092A201"); }
+            get { return new Guid("9A5B27E1-4928-4B71-B548-71C2F89444A5"); }
         }
 
         public override string RuntimeEditor
@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.MainExtensions.Account360DegreeViews
             }
             set
             {
-                
+
             }
         }
     }

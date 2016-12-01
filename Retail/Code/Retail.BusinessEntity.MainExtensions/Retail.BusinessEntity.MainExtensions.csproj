@@ -79,9 +79,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account360DegreeViews\AccountInfo.cs" />
-    <Compile Include="Account360DegreeViews\Services.cs" />
-    <Compile Include="Account360DegreeViews\SubAccounts.cs" />
+    <Compile Include="AccountViews\AccountInfo.cs" />
+    <Compile Include="AccountViews\Services.cs" />
+    <Compile Include="AccountViews\SubAccounts.cs" />
     <Compile Include="AccountConditions\FilterGroupAccountCondition.cs" />
     <Compile Include="AccountParts\AccountPartPersonalInfo.cs" />
     <Compile Include="AccountParts\AccountPartPersonalInfoDefinition.cs" />

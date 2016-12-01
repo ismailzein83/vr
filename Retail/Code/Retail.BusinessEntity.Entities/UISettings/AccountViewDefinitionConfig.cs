@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class Account360DegreeViewConfig : ExtensionConfiguration
+    public class AccountViewDefinitionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_BE_Account360DegreeView";
+        public const string EXTENSION_TYPE = "Retail_BE_AccountViewDefinition";
 
         public string Editor { get; set; }
     }
