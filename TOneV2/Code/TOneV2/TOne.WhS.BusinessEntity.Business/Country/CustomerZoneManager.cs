@@ -175,7 +175,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId, effectiveOn, isEffectiveInFuture);
 			if (customerCountries == null)
 				return null;
-			return customerCountries.MapRecords(x => x.CountryId);
+			return customerCountries.MapRecords(x => x.CountryId).Distinct();
 		}
 
 		public bool IsCountrySoldToCustomer(int customerId, int countryId, DateTime effectiveOn)
