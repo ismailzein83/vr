@@ -37,7 +37,8 @@ namespace TOne.WhS.DBSync.Entities
         public string CommercialContact { get; set; }
         public string CommercialEmail { get; set; }
         public string AccountManagerContact { get; set; }
-
+        public string CurrencyId { get; set; }
+        public byte DuePeriod { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

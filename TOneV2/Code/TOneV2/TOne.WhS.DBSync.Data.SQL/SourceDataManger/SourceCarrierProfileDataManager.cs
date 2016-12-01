@@ -17,38 +17,40 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCarrierProfiles, SourceCarrierProfileMapper, null);
         }
 
-        private SourceCarrierProfile SourceCarrierProfileMapper(IDataReader arg)
+        private SourceCarrierProfile SourceCarrierProfileMapper(IDataReader reader)
         {
             SourceCarrierProfile sourceCarrierProfile = new SourceCarrierProfile()
             {
-                SourceId = arg["ProfileID"].ToString(),
-                Name = arg["Name"] as string,
-                AccountManagerContact = arg["AccountManagerContact"].ToString(),
-                AccountManagerEmail = arg["AccountManagerEmail"].ToString(),
-                Address1 = arg["Address1"] as string,
-                Address2 = arg["Address2"] as string,
-                Address3 = arg["Address3"] as string,
-                BillingContact = arg["BillingContact"].ToString(),
-                BillingDisputeEmail = arg["BillingDisputeEmail"].ToString(),
-                BillingEmail = arg["BillingEmail"].ToString(),
-                CommercialContact = arg["CommercialContact"].ToString(),
-                CommercialEmail = arg["CommercialEmail"].ToString(),
-                CompanyLogo = GetReaderValue<byte[]>(arg, "CompanyLogo"),
-                CompanyLogoName = arg["CompanyLogoName"] as string,
-                CompanyName = arg["CompanyName"] as string,
-                Country = arg["Country"] as string,
-                Fax = arg["Fax"] as string,
-                PricingContact = arg["PricingContact"].ToString(),
-                PricingEmail = arg["PricingEmail"].ToString(),
-                RegistrationNumber = arg["RegistrationNumber"] as string,
-                SMSPhoneNumber = arg["SMSPhoneNumber"].ToString(),
-                SupportContact = arg["SupportContact"].ToString(),
-                SupportEmail = arg["SupportEmail"].ToString(),
-                TechnicalContact = arg["TechnicalContact"].ToString(),
-                TechnicalEmail = arg["TechnicalEmail"].ToString(),
-                Telephone = arg["Telephone"] as string,
-                Website = arg["Website"] as string,
-                IsDeleted = (arg["IsDeleted"] as string) != "N"
+                SourceId = reader["ProfileID"].ToString(),
+                Name = reader["Name"] as string,
+                AccountManagerContact = reader["AccountManagerContact"].ToString(),
+                AccountManagerEmail = reader["AccountManagerEmail"].ToString(),
+                Address1 = reader["Address1"] as string,
+                Address2 = reader["Address2"] as string,
+                Address3 = reader["Address3"] as string,
+                BillingContact = reader["BillingContact"].ToString(),
+                BillingDisputeEmail = reader["BillingDisputeEmail"].ToString(),
+                BillingEmail = reader["BillingEmail"].ToString(),
+                CommercialContact = reader["CommercialContact"].ToString(),
+                CommercialEmail = reader["CommercialEmail"].ToString(),
+                CompanyLogo = GetReaderValue<byte[]>(reader, "CompanyLogo"),
+                CompanyLogoName = reader["CompanyLogoName"] as string,
+                CompanyName = reader["CompanyName"] as string,
+                Country = reader["Country"] as string,
+                Fax = reader["Fax"] as string,
+                PricingContact = reader["PricingContact"].ToString(),
+                PricingEmail = reader["PricingEmail"].ToString(),
+                RegistrationNumber = reader["RegistrationNumber"] as string,
+                SMSPhoneNumber = reader["SMSPhoneNumber"].ToString(),
+                SupportContact = reader["SupportContact"].ToString(),
+                SupportEmail = reader["SupportEmail"].ToString(),
+                TechnicalContact = reader["TechnicalContact"].ToString(),
+                TechnicalEmail = reader["TechnicalEmail"].ToString(),
+                Telephone = reader["Telephone"] as string,
+                Website = reader["Website"] as string,
+                IsDeleted = (reader["IsDeleted"] as string) != "N",
+                CurrencyId = reader["CurrencyID"] as string,
+                DuePeriod = GetReaderValue<byte>(reader, "DuePeriod")
             };
             return sourceCarrierProfile;
         }
@@ -59,7 +61,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [SupportContact]   ,[SupportEmail] ,[CurrencyID]  ,[RegistrationNumber]   , 
                                                                [AccountManagerEmail]   ,[SMSPhoneNumber] ,[Website]  ,[BillingDisputeEmail]  , 
                                                                [TechnicalContact] ,[TechnicalEmail]   ,[CommercialContact]   ,[CommercialEmail] , 
-                                                               [AccountManagerContact], [IsDeleted] FROM [dbo].[CarrierProfile]  
+                                                               [AccountManagerContact], [IsDeleted], [CurrencyID], [DuePeriod] FROM [dbo].[CarrierProfile]  
                                                         WITH (NOLOCK)";
     }
 }
