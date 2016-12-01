@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+
 namespace Retail.BusinessEntity.Business
 {
     public class PackageManager : IBusinessEntityManager
@@ -21,48 +22,50 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<PackageDetail> GetFilteredPackages(Vanrise.Entities.DataRetrievalInput<PackageQuery> input)
         {
             var allPackages = GetCachedPackages();
-
-            Func<Package, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            Func<Package, bool> filterExpression = (package) => (input.Query.Name == null || package.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPackages.ToBigResult(input, filterExpression, PackageDetailMapper));
         }
+        
         public Package GetPackage(int packageId)
         {
             var packages = GetCachedPackages();
             return packages.GetRecord(packageId);
+        }
+        public PackageEditorRuntime GetPackageEditorRuntime(int packageId)
+        {
+            PackageEditorRuntime packageEditorRuntime = new PackageEditorRuntime();
+
+            packageEditorRuntime.Entity = GetPackage(packageId);
+            if (packageEditorRuntime.Entity == null)
+                throw new NullReferenceException(string.Format("packageEditorRuntime.Entity for Package ID: {0} is null", packageId));
+
+            if (packageEditorRuntime.Entity.Settings == null)
+                throw new NullReferenceException(string.Format("packageEditorRuntime.Entity.Settings for Package ID: {0} is null", packageId));
+
+            if (packageEditorRuntime.Entity.Settings.ExtendedSettings == null)
+                throw new NullReferenceException(string.Format("packageEditorRuntime.Entity.Settings.ExtendedSettings for Package ID: {0} is null", packageId));
+
+            packageEditorRuntime.ExtendedSettingsEditorRuntime = packageEditorRuntime.Entity.Settings.ExtendedSettings.GetEditorRuntime();
+
+            return packageEditorRuntime;
         }
         public string GetPackageName(int packageId)
         {
             Package package = GetPackage(packageId);
             return package != null ? package.Name : null;
         }
-        public IEnumerable<PackageInfo> GetPackagesInfo(PackageFilter filter)
-        {
-            var packages = GetCachedPackages();
-
-            Func<Package, bool> filterExpression = null;
-
-            if (filter != null)
-            {
-                if (filter.AssignedToAccountId.HasValue)
-                {
-                    var accountPackageManager = new AccountPackageManager();
-                    IEnumerable<int> packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value);
-                    filterExpression = (package) => !packageIdsAssignedToAccount.Contains(package.PackageId);
-                }
-            }
-
-            return packages.MapRecords(PackageInfoMapper, filterExpression);
-        }
+        
         public InsertOperationOutput<PackageDetail> AddPackage(Package package)
         {
             InsertOperationOutput<PackageDetail> insertOperationOutput = new InsertOperationOutput<PackageDetail>();
+
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int packageId = -1;
+
             IPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
             bool insertActionSucc = dataManager.Insert(package, out packageId);
+            
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -71,7 +74,10 @@ namespace Retail.BusinessEntity.Business
                 insertOperationOutput.InsertedObject = PackageDetailMapper(package);
             }
             else
+            {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
             return insertOperationOutput;
         }
         public UpdateOperationOutput<PackageDetail> UpdatePackage(Package package)
@@ -91,19 +97,41 @@ namespace Retail.BusinessEntity.Business
                 updateOperationOutput.UpdatedObject = PackageDetailMapper(package);
             }
             else
+            {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
             return updateOperationOutput;
         }
 
-        public IEnumerable<ServiceTemplateConfig> GetServicesTemplateConfigs()
+        public IEnumerable<PackageExtendedSettingsConfig> GetPackageExtendedSettingsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<ServiceTemplateConfig>(Constants.ServicesTemplateConfigsConfigType);
+            return templateConfigManager.GetExtensionConfigurations<PackageExtendedSettingsConfig>(PackageExtendedSettingsConfig.EXTENSION_TYPE);
         }
         public IEnumerable<ServiceVoiceTypeTemplateConfig> GetVoiceTypesTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<ServiceVoiceTypeTemplateConfig>(Constants.ServiceVoiceTypeTemplateConfigType);
+        }
+
+        public IEnumerable<PackageInfo> GetPackagesInfo(PackageFilter filter)
+        {
+            var packages = GetCachedPackages();
+
+            Func<Package, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                if (filter.AssignedToAccountId.HasValue)
+                {
+                    var accountPackageManager = new AccountPackageManager();
+                    IEnumerable<int> packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value);
+                    filterExpression = (package) => !packageIdsAssignedToAccount.Contains(package.PackageId);
+                }
+            }
+
+            return packages.MapRecords(PackageInfoMapper, filterExpression);
         }
 
         public IEnumerable<ServicePackageItemConfig> GetServicePackageItemConfigs()
@@ -124,9 +152,25 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, package.Settings.Services.ToBigResult(input, null, PackageServiceDetailMapper));
         }
 
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Members
+
         private Dictionary<int, Package> GetCachedPackages()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetPackages",
@@ -137,6 +181,22 @@ namespace Retail.BusinessEntity.Business
                    return packages.ToDictionary(cn => cn.PackageId, cn => cn);
                });
         }
+        
+        #endregion
+
+        #region Private Classes
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IPackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.ArePackagesUpdated(ref _updateHandle);
+            }
+        }
+
         #endregion
 
         #region  Mappers
@@ -171,21 +231,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
-
-        internal class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IPackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.ArePackagesUpdated(ref _updateHandle);
-            }
-        }
-
-        #endregion
-
         #region IBusinessEntityManager
 
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
@@ -213,22 +258,5 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
-
-
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
