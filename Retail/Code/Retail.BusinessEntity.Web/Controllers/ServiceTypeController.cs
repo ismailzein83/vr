@@ -23,24 +23,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetServiceTypesInfo")]
-        public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo(string filter = null)
-        {
-            return _manager.GetServiceTypesInfo();
-        }
-
-        [HttpGet]
         [Route("GetServiceType")]
         public ServiceType GetServiceType(Guid serviceTypeId)
         {
             return _manager.GetServiceType(serviceTypeId);
-        }
-
-        [HttpGet]
-        [Route("GetServiceTypeChargingPolicyDefinitionSettings")]
-        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
-        {
-            return _manager.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId);
         }
 
         [HttpPost]
@@ -48,6 +34,21 @@ namespace Retail.BusinessEntity.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<ServiceTypeDetail> UpdateServiceType(ServiceTypeToEdit serviceType)
         {
             return _manager.UpdateServiceType(serviceType);
+        }
+
+        [HttpGet]
+        [Route("GetServiceTypesInfo")]
+        public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo(string serializedFilter = null)
+        {
+            ServiceTypeInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<ServiceTypeInfoFilter>(serializedFilter) : null;
+            return _manager.GetServiceTypesInfo(filter);
+        }
+
+        [HttpGet]
+        [Route("GetServiceTypeChargingPolicyDefinitionSettings")]
+        public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
+        {
+            return _manager.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId);
         }
     }
 }
