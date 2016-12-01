@@ -12,6 +12,7 @@ BEGIN
 	  ,DefinitionID
 	  ,ExecutionStatus
 	  ,ServiceInstanceID
+	  , [CompletionNotifier]
 	FROM bp.[BPInstance] bp WITH(NOLOCK)
 	JOIN @StatusesTable statuses ON bp.ExecutionStatus = statuses.[Status]
 	ORDER BY ID

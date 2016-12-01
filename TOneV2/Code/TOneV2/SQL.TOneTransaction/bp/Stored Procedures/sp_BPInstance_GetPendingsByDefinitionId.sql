@@ -17,6 +17,7 @@ BEGIN
       ,[DefinitionID]
       ,[WorkflowInstanceID]
       ,[InputArgument]
+	  , [CompletionNotifier]
       ,[ExecutionStatus]
       ,[LastMessage]
 	   ,EntityID

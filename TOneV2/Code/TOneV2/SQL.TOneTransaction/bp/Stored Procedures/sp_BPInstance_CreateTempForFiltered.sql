@@ -13,7 +13,7 @@ BEGIN
 	
 IF OBJECT_ID(@TempTableName, N'U') IS NULL
 BEGIN	
-	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],
+	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus],
 			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID
 	INTO	#RESULT
 	FROM	bp.[BPInstance] as bps WITH(NOLOCK)

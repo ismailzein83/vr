@@ -8,6 +8,7 @@
     [InitiatorUserId]    INT              NOT NULL,
     [WorkflowInstanceID] UNIQUEIDENTIFIER NULL,
     [InputArgument]      NVARCHAR (MAX)   NULL,
+    [CompletionNotifier] NVARCHAR (MAX)   NULL,
     [ExecutionStatus]    INT              NOT NULL,
     [LastMessage]        NVARCHAR (MAX)   NULL,
     [EntityId]           VARCHAR (50)     NULL,
@@ -16,6 +17,8 @@
     [timestamp]          ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

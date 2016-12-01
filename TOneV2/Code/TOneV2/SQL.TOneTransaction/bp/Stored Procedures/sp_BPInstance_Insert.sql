@@ -8,6 +8,7 @@ CREATE PROCEDURE [bp].[sp_BPInstance_Insert]
 	@ParentID bigint,
 	@DefinitionID uniqueidentifier,
 	@InputArguments nvarchar(max),
+	@CompletionNotifier nvarchar(max),
 	@ExecutionStatus int,
 	@InitiatorUserId int,
 	@EntityId varchar(50),
@@ -20,6 +21,7 @@ BEGIN
            ,[ParentID]
            ,[DefinitionID]
            ,[InputArgument]
+		   ,[CompletionNotifier]
            ,[ExecutionStatus]
            ,[StatusUpdatedTime]
            ,[InitiatorUserId]
@@ -29,6 +31,7 @@ BEGIN
            ,@ParentID
            ,@DefinitionID
            ,@InputArguments
+		   ,@CompletionNotifier
            ,@ExecutionStatus
            ,GETDATE()
            ,@InitiatorUserId

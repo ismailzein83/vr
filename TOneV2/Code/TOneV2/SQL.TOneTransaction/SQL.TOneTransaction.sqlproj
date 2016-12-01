@@ -213,6 +213,7 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_Insert.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_Delete.sql" />
+    <Build Include="VRNotification\Tables\VRNotification.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

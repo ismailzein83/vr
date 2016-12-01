@@ -10,7 +10,7 @@ BEGIN
             INSERT INTO @BPDefinitionIDsTable (BPDefinitionId)
             select Convert(uniqueidentifier, ParsedString) from [bp].[ParseStringList](@DefinitionsId)
             
-	SELECT TOP(@NbOfRows) [ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument],[ExecutionStatus],[LastMessage]
+	SELECT TOP(@NbOfRows) [ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus],[LastMessage]
 			,EntityID,[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],[timestamp]
 	FROM	[BP].[BPInstance] with(nolock)
 	WHERE	(@EntityID is null or EntityID= @EntityID) and ID < @LessThanID AND  (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 

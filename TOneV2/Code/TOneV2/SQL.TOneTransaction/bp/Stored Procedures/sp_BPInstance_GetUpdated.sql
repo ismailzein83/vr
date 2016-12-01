@@ -18,6 +18,7 @@ IF (@TimestampAfter IS NULL)
       ,[DefinitionID]
       ,[WorkflowInstanceID]
       ,[InputArgument]
+	  , [CompletionNotifier]
       ,[ExecutionStatus]
       ,[LastMessage]
 	   ,EntityID
@@ -44,6 +45,7 @@ IF (@TimestampAfter IS NULL)
       ,[DefinitionID]
       ,[WorkflowInstanceID]
       ,[InputArgument]
+	  , [CompletionNotifier]
       ,[ExecutionStatus]
       ,[LastMessage]
 	  ,EntityID
