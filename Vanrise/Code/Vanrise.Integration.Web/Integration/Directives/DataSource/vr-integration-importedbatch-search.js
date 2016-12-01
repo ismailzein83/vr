@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService',
-function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,VRUIUtilsService) {
+app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','VRValidationService',
+function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,VRUIUtilsService , VRValidationService) {
 
     var directiveDefinitionObject = {
 
@@ -54,7 +54,9 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
             $scope.mappingResults = [];
             $scope.selectedMappingResults = [];
             $scope.importedBatches = [];
-            $scope.selectedFromDateTime = new Date().setHours(0, 0, 0, 0);
+            var fromDate = new Date();
+            fromDate.setHours(0, 0, 0, 0);
+            $scope.selectedFromDateTime = fromDate;
             $scope.showGrid = false;
 
             $scope.gridReady = function (api) {
@@ -72,6 +74,11 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
                 dataSourceDirectiveAPI = api;
                 dataSourceReadyPromiseDeferred.resolve();
             };
+
+            $scope.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.selectedFromDateTime, $scope.selectedToDateTime);
+            };
+
         }
 
         function load() {

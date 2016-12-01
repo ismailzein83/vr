@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRValidationService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService) {
 
     var directiveDefinitionObject = {
 
@@ -63,7 +63,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             $scope.gridReady = function (api) {
                 gridApi = api;
             };
-
             $scope.searchClicked = function () {
                 $scope.showGrid = true;
                 return gridApi.loadGrid(getQueryGrid());
@@ -71,6 +70,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             $scope.onDataSourceSelectorReady = function (api) {
                 dataSourceDirectiveAPI = api;
                 dataSourceReadyPromiseDeferred.resolve();
+            };
+            $scope.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.selectedFromDateTime, $scope.selectedToDateTime);
             };
 
         }

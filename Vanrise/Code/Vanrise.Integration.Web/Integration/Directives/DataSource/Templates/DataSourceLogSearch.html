@@ -10,16 +10,14 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="From" type="dateTime" value="selectedFromDateTime"></vr-datetimepicker>
+                    <vr-datetimepicker label="From" type="dateTime" value="selectedFromDateTime" customvalidate="validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
-
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="To" type="dateTime" value="selectedToDateTime"></vr-datetimepicker>
+                    <vr-datetimepicker label="To" type="dateTime" value="selectedToDateTime" customvalidate="validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </div>
     </vr-form>
-
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
@@ -27,7 +25,6 @@
             </div>
         </vr-actionbar>
     </vr-row>
-
     <div>
         <vr-row ng-show="showGrid">
             <vr-columns width="fullrow" simplecol>
@@ -35,5 +32,4 @@
              </vr-columns>
         </vr-row>
     </div>
-
 </vr-panel>
