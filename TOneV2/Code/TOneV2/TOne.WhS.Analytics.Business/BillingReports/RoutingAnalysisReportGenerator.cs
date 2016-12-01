@@ -79,7 +79,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         });
                     }
                 }
-                topZonesOrdered = topZones.OrderByDescending(x => x.duration).ToList();
+                topZonesOrdered = topZones.OrderByDescending(x => x.duration).Take(parameters.Top).ToList();
                 foreach (var zone in topZonesOrdered)
                 {
                     topZoneIds.Add(zone.id);
