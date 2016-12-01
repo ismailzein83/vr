@@ -1,25 +1,26 @@
 ﻿<div vr-modalcontent ng-controller="Retail_BE_ServiceTypeEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formServiceTypeEditor">
+
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/2row">
                             <vr-textbox label="Title" value="scopeModel.title" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/2row">
                             <vr-textarea label="Description" value="scopeModel.description" isrequired></vr-textarea>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/2row">
                             <vr-genericdata-genericruledefinition-selector customlabel="Identification Rule" on-ready="scopeModel.onRuleDefinitionSelectorReady" isrequired="true"></vr-genericdata-genericruledefinition-selector>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <retail-be-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" normal-col-num="4" customlabel="Initial Status" isrequired="true"></retail-be-statusdefinition-selector>
+                        <retail-be-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" normal-col-num="6" customlabel="Initial Status" isrequired="true"></retail-be-statusdefinition-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Charging Policy Definition'">
@@ -30,6 +31,7 @@
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
+
         </vr-form>
     </vr-modalbody>
     <div>

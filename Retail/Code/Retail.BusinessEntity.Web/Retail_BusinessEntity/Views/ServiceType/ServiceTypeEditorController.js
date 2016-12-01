@@ -2,16 +2,16 @@
 
     'use strict';
 
-    ServiceTypeEditorController.$inject = ['$scope', 'Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_EntityTypeEnum'];
+    ServiceTypeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_ServiceTypeAPIService', 'Retail_BE_EntityTypeEnum'];
 
-    function ServiceTypeEditorController($scope, Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_EntityTypeEnum) {
+    function ServiceTypeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_ServiceTypeAPIService, Retail_BE_EntityTypeEnum) {
         var isEditMode;
 
         var serviceTypeId;
         var serviceTypeEntity;
+
         var chargingPolicyAPI;
         var chargingPolicyReadyDeferred = UtilsService.createPromiseDeferred();
-
 
         var ruleDefinitionSelectorAPI;
         var ruleDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -32,9 +32,9 @@
 
             isEditMode = (serviceTypeId != undefined);
         }
-
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onChargingPolicyReady = function(api)
             {
                 chargingPolicyAPI = api;
@@ -44,7 +44,6 @@
                 statusDefinitionSelectorAPI = api;
                 statusDefinitionSelectorReadyDeferred.resolve();
             }
-
             $scope.scopeModel.onRuleDefinitionSelectorReady = function(api)
             {
                 ruleDefinitionSelectorAPI = api;
@@ -59,7 +58,6 @@
                 $scope.modalContext.closeModal()
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -91,17 +89,21 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+        function setTitle() {
+            if (isEditMode) {
+                var serviceTypeTitle = (serviceTypeEntity != undefined) ? serviceTypeEntity.Title : undefined;
+                $scope.title = UtilsService.buildTitleForUpdateEditor(serviceTypeTitle, 'ServiceType');
+            }
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor('ServiceType');
+            }
+        }
+        function loadStaticData() {
+            if (serviceTypeEntity == undefined)
+                return;
+            $scope.scopeModel.title = serviceTypeEntity.Title;
+            $scope.scopeModel.description = serviceTypeEntity.Settings.Description;
 
-        function loadStatusDefinitionSelector() {
-            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                var statusDefinitionSelectorPayload = {
-                    filter: { EntityType: Retail_BE_EntityTypeEnum.AccountService.value },
-                    selectedIds: serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined ? serviceTypeEntity.Settings.InitialStatusId : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-            });
-            return statusDefinitionSelectorLoadDeferred.promise;
         }
         function loadChargingPolicy() {
             var chargingPolicyLoadDeferred = UtilsService.createPromiseDeferred();
@@ -118,25 +120,6 @@
 
             return chargingPolicyLoadDeferred.promise;
         }
-
-        function setTitle() {
-            if (isEditMode) {
-                var serviceTypeTitle = (serviceTypeEntity != undefined) ? serviceTypeEntity.Title : undefined;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(serviceTypeTitle, 'ServiceType');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('ServiceType');
-            }
-        }
-
-        function loadStaticData() {
-            if (serviceTypeEntity == undefined)
-                return;
-            $scope.scopeModel.title = serviceTypeEntity.Title;
-            $scope.scopeModel.description = serviceTypeEntity.Settings.Description;
-
-        }
-
         function loadRuleDefinitionSelector()
         {
             var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -152,6 +135,17 @@
             });
 
             return ruleDefinitionLoadDeferred.promise;
+        }
+        function loadStatusDefinitionSelector() {
+            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                var statusDefinitionSelectorPayload = {
+                    filter: { EntityType: Retail_BE_EntityTypeEnum.AccountService.value },
+                    selectedIds: serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined ? serviceTypeEntity.Settings.InitialStatusId : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+            });
+            return statusDefinitionSelectorLoadDeferred.promise;
         }
 
         function updateServiceType() {
@@ -174,8 +168,7 @@
 
         function buildUpdateServiceTypeObjFromScope() {
 
-
-            var obj = {
+            return {
                 ServiceTypeId: serviceTypeId,
                 Title: $scope.scopeModel.title,
                 Description: $scope.scopeModel.description,
@@ -183,7 +176,6 @@
                 ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData(),
                 InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds()
             };
-            return obj;
         }
     }
 
