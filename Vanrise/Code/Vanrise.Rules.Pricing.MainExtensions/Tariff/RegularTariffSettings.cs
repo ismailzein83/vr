@@ -22,7 +22,13 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         protected override void Execute(IPricingRuleTariffContext context)
         {
-            DateTime effectiveOn = context.TargetTime.HasValue ? context.TargetTime.Value : DateTime.Now;
+            if (FractionUnit < 0)
+                throw new ArgumentException(string.Format("Invalid FractionUnit: {0}", FractionUnit));
+
+            if (PricingUnit <= 0)
+                throw new ArgumentException(string.Format("Invalid PricingUnit: {0}", PricingUnit));
+
+            DateTime currencyEffectiveOn = context.TargetTime.HasValue ? context.TargetTime.Value : DateTime.Now;
 
             CurrencyExchangeRateManager currencyExchangeManager = new CurrencyExchangeRateManager();
             decimal convertedFirstPeriodRate;
@@ -30,8 +36,8 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
             if (context.DestinationCurrencyId.HasValue)
             {
-                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(FirstPeriodRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, effectiveOn);
-                convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, effectiveOn);
+                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(FirstPeriodRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
+                convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
             }
             else
             {
@@ -39,13 +45,12 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                 convertedCallFee = CallFee;
             }
 
-            int? currencyId = context.DestinationCurrencyId;
             decimal extraChargeValue = 0;
-            Decimal? totalAmount = 0;
+            decimal totalAmount = 0;
+
             Decimal? accountedDuration = context.DurationInSeconds;
             if (FirstPeriod > 0)
             {
-                FirstPeriod = FirstPeriod;
                 Decimal firstPeriodRate = (convertedFirstPeriodRate > 0) ? (Decimal)convertedFirstPeriodRate : context.Rate;
 
                 if (accountedDuration.HasValue)
@@ -55,38 +60,27 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                     totalAmount = firstPeriodRate;
                 }
             }
+
             if (FractionUnit > 0)
             {
                 FractionUnit = (byte)FractionUnit;
                 if (accountedDuration.HasValue)
-                {
-                    if (PricingUnit <= 0)
-                        throw new ArgumentException(string.Format("Invalid PricingUnit: {0}", PricingUnit));
-
                     accountedDuration = Math.Ceiling(accountedDuration.Value / FractionUnit) * FractionUnit;
-                    if (totalAmount.HasValue)
-                        totalAmount += accountedDuration.Value / PricingUnit * context.Rate;// 60
-
-                    extraChargeValue = accountedDuration.Value / PricingUnit * context.ExtraChargeRate;
-                }
-                //context.EffectiveRate = Math.Ceiling(FractionUnit * context.Rate / 60);
-                context.EffectiveRate = 60 * context.Rate / PricingUnit;
-                context.EffectiveDurationInSeconds = accountedDuration + FirstPeriod;
             }
-            else
+
+            if (accountedDuration.HasValue)
             {
-                if (accountedDuration.HasValue && totalAmount.HasValue)
-                {
-                    totalAmount += Math.Ceiling((accountedDuration.Value * context.Rate) / 60);
-                }
-                context.EffectiveRate = context.Rate;
-                context.EffectiveDurationInSeconds = accountedDuration;
+                decimal normalisedDuration = accountedDuration.Value / PricingUnit;
+                totalAmount += normalisedDuration * context.Rate;
+                extraChargeValue = normalisedDuration * context.ExtraChargeRate;
             }
 
-            if (totalAmount.HasValue)
-                totalAmount += convertedCallFee;
+            context.EffectiveRate = 60 * context.Rate / PricingUnit;
+            context.EffectiveDurationInSeconds = accountedDuration.HasValue ? accountedDuration.Value + FirstPeriod : FirstPeriod;
 
-            context.TotalAmount = totalAmount.HasValue ? decimal.Round(totalAmount.Value, 8) : totalAmount;
+            totalAmount += convertedCallFee;
+
+            context.TotalAmount = decimal.Round(totalAmount, 8);
             context.ExtraChargeValue = decimal.Round(extraChargeValue, 8);
         }
 
