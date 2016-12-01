@@ -7,53 +7,68 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum BasicSalePriceListTemplateSettingsBEFieldType
+    public enum CodesByZoneBEFieldType
     {
         Zone = 0,
-        Code = 1,
-        CodeBED = 2,
-        CodeEED = 3,
-        Rate = 4,
-        RateBED = 5,
-        RateEED = 6
+        Codes = 1,
+        EffectiveDate = 2,
+        Rate = 3,
+        RateBED = 4,
+        RateEED = 5
     }
 
-    public class CodesByZoneBEFieldMappedValue : MappedValue
+    public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
     {
         public override Guid ConfigId
         {
             get { return new Guid("40157184-07BF-4539-8160-DB54DF844F05"); }
         }
-        public BasicSalePriceListTemplateSettingsBEFieldType BEField { get; set; }
+        public CodesByZoneBEFieldType BEField { get; set; }
 
-        public override void Execute(IBasicSalePriceListTemplateSettingsMappedValueContext context)
+        public override void Execute(ICodesByZoneMappedValueContext context)
         {
             switch (BEField)
             {
-                case BasicSalePriceListTemplateSettingsBEFieldType.Zone:
-                    context.Value = context.Zone;
+                case CodesByZoneBEFieldType.Zone:
+                    context.Value = context.ZoneNotification.ZoneName;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.Code:
-                    context.Value = context.Code;
+                case CodesByZoneBEFieldType.Codes:
+                    context.Value = GetCodesValue(context);
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.CodeBED:
-                    context.Value = context.CodeBED;
+                case CodesByZoneBEFieldType.EffectiveDate:
+                    context.Value = GetEffectiveDate(context.ZoneNotification.Codes);
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.CodeEED:
-                    context.Value = context.CodeEED;
-                    break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.Rate:
+                case CodesByZoneBEFieldType.Rate:
                     context.Value = context.Rate;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.RateBED:
+                case CodesByZoneBEFieldType.RateBED:
                     context.Value = context.RateBED;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.RateEED:
+                case CodesByZoneBEFieldType.RateEED:
                     context.Value = context.RateEED;
                     break;
             }
         }
 
+
+        private string GetCodesValue(ICodesByZoneMappedValueContext context)
+        {
+            string codesValue = string.Empty;
+
+            List<string> codes = new List<string>();
+
+            foreach (SalePLCodeNotification codeNotification in context.ZoneNotification.Codes)
+            {
+                codes.Add(codeNotification.Code);
+            }
+
+            return string.Join(context.Delimiter.ToString(), codes);
+        }
+
+        private DateTime GetEffectiveDate(IEnumerable<SalePLCodeNotification> codesNotificatons)
+        {
+            return codesNotificatons.Select(item => item.BED).Min();
+        }
 
     }
 }

@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public class CodesByZoneConstantMappedValue : MappedValue
+    public class CodesByZoneConstantMappedValue : CodesByZoneMappedValue
 	{
         public override Guid ConfigId
         {
@@ -16,10 +16,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
 		public string Value { get; set; }
 
-		public override void Execute(IBasicSalePriceListTemplateSettingsMappedValueContext context)
-		{
-			context.Value = Value;
-		}
-        
+        public override void Execute(ICodesByZoneMappedValueContext context)
+        {
+            context.Value = Value;
+        }
     }
 }

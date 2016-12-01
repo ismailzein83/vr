@@ -7,38 +7,48 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-   
-    public class CodeOnEachRowBEFieldMappedValue : MappedValue
+    public enum CodeOnEachRowBEFieldType
+    {
+        Zone = 0,
+        Code = 1,
+        CodeBED = 2,
+        CodeEED = 3,
+        Rate = 4,
+        RateBED = 5,
+        RateEED = 6
+    }
+
+    public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
     {
         public override Guid ConfigId
         {
             get { return new Guid("930FB07F-E599-4324-AC59-BAAB800ADC0E"); }
         }
-        public BasicSalePriceListTemplateSettingsBEFieldType BEField { get; set; }
+        public CodeOnEachRowBEFieldType BEField { get; set; }
 
-        public override void Execute(IBasicSalePriceListTemplateSettingsMappedValueContext context)
+        public override void Execute(ICodeOnEachRowMappedValueContext context)
         {
             switch (BEField)
             {
-                case BasicSalePriceListTemplateSettingsBEFieldType.Zone:
+                case CodeOnEachRowBEFieldType.Zone:
                     context.Value = context.Zone;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.Code:
+                case CodeOnEachRowBEFieldType.Code:
                     context.Value = context.Code;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.CodeBED:
+                case CodeOnEachRowBEFieldType.CodeBED:
                     context.Value = context.CodeBED;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.CodeEED:
+                case CodeOnEachRowBEFieldType.CodeEED:
                     context.Value = context.CodeEED;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.Rate:
+                case CodeOnEachRowBEFieldType.Rate:
                     context.Value = context.Rate;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.RateBED:
+                case CodeOnEachRowBEFieldType.RateBED:
                     context.Value = context.RateBED;
                     break;
-                case BasicSalePriceListTemplateSettingsBEFieldType.RateEED:
+                case CodeOnEachRowBEFieldType.RateEED:
                     context.Value = context.RateEED;
                     break;
             }

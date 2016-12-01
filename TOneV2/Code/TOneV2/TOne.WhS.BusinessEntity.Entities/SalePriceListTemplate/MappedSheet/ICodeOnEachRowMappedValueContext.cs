@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-	public interface IBasicSalePriceListTemplateSettingsMappedValueContext
+    public interface ICodeOnEachRowMappedValueContext
 	{
 		string Zone { get; set; }
 		string Code { get; set; }

@@ -139,7 +139,8 @@
     <Compile Include="SalePLNotification\SalePLZoneChange.cs" />
     <Compile Include="SalePriceListTemplate\ISalePriceListTemplateSettingsContext.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\BasicMappedValueExtensionConfig.cs" />
-    <Compile Include="SalePriceListTemplate\MappedSheet\IBasicSalePriceListTemplateSettingsMappedValueContext.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\ICodesByZoneMappedValueContext.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\ICodeOnEachRowMappedValueContext.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\SalePriceListTemplateSettingsMappedTableExtensionConfig.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplate.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateDetail.cs" />
@@ -147,9 +148,7 @@
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateQuery.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettingsExtensionConfig.cs" />
-    <Compile Include="SalePriceListTemplate\MappedSheet\MappedColumn.cs" />
-    <Compile Include="SalePriceListTemplate\MappedSheet\MappedTable.cs" />
-    <Compile Include="SalePriceListTemplate\MappedSheet\MappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateTableCell.cs" />
     <Compile Include="SaleRate\SaleRateDetail.cs" />
     <Compile Include="SaleRate\SaleRateQuery.cs" />
     <Compile Include="SaleZone\CallSale.cs" />

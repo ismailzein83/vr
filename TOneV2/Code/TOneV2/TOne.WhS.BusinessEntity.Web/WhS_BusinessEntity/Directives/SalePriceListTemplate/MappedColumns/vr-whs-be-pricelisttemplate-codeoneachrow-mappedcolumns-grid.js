@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsBePricelisttemplateMappedcolumnsGrid", ["VRUIUtilsService", "UtilsService", "VRNotificationService", "WhS_BE_SalePriceListTemplateAPIService",
+app.directive("vrWhsBePricelisttemplateCodeoneachrowMappedcolumnsGrid", ["VRUIUtilsService", "UtilsService", "VRNotificationService", "WhS_BE_SalePriceListTemplateAPIService",
 function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePriceListTemplateAPIService) {
 
     var directiveDefinitionObject = {
@@ -19,7 +19,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/MappedColumns/Templates/MappedColumnsGridTemplate.html"
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/MappedColumns/Templates/CodeOnEachRowMappedColumnsGridTemplate.html"
 
     };
 
@@ -191,7 +191,9 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
             for (var i = 0; i < $scope.mappedCols.length; i++) {
 
                 var mappedCol = $scope.mappedCols[i];
-                var mappedColumn = {};
+                var mappedColumn = {
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.CodeOnEachRowMappedColumn, TOne.WhS.BusinessEntity.MainExtensions"
+                };
 
                 var directiveData = mappedCol.directiveAPI.getData();
                 if (directiveData != undefined)

@@ -83,13 +83,15 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
                 if (firstRowDirectiveData == undefined)
                     return null;
 
-                var codeOnEachRow = {
+                var codesByZone = {
                     $type: 'TOne.WhS.BusinessEntity.MainExtensions.CodesByZoneMappedTable, TOne.WhS.BusinessEntity.MainExtensions',
                     SheetIndex: firstRowDirectiveData.SheetIndex,
                     FirstRowIndex: firstRowDirectiveData.RowIndex,
-                    MappedColumns: mappedColumnsAPI.getData()
+                    MappedColumns: mappedColumnsAPI.getData(),
+                    Delimiter: $scope.delimiterValue
                 }
-                return codeOnEachRow;
+
+                return codesByZone;
             }
 
             if (ctrl.onReady != null)
@@ -150,6 +152,8 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
                     mappedSheet: mappedTable,
                     priceListType: priceListType
                 };
+
+                $scope.delimiterValue = mappedTable.Delimiter;
 
                 VRUIUtilsService.callDirectiveLoad(mappedColumnsAPI, mappedColumnsPayload, mappedColumnsLoadDeferred);
             });

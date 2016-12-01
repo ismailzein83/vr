@@ -15,6 +15,7 @@ namespace TOne.WhS.DBSync.Business
         SourceCarrierProfileDataManager dataManager;
         FileDBSyncDataManager fileDataManager;
         Dictionary<string, Country> allCountries;
+        Dictionary<string, Currency> allCurrencies;
         public CarrierProfileMigrator(MigrationContext context)
             : base(context)
         {
@@ -24,6 +25,8 @@ namespace TOne.WhS.DBSync.Business
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCountry = Context.DBTables[DBTableName.Country];
             allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
+            var dbTableCurrency = Context.DBTables[DBTableName.Currency];
+            allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -55,6 +58,10 @@ namespace TOne.WhS.DBSync.Business
                 countryId = country.CountryId;
             }
 
+            Currency currency = null;
+            if (allCurrencies != null && sourceItem.CurrencyId != null)
+                allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
+
             CarrierProfileSettings settings = new CarrierProfileSettings();
             settings.Address = sourceItem.Address1;
             settings.PostalCode = sourceItem.Address2;
@@ -62,6 +69,10 @@ namespace TOne.WhS.DBSync.Business
             settings.Company = sourceItem.CompanyName;
             settings.RegistrationNumber = sourceItem.RegistrationNumber;
             settings.Website = sourceItem.Website;
+            settings.DuePeriod = (int)sourceItem.DuePeriod;
+
+            if (currency != null)
+                settings.CurrencyId = currency.CurrencyId;
 
             List<CarrierContact> contacts = new List<CarrierContact>();
             contacts.Add(new CarrierContact { Description = sourceItem.AccountManagerContact, Type = CarrierContactType.AccountManagerContact });

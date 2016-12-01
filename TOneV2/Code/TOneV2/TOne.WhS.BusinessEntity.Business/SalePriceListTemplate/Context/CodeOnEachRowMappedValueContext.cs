@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-	public class BasicSalePriceListTemplateSettingsMappedValueContext : IBasicSalePriceListTemplateSettingsMappedValueContext
+    public class CodeOnEachRowMappedValueContext : ICodeOnEachRowMappedValueContext
 	{
 		public string Zone { get; set; }
 		public string Code { get; set; }
