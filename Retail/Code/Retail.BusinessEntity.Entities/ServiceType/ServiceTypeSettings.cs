@@ -42,14 +42,4 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ActionDefinitionId { get; set; }
     }
-
-    public abstract class ServiceTypeExtendedSettings
-    {
-        public abstract Guid ConfigId { get; }
-
-        public virtual List<GenericFieldDefinition> GetFieldDefinitions()
-        {
-            return null;
-        }
-    }
 }

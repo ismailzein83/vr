@@ -171,6 +171,8 @@
     <Compile Include="Package\IPackageFixedChargingPolicy.cs" />
     <Compile Include="Package\IPackageUsageChargingPolicy.cs" />
     <Compile Include="Package\PackageConfig.cs" />
+    <Compile Include="Package\PackageEditorRuntime.cs" />
+    <Compile Include="Package\PackageExtendedSettings.cs" />
     <Compile Include="Package\PackageItems\PackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\ChargingPolicyPackageItem.cs" />
     <Compile Include="Package\PackageItems\Types\MoneyPackageItem.cs" />
@@ -197,12 +199,15 @@
     <Compile Include="Package\PackageInfo.cs" />
     <Compile Include="Package\PackageFilter.cs" />
     <Compile Include="Package\PackageQuery.cs" />
-    <Compile Include="Package\ServiceTemplateConfig.cs" />
+    <Compile Include="Package\PackageExtendedSettingsConfig.cs" />
     <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />
     <Compile Include="PricingEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ChargingPolicy\Definition\ChargingPolicyDefinitionSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeDetail.cs" />
+    <Compile Include="ServiceType\ServiceTypeExtendedSettings.cs" />
+    <Compile Include="ServiceType\ServiceTypeExtendedSettingsConfig.cs" />
+    <Compile Include="ServiceType\ServiceTypeInfoFilter.cs" />
     <Compile Include="ServiceType\ServiceTypeInfo.cs" />
     <Compile Include="ServiceType\ServiceTypeQuery.cs" />
     <Compile Include="ServiceType\ServiceTypeSettings.cs" />

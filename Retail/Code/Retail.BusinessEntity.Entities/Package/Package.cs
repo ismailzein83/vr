@@ -25,9 +25,4 @@ namespace Retail.BusinessEntity.Entities
 
         public PackageExtendedSettings ExtendedSettings { get; set; }
     }
-
-    public abstract class PackageExtendedSettings
-    {
-        public abstract Guid ConfigId { get; }
-    }
 }

@@ -7,8 +7,10 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ServiceTemplateConfig : ExtensionConfiguration
+    public class ServiceTypeExtendedSettingsConfig : ExtensionConfiguration
     {
+        public const string EXTENSION_TYPE = "Retail_BE_ServiceTypeExtendedSettingsConfig";
+
         public string Editor { get; set; }
     }
 }
