@@ -108,18 +108,18 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 treeElement = $element.find('#divTree');
                 var treeArray = [];
                 fillTreeFromDataSource(treeArray, datasource);
-                var treeData={
+                var treeData = {
                     core: {
 
                         'check_callback': true,
-                        
+
                         data: function (obj, callback) {
-                           
+
                             if (obj.id == '#')//root node
                                 callback.call(this, treeArray);
                             else {
                                 if (ctrl.loadremotechildren != undefined) {
-                                    
+
                                     ctrl.loadremotechildren(obj.original.sourceItem)
                                         .then(function (nodeChildrenSource) {
                                             if (nodeChildrenSource != undefined && nodeChildrenSource != null) {
@@ -131,13 +131,13 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                                         });
                                 }
                             }
-                                
+
                         }
                     },
 
                     state: { "key": "state_demo" },
-          
-                }
+
+                };
                 var plugins = [];
                 if (ctrl.checkbox !== undefined)
                 {
@@ -201,7 +201,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                     getFullTreeData(returnedTree, jsonTree, treeElement);
                     api.getTree = function () {
                         return returnedTree;
-                    }
+                    };
                 });
 
                 treeElement.on('changed.jstree', function (e, data) {
@@ -221,12 +221,12 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
             api.renameNode = function (newName) {
                 var node = treeElement.jstree('get_selected');
                 treeElement.jstree(true).rename_node(node, newName);
-            }
+            };
 
             api.changeNodeIcon = function (icon) {
                 var node = treeElement.jstree('get_selected');
                 treeElement.jstree(true).set_icon(node, icon);
-            }
+            };
 
             api.createNode = function (node) {
                 var treeItem = createTreeItemFromSource(node);
@@ -234,16 +234,15 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 if (parentNode != undefined) {
                     var nodeId = treeElement.jstree(true).create_node(parentNode, treeItem);
                 }
-            }
+            };
 
             api.scrollToSelectedNode = function () {
                 var node = treeElement.jstree('get_selected');
 
-                if (node != undefined && node.length > 0)
-                {
+                if (node != undefined && node.length > 0) {
                     document.getElementById(node[0]).scrollIntoView();
                 }
-            }
+            };
 
             function getFullTreeData(treeArray, jsonTree, treeElement) {
                
@@ -274,14 +273,14 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                             var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                             if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
                                 onvaluechangedMethod();
-                                
+
                             }
                         }
                     });
 
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return '<div id="divTree" />';

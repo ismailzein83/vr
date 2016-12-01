@@ -804,7 +804,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
    
     function createDateFromString(value)
     {
-        var date = new Date(value)
+        var date = new Date(value);
         var userTimezoneOffset = new Date().getTimezoneOffset() * 60000;
         return new Date(date.getTime() + userTimezoneOffset);
     }
