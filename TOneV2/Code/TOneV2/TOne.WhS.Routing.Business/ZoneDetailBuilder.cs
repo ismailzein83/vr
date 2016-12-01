@@ -50,7 +50,7 @@ namespace TOne.WhS.Routing.Business
                 customerServiceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
             }
 
-            CustomerZoneManager customerZoneManager = new CustomerZoneManager();
+			var saleZoneManager = new SaleZoneManager();
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
@@ -70,8 +70,9 @@ namespace TOne.WhS.Routing.Business
             foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
                 int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerInfo.CustomerId, CarrierAccountType.Customer);
-                var customerSaleZones = customerZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, sellingNumberPlanId, effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now, isEffectiveInFuture);
-                if (customerSaleZones == null)
+				IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
+                
+				if (customerSaleZones == null)
                     continue;
 
                 foreach (var customerZone in customerSaleZones)
