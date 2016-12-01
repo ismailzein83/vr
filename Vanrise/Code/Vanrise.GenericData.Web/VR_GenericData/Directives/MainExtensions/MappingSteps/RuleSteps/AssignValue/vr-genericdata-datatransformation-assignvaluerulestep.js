@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/AssignValue/Templates/AssignValueRuleStepTemplate.html';
@@ -68,7 +68,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                             payloadRuleStep.context = payload.context;
                         if (payload != undefined && payload.stepDetails) {
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
-                            payloadRuleStep.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings
+                            payloadRuleStep.ruleObjectsMappings = payload.stepDetails.RuleObjectsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
                             payloadRuleStep.isEffectiveInFuture = payload.stepDetails.IsEffectiveInFuture;
                             payloadRuleStep.ruleDefinitionId = payload.stepDetails.RuleDefinitionId;
