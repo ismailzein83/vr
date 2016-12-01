@@ -161,7 +161,8 @@ namespace Vanrise.BusinessProcess
         {
             if (errorMessage == null)
                 errorMessage = "Runtime is no longer available";
-            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId, BPInstanceStatus.Suspended, errorMessage, null);
+            var status = BPInstanceStatus.Suspended;
+            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId, status, errorMessage, null);
             terminatedPendingInstances.Add(pendingInstanceInfo);
             if (pendingInstanceInfo.ParentProcessInstanceId.HasValue)
             {
@@ -169,9 +170,12 @@ namespace Vanrise.BusinessProcess
                 if (parentInstanceInfo != null && parentInstanceInfo.Status == BPInstanceStatus.Running && !terminatedPendingInstances.Contains(parentInstanceInfo))
                 {
                     BPDefinitionInitiator.NotifyParentBPChildCompleted(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId.Value,
-                        BPInstanceStatus.Suspended, errorMessage, null);
+                        status, errorMessage, null);
                 }
             }
+            if (pendingInstanceInfo.CompletionNotifier != null)
+                BPDefinitionInitiator.NotifyBPCompleted(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.CompletionNotifier,
+                        status, errorMessage, null);
         }
 
         private void CheckAndNotifyPendingBPEvents(List<RuntimeServiceInstance> bpServiceInstances, List<BPPendingInstanceInfo> runningInstances)

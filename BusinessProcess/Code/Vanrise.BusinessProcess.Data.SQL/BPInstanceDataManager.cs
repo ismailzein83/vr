@@ -87,10 +87,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
 
-        public long InsertInstance(string processTitle, long? parentId, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId)
+        public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId)
         {
             object processInstanceId;
-            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus, initiatorUserId, entityId) > 0)
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, 
+                inputArguments != null ? Serializer.Serialize(inputArguments) : null,
+                completionNotifier != null ? Serializer.Serialize(completionNotifier) : null,
+                (int)executionStatus, initiatorUserId, entityId) > 0)
                 return (long)processInstanceId;
             else
                 return 0;
@@ -119,6 +122,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (!String.IsNullOrWhiteSpace(inputArg))
                 instance.InputArgument = Serializer.Deserialize(inputArg) as BaseProcessInputArgument;
 
+            string completionNotifier = reader["CompletionNotifier"] as string;
+            if (!string.IsNullOrWhiteSpace(completionNotifier))
+                instance.CompletionNotifier = Serializer.Deserialize(completionNotifier) as ProcessCompletionNotifier;
+
             return instance;
         }
 
@@ -133,6 +140,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID")
             };
 
+            string completionNotifier = reader["CompletionNotifier"] as string;
+            if (!string.IsNullOrWhiteSpace(completionNotifier))
+                instance.CompletionNotifier = Serializer.Deserialize(completionNotifier) as ProcessCompletionNotifier;
             return instance;
         }
 

@@ -17,5 +17,7 @@ namespace Vanrise.BusinessProcess.Entities
         public BPInstanceStatus Status { get; set; }
 
         public Guid? ServiceInstanceId { get; set; }
+
+        public ProcessCompletionNotifier CompletionNotifier { get; set; }
     }
 }

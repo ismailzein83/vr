@@ -219,13 +219,16 @@ namespace Vanrise.BusinessProcess
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
             }
 
-            if (bpInstance.ParentProcessID.HasValue && BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
+            if (BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
             {
                 object processOutput = null;
                 if (e.Outputs != null)
                     e.Outputs.TryGetValue("Output", out processOutput);
 
-                NotifyParentBPChildCompleted(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID.Value, bpInstance.Status, bpInstance.LastMessage, processOutput);
+                if (bpInstance.ParentProcessID.HasValue)
+                    NotifyParentBPChildCompleted(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID.Value, bpInstance.Status, bpInstance.LastMessage, processOutput);
+                if (bpInstance.CompletionNotifier != null)
+                    NotifyBPCompleted(bpInstance.ProcessInstanceID, bpInstance.CompletionNotifier, bpInstance.Status, bpInstance.LastMessage, processOutput);
             }
 
             //_instanceDataManager.UnlockProcessInstance(bpInstance.ProcessInstanceID, RunningProcessManager.CurrentProcess.ProcessId);
@@ -242,6 +245,17 @@ namespace Vanrise.BusinessProcess
                 ProcessOutput = processOutput
             };
             s_eventDataManager.InsertEvent(parentBPInstanecId, bpInstanceId.ToString(), eventData);
+        }
+
+        internal static void NotifyBPCompleted(long bpInstanceId, ProcessCompletionNotifier completionNotifier, BPInstanceStatus status, string errorMessage, object processOutput)
+        {
+            var eventData = new Entities.ProcessCompletedEventPayload
+            {
+                ProcessStatus = status,
+                LastProcessMessage = errorMessage,
+                ProcessOutput = processOutput
+            };
+            completionNotifier.OnProcessInstanceCompleted(eventData);
         }
 
         void TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)

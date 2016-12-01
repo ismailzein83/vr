@@ -10,5 +10,12 @@ namespace Vanrise.BusinessProcess.Entities
         public long? ParentProcessID { get; set; }
 
         public BaseProcessInputArgument InputArguments { get; set; }
+
+        public ProcessCompletionNotifier CompletionNotifier { get; set; }
+    }
+
+    public abstract class ProcessCompletionNotifier
+    {
+        public abstract void OnProcessInstanceCompleted(ProcessCompletedEventPayload eventPayload);
     }
 }
