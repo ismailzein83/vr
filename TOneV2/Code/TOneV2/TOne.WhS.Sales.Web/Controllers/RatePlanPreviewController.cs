@@ -68,5 +68,13 @@ namespace TOne.WhS.Sales.Web.Controllers
 			var manager = new ChangedCustomerCountryPreviewManager();
 			return GetWebResponse(input, manager.GetFilteredChangedCustomerCountryPreviews(input));
 		}
+
+		[HttpPost]
+		[Route("GetFilteredNewCustomerCountryPreviews")]
+		public object GetFilteredNewCustomerCountryPreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
+		{
+			var manager = new NewCustomerCountryPreviewManager();
+			return GetWebResponse(input, manager.GetFilteredNewCustomerCountryPreviews(input));
+		}
     }
 }

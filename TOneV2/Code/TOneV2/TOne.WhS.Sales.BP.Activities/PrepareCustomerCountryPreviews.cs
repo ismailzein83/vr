@@ -14,11 +14,13 @@ namespace TOne.WhS.Sales.BP.Activities
 	public class PrepareCustomerCountryPreviewsInput
 	{
 		public SalePriceListOwnerType OwnerType { get; set; }
+		public IEnumerable<CustomerCountryToAdd> CustomerCountriesToAdd { get; set; }
 		public IEnumerable<CustomerCountryToChange> CustomerCountriesToChange { get; set; }
 	}
 
 	public class PrepareCustomerCountryPreviewsOutput
 	{
+		public IEnumerable<NewCustomerCountryPreview> NewCustomerCountryPreviews { get; set; }
 		public IEnumerable<ChangedCustomerCountryPreview> ChangedCustomerCountryPreviews { get; set; }
 	}
 
@@ -32,11 +34,17 @@ namespace TOne.WhS.Sales.BP.Activities
 		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
 
 		[RequiredArgument]
+		public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
+
+		[RequiredArgument]
 		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
 
 		#endregion
 
 		#region Output Arguments
+
+		[RequiredArgument]
+		public OutArgument<IEnumerable<NewCustomerCountryPreview>> NewCustomerCountryPreviews { get; set; }
 
 		[RequiredArgument]
 		public OutArgument<IEnumerable<ChangedCustomerCountryPreview>> ChangedCustomerCountryPreviews { get; set; }
@@ -48,6 +56,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			return new PrepareCustomerCountryPreviewsInput()
 			{
 				OwnerType = OwnerType.Get(context),
+				CustomerCountriesToAdd = CustomerCountriesToAdd.Get(context),
 				CustomerCountriesToChange = CustomerCountriesToChange.Get(context)
 			};
 		}
@@ -56,18 +65,31 @@ namespace TOne.WhS.Sales.BP.Activities
 		{
 			if (ChangedCustomerCountryPreviews.Get(context) == null)
 				ChangedCustomerCountryPreviews.Set(context, new List<ChangedCustomerCountryPreview>());
+			if (NewCustomerCountryPreviews.Get(context) == null)
+				NewCustomerCountryPreviews.Set(context, new List<NewCustomerCountryPreview>());
 			base.OnBeforeExecute(context, handle);
 		}
 
 		protected override PrepareCustomerCountryPreviewsOutput DoWorkWithResult(PrepareCustomerCountryPreviewsInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
 		{
 			SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+			IEnumerable<CustomerCountryToAdd> customerCountriesToAdd = inputArgument.CustomerCountriesToAdd;
 			IEnumerable<CustomerCountryToChange> customerCountriesToChange = inputArgument.CustomerCountriesToChange;
 
+			var newCustomerCountryPreviews = new List<NewCustomerCountryPreview>();
 			var changedCustomerCountryPreviews = new List<ChangedCustomerCountryPreview>();
 
 			if (ownerType == SalePriceListOwnerType.Customer)
 			{
+				foreach (CustomerCountryToAdd countryToAdd in customerCountriesToAdd)
+				{
+					newCustomerCountryPreviews.Add(new NewCustomerCountryPreview()
+					{
+						CountryId = countryToAdd.CountryId,
+						BED = countryToAdd.BED,
+						EED = countryToAdd.EED
+					});
+				}
 				foreach (CustomerCountryToChange countryToChange in customerCountriesToChange)
 				{
 					changedCustomerCountryPreviews.Add(new ChangedCustomerCountryPreview()
@@ -80,12 +102,14 @@ namespace TOne.WhS.Sales.BP.Activities
 
 			return new PrepareCustomerCountryPreviewsOutput()
 			{
+				NewCustomerCountryPreviews = newCustomerCountryPreviews,
 				ChangedCustomerCountryPreviews = changedCustomerCountryPreviews
 			};
 		}
 
 		protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareCustomerCountryPreviewsOutput result)
 		{
+			NewCustomerCountryPreviews.Set(context, result.NewCustomerCountryPreviews);
 			ChangedCustomerCountryPreviews.Set(context, result.ChangedCustomerCountryPreviews);
 		}
 	}

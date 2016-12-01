@@ -24,6 +24,9 @@
         var summaryServiceViewerAPI;
         var summaryServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var newCountryGridAPI;
+        var newCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
+
         var changedCountryGridAPI;
         var changedCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -68,6 +71,11 @@
                 summaryServiceViewerReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onNewCountryPreviewGridReady = function (api) {
+            	newCountryGridAPI = api;
+            	newCountryGridReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onChangedCountryPreviewGridReady = function (api) {
             	changedCountryGridAPI = api;
             	changedCountryGridReadyDeferred.resolve();
@@ -99,7 +107,7 @@
             });
         }
         function loadAllControls() {
-        	return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadChangedCountryPreviewGrid]).catch(function (error) {
+        	return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadNewCountryPreviewGrid, loadChangedCountryPreviewGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -253,6 +261,16 @@
             });
 
             return saleZoneRoutingProductGridLoadDeferred.promise;
+        }
+        function loadNewCountryPreviewGrid() {
+        	var newCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
+        	newCountryGridReadyDeferred.promise.then(function () {
+        		var newCountryGridPayload = {
+        			ProcessInstanceId: processInstanceId
+        		};
+        		VRUIUtilsService.callDirectiveLoad(newCountryGridAPI, newCountryGridPayload, newCountryGridLoadDeferred);
+        	});
+        	return newCountryGridLoadDeferred.promise;
         }
         function loadChangedCountryPreviewGrid() {
         	var changedCountryGridLoadDeferred = UtilsService.createPromiseDeferred();

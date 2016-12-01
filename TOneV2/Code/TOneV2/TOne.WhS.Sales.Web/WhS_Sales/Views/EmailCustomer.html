@@ -1,0 +1,15 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_EmailCustomerController" vr-loader="scopeModel.isLoading">
+	<vr-modalbody>
+		<vr-form name="formEmailCustomer">
+
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="SendEmail" formname="formEmailCustomer" data-onclick="scopeModel.sendMail"></vr-button>
+				<vr-button type="Skip" formname="formEmailCustomer" data-onclick="scopeModel.skip"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>

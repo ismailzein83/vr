@@ -79,6 +79,7 @@
     <Compile Include="ApplyDefaultRoutingProductPreviewToDB.cs" />
     <Compile Include="ApplyDefaultServicePreviewToDB.cs" />
     <Compile Include="ApplyNewCustomerCountriesToDB.cs" />
+    <Compile Include="ApplyNewCustomerCountryPreviewsToDB.cs" />
     <Compile Include="ApplyNewDefaultServiceToDB.cs" />
     <Compile Include="ApplyNewSaleZoneServicesToDB.cs" />
     <Compile Include="ApplyRatePlanPreviewSummaryToDB.cs" />

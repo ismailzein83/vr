@@ -64,6 +64,7 @@
     <Compile Include="IDefaultRoutingProductPreviewDataManager.cs" />
     <Compile Include="IDefaultServicePreviewDataManager.cs" />
     <Compile Include="INewCustomerCountryDataManager.cs" />
+    <Compile Include="INewCustomerCountryPreviewDataManager.cs" />
     <Compile Include="INewDefaultRoutingProductDataManager.cs" />
     <Compile Include="INewDefaultServiceDataManager.cs" />
     <Compile Include="INewSaleRateDataManager.cs" />

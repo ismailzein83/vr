@@ -173,10 +173,12 @@
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\Templates\MarginRuleDirective.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\vr-whs-sales-sellingrulesettings-margin.js" />
     <Content Include="WhS_Sales\Directives\Preview\Templates\ChangedCountryPreviewGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Preview\Templates\NewCountryPreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\Templates\RatePreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\Templates\SaleZoneRoutingProductPreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\Templates\SaleZoneServicePreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-changedcountrypreview-grid.js" />
+    <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-newcountrypreview-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-ratepreview-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-salezoneroutingproductpreview-grid.js" />
     <Content Include="WhS_Sales\Directives\OtherRate\Templates\OtherRateGridTemplate.html" />
@@ -211,6 +213,8 @@
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />
     <Content Include="WhS_Sales\Views\Email.html" />
     <Content Include="WhS_Sales\Views\EmailController.js" />
+    <Content Include="WhS_Sales\Views\EmailCustomer.html" />
+    <Content Include="WhS_Sales\Views\EmailCustomerController.js" />
     <Content Include="WhS_Sales\Views\FutureRate.html" />
     <Content Include="WhS_Sales\Views\FutureRateController.js" />
     <Content Include="WhS_Sales\Views\InvalidRate.html" />

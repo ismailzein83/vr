@@ -95,6 +95,7 @@
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="NotificationContext.cs" />
     <Compile Include="Preview\ChangedCustomerCountryPreviewManager.cs" />
+    <Compile Include="Preview\NewCustomerCountryPreviewManager.cs" />
     <Compile Include="PriceListManager\Context\ProcessCustomerCountriesContext.cs" />
     <Compile Include="PriceListManager\PriceListCustomerCountryManager.cs" />
     <Compile Include="Reader\RatePlanServiceReadWithCache.cs" />

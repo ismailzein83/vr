@@ -153,7 +153,22 @@
 				<vr-tab header="'Country Changes'">
 					<vr-row>
 						<vr-columns width="fullrow">
-							<vr-whs-sales-changedcountrypreview-grid on-ready="scopeModel.onChangedCountryPreviewGridReady"></vr-whs-sales-changedcountrypreview-grid>
+							<vr-tabs>
+								<vr-tab header="'New Countries'">
+									<vr-row>
+										<vr-columns width="fullrow">
+											<vr-whs-sales-newcountrypreview-grid on-ready="scopeModel.onNewCountryPreviewGridReady"></vr-whs-sales-newcountrypreview-grid>
+										</vr-columns>
+									</vr-row>
+								</vr-tab>
+								<vr-tab header="'Changed Countries'">
+									<vr-row>
+										<vr-columns width="fullrow">
+											<vr-whs-sales-changedcountrypreview-grid on-ready="scopeModel.onChangedCountryPreviewGridReady"></vr-whs-sales-changedcountrypreview-grid>
+										</vr-columns>
+									</vr-row>
+								</vr-tab>
+							</vr-tabs>
 						</vr-columns>
 					</vr-row>
 				</vr-tab>

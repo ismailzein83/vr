@@ -88,6 +88,7 @@
     <Compile Include="RateManagement\Preview\ChangedCustomerCountryPreview.cs" />
     <Compile Include="RateManagement\Preview\DefaultRoutingProductPreview.cs" />
     <Compile Include="RateManagement\Preview\DefaultServicePreview.cs" />
+    <Compile Include="RateManagement\Preview\NewCustomerCountryPreview.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewQuery.cs" />
     <Compile Include="RateManagement\Preview\RatePlanPreviewSummary.cs" />
     <Compile Include="RateManagement\Preview\RatePreview.cs" />
