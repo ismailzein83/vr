@@ -85,7 +85,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + draggableIconTemplate
-                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden; padding:0px 10px" ' + title + '>' + element.html() + '</div>'
+                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden; padding:0px 10px;white-space: nowrap;"' + title + '>' + element.html() + '</div>'
                              + '</vr-listitem>'
                             + '</div>'
                            + '</vr-list>';
