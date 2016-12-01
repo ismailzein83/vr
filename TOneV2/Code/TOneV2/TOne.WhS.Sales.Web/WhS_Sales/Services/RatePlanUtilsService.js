@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = ['UtilsService'];
+    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService'];
 
-    function RatePlanUtilsService(UtilsService) {
+    function RatePlanUtilsService(UtilsService, VRValidationService) {
         return {
             onNewRateBlurred: onNewRateBlurred,
             onNewRateChanged: onNewRateChanged,
@@ -29,7 +29,7 @@
             {
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
-                var zoneBED = new Date(dataItem.ZoneBED);
+                var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
                 var newRateBED = (dataItem.CurrentRate == null || Number(dataItem.NewRate) > dataItem.CurrentRate) ? getNowPlusDays(settings.increasedRateDayOffset) : getNowPlusDays(settings.decreasedRateDayOffset);
                 dataItem.NewRateBED = (newRateBED > zoneBED) ? newRateBED : zoneBED;
             }
@@ -41,8 +41,12 @@
             if (dataItem.NewRateEED == null)
                 dataItem.NewRateEED = dataItem.ZoneEED;
         }
-        function getNowPlusDays(days) {
-            return new Date(new Date().setDate(new Date().getDate() + days));
+        function getNowPlusDays(daysToAdd) {
+        	var dayOfToday = new Date().getDate();
+        	var totalDays = dayOfToday + daysToAdd;
+        	var todayWithoutTime = UtilsService.getDateFromDateTime(new Date());
+        	var todayPlusDays = todayWithoutTime.setDate(totalDays); // setDate returns the number of milliseconds between the date object and midnight January 1 1970
+        	return new Date(todayPlusDays);
         }
         function getNowMinusDays(days) {
         	return new Date(new Date().setDate(new Date().getDate() - days));
@@ -93,19 +97,17 @@
             return null;
         }
         function validateNewRateDates(dataItem) {
-            var zoneBED = new Date(dataItem.ZoneBED);
-            var zoneEED = (dataItem.ZoneEED != null) ? new Date(dataItem.ZoneEED) : null;
 
-            var newRateBED = new Date(dataItem.NewRateBED);
-            var newRateEED = (dataItem.NewRateEED != null) ? new Date(dataItem.NewRateEED) : null;
+            var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
+            var zoneEED = (dataItem.ZoneEED != null) ? UtilsService.createDateFromString(dataItem.ZoneEED) : null;
 
-            if (newRateBED < zoneBED)
+            if (dataItem.NewRateBED < zoneBED)
                 return 'Min BED: ' + UtilsService.getShortDate(zoneBED);
 
-            if (zoneEED != null && (newRateEED == null || newRateEED > zoneEED))
+            if (zoneEED != null && (dataItem.NewRateEED == null || dataItem.NewRateEED > zoneEED))
                 return 'Max EED: ' + UtilsService.getShortDate(zoneEED);
 
-            return UtilsService.validateDates(newRateBED, newRateEED);
+            return VRValidationService.validateTimeRange(dataItem.NewRateBED, dataItem.NewRateEED);
         }
 
         function isSameNewService(newIds, oldIds) {

@@ -84,8 +84,7 @@ app.directive('vrWhsSalesSoldcountryGrid', ['WhS_Sales_RatePlanAPIService', 'WhS
 			$scope.scopeModel.validateTimeRange = function (soldCountry) {
 				if (!soldCountry.isSelected)
 					return null;
-				var soldCountryBED = UtilsService.createDateFromString(soldCountry.Entity.BED);
-				return VRValidationService.validateTimeRange(soldCountryBED, $scope.scopeModel.endEffectiveDate);
+				return VRValidationService.validateTimeRange(soldCountry.Entity.BED, $scope.scopeModel.endEffectiveDate);
 			};
 		}
 		function defineAPI() {
