@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.NumberingPlan.Entities
 {
-    public class CPSettingsData : SettingData
+    public class NPSettingsData : SettingData
     {
         public int EffectiveDateOffset { get; set; }
     }

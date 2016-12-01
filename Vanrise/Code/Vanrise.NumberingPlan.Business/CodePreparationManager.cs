@@ -32,10 +32,10 @@ namespace Vanrise.NumberingPlan.Business
             return dataManager.UpdateCodePreparationStatus(sellingNumberPlanId, CodePreparationStatus.Canceled);
         }
 
-        public CPSettingsData GetCPSettings()
+        public NPSettingsData GetCPSettings()
         {
             SettingManager settingManager = new SettingManager();
-            return settingManager.GetSetting<CPSettingsData>(Constants.CPSettings);
+            return settingManager.GetSetting<NPSettingsData>(Constants.CPSettings);
         }
 
     }

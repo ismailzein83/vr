@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.NumberingPlan.Entities;
 

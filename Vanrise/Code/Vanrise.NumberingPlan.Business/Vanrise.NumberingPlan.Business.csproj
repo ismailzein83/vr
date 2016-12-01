@@ -100,8 +100,6 @@
     <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleCodeIterator.cs" />
-    <Compile Include="SaleCode\QueryHandlers\SaleCodeQueryByZoneHandler.cs" />
-    <Compile Include="SaleCode\QueryHandlers\SaleCodeQueryHandler.cs" />
     <Compile Include="SaleCode\SaleCodeCacheManager.cs" />
     <Compile Include="SaleCode\SaleCodeManager.cs" />
     <Compile Include="SaleZoneManager.cs" />

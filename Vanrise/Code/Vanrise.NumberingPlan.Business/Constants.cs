@@ -10,6 +10,5 @@ namespace Vanrise.NumberingPlan.Business
     {
         public const string CPSettings = "VR_NumberingPlan";
 
-        public const string SaleAreaSettings = "WhS_BE_SaleArea_Settings";
     }
 }

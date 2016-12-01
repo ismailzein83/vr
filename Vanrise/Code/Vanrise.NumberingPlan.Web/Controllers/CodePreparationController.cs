@@ -114,7 +114,7 @@ namespace Vanrise.NumberingPlan.Web.Controllers
 
         [HttpGet]
         [Route("GetCPSettings")]
-        public CPSettingsData GetCPSettings()
+        public NPSettingsData GetCPSettings()
         {
             CodePreparationManager manager = new CodePreparationManager();
             return manager.GetCPSettings();
