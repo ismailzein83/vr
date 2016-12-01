@@ -221,7 +221,7 @@
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" >'
                                             + '<vr-validator validate="ctrl.validate()" vr-input>'
-                                                   + '<input readonly="ctrl.readOnly" tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
+                                                   + '<input ng-readonly="ctrl.readOnly" tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
                                                        + '</vr-validator>'
                                                 + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="top:0px" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                                                 + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()" ng-if="!ctrl.readOnly">'
