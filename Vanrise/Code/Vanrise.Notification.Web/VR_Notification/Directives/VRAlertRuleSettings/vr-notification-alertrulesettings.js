@@ -35,7 +35,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
                     return null;
 
                 return "You Should Select at least one threshold action.";
-            }
+            };
 
             ctrl.addThresholdAction = function () {
                 var onAlertRuleSettingsAdded = function (balanceAlertThreshold) {
@@ -43,7 +43,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
 
                     balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
-                }
+                };
                 VR_Notification_AlertRuleSettingsService.addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType, thresholdExtensionType);
             };
 
@@ -67,7 +67,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
                     }
                 }
                 return data;
-            }
+            };
 
             api.load = function (payload) {
                 if (payload != undefined && payload.alertTypeSettings != undefined) {
@@ -89,7 +89,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
                         }
                     }
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -126,7 +126,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
                 thresholdActionObj.RollbackActionNames = getActionNames(thresholdActionObj.RollbackActions);
 
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
-            }
+            };
             VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType);
         }
 

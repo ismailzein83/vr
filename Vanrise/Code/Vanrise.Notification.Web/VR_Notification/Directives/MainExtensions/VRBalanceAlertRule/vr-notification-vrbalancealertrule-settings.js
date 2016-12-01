@@ -44,7 +44,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                 $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
                     criteriaDirectiveAPI = api;
                     criteriaDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onVRAlertRuleSettingsDirectiveReady = function (api) {
                     vrAlertRuleSettingsDirectiveAPI = api;
