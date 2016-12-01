@@ -14,8 +14,9 @@
         function showAddTaskModal(bpDefinitionObj) {
             var settings = {
             };
+            //'7a35f562-319b-47b3-8258-ec1a704a82eb' is the related action type id for workflow
             var parameters = {
-                additionalParameter: { bpDefinitionID: bpDefinitionObj.Entity.BPDefinitionID }
+                additionalParameter: { bpDefinitionID: bpDefinitionObj.Entity.BPDefinitionID, actionTypeId: '7a35f562-319b-47b3-8258-ec1a704a82eb' }
             };
 
             settings.onScopeReady = function (modalScope) {
