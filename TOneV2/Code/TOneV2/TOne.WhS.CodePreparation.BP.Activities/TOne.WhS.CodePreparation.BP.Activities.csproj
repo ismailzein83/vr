@@ -135,7 +135,6 @@
     <Compile Include="ReserveIdForCodePreparation.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="SetCPContext.cs" />
-    <Compile Include="StructureNotificationsDataByCountries.cs" />
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
