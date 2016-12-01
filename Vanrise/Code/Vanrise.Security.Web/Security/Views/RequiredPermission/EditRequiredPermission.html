@@ -1,16 +1,18 @@
 ﻿<div vr-modalcontent ng-controller="VR_Sec_EditRequiredPermissionController" vr-loader="isLoading" width="'40%'">
-    <vr-modalbody maxheight="'600px'">
+    <vr-modalbody >
         <vr-form name="formEdit">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-treeview on-ready="onTreeReady"
-                                 datachildrenfield="Children"
-                                 datatextfield="Name"
-
-                                 datavaluefieldmethod="buildTreeId"
-                                 selecteditem="currentNode"
-                                 onvaluechanged="onTreeValueChanged">
-                    </vr-treeview>
+                    <div style="max-height:600px;overflow-y:auto">
+                        <vr-treeview on-ready="onTreeReady"
+                                     datachildrenfield="Children"
+                                     datatextfield="Name"
+                                     datavaluefieldmethod="buildTreeId"
+                                     selecteditem="currentNode"
+                                     onvaluechanged="onTreeValueChanged">
+                        </vr-treeview>
+                    </div>
+                    
                 </vr-columns>
                 <vr-columns width="1/2row" >
                     <vr-sec-permissionoptions-selector on-ready="onPermissionReady" ismultipleselection isrequired="true"></vr-sec-permissionoptions-selector>
