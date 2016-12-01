@@ -166,14 +166,14 @@ namespace TOne.WhS.BusinessEntity.Business
             Vanrise.Security.Entities.User initiator = userManager.GetUserbyId(initiatorId);
 
             string customerName = carrierAccountManager.GetCarrierAccountName(customer.CarrierAccountId);
-            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xlsx");
+            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xls");
 
             VRFile file = new VRFile()
             {
                 Content = salePLTemplateBytes,
                 Name = fileName,
                 ModuleName = "WhS_BE_SalePriceList",
-                Extension = ".xlsx",
+                Extension = "xls",
                 CreatedTime = DateTime.Today,
             };
 
@@ -206,11 +206,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 salePriceListManager.AddSalePriceList(salePriceList);
             }
 
-            this.SendMail(salePLMailTemplateId, salePLTemplateBytes, initiator, customer);
+            this.SendMail(salePLMailTemplateId, salePLTemplateBytes, initiator, customer, salePriceList);
 
         }
 
-        private void SendMail(Guid salePLMailTemplateId, byte[] salePLTemplateBytes, Vanrise.Security.Entities.User initiator, CarrierAccount customer)
+        private void SendMail(Guid salePLMailTemplateId, byte[] salePLTemplateBytes, Vanrise.Security.Entities.User initiator, CarrierAccount customer, SalePriceList salePriceList)
         {
             MemoryStream memoryStream = new MemoryStream(salePLTemplateBytes);
             memoryStream.Position = 0;
@@ -224,6 +224,7 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
             objects.Add("Customer", customer);
             objects.Add("User", initiator);
+            objects.Add("Sale Pricelist", salePriceList);
 
             VRMailManager vrMailManager = new VRMailManager();
             VRMailEvaluatedTemplate evaluatedTemplate = vrMailManager.EvaluateMailTemplate(salePLMailTemplateId, objects);

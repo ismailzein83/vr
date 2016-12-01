@@ -9,7 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum SalePriceListField { PriceListDate = 0 }
+    public enum SalePriceListField { PriceListDate = 0, PriceListType = 1 }
 
     public class SalePriceListPropertyEvaluator : VRObjectPropertyEvaluator
     {
@@ -29,7 +29,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             {
                 case MainExtensions.SalePriceListField.PriceListDate:
                     return salePriceList.EffectiveOn;
-              
+                case MainExtensions.SalePriceListField.PriceListType:
+                    return salePriceList.PriceListType;
             }
 
             return null;
