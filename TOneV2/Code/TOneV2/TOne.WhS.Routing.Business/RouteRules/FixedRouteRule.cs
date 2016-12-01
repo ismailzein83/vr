@@ -61,13 +61,16 @@ namespace TOne.WhS.Routing.Business
 
             var unblockedOptions = options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered);
             if (unblockedOptions != null)
-                totalAssignedPercentage = unblockedOptions.Sum(itm => itm.Percentage.Value);
+            {
+                var unblockedOptionsWithPercentage = unblockedOptions.FindAllRecords(itm => itm.Percentage.HasValue);
+                if (unblockedOptionsWithPercentage != null && unblockedOptionsWithPercentage.Count() > 0)
+                    totalAssignedPercentage = unblockedOptionsWithPercentage.Sum(itm => itm.Percentage.Value);
+            }
 
-
-            if (totalAssignedPercentage.HasValue && (totalAssignedPercentage == 100 || totalAssignedPercentage == 0))
+            if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
                 return;
 
-            decimal unassignedPercentages = totalAssignedPercentage.HasValue ? 100 - totalAssignedPercentage.Value : 0;
+            decimal unassignedPercentages = 100 - totalAssignedPercentage.Value;
 
             foreach (var option in options)
             {
@@ -131,13 +134,16 @@ namespace TOne.WhS.Routing.Business
 
             var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
             if (unblockedOptions != null)
-                totalAssignedPercentage = unblockedOptions.Sum(itm => itm.Percentage.Value);
+            {
+                var unblockedOptionsWithPercentage = unblockedOptions.FindAllRecords(itm => itm.Percentage.HasValue);
+                if (unblockedOptionsWithPercentage != null && unblockedOptionsWithPercentage.Count() > 0)
+                    totalAssignedPercentage = unblockedOptionsWithPercentage.Sum(itm => itm.Percentage.Value);
+            }
 
-
-            if (totalAssignedPercentage.HasValue && (totalAssignedPercentage == 100 || totalAssignedPercentage == 0))
+            if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
                 return;
 
-            decimal unassignedPercentages = totalAssignedPercentage.HasValue ? 100 - totalAssignedPercentage.Value : 0;
+            decimal unassignedPercentages = 100 - totalAssignedPercentage.Value;
 
             foreach (var option in options)
             {

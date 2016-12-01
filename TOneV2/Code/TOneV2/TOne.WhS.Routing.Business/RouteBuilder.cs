@@ -230,7 +230,12 @@ namespace TOne.WhS.Routing.Business
                         }
                     }
                 }
-
+                var blockedOrFilteredItems = route.Options.FindAllRecords(itm => itm.IsBlocked || itm.IsFiltered);
+                if (blockedOrFilteredItems != null && blockedOrFilteredItems.Count()>0)
+                {
+                    foreach (var blockedOrFilteredItem in blockedOrFilteredItems)
+                        blockedOrFilteredItem.Percentage = null;
+                }
                 routeRule.Settings.ApplyOptionsPercentage(route.Options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered));
             }
             else
