@@ -19,6 +19,7 @@
         defineScope();
         load();
 
+        $scope.scopeModel.disableActionType = false;
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             taskId = undefined;
@@ -190,10 +191,15 @@
                         $scope.actionTypes.push(item);
                     }
                 });
-                if (taskObject != undefined && taskObject.ActionTypeId)
+                if (taskObject != undefined && taskObject.ActionTypeId) {
                     $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
+                }
+                else if (additionalParameter != undefined && additionalParameter.actionTypeId) {
+                    $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, additionalParameter.actionTypeId, "ActionTypeId");
+                    $scope.scopeModel.disableActionType = true;
+                }
                 else {
-                    $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, 1, "ActionTypeId");
+                    $scope.scopeModel.selectedActionType = $scope.actionTypes != undefined && $scope.actionTypes.length > 0 ? $scope.actionTypes[0] : undefined;
                 }
 
             });
