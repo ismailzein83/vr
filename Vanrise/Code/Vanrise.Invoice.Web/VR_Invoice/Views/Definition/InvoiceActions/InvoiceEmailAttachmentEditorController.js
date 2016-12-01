@@ -28,7 +28,7 @@
             $scope.scopeModel.onSendEmailAttachmentTypeReady = function (api) {
                 sendEmailAttachmentTypeAPI = api;
                 sendEmailAttachmentTypeReadyDeferred.resolve();
-            }
+            };
             
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -71,7 +71,7 @@
             function loadEmailAttachmentTypeDirective() {
                 var sendEmailAttachmentTypeLoadDeferred = UtilsService.createPromiseDeferred();
                 sendEmailAttachmentTypeReadyDeferred.promise.then(function () {
-                    var sendEmailAttachmentTypePayload = { context: getContext() }
+                    var sendEmailAttachmentTypePayload = { context: getContext() };
                     if (emailAttachmentEntity != undefined) {
                         sendEmailAttachmentTypePayload.invoiceFileConverter = emailAttachmentEntity.InvoiceFileConverter;
                     }

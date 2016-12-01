@@ -57,20 +57,18 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.validateForm = function ()
-            {
+            $scope.scopeModel.validateForm = function () {
                 var partnerObject;
                 if (partnerSelectorAPI != undefined)
                     partnerObject = partnerSelectorAPI.getData();
-                if ($scope.scopeModel.issueDate != undefined && partnerObject != undefined && partnerObject.selectedIds != undefined && $scope.scopeModel.fromDate != undefined && $scope.scopeModel.toDate != undefined)
-                {
+                if ($scope.scopeModel.issueDate != undefined && partnerObject != undefined && partnerObject.selectedIds != undefined && $scope.scopeModel.fromDate != undefined && $scope.scopeModel.toDate != undefined) {
                     buildInvoiceGeneratorActions();
                     validateResult = true;
                     return null;
                 }
                 validateResult = false;
                 return null;
-            }
+            };
             function generateInvoice() {
                 $scope.scopeModel.isLoading = true;
 

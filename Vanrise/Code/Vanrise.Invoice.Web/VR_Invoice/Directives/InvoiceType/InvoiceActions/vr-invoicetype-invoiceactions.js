@@ -104,15 +104,12 @@ app.directive("vrInvoicetypeInvoiceactions", ["UtilsService", "VRNotificationSer
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
-                currentContext.getRDLCActionsInfo = function()
-                {
+                currentContext.getRDLCActionsInfo = function () {
                     var actionsInfo = [];
-                    if( ctrl.datasource.length>0)
-                    {
-                      
+                    if (ctrl.datasource.length > 0) {
 
-                        for(var i=0;i< ctrl.datasource.length;i++)
-                        {
+
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
                             var action = ctrl.datasource[i];
                             actionsInfo.push({
                                 Title: action.Entity.Title,
@@ -121,7 +118,7 @@ app.directive("vrInvoicetypeInvoiceactions", ["UtilsService", "VRNotificationSer
                         }
                     }
                     return actionsInfo;
-                }
+                };
                 return currentContext;
             }
         }

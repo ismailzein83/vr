@@ -97,10 +97,9 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                 ActionTypeName: "RecreateInvoiceAction",
                 actionMethod: function (payload) {
                     var promiseDeffered = UtilsService.createPromiseDeferred();
-                    var onGenerateInvoice = function(invoiceGenerated)
-                    {
+                    var onGenerateInvoice = function (invoiceGenerated) {
                         promiseDeffered.resolve(invoiceGenerated);
-                    }
+                    };
                     reGenerateInvoice(onGenerateInvoice, payload.invoice.Entity.InvoiceTypeId, payload.invoice.Entity.InvoiceId);
                     return promiseDeffered.promise;
                 }
@@ -115,7 +114,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     var promiseDeffered = UtilsService.createPromiseDeferred();
                     var onNoteAdded = function (note) {
                         promiseDeffered.resolve(note);
-                    }
+                    };
                     openInvoiceNote(onNoteAdded,payload.invoice.Entity.InvoiceId);
                     return promiseDeffered.promise;
                 }
@@ -126,10 +125,9 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             var actionType = {
                 ActionTypeName: "SendEmailAction",
                 actionMethod: function (payload) {
-                    var onInvoiceEmailSend = function(response)
-                    {
+                    var onInvoiceEmailSend = function (response) {
 
-                    }
+                    };
                     openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId);
                     //VRNotificationService.showConfirmation().then(function (response) {
                     //    if (response) {
