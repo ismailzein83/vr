@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         int SellingNumberPlanId { get; }
 
+        long ProcessInstanceId { get; set; }
         IEnumerable<int> CustomerIds { get; }
 
         IEnumerable<SalePLZoneChange> ZoneChanges { get; }

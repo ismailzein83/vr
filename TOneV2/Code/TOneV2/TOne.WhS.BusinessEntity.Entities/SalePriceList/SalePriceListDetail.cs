@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string OwnerType { get; set; }
         public string CurrencyName { get; set; }
-
         public string OwnerName { get; set; }
+        public string PriceListTypeName { get; set; }
     }
 }

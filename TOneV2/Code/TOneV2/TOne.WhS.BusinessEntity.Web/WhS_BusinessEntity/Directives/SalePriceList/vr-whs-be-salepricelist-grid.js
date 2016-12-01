@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService) {
+app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, FileAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -59,8 +59,24 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
             };
+
+            defineMenuActions();
         }
 
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Download",
+                clicked: downloadPriceList
+            }];
+        }
+
+        function downloadPriceList(priceListObj) {
+            FileAPIService.DownloadFile(priceListObj.Entity.FileId)
+                    .then(function (response) {
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+        }
     }
 
     return directiveDefinitionObject;

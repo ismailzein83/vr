@@ -37,6 +37,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             INotificationContext notificationContext = new NotificationContext()
             {
                 SellingNumberPlanId = sellingNumberPlanId,
+                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
                 CustomerIds = customerIds,
                 ZoneChanges = salePLZonesChanges,
                 EffectiveDate = minimumDate,

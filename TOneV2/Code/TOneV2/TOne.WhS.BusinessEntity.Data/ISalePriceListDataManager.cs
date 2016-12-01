@@ -10,7 +10,9 @@ namespace TOne.WhS.BusinessEntity.Data
    public interface ISalePriceListDataManager: IDataManager
     {
        List<SalePriceList> GetPriceLists();
+       bool Update(SalePriceList salePriceList);
 
+       bool Insert(SalePriceList salePriceList);
        bool ArGetSalePriceListsUpdated(ref object updateHandle);
 
     }

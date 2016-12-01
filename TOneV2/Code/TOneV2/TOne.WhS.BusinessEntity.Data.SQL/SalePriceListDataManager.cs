@@ -31,6 +31,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.IsDataUpdated("TOneWhS_BE.SalePriceList", ref updateHandle);
         }
 
+        public bool Update(SalePriceList salePriceList)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_Update", salePriceList.PriceListId, salePriceList.FileId, (int)salePriceList.PriceListType);
+            return (recordsEffected > 0);
+        }
+
+        public bool Insert(SalePriceList salePriceList)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_Insert", salePriceList.PriceListId, (int)salePriceList.OwnerType, salePriceList.OwnerId, (int)salePriceList.PriceListType, salePriceList.CurrencyId, 
+                salePriceList.EffectiveOn, salePriceList.ProcessInstanceId, salePriceList.FileId);
+            return (recordsEffected > 0);
+        }
+
         #endregion
 
         #region Private Methods
@@ -46,7 +59,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 PriceListId = (int)reader["ID"],
                 OwnerType = (Entities.SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn"),
-                PriceListType = (SalePriceListType)GetReaderValue<int>(reader, "PriceListType")
+                PriceListType = (SalePriceListType)GetReaderValue<byte>(reader, "PriceListType"),
+                ProcessInstanceId = GetReaderValue<long>(reader, "ProcessInstanceID"),
+                FileId = GetReaderValue<long>(reader, "FileID"),
             };
 
             return salePriceList;

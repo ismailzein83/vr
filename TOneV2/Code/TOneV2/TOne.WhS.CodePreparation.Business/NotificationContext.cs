@@ -11,6 +11,8 @@ namespace TOne.WhS.CodePreparation.Business
     {
         public int SellingNumberPlanId { get; set; }
 
+        public long ProcessInstanceId { get; set; }
+
         public IEnumerable<int> CustomerIds { get; set; }
 
         public IEnumerable<SalePLZoneChange> ZoneChanges { get; set; }

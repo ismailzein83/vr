@@ -46,6 +46,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			var notificationContext = new NotificationContext()
 			{
 				SellingNumberPlanId = sellingNumberPlanId,
+                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
 				CustomerIds = customerIds,
 				ZoneChanges = salePLZoneChanges,
 				EffectiveDate = DateTime.Today,

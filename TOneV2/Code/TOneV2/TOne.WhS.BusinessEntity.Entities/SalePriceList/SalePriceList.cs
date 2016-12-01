@@ -21,19 +21,14 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePriceList
     {
         public int PriceListId { get; set; }
-
         public SalePriceListOwnerType OwnerType { get; set; }
-
         public SalePriceListType PriceListType { get; set; }
-
         public int OwnerId { get; set; }
-
         public int CurrencyId { get; set; }
-
         public string SourceId { get; set; }
-
         public DateTime EffectiveOn { get; set; }
-
+        public long ProcessInstanceId { get; set; }
+        public long FileId { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

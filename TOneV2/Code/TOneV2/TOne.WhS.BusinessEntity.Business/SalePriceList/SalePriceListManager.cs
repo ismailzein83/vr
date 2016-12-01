@@ -50,6 +50,25 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
+        public bool UpdateSalePriceList(SalePriceList salePriceList)
+        {
+            ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
+            return dataManager.Update(salePriceList);
+        }
+
+        public bool AddSalePriceList(SalePriceList salePriceList)
+        {
+            ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
+            return dataManager.Insert(salePriceList);
+        }
+        public IEnumerable<SalePriceList> GetCustomerSalePriceListsByProcessInstanceId(long processInstanceId)
+        {
+            Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceLists();
+            SalePriceListOwnerType customerOwnerType = SalePriceListOwnerType.Customer;
+
+            return allSalePriceLists.Values.FindAllRecords(itm => itm.ProcessInstanceId == processInstanceId && itm.OwnerType == customerOwnerType);
+        }
+
         public bool IsSalePriceListDeleted(int priceListId)
         {
             Dictionary<int, SalePriceList> allSalePriceLists = this.GetCachedSalePriceListsWithDeleted();
@@ -144,6 +163,8 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListDetail pricelistDetail = new SalePriceListDetail();
             pricelistDetail.Entity = priceList;
             pricelistDetail.OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType);
+            pricelistDetail.PriceListTypeName = Vanrise.Common.Utilities.GetEnumDescription(priceList.PriceListType);
+
 
             if (priceList.OwnerType != SalePriceListOwnerType.Customer)
             {
