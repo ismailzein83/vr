@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    VRValidationService.$inject = ['ValidationMessagesEnum'];
+    VRValidationService.$inject = ['UtilsService', 'ValidationMessagesEnum'];
 
-    function VRValidationService(ValidationMessagesEnum) {
+    function VRValidationService(UtilsService, ValidationMessagesEnum) {
 
         function validate(value, $scope, $attrs, validationOptions) {
             if ($attrs.isrequired != undefined && ($attrs.isrequired == "" || $scope.$parent.$eval($attrs.isrequired))) {
@@ -44,35 +44,34 @@
         }
 
         function validateTimeRange(fromDate, toDate) {
-            var errorMessage = "Start should be before end";
-            if (fromDate instanceof Date) {
-                if (fromDate == undefined || toDate == undefined)
-                    return null;
-                var from = new Date(fromDate);
-                var to = new Date(toDate);
-                if (from.getTime() > to.getTime())
-                    return errorMessage;
-                else
-                    return null;
-            }
-            else if (fromDate instanceof Object && toDate instanceof Object) {
-                if (toDate.Hour == 0 && toDate.Minute == 0)
-                    return null;
-                else if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
-                    return errorMessage;
-                else
-                    return null;
-            }
-            else if (typeof fromDate == 'string') {
-                if (fromDate == undefined || toDate == undefined)
-                    return null;
-                var from = new Date(fromDate);
-                var to = new Date(toDate);
-                if (from.getTime() > to.getTime())
-                    return errorMessage;
-                else
-                    return null;
-            }
+
+        	var errorMessage = "Invalid time range";
+
+        	var startDate = getDateObject(fromDate);
+        	var endDate = getDateObject(toDate);
+
+        	if (startDate != undefined && endDate != undefined) {
+        		if (startDate.getTime() > endDate.getTime())
+        			return errorMessage;
+        	}
+        	else {
+        		if (fromDate instanceof Object && toDate instanceof Object) {
+        			if (toDate.Hour == 0 && toDate.Minute == 0)
+        				return null;
+        			else if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
+        				return errorMessage;
+        		}
+        	}
+        	return null;
+        }
+
+        function getDateObject(date) {
+        	if (date instanceof Date)
+        		return date;
+        	else if (typeof (date) == 'string')
+        		return UtilsService.createDateFromString(date);
+        	else
+        		return undefined;
         }
 
         function validateTimeEqualorGreaterthanToday(currentDate) {
