@@ -42,11 +42,11 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
             $scope.onMappedColumnsGridReady = function (api) {
                 mappedColumnsAPI = api;
                 mappedColumnsReadyDeferred.resolve();
-            }
+            };
 
             $scope.addMappedCol = function () {
                 mappedColumnsAPI.addMappedCol();
-            }
+            };
 
             UtilsService.waitMultiplePromises([firstRowDirectiveReadyDeferred.promise, mappedColumnsReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -89,10 +89,10 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
                     FirstRowIndex: firstRowDirectiveData.RowIndex,
                     MappedColumns: mappedColumnsAPI.getData(),
                     Delimiter: $scope.delimiterValue
-                }
+                };
 
                 return codesByZone;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -169,7 +169,7 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
             currentContext.getFirstRowData = function () {
                 return firstRowDirectiveAPI.getData();
 
-            }
+            };
             return currentContext;
         }
 

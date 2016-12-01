@@ -52,13 +52,13 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
 
                     directiveAPI.getData = function () {
                         return getMappedTable();
-                    }
+                    };
 
 
                     directiveAPI.addMappedCol = function () {
                         var mappedCol = getMappedCol();
                         $scope.mappedCols.push(mappedCol);
-                    }
+                    };
 
                     return directiveAPI;
                 }

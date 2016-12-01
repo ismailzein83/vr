@@ -50,7 +50,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
             $scope.scopeModel.onMappedTableDirectiveReady = function (api) {
                 mappedTableDirectiveAPI = api;
                 mappedTableDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.addMappedTable = function () {
                 var mappedTableItem = {
@@ -58,7 +58,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
                     loadPromiseDeferred: UtilsService.createPromiseDeferred()
                 };
                 addMappedTableTab(mappedTableItem);
-            }
+            };
 
             UtilsService.waitMultiplePromises([excelWorkbookReadyDeferred.promise, mappedTableDirectiveReadyPromiseDeferred.promise]).then(function () {
                 defineAPI();
@@ -166,8 +166,8 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
             var directivePayload = {
                 context: getContext(),
                 mappedTable: mappedTableItem.payload,
-                priceListType: mappedTableItem.payload != undefined ? getConfigTypeByConfigId(mappedTableItem.payload.ConfigId) : getConfigTypeByConfigId(mappedTableDirectiveAPI.getData().ExtensionConfigurationId),
-            }
+                priceListType: mappedTableItem.payload != undefined ? getConfigTypeByConfigId(mappedTableItem.payload.ConfigId) : getConfigTypeByConfigId(mappedTableDirectiveAPI.getData().ExtensionConfigurationId)
+            };
 
             mappedTableItem.readyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
@@ -208,15 +208,15 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
         function getContext() {
             var context = {
                 getSelectedSheetApi: function () {
-                    return excelWorkbookAPI.getSelectedSheetApi()
+                    return excelWorkbookAPI.getSelectedSheetApi();
                 },
                 selectCellAtSheet: function (rowIndex, columnIndex, sheetIndex) {
-                    return excelWorkbookAPI.selectCellAtSheet(rowIndex, columnIndex, sheetIndex)
+                    return excelWorkbookAPI.selectCellAtSheet(rowIndex, columnIndex, sheetIndex);
                 },
                 getSelectedSheet: function () {
-                    return excelWorkbookAPI.getSelectedSheet()
-                } 
-            }
+                    return excelWorkbookAPI.getSelectedSheet();
+                }
+            };
             return context;
         }
 

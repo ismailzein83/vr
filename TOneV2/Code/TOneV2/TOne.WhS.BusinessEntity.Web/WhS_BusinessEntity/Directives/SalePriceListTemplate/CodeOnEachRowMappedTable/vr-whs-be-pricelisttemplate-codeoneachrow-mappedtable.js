@@ -42,11 +42,11 @@ app.directive('vrWhsBePricelisttemplateCodeoneachrowMappedtable', ['WhS_BE_SaleP
             $scope.onMappedColumnsGridReady = function (api) {
                 mappedColumnsAPI = api;
                 mappedColumnsReadyDeferred.resolve();
-            }
+            };
 
             $scope.addMappedCol = function () {
                 mappedColumnsAPI.addMappedCol();
-            }
+            };
 
             UtilsService.waitMultiplePromises([firstRowDirectiveReadyDeferred.promise, mappedColumnsReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -88,9 +88,9 @@ app.directive('vrWhsBePricelisttemplateCodeoneachrowMappedtable', ['WhS_BE_SaleP
                     SheetIndex: firstRowDirectiveData.SheetIndex,
                     FirstRowIndex: firstRowDirectiveData.RowIndex,
                     MappedColumns: mappedColumnsAPI.getData()
-                }
+                };
                 return codeOnEachRow;
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -167,7 +167,7 @@ app.directive('vrWhsBePricelisttemplateCodeoneachrowMappedtable', ['WhS_BE_SaleP
             currentContext.getFirstRowData = function () {
                 return firstRowDirectiveAPI.getData();
 
-            }
+            };
             return currentContext;
         }
 
