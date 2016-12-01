@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [Retail].[sp_Distributor_Update]
+CREATE PROCEDURE [Retail].[sp_Distributor_Update]
 	@ID INT,
 	@Name NVARCHAR(255),
 	@Type nvarchar(255),
@@ -11,15 +11,7 @@ Create PROCEDURE [Retail].[sp_Distributor_Update]
 	@SourceID nvarchar(255)
 AS
 BEGIN
-	IF NOT EXISTS
-	(
-		SELECT 1 FROM Retail.Distributor
-		WHERE ID != @ID
-			AND Name = @Name
-	)
-	BEGIN
 		UPDATE Retail.Distributor
 		SET Name = @Name, [Type] = @Type, Settings = @Settings, SourceID = @SourceID
 		WHERE ID = @ID
-	END
 END

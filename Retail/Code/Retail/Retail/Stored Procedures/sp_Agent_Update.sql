@@ -11,15 +11,9 @@ CREATE PROCEDURE [Retail].[sp_Agent_Update]
 	@SourceID nvarchar(255)
 AS
 BEGIN
-	IF NOT EXISTS
-	(
-		SELECT 1 FROM Retail.Agent
-		WHERE ID != @ID
-			AND Name = @Name
-	)
-	BEGIN
+
 		UPDATE Retail.Agent
 		SET Name = @Name, [Type] = @Type, Settings = @Settings, SourceID = @SourceID
 		WHERE ID = @ID
-	END
+
 END

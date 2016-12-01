@@ -11,14 +11,9 @@ CREATE PROCEDURE [Retail].[sp_Agent_Insert]
 	@ID INT OUT
 AS
 BEGIN
-	IF NOT EXISTS
-	(
-		SELECT 1 FROM Retail.Agent
-		WHERE Name = @Name 
-	)
-	BEGIN
+
 		INSERT INTO Retail.Agent (Name, Type, Settings,  SourceID)
 		VALUES (@Name, @Type, @Settings,@SourceID)
 		SET @ID = SCOPE_IDENTITY()
-	END
+
 END
