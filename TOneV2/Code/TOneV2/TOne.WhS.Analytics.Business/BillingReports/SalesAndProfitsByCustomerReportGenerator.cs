@@ -85,7 +85,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         ? ReportHelpers.FormatNumberPercentage(((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet))
                         : ReportHelpers.FormatNumberPercentage(0);
 
-                    listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
+                    if (salesAndProfitsByCustomer.Profit > 0 && !String.IsNullOrEmpty(salesAndProfitsByCustomer.Customer))
+                        listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
                 }
 
             List<ProfitSummary> profitSummary = GetCustomerProfitSummary(listSalesAndProfitsByCustomer);
