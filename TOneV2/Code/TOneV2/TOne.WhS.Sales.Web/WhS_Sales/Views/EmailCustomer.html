@@ -1,7 +1,11 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_EmailCustomerController" vr-loader="scopeModel.isLoading">
 	<vr-modalbody>
 		<vr-form name="formEmailCustomer">
-
+			<vr-row ng-show="scopeModel.customerName != undefined">
+				<vr-columns width="fullrow">
+					<vr-label isvalue="true">A new pricelist will be sent to {{scopeModel.customerName}}</vr-label>
+				</vr-columns>
+			</vr-row>
 		</vr-form>
 	</vr-modalbody>
 	<div>

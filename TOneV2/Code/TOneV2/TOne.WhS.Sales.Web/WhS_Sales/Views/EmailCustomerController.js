@@ -2,11 +2,12 @@
 
 	'use strict';
 
-	EmailCustomerController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNavigationService', 'VRNotificationService'];
+	EmailCustomerController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-	function EmailCustomerController($scope, BusinessProcess_BPTaskAPIService, VRNavigationService, VRNotificationService) {
+	function EmailCustomerController($scope, BusinessProcess_BPTaskAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
 		var taskId;
+		var taskData;
 
 		loadParameters();
 		defineScope();
@@ -32,7 +33,39 @@
 			};
 		}
 		function load() {
+			$scope.scopeModel.isLoading = true;
 
+			getTaskData().then(function () {
+				loadAllControls();
+			}).catch(function (error) {
+				VRNotificationService.notifyException(error, $scope);
+			});
+		}
+
+		function getTaskData() {
+			return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
+				if (response != null) {
+					taskData = response.TaskData;
+				}
+			});
+		}
+
+		function loadAllControls() {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+				VRNotificationService.notifyException(error, $scope);
+			}).finally(function () {
+				$scope.scopeModel.isLoading = false;
+			});
+		}
+		function setTitle() {
+			if (taskData == undefined || taskData.CustomerName == undefined)
+				return;
+			$scope.title += (': ' + taskData.CustomerName);
+		}
+		function loadStaticData() {
+			if (taskData == undefined)
+				return;
+			$scope.scopeModel.customerName = taskData.CustomerName;
 		}
 
 		function executeTask(decision) {
