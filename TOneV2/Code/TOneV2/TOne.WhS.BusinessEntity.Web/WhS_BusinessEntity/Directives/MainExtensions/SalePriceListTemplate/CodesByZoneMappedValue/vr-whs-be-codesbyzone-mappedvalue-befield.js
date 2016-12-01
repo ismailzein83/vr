@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeCodesbyzoneMappedvalueBefield', ['WhS_BE_SalePriceListTemplateSettingsCodeByZoneEFieldEnum', 'UtilsService', function (WhS_BE_SalePriceListTemplateSettingsCodeByZoneEFieldEnum, UtilsService) {
+app.directive('vrWhsBeCodesbyzoneMappedvalueBefield', ['WhS_BE_SalePriceListTemplateSettingsCodesByZoneBEFieldEnum', 'UtilsService', function (WhS_BE_SalePriceListTemplateSettingsCodesByZoneBEFieldEnum, UtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -29,7 +29,7 @@ app.directive('vrWhsBeCodesbyzoneMappedvalueBefield', ['WhS_BE_SalePriceListTemp
 		function initializeController() {
 
 			$scope.scopeModel = {};
-			$scope.scopeModel.beFields = UtilsService.getArrayEnum(WhS_BE_SalePriceListTemplateSettingsCodeByZoneEFieldEnum);
+			$scope.scopeModel.beFields = UtilsService.getArrayEnum(WhS_BE_SalePriceListTemplateSettingsCodesByZoneBEFieldEnum);
 
 			$scope.scopeModel.onSelectorReady = function (api) {
 				selectorAPI = api;
