@@ -23,20 +23,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetPackage")]
-        public Package GetPackage(int packageId)
+        [Route("GetPackageEditorRuntime")]
+        public PackageEditorRuntime GetPackageEditorRuntime(int packageId)
         {
             PackageManager manager = new PackageManager();
-            return manager.GetPackage(packageId);
-        }
-
-        [HttpGet]
-        [Route("GetPackagesInfo")]
-        public IEnumerable<PackageInfo> GetPackagesInfo(string filter = null)
-        {
-            PackageManager manager = new PackageManager();
-            var deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<PackageFilter>(filter) : null;
-            return manager.GetPackagesInfo(deserializedFilter);
+            return manager.GetPackageEditorRuntime(packageId);
         }
 
         [HttpPost]
@@ -56,11 +47,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetServicesTemplateConfigs")]
-        public IEnumerable<ServiceTemplateConfig> GetServicesTemplateConfigs()
+        [Route("GetPackageExtendedSettingsTemplateConfigs")]
+        public IEnumerable<PackageExtendedSettingsConfig> GetPackageExtendedSettingsTemplateConfigs()
         {
             PackageManager manager = new PackageManager();
-            return manager.GetServicesTemplateConfigs();
+            return manager.GetPackageExtendedSettingsTemplateConfigs();
         }
 
         [HttpGet]
@@ -77,6 +68,15 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             PackageManager manager = new PackageManager();
             return manager.GetServicePackageItemConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetPackagesInfo")]
+        public IEnumerable<PackageInfo> GetPackagesInfo(string filter = null)
+        {
+            PackageManager manager = new PackageManager();
+            var deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<PackageFilter>(filter) : null;
+            return manager.GetPackagesInfo(deserializedFilter);
         }
 
         [HttpPost]
