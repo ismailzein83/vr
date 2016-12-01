@@ -105,6 +105,8 @@
     <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
     <Compile Include="VRObjectTypes\CustomerObjectType.cs" />
     <Compile Include="VRObjectTypes\CustomerPropertyEvaluator.cs" />
+    <Compile Include="VRObjectTypes\ProfileObjectType.cs" />
+    <Compile Include="VRObjectTypes\ProfilePropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\SalePriceListObjectType.cs" />
     <Compile Include="VRObjectTypes\SalePriceListPropertyEvaluator.cs" />
   </ItemGroup>

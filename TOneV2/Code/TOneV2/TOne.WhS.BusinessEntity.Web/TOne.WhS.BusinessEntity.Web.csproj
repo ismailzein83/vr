@@ -203,6 +203,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PrimarySaleEntityEnum.js" />
@@ -277,10 +278,14 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\Templates\SupplierZoneRateStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\ProfilePropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\ProfileObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SalePriceListObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CustomerObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SalePriceListPropertyEvaluatorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CustomerPropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-profilepropertyevaluator.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-profileobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-salepricelistobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-salepricelistpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerpropertyevaluator.js" />

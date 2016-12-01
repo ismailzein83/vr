@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Invoice.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -42,6 +44,24 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     var invoiceDetails = context.Invoice.Details as CustomerInvoiceDetails;
                     objects.Add("CustomerInvoice", context.Invoice);
+                    string[] partner = context.Invoice.PartnerId.Split('_');
+                    CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                    CarrierProfile carrierProfile = null;
+                    switch(partner[0])
+                    {
+                        case "Account":
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
+                            carrierProfile = carrierProfileManager.GetCarrierProfile(account.CarrierProfileId);
+                            break;
+                        case "Profile":
+                            carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
+                               break;
+                    }
+                    if(carrierProfile != null)
+                    {
+                         objects.Add("Profile", carrierProfile);
+                    }
                     VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
                     return template;
             }
