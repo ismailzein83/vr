@@ -17,9 +17,13 @@
             });
         }
 
-        function GetServiceTypesInfo(filter) {
+        function UpdateServiceType(serviceType) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
+        }
+
+        function GetServiceTypesInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetServiceTypesInfo'), {
-                filter: filter
+                serializedFilter: serializedFilter
             });
         }
 
@@ -29,21 +33,18 @@
             });
         }
 
-        function UpdateServiceType(serviceType) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateServiceType'), serviceType);
-        }
-
         function HasUpdateServiceTypePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateServiceType']));
         }
+
+
         return {
             GetFilteredServiceTypes: GetFilteredServiceTypes,
             GetServiceType: GetServiceType,
+            UpdateServiceType: UpdateServiceType,
             GetServiceTypesInfo: GetServiceTypesInfo,
             GetServiceTypeChargingPolicyDefinitionSettings: GetServiceTypeChargingPolicyDefinitionSettings,
-            UpdateServiceType: UpdateServiceType,
             HasUpdateServiceTypePermission: HasUpdateServiceTypePermission
-
         };
     }
 
