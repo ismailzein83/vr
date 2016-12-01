@@ -296,7 +296,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\CodesByZoneMappedTable\Templates\CodesByZoneMappedTableTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\CodesByZoneMappedTable\vr-whs-be-pricelisttemplate-codesbyzone-mappedtable.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedColumns\Templates\CodesByZoneMappedColumnsGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedColumns\Templates\MappedColumnsGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedColumns\Templates\CodeOnEachRowMappedColumnsGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedColumns\vr-whs-be-pricelisttemplate-codeoneachrow-mappedcolumns-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedColumns\vr-whs-be-pricelisttemplate-codesbyzone-mappedcolumns-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedValue\Templates\BasicSalePriceListTemplateSettingsMappedValueSelectiveTemplate.html" />

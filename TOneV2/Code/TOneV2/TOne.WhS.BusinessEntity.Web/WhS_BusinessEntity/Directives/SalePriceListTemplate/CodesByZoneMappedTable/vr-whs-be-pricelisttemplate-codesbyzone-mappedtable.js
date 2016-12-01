@@ -152,8 +152,8 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
                     mappedSheet: mappedTable,
                     priceListType: priceListType
                 };
-
-                $scope.delimiterValue = mappedTable.Delimiter;
+                if (mappedTable != undefined)
+                    $scope.delimiterValue = mappedTable.Delimiter;
 
                 VRUIUtilsService.callDirectiveLoad(mappedColumnsAPI, mappedColumnsPayload, mappedColumnsLoadDeferred);
             });
