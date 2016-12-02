@@ -43,7 +43,7 @@ namespace Retail.BusinessEntity.Business
                 return 0;
         }
 
-        public IEnumerable<int> GetPackageIdsAssignedToAccount(int accountId)
+        public IEnumerable<int> GetPackageIdsAssignedToAccount(long accountId)
         {
             var accountInfo = GetAccountInfo(accountId);
             if (accountInfo != null)

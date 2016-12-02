@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Business
             Func<Package, bool> filterExpression = (package) => (input.Query.Name == null || package.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPackages.ToBigResult(input, filterExpression, PackageDetailMapper));
         }
-        
+
         public Package GetPackage(int packageId)
         {
             var packages = GetCachedPackages();
@@ -54,7 +54,22 @@ namespace Retail.BusinessEntity.Business
             Package package = GetPackage(packageId);
             return package != null ? package.Name : null;
         }
-        
+        public List<Package> GetPackagesByIds(IEnumerable<int> packagesIds)
+        {
+            List<Package> packages = null;
+
+            if (packagesIds != null && packagesIds.Count() > 0)
+            {
+                packages = new List<Package>();
+
+                foreach (var id in packagesIds)
+                {
+                    packages.Add(GetPackage(id));
+                }
+            }
+            return packages;
+        }
+
         public InsertOperationOutput<PackageDetail> AddPackage(Package package)
         {
             InsertOperationOutput<PackageDetail> insertOperationOutput = new InsertOperationOutput<PackageDetail>();
@@ -65,7 +80,7 @@ namespace Retail.BusinessEntity.Business
 
             IPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
             bool insertActionSucc = dataManager.Insert(package, out packageId);
-            
+
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -181,7 +196,7 @@ namespace Retail.BusinessEntity.Business
                    return packages.ToDictionary(cn => cn.PackageId, cn => cn);
                });
         }
-        
+
         #endregion
 
         #region Private Classes
