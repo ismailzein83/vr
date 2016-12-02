@@ -17,7 +17,7 @@ namespace NP.IVSwitch.Business
         #region Public Methods
         public Route GetRoute(int routeId)
         {
-            Dictionary<int, Route> cachedRoute = this.GetCachedRoute();
+            Dictionary<int, Route> cachedRoute = this.GetCachedRoutes();
             return cachedRoute.GetRecord(routeId);
         }
 
@@ -35,7 +35,7 @@ namespace NP.IVSwitch.Business
                 routeInfoDic = extendedSettingsObject.RouteInfo.ToDictionary(k => k.RouteId, v => v);
             }
             Dictionary<int,Route> routeDic = new Dictionary<int,Route>();
-            var allRoutes = this.GetCachedRoute();
+            var allRoutes = this.GetCachedRoutes();
 
             foreach (var item in routeInfoDic)
             {
@@ -216,16 +216,38 @@ namespace NP.IVSwitch.Business
 
         #region Private Methods
 
-        Dictionary<int, Route> GetCachedRoute()
+        Dictionary<int, Route> GetCachedRoutes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoute",
                 () =>
                 {
-                    IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
-                    return dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
+                    return PrepareCachedRoutes();
                 });
         }
 
+        private Dictionary<int, Route> PrepareCachedRoutes()
+        {
+            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+            Dictionary<int, Route> routes = dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var suppliers = carrierAccountManager.GetAllSuppliers();
+
+            foreach (var supplierItem in suppliers)
+            {
+                RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplierItem);
+                if (extendedSettingsObject == null) continue;
+                foreach (var routeInfo in extendedSettingsObject.RouteInfo)
+                {
+                    Route tempRoute;
+                    if (routes.TryGetValue(routeInfo.RouteId, out tempRoute))
+                    {
+                        tempRoute.Percentage = routeInfo.Percentage;
+                    }
+                }
+
+            }
+            return routes;
+        }
         #endregion
 
         #region Mappers
