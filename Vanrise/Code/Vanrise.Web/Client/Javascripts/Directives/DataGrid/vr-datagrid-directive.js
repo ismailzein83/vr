@@ -1,7 +1,9 @@
-﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType',
+﻿'use strict';
+
+app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType',
     function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType) {
 
-        'use strict';
+        
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -723,17 +725,16 @@
                     item.isDeleted = true;
                     itemChanged(item, "Deleted");
                 };
-                gridApi.clearDataSource = function()
-                {
+                gridApi.clearDataSource = function () {
                     ctrl.datasource.length = 0;
                     ctrl.pagerSettings.totalDataCount = 0;
-                }
+                };
                 gridApi.clearAll = function () {
                     ctrl.datasource.length = 0;
                     ctrl.pagerSettings.totalDataCount = 0;
                     ctrl.summaryDataItem = undefined;
                     buildSummaryRowHtml();
-                }
+                };
                 gridApi.getPageInfo = getPageInfo;
 
                 gridApi.clearDataAndContinuePaging = function () {

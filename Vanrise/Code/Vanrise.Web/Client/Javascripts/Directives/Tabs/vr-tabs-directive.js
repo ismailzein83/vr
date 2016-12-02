@@ -1,6 +1,5 @@
 ﻿'use strict';
 
-
 app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (MultiTranscludeService, UtilsService) {
 
     var directiveDefinitionObject = {
@@ -34,11 +33,10 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                 if (typeof (tab.onremove) === 'function') {
                     tab.onremove(tab);
                 }
-        
                 $("#" + tab.guid).remove();
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
-                }, 1)
+                }, 1);
                 if (ctrl.tabs[0] != undefined && tab.onremove!=undefined)
                      ctrl.tabs[0].isSelected = true;
 
