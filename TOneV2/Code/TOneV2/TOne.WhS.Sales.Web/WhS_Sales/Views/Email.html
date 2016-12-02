@@ -9,7 +9,7 @@
 								 norowhighlightonclick="true"
 								 maxheight="300px">
 						<vr-datagridcolumn widthfactor="1" disablesorting="true">
-							<vr-check value="dataItem.isSelected"></vr-check>
+							<vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onCountryCheckChanged(dataItem)"></vr-check>
 						</vr-datagridcolumn>
 						<vr-datagridcolumn headertext="'Id'" field="'CarrierAccountId'" disablesorting="true"></vr-datagridcolumn>
 						<vr-datagridcolumn headertext="'Customer'" field="'Name'" disablesorting="true"></vr-datagridcolumn>
@@ -23,7 +23,7 @@
 			<div transclude-to="buttons">
 				<vr-button type="SelectAll" data-onclick="scopeModel.selectAll"></vr-button>
 				<vr-button type="DeselectAll" data-onclick="scopeModel.deselectAll"></vr-button>
-				<vr-button type="SendEmail" formname="formEmail" data-onclick="scopeModel.sendMail"></vr-button>
+				<vr-button type="SendEmail" formname="formEmail" data-onclick="scopeModel.sendMail" ng-show="scopeModel.isSendEmailButtonVisible"></vr-button>
 				<vr-button type="Skip" formname="formEmail" data-onclick="scopeModel.skip"></vr-button>
 			</div>
 		</vr-actionbar>

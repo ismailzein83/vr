@@ -30,6 +30,14 @@
 			$scope.scopeModel.onGridReady = function (api) {
 				gridReadyDeferred.resolve();
 			};
+			$scope.scopeModel.onCountryCheckChanged = function (dataItem) {
+				if (dataItem.isSelected)
+					$scope.scopeModel.isSendEmailButtonVisible = true;
+				else {
+					var firstSelectedCountryIndex = UtilsService.getItemIndexByVal($scope.scopeModel.customers, true, 'isSelected');
+					$scope.scopeModel.isSendEmailButtonVisible = (firstSelectedCountryIndex > -1);
+				}
+			};
 
 			$scope.scopeModel.selectAll = function () {
 				toggleSelection(true);
@@ -117,6 +125,7 @@
 			return customerIds;
 		}
 		function toggleSelection(toggleValue) {
+			$scope.scopeModel.isSendEmailButtonVisible = toggleValue;
 			for (var i = 0; i < $scope.scopeModel.customers.length; i++)
 				$scope.scopeModel.customers[i].isSelected = toggleValue;
 		}
