@@ -27,8 +27,8 @@ app.directive('vrTabsHeader', [function () {
             var starttemplate = isvertical ? '': '<vr-row removeline ><vr-columns width="fullrow" >';
             var endtemplate = isvertical ? '' : '</vr-columns> </vr-row>';
             var verticalflag = isvertical == true ? "vertical" : " ";
-            var template = '<vr-tab-header-links ' + verticalflag + ' selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()">'
-                            + '      <vr-tab-header-link  ng-repeat="tab in ctrl.tabs" isselected="tab.isSelected">{{ tab.header }} <span ng-if="tab.validationContext.validate() != null" style="color:#D44A47;position:relative;right: calc(100% + 7px);" title="has validation errors!">*</span></vr-tab-header-link>'
+            var template = '<vr-tab-header-links ' + verticalflag + ' selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0">'
+                            + '      <vr-tab-header-link  ng-repeat="tab in ctrl.tabs" isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor" style="width:10px; cursor:default ; position:absolute; right: 7px; top :7px;z-index: 1;" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" style="color:#D44A47;position:relative;right: calc(100% + 11px);" title="has validation errors!">*</span></vr-tab-header-link>'
                             + '</vr-tab-header-links>';
             return starttemplate + template +  endtemplate;
 

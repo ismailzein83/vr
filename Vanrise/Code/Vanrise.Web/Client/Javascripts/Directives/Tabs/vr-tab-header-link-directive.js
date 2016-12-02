@@ -14,8 +14,9 @@ app.directive('vrTabHeaderLink', [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             $element.bind("$destroy", function () {
-                ctrl.removeTab(ctrl);
+               ctrl.removeTab(ctrl);
             });
+
 
         },
         controllerAs: 'ctrl',
@@ -41,6 +42,9 @@ app.directive('vrTabHeaderLink', [function () {
                     };
                     ctrl.getTabStyle = function () {
                         return choicesCtrl.getTabStyle(ctrl);
+                    };
+                    ctrl.getOuterStyle = function () {
+                        return choicesCtrl.getOuterStyle();
                     };
                     ctrl.choiceClicked = function () {
                         choicesCtrl.selectChoice(ctrl);
@@ -78,12 +82,12 @@ app.directive('vrTabHeaderLink', [function () {
                     var span = $(element.children().first().find("span"));
                     setTimeout(function () {
                         ctrl.hint = $(span).html();
-                    }, 1)
+                    }, 1);
                 }
 
             }
         },
-        template: '<label class="hand-cursor" ng-style="ctrl.getTabStyle()"  ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude  title="{{ctrl.hint}}"></label>'
+        template: '<span style="position: relative;" ng-style="ctrl.getOuterStyle()"><label class="hand-cursor" ng-style="ctrl.getTabStyle()"   ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude  title="{{ctrl.hint}}"></label>'
     };
 
     return directiveDefinitionObject;

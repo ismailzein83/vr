@@ -33,7 +33,17 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 var m = 1;
                 if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length - 1)
                     m = 0;
+                
                 return { 'width': 'calc(' + 100 / choiceCtrls.length + '% - ' + m + 'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' };
+
+              
+
+            };
+
+            ctrl.getOuterStyle = function () {
+                if ($attrs.vertical != undefined)
+                    return { 'display': 'block'};               
+                return {  };
             };
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
@@ -44,6 +54,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 });
                 setChoiceSelection(choiceCtrl, true);
             };
+
 
             ctrl.unselectChoice = function (choiceCtrl) {
                 setChoiceSelection(choiceCtrl, false);
@@ -93,7 +104,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 var choiceCtrl = choiceCtrls[choiceIndex];
                 if (choiceCtrl != undefined)
                     ctrl.unselectChoice(choiceCtrl);
-            };
+            };           
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         },
