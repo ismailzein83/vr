@@ -1,6 +1,8 @@
-﻿using Npgsql;
+﻿using System;
+using Npgsql;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -22,6 +24,34 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return _connectionString;
         }
 
+        public Dictionary<string, string> GetAccessListTableNames()
+        {
+            Dictionary<string, string> customerDictionary = new Dictionary<string, string>();
+            string query = @"select tablename 
+                            from pg_tables  
+                            where schemaname = 'public'
+                            and tablename not like '%_temp'
+                            and tablename not like '%_old'
+                            and tablename like 'rt%'";
+            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(_connectionString))
+            {
+                using (Npgsql.NpgsqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = query;
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    Npgsql.NpgsqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["tablename"] != DBNull.Value)
+                        {
+                            string tableName = reader["tablename"].ToString();
+                            if (!customerDictionary.ContainsKey(tableName)) customerDictionary[tableName] = tableName;
+                        }
+                    }
+                }
+            }
+            return customerDictionary;
+        }
         public void Bulk(List<IVSwitchRoute> routeLst, string tableName)
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))

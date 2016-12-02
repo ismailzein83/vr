@@ -144,7 +144,9 @@
   <ItemGroup>
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\IVSwitchSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\whs-routesync-builtinivswitch-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\whs-routesync-ivswitch-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\RadiusDataManagers\Templates\DoubleSQLRadiusSWDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\RadiusDataManagers\Templates\SingleSQLRadiusSWDataManagerTemplate.html" />

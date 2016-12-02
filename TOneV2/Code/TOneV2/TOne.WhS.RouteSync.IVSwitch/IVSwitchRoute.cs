@@ -32,7 +32,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public int TechPrefix { get; set; }
         public IVSwitchRoute()
         {
-            RoutingMode = 8;
+            RoutingMode = 1;
             TotalBkts = 1;
             BktSerial = 1;
             BktCapacity = 1;
@@ -49,14 +49,14 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public override string ToString()
         {
             return string.Format(
-                    @"{1}{23}{2}{23}{3}{23}{4}{23}{5}{23}{6}{23}{7}{23}{8}{23}{9}{23}{10}{23}{11}{23}{12}{23}{13}{23}{14}{23}{15}{23}{16}{23}{17}{23}{18}{23}{19}{23}{20}{23}{21}{23}{22}",
-                    string.Empty, Destination, RoutingMode, TimeFrame,
-                    Preference, HuntStop, HuntStopRc, MinProfit,
-                    StateId, WakeUpTime, Description
-                    , RoutingMode, TotalBkts, BktSerial, BktCapacity,
-                    BktToken, PScore, Flag1, Flag2, Flag3,
-                    Flag4, Flag5, TechPrefix
-                    , "\t");
+                @"{1}{23}{2}{23}{3}{23}{4}{23}{5}{23}{6}{23}{7}{23}{8}{23}{9}{23}{10}{23}{11}{23}{12}{23}{13}{23}{14}{23}{15}{23}{16}{23}{17}{23}{18}{23}{19}{23}{20}{23}{21}{23}{22}",
+                string.Empty, Destination, RouteId, TimeFrame,
+                Preference, HuntStop, HuntStopRc, MinProfit,
+                StateId, WakeUpTime, Description
+                , RoutingMode, TotalBkts, BktSerial, BktCapacity,
+                BktToken, PScore, Flag1, Flag2, Flag3,
+                Flag4, Flag5, TechPrefix
+                , "\t");
         }
     }
 }

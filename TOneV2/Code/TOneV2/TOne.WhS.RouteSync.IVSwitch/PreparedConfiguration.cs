@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -8,27 +9,22 @@ namespace TOne.WhS.RouteSync.IVSwitch
     public class PreparedConfiguration
     {
         public Dictionary<string, CustomerDefinition> CustomerDefinitions { get; set; }
-        public Dictionary<string, CarrierDefinition> SupplierDefinitions { get; set; }
-        public List<CustomerDefinition> CustomerTables { get; set; }
+        public Dictionary<string, SupplierDefinition> SupplierDefinitions { get; set; }
+
         public int BlockRouteId;
-        public Dictionary<string, IvSwitchMapping> IvSwitchMappings { get; set; }
 
-        private static PreparedConfiguration GetConfiguration(IVSwitchSWSync sync)
+        private static PreparedConfiguration BuildBuiltInConfiguration(BuiltInIVSwitchSWSync sync)
         {
-            IVSwitchMasterDataManager masterDataManager = new IVSwitchMasterDataManager(sync.MasterConnectionString);
-            PreparedConfiguration preparedConfiguration = new PreparedConfiguration
-            {
-                CustomerTables = new List<CustomerDefinition>(),
-                CustomerDefinitions = masterDataManager.GetCustomers(),
-                SupplierDefinitions = masterDataManager.GetSuppliers()
-            };
-
-            CarrierDefinition blockDefinition;
-            if (preparedConfiguration.SupplierDefinitions.TryGetValue(sync.BlockedAccountMapping, out blockDefinition) && blockDefinition.RouteTableId.HasValue)
-                preparedConfiguration.BlockRouteId = blockDefinition.RouteTableId.Value;
-            preparedConfiguration.BuildIvSwitchMapping(sync);
-            return preparedConfiguration;
+            BuiltInConfigBuilder builder = new BuiltInConfigBuilder(sync);
+            return builder.Build();
         }
+        private static PreparedConfiguration BuildConfiguration(IVSwitchSWSync sync)
+        {
+            ConfigBuilder builder = new ConfigBuilder(sync);
+            return builder.Build();
+        }
+
+        #region Caching
         private struct GetCachedPreparedConfigurationCacheName
         {
             public Guid Uid { get; set; }
@@ -39,94 +35,57 @@ namespace TOne.WhS.RouteSync.IVSwitch
             var cacheName = new GetCachedPreparedConfigurationCacheName { Uid = sync.Uid };
             var cacheManager = CacheManagerFactory.GetCacheManager<ConfigurationCacheManager>();
             return cacheManager.GetOrCreateObject(cacheName,
-                () => GetConfiguration(sync));
+                () => BuildConfiguration(sync));
         }
-
-        private void BuildIvSwitchMapping(IVSwitchSWSync sync)
+        public static PreparedConfiguration GetBuiltInCachedPreparedConfiguration(BuiltInIVSwitchSWSync sync)
         {
-            IvSwitchMappings = new Dictionary<string, IvSwitchMapping>();
-            foreach (var mapItem in sync.CarrierMappings)
-            {
-                var map = mapItem.Value;
-                if (map.CustomerMapping == null && map.SupplierMapping == null) continue;
-                IvSwitchMapping ivSwitchMapping = new IvSwitchMapping
-                {
-                    CarrierId = map.CarrierId,
-                    InnerPrefix = map.InnerPrefix,
-                    CustomerMapping = new List<string>(),
-                    SupplierGateways = new List<Gateway>()
-                };
-                if (map.CustomerMapping != null)
-                    foreach (var customerMapping in map.CustomerMapping)
-                    {
-                        CustomerDefinition definition;
-                        if (!CustomerDefinitions.TryGetValue(customerMapping, out definition)) continue;
-                        CustomerTables.Add(definition);
-                        ivSwitchMapping.CustomerMapping.Add(customerMapping);
-                    }
-                if (map.SupplierMapping != null)
-                    foreach (var supplierMapping in map.SupplierMapping)
-                    {
-                        if (!SupplierDefinitions.ContainsKey(supplierMapping)) continue;
-                        Gateway gateway = new Gateway { Mapping = supplierMapping };
-                        string[] parts = supplierMapping.Split(':');
-                        if (parts.Length > 1)
-                        {
-                            gateway.Mapping = parts[0];
-                            int percentage;
-                            int.TryParse(parts[1], out percentage);
-                            gateway.Percentage = percentage;
-                        }
-                        ivSwitchMapping.SupplierGateways.Add(gateway);
-                    }
-                IvSwitchMappings[mapItem.Key] = ivSwitchMapping;
-            }
+            var cacheName = new GetCachedPreparedConfigurationCacheName { Uid = sync.Uid };
+            var cacheManager = CacheManagerFactory.GetCacheManager<ConfigurationCacheManager>();
+            return cacheManager.GetOrCreateObject(cacheName,
+                () => BuildBuiltInConfiguration(sync));
         }
+
+        #endregion
+
+    }
+    #region public classes
+
+    public class EndPoint
+    {
+        public int RouteTableId { get; set; }
+        public int TariffTableId { get; set; }
+    }
+    public class GateWay
+    {
+        public int RouteId { get; set; }
+        public decimal Percentage { get; set; }
+    }
+    public class SupplierDefinition
+    {
+        public string SupplierId { get; set; }
+        public List<GateWay> Gateways { get; set; }
     }
 
-    public class PreparedRoute
+    public class CustomerDefinition
     {
-        public string RouteTableName { get; set; }
-        public string TariffTableName { get; set; }
-        public List<IVSwitchRoute> Routes { get; set; }
-        public List<IVSwitchTariff> Tariffs { get; set; }
+        public string CustomerId { get; set; }
+        public List<EndPoint> EndPoints { get; set; }
     }
-    public class CarrierDefinition
+
+    public class AccessListTable
+    {
+        public int UserId { get; set; }
+        public string AccountId { get; set; }
+        public string GroupId { get; set; }
+        public int RouteTableId { get; set; }
+        public int TariffTableId { get; set; }
+    }
+
+    public class RouteTable
     {
         public string AccountId { get; set; }
         public string GroupId { get; set; }
-        public int? RouteTableId { get; set; }
+        public int RouteId { get; set; }
     }
-
-    public class CustomerDefinition : CarrierDefinition
-    {
-        public int TariffTableId { get; set; }
-        public string RouteTableName
-        {
-            get { return string.Format("rt{0}", RouteTableId); }
-        }
-        public string TariffTableName
-        {
-            get { return String.Format("trf{0}", TariffTableId); }
-        }
-    }
-    public class CarrierMapping
-    {
-        public string CarrierId { get; set; }
-        public List<string> CustomerMapping { get; set; }
-        public List<string> SupplierMapping { get; set; }
-        public string InnerPrefix { get; set; }
-    }
-    public class IvSwitchMapping
-    {
-        public string CarrierId { get; set; }
-        public List<string> CustomerMapping { get; set; }
-        public List<Gateway> SupplierGateways { get; set; }
-        public string InnerPrefix { get; set; }
-    }
-    public class Gateway
-    {
-        public string Mapping { get; set; }
-        public int Percentage { get; set; }
-    }
+    #endregion
 }

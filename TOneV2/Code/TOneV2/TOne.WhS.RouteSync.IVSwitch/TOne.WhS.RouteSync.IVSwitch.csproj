@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NP.IVSwitch.Entities">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql">
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Npgsql.dll</HintPath>
     </Reference>
@@ -64,6 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseIVSwitchSWSync.cs" />
+    <Compile Include="BuiltInConfigBuilder.cs" />
+    <Compile Include="BuiltInIVSwitchSWSync.cs" />
+    <Compile Include="ConfigBuilder.cs" />
     <Compile Include="ConfigurationCacheManager.cs" />
     <Compile Include="IVSwitchConvertedRoute.cs" />
     <Compile Include="IVSwitchMasterDataManager.cs" />

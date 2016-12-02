@@ -22,56 +22,33 @@ namespace TOne.WhS.RouteSync.IVSwitch
         private string GetCustomerQuery()
         {
             return
-                @"SELECT distinct u.type_id,u2.group_id,u2.account_id,u.table_name,al.route_table_id,al.tariff_id from user_types u
+                @"SELECT distinct u.type_id,u2.group_id,u2.account_id,u.table_name,al.route_table_id,al.tariff_id,al.user_id from user_types u
                         JOIN ( SELECT type_id,group_id,account_id from users) u2 on u2.type_id=u.type_id
-                        join access_list al on al.account_id = u2.account_id and al.group_id = u2.group_id";
+                        join access_list al on al.account_id = u2.account_id and al.group_id = u2.group_id
+                        where route_table_id is not null and tariff_id is not null
+                ";
         }
 
         private string GetSupplierQuery()
         {
-            return @"select distinct route_id,account_id,group_id from routes";
+            return @"select distinct route_id,account_id,group_id from routes where route_id is not null ";
         }
 
-        private Dictionary<string, CustomerDefinition> ToCustomerDictionary(List<CustomerDefinition> customersLst)
-        {
-            Dictionary<string, CustomerDefinition> result = new Dictionary<string, CustomerDefinition>();
-            foreach (var customer in customersLst)
-            {
-                string key = GenerateKey(customer);
-                if (!result.ContainsKey(key))
-                    result[key] = customer;
-            }
-            return result;
-        }
-        public Dictionary<string, CustomerDefinition> GetCustomers()
+        public List<AccessListTable> GetAccessListTables()
         {
             string query = GetCustomerQuery();
-            List<CustomerDefinition> customers = GetItemsText(query, CustomerDefinitionMapper, null);
-            return ToCustomerDictionary(customers);
+            return GetItemsText(query, AccessListMapper, null);
         }
-        public Dictionary<string, CarrierDefinition> GetSuppliers()
+        public List<RouteTable> GetRouteTables()
         {
             string query = GetSupplierQuery();
-            List<CarrierDefinition> supplierList = GetItemsText(query, SupplierDefinitionMapper, null);
-            Dictionary<string, CarrierDefinition> supplierDictionary = new Dictionary<string, CarrierDefinition>();
-            foreach (var customer in supplierList)
-            {
-                string key = GenerateKey(customer);
-                if (!supplierDictionary.ContainsKey(key))
-                    supplierDictionary[key] = customer;
-            }
-            return supplierDictionary;
+            return GetItemsText(query, RouteMapper, null);
         }
 
-        private string GenerateKey(CarrierDefinition customerDefinition)
+        #region Mapper
+        RouteTable RouteMapper(IDataReader reader)
         {
-            return string.Format("{0}_{1}", customerDefinition.AccountId, customerDefinition.GroupId);
-        }
-
-        #region CustomerMapper
-        CarrierDefinition SupplierDefinitionMapper(IDataReader reader)
-        {
-            CarrierDefinition mapperCustomerDefinition = new CarrierDefinition
+            RouteTable supplierDefinition = new RouteTable
             {
                 AccountId = reader["account_id"] != System.DBNull.Value ? reader["account_id"].ToString() : "",
                 GroupId = reader["group_id"] != System.DBNull.Value ? reader["group_id"].ToString() : ""
@@ -80,30 +57,34 @@ namespace TOne.WhS.RouteSync.IVSwitch
             {
                 int id;
                 int.TryParse(reader["route_id"].ToString(), out id);
-                mapperCustomerDefinition.RouteTableId = id;
+                supplierDefinition.RouteId = id;
             }
-            return mapperCustomerDefinition;
+            return supplierDefinition;
         }
-        CustomerDefinition CustomerDefinitionMapper(IDataReader reader)
+        AccessListTable AccessListMapper(IDataReader reader)
         {
-            CustomerDefinition mapperCustomerDefinition = new CustomerDefinition
+            AccessListTable endPoint = new AccessListTable
             {
                 AccountId = reader["account_id"] != System.DBNull.Value ? reader["account_id"].ToString() : "",
                 GroupId = reader["group_id"] != System.DBNull.Value ? reader["group_id"].ToString() : ""
             };
+            int id;
             if (reader["route_table_id"] != System.DBNull.Value)
             {
-                int id;
                 int.TryParse(reader["route_table_id"].ToString(), out id);
-                mapperCustomerDefinition.RouteTableId = id;
+                endPoint.RouteTableId = id;
             }
             if (reader["tariff_id"] != System.DBNull.Value)
             {
-                int id;
                 int.TryParse(reader["tariff_id"].ToString(), out id);
-                mapperCustomerDefinition.TariffTableId = id;
+                endPoint.TariffTableId = id;
             }
-            return mapperCustomerDefinition;
+            if (reader["user_id"] != System.DBNull.Value)
+            {
+                int.TryParse(reader["user_id"].ToString(), out id);
+                endPoint.UserId = id;
+            }
+            return endPoint;
         }
         #endregion
 

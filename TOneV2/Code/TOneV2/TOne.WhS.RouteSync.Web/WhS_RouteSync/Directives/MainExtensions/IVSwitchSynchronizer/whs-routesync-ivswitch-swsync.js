@@ -31,8 +31,7 @@
                         result[carrierMapping.CarrierAccountId] = {
                             CarrierId: carrierMapping.CarrierAccountId,
                             CustomerMapping: carrierMapping.CustomerMapping == undefined ? null : carrierMapping.CustomerMapping.split($scope.scopeModel.separator),
-                            SupplierMapping: carrierMapping.SupplierMapping == undefined ? null : carrierMapping.SupplierMapping.split($scope.scopeModel.separator),
-                            InnerPrefix: carrierMapping.InnerPrefix == undefined ? null : carrierMapping.InnerPrefix
+                            SupplierMapping: carrierMapping.SupplierMapping == undefined ? null : carrierMapping.SupplierMapping.split($scope.scopeModel.separator)
                         };
                     }
                 return result;
@@ -53,8 +52,7 @@
                                      CarrierAccountId: response[i].CarrierAccountId,
                                      CarrierAccountName: response[i].Name,
                                      CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
-                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined,
-                                     InnerPrefix: accountCarrierMappings != undefined && accountCarrierMappings.InnerPrefix != null ? accountCarrierMappings.InnerPrefix : undefined
+                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
                                  };
                                  $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
                              }

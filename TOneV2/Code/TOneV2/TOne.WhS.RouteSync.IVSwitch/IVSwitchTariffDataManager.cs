@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.Postgres;
+using System.Linq;
+using System;
 
 namespace TOne.WhS.RouteSync.IVSwitch
 {
@@ -26,6 +28,35 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 string.Format("ALTER TABLE {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, tableName + "_OLD", tableName + "_temp")
             };
             ExecuteNonQuery(swapQuery);
+        }
+
+        public Dictionary<string, string> GetRoutesTableNames()
+        {
+            Dictionary<string, string> supplierDictionary = new Dictionary<string, string>();
+            string query = @"select tablename  
+                            from pg_tables  
+                            where schemaname = 'public'
+                            and tablename not like '%_temp'
+                            and tablename not like '%_old'
+                            and tablename like 'trf%'";
+            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(_connectionString))
+            {
+                using (Npgsql.NpgsqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = query;
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    Npgsql.NpgsqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["tablename"] != DBNull.Value)
+                        {
+                            string tableName = reader["tablename"].ToString();
+                            if (!supplierDictionary.ContainsKey(tableName)) supplierDictionary[tableName] = tableName;
+                        }
+                    }
+                }
+            }
+            return supplierDictionary;
         }
         public void Bulk(List<IVSwitchTariff> tariffs, string tableName)
         {
