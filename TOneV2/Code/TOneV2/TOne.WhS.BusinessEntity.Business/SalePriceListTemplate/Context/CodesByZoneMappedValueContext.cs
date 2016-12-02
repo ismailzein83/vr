@@ -11,9 +11,6 @@ namespace TOne.WhS.BusinessEntity.Business
 	{
         public SalePLZoneNotification ZoneNotification { get; set; }
 
-        public decimal? Rate { get; set; }
-        public DateTime? RateBED { get; set; }
-        public DateTime? RateEED { get; set; }
         public char Delimiter { get; set; }
         public bool HasCodeRange { get; set; }
         public char RangeSeparator { get; set; }
