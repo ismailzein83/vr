@@ -52,6 +52,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     CustomerId = customer.CarrierAccountId.ToString(),
                     EndPoints = new List<EndPoint>()
                 };
+                Dictionary<int, EndPoint> tempDictionary = new Dictionary<int, EndPoint>();
                 foreach (var elt in ivCustomer.EndPointInfo)
                 {
                     AccessListTable access;
@@ -62,9 +63,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             TariffTableId = access.RouteTableId,
                             RouteTableId = access.TariffTableId
                         };
-                        definition.EndPoints.Add(endPoint);
+                        if (!tempDictionary.ContainsKey(endPoint.RouteTableId))
+                            tempDictionary[endPoint.RouteTableId] = endPoint;
                     }
                 }
+                definition.EndPoints = tempDictionary.Values.ToList();
                 customers[definition.CustomerId] = definition;
             }
             return customers;
