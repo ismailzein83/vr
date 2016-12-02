@@ -10,7 +10,7 @@ namespace Retail.Web
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
 
-            bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+            var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Retail_BusinessEntity", "*.js", true).IncludeDirectory(
@@ -29,7 +29,9 @@ namespace Retail.Web
                 "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_BEBridge", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_Routing", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_NumberingPlan", "*.js", true));
+                "~/Client/Modules/VR_NumberingPlan", "*.js", true);
+
+            bundles.Add(modulesJSBundle);
         }
     }
 }
