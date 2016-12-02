@@ -21,5 +21,13 @@ namespace TOne.WhS.Routing.BP.Arguments
         {
             return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveOn);
         }
+
+        public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
+        {
+            if (!IsFuture && evaluatedExpressions.ContainsKey("ScheduleTime"))
+            {
+                EffectiveOn = (DateTime)evaluatedExpressions["ScheduleTime"];
+            }
+        }
     }
 }
