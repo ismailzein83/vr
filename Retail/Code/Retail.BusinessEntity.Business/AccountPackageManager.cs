@@ -36,17 +36,20 @@ namespace Retail.BusinessEntity.Business
         }
         public int GetAccountPackagesCount(long accountId)
         {
-            Dictionary<int, AccountPackage> accountPackagesCount = GetCachedAccountPackages();
-            if (accountPackagesCount != null)
-                return accountPackagesCount.Where(x => x.Value.AccountId == accountId).Count();
+            var accountInfo = GetAccountInfo(accountId);
+            if (accountInfo != null)
+                return accountInfo.AccountPackages.Count;
             else
-                return -1;
+                return 0;
         }
 
         public IEnumerable<int> GetPackageIdsAssignedToAccount(int accountId)
         {
-            Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
-            return cachedAccountPackages.MapRecords(itm => itm.Value.PackageId, itm => itm.Value.AccountId == accountId);
+            var accountInfo = GetAccountInfo(accountId);
+            if (accountInfo != null)
+                return accountInfo.AccountPackages.MapRecords(itm => itm.PackageId);
+            else
+                return new List<int>();
         }
 
         public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackage accountPackage)
@@ -85,6 +88,18 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        private class AccountInfo
+        {
+            List<AccountPackage> _accountPackages = new List<AccountPackage>();
+            public List<AccountPackage> AccountPackages
+            {
+                get
+                {
+                    return _accountPackages;
+                }
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -97,6 +112,25 @@ namespace Retail.BusinessEntity.Business
                 IEnumerable<AccountPackage> accountPackages = dataManager.GetAccountPackages();
                 return accountPackages.ToDictionary(kvp => kvp.AccountPackageId, kvp => kvp);
             });
+        }
+
+        private AccountInfo GetAccountInfo(long accountId)
+        {
+            return GetCachedAccountInfoByAccountId().GetRecord(accountId);
+        }
+
+        private Dictionary<long, AccountInfo> GetCachedAccountInfoByAccountId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountInfoByAccountId",
+              () =>
+              {
+                  Dictionary<long, AccountInfo> accountInfos = new Dictionary<long, AccountInfo>();
+                  foreach (var accountPackage in GetCachedAccountPackages().Values)
+                  {
+                      accountInfos.GetOrCreateItem(accountPackage.AccountId).AccountPackages.Add(accountPackage);
+                  }
+                  return accountInfos;
+              });
         }
 
         #endregion

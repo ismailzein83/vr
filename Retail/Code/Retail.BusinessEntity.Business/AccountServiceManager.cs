@@ -39,29 +39,26 @@ namespace Retail.BusinessEntity.Business
         }
         public AccountService GetAccountService(long accountId, Guid serviceTypeId)
         {
-            var accountServices = GetCachedAccountServices();
-            if (accountServices != null)
-                return accountServices.FindRecord(itm => itm.AccountId == accountId && itm.ServiceTypeId == serviceTypeId);
+            var accountInfo = GetAccountInfo(accountId);
+            if (accountInfo != null)
+                return accountInfo.AccountServices.FindRecord(itm => itm.ServiceTypeId == serviceTypeId);
             else
                 return null;
         }
-        public AccountServiceDetail GetAccountServiceDetail(long AccountServiceId)
+        public AccountServiceDetail GetAccountServiceDetail(long accountServiceId)
         {
-            var accountServices = GetCachedAccountServices();
-            if (accountServices != null)
-                return accountServices.MapRecord(AccountServiceDetailMapper, itm => itm.AccountServiceId == AccountServiceId);
-            else
-                return null;
+            var accountService = GetAccountService(accountServiceId);
+            return accountService != null ? AccountServiceDetailMapper(accountService) : null;
         }
         public int GetAccountServicesCount(long accountId)
         {
-            Dictionary<long , AccountService> accountServicesCount = GetCachedAccountServices();
-            if (accountServicesCount != null)
-                return accountServicesCount.Where(x => x.Value.AccountId == accountId).Count();
+            var accountInfo = GetAccountInfo(accountId);
+            if (accountInfo != null)
+                return accountInfo.AccountServices.Count;
             else
-                return -1;
+                return 0;
         }
-
+        
         public bool UpdateStatus(long accountServiceId, Guid statusId)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
@@ -164,6 +161,25 @@ namespace Retail.BusinessEntity.Business
                });
         }
 
+        private AccountInfo GetAccountInfo(long accountId)
+        {
+            return GetCachedAccountInfoByAccountId().GetRecord(accountId);
+        }
+
+        private Dictionary<long, AccountInfo> GetCachedAccountInfoByAccountId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountInfoByAccountId",
+              () =>
+              {
+                  Dictionary<long, AccountInfo> accountInfos = new Dictionary<long, AccountInfo>();
+                  foreach(var accountService in GetCachedAccountServices().Values)
+                  {
+                      accountInfos.GetOrCreateItem(accountService.AccountId).AccountServices.Add(accountService);
+                  }
+                  return accountInfos;
+              });
+        }
+
         #endregion
 
 
@@ -247,6 +263,18 @@ namespace Retail.BusinessEntity.Business
                     throw new NullReferenceException(String.Format("accountServiceGenericField '{0}'", fieldName));
                 fieldType = accountServiceGenericField.FieldType;
                 return accountServiceGenericField.GetValue(new AccountServiceGenericFieldContext(_account, _accountService));
+            }
+        }
+
+        private class AccountInfo
+        {
+            List<AccountService> _accountServices = new List<AccountService>();
+            public List<AccountService> AccountServices
+            {
+                get
+                {
+                    return _accountServices;
+                }
             }
         }
 

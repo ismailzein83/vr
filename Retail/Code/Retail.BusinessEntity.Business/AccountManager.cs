@@ -30,8 +30,16 @@ namespace Retail.BusinessEntity.Business
                     (!input.Query.ParentAccountId.HasValue && !account.ParentAccountId.HasValue) ||
                     (input.Query.ParentAccountId.HasValue && account.ParentAccountId.HasValue && account.ParentAccountId.Value == input.Query.ParentAccountId.Value)
                 );
+            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapperStep1);
+            if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            {
+                foreach(var accountDetail in bigResult.Data)
+                {
+                    AccountDetailMapperStep2(accountDetail, accountDetail.Entity);
+                }
+            }
 
-            return DataRetrievalManager.Instance.ProcessResult(input, cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
 
         public Account GetAccount(long accountId)
@@ -47,8 +55,8 @@ namespace Retail.BusinessEntity.Business
         }
         public AccountDetail GetAccountDetail(long accountId)
         {
-            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
-            return cachedAccounts.MapRecord(AccountDetailMapper, x => x.AccountId == accountId);
+            var account = GetAccount(accountId);
+            return account != null ? AccountDetailMapper(account) : null;
         }
 
         public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter)
@@ -67,14 +75,15 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
         {
-            IEnumerable<Account> accounts = GetCachedAccounts().Values;
-            Func<Account, bool> accountFilter = (account) =>
+            List<AccountInfo> accountInfos = new List<AccountInfo>();
+            var accounts = GetCachedAccounts();
+            foreach(var accountId in accountIds)
             {
-                if (!accountIds.Contains(account.AccountId))
-                    return false;
-                return true;
-            };
-            return accounts.MapRecords(AccountInfoMapper, accountFilter).OrderBy(x => x.Name);
+                var account = accounts.GetRecord(accountId);
+                if (account != null)
+                    accountInfos.Add(AccountInfoMapper(account));
+            }
+            return accountInfos.OrderBy(x => x.Name);            
         }
 
         public string GetAccountName(long accountId)
@@ -400,6 +409,23 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        private class AccountTreeNode
+        {
+            public Account Account { get; set; }
+
+            public AccountTreeNode ParentNode { get; set; }
+
+            List<AccountTreeNode> _childNodes = new List<AccountTreeNode>();
+            public List<AccountTreeNode> ChildNodes
+            {
+                get
+                {
+                    return _childNodes;
+                }
+            }
+
+            public int TotalSubAccountsCount { get; set; }
+        }
 
         #endregion
 
@@ -417,35 +443,12 @@ namespace Retail.BusinessEntity.Business
 
         Dictionary<string, Account> GetCachedAccountsBySourceId()
         {
-            return GetCachedAccounts().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
-
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsBySourceId", () =>
+              {
+                  return GetCachedAccounts().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
+              });
         }
 
-        Dictionary<long, List<Account>> GetCachedAccountsByParent()
-        {
-            IEnumerable<Account> accounts = GetCachedAccounts().Values;
-            Dictionary<long, List<Account>> accountsByParent = new Dictionary<long, List<Account>>();
-            foreach (var account in accounts)
-            {
-                if (account.ParentAccountId != null)
-                {
-                    List<Account> accountsofParent;
-                    if (accountsByParent.TryGetValue(account.ParentAccountId.Value, out accountsofParent))
-                    {
-                        accountsofParent.Add(account);
-                    }
-                    else
-                    {
-                        accountsofParent = new List<Account>() { account };
-                        accountsByParent.Add(account.ParentAccountId.Value, accountsofParent);
-
-                    }
-                }
-
-            }
-            return accountsByParent;
-
-        }
         IEnumerable<GenericRuleDefinition> GetAccountsMappingRuleDefinitions()
         {
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
@@ -465,22 +468,57 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
+        Dictionary<long, AccountTreeNode> GetCacheAccountTreeNodes()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCacheAccountTreeNodes", () =>
+              {
+                  Dictionary<long, AccountTreeNode> treeNodes = new Dictionary<long, AccountTreeNode>();
+                  foreach(var account in GetCachedAccounts().Values)
+                  {
+                      AccountTreeNode node = new AccountTreeNode
+                      {
+                          Account = account
+                      };                      
+                      treeNodes.Add(account.AccountId, node);
+                  }
+                  //updating nodes parent info
+                  foreach(var node in treeNodes.Values)
+                  {
+                      var account = node.Account;
+                      if (account.ParentAccountId.HasValue)
+                      {
+                          AccountTreeNode parentNode;
+                          if (treeNodes.TryGetValue(account.ParentAccountId.Value, out parentNode))
+                          {
+                              node.ParentNode = parentNode;
+                              parentNode.ChildNodes.Add(node);
+                              parentNode.TotalSubAccountsCount++;
+                              while (parentNode.ParentNode != null)
+                              {
+                                  parentNode = parentNode.ParentNode;
+                                  parentNode.TotalSubAccountsCount++;
+                              }
+                          }
+                      }
+                  }
+                  return treeNodes;
+              });
+        }
+
         #endregion
 
         #region Mappers
 
         private AccountDetail AccountDetailMapper(Account account)
         {
-            var accountTypeManager = new AccountTypeManager();
+            var accountDetail = AccountDetailMapperStep1(account);
+            AccountDetailMapperStep2(accountDetail, account);
+            return accountDetail;
+        }
 
-            var accounts = GetCachedAccounts().Values;
-            var accountsByParent = GetCachedAccountsByParent();
-
-            IEnumerable<AccountTypeInfo> accountTypeInfoEntities =
-                accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
-            ActionDefinitionManager manager = new ActionDefinitionManager();
-            IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.Account, account.StatusId);
-
+        private AccountDetail AccountDetailMapperStep1(Account account)
+        {
+            var accountTypeManager = new AccountTypeManager();            
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
 
             var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
@@ -488,20 +526,29 @@ namespace Retail.BusinessEntity.Business
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
 
+            var accountTreeNode = GetCacheAccountTreeNodes().GetRecord(account.AccountId);
             return new AccountDetail()
             {
                 Entity = account,
                 AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
-                DirectSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, false),
-                TotalSubAccountCount = GetSubAccountsCount(account.AccountId, accounts, true, accountsByParent),
-                CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0),
-                ActionDefinitions = actionDefinitions,
+                DirectSubAccountCount = accountTreeNode.ChildNodes.Count,
+                TotalSubAccountCount = accountTreeNode.TotalSubAccountsCount,
                 StatusDesciption = statusDesciption,
-                Style = GetStatuStyle(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
                 NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId)
             };
         }
+
+        private void AccountDetailMapperStep2(AccountDetail accountDetail, Account account)
+        {
+            var accountTypeManager = new AccountTypeManager();
+            IEnumerable<AccountTypeInfo> accountTypeInfoEntities = accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
+            accountDetail.CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0);
+            ActionDefinitionManager actionDefinitionManager = new ActionDefinitionManager();
+            accountDetail.ActionDefinitions = actionDefinitionManager.GetActionDefinitionInfoByEntityType(EntityType.Account, account.StatusId);
+            accountDetail.Style = GetStatuStyle(account.StatusId);
+        }
+
         private StyleFormatingSettings GetStatuStyle(Guid statusID)
         {
             StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
@@ -517,38 +564,6 @@ namespace Retail.BusinessEntity.Business
                 AccountId = account.AccountId,
                 Name = account.Name
             };
-        }
-
-        private int GetSubAccountsCount(long accountId, IEnumerable<Account> accounts, bool isTotalSubAccountsInclude, Dictionary<long, List<Account>> accountsByParent = null)
-        {
-            int count = 0;
-            foreach (var account in accounts)
-            {
-                if (account.ParentAccountId == accountId)
-                {
-                    count++;
-                    if (isTotalSubAccountsInclude)
-                        count += GetTotalSubAccountsCountRecursively(account, accountsByParent);
-                }
-            }
-            return count;
-        }
-
-        private int GetTotalSubAccountsCountRecursively(Account account, Dictionary<long, List<Account>> accountsByParent)
-        {
-            if (accountsByParent == null)
-            {
-                throw new NullReferenceException("accountsByParent");
-            }
-            List<Account> accountsForParents;
-            if (accountsByParent.TryGetValue(account.AccountId, out accountsForParents))
-            {
-                foreach (var accountofParent in accountsForParents)
-                {
-                    return 1 + GetTotalSubAccountsCountRecursively(accountofParent, accountsByParent);
-                }
-            }
-            return 0;
         }
 
         #endregion
