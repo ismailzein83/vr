@@ -10,11 +10,13 @@ namespace NetworkProvisioning.Web
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
 
-            bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+           var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/NP_IVSwitch", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_BusinessEntity", "*.js", true));
+                "~/Client/Modules/WhS_BusinessEntity", "*.js", true);
+
+           bundles.Add(modulesJSBundle);
         }
     }
 }
