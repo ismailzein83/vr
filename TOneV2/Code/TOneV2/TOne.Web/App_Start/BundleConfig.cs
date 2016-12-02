@@ -9,7 +9,7 @@ namespace TOne.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
-            var modulesJSBundle = new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+            var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 //   "~/Client/Modules/Main", "*.js", true).IncludeDirectory(
                 //  "~/Client/Modules/Analytics", "*.js", true).IncludeDirectory(
@@ -39,19 +39,8 @@ namespace TOne.Web
                 "~/Client/Modules/WhS_Invoice", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_Deal", "*.js", true);
-            var extendedModulesNames = System.Configuration.ConfigurationManager.AppSettings["Web_ExtendedModulesNames"];
-            if (!string.IsNullOrWhiteSpace(extendedModulesNames))
-            {
-                string[] extendedModulesNamesArray = extendedModulesNames.Split(',');
-                foreach(var moduleName in extendedModulesNamesArray)
-                {
-                    modulesJSBundle.IncludeDirectory(string.Format("~/Client/Modules/{0}", moduleName), "*.js", true);
-                }
-            }
 
             bundles.Add(modulesJSBundle);
-
-            
         }
     }
 }
