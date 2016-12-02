@@ -45,8 +45,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             foreach (var customer in allCustomers)
             {
                 EndPointCarrierAccountExtension ivCustomer =
-                    carrierAccountManager.GetExtendedSettingsObject<EndPointCarrierAccountExtension>(
-                        customer.CarrierAccountId);
+                    carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customer);
                 CustomerDefinition definition = new CustomerDefinition
                 {
                     CustomerId = customer.CarrierAccountId.ToString(),
@@ -78,8 +77,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             foreach (var supplier in allSuppliers)
             {
                 RouteCarrierAccountExtension ivVendor =
-                   carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(
-                       supplier.CarrierAccountId);
+                    carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplier);
 
                 SupplierDefinition definition = new SupplierDefinition
                 {
