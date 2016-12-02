@@ -65,6 +65,8 @@
 
                     $scope.criteriaDefinitionFields = payload.criteriaDefinitionFields;
                     var criteriaFieldsValues = payload.criteriaFieldsValues;
+                    var criteriaAccessibility = payload.criteriaAccessibility;
+                    var criteriaPredefinedData = payload.criteriaPredefinedData;
                     var promises = [];
 
                     var loadAllFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -87,8 +89,8 @@
                             field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
                             criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
 
-                            if (accessibility != undefined && accessibility.criteriaAccessibility != undefined) {
-                                var accessibleField = accessibility.criteriaAccessibility[field.FieldName];
+                            if (criteriaAccessibility != undefined) {
+                                var accessibleField = criteriaAccessibility[field.FieldName];
                                 if (accessibleField != undefined) {
                                     field.notAccessible = accessibleField.notAccessible;
                                 }
@@ -98,7 +100,10 @@
                                 var payload = {
                                     fieldTitle: field.Title,
                                     fieldType: field.FieldType,
-                                    fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : undefined,
+                                    fieldValue: (criteriaFieldsValues != undefined) ?
+                                        criteriaFieldsValues[field.FieldName] :
+                                        (criteriaPredefinedData != undefined ?
+                                        criteriaPredefinedData[field.FieldName] : undefined)
                                 };
                                 VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
                             });

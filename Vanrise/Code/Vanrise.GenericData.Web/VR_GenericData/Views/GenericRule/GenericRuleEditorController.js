@@ -32,8 +32,7 @@
         load();
 
         function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
-
+            var parameters = VRNavigationService.getParameters($scope);            
             if (parameters != undefined && parameters != null) {
                 genericRuleId = parameters.genericRuleId;
                 genericRuleDefinitionId = parameters.genericRuleDefinitionId;
@@ -150,6 +149,10 @@
                     criteriaDefinitionFields: criteriaDefinitionFields,
                     criteriaFieldsValues: criteriaFieldsValues
                 };
+                if (accessibility != undefined)
+                    payload.criteriaAccessibility = accessibility.criteriaAccessibility;
+                if (preDefinedData != undefined)
+                    payload.criteriaPredefinedData = preDefinedData.criteriaFieldsValues;
                 VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, payload, loadCriteriaSectionPromiseDeferred);
             });
 
