@@ -198,9 +198,15 @@ namespace TOne.WhS.BusinessEntity.Business
 		public long ReserveIdRange(int numberOfIds)
 		{
 			long startingId;
-			Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(this.GetCustomerCountryManagerType(), numberOfIds, out startingId);
+			Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(this.GetCustomerCountryType(), numberOfIds, out startingId);
 			return startingId;
 		}
+
+
+        public int GetCustomerCountryTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetCustomerCountryType());
+        }
 
 		#endregion
 
@@ -251,7 +257,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			return allCustomerCountries.GetRecord(customerId);
 		}
 
-		private Type GetCustomerCountryManagerType()
+		private Type GetCustomerCountryType()
 		{
 			return this.GetType();
 		}

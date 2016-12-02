@@ -14,12 +14,14 @@ namespace TOne.WhS.DBSync.Business
     public class CustomerZoneMigrator : Migrator<SourceCustomerZone, CustomerCountry2>
     {
         CustomerZoneDBSyncDataManager dbSyncDataManager;
+        CustomerCountryManager _customerCountryManager;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
         bool _UseTempTables;
         public CustomerZoneMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new CustomerZoneDBSyncDataManager(Context.UseTempTables, context.SellingProductId);
+            _customerCountryManager = new CustomerCountryManager();
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
             allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
             _UseTempTables = context.UseTempTables;
@@ -34,6 +36,8 @@ namespace TOne.WhS.DBSync.Business
         }
         public override void Migrate(MigrationInfoContext context)
         {
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = _customerCountryManager.GetCustomerCountryTypeId();
             base.Migrate(context);
         }
 
@@ -41,6 +45,7 @@ namespace TOne.WhS.DBSync.Business
         {
             dbSyncDataManager.ApplyCustomerZoneToTemp(itemsToAdd);
             dbSyncDataManager.ApplyCustomerSellingProductToTemp(itemsToAdd, allCarrierAccounts.Values.ToList());
+
             TotalRowsSuccess = itemsToAdd.Count;
 
         }
@@ -75,7 +80,6 @@ namespace TOne.WhS.DBSync.Business
                     }
                 }
             }
-            IDManager.Instance.UpdateIDManager(TypeManager.Instance.GetTypeId(new CustomerCountry2().GetType()), counter);
             return customerCountries;
         }
 
