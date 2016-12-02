@@ -66,7 +66,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
                     PricingUnit = 60,
-                    FractionUnit = 1,
+                    FractionUnit = 0,
                     CurrencyId = Context.CurrencyId
                 },
                 DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
@@ -95,7 +95,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
                     PricingUnit = 60,
-                    FractionUnit = 1,
+                    FractionUnit = 0,
                     CurrencyId = Context.CurrencyId
                 },
                 DefinitionId = new Guid("F24CB510-0B65-48C8-A723-1F6EBFEEA9E8"),
