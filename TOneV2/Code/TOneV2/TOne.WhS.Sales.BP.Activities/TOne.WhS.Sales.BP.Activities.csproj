@@ -95,6 +95,7 @@
     <Compile Include="GetExistingSaleEntityZoneServices.cs" />
     <Compile Include="NotifyCustomers.cs" />
     <Compile Include="ProcessCustomerCountries.cs" />
+    <Compile Include="SavePricelistFiles.cs" />
     <Compile Include="SetRatePlanContext.cs" />
     <Compile Include="StructureDefaultData.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />

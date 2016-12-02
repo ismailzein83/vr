@@ -48,17 +48,18 @@
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Sales.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Sales.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Sales.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Sales.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -129,6 +130,7 @@
       <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)" Name="ChangedCustomerCountryPreviews" />
       <Variable x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountryPreview)" Name="NewCustomerCountryPreviews" />
       <Variable x:TypeArguments="twsbat:EmailCustomerTaskExecutionInformation" Name="EmailCustomerTaskExecutionInformation" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:CarrierAccountInfo)" Name="CustomersWithPricelistFiles" />
     </Sequence.Variables>
     <twsba1:SetRatePlanContext sap2010:WorkflowViewState.IdRef="SetRatePlanContext_1">
       <twsba1:SetRatePlanContext.EffectiveDate>
@@ -1419,6 +1421,50 @@
               </InArgument>
             </twsba1:UpdateState.OwnerType>
           </twsba1:UpdateState>
+          <twsba1:PrepareZoneChanges sap2010:WorkflowViewState.IdRef="PrepareZoneChanges_2">
+            <twsba1:PrepareZoneChanges.ExistingZones>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareZoneChanges.ExistingZones>
+            <twsba1:PrepareZoneChanges.OwnerId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareZoneChanges.OwnerId>
+            <twsba1:PrepareZoneChanges.OwnerType>
+              <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareZoneChanges.OwnerType>
+            <twsba1:PrepareZoneChanges.SalePLZoneChanges>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">SalePLZoneChanges</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:PrepareZoneChanges.SalePLZoneChanges>
+          </twsba1:PrepareZoneChanges>
+          <twsba1:SavePricelistFiles sap2010:WorkflowViewState.IdRef="SavePricelistFiles_1">
+            <twsba1:SavePricelistFiles.CustomersWithPriceListFile>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twbe:CarrierAccountInfo)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:CarrierAccountInfo)">CustomersWithPricelistFiles</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:SavePricelistFiles.CustomersWithPriceListFile>
+            <twsba1:SavePricelistFiles.OwnerId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.OwnerId>
+            <twsba1:SavePricelistFiles.OwnerType>
+              <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.OwnerType>
+            <twsba1:SavePricelistFiles.SalePLZoneChanges>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">SalePLZoneChanges</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.SalePLZoneChanges>
+          </twsba1:SavePricelistFiles>
           <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
             <Assign.To>
               <OutArgument x:TypeArguments="x:Boolean">
@@ -1445,7 +1491,7 @@
                   </vbw:AssignTask.AssignedTo>
                   <vbw:AssignTask.TaskData>
                     <InArgument x:TypeArguments="vbe:BPTaskData">
-                      <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new EmailTaskData() {  SellingProductId = Input.OwnerId }</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new EmailTaskData() {  Customers = CustomersWithPricelistFiles }</mca:CSharpValue>
                     </InArgument>
                   </vbw:AssignTask.TaskData>
                   <vbw:AssignTask.TaskExecutionInformation>
@@ -1559,49 +1605,12 @@
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
                 </vbw:WriteTrackingMessage>
-                <twsba1:PrepareZoneChanges sap2010:WorkflowViewState.IdRef="PrepareZoneChanges_1">
-                  <twsba1:PrepareZoneChanges.ExistingZones>
-                    <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
-                      <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
-                    </InArgument>
-                  </twsba1:PrepareZoneChanges.ExistingZones>
-                  <twsba1:PrepareZoneChanges.OwnerId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
-                    </InArgument>
-                  </twsba1:PrepareZoneChanges.OwnerId>
-                  <twsba1:PrepareZoneChanges.OwnerType>
-                    <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
-                      <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
-                    </InArgument>
-                  </twsba1:PrepareZoneChanges.OwnerType>
-                  <twsba1:PrepareZoneChanges.SalePLZoneChanges>
-                    <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">
-                      <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">SalePLZoneChanges</mca:CSharpReference>
-                    </OutArgument>
-                  </twsba1:PrepareZoneChanges.SalePLZoneChanges>
-                </twsba1:PrepareZoneChanges>
                 <twsba1:NotifyCustomers sap2010:WorkflowViewState.IdRef="NotifyCustomers_1">
                   <twsba1:NotifyCustomers.CustomerIds>
                     <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
                       <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">CustomerIdsToEmail</mca:CSharpValue>
                     </InArgument>
                   </twsba1:NotifyCustomers.CustomerIds>
-                  <twsba1:NotifyCustomers.OwnerId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
-                    </InArgument>
-                  </twsba1:NotifyCustomers.OwnerId>
-                  <twsba1:NotifyCustomers.OwnerType>
-                    <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
-                      <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
-                    </InArgument>
-                  </twsba1:NotifyCustomers.OwnerType>
-                  <twsba1:NotifyCustomers.SalePLZoneChanges>
-                    <InArgument x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">
-                      <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">SalePLZoneChanges</mca:CSharpValue>
-                    </InArgument>
-                  </twsba1:NotifyCustomers.SalePLZoneChanges>
                 </twsba1:NotifyCustomers>
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_12" Message="Sending pricelists is successfully done">
                   <vbw:WriteTrackingMessage.Severity>
@@ -1625,7 +1634,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -1748,6 +1757,8 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_10" sap:VirtualizedContainerService.HintSize="1087,22" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="1087,22" />
       <sap2010:ViewStateData Id="UpdateState_1" sap:VirtualizedContainerService.HintSize="1087,22" />
+      <sap2010:ViewStateData Id="PrepareZoneChanges_2" sap:VirtualizedContainerService.HintSize="1087,22" />
+      <sap2010:ViewStateData Id="SavePricelistFiles_1" sap:VirtualizedContainerService.HintSize="1087,22" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="1087,62" />
       <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="509,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -1773,18 +1784,17 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1087,548" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="PrepareZoneChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="NotifyCustomers_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,332">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1087,482" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1109,1730">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1087,420" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1109,1792">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1792,15 +1802,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="4874,1880" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="4896,3860">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="4874,1942" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="4896,3922">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Sales.BP.RatePlan_1" sap:VirtualizedContainerService.HintSize="4936,3940" />
+      <sap2010:ViewStateData Id="TOne.WhS.Sales.BP.RatePlan_1" sap:VirtualizedContainerService.HintSize="4936,4002" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

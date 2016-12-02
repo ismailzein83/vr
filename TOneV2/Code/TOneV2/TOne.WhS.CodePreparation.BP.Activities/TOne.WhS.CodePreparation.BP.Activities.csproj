@@ -98,7 +98,7 @@
     <Compile Include="ApplyPreviewCodesToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
     <Compile Include="BackupData.cs" />
-    <Compile Include="PrepareCustomersToBeNotified.cs" />
+    <Compile Include="SavePricelistFiles.cs" />
     <Compile Include="SendSalePLNotifications.cs" />
     <Compile Include="GenerateRatesPreview.cs" />
     <Compile Include="GenerateCodesPreview.cs" />

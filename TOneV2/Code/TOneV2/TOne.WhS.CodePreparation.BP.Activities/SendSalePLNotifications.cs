@@ -19,34 +19,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<int>> CustomerIds { get; set; }
 
-        [RequiredArgument]
-        public InArgument<DateTime> MinimumDate { get; set; }
-
-        [RequiredArgument]
-        public InArgument<int> SellingNumberPlanId { get; set; }
-
-        [RequiredArgument]
-        public InArgument<IEnumerable<SalePLZoneChange>> SalePLZonesChanges { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<int> customerIds = this.CustomerIds.Get(context);
-            DateTime minimumDate = this.MinimumDate.Get(context);
-            int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
-            IEnumerable<SalePLZoneChange> salePLZonesChanges = this.SalePLZonesChanges.Get(context);
-
-            INotificationContext notificationContext = new NotificationContext()
-            {
-                SellingNumberPlanId = sellingNumberPlanId,
-                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
-                CustomerIds = customerIds,
-                ZoneChanges = salePLZonesChanges,
-                EffectiveDate = minimumDate,
-                ChangeType = SalePLChangeType.CodeAndRate,
-                InitiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
-            };
+            int  initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
             NotificationManager notificationManager = new NotificationManager();
-            notificationManager.BuildNotifications(notificationContext);
+            notificationManager.SendNotification(initiatorId, customerIds, processInstanceId) ;
         }
 
     }

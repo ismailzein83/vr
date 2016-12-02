@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class NotificationContext : INotificationContext
+    public class SalePricelistFileContext : ISalePricelistFileContext
     {
         public int SellingNumberPlanId { get; set; }
 
@@ -21,6 +21,5 @@ namespace TOne.WhS.Sales.Business
 
         public SalePLChangeType ChangeType { get; set; }
 
-        public int InitiatorId { get; set; }
     }
 }

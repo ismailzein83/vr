@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface INotificationContext
+    public interface ISalePricelistFileContext
     {
         int SellingNumberPlanId { get; }
 
         long ProcessInstanceId { get; set; }
+        
         IEnumerable<int> CustomerIds { get; }
 
         IEnumerable<SalePLZoneChange> ZoneChanges { get; }
@@ -18,7 +19,5 @@ namespace TOne.WhS.BusinessEntity.Entities
         DateTime EffectiveDate { get; }
 
         SalePLChangeType ChangeType { get; }
-
-        int InitiatorId { get; }
     }
 }

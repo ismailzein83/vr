@@ -9,10 +9,12 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
+using Vanrise.BusinessProcess;
+using TOne.WhS.CodePreparation.Business;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public sealed class PrepareCustomersToBeNotified : CodeActivity
+    public sealed class SavePricelistFiles : CodeActivity
     {
         [RequiredArgument]
         public InArgument<IEnumerable<SalePLZoneChange>> ZonesChanges { get; set; }
@@ -21,13 +23,25 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<int> SellingNumberPlanId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersToBeNotified { get; set; }
+        public InArgument<DateTime> MinimumDate { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersWithPriceListFile { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
             IEnumerable<SalePLZoneChange> zonesChanges = this.ZonesChanges.Get(context);
+            DateTime minimumDate = this.MinimumDate.Get(context);
 
+            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(sellingNumberPlanId, zonesChanges);
+            this.SavePriceLists(sellingNumberPlanId, zonesChanges, context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, customersToSavePricelistsFor, minimumDate);
+
+            CustomersWithPriceListFile.Set(context, customersToSavePricelistsFor);
+        }
+
+        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<SalePLZoneChange> zonesChanges)
+        {
             Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = StructureZonesChangesByCountry(zonesChanges);
 
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
@@ -36,7 +50,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             IEnumerable<CarrierAccountInfo> customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
             DateTime today = DateTime.Today;
 
-            List<CarrierAccountInfo> customersToBeNotified = new List<CarrierAccountInfo>();
+            List<CarrierAccountInfo> customersToSavePricelistsFor = new List<CarrierAccountInfo>();
             if (customers != null)
             {
                 foreach (CarrierAccountInfo customer in customers)
@@ -44,11 +58,27 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     IEnumerable<int> customerCountryIds = customerCountryManager.GetCustomerCountryIds(customer.CarrierAccountId, today, false);
 
                     if (customerCountryIds != null && customerCountryIds.Intersect(zonesChangesByCountry.Keys).Count() > 0)
-                        customersToBeNotified.Add(customer);
+                        customersToSavePricelistsFor.Add(customer);
                 }
             }
 
-            CustomersToBeNotified.Set(context, customersToBeNotified);
+            return customersToSavePricelistsFor;
+        }
+
+        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<SalePLZoneChange> zonesChanges, long processInstanceId, IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor, DateTime effectiveOn)
+        {
+            ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext()
+            {
+                SellingNumberPlanId = sellingNumberPlanId,
+                ProcessInstanceId = processInstanceId,
+                CustomerIds = customersToSavePricelistsFor.Select(itm => itm.CarrierAccountId),
+                ZoneChanges = zonesChanges,
+                EffectiveDate = effectiveOn,
+                ChangeType = SalePLChangeType.CodeAndRate,
+            };
+
+            SalePriceListManager salePricelistManager = new SalePriceListManager();
+            salePricelistManager.SavePricelistFiles(salePriceListFileContext);
         }
 
         #region Private Methods

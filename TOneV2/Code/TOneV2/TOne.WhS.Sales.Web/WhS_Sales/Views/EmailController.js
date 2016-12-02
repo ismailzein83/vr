@@ -7,7 +7,7 @@
 	function EmailController($scope, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPTaskAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
 		var taskId;
-		var sellingProductId;
+		var customers;
 
 		var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -49,7 +49,7 @@
 		function load() {
 			$scope.scopeModel.isLoading = true;
 
-			getSellingProductId().then(function () {
+			getCustomers().then(function () {
 				loadAllControls();
 			}).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -57,10 +57,10 @@
 			});
 		}
 
-		function getSellingProductId() {
+		function getCustomers() {
 			return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
 				if (response != null && response.TaskData != null) {
-					sellingProductId = response.TaskData.SellingProductId;
+					customers = response.TaskData.Customers;
 				}
 			});
 		}
@@ -75,21 +75,12 @@
 			$scope.title = 'Notify Customers';
 		}
 		function loadGrid() {
+		    if (customers != undefined) {
+		        for(var i=0; i<customers.length; i++)
+		            $scope.scopeModel.customers.push(customers[i]);
 
-			var promises = [];
-			promises.push(gridReadyDeferred.promise);
-
-			var getCustomersPromise = WhS_BE_CustomerSellingProductAPIService.GetCustomersBySellingProductId(sellingProductId).then(function (response) {
-				if (response != null) {
-					for (var i = 0; i < response.length; i++) {
-						$scope.scopeModel.customers.push(response[i]);
-					}
-					toggleSelection(true);
-				}
-			});
-			promises.push(getCustomersPromise);
-
-			return UtilsService.waitMultiplePromises(promises);
+		        toggleSelection(true);
+		    }
 		}
 
 		function executeTask(customerIds, taskAction) {

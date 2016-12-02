@@ -10,6 +10,6 @@ namespace TOne.WhS.Sales.BP.Arguments.Tasks
 {
 	public class EmailTaskData : BPTaskData
 	{
-		public int SellingProductId { get; set; }
+		public IEnumerable<CarrierAccountInfo> Customers { get; set; }
 	}
 }

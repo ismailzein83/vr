@@ -16,70 +16,22 @@ namespace TOne.WhS.Sales.BP.Activities
 		#region Input Arguments
 
 		[RequiredArgument]
-		public InArgument<int> OwnerId { get; set; }
-
-		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
-
-		[RequiredArgument]
-		public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
-
-		[RequiredArgument]
 		public InArgument<IEnumerable<int>> CustomerIds { get; set; }
 
 		#endregion
 
 		protected override void Execute(CodeActivityContext context)
 		{
-			int ownerId = OwnerId.Get(context);
-			SalePriceListOwnerType ownerType = OwnerType.Get(context);
-			IEnumerable<SalePLZoneChange> salePLZoneChanges = SalePLZoneChanges.Get(context);
+			
 			IEnumerable<int> customerIds = CustomerIds.Get(context);
+            int  initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
 			if (customerIds == null || customerIds.Count() == 0)
 				throw new NullReferenceException("customerIds");
 
-			int sellingNumberPlanId = (ownerType == SalePriceListOwnerType.SellingProduct) ?
-				GetSellingProductSellingNumberPlanId(ownerId) :
-				GetCustomerSellingNumberPlanId(ownerId);
-
-			var notificationContext = new NotificationContext()
-			{
-				SellingNumberPlanId = sellingNumberPlanId,
-                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
-				CustomerIds = customerIds,
-				ZoneChanges = salePLZoneChanges,
-				EffectiveDate = DateTime.Today,
-				ChangeType = SalePLChangeType.Rate,
-				InitiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
-			};
-
 			NotificationManager notificationManager = new NotificationManager();
-			notificationManager.BuildNotifications(notificationContext);
+            notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
 		}
-
-		#region Private Methods
-
-		private int GetSellingProductSellingNumberPlanId(int sellingProductId)
-		{
-			var sellingProductManager = new SellingProductManager();
-			int? sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(sellingProductId);
-			if (!sellingNumberPlanId.HasValue)
-				throw new NullReferenceException(string.Format("SellingProduct '{0}' was not found", sellingProductId));
-			return sellingNumberPlanId.Value;
-		}
-
-		private int GetCustomerSellingNumberPlanId(int customerId)
-		{
-			var carrierAccountManager = new CarrierAccountManager();
-			CarrierAccount customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-			if (customerAccount == null)
-				throw new NullReferenceException(string.Format("Customer '{0}' was not found", customerId));
-			if (customerAccount.AccountType == CarrierAccountType.Supplier)
-				throw new Exception(string.Format("CarrierAccount '{0}' is not a Customer", customerId));
-			return customerAccount.SellingNumberPlanId.Value;
-		}
-		
-		#endregion
 	}
 }

@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
 {
-    public class NotificationContext : INotificationContext
+    public class SalePricelistFileContext : ISalePricelistFileContext
     {
         public int SellingNumberPlanId { get; set; }
 
@@ -20,7 +20,5 @@ namespace TOne.WhS.CodePreparation.Business
         public DateTime EffectiveDate { get; set; }
 
         public SalePLChangeType ChangeType { get; set; }
-
-        public int InitiatorId { get; set; }
     }
 }
