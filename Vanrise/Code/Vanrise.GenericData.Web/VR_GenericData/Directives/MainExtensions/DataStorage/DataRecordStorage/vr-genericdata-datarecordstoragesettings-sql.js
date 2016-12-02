@@ -47,7 +47,7 @@
                 };
                 ctrl.validateColumns = function () {
                     if (ctrl.columns.length == 0) {
-                        return null;
+                        return 'Please, one record must be added at least.';
                     }
 
                     var columnNames = [];
