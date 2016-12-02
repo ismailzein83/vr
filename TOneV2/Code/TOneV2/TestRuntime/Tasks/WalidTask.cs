@@ -88,7 +88,7 @@ namespace TestRuntime.Tasks
                     case DBTableName.File:
                         migrationTables.Add(table);
                         break;
-                    case DBTableName.CustomerZone:
+                    case DBTableName.CustomerCountry:
                         migrationTables.Add(table);
                         break;
                     case DBTableName.CustomerSellingProduct:

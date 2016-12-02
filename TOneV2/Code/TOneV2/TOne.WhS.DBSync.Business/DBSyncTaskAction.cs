@@ -141,7 +141,7 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.File:
                         iDBSyncDataManager = new FileDBSyncDataManager(context.UseTempTables);
                         break;
-                    case DBTableName.CustomerZone:
+                    case DBTableName.CustomerCountry:
                         iDBSyncDataManager = new CustomerZoneDBSyncDataManager(context.UseTempTables, context.SellingProductId);
                         break;
 
@@ -296,7 +296,7 @@ namespace TOne.WhS.DBSync.Business
                     migrator = new SupplierRateMigrator(context);
                     break;
 
-                case DBTableName.CustomerZone:
+                case DBTableName.CustomerCountry:
                     migrator = new CustomerZoneMigrator(context);
                     break;
 

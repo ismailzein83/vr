@@ -16,7 +16,7 @@
     SupplierPriceList: { value: 14, description: "SupplierPriceList", defaultMigrate: true },
     SaleRate: { value: 15, description: "SaleRate", defaultMigrate: true },
     SupplierRate: { value: 16, description: "SupplierRate", defaultMigrate: true },
-    CustomerZone: { value: 17, description: "CustomerZone", defaultMigrate: false },
+    CustomerCountry: { value: 17, description: "CustomerCountry", defaultMigrate: false },
     CustomerSellingProduct: { value: 18, description: "CustomerSellingProduct", defaultMigrate: false },
     File: { value: 19, description: "File", defaultMigrate: false },
     SwitchConnectivity: { value: 20, description: "SwitchConnectivity", defaultMigrate: true },

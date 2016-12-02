@@ -7,10 +7,11 @@ using Vanrise.Entities;
 using Vanrise.Common;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class CustomerZoneMigrator : Migrator<SourceCustomerZone, CustomerZones>
+    public class CustomerZoneMigrator : Migrator<SourceCustomerZone, CustomerCountry2>
     {
         CustomerZoneDBSyncDataManager dbSyncDataManager;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
@@ -24,13 +25,19 @@ namespace TOne.WhS.DBSync.Business
             _UseTempTables = context.UseTempTables;
             TableName = dbSyncDataManager.GetTableName();
         }
-
+        public override bool IsBuildAllItemsOnce
+        {
+            get
+            {
+                return true;
+            }
+        }
         public override void Migrate(MigrationInfoContext context)
         {
             base.Migrate(context);
         }
 
-        public override void AddItems(List<CustomerZones> itemsToAdd)
+        public override void AddItems(List<CustomerCountry2> itemsToAdd)
         {
             dbSyncDataManager.ApplyCustomerZoneToTemp(itemsToAdd);
             dbSyncDataManager.ApplyCustomerSellingProductToTemp(itemsToAdd, allCarrierAccounts.Values.ToList());
@@ -43,14 +50,33 @@ namespace TOne.WhS.DBSync.Business
             return dbSyncDataManager.GetCustomerZones(_UseTempTables).Values;
         }
 
-        public override CustomerZones BuildItemFromSource(SourceCustomerZone sourceItem)
+        public override List<CustomerCountry2> BuildAllItemsFromSource(IEnumerable<SourceCustomerZone> sourceItems)
         {
-            return new CustomerZones
+            int counter = 0;
+            List<CustomerCountry2> customerCountries = new List<CustomerCountry2>();
+            if (sourceItems != null && sourceItems.Count() > 0)
+            {
+                foreach (SourceCustomerZone sourceCustomerZone in sourceItems)
                 {
-                    CustomerId = sourceItem.CustomerId,
-                    Countries = sourceItem.Countries,
-                    StartEffectiveTime = sourceItem.StartEffectiveTime
-                };
+                    if (sourceCustomerZone.Countries == null || sourceCustomerZone.Countries.Count == 0)
+                        continue;
+
+                    foreach (CustomerCountry country in sourceCustomerZone.Countries)
+                    {
+                        counter++;
+                        CustomerCountry2 customerCountry = new CustomerCountry2()
+                        {
+                            BED = country.StartEffectiveTime,
+                            CountryId = country.CountryId,
+                            CustomerId = sourceCustomerZone.CustomerId,
+                            CustomerCountryId = counter
+                        };
+                        customerCountries.Add(customerCountry);
+                    }
+                }
+            }
+            IDManager.Instance.UpdateIDManager(TypeManager.Instance.GetTypeId(new CustomerCountry2().GetType()), counter);
+            return customerCountries;
         }
 
         public override void FillTableInfo(bool useTempTables)
@@ -58,5 +84,10 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
+
+        public override CustomerCountry2 BuildItemFromSource(SourceCustomerZone sourceItem)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

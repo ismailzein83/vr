@@ -11,11 +11,11 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CustomerZoneDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
-        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CustomerZone);
+        string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CustomerCountry);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
         int _SellingProductId;
-        public CustomerZoneDBSyncDataManager(bool useTempTables , int sellingProductId) :
+        public CustomerZoneDBSyncDataManager(bool useTempTables, int sellingProductId) :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
@@ -24,23 +24,24 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-        public void ApplyCustomerZoneToTemp(List<CustomerZones> customerZones)
+        public void ApplyCustomerZoneToTemp(List<CustomerCountry2> customerZones)
         {
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("CustomerID", typeof(int));
-            dt.Columns.Add("Details", typeof(string));
+            dt.Columns.Add("CountryID", typeof(int));
             dt.Columns.Add("BED", typeof(DateTime));
 
             dt.BeginLoadData();
-            
+
             foreach (var item in customerZones)
             {
                 DataRow row = dt.NewRow();
-                string serializedSettings = item.Countries != null ? Vanrise.Common.Serializer.Serialize(item.Countries) : null;
+                row["ID"] = item.CustomerCountryId;
                 row["CustomerID"] = item.CustomerId;
-                row["Details"] = serializedSettings;
-                row["BED"] = (DateTime)item.StartEffectiveTime;
+                row["CountryID"] = item.CountryId;
+                row["BED"] = (DateTime)item.BED;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
@@ -48,7 +49,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-        public void ApplyCustomerSellingProductToTemp(List<CustomerZones> customerZones, List<CarrierAccount> carrierAccounts)
+        public void ApplyCustomerSellingProductToTemp(List<CustomerCountry2> customerZones, List<CarrierAccount> carrierAccounts)
         {
             DataTable customerSellingProductDT = new DataTable();
             customerSellingProductDT.TableName = MigrationUtils.GetTableName(_Schema, "CustomerSellingProduct", _UseTempTables);
@@ -61,11 +62,11 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             foreach (var item in customers)
             {
-                CustomerZones customerZone = customerZones.FindRecord(itm => itm.CustomerId == item.CarrierAccountId);
+                CustomerCountry2 customerZone = customerZones.FindRecord(itm => itm.CustomerId == item.CarrierAccountId);
                 DataRow customerSellingProductDR = customerSellingProductDT.NewRow();
                 customerSellingProductDR["CustomerID"] = item.CarrierAccountId;
                 customerSellingProductDR["SellingProductID"] = _SellingProductId;
-                customerSellingProductDR["BED"] =customerZone != null ? (DateTime)customerZone.StartEffectiveTime : DateTime.Now.Date;
+                customerSellingProductDR["BED"] = customerZone != null ? (DateTime)customerZone.BED : DateTime.Now.Date;
                 customerSellingProductDT.Rows.Add(customerSellingProductDR);
             }
             customerSellingProductDT.EndLoadData();
@@ -81,29 +82,30 @@ namespace TOne.WhS.DBSync.Data.SQL
                       + MigrationUtils.GetTableName(_Schema, "SalePriceList", useTempTables) + " AS SP INNER JOIN"
                       + MigrationUtils.GetTableName(_Schema, "SaleRate", useTempTables) + " AS SR ON SP.ID = SR.PriceListID INNER JOIN "
                       + MigrationUtils.GetTableName(_Schema, "SaleZone", useTempTables) + " AS SZ ON SR.ZoneID = SZ.ID"
-                      +  " WHERE (SP.OwnerType = 1) GROUP BY SP.OwnerID, SZ.CountryID, SP.OwnerType ORDER BY SP.OwnerID", (reader) =>
+                      + " WHERE (SP.OwnerType = 1) GROUP BY SP.OwnerID, SZ.CountryID, SP.OwnerType ORDER BY SP.OwnerID", (reader) =>
                       {
                           while (reader.Read())
                           {
                               int ownerId = (int)reader["OwnerID"];
+                              DateTime bed = (DateTime)reader["BED"];
                               if (!customerZones.TryGetValue(ownerId, out customerZone))
                               {
                                   customerZones.Add(ownerId, new SourceCustomerZone()
                                   {
                                       Countries = new List<CustomerCountry>()
                                       { 
-                                          new CustomerCountry(){ CountryId = (int)reader["CountryID"]}
+                                          new CustomerCountry(){ CountryId = (int)reader["CountryID"], StartEffectiveTime =bed }
                                       },
                                       CustomerId = ownerId,
-                                      StartEffectiveTime = (DateTime)reader["BED"]
+                                      StartEffectiveTime = bed
                                   });
                               }
                               else
                               {
-                                  customerZones[ownerId].Countries.Add(new CustomerCountry() { CountryId = (int)reader["CountryID"] });
-                                  customerZones[ownerId].StartEffectiveTime = Vanrise.Common.Utilities.Min(customerZones[ownerId].StartEffectiveTime, (DateTime)reader["BED"]);
+                                  customerZones[ownerId].Countries.Add(new CustomerCountry() { CountryId = (int)reader["CountryID"], StartEffectiveTime = bed });
+                                  customerZones[ownerId].StartEffectiveTime = Vanrise.Common.Utilities.Min(customerZones[ownerId].StartEffectiveTime, bed);
                               }
-                                 
+
                           }
                       }, null);
 

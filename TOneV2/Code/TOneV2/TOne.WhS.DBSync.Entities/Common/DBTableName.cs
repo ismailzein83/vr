@@ -57,8 +57,8 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SupplierRate")]
         SupplierRate,
 
-        [Description("CustomerZone")]
-        CustomerZone,
+        [Description("CustomerCountry")]
+        CustomerCountry,
 
         [Description("CustomerSellingProduct")]
         CustomerSellingProduct,
