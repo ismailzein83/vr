@@ -132,6 +132,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                         gridApi.clearSummary();
                                     }
                                 }
+                            } else
+                            {
+                                gridApi.clearAll();
                             }
                             onResponseReady(response);
                         });
