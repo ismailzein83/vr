@@ -13,7 +13,7 @@ app.directive('retailVoiceChargingpolicySettings', [function () {
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_Voice/Directives/MainExtensions/Templates/VoiceChargingPolicySettingsTemplate.html'
+        templateUrl: '/Client/Modules/Retail_Voice/Directives/MainExtensions/ChargingPolicyDefinition/Templates/VoiceChargingPolicySettingsTemplate.html'
     };
 
     function VoiceChargingPolicySettings($scope, ctrl, $attrs)

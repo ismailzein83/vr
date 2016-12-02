@@ -1,118 +1,79 @@
-﻿"use strict";
+﻿'use strict';
 
-app.directive("retailBePackageGrid", ["UtilsService", "VRNotificationService", "Retail_BE_PackageAPIService", 
-    "Retail_BE_PackageService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Retail_BE_PackageAPIService, Retail_BE_PackageService, VRUIUtilsService) {
+app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_PackageAPIService', 'Retail_BE_PackageService',
+    function (VRNotificationService, Retail_BE_PackageAPIService, Retail_BE_PackageService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
 
-    var directiveDefinitionObject = {
+                var packageGrid = new PackageGridCtor($scope, ctrl, $attrs);
+                packageGrid.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/Templates/PackageGridTemplate.html'
+        };
 
-        restrict: "E",
-        scope: {
-            onReady: "="
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
+        function PackageGridCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-            var packageGrid = new PackageGrid($scope, ctrl, $attrs);
-            packageGrid.initializeController();
-        },
-        controllerAs: "ctrl",
-        bindToController: true,
-        compile: function (element, attrs) {
+            var gridAPI;
 
-        },
-        templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Package/Templates/PackageGridTemplate.html"
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.package = [];
+                $scope.scopeModel.menuActions = [];
 
-    };
-
-    function PackageGrid($scope, ctrl, $attrs) {
-
-        this.initializeController = initializeController;
-
-        var gridAPI;
-        var drillDownManager;
-
-        function initializeController() {
-
-            $scope.packages = [];
-
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-                drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.gridMenuActions);
-                defineAPI();
-            };
-
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Retail_BE_PackageAPIService.GetFilteredPackages(dataRetrievalInput).then(function (response) {
-                    if (response && response.Data) {
-                        for (var i = 0; i < response.Data.length; i++)
-                            drillDownManager.setDrillDownExtensionObject(response.Data[i]);
-                    }
-                    onResponseReady(response);
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
-            };
-
-            defineMenuActions();
-        }
-        function defineAPI()
-        {
-            var api = {};
-
-            api.loadGrid = function (query) {
-                return gridAPI.retrieveData(query);
-            };
-
-            api.onPackageAdded = function (packageObject) {
-                drillDownManager.setDrillDownExtensionObject(packageObject);
-                gridAPI.itemAdded(packageObject);
-            };
-
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
-        }
-        
-        function buildDrillDownTabs() {
-            var drillDownTabs = [];
-
-            var servicesTab = buildServicesTab();
-            drillDownTabs.push(servicesTab);
-
-            function buildServicesTab() {
-                return {
-                    title: 'Services',
-                    directive: 'retail-be-package-packageservice-grid',
-                    loadDirective: function (directiveAPI, dataItem) {
-                        dataItem.packageServiceGridAPI = directiveAPI;
-                        var packageServiceGridQuery = { PackageId: dataItem.Entity.PackageId };
-                        directiveAPI.loadGrid(packageServiceGridQuery);
-                    }
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
                 };
+
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                    return Retail_BE_PackageAPIService.GetFilteredPackages(dataRetrievalInput).then(function (response) {
+                        onResponseReady(response);
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+                };
+
+                defineMenuActions();
+            }
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (query) {
+                    return gridAPI.retrieveData(query);
+                };
+
+                api.onPackageAdded = function (addedPackage) {
+                    gridAPI.itemAdded(addedPackage);
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
-            return drillDownTabs;
-        }
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions.push({
+                    name: 'Edit',
+                    clicked: editPackage,
+                    //haspermission: hasEditPackagePermission
+                });
+            }
+            function editPackage(packageItem) {
+                var onPackageUpdated = function (updatedPackage) {
+                    gridAPI.itemUpdated(updatedPackage);
+                };
 
-        function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editPackage,
-                haspermission: hasUpdatePackagePermission
-            }];
+                Retail_BE_PackageService.editPackage(packageItem.Entity.PackageId, onPackageUpdated);
+            }
+            function hasEditPackagePermission() {
+                return Retail_BE_PackageAPIService.HasEditPackagePermission();
+            }
         }
-        function editPackage(packageObj) {
-            var onPackageUpdated = function (packageObject) {
-                drillDownManager.setDrillDownExtensionObject(packageObject);
-                gridAPI.itemUpdated(packageObject);
-            };
-            Retail_BE_PackageService.editPackage(packageObj.Entity.PackageId, onPackageUpdated);
-        }
-        function hasUpdatePackagePermission() {
-            return Retail_BE_PackageAPIService.HasUpdatePackagePermission();
-        }
-    }
-
-    return directiveDefinitionObject;
-
-}]);
+    }]);

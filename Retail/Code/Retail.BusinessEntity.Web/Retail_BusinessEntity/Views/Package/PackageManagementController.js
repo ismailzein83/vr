@@ -2,53 +2,49 @@
 
     "use strict";
 
-    packageManagementController.$inject = ['$scope', 'UtilsService', 'Retail_BE_PackageService', 'Retail_BE_PackageAPIService'];
+    PackageManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'Retail_BE_PackageService', 'Retail_BE_PackageAPIService'];
 
-    function packageManagementController($scope, UtilsService, Retail_BE_PackageService, Retail_BE_PackageAPIService) {
+    function PackageManagementController($scope, UtilsService, VRUIUtilsService, Retail_BE_PackageService, Retail_BE_PackageAPIService) {
+
         var gridAPI;
-        var packageDirectiveAPI;
+
         defineScope();
         load();
 
         function defineScope() {
-            $scope.hadAddPackagePermission = function () {
-                return Retail_BE_PackageAPIService.HasAddPackagePermission();
-            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid({});
-            }
-
-            $scope.searchClicked = function () {
-                return gridAPI.loadGrid(getFilterObject());
+                gridAPI.load({});
             };
 
-            $scope.AddPackage = AddPackage;
-
-            function getFilterObject() {
-                var data = {
-                    Name: $scope.name,
+            $scope.search = function () {
+                var query = buildGridQuery();
+                return gridAPI.load(query);
+            };
+            $scope.add = function () {
+                var onPackageAdded = function (addedPackage) {
+                    gridAPI.onPackageAdded(addedPackage);
                 };
-                return data;
-            }
-        }
 
-        function load() {
-            loadAllControls();
-        }
-
-        function loadAllControls() {
-        }
-
-        function AddPackage() {
-            var onPackageAdded = function (packageObj) {
-                gridAPI.onPackageAdded(packageObj);
+                Retail_BE_PackageService.addPackage(onPackageAdded);
             };
-            Retail_BE_PackageService.addPackage(onPackageAdded);
+
+            $scope.hasAddPackagePermission = function () {
+                return Retail_BE_PackageAPIService.HasAddPackagePermission();
+            };
+        }
+        function load() {
+
         }
 
+        function buildGridQuery() {
+            return {
+                Name: $scope.name
+            };
+        }
     }
 
-    appControllers.controller('Retail_BE_PackageManagementController', packageManagementController);
+    appControllers.controller('Retail_BE_PackageManagementController', PackageManagementController);
+
 })(appControllers);

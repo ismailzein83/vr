@@ -33,6 +33,10 @@
             });
         }
 
+        function GetServiceTypeExtendedSettingsTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServiceTypeExtendedSettingsTemplateConfigs"));
+        }
+
         function HasUpdateServiceTypePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateServiceType']));
         }
@@ -44,6 +48,7 @@
             UpdateServiceType: UpdateServiceType,
             GetServiceTypesInfo: GetServiceTypesInfo,
             GetServiceTypeChargingPolicyDefinitionSettings: GetServiceTypeChargingPolicyDefinitionSettings,
+            GetServiceTypeExtendedSettingsTemplateConfigs: GetServiceTypeExtendedSettingsTemplateConfigs,
             HasUpdateServiceTypePermission: HasUpdateServiceTypePermission
         };
     }

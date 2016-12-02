@@ -2,8 +2,6 @@
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
 
@@ -49,6 +47,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
         {
             return _manager.GetServiceTypeChargingPolicyDefinitionSettings(serviceTypeId);
+        }
+
+        [HttpGet]
+        [Route("GetServiceTypeExtendedSettingsTemplateConfigs")]
+        public IEnumerable<ServiceTypeExtendedSettingsConfig> GetServiceTypeExtendedSettingsTemplateConfigs()
+        {
+            return _manager.GetServiceTypeExtendedSettingsTemplateConfigs();
         }
     }
 }

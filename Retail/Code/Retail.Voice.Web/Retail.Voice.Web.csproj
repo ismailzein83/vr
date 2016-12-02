@@ -52,6 +52,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -73,12 +81,6 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -103,6 +105,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -117,21 +123,40 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
+      <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
+      <Name>Retail.Voice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Entities\Retail.Voice.Entities.csproj">
+      <Project>{d1f8761c-baf9-4302-902a-a9ea86cc8ed6}</Project>
+      <Name>Retail.Voice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VoiceChargingPolicyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Voice\Constant\ModuleConfig.js" />
-    <Content Include="Retail_Voice\Directives\MainExtensions\retail-voice-chargingpolicy-settings.js" />
-    <Content Include="Retail_Voice\Directives\MainExtensions\retail-voice-chargingpolicydefinition.js" />
-    <Content Include="Retail_Voice\Directives\MainExtensions\Templates\VoiceChargingPolicyDefinitionTemplate.html" />
-    <Content Include="Retail_Voice\Directives\MainExtensions\Templates\VoiceChargingPolicySettingsTemplate.html" />
+    <Content Include="Retail_Voice\Constant\ChargingPolicyRuleDefinitionTypesEnum.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\retail-voice-chargingpolicy-settings.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\retail-voice-chargingpolicydefinition.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\Templates\VoiceChargingPolicyDefinitionTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\Templates\VoiceChargingPolicySettingsTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\retail-voice-pricevoiceeventstep-preview.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\retail-voice-pricevoiceeventstep.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\Templates\PriceVoiceEventStepPreviewTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\Templates\PriceVoiceEventStepTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\VoiceChargingPolicyEvaluators\retail-voice-standardpolicyevaluator.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\VoiceChargingPolicyEvaluators\Templates\StandardPolicyEvaluatorTemplate.html" />
+    <Content Include="Retail_Voice\Directives\VoiceChargingPolicyEvaluator\retail-voice-voicechargingpolicyevaluator.js" />
+    <Content Include="Retail_Voice\Directives\VoiceChargingPolicyEvaluator\Templates\VoiceChargingPolicyEvaluatorTemplate.html" />
+    <Content Include="Retail_Voice\Directives\VoiceServiceType\retail-voice-voiceservicetype.js" />
+    <Content Include="Retail_Voice\Directives\VoiceServiceType\Templates\VoiceServiceTypeTemplate.html" />
+    <Content Include="Retail_Voice\Services\APIServices\VoiceChargingPolicyAPIService.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Retail_Voice\Services\APIServices\" />
     <Folder Include="Retail_Voice\Views\" />
   </ItemGroup>
   <PropertyGroup>

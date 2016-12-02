@@ -14,5 +14,6 @@ namespace Retail.BusinessEntity.Entities
         public string Description { get; set; }
         public Guid IdentificationRuleDefinitionId { get; set; }
         public ChargingPolicyDefinitionSettings ChargingPolicyDefinitionSettings { get; set; }
+        public ServiceTypeExtendedSettings ExtendedSettings { get; set; }
     }
 }

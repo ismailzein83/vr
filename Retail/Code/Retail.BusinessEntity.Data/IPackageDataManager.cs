@@ -9,10 +9,12 @@ namespace Retail.BusinessEntity.Data
 {
     public interface IPackageDataManager:IDataManager
     {
-        bool Insert(Package package, out int insertedId);
-        bool Update(Package package);
-        bool ArePackagesUpdated(ref object updateHandle);
         List<Package> GetPackages();
 
+        bool Insert(Package package, out int insertedId);
+
+        bool Update(Package package);
+
+        bool ArePackagesUpdated(ref object updateHandle);
     }
 }

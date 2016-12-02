@@ -1,0 +1,25 @@
+﻿
+
+<vr-tab header="'Settings'">
+
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="ctrl.onAddPricingPackageSetting" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+                <vr-datagrid on-ready="ctrl.onGridReady"
+                             datasource="ctrl.pricingPackageSettings"
+                             menuactions="ctrl.menuActions"
+                             ondeleterow="ctrl.onDeletePricingPackageSetting"
+                             enabledraggablerow="true"
+                             hidegridmenu>
+
+                    <vr-datagridcolumn headertext="'Service Type'" type="'Text'" field="'ServiceTypeName'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Usage Charging Policy'" type="'Text'" field="'UsageChargingPolicyName'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+
+</vr-tab>

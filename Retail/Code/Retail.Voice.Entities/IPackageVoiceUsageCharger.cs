@@ -30,21 +30,4 @@ namespace Retail.Voice.Entities
 
         List<VoiceEventPricedPart> PricedPartInfos { set; }
     }
-
-    public class VoiceEventPricedPart
-    {
-        public int PackageId { get; set; }
-
-        public int? UsageChargingPolicyId { get; set; }
-
-        public Decimal PricedDuration { get; set; }
-
-        public Decimal? Rate { get; set; }
-
-        public Decimal? Amount { get; set; }
-
-        public int? RateTypeId { get; set; }
-
-        public int CurrencyId { get; set; }
-    }
 }

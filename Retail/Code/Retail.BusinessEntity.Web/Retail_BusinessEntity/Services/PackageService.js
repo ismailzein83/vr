@@ -5,20 +5,12 @@
     PackageService.$inject = ['VRModalService'];
 
     function PackageService(VRModalService) {
-        return ({
-            addPackage: addPackage,
-            editPackage: editPackage,
-            addService: addService,
-            editService: editService,
-            addPackageItem: addPackageItem,
-            editPackageItem: editPackageItem
-        });
+
 
         function addPackage(onPackageAdded) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-
                 modalScope.onPackageAdded = onPackageAdded;
             };
 
@@ -26,18 +18,20 @@
         }
 
         function editPackage(packageId, onPackageUpdated) {
-            var modalSettings = {
-            };
 
             var parameters = {
                 PackageId: packageId,
             };
 
+            var modalSettings = {};
+
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onPackageUpdated = onPackageUpdated;
             };
+
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageEditor.html', parameters, modalSettings);
         }
+
 
         function addService(onServiceAdded) {
             var settings = {};
@@ -93,6 +87,15 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', parameters, modalSettings);
         }
 
+
+        return ({
+            addPackage: addPackage,
+            editPackage: editPackage,
+            addService: addService,
+            editService: editService,
+            addPackageItem: addPackageItem,
+            editPackageItem: editPackageItem
+        });
     }
 
     appControllers.service('Retail_BE_PackageService', PackageService);

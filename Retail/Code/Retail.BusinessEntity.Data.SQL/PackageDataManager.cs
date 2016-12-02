@@ -21,31 +21,41 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public List<Package> GetPackages()
+        {
+            return GetItemsSP("Retail.sp_Package_GetAll", PackageMapper);
+        }
+
+        public bool ArePackagesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("Retail.Package", ref updateHandle);
+        }
+
         public bool Insert(Package package, out int insertedId)
         {
             object packageId;
+            string serializedSettings = package.Settings != null ? Vanrise.Common.Serializer.Serialize(package.Settings) : null;
 
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Package_Insert", out packageId, package.Name, package.Description, Vanrise.Common.Serializer.Serialize(package.Settings));
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Package_Insert", out packageId, package.Name, package.Description, serializedSettings);
+            
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)packageId;
             else
                 insertedId = 0;
+            
             return insertedSuccesfully;
         }
+
         public bool Update(Package package)
         {
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Package_Update", package.PackageId, package.Name, package.Description, Vanrise.Common.Serializer.Serialize(package.Settings));
+            string serializedSettings = package.Settings != null ? Vanrise.Common.Serializer.Serialize(package.Settings) : null;
+
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Package_Update", package.PackageId, package.Name, package.Description, serializedSettings);
             return (recordsEffected > 0);
         }
-        public bool ArePackagesUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("Retail.Package", ref updateHandle);
-        }
-        public List<Package> GetPackages()
-        {
-            return GetItemsSP("Retail.sp_Package_GetAll", PackageMapper);
-        }
+
         #endregion
 
         #region Private Methods
@@ -53,6 +63,7 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
         #region  Mappers
+
         private Package PackageMapper(IDataReader reader)
         {
             Package package = new Package

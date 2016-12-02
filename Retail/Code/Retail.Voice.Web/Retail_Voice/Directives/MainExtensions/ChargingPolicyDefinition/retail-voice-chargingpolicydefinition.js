@@ -17,7 +17,7 @@
             },
             controllerAs: "voicechargingpolicyCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Voice/Directives/MainExtensions/Templates/VoiceChargingPolicyDefinitionTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Voice/Directives/MainExtensions/ChargingPolicyDefinition/Templates/VoiceChargingPolicyDefinitionTemplate.html"
 
         };
         function VoiceChargingpolicydefinition($scope, ctrl, $attrs) {

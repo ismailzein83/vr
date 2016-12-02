@@ -74,7 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransformationSteps\PriceVoiceEventStep.cs" />
     <Compile Include="VoiceChargingPolicyEvaluators\DataTransformationPolicyEvaluator.cs" />
+    <Compile Include="VoiceChargingPolicyEvaluators\StandardPolicyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">

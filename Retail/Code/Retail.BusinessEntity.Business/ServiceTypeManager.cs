@@ -3,8 +3,6 @@ using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -15,7 +13,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class ServiceTypeManager : IBusinessEntityManager
     {
-        #region Public Methods
+        #region Public Methods 
 
         public Vanrise.Entities.IDataRetrievalResult<ServiceTypeDetail> GetFilteredServiceTypes(Vanrise.Entities.DataRetrievalInput<ServiceTypeQuery> input)
         {
@@ -51,7 +49,8 @@ namespace Retail.BusinessEntity.Business
                 ChargingPolicyDefinitionSettings = updatedServiceType.ChargingPolicyDefinitionSettings,
                 Description = updatedServiceType.Description,
                 IdentificationRuleDefinitionId = updatedServiceType.IdentificationRuleDefinitionId,
-                InitialStatusId = updatedServiceType.InitialStatusId
+                InitialStatusId = updatedServiceType.InitialStatusId,
+                ExtendedSettings = updatedServiceType.ExtendedSettings
             };
             if (serviceType.Settings.ChargingPolicyDefinitionSettings != null)
                 serviceTypeSettings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor = serviceType.Settings.ChargingPolicyDefinitionSettings.ChargingPolicyEditor;
@@ -98,6 +97,12 @@ namespace Retail.BusinessEntity.Business
         {
             ServiceType serviceType = this.GetServiceType(serviceTypeId);
             return (serviceType != null && serviceType.Settings != null) ? serviceType.Settings.ChargingPolicyDefinitionSettings : null;
+        }
+
+        public IEnumerable<ServiceTypeExtendedSettingsConfig> GetServiceTypeExtendedSettingsTemplateConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<ServiceTypeExtendedSettingsConfig>(ServiceTypeExtendedSettingsConfig.EXTENSION_TYPE);
         }
 
         private struct GetAccountServiceGenericFieldsCacheName

@@ -11,15 +11,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackages"), input);
         }
 
-        function GetPackage(packageId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackage"), {
+        function GetPackageEditorRuntime(packageId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackageEditorRuntime"), {
                 packageId: packageId
-            });
-        }
-
-        function GetPackagesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"), {
-                filter: filter
             });
         }
 
@@ -31,6 +25,31 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "AddPackage"), packageObject);
         }
 
+        function GetPackageExtendedSettingsTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackageExtendedSettingsTemplateConfigs"));
+        }
+
+        function GetVoiceTypesTemplateConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetVoiceTypesTemplateConfigs"));
+
+        }
+
+        function GetServicePackageItemConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServicePackageItemConfigs"));
+
+        }
+        
+        function GetPackagesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"), {
+                filter: filter
+            });
+        }
+
+        function GetFilteredPackageServices(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackageServices"), input);
+        }
+
         function HasUpdatePackagePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdatePackage']));
         }
@@ -39,36 +58,19 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddPackage']));
         }
 
-        function GetServicesTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServicesTemplateConfigs"));
-
-        }
-        function GetVoiceTypesTemplateConfigs()
-        {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetVoiceTypesTemplateConfigs"));
-
-        }
-        function GetServicePackageItemConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServicePackageItemConfigs"));
-
-        }
-        
-        function GetFilteredPackageServices(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackageServices"), input);
-        }
 
         return ({
-            GetPackagesInfo: GetPackagesInfo,
             GetFilteredPackages: GetFilteredPackages,
-            GetPackage: GetPackage,
+            GetPackageEditorRuntime: GetPackageEditorRuntime,
             AddPackage: AddPackage,
             UpdatePackage: UpdatePackage,
-            HasUpdatePackagePermission: HasUpdatePackagePermission,
-            HasAddPackagePermission: HasAddPackagePermission,
-            GetServicesTemplateConfigs: GetServicesTemplateConfigs,
+            GetPackageExtendedSettingsTemplateConfigs: GetPackageExtendedSettingsTemplateConfigs,
             GetVoiceTypesTemplateConfigs: GetVoiceTypesTemplateConfigs,
             GetServicePackageItemConfigs: GetServicePackageItemConfigs,
-            GetFilteredPackageServices: GetFilteredPackageServices
+            GetPackagesInfo: GetPackagesInfo,
+            GetFilteredPackageServices: GetFilteredPackageServices,
+            HasUpdatePackagePermission: HasUpdatePackagePermission,
+            HasAddPackagePermission: HasAddPackagePermission
         });
     }
 

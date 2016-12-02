@@ -254,6 +254,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\ReactivateTelesSwitchProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\retail-be-balancealertrule-threshold-fixed.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\Templates\FixedBalanceAlertThresholdTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\PackageTypes\retail-be-pricingpackagesettings-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\PackageTypes\Templates\PricingPackageSettingsManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
@@ -342,10 +344,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\PropertyEvaluator\Templates\FinancialRetailAccountEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail_be_retailaccountobjecttype.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\RetailAccountObjectTypeTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageitem-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-volume.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\retail-be-package-packageservice-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\Templates\PackageItemEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageChargingPolicyItemTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\Templates\ServicePackageVolumeItemTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\Service\retail-be-package-servicesettings-voice.js" />
@@ -374,13 +373,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-partseditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\retail-be-servicetype-chargingpolicy-parttype.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ServiceType\ChargingPolicyDefinition\Templates\ChargingPolicyPartsEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageItem\Templates\PackageServiceGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service-grid-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\retail-be-package-service.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\Templates\PackageGridTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\Templates\ServiceGridEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Pop\Templates\PopGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Pop\retail-be-pop-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Pos\retail-be-pos-convertor-editor.js" />
@@ -440,6 +436,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\StatusChargingSetAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\StatusDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\CreditClassService.js" />
+    <Content Include="Retail_BusinessEntity\Services\PricingPackageSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\PopService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusChargingSetService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusDefinitionService.js" />
@@ -490,6 +487,8 @@
     <Content Include="Retail_BusinessEntity\Views\CreditClass\CreditClassEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageExtendedSettings\PricingPackageSettingsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Package\PackageExtendedSettings\PricingPackageSettingsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />

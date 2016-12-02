@@ -1,13 +1,12 @@
-﻿<vr-datagrid datasource="packages"
-             on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
+﻿
+
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.package"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions"
+             menuactions="scopeModel.menuActions"
              idfield="Entity.PackageId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.PackageId'" type="'Text'" widthfactor="1"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridexpandablerow>
-        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-    </vr-datagridexpandablerow>
+
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.PackageId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
 </vr-datagrid>

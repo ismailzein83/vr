@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,31 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         public int? FixedChargingPolicyId { get; set; }
 
         public Dictionary<Guid, ServiceTypeUsageChargingPolicySettings> ServiceTypeUsageChargingPolicies { get; set; }
+
+
+        public override PackageExtendedSettingsEditorRuntime GetEditorRuntime()
+        {
+            PricingPackageSettingsEditorRuntime pricingPackageSettingsEditorRuntime = new PricingPackageSettingsEditorRuntime();
+            pricingPackageSettingsEditorRuntime.ServiceTypes = new Dictionary<Guid, string>();
+            pricingPackageSettingsEditorRuntime.ChargingPolicies = new Dictionary<int, string>();
+
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+            ChargingPolicyManager chargingPolicyManager = new ChargingPolicyManager();
+
+            foreach (var serviceTypeId in ServiceTypeUsageChargingPolicies.Keys)
+            {
+                if (!pricingPackageSettingsEditorRuntime.ServiceTypes.ContainsKey(serviceTypeId))
+                    pricingPackageSettingsEditorRuntime.ServiceTypes.Add(serviceTypeId, serviceTypeManager.GetServiceTypeName(serviceTypeId));
+            }
+
+            foreach (var itm in ServiceTypeUsageChargingPolicies.Values)
+            {
+                if (!pricingPackageSettingsEditorRuntime.ChargingPolicies.ContainsKey(itm.UsageChargingPolicyId))
+                    pricingPackageSettingsEditorRuntime.ChargingPolicies.Add(itm.UsageChargingPolicyId, chargingPolicyManager.GetChargingPolicyName(itm.UsageChargingPolicyId));
+            }
+
+            return pricingPackageSettingsEditorRuntime;
+        }
 
         bool IPackageFixedChargingPolicy.TryGetFixedChargingPolicyId(IPackageFixedChargingPolicyContext context)
         {
@@ -45,5 +71,12 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
     public class ServiceTypeUsageChargingPolicySettings
     {
         public int UsageChargingPolicyId { get; set; }
+    }
+
+    public class PricingPackageSettingsEditorRuntime : PackageExtendedSettingsEditorRuntime
+    {
+        public Dictionary<Guid, string> ServiceTypes { get; set; }
+
+        public Dictionary<int, string> ChargingPolicies { get; set; }
     }
 }

@@ -8,6 +8,17 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Title" value="scopeModel.title" isrequired></vr-textbox>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-select on-ready="scopeModel.onExtendedSettingsSelectorReady"
+                                       datasource="scopeModel.extendedSettingsTemplateConfigs"
+                                       selectedvalues="scopeModel.selectedExtendedSettingsTemplateConfig"
+                                       datavaluefield="ExtensionConfigurationId"
+                                       datatextfield="Title"
+                                       label="Type"
+                                       isrequired="true"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">
@@ -30,6 +41,12 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+                <vr-directivewrapper ng-if="scopeModel.selectedExtendedSettingsTemplateConfig != undefined"
+                                     directive="scopeModel.selectedExtendedSettingsTemplateConfig.Editor"
+                                     on-ready="scopeModel.onExtendedSettingsDirectiveReady"
+                                     vr-loader="scopeModel.isExtendedSettingsDirectiveLoading">
+                </vr-directivewrapper>
+
             </vr-tabs>
 
         </vr-form>

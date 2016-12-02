@@ -1,0 +1,30 @@
+﻿
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onTariffRuleSelectorReady"
+                                                       selectedvalues="scopeModel.selectedTariffRule"
+                                                       customlabel="Tariff Rule">
+        </vr-genericdata-genericruledefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onRateTypeRuleSelectorReady"
+                                                       selectedvalues="scopeModel.selectedRateTypeRule"
+                                                       customlabel="Rate Type Rule">
+        </vr-genericdata-genericruledefinition-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onRateValueRuleSelectorReady"
+                                                       selectedvalues="scopeModel.selectedRateValueRule"
+                                                       customlabel="Rate Value Rule">
+        </vr-genericdata-genericruledefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onExtraChargeRuleSelectorReady"
+                                                       selectedvalues="scopeModel.selectedExtraChargeRule"
+                                                       customlabel="Extra Charge Rule">
+        </vr-genericdata-genericruledefinition-selector>
+    </vr-columns>
+</vr-row>
