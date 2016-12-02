@@ -278,14 +278,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (salePriceLists != null)
             {
-                SalePriceList salePriceListsTemp;
                 foreach (SalePriceList salePriceList in salePriceLists)
                 {
-                    if (!salePriceListsByCustomer.TryGetValue(salePriceList.OwnerId, out salePriceListsTemp))
-                    {
-                        salePriceListsTemp = new SalePriceList();
-                        salePriceListsByCustomer.Add(salePriceList.OwnerId, salePriceListsTemp);
-                    }
+                    if (!salePriceListsByCustomer.ContainsKey(salePriceList.OwnerId))
+                        salePriceListsByCustomer.Add(salePriceList.OwnerId, salePriceList);
 
                 }
             }
