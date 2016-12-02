@@ -26,7 +26,7 @@ namespace NP.IVSwitch.Business
             //Get Carrier by id
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
  
-            RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
+            RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
             Dictionary<int,RouteInfo> routeInfoDic = new Dictionary<int,RouteInfo>();
  
@@ -62,7 +62,7 @@ namespace NP.IVSwitch.Business
             CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId); // Get CarrierProfile
 
 
-            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettingsObject<AccountCarrierProfileExtension>(carrierProfileId);
+            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
             int accountId = -1;
 
  
@@ -80,7 +80,7 @@ namespace NP.IVSwitch.Business
  
                 // add it to extendedsettings
                 AccountCarrierProfileExtension extendedSettings = new AccountCarrierProfileExtension();
-                AccountCarrierProfileExtension ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject<AccountCarrierProfileExtension>(carrierProfileId);
+                AccountCarrierProfileExtension ExtendedSettingsObject = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
                 if (ExtendedSettingsObject != null)
                     extendedSettings = (AccountCarrierProfileExtension)ExtendedSettingsObject;
 
@@ -109,7 +109,7 @@ namespace NP.IVSwitch.Business
                 insertOperationOutput.InsertedObject = RouteDetailMapper(this.GetRoute(routeId));
 
 
-                RouteCarrierAccountExtension routesExtendedSettings = carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(carrierAccountId);
+                RouteCarrierAccountExtension routesExtendedSettings = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccountId);
                 //add route to carrier account
                 if (routesExtendedSettings == null)
                     routesExtendedSettings = new RouteCarrierAccountExtension();
@@ -150,7 +150,7 @@ namespace NP.IVSwitch.Business
             CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId); // Get CarrierProfile
 
 
-            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettingsObject<AccountCarrierProfileExtension>(carrierProfileId);
+            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
 
 
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<RouteDetail>();
@@ -165,7 +165,7 @@ namespace NP.IVSwitch.Business
             {
                
 
-                RouteCarrierAccountExtension routesExtendedSettings = carrierAccountManager.GetExtendedSettingsObject<RouteCarrierAccountExtension>(carrierAccountId);
+                RouteCarrierAccountExtension routesExtendedSettings = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccountId);
                 //add route to carrier account
                 if (routesExtendedSettings == null)
                     routesExtendedSettings = new RouteCarrierAccountExtension();

@@ -27,7 +27,7 @@ namespace NP.IVSwitch.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
 
-            EndPointCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettingsObject<EndPointCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
+            EndPointCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
             Dictionary<int,EndPointInfo> endPointDic = new Dictionary<int,EndPointInfo>();
 
@@ -55,7 +55,7 @@ namespace NP.IVSwitch.Business
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
             CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId); // Get CarrierProfile
 
-            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettingsObject<AccountCarrierProfileExtension>(carrierProfileId);
+            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
             int accountId = -1;
 
  
@@ -72,7 +72,7 @@ namespace NP.IVSwitch.Business
 
                 // add it to extendedsettings
                 AccountCarrierProfileExtension extendedSettings = new AccountCarrierProfileExtension();
-                AccountCarrierProfileExtension ExtendedSettingsObject = carrierProfileManager.GetExtendedSettingsObject<AccountCarrierProfileExtension>(carrierProfileId);
+                AccountCarrierProfileExtension ExtendedSettingsObject = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
                 if (ExtendedSettingsObject != null)
                     extendedSettings = (AccountCarrierProfileExtension)ExtendedSettingsObject;
 
@@ -96,7 +96,7 @@ namespace NP.IVSwitch.Business
             int endPointId = -1;
 
 
-            EndPointCarrierAccountExtension endPointsExtendedSettings = carrierAccountManager.GetExtendedSettingsObject<EndPointCarrierAccountExtension>(carrierAccountId);
+            EndPointCarrierAccountExtension endPointsExtendedSettings = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccountId);
 
             if (endPointsExtendedSettings == null)
                 endPointsExtendedSettings = new EndPointCarrierAccountExtension();
