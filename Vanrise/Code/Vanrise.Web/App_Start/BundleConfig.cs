@@ -22,13 +22,11 @@ namespace Vanrise.Web
             #region Angular
 
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
-               "~/Client/Libraries/AngularExtensions/BsDateTimePicker/moment-with-locales.js",
                "~/Client/Libraries/Bower/angular/angular.js",
                "~/Client/Libraries/Bower/angular-cookies/angular-cookies.js",
                "~/Client/Libraries/Bower/angular-route/angular-route.js",
                "~/Client/Libraries/Bower/angular-messages/angular-messages.js",
                "~/Client/Libraries/Bower/angular-animate/angular-animate.js",
-               "~/Client/Libraries/Bower/angular-ui-grid/ui-grid.js",
                "~/Client/Libraries/Bower/angular-sanitize/angular-sanitize.js",
                "~/Client/Libraries/Bower/angular-strap/dist/angular-strap.js",
                "~/Client/Libraries/Bower/angular-strap/dist/angular-strap.tpl.js",
@@ -80,11 +78,16 @@ namespace Vanrise.Web
 
             
             //AngularExtensions
-            bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").IncludeDirectory(
-              "~/Client/Libraries/AngularExtensions", "*.js", true));
+            //bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").IncludeDirectory(
+            //  "~/Client/Libraries/AngularExtensions", "*.js", true));
+
+            bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").Include(
+          "~/Client/Libraries/AngularExtensions/BsDateTimePicker/moment-with-locales.js",
+          "~/Client/Libraries/AngularExtensions/BsDateTimePicker/bootstrap-datetimepicker.js").IncludeDirectory(
+            "~/Client/Libraries/AngularExtensions", "*.js", true));
 
             bundles.Add(new StyleBundle("~/Content/AngularExtensions").IncludeDirectory(
-                "~/Client/Libraries/AngularExtensions", "*.css", true));
+               "~/Client/Libraries/AngularExtensions", "*.css", true));
 
             bundles.Add(new ScriptBundle("~/bundles/HandsonTable").IncludeDirectory(
              "~/Client/Libraries/HandsonTable", "*.js", true));

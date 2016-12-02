@@ -198,7 +198,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             ctrl.updateModelOnKeyUp = function (e) {
                 var $this = angular.element(e.currentTarget);
                 setTimeout(function () {
-                    if (moment($this.val(), format, true).isValid()) {
+                    if (moment($this.val(), format, true).isValid() && divDatePicker.data("DateTimePicker")) {
                         divDatePicker.data("DateTimePicker").date($this.val());
                     }
                 }, 1);
@@ -262,7 +262,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 else {
                     date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
                 }
-                if (selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) {
+                if ((selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) &&  divDatePicker.data("DateTimePicker")) {
                     divDatePicker.data("DateTimePicker").date(date);
                 }
                 else {

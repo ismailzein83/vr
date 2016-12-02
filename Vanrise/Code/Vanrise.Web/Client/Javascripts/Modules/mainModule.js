@@ -54,7 +54,18 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else
             return "{'display':'none'}";
     };
+    $scope.obj = {};
+    $scope.obj.table = [{ name: 'test 1', groupename: 'G1' }, { name: 'test 2', groupename: 'G1' }, { name: 'test 3', groupename: 'G3' }, { name: 'test 4', groupename: 'G3' }];
+    $scope.obj.remove = function (obj) {
+        console.log(obj);
+        $scope.obj.table.splice($scope.obj.table.indexOf(obj), 1);
 
+    };
+    $scope.obj.delete = function (obj) {
+        console.log(obj);
+        //$scope.obj.table.splice($scope.obj.table.indexOf(obj), 1);
+
+    };
     $('#dt1').datetimepicker();
     VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
         $rootScope.effectivePermissionsWrapper = response;
@@ -385,11 +396,3 @@ angular.module('mainModule')
         delay: { show: 1, hide: 100000 }
     });
 })
-.config([
-    'datetimepickerProvider',
-    function (datetimepickerProvider) {
-        datetimepickerProvider.setOptions({
-            locale: 'en'
-        });
-    }
-]);

@@ -5,13 +5,10 @@ var appControllers = angular.module('appControllers', [
     'ng-sortable',
     'ngSanitize',
     'mgcrea.ngStrap',
-    'uiSwitch',
     'cgNotify',
-    'ui.grid.autoResize',
     'ngMessages',
     'ivh.treeview',
     'angularTreeview',
-    'datetimepicker',
     'ui.codemirror',
     'ngWYSIWYG'
 ]);
