@@ -113,15 +113,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     var timer;
     $scope.show = false;
     $scope.mouseover = function () {
-        if ($scope.pinned==true)
-            return
+        if ($scope.pinned == true)
+            return;
         $timeout.cancel(timer);
         $scope.toogled = true;
         $rootScope.$broadcast("menu-full");
     };
     $scope.mouseout = function () {
-        if ($scope.pinned == true )
-            return
+        if ($scope.pinned == true)
+            return;
        timer = $timeout(function () {
            $scope.toogled = false;
            $rootScope.$broadcast("menu-collapsed");
