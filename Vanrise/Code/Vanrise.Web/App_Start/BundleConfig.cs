@@ -128,5 +128,21 @@ namespace Vanrise.Web
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
         }
+
+        public static ScriptBundle CreateModulesScriptBundle()
+        {
+            var modulesJSBundle = new ScriptBundle("~/bundles/ModulesJavascripts");
+            var extendedModulesNames = System.Configuration.ConfigurationManager.AppSettings["Web_ExtendedModulesNames"];
+            if (!string.IsNullOrWhiteSpace(extendedModulesNames))
+            {
+                string[] extendedModulesNamesArray = extendedModulesNames.Split(',');
+                foreach (var moduleName in extendedModulesNamesArray)
+                {
+                    modulesJSBundle.IncludeDirectory(string.Format("~/Client/Modules/{0}", moduleName), "*.js", true);
+                }
+            }
+
+            return modulesJSBundle;
+        }
     }
 }
