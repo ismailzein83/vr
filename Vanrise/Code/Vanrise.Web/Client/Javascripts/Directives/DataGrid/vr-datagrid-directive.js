@@ -723,7 +723,17 @@
                     item.isDeleted = true;
                     itemChanged(item, "Deleted");
                 };
-
+                gridApi.clearDataSource = function()
+                {
+                    ctrl.datasource.length = 0;
+                    ctrl.pagerSettings.totalDataCount = 0;
+                }
+                gridApi.clearAll = function () {
+                    ctrl.datasource.length = 0;
+                    ctrl.pagerSettings.totalDataCount = 0;
+                    ctrl.summaryDataItem = undefined;
+                    buildSummaryRowHtml();
+                }
                 gridApi.getPageInfo = getPageInfo;
 
                 gridApi.clearDataAndContinuePaging = function () {
