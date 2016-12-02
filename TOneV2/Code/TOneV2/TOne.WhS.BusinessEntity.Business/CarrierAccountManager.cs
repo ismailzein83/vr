@@ -145,9 +145,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
          }
 
-         public T GetExtendedSettingsObject<T>(int carrierAccountId) where T : class
+         public T GetExtendedSettings<T>(int carrierAccountId) where T : class
          {
              CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+             return carrierAccount != null ? GetExtendedSettings<T>(carrierAccount) : default(T);
+         }
+
+         public T GetExtendedSettings<T>(CarrierAccount carrierAccount) where T : class
+         {
              string extendedSettingName = typeof(T).FullName;
              Dictionary<string, Object> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, Object>;
 

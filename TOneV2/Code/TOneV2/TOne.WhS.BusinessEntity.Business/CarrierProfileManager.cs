@@ -126,15 +126,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 extendedSettingsDic.Add(extendedSettingName, extendedSettings);
             }
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-            
-           if( dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic))
-                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+            if (dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic))
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
-        public T GetExtendedSettingsObject<T>(int carrierProfileId) where T : class
+        public T GetExtendedSettings<T>(int carrierProfileId) where T : class
+        {
+            CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+            return carrierProfile != null ? GetExtendedSettings<T>(carrierProfile) : null;
+         }
+
+        public T GetExtendedSettings<T>(CarrierProfile carrierProfile) where T : class
         {
             string extendedSettingName = typeof(T).FullName;
-            CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
 
             Dictionary<string, Object> extendedSettingsDic = carrierProfile.ExtendedSettings as Dictionary<string, Object>;
 
@@ -149,7 +154,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             else
                 return default(T);
-         }
+        }
 
        
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
