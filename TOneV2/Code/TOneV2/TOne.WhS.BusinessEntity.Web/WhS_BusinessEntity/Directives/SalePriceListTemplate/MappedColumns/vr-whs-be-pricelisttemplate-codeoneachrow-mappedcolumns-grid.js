@@ -76,7 +76,10 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
             };
 
             
- 
+            $scope.removeMappedCol = function (dataItem) {
+                var index = $scope.mappedCols.indexOf(dataItem);
+                $scope.mappedCols.splice(index, 1);
+            };
            
         }
 

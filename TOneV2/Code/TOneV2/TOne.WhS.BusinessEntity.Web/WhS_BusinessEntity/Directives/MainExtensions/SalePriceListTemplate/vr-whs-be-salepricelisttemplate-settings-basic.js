@@ -31,7 +31,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
         var mappedTables = [];
         var mappedTablesSelective;
 
-        var tableIndex = 1;
+        var tableIndex = 0;
 
         function initializeController() {
 
@@ -59,6 +59,10 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
                 };
                 addMappedTableTab(mappedTableItem);
             };
+            $scope.scopeModel.removeTable = function (obj) {
+                var index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, obj.data.tableTabIndex, 'tableTabIndex');
+                $scope.scopeModel.tables.splice(index, 1);
+            };
 
             UtilsService.waitMultiplePromises([excelWorkbookReadyDeferred.promise, mappedTableDirectiveReadyPromiseDeferred.promise]).then(function () {
                 defineAPI();
@@ -85,7 +89,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
 
                     if (settings.MappedTables != null && settings.MappedTables.length > 0) {
                         mappedTables = settings.MappedTables;
-                        tableIndex = mappedTables.length - 1;
+                       // tableIndex = mappedTables.length -1 ;
                     }
                 }
 
@@ -155,8 +159,8 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
         function addMappedTableTab(mappedTableItem) {
             var directiveLoadDeferred = UtilsService.createPromiseDeferred();
             var mappedTableTab = {
-                header: "Table " + tableIndex,
-                tableTabIndex: tableIndex++,
+                header: "Table " + parseInt(tableIndex + 1 ),
+                tableTabIndex: ++tableIndex,
                 Editor: mappedTableItem.payload != undefined ? getEditorByConfigId(mappedTableItem.payload.ConfigId) : getEditorByConfigId(mappedTableDirectiveAPI.getData().ExtensionConfigurationId),
                 onDirectiveReady: function (api) {
                     mappedTableTab.directiveAPI = api;
