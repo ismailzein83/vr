@@ -90,7 +90,7 @@
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="NumberingPlanDBConnStringKey" value="NumberingPlanDBConnString"/>
+    <add key="NumberingPlanDBConnStringKey" value="RetailDBConnString"/>
   </appSettings>
 
   <vanriseLogging maxLogLevel="Information">
