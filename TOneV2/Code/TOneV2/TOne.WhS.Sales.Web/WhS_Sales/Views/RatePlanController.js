@@ -642,7 +642,7 @@
                 var input = {
                     OwnerType: ownerTypeValue,
                     OwnerId: getOwnerId(),
-                    EffectiveOn: new Date(),
+                    EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
                     CountryIds: countrySelectorAPI.getSelectedIds()
                 };
 
