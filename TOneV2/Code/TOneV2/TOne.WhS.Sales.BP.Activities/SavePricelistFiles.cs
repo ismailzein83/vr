@@ -34,14 +34,12 @@ namespace TOne.WhS.Sales.BP.Activities
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int sellingNumberPlanId;
-            IEnumerable<int> customerIds;
             IEnumerable<CarrierAccountInfo> customersOfSellingProduct;
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
                 sellingNumberPlanId = GetSellingProductSellingNumberPlanId(ownerId);
                 customersOfSellingProduct = customerSellingProductManager.GetCustomersBySellingProductId(ownerId);
-                customerIds = customersOfSellingProduct.Select(itm => itm.CarrierAccountId);
             }
             else
             {
@@ -58,8 +56,10 @@ namespace TOne.WhS.Sales.BP.Activities
                         SellingNumberPlanId = customer.SellingNumberPlanId
                     }
                 };
-                customerIds = new List<int>() { ownerId };
             }
+
+            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(customersOfSellingProduct, salePLZoneChanges);
+            IEnumerable<int> customerIds = customersToSavePricelistsFor.Select(item => item.CarrierAccountId);
 
             var salePricelistFileContext = new SalePricelistFileContext
             {
@@ -71,10 +71,10 @@ namespace TOne.WhS.Sales.BP.Activities
                 ChangeType = SalePLChangeType.Rate,
             };
 
+
             SalePriceListManager salePricelistManager = new SalePriceListManager();
             salePricelistManager.SavePricelistFiles(salePricelistFileContext);
 
-            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(customersOfSellingProduct, salePLZoneChanges);
             CustomersWithPriceListFile.Set(context, customersToSavePricelistsFor);
         }
 
@@ -83,6 +83,7 @@ namespace TOne.WhS.Sales.BP.Activities
         private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(IEnumerable<CarrierAccountInfo> customers, IEnumerable<SalePLZoneChange> zonesChanges)
         {
             Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = StructureZonesChangesByCountry(zonesChanges);
+            HashSet<int> customerIdsHavingRateChange = new HashSet<int>(zonesChanges.SelectMany(itm => itm.CustomersHavingRateChange));
 
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
 
@@ -97,7 +98,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     IEnumerable<int> customerCountryIds = customerCountryManager.GetCustomerCountryIds(customer.CarrierAccountId, today, false);
 
-                    if (customerCountryIds != null && customerCountryIds.Intersect(zonesChangesByCountry.Keys).Count() > 0)
+                    if (customerCountryIds != null && customerCountryIds.Intersect(zonesChangesByCountry.Keys).Count() > 0 && customerIdsHavingRateChange.Contains(customer.CarrierAccountId))
                         customersToSavePricelistsFor.Add(customer);
                 }
             }
