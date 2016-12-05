@@ -13,29 +13,23 @@ using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
+    
     #region InArguments
     public class PrepareDataForNotificationInput
     {
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
+
         public IEnumerable<AddedZone> AddedZones { get; set; }
+
         public IEnumerable<RatePreview> RatesPreview { get; set; }
 
-    }
-
-    #endregion
-
-    #region OutArguments
-
-    public class PrepareDataForNotificationOutput
-    {
         public List<SalePLZoneChange> SalePLZonesChanges { get; set; }
     }
 
     #endregion
 
-     public sealed class PrepareDataForNotification : BaseAsyncActivity<PrepareDataForNotificationInput, PrepareDataForNotificationOutput>
-    {
-
+     public sealed class PrepareDataForNotification : BaseAsyncActivity<PrepareDataForNotificationInput>
+     {
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
@@ -46,7 +40,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<RatePreview>> RatesPreview { get; set; }
 
         [RequiredArgument]
-        public OutArgument<List<SalePLZoneChange>> SalePLZonesChanges { get; set; }
+        public InArgument<List<SalePLZoneChange>> SalePLZonesChanges { get; set; }
+
+        protected override void DoWork(PrepareDataForNotificationInput inputArgument, AsyncActivityHandle handle)
+        {
+            IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(inputArgument.RatesPreview, inputArgument.ExistingZones, inputArgument.AddedZones);
+            if(zoneChanges.Count() > 0)
+            {
+                lock (inputArgument.SalePLZonesChanges)
+                {
+                    inputArgument.SalePLZonesChanges.AddRange(zoneChanges);
+                }
+            }
+        }
 
         protected override PrepareDataForNotificationInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -55,24 +61,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ExistingZones = this.ExistingZones.Get(context),
                 AddedZones = this.AddedZones.Get(context),
                 RatesPreview = this.RatesPreview.Get(context),
+                SalePLZonesChanges = this.SalePLZonesChanges.Get(context)
             };
-        }
-
-        protected override PrepareDataForNotificationOutput DoWorkWithResult(PrepareDataForNotificationInput inputArgument, AsyncActivityHandle handle)
-        {
-            IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(inputArgument.RatesPreview, inputArgument.ExistingZones, inputArgument.AddedZones);
-            List<SalePLZoneChange> salePLZonesChanges = new List<SalePLZoneChange>();
-            salePLZonesChanges.AddRange(zoneChanges);
-
-            return new PrepareDataForNotificationOutput()
-            {
-                SalePLZonesChanges = salePLZonesChanges
-            };
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareDataForNotificationOutput result)
-        {
-            this.SalePLZonesChanges.Set(context, result.SalePLZonesChanges);
         }
 
         #region Private Methods
@@ -178,5 +168,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
 
         #endregion
+
+       
     }
 }
