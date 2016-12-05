@@ -51,14 +51,35 @@ namespace Retail.Voice.Business
                     {
                         pricedPart.PackageId = voiceUsageCharger.ParentPackage.PackageId;
                         voiceEventPrice.VoiceEventPricedParts.Add(pricedPart);
+
+                        voiceEventPrice.Amount = pricedPart.Amount;
+
                         remainingDurationToPrice -= pricedPart.PricedDuration;
                     });
                     if (remainingDurationToPrice <= 0)
                         break;
                 }
             }
+
+            if (voiceUsageChargers == null || voiceUsageChargers.Count == 0)
+                throw new Exception(string.Format("No voiceUsageChargers is defined for accountID: {0} and serviceTypeId: {1}.", accountId, serviceTypeId));
+
+            if (voiceEventPrice.VoiceEventPricedParts.Count > 1)
+                throw new NotSupportedException("Case of multipler VoiceEventPricedParts not supported yet.");
+
             if (remainingDurationToPrice > 0)
                 throw new Exception(String.Format("Can't price entire duration. remaining duration '{0}'", remainingDurationToPrice));
+
+            if (voiceEventPrice.VoiceEventPricedParts.Count > 0)
+            {
+                var voiceEventPricedPart = voiceEventPrice.VoiceEventPricedParts[0];
+                voiceEventPrice.PackageId = voiceEventPricedPart.PackageId;
+                voiceEventPrice.UsageChargingPolicyId = voiceEventPricedPart.UsageChargingPolicyId;
+                voiceEventPrice.Rate = voiceEventPricedPart.Rate;
+                voiceEventPrice.Amount = voiceEventPricedPart.Amount;
+                voiceEventPrice.RateTypeId = voiceEventPricedPart.RateTypeId;
+                voiceEventPrice.CurrencyId = voiceEventPricedPart.CurrencyId;
+            }
 
             return voiceEventPrice;
         }
@@ -97,7 +118,7 @@ namespace Retail.Voice.Business
         private List<VoiceUsageChargerWithParentPackage> GetVoiceUsageChargersByPriority(long accountId, Guid serviceTypeId, DateTime eventTime)
         {
             var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
-            
+
             //needs caching
             List<Package> accountPackagesByPriority = GetAccountPackagesByPriority(accountId); //get account packages by priority
 
@@ -157,6 +178,18 @@ namespace Retail.Voice.Business
         }
 
         private List<Package> GetAccountPackagesByPriority(long accountId)
+        {
+            IEnumerable<int> accountPackagesIds = _accountPackageManager.GetPackageIdsAssignedToAccount(accountId);
+
+            if (accountPackagesIds == null || accountPackagesIds.Count() == 0)
+                return null;
+
+            List<Package> accountPackages = new PackageManager().GetPackagesByIds(accountPackagesIds);
+
+            return accountPackages;
+        }
+
+        private List<Package> GetAllAccountPackagesByPriority(long accountId)
         {
             List<int> accountPackagesIds = null;
             GetAccountPackagesByPriority(accountId, accountPackagesIds);
@@ -264,6 +297,4 @@ namespace Retail.Voice.Business
 
         public Retail.BusinessEntity.Entities.Package ParentPackage { get; set; }
     }
-
-
 }
