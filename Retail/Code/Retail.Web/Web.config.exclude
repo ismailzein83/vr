@@ -29,7 +29,6 @@
     <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= " />
-    <add name="NumberingPlanDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= "/>
     <add name="MainDBConnString" connectionString=""/>    
   </connectionStrings>
   <appSettings>
