@@ -7,11 +7,13 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Pricing
 {
-    public class RateValueRuleDefinitionSettings : GenericRuleDefinitionSettings
+    public class ExtraChargeRuleDefinitionSettings : GenericRuleDefinitionSettings
     {
+        public static Guid CONFIG_ID = new Guid("7fd67c90-3ff6-4e5d-9052-bb0a87ab371e");
+
         public override Guid ConfigId
         {
-            get { return new Guid("fc76233f-5f8f-4b5e-bf10-1e77ea24fd35"); }
+            get { return CONFIG_ID; }
         }
     }
 }

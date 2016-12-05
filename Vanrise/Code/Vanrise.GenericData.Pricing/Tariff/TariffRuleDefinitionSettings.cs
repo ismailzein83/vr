@@ -9,9 +9,11 @@ namespace Vanrise.GenericData.Pricing
 {
     public class TariffRuleDefinitionSettings : GenericRuleDefinitionSettings
     {
+        public static Guid CONFIG_ID = new Guid("b2061c48-a2c9-4494-a707-0e84a195b5e5");
+
         public override Guid ConfigId
         {
-            get { return new Guid("b2061c48-a2c9-4494-a707-0e84a195b5e5"); }
+            get { return CONFIG_ID; }
         }
     }
 }

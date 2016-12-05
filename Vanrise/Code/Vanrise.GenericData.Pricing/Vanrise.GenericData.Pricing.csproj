@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtraChargeRuleDefinitionSettings.cs" />
+    <Compile Include="ExtraCharge\ExtraChargeRuleDefinitionSettings.cs" />
     <Compile Include="ExtraCharge\ExtraChargeMappingStep.cs" />
     <Compile Include="ExtraCharge\ExtraChargeRule.cs" />
     <Compile Include="ExtraCharge\ExtraChargeRuleManager.cs" />
@@ -51,17 +51,17 @@
     <Compile Include="IPricingRulesContext.cs" />
     <Compile Include="PricingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RateTypeRuleDefinitionSettings.cs" />
+    <Compile Include="RateType\RateTypeRuleDefinitionSettings.cs" />
     <Compile Include="RateType\RateTypeMappingStep.cs" />
     <Compile Include="RateType\RateTypeRuleContext.cs" />
     <Compile Include="RateType\RateTypeRule.cs" />
     <Compile Include="RateType\RateTypeRuleManager.cs" />
-    <Compile Include="RateValueRuleDefinitionSettings.cs" />
+    <Compile Include="RateValue\RateValueRuleDefinitionSettings.cs" />
     <Compile Include="RateValue\RateValueMappingStep.cs" />
     <Compile Include="RateValue\RateValueRule.cs" />
     <Compile Include="RateValue\RateValueRuleContext.cs" />
     <Compile Include="RateValue\RateValueRuleManager.cs" />
-    <Compile Include="TariffRuleDefinitionSettings.cs" />
+    <Compile Include="Tariff\TariffRuleDefinitionSettings.cs" />
     <Compile Include="Tariff\TariffMappingStep.cs" />
     <Compile Include="Tariff\TariffRuleContext.cs" />
     <Compile Include="Tariff\TariffRule.cs" />
