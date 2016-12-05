@@ -67,5 +67,28 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
+
+        public override BillingPeriod GetBillingPeriod(IExtendedSettingsBillingPeriodContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
+        {
+            string[] partner = context.PartnerId.Split('_');
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            CarrierProfile carrierProfile = null;
+            switch(partner[0])
+            {
+                case "Account":
+                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                    var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
+                    carrierProfile = carrierProfileManager.GetCarrierProfile(account.CarrierProfileId);
+                    break;
+                case "Profile":
+                    carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
+                    break;
+            }
+        }
     }
 }
