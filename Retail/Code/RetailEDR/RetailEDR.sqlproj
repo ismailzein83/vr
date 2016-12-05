@@ -71,6 +71,9 @@
     <Folder Include="Retail_EDR\" />
     <Folder Include="Retail_EDR\Tables\" />
     <Folder Include="Retail_EDR\User Defined Types\" />
+    <Folder Include="Retail_CDR\" />
+    <Folder Include="Retail_CDR\Tables\" />
+    <Folder Include="Retail_CDR\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -97,5 +100,16 @@
     <Build Include="Retail_EDR\User Defined Types\RingoPinType.sql" />
     <Build Include="Retail_EDR\User Defined Types\RingoMessageType.sql" />
     <Build Include="Retail_EDR\User Defined Types\RingoEventType.sql" />
+    <Build Include="Retail_EDR\Tables\IMEI.sql" />
+    <Build Include="Retail_CDR\Tables\CDR.sql" />
+    <Build Include="Retail_CDR\Tables\BillingCDR_Failed.sql" />
+    <Build Include="Retail_CDR\Tables\BillingCDR_Invalid.sql" />
+    <Build Include="Retail_CDR\Tables\BillingCDR_Main.sql" />
+    <Build Include="Retail_EDR\User Defined Types\IMEIType.sql" />
+    <Build Include="Retail_CDR\User Defined Types\BillingCDR_FailedType.sql" />
+    <Build Include="Retail_CDR\User Defined Types\BillingCDR_InvalidType.sql" />
+    <Build Include="Retail_CDR\User Defined Types\BillingCDR_MainType.sql" />
+    <Build Include="Retail_CDR\User Defined Types\CDRType.sql" />
+    <Build Include="Security\Retail_CDR.sql" />
   </ItemGroup>
 </Project>

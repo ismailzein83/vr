@@ -25,7 +25,13 @@
     [FileDate]            DATETIME         NULL,
     [CreationDate]        DATETIME         NULL,
     [TypeMessage]         VARCHAR (32)     NULL,
-    [Zone]                BIGINT           NULL);
+    [AgentID]             BIGINT           NULL,
+    [AgentCommission]     DECIMAL (20, 10) NULL,
+    [AccountID]           BIGINT           NULL,
+    [OriginatingZoneID]   BIGINT           NULL,
+    [TerminatingZoneID]   BIGINT           NULL);
+
+
 
 
 

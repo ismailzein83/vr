@@ -27,7 +27,13 @@
     [MTCost]              VARCHAR (256)    NULL,
     [TermDesc]            VARCHAR (256)    NULL,
     [TypeCalled]          VARCHAR (32)     NULL,
-    [Zone]                BIGINT           NULL);
+    [Agent]               BIGINT           NULL,
+    [AgentCommission]     DECIMAL (20, 10) NULL,
+    [AccountID]           BIGINT           NULL,
+    [TerminatingZoneID]   BIGINT           NULL,
+    [OriginatingZoneID]   BIGINT           NULL);
+
+
 
 
 
