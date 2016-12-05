@@ -467,6 +467,9 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_CheckOverlaping.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceNote.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceLock.sql" />
+    <Build Include="VR_Invoice\Tables\BillingPeriodInfo.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_BillingPeriodInfo_InsertOrUpdate.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_BillingPeriodInfo_Get.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
