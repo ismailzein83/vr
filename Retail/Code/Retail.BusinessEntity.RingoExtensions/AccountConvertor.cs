@@ -73,7 +73,7 @@ namespace Retail.BusinessEntity.RingoExtensions
         {
             MappingRule rule = new MappingRule
             {
-                BeginEffectiveTime = DateTime.Now,
+                BeginEffectiveTime = DateTime.Parse("2000-01-01"),
                 Settings = new MappingRuleSettings(),
                 Criteria = new GenericRuleCriteria
                 {

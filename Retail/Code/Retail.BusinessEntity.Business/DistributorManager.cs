@@ -101,7 +101,10 @@ namespace Retail.BusinessEntity.Business
 
         Dictionary<string, Distributor> GetCachedDistributorsBySourceId()
         {
-            return GetCachedDistributors().ToDictionary(x => x.Value.SourceId, x => x.Value);
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDistributorsBySourceId", () =>
+            {
+                return GetCachedDistributors().ToDictionary(x => x.Value.SourceId, x => x.Value);
+            });
         }
 
 

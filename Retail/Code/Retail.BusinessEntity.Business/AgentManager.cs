@@ -100,7 +100,10 @@ namespace Retail.BusinessEntity.Business
 
         Dictionary<string, Agent> GetCachedAgentsBySourceId()
         {
-            return GetCachedAgents().ToDictionary(x => x.Value.SourceId, x => x.Value);
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAgentsBySourceId", () =>
+              {
+                  return GetCachedAgents().ToDictionary(x => x.Value.SourceId, x => x.Value);
+              });
         }
 
         #region Mappers
