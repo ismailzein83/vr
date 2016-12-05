@@ -133,7 +133,13 @@ namespace Vanrise.GenericData.Business
 
                 var values = genericRuleCriteriaFieldValues.GetValues();
                 if (values != null)
-                    return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
+                {
+                    switch (fieldRuntimeType.FullName)
+                    {
+                        case "System.Guid": return values.Select(itm => new Guid(itm.ToString())) as IEnumerable<Object>;
+                        default: return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
+                    }
+                }
                 else
                     return null;
             }
