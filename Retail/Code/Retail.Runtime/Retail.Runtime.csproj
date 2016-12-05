@@ -535,6 +535,18 @@
       <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
       <Name>Retail.BusinessEntity.RingoExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
+      <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
+      <Name>Retail.Voice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Entities\Retail.Voice.Entities.csproj">
+      <Project>{d1f8761c-baf9-4302-902a-a9ea86cc8ed6}</Project>
+      <Name>Retail.Voice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.MainExtensions\Retail.Voice.MainExtensions.csproj">
+      <Project>{59eff472-b705-4ac1-b04c-c23ed4c82020}</Project>
+      <Name>Retail.Voice.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

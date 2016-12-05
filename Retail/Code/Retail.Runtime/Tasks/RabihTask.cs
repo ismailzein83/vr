@@ -36,13 +36,13 @@ namespace Retail.Runtime.Tasks
             QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationRuntimeService queueActivationRuntimeService = new QueueActivationRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
 
             runtimeServices.Add(transactionLockRuntimeService);
             runtimeServices.Add(queueActivationService);
-            //runtimeServices.Add(schedulerService);
+            runtimeServices.Add(schedulerService);
             runtimeServices.Add(dsRuntimeService);
             runtimeServices.Add(queueActivationRuntimeService);
             runtimeServices.Add(bpRegulatorService);
