@@ -32,7 +32,6 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                 }
             };
             ctrl.getDataItemTitle = function (dataItem) {
-                console.log(typeof dataItem);
             };
             $scope.ondataitemclicked = function (dataItem) {
                 if (ctrl.readOnly)

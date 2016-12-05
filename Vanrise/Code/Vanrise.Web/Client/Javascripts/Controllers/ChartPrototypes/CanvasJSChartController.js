@@ -56,7 +56,6 @@
                data: [
                    {
                        click: function (e) {
-                           console.log(e);
                        },
                        type: "pie",
                        dataPoints: data

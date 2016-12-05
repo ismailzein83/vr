@@ -26,7 +26,6 @@ app.directive('vrLoader', ['$compile', function ($compile) {
                                 + tElement.html() 
                             +'</div>'
                         + '</div>';
-        //console.log(newElement);
         tElement.html(newElement);            
     }
 

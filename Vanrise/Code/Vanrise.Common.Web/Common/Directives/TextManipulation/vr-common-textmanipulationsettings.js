@@ -84,7 +84,6 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
             var api = {};
 
             api.load = function (payload) {
-                console.log(payload);
                 var settings;
 
                 if (payload != undefined) {

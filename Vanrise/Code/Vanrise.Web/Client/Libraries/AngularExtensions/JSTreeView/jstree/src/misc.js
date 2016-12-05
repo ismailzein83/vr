@@ -125,7 +125,6 @@
 		};
 		this._realcheckboxes = function () {
 			var ts = this.settings.checkbox.tie_selection;
-			console.log(ts);
 			$('.jstree-realcheckbox').each(function () {
 				this.checked = (!ts && this.parentNode.parentNode.className.indexOf("jstree-checked") !== -1) || (ts && this.parentNode.parentNode.className.indexOf('jstree-clicked') !== -1);
 				this.indeterminate = this.parentNode.className.indexOf("jstree-undetermined") !== -1;

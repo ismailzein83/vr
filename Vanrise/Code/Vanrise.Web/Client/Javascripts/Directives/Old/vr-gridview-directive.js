@@ -35,7 +35,6 @@ app.directive('vrGridview', ['GridViewService', 'BaseDirService', function (Grid
         //    return GridViewService.dTemplate;
         //},
         compile: function (tElement, attrs) {
-            console.log(tElement);
         }
     };
 

@@ -100,8 +100,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 }
                 else
                     ctrl.rotateHeader = $attrs.rotate;
-                //console.log(ctrl.showexpand)
-                // ctrl.expandabelcol = $attrs.showexpand != undefined? $scope.$eval(ctrl.showexpand) : undefined;
                 var hasActionMenu = $attrs.menuactions != undefined;
                 var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
                 var enableDraggableRow = $attrs.enabledraggablerow != undefined ? $scope.$parent.$eval($attrs.enabledraggablerow) : false;
@@ -110,8 +108,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 dataGridObj.initializeController();
                 if (retrieveDataFunction != undefined)
                     dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType);
-                //dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType, defaultSortDirection);
-
                 if (loadMoreDataFunction != undefined)
                     dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
                 dataGridObj.defineExpandableRow();
@@ -119,7 +115,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 dataGridObj.defineDraggableRow(enableDraggableRow);
                 dataGridObj.defineDeleteRowAction(deleteRowFunction);
                 dataGridObj.calculateDataColumnsSectionWidth();
-                //dataGridObj.addActionTypeColumn();
                 dataGridObj.defineAPI();
 
             },

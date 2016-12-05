@@ -98,7 +98,6 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             };
 
             function loadFiltersSection(payload) {
-                console.log(payload);
                 var promises = [];
 
                 var settings;

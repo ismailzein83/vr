@@ -23,7 +23,6 @@
             };
 
             $scope.removeItem = function (item) {
-                console.log(item);
                 var index = $scope.listItems.indexOf(item);
                 $scope.listItems.splice(index, 1);
             };

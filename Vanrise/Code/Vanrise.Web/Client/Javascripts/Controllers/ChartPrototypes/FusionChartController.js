@@ -72,7 +72,6 @@
                },
                events: {
                    dataplotClick: function (e, args) {
-                       console.log(args.dataIndex);
                        $scope.selectCodeGroup($scope.codeGroups[args.dataIndex].OurZoneID);
                    }
                }
@@ -97,7 +96,6 @@
                },
                events: {
                    dataplotClick: function (e, args) {
-                       console.log(args.dataIndex);
                        $scope.selectCodeGroup($scope.codeGroups[args.dataIndex].OurZoneID);
                    }
                }

@@ -118,7 +118,6 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
                 $scope.isLoading = false;
             },
              function (excpetion) {
-                 console.log(excpetion);
                  $scope.isLoading = false;
              });
         }

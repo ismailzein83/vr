@@ -111,9 +111,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
         return result;
     }
 
-    function createAccessCookie(userInfo) {
-        //var expiresDate = new Date(new Date().getTime() + parseInt(30) * 1000 * 60 * 60 * 24);
-        console.log(getAccessCookieName());
+    function createAccessCookie(userInfo) {      
         $cookies.put(getAccessCookieName(), userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
     }
 

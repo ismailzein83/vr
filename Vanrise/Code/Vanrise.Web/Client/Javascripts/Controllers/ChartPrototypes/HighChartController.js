@@ -111,10 +111,7 @@
                     data: series,
                     events:
                         {
-                            click: function (e) {
-                                console.log(e);
-                                console.log(e.point.index);
-                                console.log($scope.data[e.point.index].OurZoneID);
+                            click: function (e) {                              
                                 selectCodeGroup($scope.data[e.point.index].OurZoneID);
                             }
                         }

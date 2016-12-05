@@ -36,7 +36,6 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     };
 
     $scope.logevent = function () {
-        console.log('ng-click');
         $scope.istrue = true;
     };
     $scope.doc = {
@@ -46,7 +45,6 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     for (var prop in LabelColorsEnum) {
         $scope.colorlist.push(LabelColorsEnum[prop]);
     }
-    console.log($scope.colorlist);
     $scope.getColor = function () {
         return LabelColorsEnum.Info.color;
     };
@@ -198,10 +196,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
         gridApi = api;
         $scope.loadMoreData();
     };
-    $scope.testObj = {};
-    $scope.choiceSelectionChanged = function () {
-        //console.log($scope.testObj);
-    };
+    $scope.testObj = {};   
     $scope.groupeHeaders = [
         { lable: "test 2", type: "leaf", rotated: true, position: "pulltop pullleft " },
         { lable: "www", type: "leaf", rotated: true, position: " pullleft " },

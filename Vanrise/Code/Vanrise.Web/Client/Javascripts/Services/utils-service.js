@@ -459,10 +459,6 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     }
 
     function downloadFile(data, headers) {
-
-        //data = new ArrayBuffer(data.length);
-        //console.log(data);
-        //return;
         var octetStreamMime = 'application/octet-stream';
         var success = false;
         headers = headers();

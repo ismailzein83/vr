@@ -136,23 +136,8 @@
         };
 
         zingchart.bind('chartDiv', 'node_click', function (p) {
-            console.log(p.plotindex);
-            console.log($scope.data[p.plotindex].OurZoneID);
             $scope.selectCodeGroup($scope.data[p.plotindex].OurZoneID);
-        });
-
-        //zingchart.click = function (p) {
-        //    console.log(p);
-        //};
-
-        //zingchart.node_mouseover = function (p) {
-        //    console.log(p);
-        //};
-
-        //zingchart.plot_click = function (p) {
-        //    console.log(p);
-        //};
-
+        });        
         $scope.getData();
         setTimeout(function () {
             $scope.loadChart();
