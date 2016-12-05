@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[SalePriceList_Update]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_Update]
 	@ID int,
 	@FileId bigint,
 	@PriceListType INT

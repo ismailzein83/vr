@@ -430,6 +430,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierProfile_UpdateExtendedSettings.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccount_UpdateExtendedSettings.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Insert.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\SalePriceList_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Update.sql" />
   </ItemGroup>
 </Project>
