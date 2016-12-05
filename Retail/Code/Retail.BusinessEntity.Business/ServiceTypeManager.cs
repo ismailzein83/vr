@@ -110,6 +110,11 @@ namespace Retail.BusinessEntity.Business
             public Guid ServiceTypeId { get; set; }
         }
 
+        public AccountServiceGenericField GetAccountServiceGenericField(Guid serviceTypeId, string fieldName)
+        {
+            return GetAccountServiceGenericFields(serviceTypeId).GetRecord(fieldName);
+        }
+
         public Dictionary<string, AccountServiceGenericField> GetAccountServiceGenericFields(Guid serviceTypeId)
         {
             var cacheName = new GetAccountServiceGenericFieldsCacheName { ServiceTypeId = serviceTypeId };
@@ -131,11 +136,6 @@ namespace Retail.BusinessEntity.Business
                     }
                     return fields.ToDictionary(fld => fld.Name, fld => fld);
                 });
-        }
-
-        public AccountServiceGenericField GetAccountServiceGenericField(Guid serviceTypeId, string fieldName)
-        {
-            return GetAccountServiceGenericFields(serviceTypeId).GetRecord(fieldName);
         }
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
