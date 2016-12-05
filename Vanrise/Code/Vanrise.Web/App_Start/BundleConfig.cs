@@ -102,6 +102,11 @@ namespace Vanrise.Web
             //Style
             bundles.Add(new StyleBundle("~/Content/Styles").IncludeDirectory(
                "~/Client/Styles", "*.css", true));
+
+            bundles.Add(new StyleBundle("~/Content/Themes").Include(
+          "~/Client/Themes/theme.css").IncludeDirectory(
+           "~/Client/Themes", "*.css", true));
+            
             
             //Style bootstrap
             bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(

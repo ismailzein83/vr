@@ -224,7 +224,22 @@ e22337
 f79624
 9e1f63
 01a4b5*/
+.action-bar {
+    background-color: #e22337;   
+}
+.btncustom {
+  border-radius: 0px;
+  border-color: transparent;
+  background-color: transparent;
+  color: #FFF; 
+}
+.btncustom:hover {
+    background-color: #EF4355 !important;
+}
 
+.btncustom:disabled {
+    background-color: #E22337 !important;
+}
 .drill-down-level-0{    
     background: transparent linear-gradient(to top, #00ADEF , #00ADEF ) repeat scroll 0% 0%;
     color: #FFF;
