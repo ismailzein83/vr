@@ -9,10 +9,10 @@ using Vanrise.Common;
 using NP.IVSwitch.Data;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
- 
+
 namespace NP.IVSwitch.Business
 {
-    public  class RouteManager
+    public class RouteManager
     {
         #region Public Methods
         public Route GetRoute(int routeId)
@@ -25,16 +25,16 @@ namespace NP.IVSwitch.Business
         {
             //Get Carrier by id
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
- 
+
             RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
-            Dictionary<int,RouteInfo> routeInfoDic = new Dictionary<int,RouteInfo>();
- 
+            Dictionary<int, RouteInfo> routeInfoDic = new Dictionary<int, RouteInfo>();
+
             if (extendedSettingsObject != null)
             {
                 routeInfoDic = extendedSettingsObject.RouteInfo.ToDictionary(k => k.RouteId, v => v);
             }
-            Dictionary<int,Route> routeDic = new Dictionary<int,Route>();
+            Dictionary<int, Route> routeDic = new Dictionary<int, Route>();
             var allRoutes = this.GetCachedRoutes();
 
             foreach (var item in routeInfoDic)
@@ -65,19 +65,19 @@ namespace NP.IVSwitch.Business
             AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
             int accountId = -1;
 
- 
-             if (accountExtended != null && accountExtended.VendorAccountId.HasValue)
-             {
-                 accountId = accountExtended.VendorAccountId.Value;
-             }
-             else
-             {
-                              
+
+            if (accountExtended != null && accountExtended.VendorAccountId.HasValue)
+            {
+                accountId = accountExtended.VendorAccountId.Value;
+            }
+            else
+            {
+
                 //create the account
                 AccountManager accountManager = new AccountManager();
                 Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, false);
                 accountId = accountManager.AddAccount(account);
- 
+
                 // add it to extendedsettings
                 AccountCarrierProfileExtension extendedSettings = new AccountCarrierProfileExtension();
                 AccountCarrierProfileExtension ExtendedSettingsObject = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
@@ -90,7 +90,7 @@ namespace NP.IVSwitch.Business
             }
 
             routeItem.Entity.AccountId = accountId;
- 
+
 
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<RouteDetail>();
 
@@ -98,7 +98,7 @@ namespace NP.IVSwitch.Business
             insertOperationOutput.InsertedObject = null;
 
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
-
+            Helper.SetSwitchConfig(dataManager);
             int routeId = -1;
 
 
@@ -124,7 +124,7 @@ namespace NP.IVSwitch.Business
                 RouteInfo routeInfo = new RouteInfo();
                 routeInfo.RouteId = routeId;
                 routeInfo.Percentage = routeItem.Entity.Percentage;
-                
+
 
                 routeInfoList.Add(routeInfo);
                 routesExtendedSettings.RouteInfo = routeInfoList;
@@ -159,11 +159,11 @@ namespace NP.IVSwitch.Business
             updateOperationOutput.UpdatedObject = null;
 
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
-
+            Helper.SetSwitchConfig(dataManager);
 
             if (dataManager.Update(routeItem.Entity))
             {
-               
+
 
                 RouteCarrierAccountExtension routesExtendedSettings = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccountId);
                 //add route to carrier account
@@ -183,7 +183,7 @@ namespace NP.IVSwitch.Business
 
                 routeInfo = routeInfoDic.GetRecord(routeItem.Entity.RouteId);
                 routeInfo.Percentage = routeItem.Entity.Percentage;
-                 
+
                 routesExtendedSettings.RouteInfo = routeInfoList;
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, routesExtendedSettings);
@@ -191,7 +191,7 @@ namespace NP.IVSwitch.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
-                
+
                 updateOperationOutput.UpdatedObject = RouteDetailMapper(this.GetRoute(routeItem.Entity.RouteId));
             }
             else
@@ -228,6 +228,7 @@ namespace NP.IVSwitch.Business
         private Dictionary<int, Route> PrepareCachedRoutes()
         {
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+            Helper.SetSwitchConfig(dataManager);
             Dictionary<int, Route> routes = dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var suppliers = carrierAccountManager.GetAllSuppliers();

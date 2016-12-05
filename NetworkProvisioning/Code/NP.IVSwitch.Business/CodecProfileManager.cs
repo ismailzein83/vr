@@ -49,12 +49,15 @@ namespace NP.IVSwitch.Business
 
         public Vanrise.Entities.InsertOperationOutput<CodecProfileDetail> AddCodecProfile(CodecProfile codecProfileItem)
         {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CodecProfileDetail>();
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CodecProfileDetail>
+            {
+                Result = Vanrise.Entities.InsertOperationResult.Failed,
+                InsertedObject = null
+            };
 
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
 
             ICodecProfileDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ICodecProfileDataManager>();
+            Helper.SetSwitchConfig(dataManager);
 
             int codecProfileId = -1;
 
@@ -76,13 +79,15 @@ namespace NP.IVSwitch.Business
 
         public Vanrise.Entities.UpdateOperationOutput<CodecProfileDetail> UpdateCodecProfile(CodecProfile codecProfileItem)
         {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CodecProfileDetail>();
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CodecProfileDetail>
+            {
+                Result = Vanrise.Entities.UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
 
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
 
             ICodecProfileDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ICodecProfileDataManager>();
-
+            Helper.SetSwitchConfig(dataManager);
             CodecDefManager codecDefManager = new CodecDefManager();
 
             if (dataManager.Update(codecProfileItem,  codecDefManager.GetAll()))
@@ -119,6 +124,7 @@ namespace NP.IVSwitch.Business
                 () =>
                 {
                     ICodecProfileDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ICodecProfileDataManager>();
+                    Helper.SetSwitchConfig(dataManager);
                     return dataManager.GetCodecProfiles().ToDictionary(x => x.CodecProfileId, x => x);
                 });
         }

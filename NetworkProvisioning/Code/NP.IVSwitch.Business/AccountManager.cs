@@ -25,26 +25,21 @@ namespace NP.IVSwitch.Business
              //CarrierAccountType { Exchange = 1, Supplier = 2, Customer = 3 }
              //   AccountType {Vendor = 1, Customer = 2}
 
-            AccountType accountType;
-            if (customer == true)
-                accountType = AccountType.Customer;
-            else
-                accountType = AccountType.Vendor;
+            AccountType accountType= customer == true ? AccountType.Customer : AccountType.Vendor;
 
-            Account account = new Account();
+            Account account = new Account
+            {
+                FirstName = carrierProfile.Settings.Company,
+                LastName = carrierProfile.Settings.Company,
+                CompanyName = carrierProfile.Settings.Company,
+                ContactDisplay = carrierProfile.Settings.Company,
+                LogAlias = carrierProfile.Settings.Company,
+                WebSite = carrierProfile.Settings.Website,
+                Email = Guid.NewGuid().ToString() + "@guid.com",
+                TypeId = accountType
+            };
 
-            account.FirstName = carrierProfile.Settings.Company;
-            account.LastName = carrierProfile.Settings.Company;
-            account.CompanyName = carrierProfile.Settings.Company;
-            account.ContactDisplay = carrierProfile.Settings.Company;
-            account.LogAlias = carrierProfile.Settings.Company;
-            account.WebSite = carrierProfile.Settings.Website;
-            account.Email = Guid.NewGuid().ToString() + "@guid.com";   // carrierProfile.Settings.Contacts.Find(x => x.Type.ToString().Equals("TechnicalEmail")).Description; //technical contact
-            account.TypeId = accountType;
-
-
-
-
+            // carrierProfile.Settings.Contacts.Find(x => x.Type.ToString().Equals("TechnicalEmail")).Description; //technical contact
             return account;
         }
       
@@ -52,7 +47,7 @@ namespace NP.IVSwitch.Business
         public int AddAccount(Account accountItem)
         {
             IAccountDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IAccountDataManager>();
-
+            Helper.SetSwitchConfig(dataManager);
             int accountId = -1; 
             dataManager.Insert(accountItem,out  accountId);
 

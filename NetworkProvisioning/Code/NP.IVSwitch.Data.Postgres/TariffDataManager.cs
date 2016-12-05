@@ -9,12 +9,16 @@ namespace NP.IVSwitch.Data.Postgres
 {
     public class TariffDataManager : BasePostgresDataManager
     {
-        public TariffDataManager()
-            : base(GetConnectionStringName("NetworkProvisioningDBConnStringTariffsKey", "NetworkProvisioningDBConnStringTariffs"))
+        private string ConnectionString { get; set; }
+
+        public TariffDataManager(string connectionString)
         {
-
+            ConnectionString = connectionString;
         }
-
+        protected override string GetConnectionString()
+        {
+            return ConnectionString;
+        }
         public int CreateTariffTable(int tariffId)
         {
 

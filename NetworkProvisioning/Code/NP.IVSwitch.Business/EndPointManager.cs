@@ -29,16 +29,16 @@ namespace NP.IVSwitch.Business
 
             EndPointCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
-            Dictionary<int,EndPointInfo> endPointDic = new Dictionary<int,EndPointInfo>();
+            Dictionary<int, EndPointInfo> endPointDic = new Dictionary<int, EndPointInfo>();
 
             if (extendedSettingsObject != null)
             {
-                endPointDic = extendedSettingsObject.EndPointInfo.ToDictionary(k=>k.EndPointId,v=>v);
+                endPointDic = extendedSettingsObject.EndPointInfo.ToDictionary(k => k.EndPointId, v => v);
             }
 
-             var allEndPoints = this.GetCachedEndPoint();
-             Func<EndPoint, bool> filterExpression = (x) => (endPointDic.ContainsKey(x.EndPointId));                                                             
-            
+            var allEndPoints = this.GetCachedEndPoint();
+            Func<EndPoint, bool> filterExpression = (x) => (endPointDic.ContainsKey(x.EndPointId));
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allEndPoints.ToBigResult(input, filterExpression, EndPointDetailMapper));
         }
 
@@ -49,7 +49,7 @@ namespace NP.IVSwitch.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
 
- 
+
             int carrierProfileId = (int)carrierAccountManager.GetCarrierProfileId(carrierAccountId); // Get CarrierProfileId
 
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
@@ -58,7 +58,7 @@ namespace NP.IVSwitch.Business
             AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
             int accountId = -1;
 
- 
+
             if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
             {
                 accountId = accountExtended.CustomerAccountId.Value;
@@ -80,20 +80,22 @@ namespace NP.IVSwitch.Business
 
                 carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(carrierProfileId, extendedSettings);
 
-                
+
 
             }
 
             endPointItem.Entity.AccountId = accountId;
 
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<EndPointDetail>();
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<EndPointDetail>
+            {
+                Result = Vanrise.Entities.InsertOperationResult.Failed,
+                InsertedObject = null
+            };
 
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
 
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
-
-            int endPointId = -1;
+            Helper.SetSwitchConfig(dataManager);
+            int endPointId;
 
 
             EndPointCarrierAccountExtension endPointsExtendedSettings = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccountId);
@@ -109,16 +111,16 @@ namespace NP.IVSwitch.Business
             if (dataManager.Insert(endPointItem.Entity, endPointInfoList, out  endPointId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = EndPointDetailMapper(this.GetEndPoint(endPointId));
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = EndPointDetailMapper(GetEndPoint(endPointId));
 
 
                 // tariffs and routes
-                dataManager.CheckTariffAndRouteTables(insertOperationOutput.InsertedObject.Entity,  carrierAccount.NameSuffix);
+                string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
+                dataManager.CheckTariffAndRouteTables(insertOperationOutput.InsertedObject.Entity, carrierAccountName);
 
 
-                EndPointInfo endPointInfo = new EndPointInfo();
-                endPointInfo.EndPointId = endPointId;
+                EndPointInfo endPointInfo = new EndPointInfo { EndPointId = endPointId };
 
                 endPointInfoList.Add(endPointInfo);
                 endPointsExtendedSettings.EndPointInfo = endPointInfoList;
@@ -128,13 +130,13 @@ namespace NP.IVSwitch.Business
             }
             else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
 
             return insertOperationOutput;
         }
 
-      
+
 
         public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
@@ -144,8 +146,8 @@ namespace NP.IVSwitch.Business
             updateOperationOutput.UpdatedObject = null;
 
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+            Helper.SetSwitchConfig(dataManager);
 
- 
             if (dataManager.Update(endPointItem.Entity))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -180,6 +182,7 @@ namespace NP.IVSwitch.Business
                 () =>
                 {
                     IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+                    Helper.SetSwitchConfig(dataManager);
                     return dataManager.GetEndPoints().ToDictionary(x => x.EndPointId, x => x);
                 });
         }
@@ -196,7 +199,7 @@ namespace NP.IVSwitch.Business
                 CurrentStateDescription = Vanrise.Common.Utilities.GetEnumDescription<State>(endPoint.CurrentState),
                 CurrentEndPointType = Vanrise.Common.Utilities.GetEnumDescription<EndPointType>(endPoint.EndPointType),
 
-              };
+            };
 
             return endPointDetail;
         }

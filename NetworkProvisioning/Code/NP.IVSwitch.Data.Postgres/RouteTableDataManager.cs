@@ -7,12 +7,17 @@ using Vanrise.Data.Postgres;
 
 namespace NP.IVSwitch.Data.Postgres
 {
-    public class RouteTableDataManager:  BasePostgresDataManager 
+    public class RouteTableDataManager : BasePostgresDataManager
     {
-        public RouteTableDataManager()
-            : base(GetConnectionStringName("NetworkProvisioningDBConnStringRouteTablesKey", "NetworkProvisioningDBConnStringRouteTables"))
-        {
+        private string ConnectionString { get; set; }
 
+        public RouteTableDataManager(string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
+        protected override string GetConnectionString()
+        {
+            return ConnectionString;
         }
 
         public int CreateRouteTable(int routeId)
@@ -21,7 +26,7 @@ namespace NP.IVSwitch.Data.Postgres
             if (routeId != -1)
             {
                 // Create routeId table
-                String[] cmdText  = {
+                String[] cmdText = {
                                         string.Format(@"CREATE TABLE rt{0} (
                                                       destination character varying(20) NOT NULL,
                                                       route_id integer NOT NULL,
@@ -58,7 +63,7 @@ namespace NP.IVSwitch.Data.Postgres
                 return routeId;
             }
 
- 
+
 
             return -1;
         }

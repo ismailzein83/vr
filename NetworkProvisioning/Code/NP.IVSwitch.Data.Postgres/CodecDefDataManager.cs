@@ -12,9 +12,13 @@ namespace NP.IVSwitch.Data.Postgres
     class CodecDefDataManager : BasePostgresDataManager, ICodecDefDataManager
     {
         public CodecDefDataManager()
-            : base(GetConnectionStringName("NetworkProvisioningDBConnStringKey", "NetworkProvisioningDBConnString"))
         {
 
+        }
+        public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
+        protected override string GetConnectionString()
+        {
+            return IvSwitchSync.MasterConnectionString;
         }
 
         private CodecDef CodecDefMapper(IDataReader reader)

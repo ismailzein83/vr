@@ -56,6 +56,7 @@ namespace NP.IVSwitch.Business
                 () =>
                 {
                     ICodecDefDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ICodecDefDataManager>();
+                    Helper.SetSwitchConfig(dataManager);
                     return dataManager.GetCodecDefs().ToDictionary(x => x.CodecId, x => x);
                 });
         }

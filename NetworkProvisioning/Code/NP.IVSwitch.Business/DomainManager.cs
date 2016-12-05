@@ -42,6 +42,7 @@ namespace NP.IVSwitch.Business
                 () =>
                 {
                     IDomainDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IDomainDataManager>();
+                    Helper.SetSwitchConfig(dataManager);
                     return dataManager.GetDomains().ToDictionary(x => x.DomainId, x => x);
                 });
         }

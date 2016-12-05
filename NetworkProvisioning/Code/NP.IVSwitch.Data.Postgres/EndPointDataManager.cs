@@ -1,5 +1,5 @@
 ﻿using NP.IVSwitch.Entities;
- using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlTypes;
@@ -13,9 +13,13 @@ namespace NP.IVSwitch.Data.Postgres
     public class EndPointDataManager : BasePostgresDataManager, IEndPointDataManager
     {
         public EndPointDataManager()
-            : base(GetConnectionStringName("NetworkProvisioningDBConnStringKey", "NetworkProvisioningDBConnString"))
         {
 
+        }
+        public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
+        protected override string GetConnectionString()
+        {
+            return IvSwitchSync.MasterConnectionString;
         }
 
         private EndPoint EndPointMapper(IDataReader reader)
@@ -27,7 +31,7 @@ namespace NP.IVSwitch.Data.Postgres
             endPoint.EndPointId = (int)reader["user_id"];
             endPoint.AccountId = (int)reader["account_id"];
             endPoint.Description = reader["description"] as string;
- 
+
             endPoint.LogAlias = reader["log_alias"] as string;
             endPoint.CodecProfileId = (int)reader["codec_profile_id"];
             endPoint.TransRuleId = (int)reader["trans_rule_id"];
@@ -59,7 +63,7 @@ namespace NP.IVSwitch.Data.Postgres
 
             endPointToUpdate.TariffId = GetReaderValue<int?>(reader, "tariff_id");
             endPointToUpdate.RouteTableId = GetReaderValue<int?>(reader, "route_id");
-            
+
             return endPointToUpdate;
         }
 
@@ -168,12 +172,12 @@ namespace NP.IVSwitch.Data.Postgres
                 {
                     cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
                     cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                      cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
+                    cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                     cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                     cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                     cmd.Parameters.AddWithValue("@state_id", currentState);
                     cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-                     cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
+                    cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                     cmd.Parameters.AddWithValue("@rtp_mode", 1);
                     cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                     cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
@@ -194,14 +198,14 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
         {
-          
+
             object endPointId;
             int currentState, rtpMode;
-             MapEnum(endPoint, out currentState, out rtpMode);
+            MapEnum(endPoint, out currentState, out rtpMode);
 
             // get group_id   
-             int groupId = GetGroupId(endPoint, endPointInfoList);
-            
+            int groupId = GetGroupId(endPoint, endPointInfoList);
+
 
             String cmdText = @"INSERT INTO users(account_id,description,group_id, 
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, max_call_dura,rtp_mode,domain_id,
@@ -216,12 +220,12 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 cmd.Parameters.AddWithValue("@description", endPoint.Description);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
-                 cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
+                cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                 cmd.Parameters.AddWithValue("@state_id", currentState);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
+                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                 cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                 var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
@@ -248,7 +252,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool AclInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
         {
-          
+
 
             object endPointId;
             int currentState, rtpMode;
@@ -302,12 +306,12 @@ namespace NP.IVSwitch.Data.Postgres
                    cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                    cmd.Parameters.AddWithValue("@description", endPoint.Description);
                    cmd.Parameters.AddWithValue("@group_id", groupId);
-                    cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
+                   cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                    cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                    cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                    cmd.Parameters.AddWithValue("@state_id", currentState);
                    cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-                    cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
+                   cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                    cmd.Parameters.AddWithValue("@rtp_mode", 1);
                    cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                    cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
@@ -373,11 +377,11 @@ namespace NP.IVSwitch.Data.Postgres
             }
         }
 
-        public void CreateTariffAndRouteTables(String carrierAccountName, EndPoint  endPoint)
+        public void CreateTariffAndRouteTables(String carrierAccountName, EndPoint endPoint)
         {
 
             object tariffId;
-            int insertedTariffId =-1;
+            int insertedTariffId = -1;
 
             // Add tariff record to tariffs table
             String cmdText = @"INSERT INTO tariffs(tariff_name,description)
@@ -394,69 +398,69 @@ namespace NP.IVSwitch.Data.Postgres
 
             if (tariffId != null)
             {
-                     insertedTariffId = Convert.ToInt32(tariffId);
-                    // create tariff table
-                    TariffDataManager tariffDataManager = new TariffDataManager();
-                    tariffDataManager.CreateTariffTable(insertedTariffId);
+                insertedTariffId = Convert.ToInt32(tariffId);
+                // create tariff table
+                TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString);
+                tariffDataManager.CreateTariffTable(insertedTariffId);
 
             }
 
-               
-                object routeId;
-                int insertedRouteId=-1;
 
-                // Add route record to route_tables
-                String cmdText2 = @"INSERT INTO route_tables(route_table_name,description)
+            object routeId;
+            int insertedRouteId = -1;
+
+            // Add route record to route_tables
+            String cmdText2 = @"INSERT INTO route_tables(route_table_name,description)
                                SELECT @route_table_name, @description
                                WHERE  NOT EXISTS(SELECT 1 FROM  route_tables WHERE (route_table_name=@route_table_name))
   	                           returning  route_table_id;";
 
-                routeId = ExecuteScalarText(cmdText2, (cmd) =>
+            routeId = ExecuteScalarText(cmdText2, (cmd) =>
+            {
+                cmd.Parameters.AddWithValue("@route_table_name", carrierAccountName);
+                cmd.Parameters.AddWithValue("@description", carrierAccountName);
+            }
+            );
+
+            if (routeId != null)
+            {
+                insertedRouteId = Convert.ToInt32(routeId);
+                // create route table
+                RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString);
+                routeTableDataManager.CreateRouteTable(insertedRouteId);
+
+            }
+
+            // update endpoint (tariff_id and route_id columns)
+            if (endPoint.EndPointType == EndPointType.ACL)
+            {
+                //update access_list
+                String cmdText3 = "UPDATE access_list  SET  tariff_id=@tariff_id, route_table_id=@route_table_id WHERE  user_id = @user_id";
+                int recordsEffected = ExecuteNonQueryText(cmdText3, (cmd) =>
                 {
-                    cmd.Parameters.AddWithValue("@route_table_name", carrierAccountName);
-                    cmd.Parameters.AddWithValue("@description", carrierAccountName);
-                }
-                );
+                    cmd.Parameters.AddWithValue("@tariff_id", insertedTariffId);
+                    cmd.Parameters.AddWithValue("@route_table_id", insertedRouteId);
+                    cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
 
-                if (routeId != null)
+                });
+            }
+            else
+            {
+                //update users
+                String cmdText3 = "UPDATE users  SET  tariff_id=@tariff_id, route_table_id=@route_table_id WHERE  user_id = @user_id";
+                int recordsEffected = ExecuteNonQueryText(cmdText3, (cmd) =>
                 {
-                    insertedRouteId = Convert.ToInt32(routeId);
-                    // create route table
-                    RouteTableDataManager routeTableDataManager = new RouteTableDataManager();
-                    routeTableDataManager.CreateRouteTable(insertedRouteId);
+                    cmd.Parameters.AddWithValue("@tariff_id", insertedTariffId);
+                    cmd.Parameters.AddWithValue("@route_table_id", insertedRouteId);
+                    cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
 
-                }
-
-                // update endpoint (tariff_id and route_id columns)
-                if (endPoint.EndPointType == EndPointType.ACL)
-                {
-                    //update access_list
-                    String cmdText3 = "UPDATE access_list  SET  tariff_id=@tariff_id, route_table_id=@route_table_id WHERE  user_id = @user_id";
-                    int recordsEffected = ExecuteNonQueryText(cmdText3, (cmd) =>
-                    {
-                        cmd.Parameters.AddWithValue("@tariff_id", insertedTariffId);
-                        cmd.Parameters.AddWithValue("@route_table_id", insertedRouteId);
-                        cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
-
-                    });
-                }
-                else
-                {
-                    //update users
-                    String cmdText3 = "UPDATE users  SET  tariff_id=@tariff_id, route_table_id=@route_table_id WHERE  user_id = @user_id";
-                    int recordsEffected = ExecuteNonQueryText(cmdText3, (cmd) =>
-                    {
-                        cmd.Parameters.AddWithValue("@tariff_id", insertedTariffId);
-                        cmd.Parameters.AddWithValue("@route_table_id", insertedRouteId);
-                        cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
-
-                    });
-                }            
+                });
+            }
         }
 
         public bool AddTariffAndRouteToEndpoint(EndPointToUpdate tariffRouteIds, EndPoint endPoint)
         {
-                        
+
             // update new endpoint (tariff_id and route_id columns)
             if (endPoint.EndPointType == EndPointType.ACL)
             {
@@ -481,12 +485,12 @@ namespace NP.IVSwitch.Data.Postgres
                     cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
 
                 });
-            }    
+            }
 
 
             return true;
 
-         }
+        }
         private void MapEnum(EndPoint endPoint, out int currentState, out int rtpMode)
         {
             var currentStateValue = Enum.Parse(typeof(State), endPoint.CurrentState.ToString());
@@ -564,11 +568,11 @@ namespace NP.IVSwitch.Data.Postgres
 
             else
             {
- 
+
                 String cmdText = @"Select group_id  
                                    from users
                                    where user_id = @user_id";
-                int groupId  = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
+                int groupId = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
                 {
                     cmd.Parameters.AddWithValue("@user_id", endPointInfoList[0].EndPointId);
                 });
@@ -576,7 +580,7 @@ namespace NP.IVSwitch.Data.Postgres
                 return groupId;
             }
         }
-         
+
 
 
 
