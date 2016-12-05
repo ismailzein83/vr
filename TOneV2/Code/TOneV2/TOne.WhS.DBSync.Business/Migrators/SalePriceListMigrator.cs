@@ -64,7 +64,8 @@ namespace TOne.WhS.DBSync.Business
                     OwnerId = carrierAccount.CarrierAccountId,
                     CurrencyId = currency.CurrencyId,
                     SourceId = sourceItem.SourceId,
-                    EffectiveOn = sourceItem.BED
+                    EffectiveOn = sourceItem.BED,
+                    CreatedTime = sourceItem.BED
                 };
             else
             {
