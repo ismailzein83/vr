@@ -21,7 +21,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
-        
+
         [RequiredArgument]
         public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersWithPriceListFile { get; set; }
 
@@ -32,20 +32,33 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SalePLZoneChange> salePLZoneChanges = SalePLZoneChanges.Get(context);
 
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int sellingNumberPlanId;
-            List<int> customerIds = new List<int>();
-            
-            if(ownerType == SalePriceListOwnerType.SellingProduct)
+            IEnumerable<int> customerIds;
+            IEnumerable<CarrierAccountInfo> customersOfSellingProduct;
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
                 sellingNumberPlanId = GetSellingProductSellingNumberPlanId(ownerId);
-                IEnumerable<CarrierAccountInfo> customersOfSellingProduct = customerSellingProductManager.GetCustomersBySellingProductId(ownerId);
-                //TODO: check on nulls here
-                customerIds = customersOfSellingProduct.Select(itm => itm.CarrierAccountId).ToList();
+                customersOfSellingProduct = customerSellingProductManager.GetCustomersBySellingProductId(ownerId);
+                customerIds = customersOfSellingProduct.Select(itm => itm.CarrierAccountId);
             }
             else
             {
                 sellingNumberPlanId = GetCustomerSellingNumberPlanId(ownerId);
-                customerIds.Add(ownerId);
+                CarrierAccount customer = carrierAccountManager.GetCarrierAccount(ownerId);
+
+                customersOfSellingProduct = new List<CarrierAccountInfo>() 
+                { 
+                    new CarrierAccountInfo()
+                    {
+                        CarrierAccountId = ownerId,
+                        AccountType = customer.AccountType,
+                        Name = carrierAccountManager.GetCarrierAccountName(ownerId),
+                        SellingNumberPlanId = customer.SellingNumberPlanId
+                    }
+                };
+                customerIds = new List<int>() { ownerId };
             }
 
             var salePricelistFileContext = new SalePricelistFileContext
@@ -61,20 +74,20 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListManager salePricelistManager = new SalePriceListManager();
             salePricelistManager.SavePricelistFiles(salePricelistFileContext);
 
-            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(sellingNumberPlanId, salePLZoneChanges);
+            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(customersOfSellingProduct, salePLZoneChanges);
             CustomersWithPriceListFile.Set(context, customersToSavePricelistsFor);
         }
 
         #region Private Methods
 
-        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<SalePLZoneChange> zonesChanges)
+        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(IEnumerable<CarrierAccountInfo> customers, IEnumerable<SalePLZoneChange> zonesChanges)
         {
             Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = StructureZonesChangesByCountry(zonesChanges);
 
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
 
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            IEnumerable<CarrierAccountInfo> customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+
             DateTime today = DateTime.Today;
 
             List<CarrierAccountInfo> customersToSavePricelistsFor = new List<CarrierAccountInfo>();

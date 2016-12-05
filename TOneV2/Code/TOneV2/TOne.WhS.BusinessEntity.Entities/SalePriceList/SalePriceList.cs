@@ -30,5 +30,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long ProcessInstanceId { get; set; }
         public long FileId { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

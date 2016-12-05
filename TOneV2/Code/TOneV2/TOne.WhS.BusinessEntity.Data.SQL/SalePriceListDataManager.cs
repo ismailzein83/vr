@@ -62,6 +62,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 PriceListType = (SalePriceListType)GetReaderValue<byte>(reader, "PriceListType"),
                 ProcessInstanceId = GetReaderValue<long>(reader, "ProcessInstanceID"),
                 FileId = GetReaderValue<long>(reader, "FileID"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
 
             return salePriceList;
