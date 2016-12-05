@@ -27,19 +27,20 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("OwnerID", typeof(int));
             dt.Columns.Add("CurrencyID", typeof(int));
             dt.Columns.Add("SourceID", typeof(string));
-            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("EffectiveOn", typeof(DateTime));
+            dt.Columns.Add("CreatedTime", typeof(DateTime));
+            dt.Columns.Add("ID", typeof(int));
             dt.BeginLoadData();
             foreach (var item in salePriceLists)
             {
                 DataRow row = dt.NewRow();
-                int index = 0;
-                row[index++] = (int)item.OwnerType;
-                row[index++] = item.OwnerId;
-                row[index++] = item.CurrencyId;
-                row[index++] = item.SourceId;
-                row[index++] = startingId++;
-                row[index++] = item.EffectiveOn;
+                row["OwnerType"] = (int)item.OwnerType;
+                row["OwnerID"] = item.OwnerId;
+                row["CurrencyID"] = item.CurrencyId;
+                row["SourceID"] = item.SourceId;
+                row["EffectiveOn"] = item.EffectiveOn;
+                row["CreatedTime"] = item.CreatedTime;
+                row["ID"] = startingId++;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
