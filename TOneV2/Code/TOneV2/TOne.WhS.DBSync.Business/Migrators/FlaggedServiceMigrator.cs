@@ -54,9 +54,10 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<ZoneServiceConfig> itemsToAdd)
         {
             int startingId = 1;
-            
+
             foreach (ZoneServiceConfig zoneServiceConfig in itemsToAdd)
                 zoneServiceConfig.ZoneServiceConfigId = startingId++;
+
 
             foreach (ZoneServiceConfig zoneServiceConfig in itemsToAdd.OrderBy(item => item.SourceId))
             {
@@ -65,7 +66,7 @@ namespace TOne.WhS.DBSync.Business
                     if (item == zoneServiceConfig)
                         continue;
 
-                    if((Convert.ToInt32(item.SourceId) & Convert.ToInt32(zoneServiceConfig.SourceId)) == Convert.ToInt32(item.SourceId))
+                    if ((Convert.ToInt32(item.SourceId) & Convert.ToInt32(zoneServiceConfig.SourceId)) == Convert.ToInt32(zoneServiceConfig.SourceId))
                     {
                         zoneServiceConfig.Settings.ParentId = item.ZoneServiceConfigId;
                         break;
