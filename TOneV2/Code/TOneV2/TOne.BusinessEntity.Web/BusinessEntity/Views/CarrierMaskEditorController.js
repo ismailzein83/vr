@@ -66,17 +66,12 @@ function CarrierMaskEditorController($scope, CarrierMaskAPIService, LookUpAPISer
 
         UtilsService.waitMultipleAsyncOperations([loadCountries, loadCurrencies])
             .then(function () {
-
-                console.log($scope.optionsCurrencies.datasource);
-
-
                 if (editMode) {
                     $scope.isGettingData = true;
                     getCarrierMask().finally(function () {
                         $scope.isGettingData = false;
                     })
                 }
-
             })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);

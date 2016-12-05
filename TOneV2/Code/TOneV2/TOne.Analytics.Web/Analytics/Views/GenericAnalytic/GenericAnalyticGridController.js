@@ -91,10 +91,8 @@
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                console.log(dataRetrievalInput);
                 return GenericAnalyticAPIService.GetFiltered(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
                     $scope.currentSearchCriteria.groupKeys.length = 0;
                     
                     selectedGroupKeys.forEach(function (group) {

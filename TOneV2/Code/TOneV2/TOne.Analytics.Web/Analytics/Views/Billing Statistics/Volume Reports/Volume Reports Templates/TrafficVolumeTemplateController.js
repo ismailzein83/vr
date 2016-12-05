@@ -42,10 +42,7 @@ function TrafficVolumeTemplateController($scope, BillingStatisticsAPIService) {
             title: "Durations",
             valuePath: "Duration",
             type: "column"
-        }
-        ];
-        console.log(seriesDefinitions);
-        console.log(xAxisDefinition);
+        }];
         chartAPI.renderChart(data, chartDefinition, seriesDefinitions, xAxisDefinition);
 
     }

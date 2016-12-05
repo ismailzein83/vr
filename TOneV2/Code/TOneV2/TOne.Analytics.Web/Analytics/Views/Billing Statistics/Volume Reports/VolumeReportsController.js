@@ -44,7 +44,6 @@ function VolumeReportsController($scope, BillingStatisticsAPIService, VolumeRepo
         $scope.filter.attempts = $scope.attempts;
         $scope.filter.topDestination = $scope.topDestinations;
         $scope.filter.showChartsInPie = $scope.params.chartsOption;
-        console.log($scope.filter);
     }
 
     function loadTimePeriods() {

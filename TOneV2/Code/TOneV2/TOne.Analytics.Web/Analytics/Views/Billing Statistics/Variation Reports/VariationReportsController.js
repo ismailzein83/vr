@@ -95,7 +95,6 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
                     if (response.TotalValues != null) {
                         $scope.summarydata = response;
                         $scope.TotalValues = response.TotalValues;
-                        console.log($scope.summarydata);
                         mainGridAPI.setSummary($scope.summarydata);
                     }
                      

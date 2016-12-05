@@ -11,27 +11,15 @@
         load();
 
         function defineScope() {
-            console.log($scope.dataItem);
             Object.getOwnPropertyNames($scope.dataItem.MeasureValues).forEach(function (item) {
                 measureFields.push(GenericAnalyticMeasureEnum[item].value);
             });
             $scope.measures = Object.getOwnPropertyNames($scope.dataItem.MeasureValues);
-            
-            //$scope.viewScope.measures.forEach(function (item) {
-            //    measureFields.push(item.value);            
-            //});
-            //$scope.measures = $scope.viewScope.measures;
-
-
             $scope.selectedGroupKey;
             $scope.dimensions = [];
-
             $scope.groupKeySelectionChanged = function () {
-                
-
                 if ($scope.selectedGroupKeyIndex != undefined) {
                     $scope.selectedGroupKey = $scope.dimensions[$scope.selectedGroupKeyIndex];
-                    
                     if (!$scope.selectedGroupKey.isDataLoaded && $scope.selectedGroupKey.gridAPI != undefined) {
                         retrieveData($scope.selectedGroupKey, false);
                     }
@@ -134,8 +122,6 @@
         }
 
         function loadGroupKeys() {
-
-            console.log($scope.gridParentScope);
             for (var prop in $scope.viewScope.groupKeys) {
                 var groupKey = {
                     name: $scope.viewScope.groupKeys[prop].name,

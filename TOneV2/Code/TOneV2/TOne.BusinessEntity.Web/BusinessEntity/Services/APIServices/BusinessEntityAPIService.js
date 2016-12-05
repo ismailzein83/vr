@@ -20,7 +20,6 @@ var serviceObj = function (BaseAPIService) {
             });
     }
     function GetSalesZones(nameFilter) {
-        console.log("Use ZoneApiService");
         return BaseAPIService.get("/api/BusinessEntity/GetSalesZones",
             {
                 nameFilter: nameFilter

@@ -214,7 +214,6 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
 
     ];
     $scope.testValueChanged = function () {
-        console.log("ali")
     };
     var choicesApi;
     $scope.choicesReady = function (api) {

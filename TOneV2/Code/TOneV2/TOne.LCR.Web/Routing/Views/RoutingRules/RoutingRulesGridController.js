@@ -9,7 +9,6 @@ function RoutingRulesGridController($scope, VRModalService, VRNotificationServic
         if ($scope.dataItem != undefined)//the template is located in a data-grid expandable section
             $scope.routingRulesDataSource = [];
         $scope.gridReady = function (api) {
-            console.log('gridReady');
             gridAPI = api;
         }
     }
@@ -31,18 +30,7 @@ function RoutingRulesGridController($scope, VRModalService, VRNotificationServic
         $scope.gridMenuActions = [{
             name: "Edit",
             clicked: editRule
-        }
-        //,
-        //{
-        //    name: "End",
-        //    clicked: endRule
-        //}
-        //,
-        //{
-        //    name: "Delete",
-        //    clicked: deleteRule
-        //}
-        ];
+        }];
     }
 
     function editRule(ruleObj) {

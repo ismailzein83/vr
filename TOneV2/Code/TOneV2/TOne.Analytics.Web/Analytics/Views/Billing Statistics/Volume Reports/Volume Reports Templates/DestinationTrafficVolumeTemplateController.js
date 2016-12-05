@@ -19,7 +19,6 @@ function DestinationTrafficVolumeTemplateController($scope, BillingStatisticsAPI
 
         $scope.attemptsChartReady = function (api) {
             attemptsChartAPI = api;
-            console.log(attemptsFlag);
             if(attemptsFlag)
                 updateAttemptsChart($scope.attemptsData);
         };
@@ -55,7 +54,6 @@ function DestinationTrafficVolumeTemplateController($scope, BillingStatisticsAPI
                });
     }
     function updateDurationChart(data) {
-        //    console.log(data.length);
         var chartDefinition = {
             type: "column",
             title: "Destination Traffic Volumes -Duration",
@@ -66,21 +64,15 @@ function DestinationTrafficVolumeTemplateController($scope, BillingStatisticsAPI
 
         var xAxisDefinition = { titlePath: "xValue" };
         var times = [];
-
-        //angular.forEach(data, function (itm) { times.push(itm.Time) } )
         var period = data[0].Time.length;
         for (var i = 0; i < period; i++)
             times.push(data[0].Time[i]);
-        //console.log("timesss");
-        //console.log(times);
         angular.forEach(times, function (itm) {
             result.push({
                 xValue: itm,
                 Values: []
             });
         });
-        //     console.log(result);
-
         for (var i = 0; i < data.length; i++) {
             var dataItem = data[i];
             seriesDefinitions.push({
@@ -92,18 +84,10 @@ function DestinationTrafficVolumeTemplateController($scope, BillingStatisticsAPI
                 result[j].Values[i] = dataItem.Values[j];
             }
         }
-        console.log("resultt");
-        console.log(result);
-        console.log("seriess");
-        console.log(seriesDefinitions);
-        console.log("XAXisss");
-        console.log(xAxisDefinition);
-
         durationChartAPI.renderChart(result, chartDefinition, seriesDefinitions, xAxisDefinition);
 
     }
     function updateAttemptsChart(data) {
-        console.log(data);
         var chartDefinition2 = {
             type: "column",
             title: "Destination Traffic Volumes -Attempts",

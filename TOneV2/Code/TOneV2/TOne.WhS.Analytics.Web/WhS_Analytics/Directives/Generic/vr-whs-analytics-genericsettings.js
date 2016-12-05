@@ -64,7 +64,6 @@ function (WhS_Analytics_GenericAnalyticMeasureEnum) {
                         }
                     }
                 }
-                console.log(ctrl.measureThresholds);
 
             };
 

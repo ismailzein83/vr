@@ -300,7 +300,6 @@ app.directive('vrWhsSalesZoneService', ['WhS_Sales_RatePlanAPIService', 'WhS_Sal
             zoneBED.setDate(dateTab[2]);
             var newServiceBED = WhS_Sales_RatePlanUtilsService.getNowPlusDays(settings.newServiceDayOffset);
             var maxBED = (newServiceBED > zoneBED) ? newServiceBED : zoneItem.ZoneBED;
-            //console.log(maxBED);
             return maxBED;
         }
 

@@ -21,7 +21,6 @@ appControllers.controller('TestNewController',
                 $scope.currentData = responce;
             })
             .finally(function () {
-                console.log("Success");
             });
         }
         function getCarrierAccounts(name, companyName) {
@@ -29,7 +28,6 @@ appControllers.controller('TestNewController',
                 $scope.CarrierAccounts = responce;
             })
             .finally(function () {
-                console.log("Success");
             });
         }
         $scope.saveCarrier = function () {
@@ -39,7 +37,6 @@ appControllers.controller('TestNewController',
                 $scope.InsertedData = responce;
             })
             .finally(function () {
-                console.log("Success");
             });
         }
     })

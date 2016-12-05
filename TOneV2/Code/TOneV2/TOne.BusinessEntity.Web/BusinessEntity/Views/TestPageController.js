@@ -180,7 +180,6 @@ function TestPageController($scope, UsersAPIService, UtilsService, VRModalServic
                     var index = UtilsService.getItemIndexByVal($scope.users, newObj.children[i].roleId, 'UserId');
                     $scope.selectedUsers.push($scope.users[index]);
                 }
-                console.log($scope.selectedUsers);
             }
         }, false);
 

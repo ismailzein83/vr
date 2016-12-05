@@ -119,7 +119,6 @@ function CustomerInvoiceController($scope, CarrierAccountAPIService, CarrierType
 
             return CustomerInvoiceAPIService.GetFilteredCustomerInvoices(dataRetrievalInput)
                 .then(function (response) {
-                    console.log(response);
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -160,17 +159,11 @@ function CustomerInvoiceController($scope, CarrierAccountAPIService, CarrierType
 
     function retrieveData() {
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
-        console.log(pageInfo);  
         var query = {
             SelectedCustomerID: ($scope.selectedCustomer != undefined) ? $scope.selectedCustomer.CarrierAccountID : null,
             FromDate: $scope.fromDate,
-            ToDate: $scope.toDate,
-            //FromRow: ,
-            //ToRow:
-
+            ToDate: $scope.toDate
         };
-
-        console.log(query);
         return gridApi.retrieveData(query);
     }
 

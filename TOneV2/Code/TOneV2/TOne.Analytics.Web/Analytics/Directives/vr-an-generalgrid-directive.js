@@ -36,7 +36,6 @@
                     ctrl.onReady(gridApi);
 
                 gridApi.LoadGrid = function () {
-                    console.log(ctrl);
                     if (ctrl.periods.length > 0 || ctrl.dimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else

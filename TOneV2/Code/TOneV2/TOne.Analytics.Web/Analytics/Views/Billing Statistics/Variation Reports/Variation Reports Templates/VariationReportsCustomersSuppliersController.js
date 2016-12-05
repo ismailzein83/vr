@@ -116,7 +116,6 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
             }, 1);
         }).finally(function () {
             $scope.isGettingData = false;   
-            console.log($scope.data);
         });
     }
 };

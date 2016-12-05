@@ -56,7 +56,6 @@
 
             genericSettingsReadyPromiseDeferred.promise.then(function () {
                 var payload = loadPayload();
-                console.log(payload);
                 VRUIUtilsService.callDirectiveLoad(genericSettingsAPI, payload, loadGenericSettingsPromiseDeferred);
             });
             return loadGenericSettingsPromiseDeferred.promise;

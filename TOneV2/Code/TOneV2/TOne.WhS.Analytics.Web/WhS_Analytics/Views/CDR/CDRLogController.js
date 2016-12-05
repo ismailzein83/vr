@@ -110,7 +110,6 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
                     },
                     selectedIds: receivedSupplierZoneIds
                 };
-                console.log(payload);
                 var setLoader = function (value) {
                     $scope.isLoadingSupplierZonesSection = value;
                 };

@@ -11,7 +11,6 @@
         function defineScope() {
             $scope.selectedvaluesneeded=[];
             $scope.selectionchanged = function () {
-                console.log($scope.selectedvaluesneeded);
             }
             $scope.selectedvalues = [];
 
@@ -26,9 +25,6 @@
                     modalScope.onTreeSelected = function (selectedtNode) {
                         $scope.currentNode = undefined;
                         $scope.selectedtNode = selectedtNode;
-
-                        console.log($scope.selectedtNode.EntityId);
-
                         //Load Selected
                         CarrierGroupAPIService.GetCarrierGroupMembersDesc($scope.selectedtNode.EntityId).then(function (response) {
                             $scope.selectedvalues = [];
