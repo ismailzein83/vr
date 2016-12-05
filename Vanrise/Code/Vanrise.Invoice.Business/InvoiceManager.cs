@@ -116,6 +116,15 @@ namespace Vanrise.Invoice.Business
                     insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
+
+                    BillingPeriodInfoManager billingPeriodInfoManager = new BillingPeriodInfoManager();
+                    BillingPeriodInfo billingPeriodInfo = new BillingPeriodInfo
+                    {
+                        InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
+                        PartnerId = createInvoiceInput.PartnerId,
+                        NextPeriodStart = createInvoiceInput.ToDate.AddDays(1)
+                    };
+                    billingPeriodInfoManager.InsertOrUpdateBillingPeriodInfo(billingPeriodInfo);
                 }
                 else
                 {
@@ -165,7 +174,44 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
         }
-       
+
+
+        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId)
+        {
+            BillingInterval billingInterval = new Entities.BillingInterval();
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            ExtendedSettingsBillingPeriodContext extendedSettingsBillingPeriodContext = new ExtendedSettingsBillingPeriodContext
+            {
+                PartnerId = partnerId
+            };
+            var billingperiod = invoiceType.Settings.ExtendedSettings.GetBillingPeriod(extendedSettingsBillingPeriodContext);
+            var billingPeriodInfo = new BillingPeriodInfoManager().GetBillingPeriodInfoById(partnerId, invoiceTypeId);
+            if(billingPeriodInfo != null)
+            {
+                billingInterval.FromDate = billingPeriodInfo.NextPeriodStart;
+                billingInterval.ToDate = billingperiod.GetPeriod(billingPeriodInfo.NextPeriodStart);
+            }
+            else
+            {
+                InitialPeriodInfoContext initialPeriodInfoContext = new Context.InitialPeriodInfoContext
+                {
+                  PartnerId = partnerId
+                };
+                invoiceType.Settings.ExtendedSettings.GetInitialPeriodInfo(initialPeriodInfoContext);
+                StartDateCalculationMethodContext startDateCalculationMethodContext = new StartDateCalculationMethodContext
+                {
+                    InitialStartDate = initialPeriodInfoContext.InitialStartDate,
+                    BillingPeriod = billingperiod,
+                    PartnerCreatedDate = initialPeriodInfoContext.PartnerCreationDate
+                };
+                invoiceType.Settings.StartDateCalculationMethod.CalculateDate(startDateCalculationMethodContext);
+                billingInterval.FromDate = startDateCalculationMethodContext.FromDate;
+                billingInterval.ToDate = startDateCalculationMethodContext.ToDate;
+            }
+            return billingInterval;
+        }
+
         #endregion
 
         #region Mappers

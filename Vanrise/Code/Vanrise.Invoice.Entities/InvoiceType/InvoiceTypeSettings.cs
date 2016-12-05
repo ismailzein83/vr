@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
 {
     public class InvoiceTypeSettings
     {
+        public StartDateCalculationMethod StartDateCalculationMethod { get; set; }  
         public Guid InvoiceDetailsRecordTypeId { get; set; }
         public List<InvoiceAction> InvoiceActions { get; set; }
         public List<InvoiceGeneratorAction> InvoiceGeneratorActions { get; set; }
@@ -17,7 +18,6 @@ namespace Vanrise.Invoice.Entities
         public InvoiceGridSettings InvoiceGridSettings { get; set; }
         public InvoiceSerialNumberSettings InvoiceSerialNumberSettings { get; set; }
         public List<InvoiceSubSection> SubSections { get; set; }
-
         public InvoiceTypeSecurity Security { get; set; }
 
     }

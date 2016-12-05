@@ -45,6 +45,8 @@
         var generatePermissionAPI;
         var generatePermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var startCalculationMethodAPI;
+        var startCalculationMethodPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var dataRecordTypeEntity;
         defineScope();
@@ -87,7 +89,10 @@
                 serialNumberPatternAPI = api;
                 serialNumberPatternReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onStartCalculationMethodDirectiveReady = function (api) {
+                startCalculationMethodAPI = api;
+                startCalculationMethodPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onSubSectionsReady = function (api) {
                 subSectionsAPI = api;
                 subSectionsSectionReadyPromiseDeferred.resolve();
@@ -379,8 +384,16 @@
                 }
                
 
+                function loadStartCalculationMethod() {
+                    var startCalculationMethodLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission])
+                    startCalculationMethodPromiseDeferred.promise.then(function () {
+                        var startCalculationMethodPayload = invoiceTypeEntity != undefined ? invoiceTypeEntity.StartDateCalculationMethod : undefined;
+                        VRUIUtilsService.callDirectiveLoad(startCalculationMethodAPI, startCalculationMethodPayload, startCalculationMethodLoadPromiseDeferred);
+                    });
+                    return startCalculationMethodLoadPromiseDeferred.promise;
+                }
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

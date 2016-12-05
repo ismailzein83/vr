@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingCycle\BillingInterval.cs" />
+    <Compile Include="BillingCycle\BillingPeriod.cs" />
+    <Compile Include="BillingCycle\BillingPeriodInfo.cs" />
+    <Compile Include="BillingCycle\Configs\BillingPeriodConfig.cs" />
+    <Compile Include="BillingCycle\Configs\StartDateCalculationMethodConfig.cs" />
+    <Compile Include="BillingCycle\StartDateCalculationMethod.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IInvoiceTypeManager.cs" />

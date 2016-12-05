@@ -31,9 +31,14 @@
         function GetInvoiceGeneratorFilterConditionConfigs()
         {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGeneratorFilterConditionConfigs"));
-
         }
-
+        function GetBillingPeriodTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetBillingPeriodTemplateConfigs"));
+        }
+        function GetStartDateCalculationMethodConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetStartDateCalculationMethodConfigs"));
+        }
         return ({
             GetInvoiceActionSettingsConfigs: GetInvoiceActionSettingsConfigs,
             GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
@@ -42,7 +47,9 @@
             GetItemsFilterConfigs: GetItemsFilterConfigs,
             GetInvoiceGridFilterConditionConfigs: GetInvoiceGridFilterConditionConfigs,
             GetInvoiceExtendedSettingsConfigs: GetInvoiceExtendedSettingsConfigs,
-            GetInvoiceGeneratorFilterConditionConfigs: GetInvoiceGeneratorFilterConditionConfigs
+            GetInvoiceGeneratorFilterConditionConfigs: GetInvoiceGeneratorFilterConditionConfigs,
+            GetBillingPeriodTemplateConfigs: GetBillingPeriodTemplateConfigs,
+            GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs
         });
     }
 

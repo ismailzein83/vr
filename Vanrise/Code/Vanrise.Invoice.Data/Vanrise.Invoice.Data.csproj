@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBillingPeriodInfoDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IInvoiceDataManager.cs" />
     <Compile Include="IInvoiceItemDataManager.cs" />

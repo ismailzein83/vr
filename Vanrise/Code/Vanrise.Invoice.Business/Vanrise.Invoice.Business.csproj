@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingPeriodInfoManager.cs" />
+    <Compile Include="Context\ExtendedSettingsBillingPeriodContext.cs" />
+    <Compile Include="Context\InitialPeriodInfoContext.cs" />
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
     <Compile Include="Context\InvoiceRDLCFileConverterContext.cs" />
@@ -53,6 +56,7 @@
     <Compile Include="Context\PreviewInvoiceActionContext.cs" />
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
     <Compile Include="Context\RDLCReportParameterValueContext.cs" />
+    <Compile Include="Context\StartDateCalculationMethodContext.cs" />
     <Compile Include="Extensions\InvoiceItemSubSection.cs" />
     <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />
     <Compile Include="InvoiceItemManager.cs" />

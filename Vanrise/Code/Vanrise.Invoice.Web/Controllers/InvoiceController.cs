@@ -88,7 +88,13 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceDetail(invoiceId);
         }
-
+        [HttpGet]
+        [Route("GetBillingInterval")]
+        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetBillingInterval(invoiceTypeId, partnerId);
+        }
       
     }
 }

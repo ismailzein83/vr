@@ -53,5 +53,15 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<InvoiceExtendedSettingsConfig>(InvoiceExtendedSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<BillingPeriodConfig> GetBillingPeriodTemplateConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<BillingPeriodConfig>(BillingPeriodConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<StartDateCalculationMethodConfig> GetStartDateCalculationMethodConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<StartDateCalculationMethodConfig>(StartDateCalculationMethodConfig.EXTENSION_TYPE);
+        }
     }
 }

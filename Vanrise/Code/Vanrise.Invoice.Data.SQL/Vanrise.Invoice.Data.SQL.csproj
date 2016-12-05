@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingPeriodInfoDataManager.cs" />
     <Compile Include="InvoiceDataManager.cs" />
     <Compile Include="InvoiceItemDataManager.cs" />
     <Compile Include="InvoiceTypeDataManager.cs" />
