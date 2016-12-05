@@ -88,6 +88,7 @@
     <Compile Include="ApplySaleZoneServicePreviewsToDB.cs" />
     <Compile Include="BackupData.cs" />
     <Compile Include="GetExistingCustomerCountries.cs" />
+    <Compile Include="LogEmailedCustomers.cs" />
     <Compile Include="PrepareCustomerCountryPreviews.cs" />
     <Compile Include="PrepareExistingCustomerCountries.cs" />
     <Compile Include="PrepareZoneChanges.cs" />
