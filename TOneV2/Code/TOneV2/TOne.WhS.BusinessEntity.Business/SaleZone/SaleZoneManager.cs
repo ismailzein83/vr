@@ -32,14 +32,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
 		{
-			var saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);
-			Func<SaleZone, bool> filterExpression = (prod) =>
-					 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
-					&& (input.Query.Countries == null || input.Query.Countries.Contains(prod.CountryId))
-				  && ((prod.BED <= input.Query.EffectiveOn))
-				  && ((!prod.EED.HasValue || (prod.EED > input.Query.EffectiveOn)));
-
-			return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZonesBySellingNumberPlan.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
+			IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);
+			Func<SaleZone, bool> filterFunc = (saleZone) =>
+			{
+				if (input.Query.GetEffectiveOrFuture.HasValue && input.Query.GetEffectiveOrFuture.Value)
+				{
+					if (!saleZone.IsEffectiveOrFuture(input.Query.EffectiveOn))
+						return false;
+				}
+				else if (!saleZone.IsEffective(input.Query.EffectiveOn))
+					return false;
+				
+				if (input.Query.Countries != null && !input.Query.Countries.Contains(saleZone.CountryId))
+					return false;
+				
+				if (input.Query.Name != null && !saleZone.Name.ToLower().Contains(input.Query.Name.ToLower()))
+					return false;
+				
+				return true;
+			};
+			return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZones.ToBigResult(input, filterFunc, SaleZoneDetailMapper));
 		}
 
 		public IEnumerable<SaleZone> GetSaleZonesBySellingNumberPlan(int sellingNumberPlanId)

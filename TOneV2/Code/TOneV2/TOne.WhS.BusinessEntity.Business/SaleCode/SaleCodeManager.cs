@@ -139,7 +139,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<SaleCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BaseSaleCodeQueryHandler> input)
             {
-                ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
                 return input.Query.GetFilteredSaleCodes();
             }
         }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SaleZoneService.$inject = ['WhS_BE_SellingNumberPlanService', 'VRModalService'];
+    SaleZoneService.$inject = ['WhS_BE_SellingNumberPlanService', 'UtilsService', 'VRModalService'];
 
-    function SaleZoneService(WhS_BE_SellingNumberPlanService, VRModalService) {
+    function SaleZoneService(WhS_BE_SellingNumberPlanService, UtilsService, VRModalService) {
         return ({
             addSaleZone: addSaleZone,
             editSaleZone: editSaleZone,
@@ -44,14 +44,15 @@
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Sale Zones";
-            drillDownDefinition.directive = "vr-whs-be-saleZone-grid";
+            drillDownDefinition.directive = "vr-whs-be-salezone-grid";
 
             drillDownDefinition.loadDirective = function (directiveAPI, sellingNumberPlanItem) {
 
                 sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
                 var query = {
-                    SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
-                    EffectiveOn: new Date()
+                	SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
+                	EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+					GetEffectiveOrFuture: true
                 };
 
                 return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);

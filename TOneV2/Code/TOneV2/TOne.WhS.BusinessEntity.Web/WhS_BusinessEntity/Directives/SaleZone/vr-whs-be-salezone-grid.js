@@ -1,105 +1,97 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleZoneAPIService", "WhS_BE_SaleZoneService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE_SaleZoneService, VRUIUtilsService) {
+app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleZoneAPIService", "WhS_BE_SaleZoneService", "VRUIUtilsService", function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE_SaleZoneService, VRUIUtilsService) {
 
-    var directiveDefinitionObject = {
+	return {
+		restrict: "E",
+		scope: {
+			onReady: "="
+		},
+		controller: function ($scope, $element, $attrs) {
+			var ctrl = this;
+			var saleZoneGrid = new SaleZoneGrid($scope, ctrl, $attrs);
+			saleZoneGrid.initializeController();
+		},
+		controllerAs: "ctrl",
+		bindToController: true,
+		templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SaleZoneGridTemplate.html"
+	};
 
-        restrict: "E",
-        scope: {
-            onReady: "="
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var grid = new SaleZoneGrid($scope, ctrl, $attrs);
-            grid.initializeController();
-        },
-        controllerAs: "ctrl",
-        bindToController: true,
-        compile: function (element, attrs) {
+	function SaleZoneGrid($scope, ctrl, $attrs) {
 
-        },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SaleZone/Templates/SaleZoneGridTemplate.html"
+		this.initializeController = initializeController;
 
-    };
+		var gridAPI;
+		var gridDrillDownTabsObj;
 
-    function SaleZoneGrid($scope, ctrl, $attrs) {
+		var effectiveOn;
+		var getEffectiveOrFuture;
 
-        var gridAPI;
-        this.initializeController = initializeController;
-        var effectiveOn;
-        function initializeController() {
-            $scope.showGrid = false;
-            var gridDrillDownTabsObj;
-            $scope.salezones = [];
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
+		function initializeController() {
 
+			$scope.salezones = [];
+			$scope.showGrid = false;
 
-                var drillDownDefinitions = [];
-                var drillDownDefinition = {};
+			$scope.onGridReady = function (api) {
+				gridAPI = api;
+				var drillDownDefinitions = getDrillDownDefinitions();
+				gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+				defineAPI();
+			};
+			$scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+				return WhS_BE_SaleZoneAPIService.GetFilteredSaleZones(dataRetrievalInput).then(function (response) {
+					$scope.showGrid = true;
+					if (response && response.Data) {
+						for (var i = 0; i < response.Data.length; i++)
+							gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+					}
+					onResponseReady(response);
+				}).catch(function (error) {
+					VRNotificationService.notifyException(error, $scope);
+				});
+			};
+		}
 
-                drillDownDefinition.title = "Sale Codes";
-                drillDownDefinition.directive = "vr-whs-be-salecode-grid";
+		function defineAPI() {
+			var api = {};
 
-                drillDownDefinition.loadDirective = function (directiveAPI, saleZoneItem) {
-                    saleZoneItem.saleCodeGridAPI = directiveAPI;
-                    var queryHandler = {
-                        $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business"
-                    };
+			api.loadGrid = function (query) {
+				effectiveOn = query.EffectiveOn;
+				getEffectiveOrFuture = query.GetEffectiveOrFuture;
+				return gridAPI.retrieveData(query);
+			};
 
-                    queryHandler.Query = {
-                        ZonesIds: [saleZoneItem.Entity.SaleZoneId],
-                        EffectiveOn: effectiveOn
-                    };
+			if (ctrl.onReady != null)
+				ctrl.onReady(api);
+		}
 
-                    var payload = {
-                        queryHandler: queryHandler,
-                        hidesalezonecolumn: true
-                    };
-                    
-                    return saleZoneItem.saleCodeGridAPI.loadGrid(payload);
-                };
-                drillDownDefinitions.push(drillDownDefinition);
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+		function getDrillDownDefinitions() {
 
+			var drillDownDefinitions = [];
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
-                   
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        effectiveOn = query.EffectiveOn;
-                        return gridAPI.retrieveData(query);
-                    };
-                   
-                    return directiveAPI;
-                }
-            };
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SaleZoneAPIService.GetFilteredSaleZones(dataRetrievalInput)
-                    .then(function (response) {
+			var saleCodeDrillDownDefinition = {
+				title: "Sale Codes",
+				directive: 'vr-whs-be-salecode-grid',
+				loadDirective: function (saleCodeGridAPI, saleZoneDataItem) {
+					saleZoneDataItem.saleCodeGridAPI = saleCodeGridAPI;
+					var queryHandler = {
+						$type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business"
+					};
+					queryHandler.Query = {
+						ZonesIds: [saleZoneDataItem.Entity.SaleZoneId],
+						EffectiveOn: effectiveOn,
+						GetEffectiveOrFuture: getEffectiveOrFuture
+					};
+					var saleCodeGridPayload = {
+						queryHandler: queryHandler,
+						hidesalezonecolumn: true
+					};
+					return saleZoneDataItem.saleCodeGridAPI.loadGrid(saleCodeGridPayload);
+				}
+			};
 
-                        if (response && response.Data) {
-
-                            for (var i = 0; i < response.Data.length; i++) {
-                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
-                            }
-                        }
-                        $scope.showGrid = true;
-                         onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-            };
-        }
-
-       
-
-    }
-
-    return directiveDefinitionObject;
-
+			drillDownDefinitions.push(saleCodeDrillDownDefinition);
+			return drillDownDefinitions;
+		}
+	}
 }]);

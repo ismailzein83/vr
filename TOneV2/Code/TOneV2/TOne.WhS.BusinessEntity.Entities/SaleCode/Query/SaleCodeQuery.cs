@@ -14,6 +14,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Code { get; set; }
 
-        public DateTime? EffectiveOn { get; set; }
+        public DateTime EffectiveOn { get; set; }
+
+		public bool? GetEffectiveOrFuture { get; set; }
     }
 }

@@ -24,11 +24,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #region Public Methods
         public IEnumerable<SaleCode> GetFilteredSaleCodes(SaleCodeQuery query)
         {
-            string listOfZoneIds = null;
+            string zoneIdsAsString = null;
             if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
-                listOfZoneIds = string.Join<long>(",", query.ZonesIds);
-
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.EffectiveOn, query.Code, query.SellingNumberPlanId, listOfZoneIds);
+				zoneIdsAsString = string.Join<long>(",", query.ZonesIds);
+			return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.SellingNumberPlanId, zoneIdsAsString, query.Code, query.EffectiveOn, query.GetEffectiveOrFuture);
         }
 
         public IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query)

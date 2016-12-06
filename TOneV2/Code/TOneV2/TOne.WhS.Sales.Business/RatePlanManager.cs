@@ -296,6 +296,20 @@ namespace TOne.WhS.Sales.Business
 			int sellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
 			IEnumerable<SaleZone> soldSaleZones = saleZoneManager.GetSaleZonesByOwner(ownerType, ownerId, sellingNumberPlanId, effectiveOn, includeFutureZones);
 
+			if (ownerType == SalePriceListOwnerType.Customer)
+			{
+				var customerCountryManager = new CustomerCountryManager();
+				IEnumerable<CustomerCountry2> customerCountries = customerCountryManager.GetCustomerCountries(ownerId, effectiveOn, false);
+
+				var countriesById = new Dictionary<int, List<CustomerCountry2>>();
+
+				foreach (CustomerCountry2 country in customerCountries)
+				{
+					List<CustomerCountry2> countryList;
+					countriesById.TryGetValue(country.CountryId, )
+				}
+			}
+
 			IEnumerable<SaleZone> draftSoldSaleZones = null;
 			if (ownerType == SalePriceListOwnerType.Customer)
 				draftSoldSaleZones = GetCustomerDraftSaleZones(ownerId, sellingNumberPlanId, effectiveOn, includeFutureZones);
