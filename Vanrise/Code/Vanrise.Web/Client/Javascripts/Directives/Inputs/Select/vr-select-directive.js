@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $location, $anchorScroll) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
@@ -46,7 +46,8 @@
                 ondeselectitem: '=',
                 onaddclicked: "=",
                 hint: '@',
-                haspermission: '='
+                haspermission: '=',
+                hasviewpermission: '='
             },
             controller: function ($scope, $element, $attrs) {
                 if (rootScope == undefined)
@@ -75,6 +76,14 @@
                     controller.haspermission().then(function (isAllowed) {
                         if (!isAllowed)
                             controller.hideAddButton = true;
+                    });
+                }
+
+                controller.showViewButton = true;
+                if (controller.hasviewpermission != undefined && typeof (controller.hasviewpermission) == 'function') {
+                    controller.hasviewpermission().then(function (isAllowed) {
+                        if (!isAllowed)
+                            controller.showViewButton = false;
                     });
                 }
 
@@ -108,6 +117,31 @@
                             });
                         }, 250);
                     }
+                else {
+                    setTimeout(function () {
+                        if (!controller.isMultiple()) {
+                            if (controller.selectedvalues !=undefined) {
+                                 var index = controller.getObjectValue(controller.selectedvalues);
+                                 $('#' + index).find('a').first().addClass('mark-select-selected');
+                                 $('.vr-select-height').first().stop().animate({
+                                     scrollTop: parseInt($('#' + index).attr("dataindex")) * 25
+                                 }, 1);
+                                 $('.mark-select').mouseover(function() {
+                                     $('.mark-select').removeClass('mark-select-selected');
+                                });
+                            }
+                        }
+                        else {
+                            if (controller.selectedvalues.length > 0) {
+                                var index = controller.getObjectValue(controller.selectedvalues[controller.selectedvalues.length - 1]);
+                                if ($('#' + index).offset()!=undefined)
+                                    $('.vr-select-container').first().stop().animate({
+                                        scrollTop:  parseInt($('#' + index).attr("dataindex")) * 25 - 25
+                                    }, 1);
+                            }
+                        }
+                      }, 1);
+                }
                 }
 
                 //Configuration
@@ -383,7 +417,8 @@
 
                         }
                         else
-                            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();                        
+                   
                     });
 
                     $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function () {
@@ -664,7 +699,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$location', '$anchorScroll'];
 
     app.directive('vrSelect', vrSelectDirective);
 
