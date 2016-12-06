@@ -30,6 +30,25 @@
                 if (settings.useModalTemplate === true) {
                     modalUrl = '/Client/Javascripts/Services/ModalService/vr-modal-service.html';
                     modalScope.templateUrl = viewUrl;
+                    var num = 50;
+                    if (settings.width != undefined)
+                        num = parseFloat(settings.width.substring(0, settings.width.length));
+                    var sizeOptions = {
+                        small: "vr-modal-sm",
+                        medium: "vr-modal-md",
+                        large: "vr-modal-lg"
+                    };
+                    if (settings.size != undefined) {
+                        classmodal = sizeOptions[settings.size];
+                    }
+                    else {
+                        var classmodal = "vr-modal-sm";
+                        if (num >= 50)
+                            classmodal = "vr-modal-md";
+                        if (num >= 80)
+                            classmodal = "vr-modal-lg";
+                    }
+                    modalScope.resClass = classmodal;
                 }
 
                 modalScope.modalWidth = settings.width;

@@ -10,14 +10,34 @@ app.directive('vrModalcontent', [function () {
             tElement.attr['tabindex'] = "-1";
             tElement.attr['role'] = "dialog";
             tElement.attr['aria-hidden'] = "true";
-            var widthPart = "";
-            if (tAttrs.width != undefined)
-                widthPart = '\'width\': ' + tAttrs.width;
-
-            
-            //'<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">'
-            var style = "";
-            if ($('.modal-dialog').length > 0) {
+            var resClass = "";
+            var classmodal = "";
+            if (tAttrs.resclass != undefined)
+                resClass = 'ng-class="' + tAttrs.resclass + '"';
+            else {
+                var num;
+                if (tAttrs.width != undefined) {
+                    num = parseFloat(tAttrs.width.substring(1, tAttrs.width.length - 1));
+                }
+                else
+                    num = 50;
+                var sizeOptions = {
+                    small: "vr-modal-sm",
+                    medium: "vr-modal-md",
+                    large: "vr-modal-lg"
+                };
+                if (tAttrs.size != undefined) {
+                    classmodal = sizeOptions[tAttrs.size];
+                }
+                else {
+                    classmodal = "vr-modal-sm";
+                    if (num >= 50)
+                        classmodal = "vr-modal-md";
+                    if (num >= 80)
+                        classmodal = "vr-modal-lg";
+                }
+             }  
+             if ($('.modal-dialog').length > 0) {
                 style = "top:" + ($('.modal-dialog').length) * 10 + "px; left:" + ($('.modal-dialog').length) * 10 + "px;";
                 if ($('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly') == undefined) {
                     $('.modal-header').eq($('.modal-dialog').length - 1).css({
@@ -26,7 +46,7 @@ app.directive('vrModalcontent', [function () {
                 }
                
             }
-            var newElement = '<div class="modal-dialog"  ng-style="{ ' + widthPart + ' }" style="' + style + '" >'
+            var newElement = '<div class="modal-dialog ' + classmodal + '" ' + resClass + '  >'
                                   + '  <div class="modal-content" >'
                                     + '    <div class="modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'

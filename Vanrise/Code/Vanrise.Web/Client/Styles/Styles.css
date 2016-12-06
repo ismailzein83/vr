@@ -461,6 +461,13 @@ a.mark-select{
     color:#666;
 
 }
+a.mark-select-selected {
+    background-color: #D0D0D0 !important;
+    border-color: #D0D0D0 !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    text-decoration:none;
+}
 a.mark-select:hover, a.mark-select:active, a.mark-select:focus {
     background-color: #D0D0D0 !important;
     border-color: #D0D0D0 !important;
@@ -593,7 +600,6 @@ add padding .left-addon input {
 }
 
 .action-bar {
-    background-color: #e22337;
     margin-top: 10px;
     z-index: 1;
     position: relative;
@@ -672,16 +678,6 @@ vr-modalcontent .action-bar {
 
 .action-bar-right div {
     float: right !important;
-}
-
-.btncustom:hover {
-    opacity: 0.99;
-    background-color: #EF4355 !important;
-}
-
-.btncustom:disabled {
-    background-color: #E22337 !important;
-    opacity: 0.65 !important;
 }
 
 .highlight-btn .glyphicon {
@@ -2807,4 +2803,58 @@ vr-validator[vr-input] > div:nth-child(1){
     position:absolute;
     top:10px;
     right:5px
+}
+@media (min-width: 768px) {
+    .vr-modal-sm {
+        width: 70%;
+    }
+
+    .vr-modal-md {
+        width: 80%;
+    }
+
+    .vr-modal-lg {
+        width: 90%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .vr-modal-sm {
+        width: 50%;
+    }
+
+    .vr-modal-md {
+        width: 70%;
+    }
+
+    .vr-modal-lg {
+        width: 90%;
+    }
+}
+@media (min-width: 1440px) {
+    .vr-modal-sm {
+        width: 40%;
+    }
+
+    .vr-modal-md {
+        width: 60%;
+    }
+
+    .vr-modal-lg {
+        width: 90%;
+    }
+}
+
+@media (min-width: 1920px) {
+    .vr-modal-sm {
+        width: 30%;
+    }
+
+    .vr-modal-md {
+        width: 50%;
+    }
+
+    .vr-modal-lg {
+        width: 80%;
+    }
 }
