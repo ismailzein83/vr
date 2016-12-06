@@ -131,7 +131,7 @@
                 if (attrs.rows != undefined)
                     rows = attrs.rows;
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
-                        + '<vr-validator validate="ctrl.validate()">'
+                        + '<vr-validator validate="ctrl.validate()" vr-input>'
                         + '<div     id="mainInput" ng-model="ctrl.value" style="border-radius: 4px; padding: 0px; width: 100%; border: 0px;position:relative">'
                         + '<span class="glyphicon glyphicon-circle-arrow-right" style="font-size: 21px;top: 3px;cursor: pointer; cursor: hand;" ng-click="updateRange()"   ng-show="ctrl.value == undefined"></span>'
                         + '<a ng-show="ctrl.value !=null && ctrl.value !=undefined " class="hand-cursor" style="display: inline-block; width: calc(100% - 45px); position: relative; top: -2px;" ng-click="selectCell()">'
