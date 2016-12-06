@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using System.Globalization;
 using Vanrise.Common.Business;
+using System.ComponentModel;
 
 namespace Vanrise.GenericData.Business
 {
@@ -136,8 +137,14 @@ namespace Vanrise.GenericData.Business
                 {
                     switch (fieldRuntimeType.FullName)
                     {
-                        case "System.Guid": return values.Select(itm => new Guid(itm.ToString())) as IEnumerable<Object>;
-                        default: return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
+                        case "System.Guid":
+                            {
+                                GuidConverter guidConverter = new GuidConverter();
+                                return values.Select(itm => guidConverter.ConvertFrom(itm));
+                            }
+
+                        default:
+                            return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
                     }
                 }
                 else
