@@ -37,6 +37,7 @@ app.directive("vrInvoiceBillingperiodPeriod", ["UtilsService", "VRNotificationSe
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        $scope.scopeModel.numberOfDays = payload.NumberOfDays;
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);

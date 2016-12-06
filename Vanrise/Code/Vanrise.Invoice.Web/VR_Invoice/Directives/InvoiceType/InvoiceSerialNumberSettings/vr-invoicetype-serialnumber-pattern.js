@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VRModalService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService) {
+app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VRModalService","VR_Invoice_InvoiceTypeAPIService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -79,13 +79,14 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
                     invoiceTypeId = payload.invoiceTypeId;
                     if (payload.serialNumberPattern != undefined)
                         ctrl.value = payload.serialNumberPattern;
+                    var promises = [];
                     if (invoiceTypeId != undefined && parts == undefined) {
-                        VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
-                            parts = response.Settings.SerialNumberParts;
-                        });
+                        var promise = VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+                            parts = response.Settings.InvoiceSerialNumberSettings.SerialNumberParts;
+                      });
+                      promises.push(promise);
                     }
 
-                    var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
                 }
             };
