@@ -193,6 +193,7 @@
                 });
                 if (taskObject != undefined && taskObject.ActionTypeId) {
                     $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
+                    $scope.scopeModel.disableActionType = true;
                 }
                 else if (additionalParameter != undefined && additionalParameter.actionTypeId) {
                     $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, additionalParameter.actionTypeId, "ActionTypeId");
