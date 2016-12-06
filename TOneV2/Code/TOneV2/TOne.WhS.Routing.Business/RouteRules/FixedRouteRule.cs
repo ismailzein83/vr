@@ -74,6 +74,9 @@ namespace TOne.WhS.Routing.Business
 
             foreach (var option in options)
             {
+                if (!option.Percentage.HasValue)
+                    continue;
+
                 option.Percentage = option.IsBlocked || option.IsFiltered ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
             }
         }
@@ -147,6 +150,9 @@ namespace TOne.WhS.Routing.Business
 
             foreach (var option in options)
             {
+                if (!option.Percentage.HasValue)
+                    continue;
+
                 option.Percentage = option.SupplierStatus == SupplierStatus.Block ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
             }
         }

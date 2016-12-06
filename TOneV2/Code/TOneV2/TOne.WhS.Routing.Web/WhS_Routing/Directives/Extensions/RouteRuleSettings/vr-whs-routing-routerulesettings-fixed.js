@@ -38,7 +38,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.fixedSuppliers = [];
-                $scope.scopeModel.isrequired = false;
+                //$scope.scopeModel.isrequired = false;
 
                 $scope.scopeModel.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountSelectorAPI = api;
@@ -46,23 +46,29 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 };
 
                 $scope.scopeModel.isValid = function () {
-                    $scope.scopeModel.isrequired = false;
+                    //$scope.scopeModel.isrequired = false;
 
                     var suppliers = $scope.scopeModel.fixedSuppliers;
                     if (suppliers == undefined)
                         return null;
 
-                    var total = 0;
+                    var total = undefined;
                     for (var x = 0; x < suppliers.length; x++) {
                         var currentSupplier = suppliers[x];
                         if (currentSupplier.PercentageValue != undefined) {
-                            $scope.scopeModel.isrequired = true;
+                            //$scope.scopeModel.isrequired = true;
+                            if (total == undefined) {
+                                total = 0;
+                            }
                             total += parseFloat(suppliers[x].PercentageValue);
                         }
                     }
 
-                    if (!$scope.scopeModel.isrequired)
+                    if (total == undefined)
                         return null;
+
+                    //if (!$scope.scopeModel.isrequired)
+                    //    return null;
 
                     if (total != 100)
                         return "Sum of all Percentages must be equal to 100";
