@@ -3,12 +3,14 @@
         <vr-form name="formPermissionEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-treeview on-ready="onTreeReady"
-                                 datachildrenfield="Children"
-                                 datatextfield="Name"
-                                 selecteditem="currentNode"
-                                 onvaluechanged="onTreeValueChanged">
-                    </vr-treeview>
+                    <div style="max-height:600px;overflow-y:auto">
+                        <vr-treeview on-ready="onTreeReady"
+                                     datachildrenfield="Children"
+                                     datatextfield="Name"
+                                     selecteditem="currentNode"
+                                     onvaluechanged="onTreeValueChanged">
+                        </vr-treeview>
+                    </div>
                 </vr-columns>
                 <vr-columns width="1/2row" ng-show="currentNode">
                     <vr-section title="Assigned Permissions" vr-loader="isLoadingPermissions">
