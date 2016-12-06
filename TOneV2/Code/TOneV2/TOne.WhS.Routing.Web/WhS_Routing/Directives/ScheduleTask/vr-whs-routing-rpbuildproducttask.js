@@ -99,13 +99,17 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                     var promises = [];
 
                     $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
-                    $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
-
+                    
                     $scope.saleZoneRangeOptions = WhS_Routing_SaleZoneRangeOptions;
-                    $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];
-
-                    //if (!$scope.isFuture)
-                    //    $scope.effectiveOn = new Date();
+                    if (payload != undefined && payload.data != undefined) {
+                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', payload.data.RoutingDatabaseType);
+                        $scope.selectedSaleZoneRange = payload.data.SaleZoneRange;
+                        $scope.includeBlockedSupplierZones = payload.data.IncludeBlockedSupplierZones;
+                    }
+                    else {
+                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
+                        $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];
+                    }
 
                     var getRPSettingsAddBlockedOptionsPromise = getRPSettingsAddBlockedOptionsPromise();
                     promises.push(getRPSettingsAddBlockedOptionsPromise);
@@ -124,6 +128,9 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                                 var policy = response[i];
                                 extendPolicy(policy);
                                 policyLoadPromises.push(policy.directiveLoadDeferred.promise);
+                                if (payload != undefined && payload.data != undefined) {
+                                    fillPolicy(policy, payload.data.SupplierZoneRPOptionPolicies);
+                                }
                                 $scope.supplierZoneRPOptionPolicies.push(policy);
                             }
                         }
@@ -148,7 +155,8 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                         policy.directiveReadyDeferred.promise.then(function () {
                             VRUIUtilsService.callDirectiveLoad(policy.directiveAPI, undefined, policy.directiveLoadDeferred);
                         });
-                    }
+                    };
+
                     function getRPSettingsAddBlockedOptionsPromise() {
                         var promiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -162,7 +170,18 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                         });
 
                         return promiseDeferred.promise;
-                    }
+                    };
+
+                    function fillPolicy(policy, supplierZoneRPOptionPolicies) {
+                        var matchedPolicy = UtilsService.getItemByVal(supplierZoneRPOptionPolicies, policy.ExtensionConfigurationId, 'ConfigId');
+                        if (matchedPolicy != undefined) {
+                            policy.IsDefault = matchedPolicy.IsDefault;
+                            if (policy.IsDefault) {
+                                defaultPolicy = policy;
+                            }
+                            policy.isSelected = true;
+                        }
+                    };
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

@@ -30,6 +30,10 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
             var gridAPI;
             this.initializeController = initializeController;
 
+            $scope.onRoutingDatabaseTypeSelectionChanged = function () {
+                $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
+            };
+
             var switchSelectorAPI;
             var switchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -37,24 +41,21 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
                 defineAPI();
             }
 
-            function loadSwitchSelector() {
+            function loadSwitchSelector(selectedIds) {
                 var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                var payload = undefined;
 
+                if (selectedIds != undefined) {
+                    payload = { selectedIds: selectedIds };
+                }
                 switchSelectorReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, undefined, switchSelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, payload, switchSelectorLoadDeferred);
                 });
 
                 return switchSelectorLoadDeferred.promise;
             }
 
             function defineAPI() {
-
-                $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
-                $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
-
-                $scope.onRoutingDatabaseTypeSelectionChanged = function () {
-                    $scope.isFuture = $scope.selectedRoutingDatabaseType == WhS_Routing_RoutingDatabaseTypeEnum.Future;
-                };
 
                 $scope.onSwitchSelectorReady = function (api) {
                     switchSelectorAPI = api;
@@ -79,9 +80,23 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
                 };
 
                 api.load = function (payload) {
-                    var promises = [];
+                    $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
 
-                    promises.push(loadSwitchSelector());
+                    if (payload != undefined && payload.data != undefined) {
+                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', payload.data.RoutingDatabaseType);
+                        $scope.storeCodeMatches = payload.data.StoreCodeMatches;
+                    }
+                    else {
+                        $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
+                    }
+
+                    var promises = [];
+                    var selectedSwitches = undefined;
+                    if (payload != undefined && payload.data != undefined) {
+                        selectedSwitches = payload.data.Switches;
+                    }
+                        
+                    promises.push(loadSwitchSelector(selectedSwitches));
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
