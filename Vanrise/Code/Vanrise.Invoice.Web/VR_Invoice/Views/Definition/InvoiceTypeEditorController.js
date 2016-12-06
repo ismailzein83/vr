@@ -48,6 +48,9 @@
         var startCalculationMethodAPI;
         var startCalculationMethodPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var groupingItemsDirectiveAPI;
+        var groupingItemsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeEntity;
         defineScope();
         loadParameters();
@@ -68,7 +71,10 @@
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onGroupingItemsDirectiveReady = function (api) {
+                groupingItemsDirectiveAPI = api;
+                groupingItemsReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 $scope.scopeModel.isLoading = true;
                 var dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
@@ -166,7 +172,8 @@
                         Security: {
                             ViewRequiredPermission: viewPermissionAPI.getData(),
                             GenerateRequiredPermission: generatePermissionAPI.getData()
-                        }
+                        },
+                        GroupingItems: groupingItemsDirectiveAPI.getData()
 
                     }
                 };
@@ -382,18 +389,27 @@
                     });
                     return generatePermissionLoadDeferred.promise;
                 }
-               
+
+                function loadGroupingItemsDirective() {
+                    var groupingItemsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    groupingItemsReadyPromiseDeferred.promise.then(function () {
+                        var groupingItemsPayload = invoiceTypeEntity != undefined ? { groupingItems: invoiceTypeEntity.Settings.GroupingItems } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(groupingItemsDirectiveAPI, groupingItemsPayload, groupingItemsLoadPromiseDeferred);
+                    });
+                    return groupingItemsLoadPromiseDeferred.promise;
+                }
 
                 function loadStartCalculationMethod() {
                     var startCalculationMethodLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     startCalculationMethodPromiseDeferred.promise.then(function () {
-                        var startCalculationMethodPayload = invoiceTypeEntity != undefined ? invoiceTypeEntity.StartDateCalculationMethod : undefined;
+                        var startCalculationMethodPayload = invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? { startDateCalculationMethodEntity: invoiceTypeEntity.Settings.StartDateCalculationMethod } : undefined;
                         VRUIUtilsService.callDirectiveLoad(startCalculationMethodAPI, startCalculationMethodPayload, startCalculationMethodLoadPromiseDeferred);
                     });
                     return startCalculationMethodLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadGroupingItemsDirective])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -435,6 +451,55 @@
                         }
                     }
                     return invoiceActionsInfo;
+                },
+                getGroupingItemsInfo:function()
+                {
+                    var groupingItemsInfo = [];
+                    var groupingItems = groupingItemsDirectiveAPI.getData();
+                    if(groupingItems != undefined)
+                    {
+                        for(var i=0;i<groupingItems.length;i++)
+                        {
+                            var groupingItem = groupingItems[i];
+                            groupingItemsInfo.push({
+                                Name: groupingItem.ItemSetName,
+                                GroupingItemId: groupingItem.GroupingItemId
+                            });
+                        }
+                    }
+                    return groupingItemsInfo;
+                },
+                getGroupingDimensions: function (groupingItemId)
+                {
+                    var groupingDimensions = [];
+                    var groupingItems = groupingItemsDirectiveAPI.getData();
+                    if (groupingItems != undefined) {
+                        var groupingItem = UtilsService.getItemByVal(groupingItems, groupingItemId, "GroupingItemId");
+                        if (groupingItem.DimensionItemFields != undefined)
+                            groupingDimensions = groupingItem.DimensionItemFields;
+                    }
+                    return groupingDimensions;
+                },
+                getGroupingMeasures: function (groupingItemId)
+                {
+                    var groupingMeasures = [];
+                    var groupingItems = groupingItemsDirectiveAPI.getData();
+                    if (groupingItems != undefined) {
+                        var groupingItem = UtilsService.getItemByVal(groupingItems, groupingItemId, "GroupingItemId");
+                        if (groupingItem.AggregateItemFields != undefined)
+                        {
+                            for(var i=0;i<groupingItem.AggregateItemFields.length;i++)
+                            {
+                                var aggregateItem = groupingItem.AggregateItemFields[i];
+                                groupingMeasures.push({
+                                    MeasureItemFieldId:aggregateItem.AggregateItemFieldId,
+                                    FieldName:aggregateItem.FieldName,
+                                    FieldDescription:aggregateItem.FieldDescription,
+                                });
+                            }
+                        }
+                    }
+                    return groupingMeasures;
                 }
             };
             return context;

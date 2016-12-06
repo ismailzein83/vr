@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSerialNumberSettingsService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSerialNumberSettingsService) {
+app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceGroupingItemService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceGroupingItemService) {
 
         var directiveDefinitionObject = {
 
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SerialNumberParts($scope, ctrl, $attrs);
+                var ctor = new DimensionGroupingItem($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSerialNumberSettings/Templates/SerialNumberPartsTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGroupingItem/Templates/DimensionGroupingItemTemplate.html"
 
         };
 
-        function SerialNumberParts($scope, ctrl, $attrs) {
+        function DimensionGroupingItem($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -39,15 +39,15 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                     return "You Should add at least one part.";
                 };
 
-                ctrl.addSerialNumberPart = function () {
-                    var onSerialNumberPartAdded = function (serialNumberPart) {
-                        ctrl.datasource.push({ Entity: serialNumberPart });
+                ctrl.addDimensionGroupingItem = function () {
+                    var onDimensionGroupingItemAdded = function (dimensionGroupingItem) {
+                        ctrl.datasource.push({ Entity: dimensionGroupingItem });
                     };
 
-                    VR_Invoice_InvoiceSerialNumberSettingsService.addSerialNumberPart(onSerialNumberPartAdded, getContext());
+                    VR_Invoice_InvoiceGroupingItemService.addGroupingItemDimension(onDimensionGroupingItemAdded, getContext());
                 };
 
-                ctrl.removeSerialNumberPart = function (dataItem) {
+                ctrl.removeDimensionGroupingItem = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -59,24 +59,24 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 var api = {};
 
                 api.getData = function () {
-                    var serialNumberParts;
+                    var dimensionGroupingItems;
                     if (ctrl.datasource != undefined) {
-                        serialNumberParts = [];
+                        dimensionGroupingItems = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            serialNumberParts.push(currentItem.Entity);
+                            dimensionGroupingItems.push(currentItem.Entity);
                         }
                     }
-                    return serialNumberParts;
+                    return dimensionGroupingItems;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.serialNumberParts != undefined) {
-                            for (var i = 0; i < payload.serialNumberParts.length; i++) {
-                                var serialNumberPart = payload.serialNumberParts[i];
-                                ctrl.datasource.push({ Entity: serialNumberPart });
+                        if (payload.dimensionGroupingItems != undefined) {
+                            for (var i = 0; i < payload.dimensionGroupingItems.length; i++) {
+                                var dimensionGroupingItem = payload.dimensionGroupingItems[i];
+                                ctrl.datasource.push({ Entity: dimensionGroupingItem });
                             }
                         }
                     }
@@ -90,7 +90,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editSerialNumberPart,
+                    clicked: editDimensionGroupingItem,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -98,13 +98,13 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 };
             }
 
-            function editSerialNumberPart(serialNumberPartObj) {
-                var onSerialNumberPartUpdated = function (serialNumberPart) {
-                    var index = ctrl.datasource.indexOf(serialNumberPartObj);
-                    ctrl.datasource[index] = { Entity: serialNumberPart };
+            function editDimensionGroupingItem(dimensionGroupingItemObj) {
+                var onDimensionGroupingItemUpdated = function (dimensionGroupingItem) {
+                    var index = ctrl.datasource.indexOf(dimensionGroupingItemObj);
+                    ctrl.datasource[index] = { Entity: dimensionGroupingItem };
                 };
 
-                VR_Invoice_InvoiceSerialNumberSettingsService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
+                VR_Invoice_InvoiceGroupingItemService.editGroupingItemDimension(onDimensionGroupingItemUpdated, dimensionGroupingItemObj.Entity, getContext());
             }
             function getContext() {
                 return context;

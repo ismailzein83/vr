@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSerialNumberSettingsService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSerialNumberSettingsService) {
+app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceGroupingItemService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceGroupingItemService) {
 
         var directiveDefinitionObject = {
 
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SerialNumberParts($scope, ctrl, $attrs);
+                var ctor = new AggregateGroupingItem($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSerialNumberSettings/Templates/SerialNumberPartsTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGroupingItem/Templates/AggregateGroupingItemTemplate.html"
 
         };
 
-        function SerialNumberParts($scope, ctrl, $attrs) {
+        function AggregateGroupingItem($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -39,15 +39,15 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                     return "You Should add at least one part.";
                 };
 
-                ctrl.addSerialNumberPart = function () {
-                    var onSerialNumberPartAdded = function (serialNumberPart) {
-                        ctrl.datasource.push({ Entity: serialNumberPart });
+                ctrl.addAggregateGroupingItem = function () {
+                    var onAggregateGroupingItemAdded = function (aggregateGroupingItem) {
+                        ctrl.datasource.push({ Entity: aggregateGroupingItem });
                     };
 
-                    VR_Invoice_InvoiceSerialNumberSettingsService.addSerialNumberPart(onSerialNumberPartAdded, getContext());
+                    VR_Invoice_InvoiceGroupingItemService.addGroupingItemAggregate(onAggregateGroupingItemAdded, getContext());
                 };
 
-                ctrl.removeSerialNumberPart = function (dataItem) {
+                ctrl.removeAggregateGroupingItem = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -59,24 +59,24 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 var api = {};
 
                 api.getData = function () {
-                    var serialNumberParts;
+                    var aggregateGroupingItems;
                     if (ctrl.datasource != undefined) {
-                        serialNumberParts = [];
+                        aggregateGroupingItems = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            serialNumberParts.push(currentItem.Entity);
+                            aggregateGroupingItems.push(currentItem.Entity);
                         }
                     }
-                    return serialNumberParts;
+                    return aggregateGroupingItems;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.serialNumberParts != undefined) {
-                            for (var i = 0; i < payload.serialNumberParts.length; i++) {
-                                var serialNumberPart = payload.serialNumberParts[i];
-                                ctrl.datasource.push({ Entity: serialNumberPart });
+                        if (payload.aggregateGroupingItems != undefined) {
+                            for (var i = 0; i < payload.aggregateGroupingItems.length; i++) {
+                                var aggregateGroupingItem = payload.aggregateGroupingItems[i];
+                                ctrl.datasource.push({ Entity: aggregateGroupingItem });
                             }
                         }
                     }
@@ -90,7 +90,7 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editSerialNumberPart,
+                    clicked: editAggregateGroupingItem,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -98,13 +98,13 @@ app.directive("vrInvoicetypeSerialnumberparts", ["UtilsService", "VRNotification
                 };
             }
 
-            function editSerialNumberPart(serialNumberPartObj) {
-                var onSerialNumberPartUpdated = function (serialNumberPart) {
-                    var index = ctrl.datasource.indexOf(serialNumberPartObj);
-                    ctrl.datasource[index] = { Entity: serialNumberPart };
+            function editAggregateGroupingItem(aggregateGroupingItemObj) {
+                var onAggregateGroupingItemUpdated = function (aggregateGroupingItem) {
+                    var index = ctrl.datasource.indexOf(aggregateGroupingItemObj);
+                    ctrl.datasource[index] = { Entity: aggregateGroupingItem };
                 };
 
-                VR_Invoice_InvoiceSerialNumberSettingsService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
+                VR_Invoice_InvoiceGroupingItemService.editGroupingItemAggregate(onAggregateGroupingItemUpdated, aggregateGroupingItemObj.Entity, getContext());
             }
             function getContext() {
                 return context;

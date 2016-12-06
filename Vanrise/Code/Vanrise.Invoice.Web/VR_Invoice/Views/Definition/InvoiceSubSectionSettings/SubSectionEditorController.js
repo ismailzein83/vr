@@ -100,9 +100,9 @@
                 function loadInvoiceUISubsectionSettingsDirective() {
                     var invoiceUISubsectionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
                     invoiceUISubsectionSettingsReadyDeferred.promise.then(function () {
-                        var invoiceUISubsectionSettingsPayload;
+                        var invoiceUISubsectionSettingsPayload = { context: getContext() };
                         if (subSectionEntity != undefined)
-                            invoiceUISubsectionSettingsPayload = { invoiceUISubSectionSettingsEntity: subSectionEntity.Settings };
+                            invoiceUISubsectionSettingsPayload.invoiceUISubSectionSettingsEntity = subSectionEntity.Settings;
                         VRUIUtilsService.callDirectiveLoad(invoiceUISubsectionSettingsAPI, invoiceUISubsectionSettingsPayload, invoiceUISubsectionSettingsLoadDeferred);
                     });
                     return invoiceUISubsectionSettingsLoadDeferred.promise;

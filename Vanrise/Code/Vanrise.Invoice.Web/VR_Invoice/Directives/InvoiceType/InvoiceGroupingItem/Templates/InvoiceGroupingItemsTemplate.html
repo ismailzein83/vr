@@ -1,0 +1,8 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addGroupingItem" standalone></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeGroupingItem" hidegridmenu>
+        <vr-datagridcolumn headertext="'ItemSet Name'" field="'Entity.ItemSetName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

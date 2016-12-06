@@ -210,6 +210,12 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceExtendedSettings\vr-invoicetype-extendedsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\IsLockedInvoiceFilterConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-islockedinvoice.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGroupingItem\Templates\AggregateGroupingItemTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGroupingItem\Templates\DimensionGroupingItemTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGroupingItem\Templates\InvoiceGroupingItemsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGroupingItem\vr-invoice-groupingitem-aggregates.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGroupingItem\vr-invoice-groupingitem-dimensions.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGroupingItem\vr-invoice-groupingitems.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceDateSerialNumberPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceFieldSerialNumberPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\MainExtensions\Templates\InvoiceCounterSerialNumberPartTemplate.html" />
@@ -244,6 +250,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\vr-invoicetype-datasourcesettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\vr-invoicetype-openrdlcreport-parametersettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\Templates\InvoiceGridActionsManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\GroupingItemSubSectionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\vr-invoicetype-invoicesubsectionsettings-groupingitem.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\ConstantConatenatedPartSettingsTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\CurrentItemSetNameConcatenatedPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\InvoiceItemFieldValueConcatenatedPartTemplate.html" />
@@ -291,6 +299,7 @@
     <Content Include="VR_Invoice\Services\InvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGeneratorActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGridSettingService.js" />
+    <Content Include="VR_Invoice\Services\InvoiceGroupingItemService.js" />
     <Content Include="VR_Invoice\Services\InvoicePartnerSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceSerialNumberSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceService.js" />
@@ -300,6 +309,12 @@
     <Content Include="VR_Invoice\Views\Definition\InvoiceActions\InvoiceActionEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceGeneratorAction\InvoiceGeneratorActionEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceGeneratorAction\InvoiceGeneratorActionEditorController.js" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceGroupingItem\AggregateGroupingItemEditorController.js" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceGroupingItem\AggregateGroupingItemEditor.html" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceGroupingItem\DimensionGroupingItemEditor.html" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceGroupingItem\DimensionGroupingItemEditorController.js" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceGroupingItem\GroupingItemEditor.html" />
+    <Content Include="VR_Invoice\Views\Definition\InvoiceGroupingItem\GroupingItemEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSubSectionSettings\InvoiceItemSubSectionEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSubSectionSettings\InvoiceItemSubSectionEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditor.html" />

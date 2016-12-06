@@ -1,0 +1,84 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.groupingItems"
+                   datatextfield="Name"
+                   datavaluefield="GroupingItemId"
+                   selectedvalues="scopeModel.selectedGroupingItem"
+                   entityname="Grouping Item"
+                   isrequired="true"
+                   label="Grouping Item"
+                   onselectitem="scopeModel.onGroupingItemSelectionChanged"
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+</vr-row>
+
+<vr-tabs>
+    <vr-tab header="'Grid Dimensions'">
+
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select datasource="scopeModel.dimensionsGroupingItems"
+                           datatextfield="FieldDescription"
+                           datavaluefield="DimensionItemFieldId"
+                           selectedvalues="scopeModel.selectedDimensions"
+                           entityname="Dimensions"
+                           isrequired="true"
+                           label="Dimensions"
+                           onselectitem="scopeModel.onSelectDimensionItem"
+                           ondeselectitem="scopeModel.onDeselectDimensionItem"
+                           hideselectedvaluessection
+                           ismultipleselection>
+                </vr-select>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-validator validate="scopeModel.isValidDimensions()">
+                    <vr-datagrid datasource="scopeModel.dimensions" enabledraggablerow="true"
+                                 on-ready="onGridReady" ondeleterow="scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
+                        <vr-datagridcolumn headertext="'Dimension Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting="true">
+                            <vr-textbox value="dataItem.FieldDescription" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+
+    </vr-tab>
+    <vr-tab header="'Grid Measures'">
+       
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select datasource="scopeModel.measuresGroupingItems"
+                           datatextfield="FieldDescription"
+                           datavaluefield="MeasureItemFieldId"
+                           selectedvalues="scopeModel.selectedMeasures"
+                           entityname="Measuers"
+                           isrequired="true"
+                           label="Measuers"
+                           onselectitem="scopeModel.onSelectMeasureItem"
+                           ondeselectitem="scopeModel.onDeselectMeasureItem"
+                           hideselectedvaluessection
+                           ismultipleselection>
+                </vr-select>
+                </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-validator validate="scopeModel.isValidMeasures()">
+                    <vr-datagrid datasource="scopeModel.measures" enabledraggablerow="true"
+                                 on-ready="onGridReady" ondeleterow="    scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
+                        <vr-datagridcolumn headertext="'Measure Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
+                            <vr-textbox value="dataItem.FieldDescription" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+
+    </vr-tab>
+</vr-tabs>
+

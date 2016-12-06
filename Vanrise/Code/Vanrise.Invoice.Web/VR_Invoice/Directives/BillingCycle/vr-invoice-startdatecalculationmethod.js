@@ -61,13 +61,13 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var billingPeriodEntity;
+                    var startDateCalculationMethodEntity;
 
                     if (payload != undefined) {
-                        billingPeriodEntity = payload.billingPeriodEntity;
+                        startDateCalculationMethodEntity = payload.startDateCalculationMethodEntity;
                     }
 
-                    if (billingPeriodEntity != undefined) {
+                    if (startDateCalculationMethodEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -81,9 +81,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (billingPeriodEntity != undefined) {
+                                if (startDateCalculationMethodEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, billingPeriodEntity.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, startDateCalculationMethodEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -95,7 +95,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = billingPeriodEntity;
+                            var directivePayload = startDateCalculationMethodEntity;
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

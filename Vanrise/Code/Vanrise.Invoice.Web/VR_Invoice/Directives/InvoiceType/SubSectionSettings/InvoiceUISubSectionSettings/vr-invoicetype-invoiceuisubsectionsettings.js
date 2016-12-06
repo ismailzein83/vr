@@ -33,7 +33,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -49,7 +49,8 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivePayload = { context: getContext() }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -65,6 +66,7 @@
 
                     if (payload != undefined) {
                         invoiceUISubSectionSettingsEntity = payload.invoiceUISubSectionSettingsEntity;
+                        context = payload.context;
                     }
 
                     if (invoiceUISubSectionSettingsEntity != undefined) {
@@ -95,7 +97,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = invoiceUISubSectionSettingsEntity;
+                            var directivePayload = { context: getContext(), invoiceSubSectionSettingsEntity: invoiceUISubSectionSettingsEntity };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -120,6 +122,13 @@
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

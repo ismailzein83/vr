@@ -27,7 +27,8 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
 
         function InvoiceItemSubSection($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var invoiceSubSectionSettingsEntity;
+            var context;
             var subSectionGridColumnsAPI;
             var subSectionGridColumnsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -54,19 +55,22 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.itemSetName = payload.ItemSetName;
+                        invoiceSubSectionSettingsEntity = payload.invoiceSubSectionSettingsEntity;
+                        context = payload.context;
+                        if (invoiceSubSectionSettingsEntity != undefined)
+                            $scope.scopeModel.itemSetName = invoiceSubSectionSettingsEntity.ItemSetName;
                     }
                     var promises = [];
                     var subSectionGridColumnsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     subSectionGridColumnsReadyPromiseDeferred.promise.then(function () {
-                        var gridColumnsDirectivePayload = payload != undefined ? { gridColumns: payload.GridColumns } : undefined;
+                        var gridColumnsDirectivePayload = invoiceSubSectionSettingsEntity != undefined ? { gridColumns: invoiceSubSectionSettingsEntity.GridColumns } : undefined;
                         VRUIUtilsService.callDirectiveLoad(subSectionGridColumnsAPI, gridColumnsDirectivePayload, subSectionGridColumnsDeferredLoadPromiseDeferred);
                     });
                     promises.push(subSectionGridColumnsDeferredLoadPromiseDeferred.promise);
 
                     var invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceItemSubSectionGridColumnsReadyPromiseDeferred.promise.then(function () {
-                        var invoiceItemDirectivePayload = payload != undefined ? { subSections: payload.SubSections } : undefined;
+                        var invoiceItemDirectivePayload = invoiceSubSectionSettingsEntity != undefined ? { subSections: invoiceSubSectionSettingsEntity.SubSections } : undefined;
                         VRUIUtilsService.callDirectiveLoad(invoiceItemSubSectionGridColumnsAPI, invoiceItemDirectivePayload, invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred);
                     });
                     promises.push(invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred.promise);

@@ -75,6 +75,7 @@
     <Compile Include="InvoiceActionSettings\RecreateInvoiceAction.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\SendEmailAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoicePaidAction.cs" />
+    <Compile Include="InvoiceUISubSectionSettings\GroupingItemSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
     <Compile Include="InvoiceDataSourceSettings\BankDetailsDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\InvoiceDataSourceItems.cs" />
