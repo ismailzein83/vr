@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('whsInvoiceInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsService','WhS_Invoice_InvoiceSettingService',
+app.directive('whsInvoiceInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsService', 'WhS_Invoice_InvoiceSettingService',
     function (UtilsService, VRUIUtilsService, WhS_Invoice_InvoiceSettingService) {
 
         return {
@@ -23,55 +23,91 @@ app.directive('whsInvoiceInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
         function InvoiceSettingsEditor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
-            var customerInvoiceMailTemplateReadyAPI;
-            var customerInvoiceMailTemplateReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
-                $scope.onCustomerInvoiceMailTemplateSelectorReady = function (api) {
-                    customerInvoiceMailTemplateReadyAPI = api;
-                    customerInvoiceMailTemplateReadyPromiseDeferred.resolve();
+                ctrl.datasource = [];
+                ctrl.isValid = function () {
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var item = ctrl.datasource[i];
+                            if (item.Entity.IsDefault) {
+                                return null;
+                            }
+                        }
+                        return "You Should add at least one default setting.";
+
+                    }
+                    return "You Should add at least one setting.";
                 };
+                ctrl.addInvoiceSetting = function () {
+                    var onInvoiceSettingAdded = function (invoiceSetting) {
+                        ctrl.datasource.push({ Entity: invoiceSetting });
+                    };
+                    WhS_Invoice_InvoiceSettingService.addInvoiceSetting(onInvoiceSettingAdded, ctrl.datasource);
+                };
+                ctrl.removeInvoiceSetting = function (dataItem) {
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    ctrl.datasource.splice(index, 1);
+                };
+                defineMenuActions();
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+                api.load = function(payload) {
 
                     var invoiceSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         invoiceSettingsPayload = payload.data;
                     }
-
-                    var promises = [];
-
-                    var customerInvoiceMailTemplateLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(customerInvoiceMailTemplateLoadPromiseDeferred.promise);
-                    WhS_Invoice_InvoiceSettingService.getCustomerInvoiceMailType().then(function (response) {
-                        customerInvoiceMailTemplateReadyPromiseDeferred.promise.then(function () {
-                            var selectorPayload = { filter: { VRMailMessageTypeId: response } };
-                            if (invoiceSettingsPayload != undefined && invoiceSettingsPayload.CustomerInvoiceSettings != undefined) {
-                                selectorPayload.selectedIds = invoiceSettingsPayload.CustomerInvoiceSettings.DefaultEmailId;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(customerInvoiceMailTemplateReadyAPI, selectorPayload, customerInvoiceMailTemplateLoadPromiseDeferred);
-                        });
-                    });
-
-                    return UtilsService.waitMultiplePromises(promises);
+                    if (invoiceSettingsPayload != undefined && invoiceSettingsPayload.CustomerInvoiceSettings != undefined) {
+                        for (var i = 0; i < invoiceSettingsPayload.CustomerInvoiceSettings.length; i++) {
+                            var invoiceSetting = invoiceSettingsPayload.CustomerInvoiceSettings[i];
+                            ctrl.datasource.push({ Entity: invoiceSetting });
+                        }
+                    }
                 };
 
-                api.getData = function () {
+                api.getData = function() {
+                    var invoiceSettings;
+                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
+                        invoiceSettings = [];
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var currentItem = ctrl.datasource[i];
+                            invoiceSettings.push(currentItem.Entity);
+                        }
+                    }
                     return {
                         $type: "TOne.WhS.Invoice.Entities.InvoiceSettings, TOne.WhS.Invoice.Entities",
-                        CustomerInvoiceSettings: {
-                            DefaultEmailId: customerInvoiceMailTemplateReadyAPI.getSelectedIds()
-                        }
+                        CustomerInvoiceSettings: invoiceSettings
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
 
+            function defineMenuActions() {
+                var defaultMenuActions = [
+                {
+                    name: "Edit",
+                    clicked: editInvoiceSetting
+                }];
 
+                $scope.gridMenuActions = function () {
+                    return defaultMenuActions;
+                };
+            }
+
+            function editInvoiceSetting(invoiceSettingObj) {
+                var onInvoiceSettingUpdated = function (invoiceSetting) {
+                    var index = ctrl.datasource.indexOf(invoiceSettingObj);
+                    ctrl.datasource[index] = { Entity: invoiceSetting };
+                };
+                WhS_Invoice_InvoiceSettingService.editInvoiceSetting(invoiceSettingObj.Entity, onInvoiceSettingUpdated, ctrl.datasource);
             }
         }
     }]);

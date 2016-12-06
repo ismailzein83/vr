@@ -16,7 +16,12 @@ namespace TOne.WhS.Invoice.Business
             InvoiceSettings setting = GetInvoiceSettings();
             if (setting.CustomerInvoiceSettings == null)
                 throw new NullReferenceException("setting.CustomerInvoiceSettings");
-            return setting.CustomerInvoiceSettings.DefaultEmailId;
+            foreach (var customerInvoiceSettings in setting.CustomerInvoiceSettings)
+            {
+                if (customerInvoiceSettings.IsDefault)
+                    return customerInvoiceSettings.DefaultEmailId;
+            }
+            throw new NullReferenceException("setting.CustomerInvoiceSettings");
         }
         #endregion
      

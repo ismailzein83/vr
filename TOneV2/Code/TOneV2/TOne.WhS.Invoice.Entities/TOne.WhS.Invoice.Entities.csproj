@@ -44,6 +44,12 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerInvoiceDetails.cs" />

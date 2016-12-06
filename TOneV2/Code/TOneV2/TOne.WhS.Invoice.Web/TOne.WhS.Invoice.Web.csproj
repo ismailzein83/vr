@@ -187,10 +187,10 @@
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceSettingsService.js" />
+    <Content Include="WhS_Invoice\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
+    <Content Include="WhS_Invoice\Views\InvoiceSettings\Templates\InvoiceSettingEditor.html" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Invoice\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceItemsReportByCurrency.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
