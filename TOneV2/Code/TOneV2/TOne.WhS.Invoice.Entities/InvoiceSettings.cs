@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.MainExtensions;
 
 namespace TOne.WhS.Invoice.Entities
@@ -19,7 +20,7 @@ namespace TOne.WhS.Invoice.Entities
         public bool IsDefault { get; set; }
         public int DuePeriod { get; set; }
         public bool IsFollow { get; set; }
-        public PeriodBillingPeriod PeriodBillingPeriod { get; set; }
+        public BillingPeriod BillingPeriod { get; set; }
         public string SerialNumberPattern { get; set; }
     }
 }

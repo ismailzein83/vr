@@ -128,24 +128,20 @@
             billingPeriodReadyPromiseDeferred.promise.then(function () {
                 var billingPeriodDirectivePayload = {};
                 if (invoiceSettingEntity != undefined)
-                    billingPeriodDirectivePayload.billingPeriodEntity = invoiceSettingEntity.PeriodBillingPeriod;
+                    billingPeriodDirectivePayload.billingPeriodEntity = invoiceSettingEntity.BillingPeriod;
                 VRUIUtilsService.callDirectiveLoad(billingPeriodAPI, billingPeriodDirectivePayload, billingPeriodDeferredLoadPromiseDeferred);
             });
             return billingPeriodDeferredLoadPromiseDeferred.promise;
         }
 
         function buildInvoiceSettingsObjFromScope() {
-            var billingPeriod = billingPeriodAPI.getData();
-            if (billingPeriod.NumberOfDays == undefined)
-                billingPeriod.NumberOfDays = 0;
-            console.log(billingPeriod);
             var obj = {
                 Title: $scope.scopeModel.title,
                 DuePeriod: $scope.scopeModel.duePeriod,
                 DefaultEmailId: customerInvoiceMailTemplateReadyAPI.getSelectedIds(),
                 IsFollow: $scope.scopeModel.isFollow,
                 IsDefault: $scope.scopeModel.isDefault,
-                PeriodBillingPeriod: { ConfigId: billingPeriod.ConfigId, NumberOfDays: billingPeriod.NumberOfDays },
+                BillingPeriod: billingPeriodAPI.getData(),
                 SerialNumberPattern: serialNumberPatternAPI.getData()
             };
             return obj;
