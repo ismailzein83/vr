@@ -77,7 +77,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             string[] query =
             {
                 string.Format(
-                    @"ALTER TABLE {0}_temp" + "  ADD PRIMARY KEY (destination,route_id,time_frame, preference)",
+                    @"ALTER TABLE {0} ADD PRIMARY KEY (destination,route_id,time_frame, preference)",
                     routeTableName)
             };
             ExecuteNonQuery(query);

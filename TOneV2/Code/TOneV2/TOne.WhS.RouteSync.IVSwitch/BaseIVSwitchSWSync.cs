@@ -92,7 +92,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             {
                 foreach (var gateway in customerTable.Value.EndPoints)
                 {
-                    routeDataManager.CreatePrimaryKey(string.Format("rt{0}", gateway.RouteTableId));
+                    routeDataManager.CreatePrimaryKey(string.Format("rt{0}_temp", gateway.RouteTableId));
                     routeDataManager.Swap(string.Format("rt{0}", gateway.RouteTableId));
                     tariffDataManager.Swap(string.Format("trf{0}", gateway.TariffTableId));
                 }
@@ -110,7 +110,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 foreach (var gateway in customerTable.Value.EndPoints)
                 {
                     routeDataManager.BuildRouteTable(string.Format("rt{0}", gateway.RouteTableId));
-                    tariffDataManager.BuildTariffTable(string.Format("trf{0}", gateway.RouteTableId));
+                    tariffDataManager.BuildTariffTable(string.Format("trf{0}", gateway.TariffTableId));
                 }
             }
         }
