@@ -48,7 +48,7 @@ namespace Retail.BusinessEntity.Business
                     {
                         mappingRule.Settings.Value = accountId;
                         var manager = GetRuleManager(mappingRule.DefinitionId);
-                        manager.AddGenericRule(mappingRule);
+                        manager.TryAddGenericRule(mappingRule);
                     }
             }
         }
