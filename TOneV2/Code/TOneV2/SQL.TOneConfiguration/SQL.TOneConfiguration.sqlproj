@@ -496,6 +496,7 @@
     <None Include="Reprocess.PostDeployment.sql" />
     <None Include="Invoice.PostDeployment.sql" />
     <None Include="VR_NumberingPlan.PostDeployment.sql" />
+    <None Include="CloudXPoint.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
