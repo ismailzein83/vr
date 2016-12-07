@@ -11,6 +11,11 @@ namespace Vanrise.BEBridge.Entities
         public virtual string Name { get { return "Target BE Synchronizer"; } }
         public Guid ConfigId { get; set; }
 
+        public virtual void Initialize(ITargetBESynchronizerInitializeContext context)
+        {
+
+        }
+
         public abstract bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context);
 
         public abstract void InsertBEs(ITargetBESynchronizerInsertBEsContext context);
@@ -18,11 +23,18 @@ namespace Vanrise.BEBridge.Entities
         public abstract void UpdateBEs(ITargetBESynchronizerUpdateBEsContext context);
     }
 
+    public interface ITargetBESynchronizerInitializeContext
+    {
+        Object InitializationData { set; }
+    }
+
     public interface ITargetBESynchronizerTryGetExistingBEContext
     {
         object SourceBEId { get; }
 
         ITargetBE TargetBE { set; }
+
+        Object InitializationData { get; }
     }
 
     public interface ITargetBESynchronizerInsertBEsContext

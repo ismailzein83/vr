@@ -32,8 +32,8 @@ namespace Vanrise.BEBridge.BP.Activities
         protected override void DoWork(ConvertSourceToTargetBEsInput inputArgument,
             AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
-
+            var synchronizerInitializeDataContext = new TargetBESynchronizerInitializeContext();
+            inputArgument.TargetBeSynchronizer.Initialize(synchronizerInitializeDataContext);
             Dictionary<Object, ITargetBE> existingTargetBEsBySourceId = new Dictionary<object, ITargetBE>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -62,6 +62,7 @@ namespace Vanrise.BEBridge.BP.Activities
                             {
                                 TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext
                                 {
+                                    InitializationData = synchronizerInitializeDataContext.InitializationData,
                                     SourceBEId = targetBe.SourceBEId
                                 };
                                 if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(tryGetExistingContext))
@@ -144,8 +145,23 @@ namespace Vanrise.BEBridge.BP.Activities
             }
         }
 
+        private class TargetBESynchronizerInitializeContext : ITargetBESynchronizerInitializeContext
+        {
+            public object InitializationData
+            {
+                get;
+                set;
+            }
+        }
+
+
         private class TargetBETryGetExistingContext : ITargetBESynchronizerTryGetExistingBEContext
         {
+            public object InitializationData
+            {
+                set;
+                get;
+            }
 
             public object SourceBEId
             {
