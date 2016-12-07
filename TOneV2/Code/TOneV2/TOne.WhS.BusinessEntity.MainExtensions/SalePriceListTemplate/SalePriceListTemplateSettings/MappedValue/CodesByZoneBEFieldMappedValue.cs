@@ -39,13 +39,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     context.Value = GetEffectiveDate(context.ZoneNotification.Codes);
                     break;
                 case CodesByZoneBEFieldType.Rate:
-                    context.Value = context.ZoneNotification.Rate;
+                    context.Value = context.ZoneNotification.Rate != null ? context.ZoneNotification.Rate : null;
                     break;
                 case CodesByZoneBEFieldType.RateBED:
-                    context.Value = context.ZoneNotification.Rate.BED;
+                    context.Value = context.ZoneNotification.Rate != null ? context.ZoneNotification.Rate.BED : (object)null;
                     break;
                 case CodesByZoneBEFieldType.RateEED:
-                    context.Value = context.ZoneNotification.Rate.EED;
+                    context.Value = context.ZoneNotification.Rate != null ? context.ZoneNotification.Rate.EED : null;
                     break;
             }
         }

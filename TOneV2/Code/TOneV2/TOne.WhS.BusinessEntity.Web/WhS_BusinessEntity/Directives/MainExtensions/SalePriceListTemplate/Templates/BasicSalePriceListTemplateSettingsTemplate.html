@@ -15,17 +15,19 @@
         <vr-columns width="1/2row">
             <vr-section title="Mapped Tables">
                 <vr-row>
-                        <vr-whs-be-salepricelisttemplate-mappedtable-selective normal-col-num="6" on-ready="scopeModel.onMappedTableDirectiveReady"
-                                                                               label="Mapped Table"
-                                                                               isrequired></vr-whs-be-salepricelisttemplate-mappedtable-selective>
+                    <vr-whs-be-salepricelisttemplate-mappedtable-selective normal-col-num="6"
+                                                                           on-ready="scopeModel.onMappedTableDirectiveReady"
+                                                                           label="Mapped Table"
+                                                                           isrequired>
+                    </vr-whs-be-salepricelisttemplate-mappedtable-selective>
                     <vr-columns width="1/4row" withemptyline>
-                        <vr-button type="Add" data-onclick="scopeModel.addMappedTable" standalone="true"></vr-button>
+                        <vr-button type="Add" data-onclick="scopeModel.addMappedTable" standalone="true" vr-disabled="scopeModel.disableAddMappedTable()"></vr-button>
                     </vr-columns>
-                   
+
                 </vr-row>
-               
+
                 <vr-row>
-                    <vr-tabs>
+                    <vr-tabs on-ready="scopeModel.onTabsReady">
                         <vr-tab ng-repeat="table in scopeModel.tables" header="table.header" onremove="scopeModel.removeTable" data="table">
                             <vr-directivewrapper on-ready="table.onDirectiveReady"
                                                  directive="table.Editor"

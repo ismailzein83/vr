@@ -39,7 +39,7 @@ namespace TOne.WhS.Sales.BP.Activities
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
                 sellingNumberPlanId = GetSellingProductSellingNumberPlanId(ownerId);
-                customersOfSellingProduct = customerSellingProductManager.GetCustomersBySellingProductId(ownerId);
+                customersOfSellingProduct = customerSellingProductManager.GetCustomersBySellingProductId(ownerId, DateTime.Today);
             }
             else
             {

@@ -22,6 +22,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
 
         this.initializeController = initializeController;
 
+        var tabsAPI;
         var excelWorkbookAPI;
         var excelWorkbookReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -58,7 +59,20 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
                     loadPromiseDeferred: UtilsService.createPromiseDeferred()
                 };
                 addMappedTableTab(mappedTableItem);
+                mappedTableDirectiveAPI.clearSelectedValue();
+                tabsAPI.setLastTabSelected();
+
+                
             };
+
+            $scope.scopeModel.disableAddMappedTable = function () {
+                return mappedTableDirectiveAPI.getData() == undefined;
+            };
+
+            $scope.scopeModel.onTabsReady = function (api) {
+                tabsAPI = api;
+            }
+
             $scope.scopeModel.removeTable = function (obj) {
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, obj.data.tableTabIndex, 'tableTabIndex');
                 $scope.scopeModel.tables.splice(index, 1);

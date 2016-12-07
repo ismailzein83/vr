@@ -61,37 +61,47 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
-        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingProductId(int sellingProductId)
+        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingProductId(int sellingProductId, DateTime effectiveOn)
         {
-            IEnumerable<CustomerSellingProduct> customerSellingProducts = GetCachedCustomerSellingProducts().Values;
-            if(customerSellingProducts != null)
-                customerSellingProducts = customerSellingProducts.FindAllRecords(item => item.SellingProductId == sellingProductId);
+            Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsBySellingProductId = GetCachedCustomerSellingProductsBySellingProductId();
+         
+            IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductsBySellingProductId.GetRecord(sellingProductId);
 
             Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsByCustomerId = new Dictionary<int, List<CustomerSellingProduct>>();
 
-            foreach (CustomerSellingProduct item in customerSellingProducts)
+            if (customerSellingProducts != null)
             {
-                List<CustomerSellingProduct> customerSellingProductsTemp = null;
-                customerSellingProductsByCustomerId.TryGetValue(item.CustomerId, out customerSellingProductsTemp);
-                if (customerSellingProductsTemp == null)
+                foreach (CustomerSellingProduct item in customerSellingProducts)
                 {
-                    customerSellingProductsTemp = new List<CustomerSellingProduct>();
-                    customerSellingProductsByCustomerId.Add(item.CustomerId, customerSellingProductsTemp);
-                }
+                    List<CustomerSellingProduct> customerSellingProductsTemp = null;
+                    customerSellingProductsByCustomerId.TryGetValue(item.CustomerId, out customerSellingProductsTemp);
+                    if (customerSellingProductsTemp == null)
+                    {
+                        customerSellingProductsTemp = new List<CustomerSellingProduct>();
+                        customerSellingProductsByCustomerId.Add(item.CustomerId, customerSellingProductsTemp);
+                    }
 
-                customerSellingProductsTemp.Add(item);
+                    customerSellingProductsTemp.Add(item);
+                }
             }
 
             Dictionary<int, CustomerSellingProduct> filteredCustomerSellingProducts = new Dictionary<int, CustomerSellingProduct>();
-            DateTime today = DateTime.Today;
             foreach (KeyValuePair<int, List<CustomerSellingProduct>> kvp in customerSellingProductsByCustomerId)
             {
-                CustomerSellingProduct effectiveCustomerSellingProduct = kvp.Value.OrderByDescending(x => x.BED).FirstOrDefault(x => today >= x.BED);
+                CustomerSellingProduct effectiveCustomerSellingProduct = kvp.Value.OrderByDescending(x => x.BED).FirstOrDefault(x => effectiveOn >= x.BED);
                 if (effectiveCustomerSellingProduct != null)
                     filteredCustomerSellingProducts.Add(effectiveCustomerSellingProduct.CustomerSellingProductId, effectiveCustomerSellingProduct);
             }
 
-            return filteredCustomerSellingProducts.MapRecords(CarrierAccountInfoMapper, null).OrderBy(x => x.Name);
+            return filteredCustomerSellingProducts.MapRecords(CarrierAccountInfoMapper, null);
+        }
+
+        public IEnumerable<CarrierAccountInfo> GetOrderedCustomersBySellingProductId(int sellingProductId)
+        {
+            IEnumerable<CarrierAccountInfo> customersBySellingProduct = this.GetCustomersBySellingProductId(sellingProductId, DateTime.Today);
+            if (customersBySellingProduct == null)
+                return null;
+            return customersBySellingProduct.OrderBy(itm => itm.Name);
         }
 
         private Dictionary<int, CustomerSellingProduct> GetEffectiveSellingProducts(DateTime? effectiveOn)
@@ -330,6 +340,30 @@ namespace TOne.WhS.BusinessEntity.Business
                    }
                    return dic;
                });
+        }
+
+        Dictionary<int, List<CustomerSellingProduct>> GetCachedCustomerSellingProductsBySellingProductId()
+        {
+            Dictionary<int, CustomerSellingProduct> allSellingProducts = GetCachedCustomerSellingProducts();
+
+            Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsBySellingProductId = new Dictionary<int, List<CustomerSellingProduct>>();
+
+            if (allSellingProducts.Values != null)
+            {
+                List<CustomerSellingProduct> customerSellingProductList;
+                foreach (CustomerSellingProduct customerSellingProduct in allSellingProducts.Values)
+                {
+                    if (!customerSellingProductsBySellingProductId.TryGetValue(customerSellingProduct.SellingProductId, out customerSellingProductList))
+                    {
+                        customerSellingProductList = new List<CustomerSellingProduct>() { customerSellingProduct };
+                        customerSellingProductsBySellingProductId.Add(customerSellingProduct.SellingProductId, customerSellingProductList);
+                    }
+                    else
+                        customerSellingProductList.Add(customerSellingProduct);
+                }
+            }
+
+            return customerSellingProductsBySellingProductId;
         }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager

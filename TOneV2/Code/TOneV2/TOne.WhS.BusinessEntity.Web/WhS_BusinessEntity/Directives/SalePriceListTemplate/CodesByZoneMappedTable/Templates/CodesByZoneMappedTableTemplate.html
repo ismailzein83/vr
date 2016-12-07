@@ -2,11 +2,12 @@
     <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="onFirstRowMappingReady"
                                                       label="First Row"
                                                       type="'row'"
-                                                      isrequired="true">
+                                                      isrequired="true"
+                                                      normal-col-num="4">
     </vr-excelconversion-fieldmapping-cellfieldmapping>
 </vr-row>
-<vr-row removeline="true">
-    <vr-columns colnum="{{basicSettingsCtrl.normalColNum}}">
+<vr-row>
+    <vr-columns width="1/4row">
         <vr-button type="Add" data-onclick="addMappedCol" standalone="true"></vr-button>
     </vr-columns>
 </vr-row>

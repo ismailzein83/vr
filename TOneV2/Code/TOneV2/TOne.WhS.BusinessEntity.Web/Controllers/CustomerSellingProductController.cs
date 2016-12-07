@@ -55,7 +55,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 		public IEnumerable<CarrierAccountInfo> GetCustomersBySellingProductId(int sellingProductId)
 		{
 			CustomerSellingProductManager manager = new CustomerSellingProductManager();
-			return manager.GetCustomersBySellingProductId(sellingProductId);
+			return manager.GetOrderedCustomersBySellingProductId(sellingProductId);
 		}
     }
 }

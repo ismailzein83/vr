@@ -131,7 +131,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     else
                     {
                         CustomerSellingProductManager manager = new CustomerSellingProductManager();
-                        IEnumerable<CarrierAccountInfo> customersAssignedToSellingProduct = manager.GetCustomersBySellingProductId(rate.OwnerId);
+                        IEnumerable<CarrierAccountInfo> customersAssignedToSellingProduct = manager.GetCustomersBySellingProductId(rate.OwnerId, DateTime.Today);
                         if (customersAssignedToSellingProduct != null)
                         {
                             IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
