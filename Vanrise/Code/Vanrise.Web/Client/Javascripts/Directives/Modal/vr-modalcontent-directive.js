@@ -36,7 +36,8 @@ app.directive('vrModalcontent', [function () {
                     if (num >= 80)
                         classmodal = "vr-modal-lg";
                 }
-             }  
+            }
+            var style= "";
              if ($('.modal-dialog').length > 0) {
                 style = "top:" + ($('.modal-dialog').length) * 10 + "px; left:" + ($('.modal-dialog').length) * 10 + "px;";
                 if ($('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly') == undefined) {
@@ -46,7 +47,7 @@ app.directive('vrModalcontent', [function () {
                 }
                
             }
-            var newElement = '<div class="modal-dialog ' + classmodal + '" ' + resClass + '  >'
+             var newElement = '<div class="modal-dialog ' + classmodal + '" ' + resClass + ' style="' + style + '" >'
                                   + '  <div class="modal-content" >'
                                     + '    <div class="modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
