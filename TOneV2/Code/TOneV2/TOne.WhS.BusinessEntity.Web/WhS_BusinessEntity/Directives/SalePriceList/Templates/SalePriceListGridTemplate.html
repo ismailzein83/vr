@@ -1,14 +1,14 @@
 ﻿<vr-datagrid datasource="salepricelist"
-             on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions"
-             idfield="Entity.PriceListId" defaultsortbyfieldname="'Entity.CreatedTime'" defaultsortdirection="'DESC'">
+			 on-ready="onGridReady"
+			 dataretrievalfunction="dataRetrievalFunction"
+			 pagingtype="'PagingOnScroll'"
+			 menuactions="gridMenuActions"
+			 idfield="Entity.PriceListId" defaultsortbyfieldname="'Entity.PriceListId'" defaultsortdirection="'DESC'">
 
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.PriceListId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Owner Type'" field="'OwnerType'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Owner Name'" field="'OwnerName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Created Time'" field="'Entity.CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeName'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'ID'" field="'Entity.PriceListId'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Owner Type'" field="'OwnerType'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Owner Name'" field="'OwnerName'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Created Time'" field="'Entity.CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeName'" type="'Text'"></vr-datagridcolumn>
 </vr-datagrid>

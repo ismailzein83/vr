@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SalePriceListQuery
-    {
-
-        public List<int> OwnerId { get; set; }
-        public SalePriceListOwnerType? OwnerType { get; set; }
-       
-
-    }
+	public class SalePriceListQuery
+	{
+		public SalePriceListOwnerType? OwnerType { get; set; }
+		public IEnumerable<int> OwnerIds { get; set; }
+	}
 }
