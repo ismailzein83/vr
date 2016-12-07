@@ -2816,6 +2816,9 @@ vr-validator[vr-input] > div:nth-child(1){
     .vr-modal-lg {
         width: 90%;
     }
+    .vr-modal-xl {
+        width: 99%;
+    }
 }
 
 @media (min-width: 1280px) {
@@ -2830,6 +2833,9 @@ vr-validator[vr-input] > div:nth-child(1){
     .vr-modal-lg {
         width: 90%;
     }
+    .vr-modal-xl {
+        width: 99%;
+    }
 }
 @media (min-width: 1440px) {
     .vr-modal-sm {
@@ -2842,6 +2848,9 @@ vr-validator[vr-input] > div:nth-child(1){
 
     .vr-modal-lg {
         width: 90%;
+    }
+    .vr-modal-xl {
+        width: 99%;
     }
 }
 
@@ -2856,5 +2865,8 @@ vr-validator[vr-input] > div:nth-child(1){
 
     .vr-modal-lg {
         width: 80%;
+    }
+    .vr-modal-xl {
+        width: 99%;
     }
 }

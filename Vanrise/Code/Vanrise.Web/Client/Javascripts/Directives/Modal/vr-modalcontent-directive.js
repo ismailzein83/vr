@@ -24,7 +24,8 @@ app.directive('vrModalcontent', [function () {
                 var sizeOptions = {
                     small: "vr-modal-sm",
                     medium: "vr-modal-md",
-                    large: "vr-modal-lg"
+                    large: "vr-modal-lg",
+                    xlarge: "vr-modal-xl"
                 };
                 if (tAttrs.size != undefined) {
                     classmodal = sizeOptions[tAttrs.size];
@@ -35,6 +36,9 @@ app.directive('vrModalcontent', [function () {
                         classmodal = "vr-modal-md";
                     if (num >= 80)
                         classmodal = "vr-modal-lg";
+                    if(num > 90)
+                      classmodal = "vr-modal-xl";
+
                 }
             }
             var style= "";
