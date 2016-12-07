@@ -73,6 +73,12 @@ function (Qm_CliTester_TestCallService) {
         $scope.getColorResult = function (dataItem) {
             return Qm_CliTester_TestCallService.getCallTestResultColor(dataItem.CallTestResult);
         };
+
+        $scope.getDangerColorResult = function (dataItem) {
+            if (dataItem.CallTestErrorResultDescription == "" || dataItem.CallTestErrorResultDescription == undefined)
+                return null;
+            return Qm_CliTester_TestCallService.getCallTestResultColor(3);
+        };
     }
 
     return directiveDefinitionObject;

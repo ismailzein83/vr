@@ -65,6 +65,27 @@ namespace QM.CLITester.Entities
         Fas = 5
     }
 
+    public enum CallTestErrorResult
+    {
+        [Description("FAS")]
+        Fas = 0,
+
+        [Description("LD FAS")]
+        LdFas = 1,
+
+        [Description("Dead Air")]
+        DeadAir = 2,
+
+        [Description("No RBT")]
+        NoRbt = 3,
+
+        [Description("Viber")]
+        Viber = 4,
+
+        [Description("F-DLR")]
+        FDlr = 5
+    }
+
     public interface IGetTestProgressContext
     {
         Object InitiateTestInformation { get; }

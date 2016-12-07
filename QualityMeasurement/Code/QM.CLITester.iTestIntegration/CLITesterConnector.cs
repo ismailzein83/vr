@@ -242,6 +242,12 @@ namespace QM.CLITester.iTestIntegration
                             ReceivedCli = callNode["CLI"] != null ? callNode["CLI"].InnerText : "",
                             Pdd = callNode["PDD"] != null ? callNode["PDD"].InnerText : "",
                             Mos = callNode["MOS"] != null ? callNode["MOS"].InnerText : "",
+                            Fas = callNode["FAS"] != null ? (callNode["FAS"].InnerText == "0" ? false : true) : false,
+                            LdFas = callNode["LD_FAS"] != null ? (callNode["LD_FAS"].InnerText == "0" ? false : true) : false,
+                            DeadAir = callNode["Dead_Air"] != null ? (callNode["Dead_Air"].InnerText == "0" ? false : true) : false,
+                            NoRbt = callNode["No_RBT"] != null ? (callNode["No_RBT"].InnerText == "0" ? false : true) : false,
+                            Viber = callNode["Viber"] != null ? (callNode["Viber"].InnerText == "0" ? false : true) : false,
+                            FDlr = callNode["F-DLR"] != null ? (callNode["F-DLR"].InnerText == "0" ? false : true) : false,
                             Duration = unixTime2 == 0 ? (DateTime?)null : epoch.AddSeconds(unixTime2).ToLocalTime(),
                             CallTestResult = CallTestResult.PartiallySucceeded
                         };
@@ -250,6 +256,31 @@ namespace QM.CLITester.iTestIntegration
 
                         callResult.CallTestResultDescription =
                             Utilities.GetEnumAttribute<CallTestResult, DescriptionAttribute>(callResult.CallTestResult).Description;
+                        callResult.CallTestErrorResultDescription = "";
+                        
+                        if (callResult.Fas)
+                            callResult.CallTestErrorResultDescription = callResult.CallTestErrorResultDescription + 
+                                Enum.GetName(typeof(CallTestErrorResult), CallTestErrorResult.Fas) + " ";
+
+                        if (callResult.LdFas)
+                            callResult.CallTestErrorResultDescription = callResult.CallTestErrorResultDescription +
+                                Enum.GetName(typeof(CallTestErrorResult), CallTestErrorResult.LdFas) + " ";
+
+                        if (callResult.DeadAir)
+                            callResult.CallTestErrorResultDescription = callResult.CallTestErrorResultDescription +
+                                Enum.GetName(typeof(CallTestErrorResult), CallTestErrorResult.DeadAir) + " ";
+
+                        if (callResult.NoRbt)
+                            callResult.CallTestErrorResultDescription = callResult.CallTestErrorResultDescription +
+                                Enum.GetName(typeof(CallTestErrorResult), CallTestErrorResult.NoRbt) + " ";
+
+                        if (callResult.Viber)
+                            callResult.CallTestErrorResultDescription = callResult.CallTestErrorResultDescription +
+                                Enum.GetName(typeof(CallTestErrorResult), CallTestErrorResult.Viber) + " ";
+
+                        if (callResult.FDlr)
+                            callResult.CallTestErrorResultDescription = callResult.CallTestErrorResultDescription +
+                                Enum.GetName(typeof(CallTestErrorResult), CallTestErrorResult.FDlr);
 
                         switch (callResult.CallTestResult)
                         {
@@ -406,6 +437,12 @@ namespace QM.CLITester.iTestIntegration
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "PDD" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "MOS" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "FAS" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "LD FAS" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dead Air" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "No RBT" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Viber" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "F-DLR" });
             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Call Test Result" });
             
 
@@ -430,6 +467,12 @@ namespace QM.CLITester.iTestIntegration
                         row.Cells.Add(new ExportExcelCell { Value = callResult.ReleaseCode });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.Pdd });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.Mos });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.Fas });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.LdFas });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.DeadAir });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.NoRbt });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.Viber });
+                        row.Cells.Add(new ExportExcelCell { Value = callResult.FDlr });
                         row.Cells.Add(new ExportExcelCell { Value = callResult.CallTestResultDescription });
                     }
                 }

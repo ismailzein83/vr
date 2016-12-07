@@ -35,5 +35,12 @@ namespace QM.CLITester.iTestIntegration
         public DateTime? Duration { get; set; }
         public CallTestResult CallTestResult { get; set; }
         public string CallTestResultDescription { get; set; }
+        public bool Fas { get; set; }
+        public bool LdFas { get; set; }
+        public bool DeadAir { get; set; }
+        public bool NoRbt { get; set; }
+        public bool Viber { get; set; }
+        public bool FDlr { get; set; }
+        public string CallTestErrorResultDescription { get; set; }
     }
 }
