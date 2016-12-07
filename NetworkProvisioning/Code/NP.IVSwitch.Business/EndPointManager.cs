@@ -25,119 +25,93 @@ namespace NP.IVSwitch.Business
         {
             //Get Carrier by id
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-
-
             EndPointCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(input.Query.CarrierAccountId.Value);
 
-            Dictionary<int, EndPointInfo> endPointDic = new Dictionary<int, EndPointInfo>();
+            Dictionary<int, EndPointInfo> aclEndPointDic = new Dictionary<int, EndPointInfo>();
+            Dictionary<int, EndPointInfo> userEendPointDic = new Dictionary<int, EndPointInfo>();
 
             if (extendedSettingsObject != null)
             {
-                endPointDic = extendedSettingsObject.EndPointInfo.ToDictionary(k => k.EndPointId, v => v);
+                if (extendedSettingsObject.AclEndPointInfo != null) aclEndPointDic = extendedSettingsObject.AclEndPointInfo.ToDictionary(k => k.EndPointId, v => v);
+                if (extendedSettingsObject.UserEndPointInfo != null) userEendPointDic = extendedSettingsObject.UserEndPointInfo.ToDictionary(k => k.EndPointId, v => v);
             }
+            var allEndPoints = GetCachedEndPoint();
+            Func<EndPoint, bool> filterExpression =
+                x => (aclEndPointDic.ContainsKey(x.EndPointId) || (userEendPointDic.ContainsKey(x.EndPointId)));
 
-            var allEndPoints = this.GetCachedEndPoint();
-            Func<EndPoint, bool> filterExpression = (x) => (endPointDic.ContainsKey(x.EndPointId));
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allEndPoints.ToBigResult(input, filterExpression, EndPointDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, allEndPoints.ToBigResult(input, filterExpression, EndPointDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)
+        public InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)
         {
-            int carrierAccountId = endPointItem.CarrierAccountId;
-
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
-
-
-            int carrierProfileId = (int)carrierAccountManager.GetCarrierProfileId(carrierAccountId); // Get CarrierProfileId
-
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId); // Get CarrierProfile
-
-            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
-            int accountId = -1;
-
-
-            if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
+            InsertOperationOutput<EndPointDetail> insertOperationOutput = new InsertOperationOutput<EndPointDetail>
             {
-                accountId = accountExtended.CustomerAccountId.Value;
-            }
-            else
-            {
-                //create the account
-                AccountManager accountManager = new AccountManager();
-                Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, true);
-                accountId = accountManager.AddAccount(account);
-
-                // add it to extendedsettings
-                AccountCarrierProfileExtension extendedSettings = new AccountCarrierProfileExtension();
-                AccountCarrierProfileExtension ExtendedSettingsObject = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
-                if (ExtendedSettingsObject != null)
-                    extendedSettings = (AccountCarrierProfileExtension)ExtendedSettingsObject;
-
-                extendedSettings.CustomerAccountId = accountId;
-
-                carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(carrierProfileId, extendedSettings);
-
-
-
-            }
-
-            endPointItem.Entity.AccountId = accountId;
-
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<EndPointDetail>
-            {
-                Result = Vanrise.Entities.InsertOperationResult.Failed,
+                Result = InsertOperationResult.Failed,
                 InsertedObject = null
             };
-
-
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             Helper.SetSwitchConfig(dataManager);
             int endPointId;
-
-
-            EndPointCarrierAccountExtension endPointsExtendedSettings = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccountId);
-
-            if (endPointsExtendedSettings == null)
-                endPointsExtendedSettings = new EndPointCarrierAccountExtension();
-
-            List<EndPointInfo> endPointInfoList = new List<EndPointInfo>();
-            if (endPointsExtendedSettings.EndPointInfo != null)
-                endPointInfoList = endPointsExtendedSettings.EndPointInfo;
-
-
-            if (dataManager.Insert(endPointItem.Entity, endPointInfoList, out  endPointId))
+            if (Insert(endPointItem, out endPointId))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = EndPointDetailMapper(GetEndPoint(endPointId));
-
-
-                // tariffs and routes
-                string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
-                dataManager.CheckTariffAndRouteTables(insertOperationOutput.InsertedObject.Entity, carrierAccountName);
-
-
-                EndPointInfo endPointInfo = new EndPointInfo { EndPointId = endPointId };
-
-                endPointInfoList.Add(endPointInfo);
-                endPointsExtendedSettings.EndPointInfo = endPointInfoList;
-
-                carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId, endPointsExtendedSettings);
-
             }
             else
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
-
             return insertOperationOutput;
         }
 
+        private bool Insert(EndPointToAdd endPointItem, out int endPointId)
+        {
+            endPointId = 0;
+            List<EndPointInfo> userEndPointInfoList = new List<EndPointInfo>();
+            List<EndPointInfo> aclEndPointInfoList = new List<EndPointInfo>();
 
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var profileId = carrierAccountManager.GetCarrierProfileId(endPointItem.CarrierAccountId);
+            if (profileId.HasValue)
+            {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value);
+                if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
+                    endPointItem.Entity.AccountId = accountExtended.CustomerAccountId.Value;
+                else
+                    endPointItem.Entity.AccountId = CreateNewAccount(profileId.Value);
 
+                EndPointCarrierAccountExtension endPointsExtendedSettings =
+                    carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(
+                        endPointItem.CarrierAccountId) ??
+                    new EndPointCarrierAccountExtension();
+
+                if (endPointsExtendedSettings.AclEndPointInfo != null)
+                    aclEndPointInfoList = endPointsExtendedSettings.AclEndPointInfo;
+                if (endPointsExtendedSettings.UserEndPointInfo != null)
+                    userEndPointInfoList = endPointsExtendedSettings.UserEndPointInfo;
+
+                IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+                Helper.SetSwitchConfig(dataManager);
+
+                return dataManager.Insert(endPointItem.Entity, userEndPointInfoList, aclEndPointInfoList, out endPointId);
+            }
+            return false;
+        }
+        private int CreateNewAccount(int profileId)
+        {
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(profileId);
+            AccountManager accountManager = new AccountManager();
+            Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, true);
+            int accountId = accountManager.AddAccount(account);
+
+            AccountCarrierProfileExtension extendedSettings = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId);
+            extendedSettings.CustomerAccountId = accountId;
+
+            carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId, extendedSettings);
+            return accountId;
+        }
         public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<EndPointDetail>();
