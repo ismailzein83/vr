@@ -53,8 +53,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     EndPoints = new List<EndPoint>()
                 };
                 Dictionary<int, EndPoint> tempDictionary = new Dictionary<int, EndPoint>();
-                foreach (var elt in ivCustomer.EndPointInfo)
-                {
+                foreach (var elt in ivCustomer.AclEndPointInfo)
+                { 
                     AccessListTable access;
                     if (dataBaseCustomers.TryGetValue(elt.EndPointId, out access))
                     {
