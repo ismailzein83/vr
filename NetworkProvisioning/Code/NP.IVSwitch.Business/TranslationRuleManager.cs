@@ -24,7 +24,7 @@ namespace NP.IVSwitch.Business
             Dictionary<int, TranslationRule> cachedTranslationRule = this.GetCachedTranslationRule();
             return cachedTranslationRule.GetRecord(translationRuleId);
         }
-        
+
         public IDataRetrievalResult<TranslationRuleDetail> GetFilteredTranslationRules(DataRetrievalInput<TranslationRuleQuery> input)
         {
             var allTranslationRules = this.GetCachedTranslationRule();
@@ -45,7 +45,7 @@ namespace NP.IVSwitch.Business
 
             if (dataManager.Insert(translationRuleItem, out  translationRuleId))
             {
-               Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = TranslationRuleDetailMapper(this.GetTranslationRule(translationRuleId));
             }
@@ -68,7 +68,7 @@ namespace NP.IVSwitch.Business
 
             if (dataManager.Update(translationRuleItem))
             {
-              Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = TranslationRuleDetailMapper(this.GetTranslationRule(translationRuleItem.TranslationRuleId));
             }
@@ -78,25 +78,25 @@ namespace NP.IVSwitch.Business
             }
 
             return updateOperationOutput;
-        }        
+        }
 
         #endregion
- 
+
 
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ITranslationRuleDataManager _dataManager = IVSwitchDataManagerFactory.GetDataManager<ITranslationRuleDataManager>();
-        //    object _updateHandle;
+            //    object _updateHandle;
             public DateTime lastCheckTime { get; set; }
             protected override bool IsTimeExpirable { get { return true; } }
-        
-            
-        }
-       #endregion
 
-       #region Private Methods
+
+        }
+        #endregion
+
+        #region Private Methods
 
         Dictionary<int, TranslationRule> GetCachedTranslationRule()
         {
@@ -104,6 +104,7 @@ namespace NP.IVSwitch.Business
                () =>
                {
                    ITranslationRuleDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ITranslationRuleDataManager>();
+                   Helper.SetSwitchConfig(dataManager);
                    return dataManager.GetTranslationRules().ToDictionary(x => x.TranslationRuleId, x => x);
                });
         }
@@ -131,7 +132,7 @@ namespace NP.IVSwitch.Business
 
             };
             return translationRuleInfo;
-        } 
+        }
 
         #endregion
 
