@@ -10,10 +10,12 @@ namespace NP.IVSwitch.Data.Postgres
     public class RouteTableDataManager : BasePostgresDataManager
     {
         private string ConnectionString { get; set; }
+        private string Owner { get; set; }
 
-        public RouteTableDataManager(string connectionString)
+        public RouteTableDataManager(string connectionString, string owner)
         {
             ConnectionString = connectionString;
+            Owner = owner;
         }
         protected override string GetConnectionString()
         {
@@ -22,12 +24,10 @@ namespace NP.IVSwitch.Data.Postgres
 
         public int CreateRouteTable(int routeId)
         {
+            if (routeId == -1) return -1;
 
-            if (routeId != -1)
-            {
-                // Create routeId table
-                String[] cmdText = {
-                                        string.Format(@"CREATE TABLE rt{0} (
+            String[] cmdText = {
+                string.Format(@"CREATE TABLE rt{0} (
                                                       destination character varying(20) NOT NULL,
                                                       route_id integer NOT NULL,
                                                       time_frame character varying(50) NOT NULL,
@@ -55,17 +55,11 @@ namespace NP.IVSwitch.Data.Postgres
                                                     WITH (
                                                       OIDS=FALSE
                                                     );",routeId.ToString()),
-                                        string.Format("ALTER TABLE  rt{0}  OWNER TO zeinab;",routeId.ToString()) 
+                string.Format("ALTER TABLE  rt{0}  OWNER TO {1};",routeId.ToString(),Owner) 
 
-                                    };
-
-                ExecuteNonQuery(cmdText);
-                return routeId;
-            }
-
-
-
-            return -1;
+            };
+            ExecuteNonQuery(cmdText);
+            return routeId;
         }
 
     }

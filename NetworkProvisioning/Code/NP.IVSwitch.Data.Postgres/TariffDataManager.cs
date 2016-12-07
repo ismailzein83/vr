@@ -10,10 +10,12 @@ namespace NP.IVSwitch.Data.Postgres
     public class TariffDataManager : BasePostgresDataManager
     {
         private string ConnectionString { get; set; }
+        private string Owner { get; set; }
 
-        public TariffDataManager(string connectionString)
+        public TariffDataManager(string connectionString, string owner)
         {
             ConnectionString = connectionString;
+            Owner = owner;
         }
         protected override string GetConnectionString()
         {
@@ -21,13 +23,10 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public int CreateTariffTable(int tariffId)
         {
+            if (tariffId == -1) return -1;
 
-
-            if (tariffId != -1)
-            {
-                // Create tariff table
-                String[] cmdText4 = {
-                                        string.Format(@"CREATE TABLE trf{0} (
+            String[] cmdText4 = {
+                string.Format(@"CREATE TABLE trf{0} (
                                                       dest_code character varying(30) NOT NULL,
                                                       time_frame character varying(50) NOT NULL,
                                                       dest_name character varying(100) DEFAULT NULL::character varying,
@@ -40,23 +39,17 @@ namespace NP.IVSwitch.Data.Postgres
                                                     WITH (
                                                       OIDS=FALSE
                                                     );",tariffId.ToString()),
-                                        string.Format("ALTER TABLE  trf{0}  OWNER TO zeinab;",tariffId.ToString()) 
+                string.Format("ALTER TABLE  trf{0}  OWNER TO {1};",tariffId.ToString(),Owner) 
 
-                                    };
-
-                ExecuteNonQuery(cmdText4);
-                return tariffId;
-
-            }
-
-            return -1;
+            };
+            ExecuteNonQuery(cmdText4);
+            return tariffId;
         }
 
 
-        public void CreateGlobalTable()
+        public void CreateGlobalTable(int tariffId)
         {
-
-            String[] cmdText = { @"CREATE TABLE Global (
+            String[] cmdText = { string.Format(@"CREATE TABLE trf_{0} (
                                                       dest_code character varying(30) NOT NULL,
                                                       time_frame character varying(50) NOT NULL,
                                                       dest_name character varying(100) DEFAULT NULL::character varying,
@@ -64,21 +57,21 @@ namespace NP.IVSwitch.Data.Postgres
                                                       next_period integer,
                                                       init_charge numeric(18,9) DEFAULT NULL::numeric,
                                                       next_charge numeric(18,9) DEFAULT NULL::numeric,
-                                                      CONSTRAINT Global_pkey PRIMARY KEY (dest_code, time_frame)
+                                                      CONSTRAINT trf_{0}_pkey PRIMARY KEY (dest_code, time_frame)
                                                     )
                                                     WITH (
                                                       OIDS=FALSE
-                                                    );" ,
-                                        "ALTER TABLE  Global  OWNER TO zeinab;",
-                                       @"INSERT INTO Global (dest_code, time_frame,dest_name,init_period ,next_period,init_charge,next_charge) 
+                                                    );",tariffId) ,
+                                       string.Format("ALTER TABLE  trf_{0}  OWNER TO {1};",tariffId,Owner),
+                                       string.Format(@"INSERT INTO trf_{0} (dest_code, time_frame,dest_name,init_period ,next_period,init_charge,next_charge) 
                                         SELECT  dest_code,time_frame,dest_name,init_period,next_period,init_charge,next_charge
                                         FROM  	unnest(ARRAY[0,1,2,3,4,5,6,7,8,9]) dest_code, 
                                                 unnest(ARRAY['* * * * *']) time_frame,
                                                 ARRAY_TO_STRING(ARRAY[NULL, dest_code],' ','GLobal ' ) dest_name,
                                                 unnest(ARRAY[1]) init_period,unnest(ARRAY[1]) next_period,unnest(ARRAY[0.0]) init_charge,
-                                                unnest(ARRAY[0.0]) next_charge" 
+                                                unnest(ARRAY[0.0]) next_charge",tariffId) 
             };
-               ExecuteNonQuery(cmdText);
+            ExecuteNonQuery(cmdText);
         }
     }
 }

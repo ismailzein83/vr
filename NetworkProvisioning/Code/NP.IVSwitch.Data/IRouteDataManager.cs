@@ -12,7 +12,5 @@ namespace NP.IVSwitch.Data
         List<Route> GetRoutes();
         bool Update(Route route);
         bool Insert(Route route, out int insertedId);
-
-        void CheckTariffTable();
     }
 }

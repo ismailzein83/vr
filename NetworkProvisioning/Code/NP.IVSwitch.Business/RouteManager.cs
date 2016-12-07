@@ -50,7 +50,84 @@ namespace NP.IVSwitch.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeDic.ToBigResult(input, filterExpression, RouteDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<RouteDetail> AddRoute(RouteToAdd routeItem)
+        public InsertOperationOutput<RouteDetail> AddRoute(RouteToAdd routeItem)
+        {
+            InsertOperationOutput<RouteDetail> insertOperationOutput = new InsertOperationOutput<RouteDetail>
+            {
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
+            int routeId;
+            if (Insert(routeItem, out routeId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = RouteDetailMapper(this.GetRoute(routeId));
+            }
+            else
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            return insertOperationOutput;
+        }
+
+        private bool Insert(RouteToAdd routeItem, out int routeId)
+        {
+            routeId = 0;
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var profileId = carrierAccountManager.GetCarrierProfileId(routeItem.CarrierAccountId);
+
+            if (!profileId.HasValue) return false;
+
+            int carrierProfileId = (int)profileId;
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId);
+            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
+            int accountId;
+            if (accountExtended != null && accountExtended.VendorAccountId.HasValue)
+            {
+                accountId = accountExtended.VendorAccountId.Value;
+            }
+            else
+            {
+                AccountManager accountManager = new AccountManager();
+                Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, false);
+                accountId = accountManager.AddAccount(account);
+                AccountCarrierProfileExtension extendedSettings =
+                    carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId) ??
+                    new AccountCarrierProfileExtension();
+
+                extendedSettings.VendorAccountId = accountId;
+
+                carrierProfileManager.UpdateCarrierProfileExtendedSetting(carrierProfileId, extendedSettings);
+            }
+            routeItem.Entity.AccountId = accountId;
+
+            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+            Helper.SetSwitchConfig(dataManager);
+            if (dataManager.Insert(routeItem.Entity, out  routeId))
+            {
+                RouteCarrierAccountExtension routesExtendedSettings =
+                    carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(
+                        routeItem.CarrierAccountId) ??
+                    (RouteCarrierAccountExtension)new RouteCarrierAccountExtension();
+
+                List<RouteInfo> routeInfoList = new List<RouteInfo>();
+                if (routesExtendedSettings.RouteInfo != null)
+                    routeInfoList = routesExtendedSettings.RouteInfo;
+                RouteInfo routeInfo = new RouteInfo
+                {
+                    RouteId = routeId,
+                    Percentage = routeItem.Entity.Percentage
+                };
+                routeInfoList.Add(routeInfo);
+                routesExtendedSettings.RouteInfo = routeInfoList;
+
+                carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
+                    routesExtendedSettings);
+                return true;
+            }
+            return false;
+        }
+        public Vanrise.Entities.InsertOperationOutput<RouteDetail> AddRoutes(RouteToAdd routeItem)
         {
 
             int carrierAccountId = routeItem.CarrierAccountId;
@@ -92,10 +169,12 @@ namespace NP.IVSwitch.Business
             routeItem.Entity.AccountId = accountId;
 
 
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<RouteDetail>();
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<RouteDetail>
+            {
+                Result = Vanrise.Entities.InsertOperationResult.Failed,
+                InsertedObject = null
+            };
 
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
 
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
             Helper.SetSwitchConfig(dataManager);
@@ -119,7 +198,7 @@ namespace NP.IVSwitch.Business
                     routeInfoList = routesExtendedSettings.RouteInfo;
 
                 // tariffs
-                dataManager.CheckTariffTable();
+                //dataManager.CheckTariffTable();
 
                 RouteInfo routeInfo = new RouteInfo();
                 routeInfo.RouteId = routeId;
@@ -175,7 +254,7 @@ namespace NP.IVSwitch.Business
                     routeInfoList = routesExtendedSettings.RouteInfo;
 
                 // tariffs
-                dataManager.CheckTariffTable();
+                //dataManager.CheckTariffTable();
 
                 RouteInfo routeInfo = new RouteInfo();
 

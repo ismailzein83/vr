@@ -12,10 +12,6 @@ namespace NP.IVSwitch.Data.Postgres
 {
     public class RouteDataManager : BasePostgresDataManager, IRouteDataManager
     {
-        public RouteDataManager()
-        {
-
-        }
         public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
         protected override string GetConnectionString()
         {
@@ -57,9 +53,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool Update(Route route)
         {
-
             int currentState, transportPortId;
-
             MapEnum(route, out currentState, out transportPortId);
 
             String cmdText = @"UPDATE routes
@@ -82,25 +76,19 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
                 cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
-
-
             }
            );
-            return (recordsEffected > 0);
+            bool succ = (recordsEffected > 0);
+            if (succ)
+            {
+                CheckTariffTable();
+                return true;
+            }
+            return false;
         }
 
-        public bool Insert(Route route, out int insertedId)
+        private int? InsertRoutes(Route route, int groupId)
         {
-
-
-            object routeId;
-            int currentState, transportPortId;
-
-            int groupId = GetGroupId(route);
-
-            MapEnum(route, out currentState, out transportPortId);
-
-
             String cmdText = @"INSERT INTO routes(account_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,transport_mode_id,
                                     timeout  )
@@ -108,7 +96,7 @@ namespace NP.IVSwitch.Data.Postgres
                                  @channels_limit,  @wakeup_time, @host, @port, @transport_mode_id, @timeout 
  	                             returning  route_id;";
 
-            routeId = ExecuteScalarText(cmdText, (cmd) =>
+            return (int?)ExecuteScalarText(cmdText, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@account_id", route.AccountId);
                 cmd.Parameters.AddWithValue("@description", route.Description);
@@ -117,46 +105,47 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", currentState);
+                cmd.Parameters.AddWithValue("@state_id", (int)route.CurrentState);
                 cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@wakeup_time", route.WakeUpTime);
                 cmd.Parameters.AddWithValue("@host", route.Host);
                 cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
-                cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
+                cmd.Parameters.AddWithValue("@transport_mode_id", (int)route.TransportModeId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
 
             }
-            );
+                );
+        }
+        public bool Insert(Route route, out int insertedId)
+        {
+            int groupId = GetGroupId(route);
+            int? routeId = InsertRoutes(route, groupId);
 
             insertedId = -1;
-            if (routeId != null)
+            if (routeId.HasValue)
             {
                 insertedId = Convert.ToInt32(routeId);
+                CheckTariffTable();
                 return true;
             }
-            else
-                return false;
-
+            return false;
         }
-
-
-
-        public void CheckTariffTable()
+        private void CheckTariffTable()
         {
-            // check if exists/insert
-            String cmdText = @"insert into tariffs (tariff_name, description) 
-                               select  'Global' ,'Global' 
-                               where not exists(select 1 from tariffs where tariff_name = 'Global')";
-
-            int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) => { });
-
-            if (recordsEffected > 0)
+            String cmdText = @" select tariff_id
+                                from tariffs
+                                where tariff_name = 'Global'";
+            int? tariffId = (int?)ExecuteScalarText(cmdText, null);
+            if (!tariffId.HasValue)
             {
-                //create global table in tariffs database
-                TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString);
-                tariffDataManager.CreateGlobalTable();
+                string insertCmd = @"insert into tariffs (tariff_name, description) 
+                                select  'Global' ,'Global' 
+                                where not exists(select 1 from tariffs where tariff_name = 'Global')
+                                returning tariff_id";
+                tariffId = (int?)ExecuteScalarText(insertCmd, null);
+                TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString, IvSwitchSync.OwnerName);
+                tariffDataManager.CreateGlobalTable(tariffId.Value);
             }
-
         }
 
         private void MapEnum(Route route, out int currentState, out int transportPortId)
@@ -166,21 +155,15 @@ namespace NP.IVSwitch.Data.Postgres
 
             var transportPortIdValue = Enum.Parse(typeof(TransportMode), route.TransportModeId.ToString());
             transportPortId = (int)transportPortIdValue;
-
-
-
         }
 
         private Object CheckIfNull(String parameter, Object defaultValue)
         {
-
             return (String.IsNullOrEmpty(parameter)) ? defaultValue : parameter;
-
         }
 
         private int GetGroupId(Route route)
         {
-
             int groupId, nextGroupId;
 
             String cmdText = @"Select max(group_id) as group_id

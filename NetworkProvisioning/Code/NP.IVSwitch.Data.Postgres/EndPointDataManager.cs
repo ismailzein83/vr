@@ -38,6 +38,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
+        #region public functions
         public bool SipUpdate(EndPoint endPoint)
         {
 
@@ -132,29 +133,55 @@ namespace NP.IVSwitch.Data.Postgres
                     cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                     cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
                     cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
-
-
                 }
                );
-
-
-
                 return (recordsEffected > 0);
-
             }
-
             return false;
         }
 
         public bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
         {
-            int currentState, rtpMode;
-            MapEnum(endPoint, out currentState, out rtpMode);
-
-            // get group_id   
+            insertedId = -1;
             int groupId = GetGroupId(endPoint, endPointInfoList);
+            int? endPointId = ExecuteSipInsert(endPoint, groupId);
+            if (!endPointId.HasValue) return false;
+            insertedId = Convert.ToInt32(endPointId);
+            return true;
+        }
 
+        public bool AclInsert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
+        {
+            insertedId = -1;
+            List<EndPointInfo> endpoints = userEndPoints.Concat(aclEndPoints).ToList();
+            int groupId = GetGroupId(endPoint, endpoints);
+            AccessList accessList = PrepareDataForInsert(endPoint.AccountId, groupId, carrierAccountName);
 
+            int? endPointId = InserUser(endPoint, groupId, accessList);
+            if (!endPointId.HasValue) return false;
+            insertedId = endPointId.Value;
+            return InsertAcl(endPointId.Value, endPoint, groupId, accessList);
+        }
+        public bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
+        {
+            if (endPoint.EndPointType == EndPointType.ACL)
+                return AclInsert(endPoint, userEndPoints, aclEndPoints, out insertedId, carrierAccountName);
+            return SipInsert(endPoint, userEndPoints, out insertedId);
+        }
+
+        public bool Update(EndPoint endPoint)
+        {
+            if (endPoint.EndPointType == EndPointType.ACL)
+                return AclUpdate(endPoint);
+            return SipUpdate(endPoint);
+
+        }
+
+        #endregion
+
+        #region private functions
+        private int? ExecuteSipInsert(EndPoint endPoint, int groupId)
+        {
             String cmdText = @"INSERT INTO users(account_id,description,group_id, 
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, max_call_dura,rtp_mode,domain_id,
                                     sip_login,sip_password, tech_prefix,type_id)
@@ -163,7 +190,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    WHERE   NOT EXISTS(SELECT 1 FROM  users WHERE (domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix))
  	                             returning  user_id;";
 
-            var endPointId = ExecuteScalarText(cmdText, cmd =>
+            return (int?)ExecuteScalarText(cmdText, cmd =>
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 cmd.Parameters.AddWithValue("@description", endPoint.Description);
@@ -171,33 +198,26 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", currentState);
+                cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                cmd.Parameters.AddWithValue("@rtp_mode", rtpMode);
+                cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String);
-                prmSipLogin.Value = CheckIfNull(endPoint.SipLogin);
+                var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String)
+                {
+                    Value = CheckIfNull(endPoint.SipLogin)
+                };
                 cmd.Parameters.Add(prmSipLogin);
-                var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String);
-                prmPassword.Value = CheckIfNull(endPoint.SipPassword);
+                var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String)
+                {
+                    Value = CheckIfNull(endPoint.SipPassword)
+                };
                 cmd.Parameters.Add(prmPassword);
                 cmd.Parameters.AddWithValue("@tech_prefix", ".");
                 cmd.Parameters.AddWithValue("@type_id", 2);
             }
                 );
-
-            insertedId = -1;
-            if (endPointId != null)
-            {
-                insertedId = Convert.ToInt32(endPointId);
-                return true;
-            }
-            else
-                return false;
-
         }
-
         private int? InserUser(EndPoint endPoint, int groupId, AccessList accessList)
         {
             int currentState, rtpMode;
@@ -209,7 +229,7 @@ namespace NP.IVSwitch.Data.Postgres
                                  @channels_limit,   @max_call_dura, @rtp_mode, @domain_id, @tech_prefix ,@type_id,@tariff_id,@route_table_id
  	                             returning  user_id;";
 
-            var endPointId = ExecuteScalarText(cmdText1, cmd =>
+            return (int?)ExecuteScalarText(cmdText1, cmd =>
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
@@ -225,8 +245,6 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@tariff_id", accessList.TariffId);
             }
                 );
-
-            return (int?)endPointId;
         }
 
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
@@ -262,20 +280,8 @@ namespace NP.IVSwitch.Data.Postgres
                 );
             return recordAffected > 0;
         }
-        public bool AclInsert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId)
-        {
-            insertedId = -1;
-            List<EndPointInfo> endpoints = userEndPoints.Concat(aclEndPoints).ToList();
-            int groupId = GetGroupId(endPoint, endpoints);
-            AccessList accessList = PreareDataForInsert(endPoint.AccountId, groupId, "");
 
-            int? endPointId = InserUser(endPoint, groupId, accessList);
-            if (!endPointId.HasValue) return false;
-            insertedId = endPointId.Value;
-            return InsertAcl(endPointId.Value, endPoint, groupId, accessList);
-        }
-
-        private AccessList PreareDataForInsert(int accountId, int groupId, string carrierAccountName)
+        private AccessList PrepareDataForInsert(int accountId, int groupId, string carrierAccountName)
         {
             AccessList accessList = CheckAccessListExistense(accountId, groupId);
             return accessList ?? CreateTariffAndRouteTables(carrierAccountName);
@@ -292,50 +298,7 @@ namespace NP.IVSwitch.Data.Postgres
              });
             return accessLists.Count > 0 ? accessLists.First() : null;
         }
-        public bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId)
-        {
-            if (endPoint.EndPointType == EndPointType.ACL)
-                return AclInsert(endPoint, userEndPoints, aclEndPoints, out insertedId);
-            return SipInsert(endPoint, userEndPoints, out insertedId);
-        }
 
-        public bool Update(EndPoint endPoint)
-        {
-            if (endPoint.EndPointType == EndPointType.ACL)
-                return AclUpdate(endPoint);
-            else
-                return SipUpdate(endPoint);
-
-        }
-        public void CheckTariffAndRouteTables(EndPoint endPoint, String carrierAccountName)
-        {
-            //check if route and tariff exist for this accountid
-            // get existing route_id and tariff_id
-            String cmdText = @"SELECT COALESCE (users.tariff_id,access_list.tariff_id) as tariff_id, COALESCE (users.route_table_id,access_list.route_table_id) as route_id
-                                from users 
-                                LEFT  JOIN access_list
-                                on users.user_id = access_list.user_id
-                                where users.account_id = @account_id
-                                LIMIT 1 ";
-
-            EndPointToUpdate tariffRouteIds = GetItemText(cmdText, EndPointToUpdateMapper, (cmd) =>
-            {
-                cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
-            });
-
-            if (tariffRouteIds.RouteTableId != null || tariffRouteIds.TariffId != null)
-            {
-                // update new endpoint with existing route_id and table_id
-                AddTariffAndRouteToEndpoint(tariffRouteIds, endPoint);
-            }
-
-            else
-            {
-                // create tariff and route id then update endpoint
-                //CreateTariffAndRouteTables(carrierAccountName, endPoint);
-
-            }
-        }
         private AccessList CreateTariffAndRouteTables(String carrierAccountName)
         {
             String cmdText = @"INSERT INTO tariffs(tariff_name,description)
@@ -352,7 +315,7 @@ namespace NP.IVSwitch.Data.Postgres
             if (tariffId == null) return null;
 
             var insertedTariffId = Convert.ToInt32(tariffId);
-            TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString);
+            TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString, IvSwitchSync.OwnerName);
             tariffDataManager.CreateTariffTable(insertedTariffId);
 
 
@@ -371,7 +334,7 @@ namespace NP.IVSwitch.Data.Postgres
             if (routeId == null) return null;
 
             insertedRouteId = Convert.ToInt32(routeId);
-            RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString);
+            RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString, IvSwitchSync.OwnerName);
             routeTableDataManager.CreateRouteTable(insertedRouteId);
 
             return new AccessList
@@ -428,6 +391,7 @@ namespace NP.IVSwitch.Data.Postgres
             return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value : parameter;
 
         }
+
         private int GetGroupId(EndPoint endPoint, List<EndPointInfo> endPointInfoList)
         {
             if (endPointInfoList.Count == 0)
@@ -453,9 +417,9 @@ namespace NP.IVSwitch.Data.Postgres
                                  where  group_id = @group_id;";
 
                     nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "next_group_id"); }, (cmd) =>
-                  {
-                      cmd.Parameters.AddWithValue("@group_id", groupId);
-                  });
+                    {
+                        cmd.Parameters.AddWithValue("@group_id", groupId);
+                    });
 
                     if (nextGroupId == 0)
                     {
@@ -500,6 +464,8 @@ namespace NP.IVSwitch.Data.Postgres
                 return groupId;
             }
         }
+
+        #endregion
 
         #region mappers
         private EndPoint EndPointMapper(IDataReader reader)
@@ -549,11 +515,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         private AccessList AccessListMapper(IDataReader reader)
         {
-            AccessList endPoint = new AccessList
-            {
-                AccountId = reader["account_id"] != DBNull.Value ? reader["account_id"].ToString() : "",
-                GroupId = reader["group_id"] != DBNull.Value ? reader["group_id"].ToString() : ""
-            };
+            AccessList endPoint = new AccessList();
             int id;
             if (reader["route_table_id"] != DBNull.Value)
             {
@@ -573,8 +535,6 @@ namespace NP.IVSwitch.Data.Postgres
 
     public class AccessList
     {
-        public string AccountId { get; set; }
-        public string GroupId { get; set; }
         public int RouteTableId { get; set; }
         public int TariffId { get; set; }
     }
