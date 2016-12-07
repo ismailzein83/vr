@@ -66,16 +66,18 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             mappedCol.MappedValue.Execute(mappedValueContext);
 
-            if (mappedValueContext.Value != null && mappedValueContext.Value is DateTime)
-                mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
-
-            sheets.Add(new SalePriceListTemplateTableCell()
+            if (mappedValueContext.Value != null)
             {
-                ColumnIndex = mappedCol.ColumnIndex,
-                RowIndex = rowIndex,
-                Value = mappedValueContext.Value
-            });
+                if (mappedValueContext.Value is DateTime)
+                    mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
 
+                sheets.Add(new SalePriceListTemplateTableCell()
+                {
+                    ColumnIndex = mappedCol.ColumnIndex,
+                    RowIndex = rowIndex,
+                    Value = mappedValueContext.Value
+                });
+            }
         }
     }
 }
