@@ -28,6 +28,23 @@ namespace Vanrise.Rules
         public virtual bool ValidateBeforeAdd(T rule) { return true; }
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
+            InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
+            if (TryAdd(rule))
+            {
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                GetCacheManager().SetCacheExpired(GetRuleTypeId());
+                insertOperationOutput.InsertedObject = MapToDetails(rule);
+
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
+            return insertOperationOutput;
+        }
+
+        public bool TryAdd(T rule)
+        {
             int ruleTypeId = GetRuleTypeId();
             Entities.Rule ruleEntity = new Entities.Rule
             {
@@ -37,23 +54,17 @@ namespace Vanrise.Rules
                 EED = rule.EndEffectiveTime,
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
+            
             int ruleId;
             if (ValidateBeforeAdd(rule))
             {
                 if (ruleDataManager.AddRule(ruleEntity, out ruleId))
-                {
-                    insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                {                    
                     rule.RuleId = ruleId;
-                    GetCacheManager().SetCacheExpired(ruleTypeId);
-                    insertOperationOutput.InsertedObject = MapToDetails(rule);
+                    return true;
                 }
             }
-            else
-            {
-                insertOperationOutput.Result = InsertOperationResult.SameExists;
-            }
-            return insertOperationOutput;
+            return false;
         }
 
         public virtual bool ValidateBeforeUpdate(T rule) { return true; }

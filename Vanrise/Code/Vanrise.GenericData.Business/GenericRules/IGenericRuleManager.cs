@@ -15,6 +15,8 @@ namespace Vanrise.GenericData.Business
 
         IEnumerable<GenericRule> GetGenericRulesByDefinitionId(Guid ruleDefinitionId);
 
+        bool TryAddGenericRule(GenericRule rule);
+
         Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule);
 
         Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule);

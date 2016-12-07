@@ -35,8 +35,8 @@ namespace Vanrise.GenericData.Business
 
         public GenericRuleTypeConfig GetGenericRuleTypeById(Guid ruleTypeConfigId)
         {
-            var cachedGenericRuleTypes = GetGenericRuleTypes();
-            return cachedGenericRuleTypes.FindRecord(x=>x.ExtensionConfigurationId == ruleTypeConfigId);
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfiguration<GenericRuleTypeConfig>(ruleTypeConfigId, GenericRuleTypeConfig.EXTENSION_TYPE);
         }
 
         #endregion

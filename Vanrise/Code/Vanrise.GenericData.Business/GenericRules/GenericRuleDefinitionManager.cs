@@ -28,7 +28,7 @@ namespace Vanrise.GenericData.Business
         public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
-            return cachedGenericRuleDefinitions.FindRecord((genericRuleDefinition) => genericRuleDefinition.GenericRuleDefinitionId == genericRuleDefinitionId);
+            return cachedGenericRuleDefinitions.GetRecord(genericRuleDefinitionId);
         }
 
         public IEnumerable<GenericRuleDefinition> GetGenericRulesDefinitons()
