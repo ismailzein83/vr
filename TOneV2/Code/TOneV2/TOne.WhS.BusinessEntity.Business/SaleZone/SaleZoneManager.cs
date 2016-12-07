@@ -249,18 +249,25 @@ namespace TOne.WhS.BusinessEntity.Business
 			return allSaleZones.ToDictionary(x => x.Key, x => x.Value.Name);
 		}
 
-		public bool IsCountryEmpty(int sellingNumberPlanId, int countryId, DateTime minimumDate)
-		{
-			IEnumerable<SaleZone> saleZones = this.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
-			if (saleZones == null || saleZones.Count() == 0)
-				return true;
-			return false;
-		}
-
-		public IEnumerable<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+		public bool IsCountryEmpty(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
 		{
 			IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones().Values;
-			return allSaleZones.FindAllRecords(item => item.SellingNumberPlanId == sellingNumberPlanId && item.CountryId == countryId && (!item.EED.HasValue || (item.EED.Value > minimumDate && item.EED > item.BED)));
+			return AnySaleZoneEffectiveAfterExists(allSaleZones, countryId, effectiveOn);
+		}
+
+		public bool AnySaleZoneEffectiveAfterExists(IEnumerable<SaleZone> saleZones, int countryId, DateTime effectiveOn)
+		{
+			Func<SaleZone, bool> filterFunc = (saleZone) =>
+			{
+				if (saleZone.EED.HasValue && saleZone.EED <= saleZone.BED) // Exclude deleted sale zones
+					return false;
+				if (saleZone.CountryId != countryId)
+					return false;
+				if (!saleZone.IsEffectiveOrFuture(effectiveOn))
+					return false;
+				return true;
+			};
+			return saleZones.Any(filterFunc);
 		}
 
 		public IEnumerable<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, DateTime minimumDate)

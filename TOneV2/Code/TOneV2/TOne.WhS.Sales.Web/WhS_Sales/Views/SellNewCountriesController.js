@@ -130,12 +130,20 @@
 				var filter = {};
 
 				filter.Filters = [];
+
 				var notSoldToCustomerFilter = {
 					$type: 'TOne.WhS.BusinessEntity.Business.CountryNotSoldToCustomerFilter, TOne.WhS.BusinessEntity.Business',
 					CustomerId: customerId,
 					EffectiveOn: UtilsService.getDateFromDateTime(new Date())
 				};
 				filter.Filters.push(notSoldToCustomerFilter);
+
+				var countryNotEmptyFilter = {
+					$type: 'TOne.WhS.BusinessEntity.Business.CountryNotEmptyFilter, TOne.WhS.BusinessEntity.Business',
+					CustomerId: customerId,
+					EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+				};
+				filter.Filters.push(countryNotEmptyFilter);
 
 				return filter;
 			}
