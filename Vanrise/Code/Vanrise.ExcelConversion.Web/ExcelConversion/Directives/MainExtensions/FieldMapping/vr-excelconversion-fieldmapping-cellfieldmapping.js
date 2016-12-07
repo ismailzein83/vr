@@ -117,6 +117,8 @@
                                 ctrl.showCheckButton = true;
                             }
                         }
+                        if (payload.showEditButton != undefined)
+                            ctrl.showEditButton = payload.showEditButton;
                     }
 
                 };
