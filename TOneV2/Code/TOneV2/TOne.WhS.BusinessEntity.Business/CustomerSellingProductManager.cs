@@ -99,8 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<CarrierAccountInfo> GetOrderedCustomersBySellingProductId(int sellingProductId)
         {
             IEnumerable<CarrierAccountInfo> customersBySellingProduct = this.GetCustomersBySellingProductId(sellingProductId, DateTime.Today);
-            if (customersBySellingProduct == null)
-                return null;
+            
             return customersBySellingProduct.OrderBy(itm => itm.Name);
         }
 

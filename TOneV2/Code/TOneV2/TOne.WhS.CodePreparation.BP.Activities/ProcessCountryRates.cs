@@ -27,7 +27,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
         public IEnumerable<AddedRate> NewRates { get; set; }
-        public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
 
     }
 
@@ -88,8 +87,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return new ProcessCountryRatesOutput()
             {
                 ChangedRates = processCountryRateContext.ChangedRates,
-                NewRates = processCountryRateContext.NewRates,
-                SalePriceListsByOwner = salePriceListsByOwner
+                NewRates = processCountryRateContext.NewRates
             };
         }
 
@@ -111,7 +109,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             ChangedRates.Set(context, result.ChangedRates);
             NewRates.Set(context, result.NewRates);
-            SalePriceListsByOwner.Set(context, result.SalePriceListsByOwner);
         }
     }
 }

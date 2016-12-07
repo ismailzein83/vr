@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int PriceListId { get; set; }
         public SalePriceListOwnerType OwnerType { get; set; }
-        public SalePriceListType PriceListType { get; set; }
+        public SalePriceListType? PriceListType { get; set; }
         public int OwnerId { get; set; }
         public int CurrencyId { get; set; }
         public string SourceId { get; set; }

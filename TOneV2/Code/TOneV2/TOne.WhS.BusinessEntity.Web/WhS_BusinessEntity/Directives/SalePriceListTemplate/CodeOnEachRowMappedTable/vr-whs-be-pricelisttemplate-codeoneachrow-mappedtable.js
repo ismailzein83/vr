@@ -102,7 +102,8 @@ app.directive('vrWhsBePricelisttemplateCodeoneachrowMappedtable', ['WhS_BE_SaleP
 
             firstRowDirectiveReadyDeferred.promise.then(function () {
                 var firstRowDirectivePayload = {
-                    context: getCellFieldMappingContext()
+                    context: getCellFieldMappingContext(),
+                    showEditButton: false
                 };
               
                 if (mappedTable != undefined) {

@@ -525,7 +525,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			SalePriceListDetail pricelistDetail = new SalePriceListDetail();
 			pricelistDetail.Entity = priceList;
 			pricelistDetail.OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType);
-			pricelistDetail.PriceListTypeName = Vanrise.Common.Utilities.GetEnumDescription(priceList.PriceListType);
+			pricelistDetail.PriceListTypeName = priceList.PriceListType.HasValue ? Vanrise.Common.Utilities.GetEnumDescription(priceList.PriceListType.Value) : null;
 
 
 			if (priceList.OwnerType != SalePriceListOwnerType.Customer)

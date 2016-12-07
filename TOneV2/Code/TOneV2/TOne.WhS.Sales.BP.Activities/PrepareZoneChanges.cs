@@ -85,8 +85,7 @@ namespace TOne.WhS.Sales.BP.Activities
 		{
 			var customerSellingProductManager = new CustomerSellingProductManager();
 			IEnumerable<CarrierAccountInfo> customers = customerSellingProductManager.GetCustomersBySellingProductId(sellingProductId, DateTime.Today);
-			if (customers == null)
-				return new List<RoutingCustomerInfoDetails>();
+			
 			return customers.MapRecords(x => new RoutingCustomerInfoDetails()
 			{
 				CustomerId = x.CarrierAccountId,

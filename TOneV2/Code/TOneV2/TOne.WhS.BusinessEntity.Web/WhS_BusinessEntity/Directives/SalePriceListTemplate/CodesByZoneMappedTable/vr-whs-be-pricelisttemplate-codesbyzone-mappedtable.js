@@ -104,7 +104,8 @@ app.directive('vrWhsBePricelisttemplateCodesbyzoneMappedtable', ['WhS_BE_SalePri
 
             firstRowDirectiveReadyDeferred.promise.then(function () {
                 var firstRowDirectivePayload = {
-                    context: getCellFieldMappingContext()
+                    context: getCellFieldMappingContext(),
+                    showEditButton : false
                 };
 
                 if (mappedTable != undefined) {

@@ -75,12 +75,12 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
                     });
             };
 
-            
+
             $scope.removeMappedCol = function (dataItem) {
                 var index = $scope.mappedCols.indexOf(dataItem);
                 $scope.mappedCols.splice(index, 1);
             };
-           
+
         }
 
         function loadMappedColumns(mappedSheet) {
@@ -99,7 +99,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
         }
 
 
-        
+
 
         function getMappedCol(mappedColumn, sheetIndex, firstRowIndex) {
 
@@ -113,7 +113,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
             mappedCol.onDirectiveReady = function (api) {
                 mappedCol.directiveAPI = api;
                 var directivePayload = {
-                    context: getCellFieldMappingContext()
+                    context: getCellFieldMappingContext(),
+                    showEditButton: false
                 };
                 if (mappedColumn != undefined) {
                     directivePayload.fieldMapping = {
@@ -134,7 +135,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
                 };
                 if (mappedColumn != undefined)
                     mappedValueSelectivePayload.mappedValue = mappedColumn.MappedValue;
-                
+
                 VRUIUtilsService.callDirectiveLoad(mappedCol.mappedValueSelectiveAPI, mappedValueSelectivePayload, mappedCol.mappedValueSelectiveLoadDeferred);
             };
 

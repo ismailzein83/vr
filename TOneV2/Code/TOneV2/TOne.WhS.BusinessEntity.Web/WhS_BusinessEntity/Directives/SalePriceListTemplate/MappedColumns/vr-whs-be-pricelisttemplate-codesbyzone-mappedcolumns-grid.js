@@ -110,7 +110,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
             mappedCol.onDirectiveReady = function (api) {
                 mappedCol.directiveAPI = api;
                 var directivePayload = {
-                    context: getCellFieldMappingContext()
+                    context: getCellFieldMappingContext(),
+                    showEditButton : false
                 };
                 if (mappedColumn != undefined) {
                     directivePayload.fieldMapping = {

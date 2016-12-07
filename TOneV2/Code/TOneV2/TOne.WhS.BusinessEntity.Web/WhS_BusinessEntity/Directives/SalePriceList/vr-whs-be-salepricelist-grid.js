@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, FileAPIService) {
+app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService", "WhS_BE_SalePriceListOwnerTypeEnum",
+function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, FileAPIService, WhS_BE_SalePriceListOwnerTypeEnum) {
 
     var directiveDefinitionObject = {
 
@@ -65,10 +65,21 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, F
 
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Download",
-                clicked: downloadPriceList
-            }];
+            $scope.gridMenuActions = function (dataItem) {
+                var downloadPricelist = {
+                    name: "Download",
+                    clicked: downloadPriceList
+                };
+
+               
+                var menuActions = [];
+                if (dataItem.Entity.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                    menuActions.push(downloadPricelist);
+                }
+               
+                return menuActions;
+            };
+         
         }
 
         function downloadPriceList(priceListObj) {

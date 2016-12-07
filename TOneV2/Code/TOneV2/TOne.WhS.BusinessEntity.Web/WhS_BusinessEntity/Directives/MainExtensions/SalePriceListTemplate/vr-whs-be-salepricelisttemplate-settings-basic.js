@@ -66,6 +66,8 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
             };
 
             $scope.scopeModel.disableAddMappedTable = function () {
+                if (mappedTableDirectiveAPI == undefined)
+                    return true;
                 return mappedTableDirectiveAPI.getData() == undefined;
             };
 
@@ -184,6 +186,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
             var directivePayload = {
                 context: getContext(),
                 mappedTable: mappedTableItem.payload,
+                showEditButton : false,
                 priceListType: mappedTableItem.payload != undefined ? getConfigTypeByConfigId(mappedTableItem.payload.ConfigId) : getConfigTypeByConfigId(mappedTableDirectiveAPI.getData().ExtensionConfigurationId)
             };
 
