@@ -14,6 +14,12 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountSynchronizer : TargetBESynchronizer
     {
+        IGenericRuleManager _ruleManager;
+        public AccountSynchronizer()
+            : base()
+        {
+            _ruleManager = GetRuleManager(new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"));
+        }
         public override string Name
         {
             get
@@ -35,8 +41,8 @@ namespace Retail.BusinessEntity.Business
                     foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
                     {
                         mappingRule.Settings.Value = accountId;
-                        var manager = GetRuleManager(mappingRule.DefinitionId);
-                        manager.AddGenericRule(mappingRule);
+                        //var manager = GetRuleManager(mappingRule.DefinitionId);
+                        _ruleManager.AddGenericRule(mappingRule);
                     }
             }
         }
