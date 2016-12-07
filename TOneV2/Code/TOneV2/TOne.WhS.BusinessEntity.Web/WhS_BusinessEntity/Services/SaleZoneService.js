@@ -52,7 +52,7 @@
                 var query = {
                 	SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
                 	EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-					GetEffectiveOrFuture: true
+					GetEffectiveAfter: true
                 };
 
                 return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);

@@ -25,7 +25,7 @@ app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "
 		var gridDrillDownTabsObj;
 
 		var effectiveOn;
-		var getEffectiveOrFuture;
+		var getEffectiveAfter;
 
 		function initializeController() {
 
@@ -57,7 +57,7 @@ app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "
 
 			api.loadGrid = function (query) {
 				effectiveOn = query.EffectiveOn;
-				getEffectiveOrFuture = query.GetEffectiveOrFuture;
+				getEffectiveAfter = query.GetEffectiveAfter;
 				return gridAPI.retrieveData(query);
 			};
 
@@ -80,7 +80,7 @@ app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "
 					queryHandler.Query = {
 						ZonesIds: [saleZoneDataItem.Entity.SaleZoneId],
 						EffectiveOn: effectiveOn,
-						GetEffectiveOrFuture: getEffectiveOrFuture
+						GetEffectiveAfter: getEffectiveAfter
 					};
 					var saleCodeGridPayload = {
 						queryHandler: queryHandler,

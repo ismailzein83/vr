@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             string zoneIdsAsString = null;
             if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
 				zoneIdsAsString = string.Join<long>(",", query.ZonesIds);
-			return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.SellingNumberPlanId, zoneIdsAsString, query.Code, query.EffectiveOn, query.GetEffectiveOrFuture);
+			return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.SellingNumberPlanId, zoneIdsAsString, query.Code, query.EffectiveOn, query.GetEffectiveAfter);
         }
 
         public IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query)

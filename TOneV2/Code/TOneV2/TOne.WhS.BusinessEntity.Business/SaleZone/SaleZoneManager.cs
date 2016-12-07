@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);
 			Func<SaleZone, bool> filterFunc = (saleZone) =>
 			{
-				if (input.Query.GetEffectiveOrFuture.HasValue && input.Query.GetEffectiveOrFuture.Value)
+				if (input.Query.GetEffectiveAfter)
 				{
 					if (!saleZone.IsEffectiveOrFuture(input.Query.EffectiveOn))
 						return false;

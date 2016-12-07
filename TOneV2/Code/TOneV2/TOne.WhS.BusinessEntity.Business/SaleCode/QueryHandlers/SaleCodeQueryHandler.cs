@@ -14,8 +14,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override IEnumerable<SaleCode> GetFilteredSaleCodes()
         {
-            ISaleCodeDataManager manager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return manager.GetFilteredSaleCodes(this.Query);
+            var dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+			return dataManager.GetFilteredSaleCodes(this.Query);
         }
     }
 }
