@@ -441,7 +441,7 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
-        Dictionary<string, Account> GetCachedAccountsBySourceId()
+        public Dictionary<string, Account> GetCachedAccountsBySourceId()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsBySourceId", () =>
               {

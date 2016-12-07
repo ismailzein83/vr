@@ -14,12 +14,12 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountSynchronizer : TargetBESynchronizer
     {
-        IGenericRuleManager _ruleManager;
-        public AccountSynchronizer()
-            : base()
-        {
-            _ruleManager = GetRuleManager(new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"));
-        }
+        //IGenericRuleManager _ruleManager;
+        //public AccountSynchronizer()
+        //    : base()
+        //{
+        //    _ruleManager = GetRuleManager(new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"));
+        //}
         public override string Name
         {
             get
@@ -27,6 +27,12 @@ namespace Retail.BusinessEntity.Business
                 return "Accounts";
             }
         }
+
+        public override void Initialize(ITargetBESynchronizerInitializeContext context)
+        {
+            context.InitializationData = new AccountManager().GetCachedAccountsBySourceId();
+        }
+
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             if (context.TargetBE == null)
@@ -41,8 +47,8 @@ namespace Retail.BusinessEntity.Business
                     foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
                     {
                         mappingRule.Settings.Value = accountId;
-                        //var manager = GetRuleManager(mappingRule.DefinitionId);
-                        _ruleManager.AddGenericRule(mappingRule);
+                        var manager = GetRuleManager(mappingRule.DefinitionId);
+                        manager.AddGenericRule(mappingRule);
                     }
             }
         }
@@ -59,9 +65,11 @@ namespace Retail.BusinessEntity.Business
         }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
-            AccountManager accountManager = new AccountManager();
-            Account account = accountManager.GetAccountBySourceId(context.SourceBEId as string);
-            if (account != null)
+            Dictionary<string, Account> existingAccounts = context.InitializationData as Dictionary<string, Account>;
+            if (existingAccounts == null)
+                throw new NullReferenceException("existingAccounts");
+            Account account;
+            if (existingAccounts.TryGetValue(context.SourceBEId as string, out account))
             {
                 context.TargetBE = new SourceAccountData
                 {
