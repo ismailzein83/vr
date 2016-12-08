@@ -86,7 +86,6 @@
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\OtherRateEEDGreaterThanValidEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ServiceBEDLessThanValidBEDCondition.cs" />
