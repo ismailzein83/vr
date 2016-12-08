@@ -567,6 +567,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\cloudXPoint-iconheader.ico" />
+    <Content Include="images\cloudXPoint-login.png" />
+    <Content Include="images\cloudXPoint-logoonheader.png" />
     <Content Include="images\login.png" />
     <Content Include="images\logoonheader.png" />
     <Content Include="images\iconheader.ico" />
@@ -586,6 +589,9 @@
     <Content Include="images\menu-icons\Purchase Area.png" />
     <Content Include="images\menu-icons\Routing.png" />
     <Content Include="images\menu-icons\Sale Area.png" />
+    <Content Include="images\nTegra-iconheader.ico" />
+    <Content Include="images\nTegra-login.png" />
+    <Content Include="images\nTegra-logoonheader.png" />
     <Content Include="popoverTemp.html" />
     <Content Include="Global.asax" />
     <Content Include="Reports\Analytics\BillingReports.aspx" />
