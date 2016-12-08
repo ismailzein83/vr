@@ -172,7 +172,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 //Check if all codes are coming from the same original zone; otherwise we cannot consider it as renamed
                 string originalZoneName = zoneToProcess.CodesToMove.First().OldZoneName;
-                if (zoneToProcess.CodesToMove.All(itm => itm.OldZoneName == originalZoneName))
+                if (zoneToProcess.CodesToMove.All(itm => itm.OldZoneName.Equals(originalZoneName, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     //Check if the original zone has been close, otherwise the original still exists change type of this zone cannot be considered as renamed
                     List<ExistingZone> matchedRenamedExistingZones;

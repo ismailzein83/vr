@@ -240,7 +240,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (existingCode.IsOverlappedWith(codeToMove))
                 {
-                    if (String.Compare(existingCode.ParentZone.Name, codeToMove.OldZoneName, true) != 0)
+                    if (!existingCode.ParentZone.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
                         codeToMove.HasOverlapedCodesInOtherZone = true;
 
                     DateTime existingCodeEED = Utilities.Max(codeToMove.BED, existingCode.BED);
@@ -259,7 +259,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (existingCode.EED.VRGreaterThan(codeToClose.CloseEffectiveDate))
                 {
-                    if (String.Compare(existingCode.ParentZone.Name, codeToClose.ZoneName, true) != 0)
+                    if (!existingCode.ParentZone.Name.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase))
                         codeToClose.HasOverlapedCodesInOtherZone = true;
                     existingCode.ChangedCode = new ChangedCode
                     {
