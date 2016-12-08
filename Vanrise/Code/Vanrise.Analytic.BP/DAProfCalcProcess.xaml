@@ -10,9 +10,9 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vaba="clr-namespace:Vanrise.Analytic.BP.Arguments;assembly=Vanrise.Analytic.BP.Arguments"
+ xmlns:vaba1="clr-namespace:Vanrise.Analytic.BP.Activities;assembly=Vanrise.Analytic.BP.Activities"
  xmlns:vabad="clr-namespace:Vanrise.Analytic.BP.Activities.DAProfCalc;assembly=Vanrise.Analytic.BP.Activities"
  xmlns:vae="clr-namespace:Vanrise.Analytic.Entities;assembly=Vanrise.Analytic.Entities"
- xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -50,10 +50,12 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
@@ -68,6 +70,7 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(vae:DAProfCalcExecInput)" Name="DAProfCalcExecInputs" />
+      <Variable x:TypeArguments="scg:List(s:Guid)" Name="DataAnalysisDefinitionItemIds" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Profiling and Calculation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -76,17 +79,34 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
+    <vaba1:GetDataAnalysisDefinitionItems sap2010:WorkflowViewState.IdRef="GetDataAnalysisDefinitionItems_1">
+      <vaba1:GetDataAnalysisDefinitionItems.DataAnalysisDefinitionId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.DAProfCalcDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </vaba1:GetDataAnalysisDefinitionItems.DataAnalysisDefinitionId>
+      <vaba1:GetDataAnalysisDefinitionItems.DataAnalysisItemDefinitionIds>
+        <OutArgument x:TypeArguments="scg:List(s:Guid)">
+          <mca:CSharpReference x:TypeArguments="scg:List(s:Guid)">DataAnalysisDefinitionItemIds</mca:CSharpReference>
+        </OutArgument>
+      </vaba1:GetDataAnalysisDefinitionItems.DataAnalysisItemDefinitionIds>
+    </vaba1:GetDataAnalysisDefinitionItems>
     <vabad:GetDAProfCalcExecInputs sap2010:WorkflowViewState.IdRef="GetDAProfCalcExecInputs_1">
       <vabad:GetDAProfCalcExecInputs.DAProfCalcExecInputs>
         <OutArgument x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">
           <mca:CSharpReference x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">DAProfCalcExecInputs</mca:CSharpReference>
         </OutArgument>
       </vabad:GetDAProfCalcExecInputs.DAProfCalcExecInputs>
+      <vabad:GetDAProfCalcExecInputs.DataAnalysisDefinitionItemIds>
+        <InArgument x:TypeArguments="scg:List(s:Guid)">
+          <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">DataAnalysisDefinitionItemIds</mca:CSharpValue>
+        </InArgument>
+      </vabad:GetDAProfCalcExecInputs.DataAnalysisDefinitionItemIds>
     </vabad:GetDAProfCalcExecInputs>
-    <local:DAProfCalcSubProcess OutputRecordProcessor="{x:Null}" OutputRecordsQueue="{x:Null}" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Analytic.BP.DAProfCalcSubProcess_1">
+    <local:DAProfCalcSubProcess OutputRecordsQueue="{x:Null}" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Analytic.BP.DAProfCalcSubProcess_1">
       <local:DAProfCalcSubProcess.ChunkTime>
-        <InArgument x:TypeArguments="vbe:ChunkTime">
-          <mca:CSharpValue x:TypeArguments="vbe:ChunkTime">Input.ChunkTime</mca:CSharpValue>
+        <InArgument x:TypeArguments="vae:DAProfCalcChunkTimeEnum">
+          <mca:CSharpValue x:TypeArguments="vae:DAProfCalcChunkTimeEnum">Input.ChunkTime</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.ChunkTime>
       <local:DAProfCalcSubProcess.DAProfCalcDefinitionId>
@@ -104,6 +124,11 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.FromTime>
+      <local:DAProfCalcSubProcess.OutputRecordProcessor>
+        <InArgument x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">
+          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">new Vanrise.Analytic.Business.DAProfCalcStoreEventsOutputProcessor()</mca:CSharpValue>
+        </InArgument>
+      </local:DAProfCalcSubProcess.OutputRecordProcessor>
       <local:DAProfCalcSubProcess.RecordStorageIds>
         <InArgument x:TypeArguments="scg:List(s:Guid)">
           <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">Input.InRecordStorageIds</mca:CSharpValue>
@@ -120,11 +145,14 @@
           <sap2010:ViewStateData Id="AddToCollection`1_2" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
           <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
           <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
-          <sap2010:ViewStateData Id="RunProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
-          <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
-          <sap2010:ViewStateData Id="ParallelForEach`1_2" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
-          <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
-          <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+          <sap2010:ViewStateData Id="GenerateDAProfCalcExecInputDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+          <sap2010:ViewStateData Id="RunProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+          <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+          <sap2010:ViewStateData Id="ParallelForEach`1_2" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+          <sap2010:ViewStateData Id="FinaliseRecordProfiling_1" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+          <sap2010:ViewStateData Id="ParallelForEach`1_3" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+          <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+          <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
         </sap2010:ViewStateManager>
       </sap2010:WorkflowViewState.ViewStateManager>
     </local:DAProfCalcSubProcess>
@@ -135,43 +163,47 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>dz5DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1Byb2Nlc3MueGFtbBBEA4sBDgIBAUgFTiACAR5PBVUlAgEaVgWCASICAQeDAQWJASACAQJLC0uFAQIBIEhgSI0BAgEfUgtSfgIBG1kLWV0CARdeC15jAgEUbQttaQIBEWMLY3YCAQ5oC2hZAgELcgtyVwIBCIYBC4YBhQECAQSDAWCDAY0BAgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz5DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1Byb2Nlc3MueGFtbBVGA6cBDgIBAUsFUSACATdSBV0sAgEuXgVpJQIBJWoFngEiAgEInwEFpQEgAgECTgtOhQECATlLYEuNAQIBOFoLWnYCATNVC1VjAgEvZgtmbgIBKmELYX4CASZtC21rAgEhcgtyYwIBHYEBC4EBqQECARmGAQuGAWkCARV3C3d2AgERfAt8WQIBDYsBC4sBVwIBCaIBC6IBhQECAQSfAWCfAY0BAgED</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetDataAnalysisDefinitionItems_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetDAProfCalcExecInputs_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="464,210" />
       <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="222,146">
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="464,296" />
-      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="486,794">
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="464,296" />
+      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="486,1106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="526,874" />
+      <sap2010:ViewStateData Id="ViewStateData_12" sap:VirtualizedContainerService.HintSize="526,1186" />
       <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,332">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,394">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcProcess_1" sap:VirtualizedContainerService.HintSize="262,412" />
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcProcess_1" sap:VirtualizedContainerService.HintSize="262,474" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

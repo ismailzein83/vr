@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Activities;
 using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Business;
+using Vanrise.BusinessProcess;
 
 namespace Vanrise.Analytic.BP.Activities
 {
@@ -31,6 +32,8 @@ namespace Vanrise.Analytic.BP.Activities
             }
 
             DataAnalysisItemDefinitionIds.Set(context, dataAnalysisItemDefinitionIds);
+
+            context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Data Analysis Definition Items loaded.", null);
         }
     }
 }

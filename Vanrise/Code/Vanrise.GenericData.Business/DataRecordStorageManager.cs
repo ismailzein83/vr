@@ -134,12 +134,29 @@ namespace Vanrise.GenericData.Business
         }
         public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(DataRecordStorageFilter filter)
         {
-            Func<DataRecordStorage, bool> filterExpression = null;
-            if (filter != null)
+            Func<DataRecordStorage, bool> filterExpression = (dataRecordStorage) =>
             {
-                if (filter.DataRecordTypeId.HasValue)
-                    filterExpression = (x) => x.DataRecordTypeId == filter.DataRecordTypeId;
-            }
+                if (filter == null)
+                    return true;
+
+                if (filter.DataRecordTypeId.HasValue && dataRecordStorage.DataRecordTypeId != filter.DataRecordTypeId)
+                    return false;
+
+                if (filter.Filters != null && filter.Filters.Count > 0)
+                {
+                    foreach(IDataRecordStorageFilter dataRecordStorageFilter in filter.Filters)
+                    {
+                        if (!dataRecordStorageFilter.IsMatched(dataRecordStorage))
+                            return false;
+                    }
+                }
+
+                return true;
+            };
+            //if (filter != null)
+            //{
+            //    if (filter.DataRecordTypeId.HasValue)
+            //        filterExpression = (x) => x.DataRecordTypeId == filter.DataRecordTypeId;
             return this.GetCachedDataRecordStorages().MapRecords(DataRecordStorageInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
@@ -213,7 +230,7 @@ namespace Vanrise.GenericData.Business
             if (dataManager == null)
                 throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
 
-             dataManager.GetDataRecords(from, to, onItemReady);
+            dataManager.GetDataRecords(from, to, onItemReady);
         }
         public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
         {
@@ -227,7 +244,7 @@ namespace Vanrise.GenericData.Business
             }
             return filterdRecrodsIds;
         }
-        public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)        
+        public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
 
             return this.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds);
@@ -237,7 +254,7 @@ namespace Vanrise.GenericData.Business
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
             foreach (var r in allRecordStorages)
             {
-                if (!DoesUserHaveAccessOnRecordStorage(userId,r))
+                if (!DoesUserHaveAccessOnRecordStorage(userId, r))
                     return false;
             }
             return true;
@@ -248,10 +265,10 @@ namespace Vanrise.GenericData.Business
 
         bool DoesUserHaveAccessOnRecordStorage(int userId, DataRecordStorage dataRecordStorage)
         {
-             SecurityManager secManager = new SecurityManager();
-             if (dataRecordStorage.Settings.RequiredPermission != null && !secManager.IsAllowed(dataRecordStorage.Settings.RequiredPermission, userId))
-                    return false;
-             return true;
+            SecurityManager secManager = new SecurityManager();
+            if (dataRecordStorage.Settings.RequiredPermission != null && !secManager.IsAllowed(dataRecordStorage.Settings.RequiredPermission, userId))
+                return false;
+            return true;
         }
         Dictionary<Guid, DataRecordStorage> GetCachedDataRecordStorages()
         {

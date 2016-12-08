@@ -18,6 +18,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vaba:DAProfCalcForRangeProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(vaba:DAProfCalcSubProcessOutput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Analytic.BP.DAProfCalcForRangeProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -36,8 +37,11 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
@@ -49,23 +53,44 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
+      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vaba:DAProfCalcSubProcessOutput">
+          <mca:CSharpReference x:TypeArguments="vaba:DAProfCalcSubProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vaba:DAProfCalcSubProcessOutput">
+          <mca:CSharpValue x:TypeArguments="vaba:DAProfCalcSubProcessOutput">new DAProfCalcSubProcessOutput()</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="queueRecords" />
+        <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="queueRecords">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">new MemoryQueue&lt;Vanrise.GenericData.Entities.RecordBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadRecordsStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="executeRecordsProfilingStatus" />
         <Variable x:TypeArguments="scg:List(vq:BaseQueue(vae:DAProfCalcOutputRecordBatch))" Name="recordProfilingOutputQueues">
@@ -80,6 +105,11 @@
         </Variable>
       </Parallel.Variables>
       <vgba:LoadRecordsFromStorages sap2010:WorkflowViewState.IdRef="LoadRecordsFromStorages_1">
+        <vgba:LoadRecordsFromStorages.EventCount>
+          <OutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">Output.EventCount</mca:CSharpReference>
+          </OutArgument>
+        </vgba:LoadRecordsFromStorages.EventCount>
         <vgba:LoadRecordsFromStorages.FromTime>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
@@ -112,11 +142,11 @@
             <mca:CSharpValue x:TypeArguments="s:Guid">Input.DAProfCalcDefinitionId</mca:CSharpValue>
           </InArgument>
         </vabad:ExecuteRecordProfiling.DAProfCalcDefinitionId>
-        <vabad:ExecuteRecordProfiling.DAProfCalcExecInputs>
-          <InArgument x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">
-            <mca:CSharpValue x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">Input.DAProfCalcExecInputs</mca:CSharpValue>
+        <vabad:ExecuteRecordProfiling.DAProfCalcExecInputDetails>
+          <InArgument x:TypeArguments="scg:List(vae:DAProfCalcExecInputDetail)">
+            <mca:CSharpValue x:TypeArguments="scg:List(vae:DAProfCalcExecInputDetail)">Input.DAProfCalcExecInputDetails</mca:CSharpValue>
           </InArgument>
-        </vabad:ExecuteRecordProfiling.DAProfCalcExecInputs>
+        </vabad:ExecuteRecordProfiling.DAProfCalcExecInputDetails>
         <vabad:ExecuteRecordProfiling.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">queueRecords</mca:CSharpValue>
@@ -144,21 +174,22 @@
         </vabad:ExecuteRecordProfiling.Status>
       </vabad:ExecuteRecordProfiling>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sEkEDlAEOAgEBQgWSARACAQJJDUnBAQIBCk4NTr4BAgEDUgdsJgIBQ20HkQEmAgERXw1faQIBYGQNZHICAVlaDVp0AgFSVQ1VWwIBS2kNaVkCAUSJAQ2JAWoCATx6DXpsAgE1cA1wZQIBLoQBDYQBggECASd1DXV+AgEgfw1/lQECARmOAQ2OAX4CARI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sF0oDsgEOAgEBSwVWDgMBhQFXBbABEAIBAlMLU4ABAwGJAU4LTm4DAYYBWw1boQECARNiDWLBAQIBC2cNZ74BAgEDaweKASYCAVSLAQevASYCARtuDW5jAgF9fQ19aQIBdYIBDYIBcgIBbXgNeHQCAWVzDXNbAgFdhwENhwFZAgFVpwENpwFqAgFMmAENmAFsAgFEjgENjgFlAgE8ogENogGCAQIBNJ0BDZ0BlQECASysAQ2sAX4CASSTAQ2TAYoBAgEc</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="554,62" />
       <sap2010:ViewStateData Id="LoadRecordsFromStorages_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ExecuteRecordProfiling_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,210">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,312">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcForRangeProcess_1" sap:VirtualizedContainerService.HintSize="616,290" />
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcForRangeProcess_1" sap:VirtualizedContainerService.HintSize="616,392" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

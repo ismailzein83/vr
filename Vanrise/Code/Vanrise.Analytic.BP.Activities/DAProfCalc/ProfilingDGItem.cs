@@ -14,5 +14,6 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
         public List<DARecordAggregateState> AggregateStates { get; set; }
 
+        public Dictionary<string, dynamic> GroupingValues { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿<vr-row removeline>
-    <!--<vr-columns colnum="3">
-        <reprocess-reprocessdefinition-selector isrequired="true" on-ready="onReprocessDefinitionSelectorReady"></reprocess-reprocessdefinition-selector>
-    </vr-columns>-->
-
+    <vr-columns colnum="3">
+        <vr-analytic-dataanalysisdefinition-selector on-ready="onDataAnalysisDefinitionSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedDataAnalysisDefinition"
+                                                     onselectionchanged="onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
+    </vr-columns>
     <vr-columns colnum="3">
         <vr-datetimepicker label="From" isrequired="true" value="fromDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
     </vr-columns>
@@ -15,4 +15,12 @@
         <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
                    datasource="chunkTimes" selectedvalues="selectedChunkTime"></vr-select>
     </vr-columns>
+    <vr-columns colnum="3" ng-show="scopeModel.selectedDataAnalysisDefinition!=undefined">
+        <vr-genericdata-datarecordstorage-selector on-ready="onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages" isrequired="true"
+                                                   customlabel="Source Record Storages" ismultipleselection="true"></vr-genericdata-datarecordstorage-selector>
+    </vr-columns>
+    <!--<vr-columns colnum="3" ng-show="scopeModel.selectedDataAnalysisDefinition!=undefined">
+        <vr-genericdata-datarecordstorage-selector on-ready="onDestinationDataRecordStorageSelectorReady" selectedvalues="selectedDestinationDataRecordStorages" isrequired="true"
+                                                   customlabel="Destination Record Storages" ismultipleselection="true"></vr-genericdata-datarecordstorage-selector>
+    </vr-columns>-->
 </vr-row>

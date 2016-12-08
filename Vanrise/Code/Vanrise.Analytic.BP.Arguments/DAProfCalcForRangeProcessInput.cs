@@ -15,7 +15,9 @@ namespace Vanrise.Analytic.BP.Arguments
 
         public Guid DAProfCalcDefinitionId { get; set; }
 
-        public List<DAProfCalcExecInput> DAProfCalcExecInputs { get; set; }
+        public List<DAProfCalcExecInputDetail> DAProfCalcExecInputDetails { get; set; }
+
+        public string DataAnalysisUniqueName { get; set; }
 
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
 

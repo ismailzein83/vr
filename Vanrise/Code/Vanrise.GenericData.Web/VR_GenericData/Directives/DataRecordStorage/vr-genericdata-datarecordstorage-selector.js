@@ -71,6 +71,7 @@
                     if (payload != undefined) {
                         filter = {};
                         filter.DataRecordTypeId = payload.DataRecordTypeId;
+                        filter.Filters = payload.filters;
                         if (payload.showaddbutton)
                             ctrl.onAddDataStorageRecord = onAddDataStorageRecord;
                         selectedIds = payload.selectedIds;

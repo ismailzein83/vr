@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -10,6 +7,6 @@ namespace Vanrise.Analytic.Entities
     {
         public Guid OutputItemDefinitionId { get; set; }
 
-        public dynamic Record { get; set; }
+        public Dictionary<string, dynamic> Records { get; set; }
     }
 }

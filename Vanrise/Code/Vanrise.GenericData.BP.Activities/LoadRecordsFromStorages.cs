@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class LoadRecordsFromStoragesOutput
     {
-
+        public long EventCount { get; set; }
     }
 
     #endregion
@@ -42,6 +42,8 @@ namespace Vanrise.GenericData.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<RecordBatch>> OutputQueue { get; set; }
+
+        public OutArgument<long> EventCount { get; set; }
 
         protected override LoadRecordsFromStoragesOutput DoWorkWithResult(LoadRecordsFromStoragesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -78,6 +80,8 @@ namespace Vanrise.GenericData.BP.Activities
                 inputArgument.OutputQueue.Enqueue(recordBatch);
             }
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", eventCount);
+
+            output.EventCount = eventCount;
             return output;
         }
 
@@ -94,7 +98,7 @@ namespace Vanrise.GenericData.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadRecordsFromStoragesOutput result)
         {
-            //throw new NotImplementedException();
+            this.EventCount.Set(context, result.EventCount);
         }
     }
 }

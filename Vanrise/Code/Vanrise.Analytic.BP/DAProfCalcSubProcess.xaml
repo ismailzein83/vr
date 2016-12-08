@@ -8,7 +8,10 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vaba="clr-namespace:Vanrise.Analytic.BP.Arguments;assembly=Vanrise.Analytic.BP.Arguments"
+ xmlns:vabad="clr-namespace:Vanrise.Analytic.BP.Activities.DAProfCalc;assembly=Vanrise.Analytic.BP.Activities"
  xmlns:vae="clr-namespace:Vanrise.Analytic.Entities;assembly=Vanrise.Analytic.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
@@ -22,7 +25,7 @@
     <x:Property Name="OutputRecordsQueue" Type="InArgument(vq:BaseQueue(vae:DAProfCalcOutputRecordBatch))" />
     <x:Property Name="OutputRecordProcessor" Type="InArgument(vae:IDAProfCalcOutputRecordProcessor)" />
     <x:Property Name="DAProfCalcExecInputs" Type="InArgument(scg:List(vae:DAProfCalcExecInput))" />
-    <x:Property Name="ChunkTime" Type="InArgument(vbe:ChunkTime)" />
+    <x:Property Name="ChunkTime" Type="InArgument(vae:DAProfCalcChunkTimeEnum)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Analytic.BP.DAProfCalcSubProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -37,6 +40,7 @@
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Analytic.Entities</x:String>
       <x:String>Vanrise.BusinessProcess.Entities</x:String>
+      <x:String>Vanrise.Analytic.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -58,10 +62,12 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Analytic.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
@@ -69,11 +75,12 @@
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
+      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Main_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(vq:BaseQueue(vae:DAProfCalcOutputRecordBatch))" Name="recordProfilingOutputQueues">
         <Variable.Default>
@@ -86,6 +93,10 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)" Name="subProcessTimeRanges" />
+      <Variable x:TypeArguments="scg:List(vae:DAProfCalcExecInputDetail)" Name="DAProfCalcExecInputDetails" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="ProcessedRangesCount" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalRangesCount" />
+      <Variable x:TypeArguments="x:Int64" Default="0" Name="TotalEventCount" />
     </Sequence.Variables>
     <AddToCollection x:TypeArguments="vq:BaseQueue(vae:DAProfCalcOutputRecordBatch)" DisplayName="AddToCollection&lt;BaseQueue&lt;DAProfCalcOutputRecordBatch&gt;&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
       <AddToCollection.Item>
@@ -117,11 +128,6 @@
       </If.Then>
     </If>
     <vbw:GenerateDateTimeRanges sap2010:WorkflowViewState.IdRef="GenerateDateTimeRanges_1">
-      <vbw:GenerateDateTimeRanges.ChunkTime>
-        <InArgument x:TypeArguments="vbe:ChunkTime">
-          <mca:CSharpValue x:TypeArguments="vbe:ChunkTime">ChunkTime</mca:CSharpValue>
-        </InArgument>
-      </vbw:GenerateDateTimeRanges.ChunkTime>
       <vbw:GenerateDateTimeRanges.DateTimeRanges>
         <OutArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
           <mca:CSharpReference x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">subProcessTimeRanges</mca:CSharpReference>
@@ -132,30 +138,76 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">FromTime</mca:CSharpValue>
         </InArgument>
       </vbw:GenerateDateTimeRanges.From>
+      <vbw:GenerateDateTimeRanges.TimeSpan>
+        <InArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpValue x:TypeArguments="x:TimeSpan">new TimeSpan(0, Vanrise.Common.Utilities.GetEnumAttribute&lt;DAProfCalcChunkTimeEnum, DAProfCalcChunkTimeAttribute&gt;(ChunkTime).Value, 0)</mca:CSharpValue>
+        </InArgument>
+      </vbw:GenerateDateTimeRanges.TimeSpan>
       <vbw:GenerateDateTimeRanges.To>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">ToTime</mca:CSharpValue>
         </InArgument>
       </vbw:GenerateDateTimeRanges.To>
     </vbw:GenerateDateTimeRanges>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">TotalRangesCount</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">subProcessTimeRanges.Count()</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <vabad:GenerateDAProfCalcExecInputDetails sap2010:WorkflowViewState.IdRef="GenerateDAProfCalcExecInputDetails_1">
+      <vabad:GenerateDAProfCalcExecInputDetails.DAProfCalcExecInputDetails>
+        <OutArgument x:TypeArguments="scg:List(vae:DAProfCalcExecInputDetail)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vae:DAProfCalcExecInputDetail)">DAProfCalcExecInputDetails</mca:CSharpReference>
+        </OutArgument>
+      </vabad:GenerateDAProfCalcExecInputDetails.DAProfCalcExecInputDetails>
+      <vabad:GenerateDAProfCalcExecInputDetails.DAProfCalcExecInputs>
+        <InArgument x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">
+          <mca:CSharpValue x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">DAProfCalcExecInputs</mca:CSharpValue>
+        </InArgument>
+      </vabad:GenerateDAProfCalcExecInputDetails.DAProfCalcExecInputs>
+    </vabad:GenerateDAProfCalcExecInputDetails>
     <ParallelForEach x:TypeArguments="ve:DateTimeRange" DisplayName="ParallelForEach&lt;DateTimeRange&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">subProcessTimeRanges</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">subProcessTimeRanges.Reverse()</mca:CSharpValue>
         </InArgument>
       </ParallelForEach.Values>
       <ActivityAction x:TypeArguments="ve:DateTimeRange">
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="ve:DateTimeRange" Name="timeRange" />
         </ActivityAction.Argument>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+        <Sequence DisplayName="Sequence_RunSubReprocess" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+            <Variable x:TypeArguments="x:Int64" Default="0" Name="RangeEventCount" />
+            <Variable x:TypeArguments="vaba:DAProfCalcSubProcessOutput" Name="DAProfCalcSubProcessOutput" />
+          </Sequence.Variables>
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Starting Range From {0}, To {1}", timeRange.From, timeRange.To)</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+            <vbw:WriteTrackingMessage.Severity>
+              <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Severity>
+          </vbw:WriteTrackingMessage>
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                 <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Analytic.BP.Arguments.DAProfCalcForRangeProcessInput
             {
                 DAProfCalcDefinitionId = DAProfCalcDefinitionId,
-                DAProfCalcExecInputs = DAProfCalcExecInputs,
+                DAProfCalcExecInputDetails = DAProfCalcExecInputDetails,
                 FromTime = timeRange.From,
                 ToTime = timeRange.To,
                 RecordStorageIds = RecordStorageIds,
@@ -163,35 +215,158 @@
             }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
+            <vbw:RunProcess.ProcessCompletedEventPayload>
+              <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+              </OutArgument>
+            </vbw:RunProcess.ProcessCompletedEventPayload>
           </vbw:RunProcess>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">ProcessedRangesCount</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">ProcessedRangesCount + 1</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <If sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                <TerminateWorkflow.Reason>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Range From {0}, To {1} failed due to error: {2}", timeRange.From, timeRange.To, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                  </InArgument>
+                </TerminateWorkflow.Reason>
+              </TerminateWorkflow>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="vaba:DAProfCalcSubProcessOutput">
+                      <mca:CSharpReference x:TypeArguments="vaba:DAProfCalcSubProcessOutput">DAProfCalcSubProcessOutput</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="vaba:DAProfCalcSubProcessOutput">
+                      <mca:CSharpValue x:TypeArguments="vaba:DAProfCalcSubProcessOutput">(DAProfCalcSubProcessOutput)subProcessEventPayload.ProcessOutput</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpReference x:TypeArguments="x:Int64">RangeEventCount</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpValue x:TypeArguments="x:Int64">DAProfCalcSubProcessOutput.EventCount</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpReference x:TypeArguments="x:Int64">TotalEventCount</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int64">
+                      <mca:CSharpValue x:TypeArguments="x:Int64">TotalEventCount + RangeEventCount</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
+                  <vbw:WriteTrackingMessage.Message>
+                    <InArgument x:TypeArguments="x:String">
+                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Range From {0}, To {1}. Remaining Ranges: {2}. Range Event Count : {3}. Total Event Count: {4}.", timeRange.From, timeRange.To, TotalRangesCount - ProcessedRangesCount, RangeEventCount, TotalEventCount)</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Message>
+                </vbw:WriteTrackingMessage>
+              </Sequence>
+            </If.Else>
+          </If>
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbBZMA6sBDgIBAVALULYBAgEOVQtVvAECAQJaBWMXAwGOAWQFdgoCAWh3BYwBIgIBN40BBakBFwIBGmEJYZgBAwGbAV0LXYkBAwGPAWcLZ2QCAWlrCXQbAgF1iQELiQFRAgFcegt6VwIBUIQBC4QBUwIBRH8Lf34CATiQAQuQAXYCASuXAQmnARQCARtyDXKcAQMBggFuD26EAQIBdpgBC6YBHAIBHJsBEaMBIAIBHpgBpAGYAaoBAgEd</sads:DebugSymbol.Symbol>
+    <ParallelForEach x:TypeArguments="vae:DAProfCalcExecInputDetail" DisplayName="ParallelForEach&lt;DAProfCalcExecInputDetail&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
+      <ParallelForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(vae:DAProfCalcExecInputDetail)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vae:DAProfCalcExecInputDetail)">DAProfCalcExecInputDetails</mca:CSharpValue>
+        </InArgument>
+      </ParallelForEach.Values>
+      <ActivityAction x:TypeArguments="vae:DAProfCalcExecInputDetail">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="vae:DAProfCalcExecInputDetail" Name="DAProfCalcExecInputDetail" />
+        </ActivityAction.Argument>
+        <vabad:FinaliseRecordProfiling PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinaliseRecordProfiling_1">
+          <vabad:FinaliseRecordProfiling.DAProfCalcExecInputDetail>
+            <InArgument x:TypeArguments="vae:DAProfCalcExecInputDetail">
+              <mca:CSharpValue x:TypeArguments="vae:DAProfCalcExecInputDetail">DAProfCalcExecInputDetail</mca:CSharpValue>
+            </InArgument>
+          </vabad:FinaliseRecordProfiling.DAProfCalcExecInputDetail>
+          <vabad:FinaliseRecordProfiling.OutputRecordProcessor>
+            <InArgument x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">
+              <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">OutputRecordProcessor</mca:CSharpValue>
+            </InArgument>
+          </vabad:FinaliseRecordProfiling.OutputRecordProcessor>
+        </vabad:FinaliseRecordProfiling>
+      </ActivityAction>
+    </ParallelForEach>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbDxTA8cCDgIBAVcLV7YBAgEVXAtcvAECAQVhM2E2AgEEYjNiNgIBA2MzYzYCAQJlBW4XAwHYBG8FgQEKAwGmBIIBBZcBIgMB5QOYAQWjAQ4DAcQDpAEFrwEwAwGjA7ABBa0CFwIBWa4CBcUCFwIBJWwJbJgBAwHpBGgLaIkBAwHZBHILcmQDAacEdgl/GwMBtwSUAQuUAVEDAZYEigELigFTAwGGBIUBC4UBfgMB9gOPAQuPAdYBAwHmA6ABC6ABZAMB1QObAQubAWADAcUDrAELrAF2AwG0A6cBC6cBigEDAaQDswELswGAAQMBkwO6AQmrAhQCAVqxAguxAokBAgFJuAIJwwIpAgEmfQ19nAEDAcgEeQ95hAEDAbgEvQE5vQE8AgFbwAELywEmAwHqAswBC98BHAMBwALgAQvrARQDAZcC7AELqgIQAgFcuwIPuwJ7AgE4wAIPwAJ+AgEnyAERyAGLAQMB/wLDARHDAZ0BAwHrAs8BEdcBIAMB1gLcARHcAYQBAwHCAswBfMwBggEDAcEC6AER6AFmAwGsAuMBEeMBagMBmALvARHvAbMBAgFd8wEP+QEjAwGCAvwBD6gCGgIBcfYBFfYB5wEDAYMC/QERiAIaAwHZAYkCEZQCGgMBsAGVAhGgAhoDAYcBoQIRpwIsAgFyhQIXhQKsAQMB7gGAAheAAo4BAwHaAZECF5ECeQMBxQGMAheMAmsDAbEBnQIXnQJ1AwGcAZgCF5gCawMBiAGkAhekArcCAgFz</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="AddToCollection`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,210" />
-      <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,146">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="541,210" />
+      <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="541,62" />
+      <sap2010:ViewStateData Id="GenerateDAProfCalcExecInputDetails_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="489,62" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,452">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="464,296" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,794">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,602" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,952">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="526,874" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,1102" />
+      <sap2010:ViewStateData Id="FinaliseRecordProfiling_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="541,210" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="563,2014">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="603,2094" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

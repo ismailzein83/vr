@@ -124,6 +124,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleTypeSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAggregationField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcCalculationField.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcChunkTime.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcGroupingField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\IDAProfCalcOutputRecordProcessor.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Input\DAProfCalcExecInput.cs" />

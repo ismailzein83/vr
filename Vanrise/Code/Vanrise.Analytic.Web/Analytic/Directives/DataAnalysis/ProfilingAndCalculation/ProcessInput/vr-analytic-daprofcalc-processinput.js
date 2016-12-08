@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ChunkTimeEnum',
-    function (UtilsService, VRUIUtilsService, VRValidationService, ChunkTimeEnum) {
+app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'DAProfCalcChunkTimeEnum',
+    function (UtilsService, VRUIUtilsService, VRValidationService, DAProfCalcChunkTimeEnum) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -32,16 +32,58 @@ app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsSer
             function initializeController() {
                 defineAPI();
             }
-            //var reprocessDefinitionSelectorAPI;
-            //var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            //$scope.onReprocessDefinitionSelectorReady = function (api) {
-            //    reprocessDefinitionSelectorAPI = api;
-            //    reprocessDefinitionSelectorReadyDeferred.resolve();
+            $scope.scopeModel = {};
+            var dataAnalysisDefinitionSelectorAPI;
+            var dataAnalysisDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var sourceDataRecordStorageSelectorAPI;
+            var sourceDataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            //var destinationDataRecordStorageSelectorAPI;
+            //var destinationDataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            $scope.onDataAnalysisDefinitionSelectorReady = function (api) {
+                dataAnalysisDefinitionSelectorAPI = api;
+                dataAnalysisDefinitionSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onSourceDataRecordStorageSelectorReady = function (api) {
+                sourceDataRecordStorageSelectorAPI = api;
+                sourceDataRecordStorageSelectorReadyDeferred.resolve();
+            };
+
+            //$scope.onDestinationDataRecordStorageSelectorReady = function (api) {
+            //    destinationDataRecordStorageSelectorAPI = api;
+            //    destinationDataRecordStorageSelectorReadyDeferred.resolve();
             //};
+
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            };
+
+            $scope.onDataAnalysisDefinitionSelectionChanged = function (dataItem) {
+                if (dataItem != undefined) {
+                    var filters = [];
+                    var daProfCalcDataRecordStorageFilter = {
+                        $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.MainExtensions',
+                        DataAnalysisDefinitionId: dataItem.DataAnalysisDefinitionId
+                    };
+                    filters.push(daProfCalcDataRecordStorageFilter);
+
+                    var setSourceLoader = function (value) { $scope.scopeModel.isLoadingSourceDataRecordStorage = value };
+                    var payload = {
+                        filters: filters
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceDataRecordStorageSelectorAPI, payload, setSourceLoader, sourceDataRecordStorageSelectorReadyDeferred);
+
+                    //var setDestinationLoader = function (value) { $scope.scopeModel.isLoadingDestinationDataRecordStorage = value };
+                    //var payload = {
+                    //    filters: filters
+                    //};
+                    //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, destinationDataRecordStorageSelectorAPI, payload, setDestinationLoader,destinationDataRecordStorageSelectorReadyDeferred);
+                }
             };
 
             function defineAPI() {
@@ -51,7 +93,8 @@ app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsSer
                     return {
                         InputArguments: {
                             $type: "Vanrise.Analytic.BP.Arguments.DAProfCalcProcessInput, Vanrise.Analytic.BP.Arguments",
-                            //ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
+                            DAProfCalcDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
+                            InRecordStorageIds: sourceDataRecordStorageSelectorAPI.getSelectedIds(),
                             FromTime: $scope.fromDate,
                             ToTime: new Date($scope.toDate.setDate($scope.toDate.getDate() + 1)),
                             ChunkTime: $scope.selectedChunkTime.value
@@ -60,16 +103,26 @@ app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsSer
                 };
 
                 api.load = function (payload) {
-                    $scope.chunkTimes = UtilsService.getArrayEnum(ChunkTimeEnum);
+                    $scope.chunkTimes = UtilsService.getArrayEnum(DAProfCalcChunkTimeEnum);
 
                     var promises = [];
 
-                    //var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    //reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
-                    //    VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, undefined, reprocessDefinitionSelectorLoadDeferred);
-                    //});
+                    var dataAnalysisDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    //promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
+                    dataAnalysisDefinitionSelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, undefined, dataAnalysisDefinitionSelectorLoadDeferred);
+                    });
+
+                    promises.push(dataAnalysisDefinitionSelectorLoadDeferred.promise);
+                    promises.push(sourceDataRecordStorageSelectorReadyDeferred.promise);
+                    //promises.push(destinationDataRecordStorageSelectorReadyDeferred.promise);
+
+                    sourceDataRecordStorageSelectorReadyDeferred.promise.then(function () {
+                        sourceDataRecordStorageSelectorReadyDeferred = undefined;
+                    });
+                    //destinationDataRecordStorageSelectorReadyDeferred.promise.then(function () {
+                    //    destinationDataRecordStorageSelectorReadyDeferred = undefined;
+                    //});
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

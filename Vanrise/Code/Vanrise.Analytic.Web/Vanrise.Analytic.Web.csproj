@@ -124,6 +124,7 @@
     <Content Include="Analytic\Constants\SinceTimeEnum.js" />
     <Content Include="Analytic\Constants\StyleCodeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
+    <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-ordertype-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-aggregate-selector.js" />

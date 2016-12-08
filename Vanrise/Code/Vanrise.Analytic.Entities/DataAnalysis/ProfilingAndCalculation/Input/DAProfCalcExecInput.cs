@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -11,5 +8,12 @@ namespace Vanrise.Analytic.Entities
         public Guid OutputItemDefinitionId { get; set; }
 
         public Dictionary<Guid, dynamic> FilterParameterValues { get; set; }
+    }
+
+    public class DAProfCalcExecInputDetail
+    {
+        public string DataAnalysisUniqueName { get; set; }
+
+        public DAProfCalcExecInput DAProfCalcExecInput { get; set; }
     }
 }

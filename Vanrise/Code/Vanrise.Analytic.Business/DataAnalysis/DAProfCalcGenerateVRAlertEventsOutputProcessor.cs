@@ -14,7 +14,7 @@ namespace Vanrise.Analytic.Business
             
         }
 
-        public void ProcessOutputRecord(IDAProfCalcOutputRecordProcessorProcessContext context)
+        public void ProcessOutputRecords(IDAProfCalcOutputRecordProcessorProcessContext context)
         {
             throw new NotImplementedException();
         }

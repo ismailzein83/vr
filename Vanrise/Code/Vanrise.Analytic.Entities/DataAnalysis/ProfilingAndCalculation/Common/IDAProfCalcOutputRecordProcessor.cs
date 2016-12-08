@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         void Initialize(IDAProfCalcOutputRecordProcessorIntializeContext context);
 
-        void ProcessOutputRecord(IDAProfCalcOutputRecordProcessorProcessContext context);
+        void ProcessOutputRecords(IDAProfCalcOutputRecordProcessorProcessContext context);
 
         void Finalize(IDAProfCalcOutputRecordProcessorFinalizeContext context);
     }
@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Entities
 
     public interface IDAProfCalcOutputRecordProcessorProcessContext
     {
-        DAProfCalcOutputRecord OutputRecord { get; }
+        List<DAProfCalcOutputRecord> OutputRecords { get; }
     }
 
     public interface IDAProfCalcOutputRecordProcessorFinalizeContext
