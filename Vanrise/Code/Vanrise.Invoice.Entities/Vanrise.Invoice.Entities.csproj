@@ -58,6 +58,7 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
     <Compile Include="InvoiceGeneratorException.cs" />
+    <Compile Include="InvoiceItem\ConvertItemGroupingToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceItem\GroupingInvoiceItemDetail.cs" />
     <Compile Include="InvoiceItem\GroupingInvoiceItemQuery.cs" />
     <Compile Include="InvoiceItem\IGroupingInvoiceItemQueryContext.cs" />

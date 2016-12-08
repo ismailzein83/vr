@@ -19,6 +19,6 @@ namespace Vanrise.Invoice.Entities
     {
         public Guid DimensionId { get; set; }
 
-        public List<Object> FilterValues { get; set; }
+        public Object FilterValue { get; set; }
     }
 }

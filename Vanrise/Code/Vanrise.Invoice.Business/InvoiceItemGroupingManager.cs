@@ -103,17 +103,14 @@ namespace Vanrise.Invoice.Business
                     if (!invoiceItemRecord.GroupingValuesByDimensionId.TryGetValue(dimFilter.DimensionId, out dimensionValue))
                         throw new NullReferenceException(String.Format("dimensionValue. dimId '{0}'", dimFilter.DimensionId));
                     if (dimensionValue.Value == null)
-                        return dimFilter.FilterValues.Contains(null);
+                        return dimFilter.FilterValue == null;
                     else
                     {
-                        var nonNullFilterValues = dimFilter.FilterValues.Where(itm => itm != null).ToList();
-                        if (nonNullFilterValues.Count > 0)
-                        {
-                            var filterValueType = nonNullFilterValues[0].GetType();
-                            var convertedDimensionValue = filterValueType == typeof(string) ? dimensionValue.Value.ToString() : Convert.ChangeType(dimensionValue.Value, filterValueType);
-                            if (!nonNullFilterValues.Contains(convertedDimensionValue))
-                                return false;
-                        }
+                       
+                        var filterValueType = dimFilter.FilterValue.GetType();
+                        var convertedDimensionValue = filterValueType == typeof(string) ? dimensionValue.Value.ToString() : Convert.ChangeType(dimensionValue.Value, filterValueType);
+                        if (!dimFilter.FilterValue.Equals(convertedDimensionValue))
+                            return false;
                     }
                 }
             }

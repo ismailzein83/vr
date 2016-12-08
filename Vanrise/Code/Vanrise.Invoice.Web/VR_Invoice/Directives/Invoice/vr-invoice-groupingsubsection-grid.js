@@ -36,6 +36,7 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
             var invoiceTypeId;
             var invoiceId;
             var invoiceItemGroupings;
+            var parentFilter;
             function initializeController() {
                 gridWidthFactors = UtilsService.getArrayEnum(VRCommon_GridWidthFactorEnum);
                 $scope.datastore = [];
@@ -56,6 +57,7 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                             if (payload != undefined) {
                                 invoiceTypeId = payload.invoiceTypeId;
                                 invoiceId = payload.invoiceId;
+                                parentFilter = payload.ParentFilter;
                                 var promiseDeferred = UtilsService.createPromiseDeferred();
                                 if (payload.query != undefined)
                                     query = payload.query;
@@ -75,29 +77,35 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                                     var itemGrouping = UtilsService.getItemByVal(payload.invoiceItemGroupings, itemGroupingId, "ItemGroupingId");
                                     if (payload.settings.Settings.GridDimesions != undefined)
                                     {
+                                        query.DimensionIds = [];
                                         for (var i = 0; i < payload.settings.Settings.GridDimesions.length; i++) {
                                             var dimension = payload.settings.Settings.GridDimesions[i];
                                             var dimensionItem = UtilsService.getItemByVal(itemGrouping.DimensionItemFields, dimension.DimensionId, "DimensionItemFieldId");
                                             input.GridColumns.push({
+                                                ID: dimension.DimensionId,
                                                 Header: dimension.Header,
                                                 FieldName: dimensionItem.FieldName,
                                                 WidthFactor: dimension.WidthFactor,
                                                 FieldType: dimensionItem.FieldType,
                                                 Type: "Dimension"
                                             });
-                                        }
+                                            query.DimensionIds.push(dimension.DimensionId);
+                                        } 
                                     }
                                     if (payload.settings.Settings.GridMeasures != undefined) {
+                                        query.MeasureIds = [];
                                         for (var i = 0; i < payload.settings.Settings.GridMeasures.length; i++) {
                                             var measure = payload.settings.Settings.GridMeasures[i];
                                             var measureItem = UtilsService.getItemByVal(itemGrouping.AggregateItemFields, measure.MeasureId, "AggregateItemFieldId");
                                             input.GridColumns.push({
+                                                ID:measure.MeasureId,
                                                 Header:measure.Header,
                                                 FieldName:measureItem.FieldName,
                                                 WidthFactor:measure.WidthFactor,
                                                 FieldType:measureItem.FieldType,
                                                 Type:"Measure"
                                             });
+                                            query.MeasureIds.push(measure.MeasureId);
                                         }
                                     }
                                     VR_Invoice_InvoiceTypeAPIService.ConvertToGridColumnAttribute(input).then(function (response) {
@@ -152,10 +160,12 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                         var gridAttribute = UtilsService.getItemByVal(gridAttributes, gridColumn.FieldName, "Field");
                         if (gridAttribute != undefined)
                         {
+                            gridAttribute.ID = gridColumn.ID;
+                            gridAttribute.ItemType = gridColumn.Type;
                             if (gridColumn.Type == "Dimension")
                             {
                                 gridAttribute.Field = "DimensionValues[" + i + "].Name";
-                              
+                               
                             } else
                             {
                                 gridAttribute.Field = "MeasureValues." + gridColumn.FieldName + ".Value";
@@ -191,17 +201,37 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                         invoiceItemsTab.title = subSection.SectionTitle;
                         invoiceItemsTab.directive = "vr-invoice-groupingsubsection-grid";
                         invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoiceItem) {
+                            var filters = [];
+                            if (parentFilter != undefined)
+                            {
+                                filters = parentFilter;
+                            }
+                            var dimensionCounter = 0;
+                            for (var i = 0; i < $scope.gridFields.length; i++)
+                            {
+                                var gridField = $scope.gridFields[i];
+                                if (gridField.ItemType == "Dimension")
+                                {
+                                    filters.push({
+                                        DimensionId: gridField.ID,
+                                        FilterValue: invoiceItem.DimensionValues[dimensionCounter].Value
+                                    });
+                                    dimensionCounter++;
+                                }
+                            }
                             invoiceItem.invoiceItemGridAPI = invoiceItemGridAPI;
                             var invoiceItemGridPayload = {
                                 query: {
                                     InvoiceId: invoiceId,
                                     InvoiceTypeId: invoiceTypeId,
-                                    ItemGroupingId: itemGroupingId
+                                    ItemGroupingId: itemGroupingId,
+                                    Filters: filters
                                 },
                                 settings: subSection,
                                 invoiceId: invoiceId,
                                 itemGroupingId: itemGroupingId,
-                                invoiceItemGroupings: invoiceItemGroupings
+                                invoiceItemGroupings: invoiceItemGroupings,
+                                ParentFilter: filters
                             };
                             return invoiceItem.invoiceItemGridAPI.load(invoiceItemGridPayload);
                         };
